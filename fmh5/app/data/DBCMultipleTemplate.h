@@ -218,7 +218,7 @@ public:
 	}
 
 	const std::map<unsigned, std::map<unsigned, unsigned> >& GetAllMap() const { return m_map; }
-private:
+protected:
 	std::map<unsigned, std::map<unsigned, unsigned> > m_map;
 };
 

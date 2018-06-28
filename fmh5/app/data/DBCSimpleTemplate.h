@@ -129,7 +129,7 @@ public:
 		return base::m_data->MarkChange(index);
 	}
 
-private:
+protected:
 	int _Load(unsigned uid)
 	{
 		if (base::IsFull())
