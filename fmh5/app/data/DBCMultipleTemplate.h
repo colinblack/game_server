@@ -198,18 +198,6 @@ public:
 		}
 	}
 
-	_DBC & GetDataByIndex(unsigned index)
-	{
-		return base::m_data->data[index];
-	}
-
-	_DBC & GetData(unsigned uid, unsigned id)
-	{
-		unsigned index = GetIndex(uid, id);
-
-		return base::m_data->data[index];
-	}
-
 	int GetIndex(unsigned uid, unsigned id)
 	{
 		LoadBuffer(uid);
@@ -224,10 +212,33 @@ public:
 		return NewItem(uid, id);
 	}
 
+	_DBC & GetDataByIndex(unsigned index)
+	{
+		return base::m_data->data[index];
+	}
+
+	_DBC & GetData(unsigned uid, unsigned id)
+	{
+		unsigned index = GetIndex(uid, id);
+
+		return base::m_data->data[index];
+	}
+
+	bool UpdateItem(unsigned uid, unsigned id)
+	{
+		unsigned index = GetIndex(uid, id);
+
+		if ((unsigned)-1 == index)
+		{
+			return false;
+		}
+
+		return base::m_data->MarkChange(index);
+	}
+
 	bool UpdateItem(_DBC & data)
 	{
-		unsigned index = -1;
-		index = GetIndex(data.uid, data.id);
+		unsigned index = GetIndex(data.uid, data.id);
 
 		if ((unsigned)-1 == index)
 		{
@@ -259,6 +270,29 @@ public:
 		}
 
 		return 0;
+	}
+
+	void GetIds(unsigned uid, std::vector<unsigned>& vResult)
+	{
+		vResult.clear();
+
+		LoadBuffer(uid);
+
+		const std::map<unsigned, unsigned>& items = m_map[uid];
+		std::map<unsigned, unsigned>::const_iterator it = items.begin();
+		for (; it != items.end(); ++it)
+		{
+			vResult.push_back(it->first);
+		}
+	}
+
+	void DelItem(unsigned uid, unsigned id)
+	{
+		if(!IsExistItem(uid, id))
+			return;
+		base::m_data->MarkDel(m_map[uid][id]);
+		base::AddSave(m_map[uid][id]);
+		m_map[uid].erase(id);
 	}
 
 	const std::map<unsigned, std::map<unsigned, unsigned> >& GetAllMap() const { return m_map; }
