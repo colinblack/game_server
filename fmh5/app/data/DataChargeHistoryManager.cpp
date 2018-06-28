@@ -43,7 +43,7 @@ int DataChargeHistoryManager::AddBuff(DataChargeHistory & datacharge)
 	uint32_t uid = datacharge.uid;
 	uint32_t ts = datacharge.ts ;
 
-	if(index == -1)
+	if(index == (unsigned)-1)
 	{
 		error_log("[AddBuff] get free index error. uid=%u", uid);
 		return R_ERR_DATA;
@@ -86,11 +86,11 @@ int DataChargeHistoryManager::LoadBuff(unsigned uid)
 	}
 
 	//单个逐个加载
-	for(int i = 0; i < vctcharges.size(); ++i)
+	for(size_t i = 0; i < vctcharges.size(); ++i)
 	{
 		unsigned index = GetFreeIndex();
 
-		if(index == -1)
+		if(index == (unsigned)-1)
 		{
 			error_log("[LoadBuff] get free index error. uid=%u", uid);
 			return R_ERR_DATA;
@@ -155,7 +155,7 @@ void DataChargeHistoryManager::FullMessage(unsigned uid, User::AccumulateCharge 
 		 {
 			 unsigned index = miter->second;
 
-			 m_data->data[index].SetMessage(msg->add_accumulate_charge());
+			 m_data->data[index].SetMessage(msg->add_accumulatecharge());
 		 }
 	}
 }

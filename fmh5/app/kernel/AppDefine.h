@@ -13,6 +13,7 @@
 #define CONFIG_DBC_SERVER					"pi/conf/dbc_server.xml"
 #define CONFIG_STRING_FILTER_DATA 			"data/stringfilter.dat"
 #define CONFIG_JSON_PATH		 			"pi/conf/json/"
+#define CONFIG_MAP_PATH			"pi/conf/home.map"
 
 #define DEFAULT_APP_CONFIG_PATH				"conf/app_config.xml"
 #define CONFIG_DATA_LOG_PATH				"datalog/"
@@ -92,7 +93,20 @@ enum PlatformType
 
 	PT_MAX,
 };
+
 #define Is_QQ_Platform(Platform) (Platform == PT_PENGYOU || Platform == PT_QZONE || Platform == PT_3366 || Platform == PT_qqgame || Platform == PT_TX_C9)
+
+//农场地图
+#define INT_BITS ((1<<3) * sizeof(int))
+#define CHAR_BITS ((1<<3) * sizeof(char))
+#define MAP_LENGTH (35)
+#define MAP_WIDTH (35)
+#define MAP_MAX_GRID (MAP_LENGTH * MAP_WIDTH)
+
+//障碍物长度，向上取整
+#define BARRIER_LENGTH ((MAP_MAX_GRID + CHAR_BITS - 1) / CHAR_BITS)
+#define GRID_LENGTH ((MAP_MAX_GRID + INT_BITS - 1) / INT_BITS)
+#define IsValidGridId(id) ( (id >= 1) && (id <= MAP_MAX_GRID))
 
 //DB
 //对应DBC端口号和共享内存号为18000+ID
@@ -103,6 +117,9 @@ enum PlatformType
 #define DB_BASE_BUFF        5000
 #define DB_BASE_FULL        1
 
+#define DB_ITEM             110
+#define DB_ITEM_FULL        200
+
 //通用活动
 #define DB_GAME_ACTIVITY 102
 #define DB_GAME_ACTIVITY_FULL 50
@@ -112,6 +129,18 @@ enum PlatformType
 #define DB_CHARGE_HISTORY 103
 #define DB_CHARGE_HISTORY_FULL 15
 
+//建筑
+#define DB_BUILD 121
+#define DB_BUILD_FULL  (MAP_LENGTH * MAP_WIDTH)
+
+#define DB_CROPLAND  122
+#define DB_CROPLAND_FULL 200
+
+#define DB_PRODUCEEQUIP 123
+#define DB_PRODUCEEQUIP_FULL 13
+
+#define DB_ANIMAL 124
+#define DB_ANIMAL_FULL 63
 
 #define MEM_SESSION			91
 #define SESSION_DATA		"data"
@@ -154,7 +183,6 @@ enum ASYN_TYPE
 #define ALLIANCE_ID_START	2010000000
 #define AID_ZONE			500000
 #define IsAllianceId(id)	(id >= ALLIANCE_ID_MIN)
-
 
 
 //error
@@ -201,6 +229,51 @@ enum CurCMD
 enum NotifyID
 {
 	e_Notify_max
+};
+
+enum Build_Direct
+{
+	direct_right = 0,  //朝右
+	direct_down  = 1,  //朝下
+};
+
+enum BuildType
+{
+	build_type_corpland = 0,   //农地
+	build_type_animal_residence = 1,  //动物住所
+	build_type_animal			= 2,  //动物
+	build_type_produce_equipment = 3,  //生产设备
+	build_type_fruit_tree = 4,  //果树
+	build_type_decorate = 5,   //装饰
+	build_type_storage = 10,  //仓库
+	build_type_house = 11,  //房子
+};
+
+enum StorageType
+{
+	type_granary = 1, //粮仓
+	type_warehouse = 2, //货仓
+};
+
+//玩家属性类型
+enum PropertyType
+{
+	type_coin	= 1,
+	type_cash	= 2, //钻石
+	type_exp	= 3,  //如果用户升级了会额外推送升级协议
+	type_level	= 4,  //等级
+};
+
+//生产线状态
+enum ProduceStatus
+{
+	status_free 	= 0,  //空闲
+	status_hungry 	= 0,  //饥饿
+	status_growup 	= 1,  //成长
+	status_procing	= 1, //生产中
+	status_harvest 	= 2,  //收获
+	status_suspend	= 2, //暂停生产
+	status_full		= 2, //饱腹
 };
 
 //exchange code

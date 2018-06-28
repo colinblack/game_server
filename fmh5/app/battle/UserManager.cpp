@@ -115,7 +115,7 @@ int UserManager::Process(unsigned uid, User::Tutorial_stage* msg)
 {
 	unsigned index = BaseManager::Instance()->GetIndex(uid);
 	DataBase &base = BaseManager::Instance()->m_data->data[index];
-	base.tutorial_stage = msg->tutorial_stage();
+	base.tutorial_stage = msg->tutorialstage();
 	BaseManager::Instance()->m_data->MarkChange(index);
 	return 0;
 }
@@ -310,6 +310,16 @@ int UserManager::ProcessLogin(Common::Login* msg)
 		DataChargeHistoryManager::Instance()->FullMessage(uid, reply->mutable_charges());
 		//活动
 		LogicGameActivityManager::Instance()->FullMessage(uid, reply->mutable_gameactivity());
+		//物品信息
+		DataItemManager::Instance()->FullMessage(uid,reply->mutable_item());
+		//建筑
+		DataBuildingMgr::Instance()->FullMessage(uid, reply->mutable_builds());
+		//农地
+		DataCroplandManager::Instance()->FullMessage(uid, reply->mutable_cropland());
+		//生产设备
+		DataProduceequipManager::Instance()->FullMessage(uid, reply->mutable_equipments());
+		//动物
+		DataAnimalManager::Instance()->FullMessage(uid, reply->mutable_animals());
 	}
 	catch(const std::exception& e)
 	{
@@ -381,15 +391,24 @@ int UserManager::OnNewUser(unsigned uid, Common::Login* msg)
 	base.last_active_time = Time::GetGlobalTime();
 	if(!msg->fig().empty())
 		strncpy(base.fig, msg->fig().c_str(), sizeof(base.fig));
+	const UserCfg::UserBase& userBaseCfg = UserCfgWrap().UserBase();
 	base.level = 1;
 	//todo: new user init
-
+	base.coin = userBaseCfg.coin();
+	base.cash = userBaseCfg.cash();
 
 	BaseManager::Instance()->m_data->MarkChange(index);	
 
 	try
 	{
 		LogicResourceManager::Instance()->Get(uid);
+
+		//建筑
+		LogicBuildManager::Instance()->NewUser(uid);
+		//道具
+		LogicPropsManager::Instance()->NewUser(uid);
+		//生产线
+		LogicProductLineManager::Instance()->NewUser(uid);
 	}
 	catch (const std::exception& e)
 	{
@@ -444,6 +463,13 @@ int UserManager::OnUserLogin(unsigned uid, Common::Login* msg)
 
 		DBCUserBaseWrap user(index, base);
 		user.FinalAsynData();
+
+		//建筑
+		LogicBuildManager::Instance()->CheckLogin(uid);
+		//道具
+		LogicPropsManager::Instance()->CheckLogin(uid);
+		//生产线
+		LogicProductLineManager::Instance()->CheckLogin(uid);
 
 		//累积充值
 		DataChargeHistoryManager::Instance()->LoginCheck(uid);

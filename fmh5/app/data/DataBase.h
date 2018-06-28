@@ -28,6 +28,7 @@ struct DataBase{
 	uint32_t coin;//代币
 	uint32_t first_recharge;  	//首充领取标志。按位表示第一次，第二次首充状态
 	uint32_t alliance_id;//加入的联盟
+	char barrier[BARRIER_LENGTH];   //障碍物状态
 
 	DataBase(){
 		uid = 0;
@@ -53,22 +54,23 @@ struct DataBase{
 		memset(forbid_reason, 0, sizeof(forbid_reason));
 		memset(name, 0, sizeof(name));
 		memset(fig, 0, sizeof(fig));
+		memset(barrier, 0, sizeof(barrier));
 	}
 
 	void SetMessage(User::Base* msg)
 	{
 		msg->set_uid(uid);
-		msg->set_register_platform(register_platform);
-		msg->set_register_time(register_time);
-		msg->set_last_login_platform(last_login_platform);
-		msg->set_last_login_time(last_login_time);
-		msg->set_login_times(login_times);
-		msg->set_login_days(login_days);
-		msg->set_last_active_time(last_active_time);
-		msg->set_last_off_time(last_off_time);
-		msg->set_forbid_ts(forbid_ts);
-		msg->set_forbid_reason(string(forbid_reason));
-		msg->set_tutorial_stage(tutorial_stage);
+		msg->set_registerplatform(register_platform);
+		msg->set_registertime(register_time);
+		msg->set_lastloginplatform(last_login_platform);
+		msg->set_lastlogintime(last_login_time);
+		msg->set_logintimes(login_times);
+		msg->set_logindays(login_days);
+		msg->set_lastactivetime(last_active_time);
+		msg->set_lastofftime(last_off_time);
+		msg->set_forbidts(forbid_ts);
+		msg->set_forbidreason(string(forbid_reason));
+		msg->set_tutorialstage(tutorial_stage);
 		msg->set_name(string(name));
 		msg->set_fig(string(fig));
 		msg->set_exp(exp);
@@ -77,22 +79,27 @@ struct DataBase{
 		msg->set_viplevel(viplevel);
 		msg->set_cash(cash);
 		msg->set_coin(coin);
-		msg->set_first_recharge(first_recharge);
-		msg->set_alliance_id(alliance_id);
+		msg->set_firstrecharge(first_recharge);
+		msg->set_allianceid(alliance_id);
+		msg->set_barrier(barrier);
 	}
 
 	bool IsOnline()
 	{
 		return last_off_time < last_login_time;
 	}
+
 	bool CanOff()
 	{
 		return IsOnline() && last_active_time + 12 * 3600 < Time::GetGlobalTime();
 	}
+
 	bool CanClear()
 	{
 		return !IsOnline() && last_off_time + 300 < Time::GetGlobalTime();
 	}
+
+	void AddExp(int exp_);
 };
 
 class CDataBase :public DBCBase<DataBase, DB_BASE>

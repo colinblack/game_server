@@ -482,6 +482,10 @@ void LogicManager::offline(unsigned uid)
 	if(IsValidUid(uid)){
 		//todo 此处是下线的逻辑处理
 		UserManager::Instance()->UserOffLine(uid);
+		//队列离线处理
+		LogicQueueManager::Instance()->Offline(uid);
+		//删除定时任务管理器中该用户的任务
+		LogicRoutineManager::Instance()->Offline(uid);
 	}
 }
 
@@ -784,12 +788,46 @@ void LogicManager::RegProto()
 
 	//钻石消耗
 	dispatcher.registerMessageCallback<User::CostCashReq>(ProtoManager::Process<User::CostCashReq, User::CostCashResp, LogicUserManager>);
-
 	dispatcher.registerMessageCallback<Common::ShutDown>(ProtoManager::ProcessNoReply<Common::ShutDown, UserManager>);
+
+	//内政
+	//建造
+	dispatcher.registerMessageCallback<ProtoBuilding::BuildReq>(ProtoManager::Process<ProtoBuilding::BuildReq, ProtoBuilding::BuildResp, LogicBuildManager>);
+	//移动
+	dispatcher.registerMessageCallback<ProtoBuilding::MoveReq>(ProtoManager::Process<ProtoBuilding::MoveReq, ProtoBuilding::MoveResp, LogicBuildManager>);
+	//翻转
+	dispatcher.registerMessageCallback<ProtoBuilding::FlipReq>(ProtoManager::Process<ProtoBuilding::FlipReq, ProtoBuilding::FlipResp, LogicBuildManager>);
+
+	//通用加速
+	dispatcher.registerMessageCallback<User::SpeedUpReq>(ProtoManager::Process<User::SpeedUpReq, User::SpeedUpResp, LogicQueueManager>);
+
+	//---------------地块生产线
+	//种植
+	dispatcher.registerMessageCallback<ProtoProduce::PlantCropReq>(ProtoManager::Process<ProtoProduce::PlantCropReq, ProtoProduce::PlantCropResp, LogicProductLineManager>);
+	//收割
+	dispatcher.registerMessageCallback<ProtoProduce::ReapCropReq>(ProtoManager::Process<ProtoProduce::ReapCropReq, ProtoProduce::ReapCropResp, LogicProductLineManager>);
+
+	//---------------设备生产
+	//扩展队列
+	dispatcher.registerMessageCallback<ProtoProduce::ExpandQueueReq>(ProtoManager::Process<ProtoProduce::ExpandQueueReq, ProtoProduce::ExpandQueueResp, LogicProductLineManager>);
+	//放入生产队列
+	dispatcher.registerMessageCallback<ProtoProduce::JoinQueueReq>(ProtoManager::Process<ProtoProduce::JoinQueueReq, ProtoProduce::JoinQueueResp, LogicProductLineManager>);
+	//取回仓库
+	dispatcher.registerMessageCallback<ProtoProduce::FetchProductReq>(ProtoManager::Process<ProtoProduce::FetchProductReq, ProtoProduce::FetchProductResp, LogicProductLineManager>);
+
+	//----------------动物生产
+	//领养动物
+	dispatcher.registerMessageCallback<ProtoProduce::AdoptAnimalReq>(ProtoManager::Process<ProtoProduce::AdoptAnimalReq, ProtoProduce::AdoptAnimalResp, LogicProductLineManager>);
+	//喂养动物
+	dispatcher.registerMessageCallback<ProtoProduce::FeedAnimalReq>(ProtoManager::Process<ProtoProduce::FeedAnimalReq, ProtoProduce::FeedAnimalResp, LogicProductLineManager>);
+	//获取产品
+	dispatcher.registerMessageCallback<ProtoProduce::ObtainProductReq>(ProtoManager::Process<ProtoProduce::ObtainProductReq, ProtoProduce::ObtainProductResp, LogicProductLineManager>);
+
+	//GM
+	dispatcher.registerMessageCallback<ProtoGM::GMCmdReq>(ProtoManager::ProcessNoReply<ProtoGM::GMCmdReq, LogicGM>);
 
 	//通知系统
 	dispatcher.registerMessageCallback<ProtoNotify::GetNotifyReq>(ProtoManager::Process<ProtoNotify::GetNotifyReq, ProtoNotify::GetNotifyResp, LogicNotifyManager>);
-
 }
 
 void LogicManager::RegMemoryManager()
@@ -806,12 +844,22 @@ void LogicManager::RegDataManager()
 	m_dataManager.push_back(BaseManager::Instance());
 	m_dataManager.push_back(DataGameActivityManager::Instance());
 	m_dataManager.push_back(DataChargeHistoryManager::Instance());
+	m_dataManager.push_back(DataBuildingMgr::Instance());
+	m_dataManager.push_back(DataCroplandManager::Instance());
+	m_dataManager.push_back(DataItemManager::Instance());
+	m_dataManager.push_back(DataProduceequipManager::Instance());
+	m_dataManager.push_back(DataAnimalManager::Instance());
 }
 
 void LogicManager::RegBattleManager()
 {
 	m_battleManager.push_back(LogicUserManager::Instance());
 	m_battleManager.push_back(LogicNotifyManager::Instance());
+	m_battleManager.push_back(LogicBuildManager::Instance());
+	m_battleManager.push_back(LogicProductLineManager::Instance());
+	m_battleManager.push_back(LogicPropsManager::Instance());
+	m_battleManager.push_back(LogicQueueManager::Instance());
+	m_battleManager.push_back(LogicRoutineManager::Instance());
 
 	//下面的放在最后，顺序不要变
 	m_battleManager.push_back(UserManager::Instance());

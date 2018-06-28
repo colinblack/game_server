@@ -16,5 +16,12 @@
 #include "LogicUserManager.h"
 #include "LogicNotifyManager.h"
 #include "LogicGameActivityManager.h"
+#include "LogicRoutineManager.h"
+#include "LogicBuildingManager.h"
+#include "ParseManager.h"
+#include "LogicPropsManager.h"
+#include "LogicProductLineManager.h"
+#include "LogicQueueManager.h"
+#include "LogicGM.h"
 
 #endif

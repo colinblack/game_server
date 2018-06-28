@@ -2,6 +2,40 @@
 #include "DataBase.h"
 #include "DataInc.h"
 
+void DataBase::AddExp(int exp_)
+{
+	if (exp_ < 0)
+	{
+		error_log("params error. uid=%u,exp=%d", uid, exp_);
+		return ;
+	}
+
+	if (exp_ == 0) return ;
+
+	exp += exp_;
+
+	const UserCfg::User& userCfg = UserCfgWrap().User();
+
+	//更新用户level数据
+	int levelSize = userCfg.user_exp_size();
+
+	if (exp >=  userCfg.user_exp(levelSize - 1))
+	{
+		exp =  userCfg.user_exp(levelSize - 1);
+		level = levelSize;
+	}
+	else
+	{
+		for (int i = level; i < levelSize; i++)
+		{
+			if (exp < (uint64_t)userCfg.user_exp(i))
+			{
+				level = i;
+				break;
+			}
+		}
+	}
+}
 
 int CDataBase::Get(DataBase &data)
 {
@@ -31,6 +65,7 @@ int CDataBase::Get(DataBase &data)
 	DBCREQ_NEED(alliance_id);
 	DBCREQ_NEED(cash);
 	DBCREQ_NEED(coin);
+	DBCREQ_NEED(barrier);
 
 	DBCREQ_EXEC;
 	DBCREQ_IFNULLROW;
@@ -59,6 +94,7 @@ int CDataBase::Get(DataBase &data)
 	DBCREQ_GET_INT(data, coin);
 	DBCREQ_GET_INT(data, first_recharge);
 	DBCREQ_GET_INT(data, alliance_id);
+	DBCREQ_GET_CHAR(data, barrier, BARRIER_LENGTH);
 
 	return 0;
 }
@@ -88,6 +124,7 @@ int CDataBase::Add(DataBase &data)
 	DBCREQ_SET_INT(data, coin);
 	DBCREQ_SET_INT(data, first_recharge);
 	DBCREQ_SET_INT(data, alliance_id);
+	DBCREQ_SET_CHAR(data, barrier, BARRIER_LENGTH);
 
 	DBCREQ_EXEC;
 	return 0;
@@ -118,6 +155,7 @@ int CDataBase::Set(DataBase &data)
 	DBCREQ_SET_INT(data, coin);
 	DBCREQ_SET_INT(data, first_recharge);
 	DBCREQ_SET_INT(data, alliance_id);
+	DBCREQ_SET_CHAR(data, barrier, BARRIER_LENGTH);
 
 	DBCREQ_EXEC;
 	return 0;

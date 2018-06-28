@@ -92,6 +92,7 @@ public:
 
 #define DBCREQ_ARRAY_GET_BIN(array, field)      {int len;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&len);array[i].field.append(pTmp,len);}
 #define DBCREQ_ARRAY_GET_INT(array, field)		array[i].field = m_dbcret.IntValue(++reqItemIndex)
+#define DBCREQ_ARRAY_GET_CHAR(array, field, len)	{const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(array[i].field,pTmp,len);}
 #define DBCREQ_ARRAY_GET_STR(array, field)		array[i].field = m_dbcret.StringValue(++reqItemIndex)
 #define DBCREQ_ARRAY_SET(array, field, value)	array[i].field = value
 #define DBCREQ_ARRAY_GET_END()					}

@@ -1,7 +1,9 @@
 #ifndef LOGIC_NOTIFY_MANAGER_H_
 #define LOGIC_NOTIFY_MANAGER_H_
 
-#include "ServerInc.h"
+#include "Common.h"
+#include "Kernel.h"
+#include "DataInc.h"
 
 class  LogicNotifyManager : public BattleSingleton, public CSingleton<LogicNotifyManager>
 {

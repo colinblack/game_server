@@ -65,11 +65,22 @@ public:
 	//获取用户注册小时数
 	unsigned GetRegisterHours() const;
 
+	bool AddExp(int exp);
+
+	//通用属性操作
+	void BaseProcess(const ::CommonGiftConfig::BaseItem& base, DataCommon::UserBaseChangeCPP* obj,
+			const std::string& reason, double factor = 1.0);
+
+	//检查条件
+	int CheckBaseBeforeCost(unsigned uid, const string & reason, const CommonGiftConfig::BaseItem & base);
+
 	void FullMessage(User::Base* obj) const;
 private:
 	int _Index(unsigned uid);
 
 	int AsynType2ResourceType(ASYN_TYPE type);
+
+	void OnUserUpgradeReward(unsigned old_level);
 private:
 	BaseManager*	container_;
 	unsigned 		index_;
@@ -111,6 +122,15 @@ public:
 	//消耗钻石
 	int Process(unsigned uid, User::CostCashReq* req, User::CostCashResp* resp);
 
+	//通用处理，包含通用消耗和通用奖励
+	int CommonProcess(unsigned uid, const CommonGiftConfig::CommonModifyItem& modifyitem, const std::string& reason,
+			DataCommon::CommonItemsCPP* obj, double multiple = 1.0);
+private:
+	//通用处理底层
+	void CommonUnderlaying(DBCUserBaseWrap& user, const CommonGiftConfig::CommonModifyItem& cfg, const std::string& reason,
+			DataCommon::CommonItemsCPP* obj, double multiple = 1.0);
+
+	void CheckPropsBeforeCost(unsigned uid, const string & reason, const CommonGiftConfig::CommonModifyItem& cfg);
 private:
 	BaseManager* baseData_;
 	unsigned  start_time;

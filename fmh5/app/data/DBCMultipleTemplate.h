@@ -34,7 +34,9 @@ protected:
 
 	void NewItem(unsigned uid, unsigned id, int index)
 	{
-		_DBC data(uid, id);
+		_DBC data;
+		data.uid = uid;
+		data.id = id;
 		if(Add(index, data))
 		{
 			m_map[uid].insert(std::make_pair<unsigned, unsigned>(id, index));
@@ -50,7 +52,9 @@ protected:
 	{
 		int index = FreeIndex();
 
-		_DBC data(uid, id);
+		_DBC data;
+		data.uid = uid;
+		data.id = id;
 		if(Add(index, data))
 		{
 			m_map[uid].insert(std::make_pair<unsigned, unsigned>(id, index));
@@ -194,6 +198,18 @@ public:
 		}
 	}
 
+	_DBC & GetDataByIndex(unsigned index)
+	{
+		return base::m_data->data[index];
+	}
+
+	_DBC & GetData(unsigned uid, unsigned id)
+	{
+		unsigned index = GetIndex(uid, id);
+
+		return base::m_data->data[index];
+	}
+
 	int GetIndex(unsigned uid, unsigned id)
 	{
 		LoadBuffer(uid);
@@ -208,6 +224,19 @@ public:
 		return NewItem(uid, id);
 	}
 
+	bool UpdateItem(_DBC & data)
+	{
+		unsigned index = -1;
+		index = GetIndex(data.uid, data.id);
+
+		if ((unsigned)-1 == index)
+		{
+			return false;
+		}
+
+		return base::m_data->MarkChange(index);
+	}
+
 	bool IsExistItem(unsigned uid, unsigned id)
 	{
 		LoadBuffer(uid);
@@ -215,6 +244,21 @@ public:
 		const std::map<unsigned, unsigned>& items = m_map[uid];
 		std::map<unsigned, unsigned>::const_iterator it = items.find(id);
 		return (it != items.end());
+	}
+
+	template<class _PROTO>
+	int FullMessage(unsigned uid, google::protobuf::RepeatedPtrField<_PROTO >* msg)
+	{
+		vector<unsigned> indexs;
+
+		GetIndexs(uid, indexs);
+
+		for(size_t i = 0; i < indexs.size(); ++i)
+		{
+			GetDataByIndex(indexs[i]).SetMessage(msg->Add());
+		}
+
+		return 0;
 	}
 
 	const std::map<unsigned, std::map<unsigned, unsigned> >& GetAllMap() const { return m_map; }

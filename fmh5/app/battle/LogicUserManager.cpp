@@ -207,6 +207,136 @@ unsigned DBCUserBaseWrap::GetRegisterHours() const
 	}
 }
 
+bool DBCUserBaseWrap::AddExp(int exp)
+{
+	unsigned old_lvl = data_.level;
+
+	if (exp > 0)
+	{
+		data_.AddExp(exp);
+		Save();
+
+		if (data_.level > old_lvl)
+		{
+			//用户升级推送
+			OnUserUpgradeReward(old_lvl);
+
+			std::string open_id = UserManager::Instance()->GetOpenId(data_.uid);
+			USER_LOG("[upgrade]uid=%u,open_id=%s,name:%s,old_level=%d,new_level:%d"
+					, data_.uid, open_id.c_str(),data_.name, old_lvl, data_.level);
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+void DBCUserBaseWrap::OnUserUpgradeReward(unsigned old_level)
+{
+	LogicResourceManager::Instance()->SyncUserLevel(data_.uid, data_.level);
+
+	ProtoPush::PushUserUpLevel* msg = new ProtoPush::PushUserUpLevel;
+	DataCommon::BaseItemCPP* basemsg = msg->mutable_commons()->mutable_userbase()->add_baseitem();
+
+	basemsg->set_type(type_level);
+	basemsg->set_change(data_.level - old_level);
+	basemsg->set_totalvalue(data_.level);
+
+	LogicManager::Instance()->sendMsg(data_.uid, msg);
+}
+
+void DBCUserBaseWrap::BaseProcess(const CommonGiftConfig::BaseItem & base, DataCommon::UserBaseChangeCPP* obj,
+		  const std::string& reason, double nMul)
+{
+	CheckBaseBeforeCost(data_.uid, reason, base);
+
+	string strlog;
+
+	char szchgtemp[1000] = {0};
+	sprintf(szchgtemp, "[%s] uid=%u,", reason.c_str(), data_.uid);
+	strlog += szchgtemp;
+
+	if (base.has_coin())
+	{
+		int coin = base.coin() * nMul;
+		data_.coin += coin;
+
+		sprintf(szchgtemp, "chgcoin=%d,coin=%u,", coin, data_.coin);
+		strlog += szchgtemp;
+
+		DataCommon::BaseItemCPP * item = obj->add_baseitem();
+
+		item->set_type(type_coin);
+		//item->set_id(id);
+		item->set_change(coin);
+		item->set_totalvalue(data_.coin);
+	}
+
+	//只支持加经验
+	if (base.has_exp() && base.exp() > 0)
+	{
+		//经验没有扣除这一说法，所以AddExp方法内，排除了经验小于0的情况
+		int exp = nMul * base.exp();
+		bool success = AddExp(exp);
+
+		if (success)
+		{
+			sprintf(szchgtemp, "chgexp=%d,exp=%llu,", exp, data_.exp);
+			strlog += szchgtemp;
+
+			DataCommon::BaseItemCPP * item = obj->add_baseitem();
+
+			item->set_type(type_exp);
+			//item->set_id(id);
+			item->set_change(exp);
+			item->set_totalvalue(data_.exp);
+		}
+	}
+
+	if (base.has_cash())
+	{
+		//调用加钻石的接口
+		int cash = base.cash() * nMul;
+
+		if (cash > 0)
+		{
+			AddCash(cash, reason);
+		}
+		else if (cash < 0)
+		{
+			CostCash(-cash, reason);
+		}
+
+		DataCommon::BaseItemCPP * item = obj->add_baseitem();
+
+		item->set_type(type_cash);
+		//item->set_id(id);
+		item->set_change(cash);
+		item->set_totalvalue(data_.cash);
+	}
+
+	Save();
+
+	RESOURCE_LOG(strlog.c_str());
+}
+
+int DBCUserBaseWrap::CheckBaseBeforeCost(unsigned uid, const string & reason, const CommonGiftConfig::BaseItem & base)
+{
+	if (base.has_coin() && base.coin() < 0 && static_cast<unsigned>(-base.coin()) > data_.coin)
+	{
+		error_log("coin not enough. uid=%u,need=%d,code=%s", uid, base.coin(), reason.c_str());
+		throw runtime_error("coin_not_enough");
+	}
+
+	if (base.has_cash() && base.cash() < 0 && static_cast<unsigned>(-base.cash()) > data_.cash)
+	{
+		error_log("cash not enough. uid=%u,need=%d,code=%s", uid, base.cash(), reason.c_str());
+		throw runtime_error("cash_not_enough");
+	}
+
+	return 0;
+}
 
 void DBCUserBaseWrap::EveryDayAction(int di)
 {
@@ -258,7 +388,7 @@ LogicUserManager::LogicUserManager()
 
 void LogicUserManager::OnTimer1()
 {
-	unsigned now = Time::GetGlobalTime();
+	//unsigned now = Time::GetGlobalTime();
 
 	while(! recharge_records_.empty())
 	{
@@ -267,7 +397,7 @@ void LogicUserManager::OnTimer1()
 		{
 			DBCUserBaseWrap user(record.uid);
 
-			unsigned oldvip = user.Obj().viplevel;
+			//unsigned oldvip = user.Obj().viplevel;
 
 			//添加充值记录到玩家的档里
 			DataChargeHistoryManager::Instance()->AddChargeHistory(record.uid, record.cash);
@@ -285,7 +415,7 @@ void LogicUserManager::OnTimer1()
 			User::PushAccumulateChangeReq * pushmsg = new User::PushAccumulateChangeReq;
 			//GET_RMI(record.uid).SetMessage(pushmsg->mutable_change_acccharge());
 			//改为使用玩家档中的充值数据
-			DataChargeHistoryManager::Instance()->FullMessage(record.uid, pushmsg->mutable_change_acccharge());
+			DataChargeHistoryManager::Instance()->FullMessage(record.uid, pushmsg->mutable_changeacccharge());
 
 			LogicManager::Instance()->sendMsg(record.uid, pushmsg);
 		}
@@ -340,12 +470,12 @@ int LogicUserManager::Process(unsigned uid, User::CostCashReq* req, User::CostCa
 		throw std::runtime_error("cash_not_enough");
 	}
 
-	if (req->op_code().empty())
+	if (req->opcode().empty())
 	{
 		throw std::runtime_error("need_op_code");
 	}
 
-	user.CostCash(req->cash(), req->op_code());
+	user.CostCash(req->cash(), req->opcode());
 
 	if (resp)
 	{
@@ -354,5 +484,94 @@ int LogicUserManager::Process(unsigned uid, User::CostCashReq* req, User::CostCa
 	}
 
 	return R_SUCCESS;
+}
+
+int LogicUserManager::CommonProcess(unsigned uid, const CommonGiftConfig::CommonModifyItem& cfg, const std::string& reason,
+		DataCommon::CommonItemsCPP * obj, double multiple)
+{
+	DBCUserBaseWrap userwrap(uid);
+
+	//调用底层的通用操作
+	CommonUnderlaying(userwrap, cfg, reason, obj, multiple);
+
+	return 0;
+}
+
+void LogicUserManager::CommonUnderlaying(DBCUserBaseWrap& user, const CommonGiftConfig::CommonModifyItem& cfg, const std::string& reason,
+			DataCommon::CommonItemsCPP* obj, double multiple)
+{
+	unsigned uid = user.Obj().uid;
+
+	//装备消耗的检查
+	CheckPropsBeforeCost(uid, reason, cfg);
+
+	//进行资源的结算
+	if (cfg.has_based())
+	{
+		//处理用户属性的扣除和增加
+		user.BaseProcess(cfg.based(), obj->mutable_userbase(), reason, multiple);
+	}
+
+	//道具的结算
+	for(int i = 0; i < cfg.props_size(); ++i)
+	{
+		unsigned int propsid = cfg.props(i).id();
+		int cnt = cfg.props(i).count();
+
+		if (cnt > 0)
+		{
+			LogicPropsManager::Instance()->AddProps(uid, propsid, cnt, reason, obj->mutable_props());
+		}
+		else if (cnt < 0)
+		{
+			//获取该propid对应的ud
+			unsigned ud = DataItemManager::Instance()->GetPropsUd(uid, propsid);
+
+			if (-1 == ud)
+			{
+				error_log("props not exist. uid=%u,propsid=%u", uid, propsid);
+				throw runtime_error("props_not_exist");
+			}
+
+			LogicPropsManager::Instance()->CostProps(uid, ud, propsid, -cnt, reason, obj->mutable_props());
+		}
+	}
+}
+
+void LogicUserManager::CheckPropsBeforeCost(unsigned uid, const string & reason, const CommonGiftConfig::CommonModifyItem& cfg)
+{
+	if (cfg.props_size() > 0)
+	{
+		for(int i = 0; i < cfg.props_size(); ++i)
+		{
+			if (cfg.props(i).count() < 0)
+			{
+				unsigned int propsid = cfg.props(i).id();
+
+				//只支持可叠加装备
+				bool isOverlay = LogicPropsManager::Instance()->IsAllowOverlay(propsid);
+
+				if (!isOverlay)
+				{
+					error_log("props can not overlay. uid=%u,propsid=%u,code=%s", uid, propsid, reason.c_str());
+					throw runtime_error("props_cfg_error");
+				}
+
+				unsigned ud = DataItemManager::Instance()->GetPropsUd(uid, propsid);
+
+				if (-1 == ud)
+				{
+					error_log("props not exist. uid=%u,propsid=%u", uid, propsid);
+					throw runtime_error("props_not_exist");
+				}
+
+				if ( static_cast<unsigned>(-cfg.props(i).count()) > DataItemManager::Instance()->GetData(uid, ud).item_cnt)
+				{
+					error_log("props not enough. uid=%u,propsid=%u,need=%d,code=%s", uid, propsid, cfg.props(i).count(), reason.c_str());
+					throw runtime_error("props_not_enough");
+				}
+			}
+		}
+	}
 }
 

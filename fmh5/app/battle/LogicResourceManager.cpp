@@ -60,7 +60,7 @@ unsigned LogicResourceManager::GetRechargePays(unsigned uid, unsigned time)
 
 	DataChargeHistoryManager::Instance()->GetChargeHistoryList(uid, indexs);
 
-	for(int i = 0; i < indexs.size(); ++i)
+	for(size_t i = 0; i < indexs.size(); ++i)
 	{
 		unsigned index = indexs[i];
 
@@ -82,7 +82,7 @@ unsigned LogicResourceManager::GetDurationRechargePays(unsigned uid, unsigned st
 
 	DataChargeHistoryManager::Instance()->GetChargeHistoryList(uid, indexs);
 
-	for(int i = 0; i < indexs.size(); ++i)
+	for(size_t i = 0; i < indexs.size(); ++i)
 	{
 		unsigned index = indexs[i];
 

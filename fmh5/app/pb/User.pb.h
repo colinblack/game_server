@@ -26,6 +26,9 @@
 #include <google/protobuf/unknown_field_set.h>
 #include "ProtoNotify.pb.h"
 #include "ProtoActivity.pb.h"
+#include "ProtoBuilding.pb.h"
+#include "ProtoProduce.pb.h"
+#include "DataCommon.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace User {
@@ -48,6 +51,8 @@ class CostCashResp;
 class ChargeItem;
 class AccumulateCharge;
 class PushAccumulateChangeReq;
+class SpeedUpReq;
+class SpeedUpResp;
 
 // ===================================================================
 
@@ -111,87 +116,87 @@ class Base : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 uid() const;
   inline void set_uid(::google::protobuf::uint32 value);
 
-  // required uint32 register_platform = 2;
-  inline bool has_register_platform() const;
-  inline void clear_register_platform();
+  // required uint32 registerPlatform = 2;
+  inline bool has_registerplatform() const;
+  inline void clear_registerplatform();
   static const int kRegisterPlatformFieldNumber = 2;
-  inline ::google::protobuf::uint32 register_platform() const;
-  inline void set_register_platform(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 registerplatform() const;
+  inline void set_registerplatform(::google::protobuf::uint32 value);
 
-  // required uint32 register_time = 3;
-  inline bool has_register_time() const;
-  inline void clear_register_time();
+  // required uint32 registerTime = 3;
+  inline bool has_registertime() const;
+  inline void clear_registertime();
   static const int kRegisterTimeFieldNumber = 3;
-  inline ::google::protobuf::uint32 register_time() const;
-  inline void set_register_time(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 registertime() const;
+  inline void set_registertime(::google::protobuf::uint32 value);
 
-  // required uint32 last_login_platform = 4;
-  inline bool has_last_login_platform() const;
-  inline void clear_last_login_platform();
+  // required uint32 lastLoginPlatform = 4;
+  inline bool has_lastloginplatform() const;
+  inline void clear_lastloginplatform();
   static const int kLastLoginPlatformFieldNumber = 4;
-  inline ::google::protobuf::uint32 last_login_platform() const;
-  inline void set_last_login_platform(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 lastloginplatform() const;
+  inline void set_lastloginplatform(::google::protobuf::uint32 value);
 
-  // required uint32 last_login_time = 5;
-  inline bool has_last_login_time() const;
-  inline void clear_last_login_time();
+  // required uint32 lastLoginTime = 5;
+  inline bool has_lastlogintime() const;
+  inline void clear_lastlogintime();
   static const int kLastLoginTimeFieldNumber = 5;
-  inline ::google::protobuf::uint32 last_login_time() const;
-  inline void set_last_login_time(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 lastlogintime() const;
+  inline void set_lastlogintime(::google::protobuf::uint32 value);
 
-  // required uint32 login_times = 6;
-  inline bool has_login_times() const;
-  inline void clear_login_times();
+  // required uint32 loginTimes = 6;
+  inline bool has_logintimes() const;
+  inline void clear_logintimes();
   static const int kLoginTimesFieldNumber = 6;
-  inline ::google::protobuf::uint32 login_times() const;
-  inline void set_login_times(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 logintimes() const;
+  inline void set_logintimes(::google::protobuf::uint32 value);
 
-  // required uint32 login_days = 7;
-  inline bool has_login_days() const;
-  inline void clear_login_days();
+  // required uint32 loginDays = 7;
+  inline bool has_logindays() const;
+  inline void clear_logindays();
   static const int kLoginDaysFieldNumber = 7;
-  inline ::google::protobuf::uint32 login_days() const;
-  inline void set_login_days(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 logindays() const;
+  inline void set_logindays(::google::protobuf::uint32 value);
 
-  // required uint32 last_active_time = 8;
-  inline bool has_last_active_time() const;
-  inline void clear_last_active_time();
+  // required uint32 lastActiveTime = 8;
+  inline bool has_lastactivetime() const;
+  inline void clear_lastactivetime();
   static const int kLastActiveTimeFieldNumber = 8;
-  inline ::google::protobuf::uint32 last_active_time() const;
-  inline void set_last_active_time(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 lastactivetime() const;
+  inline void set_lastactivetime(::google::protobuf::uint32 value);
 
-  // required uint32 last_off_time = 9;
-  inline bool has_last_off_time() const;
-  inline void clear_last_off_time();
+  // required uint32 lastOffTime = 9;
+  inline bool has_lastofftime() const;
+  inline void clear_lastofftime();
   static const int kLastOffTimeFieldNumber = 9;
-  inline ::google::protobuf::uint32 last_off_time() const;
-  inline void set_last_off_time(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 lastofftime() const;
+  inline void set_lastofftime(::google::protobuf::uint32 value);
 
-  // required uint32 forbid_ts = 10;
-  inline bool has_forbid_ts() const;
-  inline void clear_forbid_ts();
+  // required uint32 forbidTs = 10;
+  inline bool has_forbidts() const;
+  inline void clear_forbidts();
   static const int kForbidTsFieldNumber = 10;
-  inline ::google::protobuf::uint32 forbid_ts() const;
-  inline void set_forbid_ts(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 forbidts() const;
+  inline void set_forbidts(::google::protobuf::uint32 value);
 
-  // required bytes forbid_reason = 11;
-  inline bool has_forbid_reason() const;
-  inline void clear_forbid_reason();
+  // required bytes forbidReason = 11;
+  inline bool has_forbidreason() const;
+  inline void clear_forbidreason();
   static const int kForbidReasonFieldNumber = 11;
-  inline const ::std::string& forbid_reason() const;
-  inline void set_forbid_reason(const ::std::string& value);
-  inline void set_forbid_reason(const char* value);
-  inline void set_forbid_reason(const void* value, size_t size);
-  inline ::std::string* mutable_forbid_reason();
-  inline ::std::string* release_forbid_reason();
-  inline void set_allocated_forbid_reason(::std::string* forbid_reason);
+  inline const ::std::string& forbidreason() const;
+  inline void set_forbidreason(const ::std::string& value);
+  inline void set_forbidreason(const char* value);
+  inline void set_forbidreason(const void* value, size_t size);
+  inline ::std::string* mutable_forbidreason();
+  inline ::std::string* release_forbidreason();
+  inline void set_allocated_forbidreason(::std::string* forbidreason);
 
-  // required uint32 tutorial_stage = 12;
-  inline bool has_tutorial_stage() const;
-  inline void clear_tutorial_stage();
+  // required uint32 tutorialStage = 12;
+  inline bool has_tutorialstage() const;
+  inline void clear_tutorialstage();
   static const int kTutorialStageFieldNumber = 12;
-  inline ::google::protobuf::uint32 tutorial_stage() const;
-  inline void set_tutorial_stage(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 tutorialstage() const;
+  inline void set_tutorialstage(::google::protobuf::uint32 value);
 
   // required bytes name = 13;
   inline bool has_name() const;
@@ -259,46 +264,58 @@ class Base : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 coin() const;
   inline void set_coin(::google::protobuf::uint32 value);
 
-  // required uint32 first_recharge = 21;
-  inline bool has_first_recharge() const;
-  inline void clear_first_recharge();
+  // required uint32 firstRecharge = 21;
+  inline bool has_firstrecharge() const;
+  inline void clear_firstrecharge();
   static const int kFirstRechargeFieldNumber = 21;
-  inline ::google::protobuf::uint32 first_recharge() const;
-  inline void set_first_recharge(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 firstrecharge() const;
+  inline void set_firstrecharge(::google::protobuf::uint32 value);
 
-  // required uint32 alliance_id = 22;
-  inline bool has_alliance_id() const;
-  inline void clear_alliance_id();
+  // required uint32 allianceId = 22;
+  inline bool has_allianceid() const;
+  inline void clear_allianceid();
   static const int kAllianceIdFieldNumber = 22;
-  inline ::google::protobuf::uint32 alliance_id() const;
-  inline void set_alliance_id(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 allianceid() const;
+  inline void set_allianceid(::google::protobuf::uint32 value);
+
+  // required bytes barrier = 23;
+  inline bool has_barrier() const;
+  inline void clear_barrier();
+  static const int kBarrierFieldNumber = 23;
+  inline const ::std::string& barrier() const;
+  inline void set_barrier(const ::std::string& value);
+  inline void set_barrier(const char* value);
+  inline void set_barrier(const void* value, size_t size);
+  inline ::std::string* mutable_barrier();
+  inline ::std::string* release_barrier();
+  inline void set_allocated_barrier(::std::string* barrier);
 
   // @@protoc_insertion_point(class_scope:User.Base)
  private:
   inline void set_has_uid();
   inline void clear_has_uid();
-  inline void set_has_register_platform();
-  inline void clear_has_register_platform();
-  inline void set_has_register_time();
-  inline void clear_has_register_time();
-  inline void set_has_last_login_platform();
-  inline void clear_has_last_login_platform();
-  inline void set_has_last_login_time();
-  inline void clear_has_last_login_time();
-  inline void set_has_login_times();
-  inline void clear_has_login_times();
-  inline void set_has_login_days();
-  inline void clear_has_login_days();
-  inline void set_has_last_active_time();
-  inline void clear_has_last_active_time();
-  inline void set_has_last_off_time();
-  inline void clear_has_last_off_time();
-  inline void set_has_forbid_ts();
-  inline void clear_has_forbid_ts();
-  inline void set_has_forbid_reason();
-  inline void clear_has_forbid_reason();
-  inline void set_has_tutorial_stage();
-  inline void clear_has_tutorial_stage();
+  inline void set_has_registerplatform();
+  inline void clear_has_registerplatform();
+  inline void set_has_registertime();
+  inline void clear_has_registertime();
+  inline void set_has_lastloginplatform();
+  inline void clear_has_lastloginplatform();
+  inline void set_has_lastlogintime();
+  inline void clear_has_lastlogintime();
+  inline void set_has_logintimes();
+  inline void clear_has_logintimes();
+  inline void set_has_logindays();
+  inline void clear_has_logindays();
+  inline void set_has_lastactivetime();
+  inline void clear_has_lastactivetime();
+  inline void set_has_lastofftime();
+  inline void clear_has_lastofftime();
+  inline void set_has_forbidts();
+  inline void clear_has_forbidts();
+  inline void set_has_forbidreason();
+  inline void clear_has_forbidreason();
+  inline void set_has_tutorialstage();
+  inline void clear_has_tutorialstage();
   inline void set_has_name();
   inline void clear_has_name();
   inline void set_has_fig();
@@ -315,37 +332,40 @@ class Base : public ::google::protobuf::Message {
   inline void clear_has_cash();
   inline void set_has_coin();
   inline void clear_has_coin();
-  inline void set_has_first_recharge();
-  inline void clear_has_first_recharge();
-  inline void set_has_alliance_id();
-  inline void clear_has_alliance_id();
+  inline void set_has_firstrecharge();
+  inline void clear_has_firstrecharge();
+  inline void set_has_allianceid();
+  inline void clear_has_allianceid();
+  inline void set_has_barrier();
+  inline void clear_has_barrier();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 uid_;
-  ::google::protobuf::uint32 register_platform_;
-  ::google::protobuf::uint32 register_time_;
-  ::google::protobuf::uint32 last_login_platform_;
-  ::google::protobuf::uint32 last_login_time_;
-  ::google::protobuf::uint32 login_times_;
-  ::google::protobuf::uint32 login_days_;
-  ::google::protobuf::uint32 last_active_time_;
-  ::google::protobuf::uint32 last_off_time_;
-  ::google::protobuf::uint32 forbid_ts_;
-  ::std::string* forbid_reason_;
+  ::google::protobuf::uint32 registerplatform_;
+  ::google::protobuf::uint32 registertime_;
+  ::google::protobuf::uint32 lastloginplatform_;
+  ::google::protobuf::uint32 lastlogintime_;
+  ::google::protobuf::uint32 logintimes_;
+  ::google::protobuf::uint32 logindays_;
+  ::google::protobuf::uint32 lastactivetime_;
+  ::google::protobuf::uint32 lastofftime_;
+  ::google::protobuf::uint32 forbidts_;
+  ::std::string* forbidreason_;
   ::std::string* name_;
   ::std::string* fig_;
-  ::google::protobuf::uint32 tutorial_stage_;
+  ::google::protobuf::uint32 tutorialstage_;
   ::google::protobuf::uint32 level_;
   ::google::protobuf::uint64 exp_;
   ::google::protobuf::uint32 acccharge_;
   ::google::protobuf::uint32 viplevel_;
   ::google::protobuf::uint32 cash_;
   ::google::protobuf::uint32 coin_;
-  ::google::protobuf::uint32 first_recharge_;
-  ::google::protobuf::uint32 alliance_id_;
+  ::google::protobuf::uint32 firstrecharge_;
+  ::google::protobuf::uint32 allianceid_;
+  ::std::string* barrier_;
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
   friend void protobuf_ShutdownFile_User_2eproto();
@@ -651,6 +671,66 @@ class User : public ::google::protobuf::Message {
   inline ::ProtoActivity::GameAcitivityAllCPP* release_gameactivity();
   inline void set_allocated_gameactivity(::ProtoActivity::GameAcitivityAllCPP* gameactivity);
 
+  // repeated .DataCommon.PropsItemCPP item = 7;
+  inline int item_size() const;
+  inline void clear_item();
+  static const int kItemFieldNumber = 7;
+  inline const ::DataCommon::PropsItemCPP& item(int index) const;
+  inline ::DataCommon::PropsItemCPP* mutable_item(int index);
+  inline ::DataCommon::PropsItemCPP* add_item();
+  inline const ::google::protobuf::RepeatedPtrField< ::DataCommon::PropsItemCPP >&
+      item() const;
+  inline ::google::protobuf::RepeatedPtrField< ::DataCommon::PropsItemCPP >*
+      mutable_item();
+
+  // repeated .ProtoBuilding.BuildingCPP builds = 8;
+  inline int builds_size() const;
+  inline void clear_builds();
+  static const int kBuildsFieldNumber = 8;
+  inline const ::ProtoBuilding::BuildingCPP& builds(int index) const;
+  inline ::ProtoBuilding::BuildingCPP* mutable_builds(int index);
+  inline ::ProtoBuilding::BuildingCPP* add_builds();
+  inline const ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::BuildingCPP >&
+      builds() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::BuildingCPP >*
+      mutable_builds();
+
+  // repeated .ProtoProduce.CropLandCPP cropland = 9;
+  inline int cropland_size() const;
+  inline void clear_cropland();
+  static const int kCroplandFieldNumber = 9;
+  inline const ::ProtoProduce::CropLandCPP& cropland(int index) const;
+  inline ::ProtoProduce::CropLandCPP* mutable_cropland(int index);
+  inline ::ProtoProduce::CropLandCPP* add_cropland();
+  inline const ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP >&
+      cropland() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP >*
+      mutable_cropland();
+
+  // repeated .ProtoProduce.ProduceEquipCPP equipments = 10;
+  inline int equipments_size() const;
+  inline void clear_equipments();
+  static const int kEquipmentsFieldNumber = 10;
+  inline const ::ProtoProduce::ProduceEquipCPP& equipments(int index) const;
+  inline ::ProtoProduce::ProduceEquipCPP* mutable_equipments(int index);
+  inline ::ProtoProduce::ProduceEquipCPP* add_equipments();
+  inline const ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP >&
+      equipments() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP >*
+      mutable_equipments();
+
+  // repeated .ProtoProduce.AnimalCPP animals = 11;
+  inline int animals_size() const;
+  inline void clear_animals();
+  static const int kAnimalsFieldNumber = 11;
+  inline const ::ProtoProduce::AnimalCPP& animals(int index) const;
+  inline ::ProtoProduce::AnimalCPP* mutable_animals(int index);
+  inline ::ProtoProduce::AnimalCPP* add_animals();
+  inline const ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >&
+      animals() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >*
+      mutable_animals();
+
   // @@protoc_insertion_point(class_scope:User.User)
  private:
   inline void set_has_base();
@@ -675,6 +755,11 @@ class User : public ::google::protobuf::Message {
   ::ProtoNotify::NotifyItemCPPAll* notifies_;
   ::User::AccumulateCharge* charges_;
   ::ProtoActivity::GameAcitivityAllCPP* gameactivity_;
+  ::google::protobuf::RepeatedPtrField< ::DataCommon::PropsItemCPP > item_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::BuildingCPP > builds_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP > cropland_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP > equipments_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP > animals_;
   ::google::protobuf::uint32 ts_;
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
@@ -898,23 +983,23 @@ class Tutorial_stage : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required uint32 tutorial_stage = 1;
-  inline bool has_tutorial_stage() const;
-  inline void clear_tutorial_stage();
+  // required uint32 tutorialStage = 1;
+  inline bool has_tutorialstage() const;
+  inline void clear_tutorialstage();
   static const int kTutorialStageFieldNumber = 1;
-  inline ::google::protobuf::uint32 tutorial_stage() const;
-  inline void set_tutorial_stage(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 tutorialstage() const;
+  inline void set_tutorialstage(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:User.Tutorial_stage)
  private:
-  inline void set_has_tutorial_stage();
-  inline void clear_has_tutorial_stage();
+  inline void set_has_tutorialstage();
+  inline void clear_has_tutorialstage();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::uint32 tutorial_stage_;
+  ::google::protobuf::uint32 tutorialstage_;
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
   friend void protobuf_ShutdownFile_User_2eproto();
@@ -1063,17 +1148,17 @@ class CostCashReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 cash() const;
   inline void set_cash(::google::protobuf::uint32 value);
 
-  // required string op_code = 2;
-  inline bool has_op_code() const;
-  inline void clear_op_code();
+  // required string opCode = 2;
+  inline bool has_opcode() const;
+  inline void clear_opcode();
   static const int kOpCodeFieldNumber = 2;
-  inline const ::std::string& op_code() const;
-  inline void set_op_code(const ::std::string& value);
-  inline void set_op_code(const char* value);
-  inline void set_op_code(const char* value, size_t size);
-  inline ::std::string* mutable_op_code();
-  inline ::std::string* release_op_code();
-  inline void set_allocated_op_code(::std::string* op_code);
+  inline const ::std::string& opcode() const;
+  inline void set_opcode(const ::std::string& value);
+  inline void set_opcode(const char* value);
+  inline void set_opcode(const char* value, size_t size);
+  inline ::std::string* mutable_opcode();
+  inline ::std::string* release_opcode();
+  inline void set_allocated_opcode(::std::string* opcode);
 
   // required uint32 operation = 3;
   inline bool has_operation() const;
@@ -1086,8 +1171,8 @@ class CostCashReq : public ::google::protobuf::Message {
  private:
   inline void set_has_cash();
   inline void clear_has_cash();
-  inline void set_has_op_code();
-  inline void clear_has_op_code();
+  inline void set_has_opcode();
+  inline void clear_has_opcode();
   inline void set_has_operation();
   inline void clear_has_operation();
 
@@ -1095,7 +1180,7 @@ class CostCashReq : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::std::string* op_code_;
+  ::std::string* opcode_;
   ::google::protobuf::uint32 cash_;
   ::google::protobuf::uint32 operation_;
   friend void  protobuf_AddDesc_User_2eproto();
@@ -1338,17 +1423,17 @@ class AccumulateCharge : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .User.ChargeItem accumulate_charge = 1;
-  inline int accumulate_charge_size() const;
-  inline void clear_accumulate_charge();
+  // repeated .User.ChargeItem accumulateCharge = 1;
+  inline int accumulatecharge_size() const;
+  inline void clear_accumulatecharge();
   static const int kAccumulateChargeFieldNumber = 1;
-  inline const ::User::ChargeItem& accumulate_charge(int index) const;
-  inline ::User::ChargeItem* mutable_accumulate_charge(int index);
-  inline ::User::ChargeItem* add_accumulate_charge();
+  inline const ::User::ChargeItem& accumulatecharge(int index) const;
+  inline ::User::ChargeItem* mutable_accumulatecharge(int index);
+  inline ::User::ChargeItem* add_accumulatecharge();
   inline const ::google::protobuf::RepeatedPtrField< ::User::ChargeItem >&
-      accumulate_charge() const;
+      accumulatecharge() const;
   inline ::google::protobuf::RepeatedPtrField< ::User::ChargeItem >*
-      mutable_accumulate_charge();
+      mutable_accumulatecharge();
 
   // @@protoc_insertion_point(class_scope:User.AccumulateCharge)
  private:
@@ -1357,7 +1442,7 @@ class AccumulateCharge : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::User::ChargeItem > accumulate_charge_;
+  ::google::protobuf::RepeatedPtrField< ::User::ChargeItem > accumulatecharge_;
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
   friend void protobuf_ShutdownFile_User_2eproto();
@@ -1420,31 +1505,191 @@ class PushAccumulateChangeReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .User.AccumulateCharge change_acccharge = 1;
-  inline bool has_change_acccharge() const;
-  inline void clear_change_acccharge();
+  // required .User.AccumulateCharge changeAcccharge = 1;
+  inline bool has_changeacccharge() const;
+  inline void clear_changeacccharge();
   static const int kChangeAccchargeFieldNumber = 1;
-  inline const ::User::AccumulateCharge& change_acccharge() const;
-  inline ::User::AccumulateCharge* mutable_change_acccharge();
-  inline ::User::AccumulateCharge* release_change_acccharge();
-  inline void set_allocated_change_acccharge(::User::AccumulateCharge* change_acccharge);
+  inline const ::User::AccumulateCharge& changeacccharge() const;
+  inline ::User::AccumulateCharge* mutable_changeacccharge();
+  inline ::User::AccumulateCharge* release_changeacccharge();
+  inline void set_allocated_changeacccharge(::User::AccumulateCharge* changeacccharge);
 
   // @@protoc_insertion_point(class_scope:User.PushAccumulateChangeReq)
  private:
-  inline void set_has_change_acccharge();
-  inline void clear_has_change_acccharge();
+  inline void set_has_changeacccharge();
+  inline void clear_has_changeacccharge();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::User::AccumulateCharge* change_acccharge_;
+  ::User::AccumulateCharge* changeacccharge_;
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
   friend void protobuf_ShutdownFile_User_2eproto();
 
   void InitAsDefaultInstance();
   static PushAccumulateChangeReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SpeedUpReq : public ::google::protobuf::Message {
+ public:
+  SpeedUpReq();
+  virtual ~SpeedUpReq();
+
+  SpeedUpReq(const SpeedUpReq& from);
+
+  inline SpeedUpReq& operator=(const SpeedUpReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SpeedUpReq& default_instance();
+
+  void Swap(SpeedUpReq* other);
+
+  // implements Message ----------------------------------------------
+
+  SpeedUpReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SpeedUpReq& from);
+  void MergeFrom(const SpeedUpReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 ud = 1;
+  inline bool has_ud() const;
+  inline void clear_ud();
+  static const int kUdFieldNumber = 1;
+  inline ::google::protobuf::uint32 ud() const;
+  inline void set_ud(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:User.SpeedUpReq)
+ private:
+  inline void set_has_ud();
+  inline void clear_has_ud();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 ud_;
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static SpeedUpReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SpeedUpResp : public ::google::protobuf::Message {
+ public:
+  SpeedUpResp();
+  virtual ~SpeedUpResp();
+
+  SpeedUpResp(const SpeedUpResp& from);
+
+  inline SpeedUpResp& operator=(const SpeedUpResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SpeedUpResp& default_instance();
+
+  void Swap(SpeedUpResp* other);
+
+  // implements Message ----------------------------------------------
+
+  SpeedUpResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SpeedUpResp& from);
+  void MergeFrom(const SpeedUpResp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .DataCommon.CommonItemsCPP commons = 1;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 1;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  inline void set_allocated_commons(::DataCommon::CommonItemsCPP* commons);
+
+  // @@protoc_insertion_point(class_scope:User.SpeedUpResp)
+ private:
+  inline void set_has_commons();
+  inline void clear_has_commons();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::DataCommon::CommonItemsCPP* commons_;
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static SpeedUpResp* default_instance_;
 };
 // ===================================================================
 
@@ -1477,320 +1722,320 @@ inline void Base::set_uid(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:User.Base.uid)
 }
 
-// required uint32 register_platform = 2;
-inline bool Base::has_register_platform() const {
+// required uint32 registerPlatform = 2;
+inline bool Base::has_registerplatform() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Base::set_has_register_platform() {
+inline void Base::set_has_registerplatform() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Base::clear_has_register_platform() {
+inline void Base::clear_has_registerplatform() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Base::clear_register_platform() {
-  register_platform_ = 0u;
-  clear_has_register_platform();
+inline void Base::clear_registerplatform() {
+  registerplatform_ = 0u;
+  clear_has_registerplatform();
 }
-inline ::google::protobuf::uint32 Base::register_platform() const {
-  // @@protoc_insertion_point(field_get:User.Base.register_platform)
-  return register_platform_;
+inline ::google::protobuf::uint32 Base::registerplatform() const {
+  // @@protoc_insertion_point(field_get:User.Base.registerPlatform)
+  return registerplatform_;
 }
-inline void Base::set_register_platform(::google::protobuf::uint32 value) {
-  set_has_register_platform();
-  register_platform_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.register_platform)
+inline void Base::set_registerplatform(::google::protobuf::uint32 value) {
+  set_has_registerplatform();
+  registerplatform_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.registerPlatform)
 }
 
-// required uint32 register_time = 3;
-inline bool Base::has_register_time() const {
+// required uint32 registerTime = 3;
+inline bool Base::has_registertime() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Base::set_has_register_time() {
+inline void Base::set_has_registertime() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Base::clear_has_register_time() {
+inline void Base::clear_has_registertime() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Base::clear_register_time() {
-  register_time_ = 0u;
-  clear_has_register_time();
+inline void Base::clear_registertime() {
+  registertime_ = 0u;
+  clear_has_registertime();
 }
-inline ::google::protobuf::uint32 Base::register_time() const {
-  // @@protoc_insertion_point(field_get:User.Base.register_time)
-  return register_time_;
+inline ::google::protobuf::uint32 Base::registertime() const {
+  // @@protoc_insertion_point(field_get:User.Base.registerTime)
+  return registertime_;
 }
-inline void Base::set_register_time(::google::protobuf::uint32 value) {
-  set_has_register_time();
-  register_time_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.register_time)
+inline void Base::set_registertime(::google::protobuf::uint32 value) {
+  set_has_registertime();
+  registertime_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.registerTime)
 }
 
-// required uint32 last_login_platform = 4;
-inline bool Base::has_last_login_platform() const {
+// required uint32 lastLoginPlatform = 4;
+inline bool Base::has_lastloginplatform() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Base::set_has_last_login_platform() {
+inline void Base::set_has_lastloginplatform() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void Base::clear_has_last_login_platform() {
+inline void Base::clear_has_lastloginplatform() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void Base::clear_last_login_platform() {
-  last_login_platform_ = 0u;
-  clear_has_last_login_platform();
+inline void Base::clear_lastloginplatform() {
+  lastloginplatform_ = 0u;
+  clear_has_lastloginplatform();
 }
-inline ::google::protobuf::uint32 Base::last_login_platform() const {
-  // @@protoc_insertion_point(field_get:User.Base.last_login_platform)
-  return last_login_platform_;
+inline ::google::protobuf::uint32 Base::lastloginplatform() const {
+  // @@protoc_insertion_point(field_get:User.Base.lastLoginPlatform)
+  return lastloginplatform_;
 }
-inline void Base::set_last_login_platform(::google::protobuf::uint32 value) {
-  set_has_last_login_platform();
-  last_login_platform_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.last_login_platform)
+inline void Base::set_lastloginplatform(::google::protobuf::uint32 value) {
+  set_has_lastloginplatform();
+  lastloginplatform_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.lastLoginPlatform)
 }
 
-// required uint32 last_login_time = 5;
-inline bool Base::has_last_login_time() const {
+// required uint32 lastLoginTime = 5;
+inline bool Base::has_lastlogintime() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void Base::set_has_last_login_time() {
+inline void Base::set_has_lastlogintime() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void Base::clear_has_last_login_time() {
+inline void Base::clear_has_lastlogintime() {
   _has_bits_[0] &= ~0x00000010u;
 }
-inline void Base::clear_last_login_time() {
-  last_login_time_ = 0u;
-  clear_has_last_login_time();
+inline void Base::clear_lastlogintime() {
+  lastlogintime_ = 0u;
+  clear_has_lastlogintime();
 }
-inline ::google::protobuf::uint32 Base::last_login_time() const {
-  // @@protoc_insertion_point(field_get:User.Base.last_login_time)
-  return last_login_time_;
+inline ::google::protobuf::uint32 Base::lastlogintime() const {
+  // @@protoc_insertion_point(field_get:User.Base.lastLoginTime)
+  return lastlogintime_;
 }
-inline void Base::set_last_login_time(::google::protobuf::uint32 value) {
-  set_has_last_login_time();
-  last_login_time_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.last_login_time)
+inline void Base::set_lastlogintime(::google::protobuf::uint32 value) {
+  set_has_lastlogintime();
+  lastlogintime_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.lastLoginTime)
 }
 
-// required uint32 login_times = 6;
-inline bool Base::has_login_times() const {
+// required uint32 loginTimes = 6;
+inline bool Base::has_logintimes() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void Base::set_has_login_times() {
+inline void Base::set_has_logintimes() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void Base::clear_has_login_times() {
+inline void Base::clear_has_logintimes() {
   _has_bits_[0] &= ~0x00000020u;
 }
-inline void Base::clear_login_times() {
-  login_times_ = 0u;
-  clear_has_login_times();
+inline void Base::clear_logintimes() {
+  logintimes_ = 0u;
+  clear_has_logintimes();
 }
-inline ::google::protobuf::uint32 Base::login_times() const {
-  // @@protoc_insertion_point(field_get:User.Base.login_times)
-  return login_times_;
+inline ::google::protobuf::uint32 Base::logintimes() const {
+  // @@protoc_insertion_point(field_get:User.Base.loginTimes)
+  return logintimes_;
 }
-inline void Base::set_login_times(::google::protobuf::uint32 value) {
-  set_has_login_times();
-  login_times_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.login_times)
+inline void Base::set_logintimes(::google::protobuf::uint32 value) {
+  set_has_logintimes();
+  logintimes_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.loginTimes)
 }
 
-// required uint32 login_days = 7;
-inline bool Base::has_login_days() const {
+// required uint32 loginDays = 7;
+inline bool Base::has_logindays() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void Base::set_has_login_days() {
+inline void Base::set_has_logindays() {
   _has_bits_[0] |= 0x00000040u;
 }
-inline void Base::clear_has_login_days() {
+inline void Base::clear_has_logindays() {
   _has_bits_[0] &= ~0x00000040u;
 }
-inline void Base::clear_login_days() {
-  login_days_ = 0u;
-  clear_has_login_days();
+inline void Base::clear_logindays() {
+  logindays_ = 0u;
+  clear_has_logindays();
 }
-inline ::google::protobuf::uint32 Base::login_days() const {
-  // @@protoc_insertion_point(field_get:User.Base.login_days)
-  return login_days_;
+inline ::google::protobuf::uint32 Base::logindays() const {
+  // @@protoc_insertion_point(field_get:User.Base.loginDays)
+  return logindays_;
 }
-inline void Base::set_login_days(::google::protobuf::uint32 value) {
-  set_has_login_days();
-  login_days_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.login_days)
+inline void Base::set_logindays(::google::protobuf::uint32 value) {
+  set_has_logindays();
+  logindays_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.loginDays)
 }
 
-// required uint32 last_active_time = 8;
-inline bool Base::has_last_active_time() const {
+// required uint32 lastActiveTime = 8;
+inline bool Base::has_lastactivetime() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void Base::set_has_last_active_time() {
+inline void Base::set_has_lastactivetime() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void Base::clear_has_last_active_time() {
+inline void Base::clear_has_lastactivetime() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void Base::clear_last_active_time() {
-  last_active_time_ = 0u;
-  clear_has_last_active_time();
+inline void Base::clear_lastactivetime() {
+  lastactivetime_ = 0u;
+  clear_has_lastactivetime();
 }
-inline ::google::protobuf::uint32 Base::last_active_time() const {
-  // @@protoc_insertion_point(field_get:User.Base.last_active_time)
-  return last_active_time_;
+inline ::google::protobuf::uint32 Base::lastactivetime() const {
+  // @@protoc_insertion_point(field_get:User.Base.lastActiveTime)
+  return lastactivetime_;
 }
-inline void Base::set_last_active_time(::google::protobuf::uint32 value) {
-  set_has_last_active_time();
-  last_active_time_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.last_active_time)
+inline void Base::set_lastactivetime(::google::protobuf::uint32 value) {
+  set_has_lastactivetime();
+  lastactivetime_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.lastActiveTime)
 }
 
-// required uint32 last_off_time = 9;
-inline bool Base::has_last_off_time() const {
+// required uint32 lastOffTime = 9;
+inline bool Base::has_lastofftime() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
-inline void Base::set_has_last_off_time() {
+inline void Base::set_has_lastofftime() {
   _has_bits_[0] |= 0x00000100u;
 }
-inline void Base::clear_has_last_off_time() {
+inline void Base::clear_has_lastofftime() {
   _has_bits_[0] &= ~0x00000100u;
 }
-inline void Base::clear_last_off_time() {
-  last_off_time_ = 0u;
-  clear_has_last_off_time();
+inline void Base::clear_lastofftime() {
+  lastofftime_ = 0u;
+  clear_has_lastofftime();
 }
-inline ::google::protobuf::uint32 Base::last_off_time() const {
-  // @@protoc_insertion_point(field_get:User.Base.last_off_time)
-  return last_off_time_;
+inline ::google::protobuf::uint32 Base::lastofftime() const {
+  // @@protoc_insertion_point(field_get:User.Base.lastOffTime)
+  return lastofftime_;
 }
-inline void Base::set_last_off_time(::google::protobuf::uint32 value) {
-  set_has_last_off_time();
-  last_off_time_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.last_off_time)
+inline void Base::set_lastofftime(::google::protobuf::uint32 value) {
+  set_has_lastofftime();
+  lastofftime_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.lastOffTime)
 }
 
-// required uint32 forbid_ts = 10;
-inline bool Base::has_forbid_ts() const {
+// required uint32 forbidTs = 10;
+inline bool Base::has_forbidts() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
-inline void Base::set_has_forbid_ts() {
+inline void Base::set_has_forbidts() {
   _has_bits_[0] |= 0x00000200u;
 }
-inline void Base::clear_has_forbid_ts() {
+inline void Base::clear_has_forbidts() {
   _has_bits_[0] &= ~0x00000200u;
 }
-inline void Base::clear_forbid_ts() {
-  forbid_ts_ = 0u;
-  clear_has_forbid_ts();
+inline void Base::clear_forbidts() {
+  forbidts_ = 0u;
+  clear_has_forbidts();
 }
-inline ::google::protobuf::uint32 Base::forbid_ts() const {
-  // @@protoc_insertion_point(field_get:User.Base.forbid_ts)
-  return forbid_ts_;
+inline ::google::protobuf::uint32 Base::forbidts() const {
+  // @@protoc_insertion_point(field_get:User.Base.forbidTs)
+  return forbidts_;
 }
-inline void Base::set_forbid_ts(::google::protobuf::uint32 value) {
-  set_has_forbid_ts();
-  forbid_ts_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.forbid_ts)
+inline void Base::set_forbidts(::google::protobuf::uint32 value) {
+  set_has_forbidts();
+  forbidts_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.forbidTs)
 }
 
-// required bytes forbid_reason = 11;
-inline bool Base::has_forbid_reason() const {
+// required bytes forbidReason = 11;
+inline bool Base::has_forbidreason() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
-inline void Base::set_has_forbid_reason() {
+inline void Base::set_has_forbidreason() {
   _has_bits_[0] |= 0x00000400u;
 }
-inline void Base::clear_has_forbid_reason() {
+inline void Base::clear_has_forbidreason() {
   _has_bits_[0] &= ~0x00000400u;
 }
-inline void Base::clear_forbid_reason() {
-  if (forbid_reason_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    forbid_reason_->clear();
+inline void Base::clear_forbidreason() {
+  if (forbidreason_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    forbidreason_->clear();
   }
-  clear_has_forbid_reason();
+  clear_has_forbidreason();
 }
-inline const ::std::string& Base::forbid_reason() const {
-  // @@protoc_insertion_point(field_get:User.Base.forbid_reason)
-  return *forbid_reason_;
+inline const ::std::string& Base::forbidreason() const {
+  // @@protoc_insertion_point(field_get:User.Base.forbidReason)
+  return *forbidreason_;
 }
-inline void Base::set_forbid_reason(const ::std::string& value) {
-  set_has_forbid_reason();
-  if (forbid_reason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    forbid_reason_ = new ::std::string;
+inline void Base::set_forbidreason(const ::std::string& value) {
+  set_has_forbidreason();
+  if (forbidreason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    forbidreason_ = new ::std::string;
   }
-  forbid_reason_->assign(value);
-  // @@protoc_insertion_point(field_set:User.Base.forbid_reason)
+  forbidreason_->assign(value);
+  // @@protoc_insertion_point(field_set:User.Base.forbidReason)
 }
-inline void Base::set_forbid_reason(const char* value) {
-  set_has_forbid_reason();
-  if (forbid_reason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    forbid_reason_ = new ::std::string;
+inline void Base::set_forbidreason(const char* value) {
+  set_has_forbidreason();
+  if (forbidreason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    forbidreason_ = new ::std::string;
   }
-  forbid_reason_->assign(value);
-  // @@protoc_insertion_point(field_set_char:User.Base.forbid_reason)
+  forbidreason_->assign(value);
+  // @@protoc_insertion_point(field_set_char:User.Base.forbidReason)
 }
-inline void Base::set_forbid_reason(const void* value, size_t size) {
-  set_has_forbid_reason();
-  if (forbid_reason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    forbid_reason_ = new ::std::string;
+inline void Base::set_forbidreason(const void* value, size_t size) {
+  set_has_forbidreason();
+  if (forbidreason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    forbidreason_ = new ::std::string;
   }
-  forbid_reason_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:User.Base.forbid_reason)
+  forbidreason_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:User.Base.forbidReason)
 }
-inline ::std::string* Base::mutable_forbid_reason() {
-  set_has_forbid_reason();
-  if (forbid_reason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    forbid_reason_ = new ::std::string;
+inline ::std::string* Base::mutable_forbidreason() {
+  set_has_forbidreason();
+  if (forbidreason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    forbidreason_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:User.Base.forbid_reason)
-  return forbid_reason_;
+  // @@protoc_insertion_point(field_mutable:User.Base.forbidReason)
+  return forbidreason_;
 }
-inline ::std::string* Base::release_forbid_reason() {
-  clear_has_forbid_reason();
-  if (forbid_reason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline ::std::string* Base::release_forbidreason() {
+  clear_has_forbidreason();
+  if (forbidreason_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
-    ::std::string* temp = forbid_reason_;
-    forbid_reason_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    ::std::string* temp = forbidreason_;
+    forbidreason_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void Base::set_allocated_forbid_reason(::std::string* forbid_reason) {
-  if (forbid_reason_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete forbid_reason_;
+inline void Base::set_allocated_forbidreason(::std::string* forbidreason) {
+  if (forbidreason_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete forbidreason_;
   }
-  if (forbid_reason) {
-    set_has_forbid_reason();
-    forbid_reason_ = forbid_reason;
+  if (forbidreason) {
+    set_has_forbidreason();
+    forbidreason_ = forbidreason;
   } else {
-    clear_has_forbid_reason();
-    forbid_reason_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    clear_has_forbidreason();
+    forbidreason_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:User.Base.forbid_reason)
+  // @@protoc_insertion_point(field_set_allocated:User.Base.forbidReason)
 }
 
-// required uint32 tutorial_stage = 12;
-inline bool Base::has_tutorial_stage() const {
+// required uint32 tutorialStage = 12;
+inline bool Base::has_tutorialstage() const {
   return (_has_bits_[0] & 0x00000800u) != 0;
 }
-inline void Base::set_has_tutorial_stage() {
+inline void Base::set_has_tutorialstage() {
   _has_bits_[0] |= 0x00000800u;
 }
-inline void Base::clear_has_tutorial_stage() {
+inline void Base::clear_has_tutorialstage() {
   _has_bits_[0] &= ~0x00000800u;
 }
-inline void Base::clear_tutorial_stage() {
-  tutorial_stage_ = 0u;
-  clear_has_tutorial_stage();
+inline void Base::clear_tutorialstage() {
+  tutorialstage_ = 0u;
+  clear_has_tutorialstage();
 }
-inline ::google::protobuf::uint32 Base::tutorial_stage() const {
-  // @@protoc_insertion_point(field_get:User.Base.tutorial_stage)
-  return tutorial_stage_;
+inline ::google::protobuf::uint32 Base::tutorialstage() const {
+  // @@protoc_insertion_point(field_get:User.Base.tutorialStage)
+  return tutorialstage_;
 }
-inline void Base::set_tutorial_stage(::google::protobuf::uint32 value) {
-  set_has_tutorial_stage();
-  tutorial_stage_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.tutorial_stage)
+inline void Base::set_tutorialstage(::google::protobuf::uint32 value) {
+  set_has_tutorialstage();
+  tutorialstage_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.tutorialStage)
 }
 
 // required bytes name = 13;
@@ -2089,52 +2334,128 @@ inline void Base::set_coin(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:User.Base.coin)
 }
 
-// required uint32 first_recharge = 21;
-inline bool Base::has_first_recharge() const {
+// required uint32 firstRecharge = 21;
+inline bool Base::has_firstrecharge() const {
   return (_has_bits_[0] & 0x00100000u) != 0;
 }
-inline void Base::set_has_first_recharge() {
+inline void Base::set_has_firstrecharge() {
   _has_bits_[0] |= 0x00100000u;
 }
-inline void Base::clear_has_first_recharge() {
+inline void Base::clear_has_firstrecharge() {
   _has_bits_[0] &= ~0x00100000u;
 }
-inline void Base::clear_first_recharge() {
-  first_recharge_ = 0u;
-  clear_has_first_recharge();
+inline void Base::clear_firstrecharge() {
+  firstrecharge_ = 0u;
+  clear_has_firstrecharge();
 }
-inline ::google::protobuf::uint32 Base::first_recharge() const {
-  // @@protoc_insertion_point(field_get:User.Base.first_recharge)
-  return first_recharge_;
+inline ::google::protobuf::uint32 Base::firstrecharge() const {
+  // @@protoc_insertion_point(field_get:User.Base.firstRecharge)
+  return firstrecharge_;
 }
-inline void Base::set_first_recharge(::google::protobuf::uint32 value) {
-  set_has_first_recharge();
-  first_recharge_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.first_recharge)
+inline void Base::set_firstrecharge(::google::protobuf::uint32 value) {
+  set_has_firstrecharge();
+  firstrecharge_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.firstRecharge)
 }
 
-// required uint32 alliance_id = 22;
-inline bool Base::has_alliance_id() const {
+// required uint32 allianceId = 22;
+inline bool Base::has_allianceid() const {
   return (_has_bits_[0] & 0x00200000u) != 0;
 }
-inline void Base::set_has_alliance_id() {
+inline void Base::set_has_allianceid() {
   _has_bits_[0] |= 0x00200000u;
 }
-inline void Base::clear_has_alliance_id() {
+inline void Base::clear_has_allianceid() {
   _has_bits_[0] &= ~0x00200000u;
 }
-inline void Base::clear_alliance_id() {
-  alliance_id_ = 0u;
-  clear_has_alliance_id();
+inline void Base::clear_allianceid() {
+  allianceid_ = 0u;
+  clear_has_allianceid();
 }
-inline ::google::protobuf::uint32 Base::alliance_id() const {
-  // @@protoc_insertion_point(field_get:User.Base.alliance_id)
-  return alliance_id_;
+inline ::google::protobuf::uint32 Base::allianceid() const {
+  // @@protoc_insertion_point(field_get:User.Base.allianceId)
+  return allianceid_;
 }
-inline void Base::set_alliance_id(::google::protobuf::uint32 value) {
-  set_has_alliance_id();
-  alliance_id_ = value;
-  // @@protoc_insertion_point(field_set:User.Base.alliance_id)
+inline void Base::set_allianceid(::google::protobuf::uint32 value) {
+  set_has_allianceid();
+  allianceid_ = value;
+  // @@protoc_insertion_point(field_set:User.Base.allianceId)
+}
+
+// required bytes barrier = 23;
+inline bool Base::has_barrier() const {
+  return (_has_bits_[0] & 0x00400000u) != 0;
+}
+inline void Base::set_has_barrier() {
+  _has_bits_[0] |= 0x00400000u;
+}
+inline void Base::clear_has_barrier() {
+  _has_bits_[0] &= ~0x00400000u;
+}
+inline void Base::clear_barrier() {
+  if (barrier_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    barrier_->clear();
+  }
+  clear_has_barrier();
+}
+inline const ::std::string& Base::barrier() const {
+  // @@protoc_insertion_point(field_get:User.Base.barrier)
+  return *barrier_;
+}
+inline void Base::set_barrier(const ::std::string& value) {
+  set_has_barrier();
+  if (barrier_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    barrier_ = new ::std::string;
+  }
+  barrier_->assign(value);
+  // @@protoc_insertion_point(field_set:User.Base.barrier)
+}
+inline void Base::set_barrier(const char* value) {
+  set_has_barrier();
+  if (barrier_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    barrier_ = new ::std::string;
+  }
+  barrier_->assign(value);
+  // @@protoc_insertion_point(field_set_char:User.Base.barrier)
+}
+inline void Base::set_barrier(const void* value, size_t size) {
+  set_has_barrier();
+  if (barrier_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    barrier_ = new ::std::string;
+  }
+  barrier_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:User.Base.barrier)
+}
+inline ::std::string* Base::mutable_barrier() {
+  set_has_barrier();
+  if (barrier_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    barrier_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:User.Base.barrier)
+  return barrier_;
+}
+inline ::std::string* Base::release_barrier() {
+  clear_has_barrier();
+  if (barrier_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = barrier_;
+    barrier_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void Base::set_allocated_barrier(::std::string* barrier) {
+  if (barrier_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete barrier_;
+  }
+  if (barrier) {
+    set_has_barrier();
+    barrier_ = barrier;
+  } else {
+    clear_has_barrier();
+    barrier_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:User.Base.barrier)
 }
 
 // -------------------------------------------------------------------
@@ -2504,6 +2825,156 @@ inline void User::set_allocated_gameactivity(::ProtoActivity::GameAcitivityAllCP
   // @@protoc_insertion_point(field_set_allocated:User.User.gameactivity)
 }
 
+// repeated .DataCommon.PropsItemCPP item = 7;
+inline int User::item_size() const {
+  return item_.size();
+}
+inline void User::clear_item() {
+  item_.Clear();
+}
+inline const ::DataCommon::PropsItemCPP& User::item(int index) const {
+  // @@protoc_insertion_point(field_get:User.User.item)
+  return item_.Get(index);
+}
+inline ::DataCommon::PropsItemCPP* User::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:User.User.item)
+  return item_.Mutable(index);
+}
+inline ::DataCommon::PropsItemCPP* User::add_item() {
+  // @@protoc_insertion_point(field_add:User.User.item)
+  return item_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::DataCommon::PropsItemCPP >&
+User::item() const {
+  // @@protoc_insertion_point(field_list:User.User.item)
+  return item_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::DataCommon::PropsItemCPP >*
+User::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:User.User.item)
+  return &item_;
+}
+
+// repeated .ProtoBuilding.BuildingCPP builds = 8;
+inline int User::builds_size() const {
+  return builds_.size();
+}
+inline void User::clear_builds() {
+  builds_.Clear();
+}
+inline const ::ProtoBuilding::BuildingCPP& User::builds(int index) const {
+  // @@protoc_insertion_point(field_get:User.User.builds)
+  return builds_.Get(index);
+}
+inline ::ProtoBuilding::BuildingCPP* User::mutable_builds(int index) {
+  // @@protoc_insertion_point(field_mutable:User.User.builds)
+  return builds_.Mutable(index);
+}
+inline ::ProtoBuilding::BuildingCPP* User::add_builds() {
+  // @@protoc_insertion_point(field_add:User.User.builds)
+  return builds_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::BuildingCPP >&
+User::builds() const {
+  // @@protoc_insertion_point(field_list:User.User.builds)
+  return builds_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::BuildingCPP >*
+User::mutable_builds() {
+  // @@protoc_insertion_point(field_mutable_list:User.User.builds)
+  return &builds_;
+}
+
+// repeated .ProtoProduce.CropLandCPP cropland = 9;
+inline int User::cropland_size() const {
+  return cropland_.size();
+}
+inline void User::clear_cropland() {
+  cropland_.Clear();
+}
+inline const ::ProtoProduce::CropLandCPP& User::cropland(int index) const {
+  // @@protoc_insertion_point(field_get:User.User.cropland)
+  return cropland_.Get(index);
+}
+inline ::ProtoProduce::CropLandCPP* User::mutable_cropland(int index) {
+  // @@protoc_insertion_point(field_mutable:User.User.cropland)
+  return cropland_.Mutable(index);
+}
+inline ::ProtoProduce::CropLandCPP* User::add_cropland() {
+  // @@protoc_insertion_point(field_add:User.User.cropland)
+  return cropland_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP >&
+User::cropland() const {
+  // @@protoc_insertion_point(field_list:User.User.cropland)
+  return cropland_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP >*
+User::mutable_cropland() {
+  // @@protoc_insertion_point(field_mutable_list:User.User.cropland)
+  return &cropland_;
+}
+
+// repeated .ProtoProduce.ProduceEquipCPP equipments = 10;
+inline int User::equipments_size() const {
+  return equipments_.size();
+}
+inline void User::clear_equipments() {
+  equipments_.Clear();
+}
+inline const ::ProtoProduce::ProduceEquipCPP& User::equipments(int index) const {
+  // @@protoc_insertion_point(field_get:User.User.equipments)
+  return equipments_.Get(index);
+}
+inline ::ProtoProduce::ProduceEquipCPP* User::mutable_equipments(int index) {
+  // @@protoc_insertion_point(field_mutable:User.User.equipments)
+  return equipments_.Mutable(index);
+}
+inline ::ProtoProduce::ProduceEquipCPP* User::add_equipments() {
+  // @@protoc_insertion_point(field_add:User.User.equipments)
+  return equipments_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP >&
+User::equipments() const {
+  // @@protoc_insertion_point(field_list:User.User.equipments)
+  return equipments_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP >*
+User::mutable_equipments() {
+  // @@protoc_insertion_point(field_mutable_list:User.User.equipments)
+  return &equipments_;
+}
+
+// repeated .ProtoProduce.AnimalCPP animals = 11;
+inline int User::animals_size() const {
+  return animals_.size();
+}
+inline void User::clear_animals() {
+  animals_.Clear();
+}
+inline const ::ProtoProduce::AnimalCPP& User::animals(int index) const {
+  // @@protoc_insertion_point(field_get:User.User.animals)
+  return animals_.Get(index);
+}
+inline ::ProtoProduce::AnimalCPP* User::mutable_animals(int index) {
+  // @@protoc_insertion_point(field_mutable:User.User.animals)
+  return animals_.Mutable(index);
+}
+inline ::ProtoProduce::AnimalCPP* User::add_animals() {
+  // @@protoc_insertion_point(field_add:User.User.animals)
+  return animals_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >&
+User::animals() const {
+  // @@protoc_insertion_point(field_list:User.User.animals)
+  return animals_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >*
+User::mutable_animals() {
+  // @@protoc_insertion_point(field_mutable_list:User.User.animals)
+  return &animals_;
+}
+
 // -------------------------------------------------------------------
 
 // RequestOtherUser
@@ -2581,28 +3052,28 @@ inline void OtherUser::set_allocated_base(::User::Base* base) {
 
 // Tutorial_stage
 
-// required uint32 tutorial_stage = 1;
-inline bool Tutorial_stage::has_tutorial_stage() const {
+// required uint32 tutorialStage = 1;
+inline bool Tutorial_stage::has_tutorialstage() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Tutorial_stage::set_has_tutorial_stage() {
+inline void Tutorial_stage::set_has_tutorialstage() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Tutorial_stage::clear_has_tutorial_stage() {
+inline void Tutorial_stage::clear_has_tutorialstage() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Tutorial_stage::clear_tutorial_stage() {
-  tutorial_stage_ = 0u;
-  clear_has_tutorial_stage();
+inline void Tutorial_stage::clear_tutorialstage() {
+  tutorialstage_ = 0u;
+  clear_has_tutorialstage();
 }
-inline ::google::protobuf::uint32 Tutorial_stage::tutorial_stage() const {
-  // @@protoc_insertion_point(field_get:User.Tutorial_stage.tutorial_stage)
-  return tutorial_stage_;
+inline ::google::protobuf::uint32 Tutorial_stage::tutorialstage() const {
+  // @@protoc_insertion_point(field_get:User.Tutorial_stage.tutorialStage)
+  return tutorialstage_;
 }
-inline void Tutorial_stage::set_tutorial_stage(::google::protobuf::uint32 value) {
-  set_has_tutorial_stage();
-  tutorial_stage_ = value;
-  // @@protoc_insertion_point(field_set:User.Tutorial_stage.tutorial_stage)
+inline void Tutorial_stage::set_tutorialstage(::google::protobuf::uint32 value) {
+  set_has_tutorialstage();
+  tutorialstage_ = value;
+  // @@protoc_insertion_point(field_set:User.Tutorial_stage.tutorialStage)
 }
 
 // -------------------------------------------------------------------
@@ -2661,80 +3132,80 @@ inline void CostCashReq::set_cash(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:User.CostCashReq.cash)
 }
 
-// required string op_code = 2;
-inline bool CostCashReq::has_op_code() const {
+// required string opCode = 2;
+inline bool CostCashReq::has_opcode() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void CostCashReq::set_has_op_code() {
+inline void CostCashReq::set_has_opcode() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void CostCashReq::clear_has_op_code() {
+inline void CostCashReq::clear_has_opcode() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void CostCashReq::clear_op_code() {
-  if (op_code_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    op_code_->clear();
+inline void CostCashReq::clear_opcode() {
+  if (opcode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    opcode_->clear();
   }
-  clear_has_op_code();
+  clear_has_opcode();
 }
-inline const ::std::string& CostCashReq::op_code() const {
-  // @@protoc_insertion_point(field_get:User.CostCashReq.op_code)
-  return *op_code_;
+inline const ::std::string& CostCashReq::opcode() const {
+  // @@protoc_insertion_point(field_get:User.CostCashReq.opCode)
+  return *opcode_;
 }
-inline void CostCashReq::set_op_code(const ::std::string& value) {
-  set_has_op_code();
-  if (op_code_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    op_code_ = new ::std::string;
+inline void CostCashReq::set_opcode(const ::std::string& value) {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    opcode_ = new ::std::string;
   }
-  op_code_->assign(value);
-  // @@protoc_insertion_point(field_set:User.CostCashReq.op_code)
+  opcode_->assign(value);
+  // @@protoc_insertion_point(field_set:User.CostCashReq.opCode)
 }
-inline void CostCashReq::set_op_code(const char* value) {
-  set_has_op_code();
-  if (op_code_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    op_code_ = new ::std::string;
+inline void CostCashReq::set_opcode(const char* value) {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    opcode_ = new ::std::string;
   }
-  op_code_->assign(value);
-  // @@protoc_insertion_point(field_set_char:User.CostCashReq.op_code)
+  opcode_->assign(value);
+  // @@protoc_insertion_point(field_set_char:User.CostCashReq.opCode)
 }
-inline void CostCashReq::set_op_code(const char* value, size_t size) {
-  set_has_op_code();
-  if (op_code_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    op_code_ = new ::std::string;
+inline void CostCashReq::set_opcode(const char* value, size_t size) {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    opcode_ = new ::std::string;
   }
-  op_code_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:User.CostCashReq.op_code)
+  opcode_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:User.CostCashReq.opCode)
 }
-inline ::std::string* CostCashReq::mutable_op_code() {
-  set_has_op_code();
-  if (op_code_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    op_code_ = new ::std::string;
+inline ::std::string* CostCashReq::mutable_opcode() {
+  set_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    opcode_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:User.CostCashReq.op_code)
-  return op_code_;
+  // @@protoc_insertion_point(field_mutable:User.CostCashReq.opCode)
+  return opcode_;
 }
-inline ::std::string* CostCashReq::release_op_code() {
-  clear_has_op_code();
-  if (op_code_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline ::std::string* CostCashReq::release_opcode() {
+  clear_has_opcode();
+  if (opcode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
-    ::std::string* temp = op_code_;
-    op_code_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    ::std::string* temp = opcode_;
+    opcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void CostCashReq::set_allocated_op_code(::std::string* op_code) {
-  if (op_code_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete op_code_;
+inline void CostCashReq::set_allocated_opcode(::std::string* opcode) {
+  if (opcode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete opcode_;
   }
-  if (op_code) {
-    set_has_op_code();
-    op_code_ = op_code;
+  if (opcode) {
+    set_has_opcode();
+    opcode_ = opcode;
   } else {
-    clear_has_op_code();
-    op_code_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    clear_has_opcode();
+    opcode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:User.CostCashReq.op_code)
+  // @@protoc_insertion_point(field_set_allocated:User.CostCashReq.opCode)
 }
 
 // required uint32 operation = 3;
@@ -2869,79 +3340,152 @@ inline void ChargeItem::set_ts(::google::protobuf::uint32 value) {
 
 // AccumulateCharge
 
-// repeated .User.ChargeItem accumulate_charge = 1;
-inline int AccumulateCharge::accumulate_charge_size() const {
-  return accumulate_charge_.size();
+// repeated .User.ChargeItem accumulateCharge = 1;
+inline int AccumulateCharge::accumulatecharge_size() const {
+  return accumulatecharge_.size();
 }
-inline void AccumulateCharge::clear_accumulate_charge() {
-  accumulate_charge_.Clear();
+inline void AccumulateCharge::clear_accumulatecharge() {
+  accumulatecharge_.Clear();
 }
-inline const ::User::ChargeItem& AccumulateCharge::accumulate_charge(int index) const {
-  // @@protoc_insertion_point(field_get:User.AccumulateCharge.accumulate_charge)
-  return accumulate_charge_.Get(index);
+inline const ::User::ChargeItem& AccumulateCharge::accumulatecharge(int index) const {
+  // @@protoc_insertion_point(field_get:User.AccumulateCharge.accumulateCharge)
+  return accumulatecharge_.Get(index);
 }
-inline ::User::ChargeItem* AccumulateCharge::mutable_accumulate_charge(int index) {
-  // @@protoc_insertion_point(field_mutable:User.AccumulateCharge.accumulate_charge)
-  return accumulate_charge_.Mutable(index);
+inline ::User::ChargeItem* AccumulateCharge::mutable_accumulatecharge(int index) {
+  // @@protoc_insertion_point(field_mutable:User.AccumulateCharge.accumulateCharge)
+  return accumulatecharge_.Mutable(index);
 }
-inline ::User::ChargeItem* AccumulateCharge::add_accumulate_charge() {
-  // @@protoc_insertion_point(field_add:User.AccumulateCharge.accumulate_charge)
-  return accumulate_charge_.Add();
+inline ::User::ChargeItem* AccumulateCharge::add_accumulatecharge() {
+  // @@protoc_insertion_point(field_add:User.AccumulateCharge.accumulateCharge)
+  return accumulatecharge_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::User::ChargeItem >&
-AccumulateCharge::accumulate_charge() const {
-  // @@protoc_insertion_point(field_list:User.AccumulateCharge.accumulate_charge)
-  return accumulate_charge_;
+AccumulateCharge::accumulatecharge() const {
+  // @@protoc_insertion_point(field_list:User.AccumulateCharge.accumulateCharge)
+  return accumulatecharge_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::User::ChargeItem >*
-AccumulateCharge::mutable_accumulate_charge() {
-  // @@protoc_insertion_point(field_mutable_list:User.AccumulateCharge.accumulate_charge)
-  return &accumulate_charge_;
+AccumulateCharge::mutable_accumulatecharge() {
+  // @@protoc_insertion_point(field_mutable_list:User.AccumulateCharge.accumulateCharge)
+  return &accumulatecharge_;
 }
 
 // -------------------------------------------------------------------
 
 // PushAccumulateChangeReq
 
-// required .User.AccumulateCharge change_acccharge = 1;
-inline bool PushAccumulateChangeReq::has_change_acccharge() const {
+// required .User.AccumulateCharge changeAcccharge = 1;
+inline bool PushAccumulateChangeReq::has_changeacccharge() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void PushAccumulateChangeReq::set_has_change_acccharge() {
+inline void PushAccumulateChangeReq::set_has_changeacccharge() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void PushAccumulateChangeReq::clear_has_change_acccharge() {
+inline void PushAccumulateChangeReq::clear_has_changeacccharge() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void PushAccumulateChangeReq::clear_change_acccharge() {
-  if (change_acccharge_ != NULL) change_acccharge_->::User::AccumulateCharge::Clear();
-  clear_has_change_acccharge();
+inline void PushAccumulateChangeReq::clear_changeacccharge() {
+  if (changeacccharge_ != NULL) changeacccharge_->::User::AccumulateCharge::Clear();
+  clear_has_changeacccharge();
 }
-inline const ::User::AccumulateCharge& PushAccumulateChangeReq::change_acccharge() const {
-  // @@protoc_insertion_point(field_get:User.PushAccumulateChangeReq.change_acccharge)
-  return change_acccharge_ != NULL ? *change_acccharge_ : *default_instance_->change_acccharge_;
+inline const ::User::AccumulateCharge& PushAccumulateChangeReq::changeacccharge() const {
+  // @@protoc_insertion_point(field_get:User.PushAccumulateChangeReq.changeAcccharge)
+  return changeacccharge_ != NULL ? *changeacccharge_ : *default_instance_->changeacccharge_;
 }
-inline ::User::AccumulateCharge* PushAccumulateChangeReq::mutable_change_acccharge() {
-  set_has_change_acccharge();
-  if (change_acccharge_ == NULL) change_acccharge_ = new ::User::AccumulateCharge;
-  // @@protoc_insertion_point(field_mutable:User.PushAccumulateChangeReq.change_acccharge)
-  return change_acccharge_;
+inline ::User::AccumulateCharge* PushAccumulateChangeReq::mutable_changeacccharge() {
+  set_has_changeacccharge();
+  if (changeacccharge_ == NULL) changeacccharge_ = new ::User::AccumulateCharge;
+  // @@protoc_insertion_point(field_mutable:User.PushAccumulateChangeReq.changeAcccharge)
+  return changeacccharge_;
 }
-inline ::User::AccumulateCharge* PushAccumulateChangeReq::release_change_acccharge() {
-  clear_has_change_acccharge();
-  ::User::AccumulateCharge* temp = change_acccharge_;
-  change_acccharge_ = NULL;
+inline ::User::AccumulateCharge* PushAccumulateChangeReq::release_changeacccharge() {
+  clear_has_changeacccharge();
+  ::User::AccumulateCharge* temp = changeacccharge_;
+  changeacccharge_ = NULL;
   return temp;
 }
-inline void PushAccumulateChangeReq::set_allocated_change_acccharge(::User::AccumulateCharge* change_acccharge) {
-  delete change_acccharge_;
-  change_acccharge_ = change_acccharge;
-  if (change_acccharge) {
-    set_has_change_acccharge();
+inline void PushAccumulateChangeReq::set_allocated_changeacccharge(::User::AccumulateCharge* changeacccharge) {
+  delete changeacccharge_;
+  changeacccharge_ = changeacccharge;
+  if (changeacccharge) {
+    set_has_changeacccharge();
   } else {
-    clear_has_change_acccharge();
+    clear_has_changeacccharge();
   }
-  // @@protoc_insertion_point(field_set_allocated:User.PushAccumulateChangeReq.change_acccharge)
+  // @@protoc_insertion_point(field_set_allocated:User.PushAccumulateChangeReq.changeAcccharge)
+}
+
+// -------------------------------------------------------------------
+
+// SpeedUpReq
+
+// required uint32 ud = 1;
+inline bool SpeedUpReq::has_ud() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SpeedUpReq::set_has_ud() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SpeedUpReq::clear_has_ud() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SpeedUpReq::clear_ud() {
+  ud_ = 0u;
+  clear_has_ud();
+}
+inline ::google::protobuf::uint32 SpeedUpReq::ud() const {
+  // @@protoc_insertion_point(field_get:User.SpeedUpReq.ud)
+  return ud_;
+}
+inline void SpeedUpReq::set_ud(::google::protobuf::uint32 value) {
+  set_has_ud();
+  ud_ = value;
+  // @@protoc_insertion_point(field_set:User.SpeedUpReq.ud)
+}
+
+// -------------------------------------------------------------------
+
+// SpeedUpResp
+
+// optional .DataCommon.CommonItemsCPP commons = 1;
+inline bool SpeedUpResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SpeedUpResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SpeedUpResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SpeedUpResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& SpeedUpResp::commons() const {
+  // @@protoc_insertion_point(field_get:User.SpeedUpResp.commons)
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* SpeedUpResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  // @@protoc_insertion_point(field_mutable:User.SpeedUpResp.commons)
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* SpeedUpResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
+}
+inline void SpeedUpResp::set_allocated_commons(::DataCommon::CommonItemsCPP* commons) {
+  delete commons_;
+  commons_ = commons;
+  if (commons) {
+    set_has_commons();
+  } else {
+    clear_has_commons();
+  }
+  // @@protoc_insertion_point(field_set_allocated:User.SpeedUpResp.commons)
 }
 
 

@@ -1,6 +1,8 @@
 import "ProtoNotify.proto";
 import "ProtoActivity.proto";
 import "ProtoBuilding.proto";
+import "ProtoProduce.proto";
+import "DataCommon.proto";
 
 package User;
 
@@ -41,12 +43,14 @@ message Activity{
 
 message User {
 		required Base base										= 1;
-		required uint32 ts										= 2;//服务器时间
-		required Activity activity								= 3;//活动时间
-		optional ProtoNotify.NotifyItemCPPAll 	notifies		= 4;//活动的通知
-		required AccumulateCharge	       charges				= 5;//累积充值.与累积充值活动无关。只保留7日充值数据
-		required ProtoActivity.GameAcitivityAllCPP gameactivity	= 6;//已开启的活动
-		repeated ProtoBuilding.BuildingCPP		builds			= 7;
+		required uint32 ts										= 2; //服务器时间
+		required Activity activity								= 3; //活动时间
+		optional ProtoNotify.NotifyItemCPPAll 	notifies		= 4; //活动的通知
+		required AccumulateCharge	       charges				= 5; //累积充值.与累积充值活动无关。只保留7日充值数据
+		required ProtoActivity.GameAcitivityAllCPP gameactivity	= 6; //已开启的活动
+		repeated DataCommon.PropsItemCPP	 item	            = 7; //物品
+		repeated ProtoBuilding.BuildingCPP		builds			= 8; //建筑物
+		repeated ProtoProduce.CropLandCPP		cropland		= 9; //农地
 }
 
 message RequestOtherUser{
@@ -95,3 +99,15 @@ message PushAccumulateChangeReq
 {
 	required AccumulateCharge  changeAcccharge = 1;  //改变后的累积充值
 }
+
+//加速
+message SpeedUpReq
+{
+	required uint32 ud	= 1; //建筑ud
+} 
+
+message SpeedUpResp
+{
+	optional DataCommon.CommonItemsCPP commons  = 1; //钻石或收获
+}
+

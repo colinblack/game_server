@@ -19,5 +19,6 @@
 #include "DataChargeHistoryManager.h"
 #include "ConfigWrap.h"
 #include "NotifyManager.h"
+#include "DataAllManager.h"
 
 #endif /* DATAINC_H_ */
