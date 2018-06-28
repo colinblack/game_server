@@ -97,6 +97,7 @@ message Buildings
 	repeated Decoration 		decorate		= 7;  //装饰物
 	repeated BuildFoot 			build_print		= 8;  //地块相关信息
 	repeated Animal				 animal			= 9;  //动物
+	required uint32 unlock_upgardestar_level	= 10; //升星功能解锁等级
 }
 
 message Barrier

@@ -320,6 +320,8 @@ int UserManager::ProcessLogin(Common::Login* msg)
 		DataProduceequipManager::Instance()->FullMessage(uid, reply->mutable_equipments());
 		//动物
 		DataAnimalManager::Instance()->FullMessage(uid, reply->mutable_animals());
+		//设备星级
+		DataEquipmentStarManager::Instance()->FullMessage(uid, reply->mutable_equipmentstars());
 	}
 	catch(const std::exception& e)
 	{

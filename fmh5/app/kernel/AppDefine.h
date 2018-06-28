@@ -142,6 +142,9 @@ enum PlatformType
 #define DB_ANIMAL 124
 #define DB_ANIMAL_FULL 63
 
+#define DB_EQUIPMENT_STAR 125
+#define DB_EQUIPMENT_STAR_FULL 20
+
 #define MEM_SESSION			91
 #define SESSION_DATA		"data"
 
@@ -274,6 +277,13 @@ enum ProduceStatus
 	status_harvest 	= 2,  //收获
 	status_suspend	= 2, //暂停生产
 	status_full		= 2, //饱腹
+};
+
+enum EquipmentStarProperty
+{
+	property_type_coin = 1,  //金币加成
+	property_type_exp = 2,  //经验加成
+	property_type_time = 3,  //生产时间缩短
 };
 
 //exchange code

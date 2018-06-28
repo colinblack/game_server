@@ -55,6 +55,7 @@ message User
 	repeated ProtoProduce.CropLandCPP		cropland		= 9; //农地
 	repeated ProtoProduce.ProduceEquipCPP equipments		= 10; //生产设备		
 	repeated ProtoProduce.AnimalCPP 	animals				= 11; //动物	
+	repeated ProtoBuilding.EquipmentStarCPP equipmentstars	= 12;  //设备星级
 }
 
 message RequestOtherUser{
@@ -113,5 +114,21 @@ message SpeedUpReq
 message SpeedUpResp
 {
 	optional DataCommon.CommonItemsCPP commons  = 1; //钻石或收获
+}
+
+message BuyMaterialInfo
+{
+	required uint32 props_id  = 1;
+	required uint32 props_cnt = 2;
+}
+
+message BuyMaterialReq
+{
+	repeated BuyMaterialInfo buy_info = 1;
+}
+
+message BuyMaterialResp
+{
+	required DataCommon.CommonItemsCPP commons  = 1;  //属性或者道具的通用修改
 }
 

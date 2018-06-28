@@ -1,6 +1,48 @@
 #include "LogicPropsManager.h"
 #include "ServerInc.h"
 
+int LogicPropsManager::Process(unsigned uid, User::BuyMaterialReq* req, User::BuyMaterialResp* resp)
+{
+	//计算所需花费的钻石
+	int cost_diamond = 0;
+	for(int i = 0; i < req->buy_info_size(); i++)
+	{
+		User::BuyMaterialInfo buy_info = req->buy_info(i);
+		unsigned props_id = buy_info.props_id();
+		unsigned props_cnt = buy_info.props_cnt();
+
+		cost_diamond += props_cnt * ItemCfgWrap().GetPropsItem(props_id).dimond_cost().based().cash();
+	}
+
+	//校验钻石是否足够
+	DBCUserBaseWrap userwrap(uid);
+	if(-cost_diamond > userwrap.GetCash())
+	{
+		error_log("cash is not enough.cur_cash=%u,cost_cash=%u", userwrap.GetCash(), -cost_diamond);
+		throw runtime_error("cash_is_not_enough");
+	}
+
+	//扣除钻石
+	string reason = "cost_cash_buy_material";
+	userwrap.CostCash(-cost_diamond,reason);
+	DataCommon::CommonItemsCPP *common = resp->mutable_commons();
+	DataCommon::BaseItemCPP *base = common->mutable_userbase()->add_baseitem();
+	base->set_type(type_cash);
+	base->set_change(cost_diamond);
+	base->set_totalvalue(userwrap.GetCash());
+
+	//添加物品
+	for(int i = 0; i < req->buy_info_size(); i++)
+	{
+		User::BuyMaterialInfo buy_info = req->buy_info(i);
+		unsigned props_id = buy_info.props_id();
+		unsigned props_cnt = buy_info.props_cnt();
+
+		AddProps(uid,props_id,props_cnt,reason,resp->mutable_commons()->mutable_props());
+	}
+	return 0;
+}
+
 int LogicPropsManager::NewUser(unsigned uid)
 {
 	DataItemManager::Instance()->Init(uid);

@@ -36,6 +36,9 @@ public:
 	virtual void GetPriceAndATime(unsigned buildud, int & cash, int & diffts);
 
 	virtual void SingleRoutineEnd(unsigned buildud, ProtoPush::PushBuildingsCPP * msg);
+
+	//升星
+	int EquipmentStarUpgrade(DataProduceequip & equipment, ProtoPush::PushBuildingsCPP * msg);
 };
 
 //动物生产
@@ -74,7 +77,7 @@ public:
 	int CheckLogin(unsigned uid);
 
 	//建造相关的生产线
-	int ProduceAfterBuild(unsigned uid, unsigned ud, unsigned type);
+	int ProduceAfterBuild(unsigned uid, unsigned ud, unsigned type, bool ispush = true, ProtoBuilding::BuildResp * resp = NULL);
 
 	//设备的下一步动作
 	void ProduceEquipNextMove(DataProduceequip & equipment);
@@ -96,7 +99,6 @@ public:
 	int Process(unsigned uid, ProtoProduce::FeedAnimalReq* req, ProtoProduce::FeedAnimalResp* resp);
 	//获取物品
 	int Process(unsigned uid, ProtoProduce::ObtainProductReq* req, ProtoProduce::ObtainProductResp* resp);
-
 private:
 	int OnlineCropland(unsigned uid);
 
@@ -130,6 +132,9 @@ private:
 
 	//获取经验奖励
 	int GetExpReward(unsigned productid, unsigned count, CommonGiftConfig::CommonModifyItem &reward);
+
+	//收获后的动作：更新收获次数，是否随机产生道具
+	int ActAfterHarvest(unsigned uid, unsigned count, DataCommon::CommonItemsCPP * msg);
 
 	unsigned GetBuildId(unsigned uid, unsigned equipud);
 };

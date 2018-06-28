@@ -29,6 +29,7 @@ message Base {
 	required uint32 coin				 = 20;
 	required uint32 firstRecharge 		 = 21;  //首充 1--可领取 2--已经领取
 	required uint32 allianceId			 = 22;
+	required bytes barrier				 = 23;  //障碍物是否被移除的状态。位标志
 }
 
 message ActivityItem{
@@ -41,16 +42,20 @@ message Activity{
 	repeated ActivityItem act	 = 1;
 }
 
-message User {
-		required Base base										= 1;
-		required uint32 ts										= 2; //服务器时间
-		required Activity activity								= 3; //活动时间
-		optional ProtoNotify.NotifyItemCPPAll 	notifies		= 4; //活动的通知
-		required AccumulateCharge	       charges				= 5; //累积充值.与累积充值活动无关。只保留7日充值数据
-		required ProtoActivity.GameAcitivityAllCPP gameactivity	= 6; //已开启的活动
-		repeated DataCommon.PropsItemCPP	 item	            = 7; //物品
-		repeated ProtoBuilding.BuildingCPP		builds			= 8; //建筑物
-		repeated ProtoProduce.CropLandCPP		cropland		= 9; //农地
+message User 
+{
+	required Base base										= 1;
+	required uint32 ts										= 2; //服务器时间
+	required Activity activity								= 3; //活动时间
+	optional ProtoNotify.NotifyItemCPPAll 	notifies		= 4; //活动的通知
+	required AccumulateCharge	       charges				= 5; //累积充值.与累积充值活动无关。只保留7日充值数据
+	required ProtoActivity.GameAcitivityAllCPP gameactivity	= 6; //已开启的活动
+	repeated DataCommon.PropsItemCPP	 item	            = 7; //物品
+	repeated ProtoBuilding.BuildingCPP		builds			= 8; //建筑物
+	repeated ProtoProduce.CropLandCPP		cropland		= 9; //农地
+	repeated ProtoProduce.ProduceEquipCPP equipments		= 10; //生产设备		
+	repeated ProtoProduce.AnimalCPP 	animals				= 11; //动物	
+	repeated ProtoBuilding.EquipmentStarCPP equipmentstars	= 12;  //设备星级
 }
 
 message RequestOtherUser{
@@ -109,5 +114,21 @@ message SpeedUpReq
 message SpeedUpResp
 {
 	optional DataCommon.CommonItemsCPP commons  = 1; //钻石或收获
+}
+
+message BuyMaterialInfo
+{
+	required uint32 props_id  = 1;
+	required uint32 props_cnt = 2;
+}
+
+message BuyMaterialReq
+{
+	repeated BuyMaterialInfo buy_info = 1;
+}
+
+message BuyMaterialResp
+{
+	required DataCommon.CommonItemsCPP commons  = 1;  //属性或者道具的通用修改
 }
 

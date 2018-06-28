@@ -43,6 +43,9 @@ public:
 
 	const ConfigBuilding::Buildings & GetBuildingCfg() const {return cfg_;}
 
+	//获取设备升星的解锁等级
+	int GetUnlockUpgradeStarLevel() const;
+
 	int GetBuildType(unsigned build_id) const;
 	//根据用户等级，获取对应的下标
 	int GetLevelIndex(const google::protobuf::RepeatedField< ::google::protobuf::uint32 >& needlevel, unsigned lv);
@@ -125,6 +128,8 @@ public:
 
 	//获取动物的生产线配置
 	const ConfigProductLine::AnimalLine & GetAnimallineCfg(unsigned animalid) const;
+
+	const ConfigProductLine::MaterailReward & GetMaterialCfg() const;
 
 private:
 	const ConfigProductLine::ProductLine & cfg_;

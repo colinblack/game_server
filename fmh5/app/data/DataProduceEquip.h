@@ -10,8 +10,8 @@ struct DataProduceequip {
 	uint8_t queuenum;
 	int8_t status;
 
-	char queuedata[DataProduceequip_queuedata_COUNT];
-	char shelfdata[DataProduceequip_shelfdata_COUNT];
+	char queuedata[DataProduceequip_queuedata_COUNT];  //生产队列
+	char shelfdata[DataProduceequip_shelfdata_COUNT];  //展示架
 
 	DataProduceequip()
 	{

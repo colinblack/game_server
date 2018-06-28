@@ -789,6 +789,8 @@ void LogicManager::RegProto()
 	//钻石消耗
 	dispatcher.registerMessageCallback<User::CostCashReq>(ProtoManager::Process<User::CostCashReq, User::CostCashResp, LogicUserManager>);
 	dispatcher.registerMessageCallback<Common::ShutDown>(ProtoManager::ProcessNoReply<Common::ShutDown, UserManager>);
+	//购买材料
+	dispatcher.registerMessageCallback<User::BuyMaterialReq>(ProtoManager::Process<User::BuyMaterialReq, User::BuyMaterialResp, LogicPropsManager>);
 
 	//内政
 	//建造
@@ -797,6 +799,8 @@ void LogicManager::RegProto()
 	dispatcher.registerMessageCallback<ProtoBuilding::MoveReq>(ProtoManager::Process<ProtoBuilding::MoveReq, ProtoBuilding::MoveResp, LogicBuildManager>);
 	//翻转
 	dispatcher.registerMessageCallback<ProtoBuilding::FlipReq>(ProtoManager::Process<ProtoBuilding::FlipReq, ProtoBuilding::FlipResp, LogicBuildManager>);
+	//仓库升级
+	dispatcher.registerMessageCallback<ProtoBuilding::BuildingUpReq>(ProtoManager::Process<ProtoBuilding::BuildingUpReq, ProtoBuilding::BuildingUpResp, LogicBuildManager>);
 
 	//通用加速
 	dispatcher.registerMessageCallback<User::SpeedUpReq>(ProtoManager::Process<User::SpeedUpReq, User::SpeedUpResp, LogicQueueManager>);
@@ -849,6 +853,7 @@ void LogicManager::RegDataManager()
 	m_dataManager.push_back(DataItemManager::Instance());
 	m_dataManager.push_back(DataProduceequipManager::Instance());
 	m_dataManager.push_back(DataAnimalManager::Instance());
+	m_dataManager.push_back(DataEquipmentStarManager::Instance());
 }
 
 void LogicManager::RegBattleManager()

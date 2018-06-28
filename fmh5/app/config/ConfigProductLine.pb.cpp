@@ -26,6 +26,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* AnimalLine_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   AnimalLine_reflection_ = NULL;
+const ::google::protobuf::Descriptor* MaterailReward_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  MaterailReward_reflection_ = NULL;
 const ::google::protobuf::Descriptor* ProductLine_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ProductLine_reflection_ = NULL;
@@ -74,10 +77,28 @@ void protobuf_AssignDesc_ConfigProductLine_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AnimalLine));
-  ProductLine_descriptor_ = file->message_type(2);
-  static const int ProductLine_offsets_[2] = {
+  MaterailReward_descriptor_ = file->message_type(2);
+  static const int MaterailReward_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MaterailReward, init_count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MaterailReward, rate_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MaterailReward, random_reward_),
+  };
+  MaterailReward_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      MaterailReward_descriptor_,
+      MaterailReward::default_instance_,
+      MaterailReward_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MaterailReward, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MaterailReward, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(MaterailReward));
+  ProductLine_descriptor_ = file->message_type(3);
+  static const int ProductLine_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ProductLine, equipline_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ProductLine, animal_line_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ProductLine, get_storage_material_),
   };
   ProductLine_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -107,6 +128,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     AnimalLine_descriptor_, &AnimalLine::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    MaterailReward_descriptor_, &MaterailReward::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ProductLine_descriptor_, &ProductLine::default_instance());
 }
 
@@ -117,6 +140,8 @@ void protobuf_ShutdownFile_ConfigProductLine_2eproto() {
   delete EquipLine_reflection_;
   delete AnimalLine::default_instance_;
   delete AnimalLine_reflection_;
+  delete MaterailReward::default_instance_;
+  delete MaterailReward_reflection_;
   delete ProductLine::default_instance_;
   delete ProductLine_reflection_;
 }
@@ -137,16 +162,23 @@ void protobuf_AddDesc_ConfigProductLine_2eproto() {
     "GiftConfig.CommonModifyItem\"]\n\nAnimalLin"
     "e\022\n\n\002id\030\001 \002(\r\022\016\n\006fodder\030\002 \002(\r\0223\n\007product"
     "\030\003 \002(\0132\".CommonGiftConfig.CommonModifyIt"
-    "em\"r\n\013ProductLine\022/\n\tequipline\030\001 \003(\0132\034.C"
-    "onfigProductLine.EquipLine\0222\n\013animal_lin"
-    "e\030\002 \003(\0132\035.ConfigProductLine.AnimalLine", 438);
+    "em\"m\n\016MaterailReward\022\022\n\ninit_count\030\001 \002(\r"
+    "\022\014\n\004rate\030\002 \002(\r\0229\n\rrandom_reward\030\003 \003(\0132\"."
+    "CommonGiftConfig.CommonModifyItem\"\263\001\n\013Pr"
+    "oductLine\022/\n\tequipline\030\001 \003(\0132\034.ConfigPro"
+    "ductLine.EquipLine\0222\n\013animal_line\030\002 \003(\0132"
+    "\035.ConfigProductLine.AnimalLine\022\?\n\024get_st"
+    "orage_material\030\003 \002(\0132!.ConfigProductLine"
+    ".MaterailReward", 615);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ConfigProductLine.proto", &protobuf_RegisterTypes);
   EquipLine::default_instance_ = new EquipLine();
   AnimalLine::default_instance_ = new AnimalLine();
+  MaterailReward::default_instance_ = new MaterailReward();
   ProductLine::default_instance_ = new ProductLine();
   EquipLine::default_instance_->InitAsDefaultInstance();
   AnimalLine::default_instance_->InitAsDefaultInstance();
+  MaterailReward::default_instance_->InitAsDefaultInstance();
   ProductLine::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_ConfigProductLine_2eproto);
 }
@@ -840,8 +872,324 @@ void AnimalLine::Swap(AnimalLine* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int MaterailReward::kInitCountFieldNumber;
+const int MaterailReward::kRateFieldNumber;
+const int MaterailReward::kRandomRewardFieldNumber;
+#endif  // !_MSC_VER
+
+MaterailReward::MaterailReward()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigProductLine.MaterailReward)
+}
+
+void MaterailReward::InitAsDefaultInstance() {
+}
+
+MaterailReward::MaterailReward(const MaterailReward& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigProductLine.MaterailReward)
+}
+
+void MaterailReward::SharedCtor() {
+  _cached_size_ = 0;
+  init_count_ = 0u;
+  rate_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+MaterailReward::~MaterailReward() {
+  // @@protoc_insertion_point(destructor:ConfigProductLine.MaterailReward)
+  SharedDtor();
+}
+
+void MaterailReward::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void MaterailReward::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* MaterailReward::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return MaterailReward_descriptor_;
+}
+
+const MaterailReward& MaterailReward::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigProductLine_2eproto();
+  return *default_instance_;
+}
+
+MaterailReward* MaterailReward::default_instance_ = NULL;
+
+MaterailReward* MaterailReward::New() const {
+  return new MaterailReward;
+}
+
+void MaterailReward::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<MaterailReward*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(init_count_, rate_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  random_reward_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool MaterailReward::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigProductLine.MaterailReward)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 init_count = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &init_count_)));
+          set_has_init_count();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_rate;
+        break;
+      }
+
+      // required uint32 rate = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_rate:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &rate_)));
+          set_has_rate();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_random_reward;
+        break;
+      }
+
+      // repeated .CommonGiftConfig.CommonModifyItem random_reward = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_random_reward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_random_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_random_reward;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigProductLine.MaterailReward)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigProductLine.MaterailReward)
+  return false;
+#undef DO_
+}
+
+void MaterailReward::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigProductLine.MaterailReward)
+  // required uint32 init_count = 1;
+  if (has_init_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->init_count(), output);
+  }
+
+  // required uint32 rate = 2;
+  if (has_rate()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->rate(), output);
+  }
+
+  // repeated .CommonGiftConfig.CommonModifyItem random_reward = 3;
+  for (int i = 0; i < this->random_reward_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->random_reward(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigProductLine.MaterailReward)
+}
+
+::google::protobuf::uint8* MaterailReward::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigProductLine.MaterailReward)
+  // required uint32 init_count = 1;
+  if (has_init_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->init_count(), target);
+  }
+
+  // required uint32 rate = 2;
+  if (has_rate()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->rate(), target);
+  }
+
+  // repeated .CommonGiftConfig.CommonModifyItem random_reward = 3;
+  for (int i = 0; i < this->random_reward_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->random_reward(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigProductLine.MaterailReward)
+  return target;
+}
+
+int MaterailReward::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 init_count = 1;
+    if (has_init_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->init_count());
+    }
+
+    // required uint32 rate = 2;
+    if (has_rate()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->rate());
+    }
+
+  }
+  // repeated .CommonGiftConfig.CommonModifyItem random_reward = 3;
+  total_size += 1 * this->random_reward_size();
+  for (int i = 0; i < this->random_reward_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->random_reward(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MaterailReward::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const MaterailReward* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const MaterailReward*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void MaterailReward::MergeFrom(const MaterailReward& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  random_reward_.MergeFrom(from.random_reward_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_init_count()) {
+      set_init_count(from.init_count());
+    }
+    if (from.has_rate()) {
+      set_rate(from.rate());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void MaterailReward::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void MaterailReward::CopyFrom(const MaterailReward& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MaterailReward::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->random_reward())) return false;
+  return true;
+}
+
+void MaterailReward::Swap(MaterailReward* other) {
+  if (other != this) {
+    std::swap(init_count_, other->init_count_);
+    std::swap(rate_, other->rate_);
+    random_reward_.Swap(&other->random_reward_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata MaterailReward::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = MaterailReward_descriptor_;
+  metadata.reflection = MaterailReward_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int ProductLine::kEquiplineFieldNumber;
 const int ProductLine::kAnimalLineFieldNumber;
+const int ProductLine::kGetStorageMaterialFieldNumber;
 #endif  // !_MSC_VER
 
 ProductLine::ProductLine()
@@ -851,6 +1199,7 @@ ProductLine::ProductLine()
 }
 
 void ProductLine::InitAsDefaultInstance() {
+  get_storage_material_ = const_cast< ::ConfigProductLine::MaterailReward*>(&::ConfigProductLine::MaterailReward::default_instance());
 }
 
 ProductLine::ProductLine(const ProductLine& from)
@@ -862,6 +1211,7 @@ ProductLine::ProductLine(const ProductLine& from)
 
 void ProductLine::SharedCtor() {
   _cached_size_ = 0;
+  get_storage_material_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -872,6 +1222,7 @@ ProductLine::~ProductLine() {
 
 void ProductLine::SharedDtor() {
   if (this != default_instance_) {
+    delete get_storage_material_;
   }
 }
 
@@ -897,6 +1248,9 @@ ProductLine* ProductLine::New() const {
 }
 
 void ProductLine::Clear() {
+  if (has_get_storage_material()) {
+    if (get_storage_material_ != NULL) get_storage_material_->::ConfigProductLine::MaterailReward::Clear();
+  }
   equipline_.Clear();
   animal_line_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -937,6 +1291,19 @@ bool ProductLine::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_animal_line;
+        if (input->ExpectTag(26)) goto parse_get_storage_material;
+        break;
+      }
+
+      // required .ConfigProductLine.MaterailReward get_storage_material = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_get_storage_material:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_get_storage_material()));
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -978,6 +1345,12 @@ void ProductLine::SerializeWithCachedSizes(
       2, this->animal_line(i), output);
   }
 
+  // required .ConfigProductLine.MaterailReward get_storage_material = 3;
+  if (has_get_storage_material()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->get_storage_material(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1002,6 +1375,13 @@ void ProductLine::SerializeWithCachedSizes(
         2, this->animal_line(i), target);
   }
 
+  // required .ConfigProductLine.MaterailReward get_storage_material = 3;
+  if (has_get_storage_material()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->get_storage_material(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -1013,6 +1393,15 @@ void ProductLine::SerializeWithCachedSizes(
 int ProductLine::ByteSize() const {
   int total_size = 0;
 
+  if (_has_bits_[2 / 32] & (0xffu << (2 % 32))) {
+    // required .ConfigProductLine.MaterailReward get_storage_material = 3;
+    if (has_get_storage_material()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->get_storage_material());
+    }
+
+  }
   // repeated .ConfigProductLine.EquipLine equipline = 1;
   total_size += 1 * this->equipline_size();
   for (int i = 0; i < this->equipline_size(); i++) {
@@ -1056,6 +1445,11 @@ void ProductLine::MergeFrom(const ProductLine& from) {
   GOOGLE_CHECK_NE(&from, this);
   equipline_.MergeFrom(from.equipline_);
   animal_line_.MergeFrom(from.animal_line_);
+  if (from._has_bits_[2 / 32] & (0xffu << (2 % 32))) {
+    if (from.has_get_storage_material()) {
+      mutable_get_storage_material()->::ConfigProductLine::MaterailReward::MergeFrom(from.get_storage_material());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -1072,9 +1466,13 @@ void ProductLine::CopyFrom(const ProductLine& from) {
 }
 
 bool ProductLine::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000004) != 0x00000004) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->equipline())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->animal_line())) return false;
+  if (has_get_storage_material()) {
+    if (!this->get_storage_material().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -1082,6 +1480,7 @@ void ProductLine::Swap(ProductLine* other) {
   if (other != this) {
     equipline_.Swap(&other->equipline_);
     animal_line_.Swap(&other->animal_line_);
+    std::swap(get_storage_material_, other->get_storage_material_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

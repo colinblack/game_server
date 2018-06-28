@@ -258,7 +258,7 @@ void protobuf_AssignDesc_ConfigBuilding_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Decoration));
   Buildings_descriptor_ = file->message_type(10);
-  static const int Buildings_offsets_[9] = {
+  static const int Buildings_offsets_[10] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, house_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, storagehouse_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, cropland_),
@@ -268,6 +268,7 @@ void protobuf_AssignDesc_ConfigBuilding_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, decorate_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, build_print_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, animal_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Buildings, unlock_upgardestar_level_),
   };
   Buildings_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -445,7 +446,7 @@ void protobuf_AddDesc_ConfigBuilding_2eproto() {
     "e_props\030\007 \002(\r\"v\n\nDecoration\022\n\n\002id\030\001 \002(\r\022"
     "5\n\tneed_cost\030\002 \003(\0132\".CommonGiftConfig.Co"
     "mmonModifyItem\022\022\n\nneed_level\030\003 \003(\r\022\021\n\twa"
-    "it_time\030\004 \003(\r\"\276\003\n\tBuildings\022$\n\005house\030\001 \002"
+    "it_time\030\004 \003(\r\"\340\003\n\tBuildings\022$\n\005house\030\001 \002"
     "(\0132\025.ConfigBuilding.House\0222\n\014storagehous"
     "e\030\002 \003(\0132\034.ConfigBuilding.StorageHouse\022*\n"
     "\010cropland\030\003 \003(\0132\030.ConfigBuilding.CropLan"
@@ -456,14 +457,15 @@ void protobuf_AddDesc_ConfigBuilding_2eproto() {
     "ruitTree\022,\n\010decorate\030\007 \003(\0132\032.ConfigBuild"
     "ing.Decoration\022.\n\013build_print\030\010 \003(\0132\031.Co"
     "nfigBuilding.BuildFoot\022&\n\006animal\030\t \003(\0132\026"
-    ".ConfigBuilding.Animal\"C\n\007Barrier\022\n\n\002id\030"
-    "\001 \002(\r\022\014\n\004type\030\002 \002(\r\022\013\n\003pos\030\003 \003(\r\022\021\n\tfoot"
-    "print\030\004 \003(\r\"V\n\016DestoryBarrier\022\014\n\004type\030\001 "
-    "\002(\r\0226\n\nneed_props\030\002 \002(\0132\".CommonGiftConf"
-    "ig.CommonModifyItem\"o\n\010Barriers\022)\n\010barri"
-    "ers\030\001 \003(\0132\027.ConfigBuilding.Barrier\0228\n\020ba"
-    "rriers_destory\030\002 \003(\0132\036.ConfigBuilding.De"
-    "storyBarrier", 2012);
+    ".ConfigBuilding.Animal\022 \n\030unlock_upgarde"
+    "star_level\030\n \002(\r\"C\n\007Barrier\022\n\n\002id\030\001 \002(\r\022"
+    "\014\n\004type\030\002 \002(\r\022\013\n\003pos\030\003 \003(\r\022\021\n\tfootprint\030"
+    "\004 \003(\r\"V\n\016DestoryBarrier\022\014\n\004type\030\001 \002(\r\0226\n"
+    "\nneed_props\030\002 \002(\0132\".CommonGiftConfig.Com"
+    "monModifyItem\"o\n\010Barriers\022)\n\010barriers\030\001 "
+    "\003(\0132\027.ConfigBuilding.Barrier\0228\n\020barriers"
+    "_destory\030\002 \003(\0132\036.ConfigBuilding.DestoryB"
+    "arrier", 2046);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ConfigBuilding.proto", &protobuf_RegisterTypes);
   BuildFoot::default_instance_ = new BuildFoot();
@@ -4281,6 +4283,7 @@ const int Buildings::kFruitTreeFieldNumber;
 const int Buildings::kDecorateFieldNumber;
 const int Buildings::kBuildPrintFieldNumber;
 const int Buildings::kAnimalFieldNumber;
+const int Buildings::kUnlockUpgardestarLevelFieldNumber;
 #endif  // !_MSC_VER
 
 Buildings::Buildings()
@@ -4303,6 +4306,7 @@ Buildings::Buildings(const Buildings& from)
 void Buildings::SharedCtor() {
   _cached_size_ = 0;
   house_ = NULL;
+  unlock_upgardestar_level_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -4342,6 +4346,7 @@ void Buildings::Clear() {
   if (has_house()) {
     if (house_ != NULL) house_->::ConfigBuilding::House::Clear();
   }
+  unlock_upgardestar_level_ = 0u;
   storagehouse_.Clear();
   cropland_.Clear();
   animal_residence_.Clear();
@@ -4484,6 +4489,21 @@ bool Buildings::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(74)) goto parse_animal;
+        if (input->ExpectTag(80)) goto parse_unlock_upgardestar_level;
+        break;
+      }
+
+      // required uint32 unlock_upgardestar_level = 10;
+      case 10: {
+        if (tag == 80) {
+         parse_unlock_upgardestar_level:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &unlock_upgardestar_level_)));
+          set_has_unlock_upgardestar_level();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -4567,6 +4587,11 @@ void Buildings::SerializeWithCachedSizes(
       9, this->animal(i), output);
   }
 
+  // required uint32 unlock_upgardestar_level = 10;
+  if (has_unlock_upgardestar_level()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(10, this->unlock_upgardestar_level(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -4640,6 +4665,11 @@ void Buildings::SerializeWithCachedSizes(
         9, this->animal(i), target);
   }
 
+  // required uint32 unlock_upgardestar_level = 10;
+  if (has_unlock_upgardestar_level()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(10, this->unlock_upgardestar_level(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -4657,6 +4687,15 @@ int Buildings::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->house());
+    }
+
+  }
+  if (_has_bits_[9 / 32] & (0xffu << (9 % 32))) {
+    // required uint32 unlock_upgardestar_level = 10;
+    if (has_unlock_upgardestar_level()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->unlock_upgardestar_level());
     }
 
   }
@@ -4762,6 +4801,11 @@ void Buildings::MergeFrom(const Buildings& from) {
       mutable_house()->::ConfigBuilding::House::MergeFrom(from.house());
     }
   }
+  if (from._has_bits_[9 / 32] & (0xffu << (9 % 32))) {
+    if (from.has_unlock_upgardestar_level()) {
+      set_unlock_upgardestar_level(from.unlock_upgardestar_level());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -4778,7 +4822,7 @@ void Buildings::CopyFrom(const Buildings& from) {
 }
 
 bool Buildings::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  if ((_has_bits_[0] & 0x00000201) != 0x00000201) return false;
 
   if (has_house()) {
     if (!this->house().IsInitialized()) return false;
@@ -4805,6 +4849,7 @@ void Buildings::Swap(Buildings* other) {
     decorate_.Swap(&other->decorate_);
     build_print_.Swap(&other->build_print_);
     animal_.Swap(&other->animal_);
+    std::swap(unlock_upgardestar_level_, other->unlock_upgardestar_level_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

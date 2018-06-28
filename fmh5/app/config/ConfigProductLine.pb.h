@@ -36,6 +36,7 @@ void protobuf_ShutdownFile_ConfigProductLine_2eproto();
 
 class EquipLine;
 class AnimalLine;
+class MaterailReward;
 class ProductLine;
 
 // ===================================================================
@@ -256,6 +257,108 @@ class AnimalLine : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class MaterailReward : public ::google::protobuf::Message {
+ public:
+  MaterailReward();
+  virtual ~MaterailReward();
+
+  MaterailReward(const MaterailReward& from);
+
+  inline MaterailReward& operator=(const MaterailReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MaterailReward& default_instance();
+
+  void Swap(MaterailReward* other);
+
+  // implements Message ----------------------------------------------
+
+  MaterailReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MaterailReward& from);
+  void MergeFrom(const MaterailReward& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 init_count = 1;
+  inline bool has_init_count() const;
+  inline void clear_init_count();
+  static const int kInitCountFieldNumber = 1;
+  inline ::google::protobuf::uint32 init_count() const;
+  inline void set_init_count(::google::protobuf::uint32 value);
+
+  // required uint32 rate = 2;
+  inline bool has_rate() const;
+  inline void clear_rate();
+  static const int kRateFieldNumber = 2;
+  inline ::google::protobuf::uint32 rate() const;
+  inline void set_rate(::google::protobuf::uint32 value);
+
+  // repeated .CommonGiftConfig.CommonModifyItem random_reward = 3;
+  inline int random_reward_size() const;
+  inline void clear_random_reward();
+  static const int kRandomRewardFieldNumber = 3;
+  inline const ::CommonGiftConfig::CommonModifyItem& random_reward(int index) const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_random_reward(int index);
+  inline ::CommonGiftConfig::CommonModifyItem* add_random_reward();
+  inline const ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >&
+      random_reward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >*
+      mutable_random_reward();
+
+  // @@protoc_insertion_point(class_scope:ConfigProductLine.MaterailReward)
+ private:
+  inline void set_has_init_count();
+  inline void clear_has_init_count();
+  inline void set_has_rate();
+  inline void clear_has_rate();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 init_count_;
+  ::google::protobuf::uint32 rate_;
+  ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem > random_reward_;
+  friend void  protobuf_AddDesc_ConfigProductLine_2eproto();
+  friend void protobuf_AssignDesc_ConfigProductLine_2eproto();
+  friend void protobuf_ShutdownFile_ConfigProductLine_2eproto();
+
+  void InitAsDefaultInstance();
+  static MaterailReward* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ProductLine : public ::google::protobuf::Message {
  public:
   ProductLine();
@@ -333,8 +436,19 @@ class ProductLine : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::ConfigProductLine::AnimalLine >*
       mutable_animal_line();
 
+  // required .ConfigProductLine.MaterailReward get_storage_material = 3;
+  inline bool has_get_storage_material() const;
+  inline void clear_get_storage_material();
+  static const int kGetStorageMaterialFieldNumber = 3;
+  inline const ::ConfigProductLine::MaterailReward& get_storage_material() const;
+  inline ::ConfigProductLine::MaterailReward* mutable_get_storage_material();
+  inline ::ConfigProductLine::MaterailReward* release_get_storage_material();
+  inline void set_allocated_get_storage_material(::ConfigProductLine::MaterailReward* get_storage_material);
+
   // @@protoc_insertion_point(class_scope:ConfigProductLine.ProductLine)
  private:
+  inline void set_has_get_storage_material();
+  inline void clear_has_get_storage_material();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -342,6 +456,7 @@ class ProductLine : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::google::protobuf::RepeatedPtrField< ::ConfigProductLine::EquipLine > equipline_;
   ::google::protobuf::RepeatedPtrField< ::ConfigProductLine::AnimalLine > animal_line_;
+  ::ConfigProductLine::MaterailReward* get_storage_material_;
   friend void  protobuf_AddDesc_ConfigProductLine_2eproto();
   friend void protobuf_AssignDesc_ConfigProductLine_2eproto();
   friend void protobuf_ShutdownFile_ConfigProductLine_2eproto();
@@ -559,6 +674,88 @@ inline void AnimalLine::set_allocated_product(::CommonGiftConfig::CommonModifyIt
 
 // -------------------------------------------------------------------
 
+// MaterailReward
+
+// required uint32 init_count = 1;
+inline bool MaterailReward::has_init_count() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MaterailReward::set_has_init_count() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MaterailReward::clear_has_init_count() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MaterailReward::clear_init_count() {
+  init_count_ = 0u;
+  clear_has_init_count();
+}
+inline ::google::protobuf::uint32 MaterailReward::init_count() const {
+  // @@protoc_insertion_point(field_get:ConfigProductLine.MaterailReward.init_count)
+  return init_count_;
+}
+inline void MaterailReward::set_init_count(::google::protobuf::uint32 value) {
+  set_has_init_count();
+  init_count_ = value;
+  // @@protoc_insertion_point(field_set:ConfigProductLine.MaterailReward.init_count)
+}
+
+// required uint32 rate = 2;
+inline bool MaterailReward::has_rate() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MaterailReward::set_has_rate() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MaterailReward::clear_has_rate() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MaterailReward::clear_rate() {
+  rate_ = 0u;
+  clear_has_rate();
+}
+inline ::google::protobuf::uint32 MaterailReward::rate() const {
+  // @@protoc_insertion_point(field_get:ConfigProductLine.MaterailReward.rate)
+  return rate_;
+}
+inline void MaterailReward::set_rate(::google::protobuf::uint32 value) {
+  set_has_rate();
+  rate_ = value;
+  // @@protoc_insertion_point(field_set:ConfigProductLine.MaterailReward.rate)
+}
+
+// repeated .CommonGiftConfig.CommonModifyItem random_reward = 3;
+inline int MaterailReward::random_reward_size() const {
+  return random_reward_.size();
+}
+inline void MaterailReward::clear_random_reward() {
+  random_reward_.Clear();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& MaterailReward::random_reward(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigProductLine.MaterailReward.random_reward)
+  return random_reward_.Get(index);
+}
+inline ::CommonGiftConfig::CommonModifyItem* MaterailReward::mutable_random_reward(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigProductLine.MaterailReward.random_reward)
+  return random_reward_.Mutable(index);
+}
+inline ::CommonGiftConfig::CommonModifyItem* MaterailReward::add_random_reward() {
+  // @@protoc_insertion_point(field_add:ConfigProductLine.MaterailReward.random_reward)
+  return random_reward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >&
+MaterailReward::random_reward() const {
+  // @@protoc_insertion_point(field_list:ConfigProductLine.MaterailReward.random_reward)
+  return random_reward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >*
+MaterailReward::mutable_random_reward() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigProductLine.MaterailReward.random_reward)
+  return &random_reward_;
+}
+
+// -------------------------------------------------------------------
+
 // ProductLine
 
 // repeated .ConfigProductLine.EquipLine equipline = 1;
@@ -619,6 +816,47 @@ inline ::google::protobuf::RepeatedPtrField< ::ConfigProductLine::AnimalLine >*
 ProductLine::mutable_animal_line() {
   // @@protoc_insertion_point(field_mutable_list:ConfigProductLine.ProductLine.animal_line)
   return &animal_line_;
+}
+
+// required .ConfigProductLine.MaterailReward get_storage_material = 3;
+inline bool ProductLine::has_get_storage_material() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ProductLine::set_has_get_storage_material() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ProductLine::clear_has_get_storage_material() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ProductLine::clear_get_storage_material() {
+  if (get_storage_material_ != NULL) get_storage_material_->::ConfigProductLine::MaterailReward::Clear();
+  clear_has_get_storage_material();
+}
+inline const ::ConfigProductLine::MaterailReward& ProductLine::get_storage_material() const {
+  // @@protoc_insertion_point(field_get:ConfigProductLine.ProductLine.get_storage_material)
+  return get_storage_material_ != NULL ? *get_storage_material_ : *default_instance_->get_storage_material_;
+}
+inline ::ConfigProductLine::MaterailReward* ProductLine::mutable_get_storage_material() {
+  set_has_get_storage_material();
+  if (get_storage_material_ == NULL) get_storage_material_ = new ::ConfigProductLine::MaterailReward;
+  // @@protoc_insertion_point(field_mutable:ConfigProductLine.ProductLine.get_storage_material)
+  return get_storage_material_;
+}
+inline ::ConfigProductLine::MaterailReward* ProductLine::release_get_storage_material() {
+  clear_has_get_storage_material();
+  ::ConfigProductLine::MaterailReward* temp = get_storage_material_;
+  get_storage_material_ = NULL;
+  return temp;
+}
+inline void ProductLine::set_allocated_get_storage_material(::ConfigProductLine::MaterailReward* get_storage_material) {
+  delete get_storage_material_;
+  get_storage_material_ = get_storage_material;
+  if (get_storage_material) {
+    set_has_get_storage_material();
+  } else {
+    clear_has_get_storage_material();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigProductLine.ProductLine.get_storage_material)
 }
 
 

@@ -16,6 +16,9 @@ private:
 public:
 	virtual void CallDestroy() { Destroy();}
 
+	//花钻购买材料
+	int Process(unsigned uid, User::BuyMaterialReq* req, User::BuyMaterialResp* resp);
+
 	int NewUser(unsigned uid);
 
 	int CheckLogin(unsigned uid);

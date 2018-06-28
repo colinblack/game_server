@@ -1427,10 +1427,19 @@ class Buildings : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::ConfigBuilding::Animal >*
       mutable_animal();
 
+  // required uint32 unlock_upgardestar_level = 10;
+  inline bool has_unlock_upgardestar_level() const;
+  inline void clear_unlock_upgardestar_level();
+  static const int kUnlockUpgardestarLevelFieldNumber = 10;
+  inline ::google::protobuf::uint32 unlock_upgardestar_level() const;
+  inline void set_unlock_upgardestar_level(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:ConfigBuilding.Buildings)
  private:
   inline void set_has_house();
   inline void clear_has_house();
+  inline void set_has_unlock_upgardestar_level();
+  inline void clear_has_unlock_upgardestar_level();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1445,6 +1454,7 @@ class Buildings : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::ConfigBuilding::Decoration > decorate_;
   ::google::protobuf::RepeatedPtrField< ::ConfigBuilding::BuildFoot > build_print_;
   ::google::protobuf::RepeatedPtrField< ::ConfigBuilding::Animal > animal_;
+  ::google::protobuf::uint32 unlock_upgardestar_level_;
   friend void  protobuf_AddDesc_ConfigBuilding_2eproto();
   friend void protobuf_AssignDesc_ConfigBuilding_2eproto();
   friend void protobuf_ShutdownFile_ConfigBuilding_2eproto();
@@ -3315,6 +3325,30 @@ inline ::google::protobuf::RepeatedPtrField< ::ConfigBuilding::Animal >*
 Buildings::mutable_animal() {
   // @@protoc_insertion_point(field_mutable_list:ConfigBuilding.Buildings.animal)
   return &animal_;
+}
+
+// required uint32 unlock_upgardestar_level = 10;
+inline bool Buildings::has_unlock_upgardestar_level() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Buildings::set_has_unlock_upgardestar_level() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Buildings::clear_has_unlock_upgardestar_level() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Buildings::clear_unlock_upgardestar_level() {
+  unlock_upgardestar_level_ = 0u;
+  clear_has_unlock_upgardestar_level();
+}
+inline ::google::protobuf::uint32 Buildings::unlock_upgardestar_level() const {
+  // @@protoc_insertion_point(field_get:ConfigBuilding.Buildings.unlock_upgardestar_level)
+  return unlock_upgardestar_level_;
+}
+inline void Buildings::set_unlock_upgardestar_level(::google::protobuf::uint32 value) {
+  set_has_unlock_upgardestar_level();
+  unlock_upgardestar_level_ = value;
+  // @@protoc_insertion_point(field_set:ConfigBuilding.Buildings.unlock_upgardestar_level)
 }
 
 // -------------------------------------------------------------------

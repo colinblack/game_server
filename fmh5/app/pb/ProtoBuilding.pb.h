@@ -25,6 +25,7 @@
 #include <google/protobuf/extension_set.h>
 #include <google/protobuf/unknown_field_set.h>
 #include "DataCommon.pb.h"
+#include "ProtoProduce.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace ProtoBuilding {
@@ -35,12 +36,15 @@ void protobuf_AssignDesc_ProtoBuilding_2eproto();
 void protobuf_ShutdownFile_ProtoBuilding_2eproto();
 
 class BuildingCPP;
+class EquipmentStarCPP;
 class BuildReq;
 class BuildResp;
 class MoveReq;
 class MoveResp;
 class FlipReq;
 class FlipResp;
+class BuildingUpReq;
+class BuildingUpResp;
 
 // ===================================================================
 
@@ -173,6 +177,105 @@ class BuildingCPP : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static BuildingCPP* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class EquipmentStarCPP : public ::google::protobuf::Message {
+ public:
+  EquipmentStarCPP();
+  virtual ~EquipmentStarCPP();
+
+  EquipmentStarCPP(const EquipmentStarCPP& from);
+
+  inline EquipmentStarCPP& operator=(const EquipmentStarCPP& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const EquipmentStarCPP& default_instance();
+
+  void Swap(EquipmentStarCPP* other);
+
+  // implements Message ----------------------------------------------
+
+  EquipmentStarCPP* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const EquipmentStarCPP& from);
+  void MergeFrom(const EquipmentStarCPP& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required uint32 star = 2;
+  inline bool has_star() const;
+  inline void clear_star();
+  static const int kStarFieldNumber = 2;
+  inline ::google::protobuf::uint32 star() const;
+  inline void set_star(::google::protobuf::uint32 value);
+
+  // required uint32 usedtime = 3;
+  inline bool has_usedtime() const;
+  inline void clear_usedtime();
+  static const int kUsedtimeFieldNumber = 3;
+  inline ::google::protobuf::uint32 usedtime() const;
+  inline void set_usedtime(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:ProtoBuilding.EquipmentStarCPP)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_star();
+  inline void clear_has_star();
+  inline void set_has_usedtime();
+  inline void clear_has_usedtime();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 star_;
+  ::google::protobuf::uint32 usedtime_;
+  friend void  protobuf_AddDesc_ProtoBuilding_2eproto();
+  friend void protobuf_AssignDesc_ProtoBuilding_2eproto();
+  friend void protobuf_ShutdownFile_ProtoBuilding_2eproto();
+
+  void InitAsDefaultInstance();
+  static EquipmentStarCPP* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -339,12 +442,34 @@ class BuildResp : public ::google::protobuf::Message {
   inline ::DataCommon::CommonItemsCPP* release_commons();
   inline void set_allocated_commons(::DataCommon::CommonItemsCPP* commons);
 
+  // optional .ProtoProduce.CropLandCPP lands = 3;
+  inline bool has_lands() const;
+  inline void clear_lands();
+  static const int kLandsFieldNumber = 3;
+  inline const ::ProtoProduce::CropLandCPP& lands() const;
+  inline ::ProtoProduce::CropLandCPP* mutable_lands();
+  inline ::ProtoProduce::CropLandCPP* release_lands();
+  inline void set_allocated_lands(::ProtoProduce::CropLandCPP* lands);
+
+  // optional .ProtoBuilding.EquipmentStarCPP equipmentstar = 4;
+  inline bool has_equipmentstar() const;
+  inline void clear_equipmentstar();
+  static const int kEquipmentstarFieldNumber = 4;
+  inline const ::ProtoBuilding::EquipmentStarCPP& equipmentstar() const;
+  inline ::ProtoBuilding::EquipmentStarCPP* mutable_equipmentstar();
+  inline ::ProtoBuilding::EquipmentStarCPP* release_equipmentstar();
+  inline void set_allocated_equipmentstar(::ProtoBuilding::EquipmentStarCPP* equipmentstar);
+
   // @@protoc_insertion_point(class_scope:ProtoBuilding.BuildResp)
  private:
   inline void set_has_building();
   inline void clear_has_building();
   inline void set_has_commons();
   inline void clear_has_commons();
+  inline void set_has_lands();
+  inline void clear_has_lands();
+  inline void set_has_equipmentstar();
+  inline void clear_has_equipmentstar();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -352,6 +477,8 @@ class BuildResp : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::ProtoBuilding::BuildingCPP* building_;
   ::DataCommon::CommonItemsCPP* commons_;
+  ::ProtoProduce::CropLandCPP* lands_;
+  ::ProtoBuilding::EquipmentStarCPP* equipmentstar_;
   friend void  protobuf_AddDesc_ProtoBuilding_2eproto();
   friend void protobuf_AssignDesc_ProtoBuilding_2eproto();
   friend void protobuf_ShutdownFile_ProtoBuilding_2eproto();
@@ -688,6 +815,166 @@ class FlipResp : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static FlipResp* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class BuildingUpReq : public ::google::protobuf::Message {
+ public:
+  BuildingUpReq();
+  virtual ~BuildingUpReq();
+
+  BuildingUpReq(const BuildingUpReq& from);
+
+  inline BuildingUpReq& operator=(const BuildingUpReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuildingUpReq& default_instance();
+
+  void Swap(BuildingUpReq* other);
+
+  // implements Message ----------------------------------------------
+
+  BuildingUpReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuildingUpReq& from);
+  void MergeFrom(const BuildingUpReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 ud = 1;
+  inline bool has_ud() const;
+  inline void clear_ud();
+  static const int kUdFieldNumber = 1;
+  inline ::google::protobuf::uint32 ud() const;
+  inline void set_ud(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:ProtoBuilding.BuildingUpReq)
+ private:
+  inline void set_has_ud();
+  inline void clear_has_ud();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 ud_;
+  friend void  protobuf_AddDesc_ProtoBuilding_2eproto();
+  friend void protobuf_AssignDesc_ProtoBuilding_2eproto();
+  friend void protobuf_ShutdownFile_ProtoBuilding_2eproto();
+
+  void InitAsDefaultInstance();
+  static BuildingUpReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BuildingUpResp : public ::google::protobuf::Message {
+ public:
+  BuildingUpResp();
+  virtual ~BuildingUpResp();
+
+  BuildingUpResp(const BuildingUpResp& from);
+
+  inline BuildingUpResp& operator=(const BuildingUpResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuildingUpResp& default_instance();
+
+  void Swap(BuildingUpResp* other);
+
+  // implements Message ----------------------------------------------
+
+  BuildingUpResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuildingUpResp& from);
+  void MergeFrom(const BuildingUpResp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .DataCommon.CommonItemsCPP commons = 1;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 1;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  inline void set_allocated_commons(::DataCommon::CommonItemsCPP* commons);
+
+  // @@protoc_insertion_point(class_scope:ProtoBuilding.BuildingUpResp)
+ private:
+  inline void set_has_commons();
+  inline void clear_has_commons();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::DataCommon::CommonItemsCPP* commons_;
+  friend void  protobuf_AddDesc_ProtoBuilding_2eproto();
+  friend void protobuf_AssignDesc_ProtoBuilding_2eproto();
+  friend void protobuf_ShutdownFile_ProtoBuilding_2eproto();
+
+  void InitAsDefaultInstance();
+  static BuildingUpResp* default_instance_;
+};
 // ===================================================================
 
 
@@ -847,6 +1134,82 @@ inline void BuildingCPP::set_level(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// EquipmentStarCPP
+
+// required uint32 id = 1;
+inline bool EquipmentStarCPP::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void EquipmentStarCPP::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void EquipmentStarCPP::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void EquipmentStarCPP::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 EquipmentStarCPP::id() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.EquipmentStarCPP.id)
+  return id_;
+}
+inline void EquipmentStarCPP::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:ProtoBuilding.EquipmentStarCPP.id)
+}
+
+// required uint32 star = 2;
+inline bool EquipmentStarCPP::has_star() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void EquipmentStarCPP::set_has_star() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void EquipmentStarCPP::clear_has_star() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void EquipmentStarCPP::clear_star() {
+  star_ = 0u;
+  clear_has_star();
+}
+inline ::google::protobuf::uint32 EquipmentStarCPP::star() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.EquipmentStarCPP.star)
+  return star_;
+}
+inline void EquipmentStarCPP::set_star(::google::protobuf::uint32 value) {
+  set_has_star();
+  star_ = value;
+  // @@protoc_insertion_point(field_set:ProtoBuilding.EquipmentStarCPP.star)
+}
+
+// required uint32 usedtime = 3;
+inline bool EquipmentStarCPP::has_usedtime() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void EquipmentStarCPP::set_has_usedtime() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void EquipmentStarCPP::clear_has_usedtime() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void EquipmentStarCPP::clear_usedtime() {
+  usedtime_ = 0u;
+  clear_has_usedtime();
+}
+inline ::google::protobuf::uint32 EquipmentStarCPP::usedtime() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.EquipmentStarCPP.usedtime)
+  return usedtime_;
+}
+inline void EquipmentStarCPP::set_usedtime(::google::protobuf::uint32 value) {
+  set_has_usedtime();
+  usedtime_ = value;
+  // @@protoc_insertion_point(field_set:ProtoBuilding.EquipmentStarCPP.usedtime)
+}
+
+// -------------------------------------------------------------------
+
 // BuildReq
 
 // required uint32 buildId = 1;
@@ -989,6 +1352,88 @@ inline void BuildResp::set_allocated_commons(::DataCommon::CommonItemsCPP* commo
   // @@protoc_insertion_point(field_set_allocated:ProtoBuilding.BuildResp.commons)
 }
 
+// optional .ProtoProduce.CropLandCPP lands = 3;
+inline bool BuildResp::has_lands() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void BuildResp::set_has_lands() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void BuildResp::clear_has_lands() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void BuildResp::clear_lands() {
+  if (lands_ != NULL) lands_->::ProtoProduce::CropLandCPP::Clear();
+  clear_has_lands();
+}
+inline const ::ProtoProduce::CropLandCPP& BuildResp::lands() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.BuildResp.lands)
+  return lands_ != NULL ? *lands_ : *default_instance_->lands_;
+}
+inline ::ProtoProduce::CropLandCPP* BuildResp::mutable_lands() {
+  set_has_lands();
+  if (lands_ == NULL) lands_ = new ::ProtoProduce::CropLandCPP;
+  // @@protoc_insertion_point(field_mutable:ProtoBuilding.BuildResp.lands)
+  return lands_;
+}
+inline ::ProtoProduce::CropLandCPP* BuildResp::release_lands() {
+  clear_has_lands();
+  ::ProtoProduce::CropLandCPP* temp = lands_;
+  lands_ = NULL;
+  return temp;
+}
+inline void BuildResp::set_allocated_lands(::ProtoProduce::CropLandCPP* lands) {
+  delete lands_;
+  lands_ = lands;
+  if (lands) {
+    set_has_lands();
+  } else {
+    clear_has_lands();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ProtoBuilding.BuildResp.lands)
+}
+
+// optional .ProtoBuilding.EquipmentStarCPP equipmentstar = 4;
+inline bool BuildResp::has_equipmentstar() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void BuildResp::set_has_equipmentstar() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void BuildResp::clear_has_equipmentstar() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void BuildResp::clear_equipmentstar() {
+  if (equipmentstar_ != NULL) equipmentstar_->::ProtoBuilding::EquipmentStarCPP::Clear();
+  clear_has_equipmentstar();
+}
+inline const ::ProtoBuilding::EquipmentStarCPP& BuildResp::equipmentstar() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.BuildResp.equipmentstar)
+  return equipmentstar_ != NULL ? *equipmentstar_ : *default_instance_->equipmentstar_;
+}
+inline ::ProtoBuilding::EquipmentStarCPP* BuildResp::mutable_equipmentstar() {
+  set_has_equipmentstar();
+  if (equipmentstar_ == NULL) equipmentstar_ = new ::ProtoBuilding::EquipmentStarCPP;
+  // @@protoc_insertion_point(field_mutable:ProtoBuilding.BuildResp.equipmentstar)
+  return equipmentstar_;
+}
+inline ::ProtoBuilding::EquipmentStarCPP* BuildResp::release_equipmentstar() {
+  clear_has_equipmentstar();
+  ::ProtoBuilding::EquipmentStarCPP* temp = equipmentstar_;
+  equipmentstar_ = NULL;
+  return temp;
+}
+inline void BuildResp::set_allocated_equipmentstar(::ProtoBuilding::EquipmentStarCPP* equipmentstar) {
+  delete equipmentstar_;
+  equipmentstar_ = equipmentstar;
+  if (equipmentstar) {
+    set_has_equipmentstar();
+  } else {
+    clear_has_equipmentstar();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ProtoBuilding.BuildResp.equipmentstar)
+}
+
 // -------------------------------------------------------------------
 
 // MoveReq
@@ -1129,6 +1574,79 @@ inline void FlipResp::set_result(bool value) {
   set_has_result();
   result_ = value;
   // @@protoc_insertion_point(field_set:ProtoBuilding.FlipResp.result)
+}
+
+// -------------------------------------------------------------------
+
+// BuildingUpReq
+
+// required uint32 ud = 1;
+inline bool BuildingUpReq::has_ud() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BuildingUpReq::set_has_ud() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BuildingUpReq::clear_has_ud() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BuildingUpReq::clear_ud() {
+  ud_ = 0u;
+  clear_has_ud();
+}
+inline ::google::protobuf::uint32 BuildingUpReq::ud() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.BuildingUpReq.ud)
+  return ud_;
+}
+inline void BuildingUpReq::set_ud(::google::protobuf::uint32 value) {
+  set_has_ud();
+  ud_ = value;
+  // @@protoc_insertion_point(field_set:ProtoBuilding.BuildingUpReq.ud)
+}
+
+// -------------------------------------------------------------------
+
+// BuildingUpResp
+
+// required .DataCommon.CommonItemsCPP commons = 1;
+inline bool BuildingUpResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BuildingUpResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BuildingUpResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BuildingUpResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& BuildingUpResp::commons() const {
+  // @@protoc_insertion_point(field_get:ProtoBuilding.BuildingUpResp.commons)
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* BuildingUpResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  // @@protoc_insertion_point(field_mutable:ProtoBuilding.BuildingUpResp.commons)
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* BuildingUpResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
+}
+inline void BuildingUpResp::set_allocated_commons(::DataCommon::CommonItemsCPP* commons) {
+  delete commons_;
+  commons_ = commons;
+  if (commons) {
+    set_has_commons();
+  } else {
+    clear_has_commons();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ProtoBuilding.BuildingUpResp.commons)
 }
 
 

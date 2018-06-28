@@ -65,6 +65,15 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* SpeedUpResp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   SpeedUpResp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* BuyMaterialInfo_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BuyMaterialInfo_reflection_ = NULL;
+const ::google::protobuf::Descriptor* BuyMaterialReq_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BuyMaterialReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* BuyMaterialResp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  BuyMaterialResp_reflection_ = NULL;
 
 }  // namespace
 
@@ -146,7 +155,7 @@ void protobuf_AssignDesc_User_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Activity));
   User_descriptor_ = file->message_type(3);
-  static const int User_offsets_[11] = {
+  static const int User_offsets_[12] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, base_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, ts_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, activity_),
@@ -158,6 +167,7 @@ void protobuf_AssignDesc_User_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, cropland_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, equipments_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, animals_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, equipmentstars_),
   };
   User_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -339,6 +349,52 @@ void protobuf_AssignDesc_User_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SpeedUpResp));
+  BuyMaterialInfo_descriptor_ = file->message_type(15);
+  static const int BuyMaterialInfo_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialInfo, props_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialInfo, props_cnt_),
+  };
+  BuyMaterialInfo_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BuyMaterialInfo_descriptor_,
+      BuyMaterialInfo::default_instance_,
+      BuyMaterialInfo_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialInfo, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialInfo, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BuyMaterialInfo));
+  BuyMaterialReq_descriptor_ = file->message_type(16);
+  static const int BuyMaterialReq_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialReq, buy_info_),
+  };
+  BuyMaterialReq_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BuyMaterialReq_descriptor_,
+      BuyMaterialReq::default_instance_,
+      BuyMaterialReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialReq, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BuyMaterialReq));
+  BuyMaterialResp_descriptor_ = file->message_type(17);
+  static const int BuyMaterialResp_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialResp, commons_),
+  };
+  BuyMaterialResp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      BuyMaterialResp_descriptor_,
+      BuyMaterialResp::default_instance_,
+      BuyMaterialResp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialResp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BuyMaterialResp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(BuyMaterialResp));
 }
 
 namespace {
@@ -381,6 +437,12 @@ void protobuf_RegisterTypes(const ::std::string&) {
     SpeedUpReq_descriptor_, &SpeedUpReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     SpeedUpResp_descriptor_, &SpeedUpResp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BuyMaterialInfo_descriptor_, &BuyMaterialInfo::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BuyMaterialReq_descriptor_, &BuyMaterialReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    BuyMaterialResp_descriptor_, &BuyMaterialResp::default_instance());
 }
 
 }  // namespace
@@ -416,6 +478,12 @@ void protobuf_ShutdownFile_User_2eproto() {
   delete SpeedUpReq_reflection_;
   delete SpeedUpResp::default_instance_;
   delete SpeedUpResp_reflection_;
+  delete BuyMaterialInfo::default_instance_;
+  delete BuyMaterialInfo_reflection_;
+  delete BuyMaterialReq::default_instance_;
+  delete BuyMaterialReq_reflection_;
+  delete BuyMaterialResp::default_instance_;
+  delete BuyMaterialResp_reflection_;
 }
 
 void protobuf_AddDesc_User_2eproto() {
@@ -446,7 +514,7 @@ void protobuf_AddDesc_User_2eproto() {
     "e\030\025 \002(\r\022\022\n\nallianceId\030\026 \002(\r\022\017\n\007barrier\030\027"
     " \002(\014\"A\n\014ActivityItem\022\n\n\002id\030\001 \002(\r\022\013\n\003bts\030"
     "\002 \002(\r\022\013\n\003ets\030\003 \002(\r\022\013\n\003ver\030\004 \002(\r\"+\n\010Activ"
-    "ity\022\037\n\003act\030\001 \003(\0132\022.User.ActivityItem\"\300\003\n"
+    "ity\022\037\n\003act\030\001 \003(\0132\022.User.ActivityItem\"\371\003\n"
     "\004User\022\030\n\004base\030\001 \002(\0132\n.User.Base\022\n\n\002ts\030\002 "
     "\002(\r\022 \n\010activity\030\003 \002(\0132\016.User.Activity\022/\n"
     "\010notifies\030\004 \001(\0132\035.ProtoNotify.NotifyItem"
@@ -458,20 +526,26 @@ void protobuf_AddDesc_User_2eproto() {
     "d\030\t \003(\0132\031.ProtoProduce.CropLandCPP\0221\n\neq"
     "uipments\030\n \003(\0132\035.ProtoProduce.ProduceEqu"
     "ipCPP\022(\n\007animals\030\013 \003(\0132\027.ProtoProduce.An"
-    "imalCPP\"\037\n\020RequestOtherUser\022\013\n\003uid\030\001 \002(\r"
-    "\"%\n\tOtherUser\022\030\n\004base\030\001 \002(\0132\n.User.Base\""
-    "\'\n\016Tutorial_stage\022\025\n\rtutorialStage\030\001 \002(\r"
-    "\"\030\n\nServerTime\022\n\n\002ts\030\001 \002(\r\">\n\013CostCashRe"
-    "q\022\014\n\004cash\030\001 \002(\r\022\016\n\006opCode\030\002 \002(\t\022\021\n\topera"
-    "tion\030\003 \002(\r\"/\n\014CostCashResp\022\014\n\004cash\030\001 \002(\r"
-    "\022\021\n\toperation\030\002 \002(\r\"&\n\nChargeItem\022\014\n\004cas"
-    "h\030\001 \002(\r\022\n\n\002ts\030\002 \002(\r\">\n\020AccumulateCharge\022"
-    "*\n\020accumulateCharge\030\001 \003(\0132\020.User.ChargeI"
-    "tem\"J\n\027PushAccumulateChangeReq\022/\n\017change"
-    "Acccharge\030\001 \002(\0132\026.User.AccumulateCharge\""
-    "\030\n\nSpeedUpReq\022\n\n\002ud\030\001 \002(\r\":\n\013SpeedUpResp"
-    "\022+\n\007commons\030\001 \001(\0132\032.DataCommon.CommonIte"
-    "msCPP", 1645);
+    "imalCPP\0227\n\016equipmentstars\030\014 \003(\0132\037.ProtoB"
+    "uilding.EquipmentStarCPP\"\037\n\020RequestOther"
+    "User\022\013\n\003uid\030\001 \002(\r\"%\n\tOtherUser\022\030\n\004base\030\001"
+    " \002(\0132\n.User.Base\"\'\n\016Tutorial_stage\022\025\n\rtu"
+    "torialStage\030\001 \002(\r\"\030\n\nServerTime\022\n\n\002ts\030\001 "
+    "\002(\r\">\n\013CostCashReq\022\014\n\004cash\030\001 \002(\r\022\016\n\006opCo"
+    "de\030\002 \002(\t\022\021\n\toperation\030\003 \002(\r\"/\n\014CostCashR"
+    "esp\022\014\n\004cash\030\001 \002(\r\022\021\n\toperation\030\002 \002(\r\"&\n\n"
+    "ChargeItem\022\014\n\004cash\030\001 \002(\r\022\n\n\002ts\030\002 \002(\r\">\n\020"
+    "AccumulateCharge\022*\n\020accumulateCharge\030\001 \003"
+    "(\0132\020.User.ChargeItem\"J\n\027PushAccumulateCh"
+    "angeReq\022/\n\017changeAcccharge\030\001 \002(\0132\026.User."
+    "AccumulateCharge\"\030\n\nSpeedUpReq\022\n\n\002ud\030\001 \002"
+    "(\r\":\n\013SpeedUpResp\022+\n\007commons\030\001 \001(\0132\032.Dat"
+    "aCommon.CommonItemsCPP\"6\n\017BuyMaterialInf"
+    "o\022\020\n\010props_id\030\001 \002(\r\022\021\n\tprops_cnt\030\002 \002(\r\"9"
+    "\n\016BuyMaterialReq\022\'\n\010buy_info\030\001 \003(\0132\025.Use"
+    "r.BuyMaterialInfo\">\n\017BuyMaterialResp\022+\n\007"
+    "commons\030\001 \002(\0132\032.DataCommon.CommonItemsCP"
+    "P", 1881);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "User.proto", &protobuf_RegisterTypes);
   Base::default_instance_ = new Base();
@@ -489,6 +563,9 @@ void protobuf_AddDesc_User_2eproto() {
   PushAccumulateChangeReq::default_instance_ = new PushAccumulateChangeReq();
   SpeedUpReq::default_instance_ = new SpeedUpReq();
   SpeedUpResp::default_instance_ = new SpeedUpResp();
+  BuyMaterialInfo::default_instance_ = new BuyMaterialInfo();
+  BuyMaterialReq::default_instance_ = new BuyMaterialReq();
+  BuyMaterialResp::default_instance_ = new BuyMaterialResp();
   Base::default_instance_->InitAsDefaultInstance();
   ActivityItem::default_instance_->InitAsDefaultInstance();
   Activity::default_instance_->InitAsDefaultInstance();
@@ -504,6 +581,9 @@ void protobuf_AddDesc_User_2eproto() {
   PushAccumulateChangeReq::default_instance_->InitAsDefaultInstance();
   SpeedUpReq::default_instance_->InitAsDefaultInstance();
   SpeedUpResp::default_instance_->InitAsDefaultInstance();
+  BuyMaterialInfo::default_instance_->InitAsDefaultInstance();
+  BuyMaterialReq::default_instance_->InitAsDefaultInstance();
+  BuyMaterialResp::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_User_2eproto);
 }
 
@@ -2226,6 +2306,7 @@ const int User::kBuildsFieldNumber;
 const int User::kCroplandFieldNumber;
 const int User::kEquipmentsFieldNumber;
 const int User::kAnimalsFieldNumber;
+const int User::kEquipmentstarsFieldNumber;
 #endif  // !_MSC_VER
 
 User::User()
@@ -2320,6 +2401,7 @@ void User::Clear() {
   cropland_.Clear();
   equipments_.Clear();
   animals_.Clear();
+  equipmentstars_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -2479,6 +2561,20 @@ bool User::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(90)) goto parse_animals;
+        if (input->ExpectTag(98)) goto parse_equipmentstars;
+        break;
+      }
+
+      // repeated .ProtoBuilding.EquipmentStarCPP equipmentstars = 12;
+      case 12: {
+        if (tag == 98) {
+         parse_equipmentstars:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_equipmentstars()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(98)) goto parse_equipmentstars;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2573,6 +2669,12 @@ void User::SerializeWithCachedSizes(
       11, this->animals(i), output);
   }
 
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstars = 12;
+  for (int i = 0; i < this->equipmentstars_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      12, this->equipmentstars(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2656,6 +2758,13 @@ void User::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         11, this->animals(i), target);
+  }
+
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstars = 12;
+  for (int i = 0; i < this->equipmentstars_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        12, this->equipmentstars(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2753,6 +2862,14 @@ int User::ByteSize() const {
         this->animals(i));
   }
 
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstars = 12;
+  total_size += 1 * this->equipmentstars_size();
+  for (int i = 0; i < this->equipmentstars_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->equipmentstars(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -2783,6 +2900,7 @@ void User::MergeFrom(const User& from) {
   cropland_.MergeFrom(from.cropland_);
   equipments_.MergeFrom(from.equipments_);
   animals_.MergeFrom(from.animals_);
+  equipmentstars_.MergeFrom(from.equipmentstars_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_base()) {
       mutable_base()->::User::Base::MergeFrom(from.base());
@@ -2841,6 +2959,7 @@ bool User::IsInitialized() const {
   if (!::google::protobuf::internal::AllAreInitialized(this->cropland())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->equipments())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->animals())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->equipmentstars())) return false;
   return true;
 }
 
@@ -2857,6 +2976,7 @@ void User::Swap(User* other) {
     cropland_.Swap(&other->cropland_);
     equipments_.Swap(&other->equipments_);
     animals_.Swap(&other->animals_);
+    equipmentstars_.Swap(&other->equipmentstars_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -5559,6 +5679,732 @@ void SpeedUpResp::Swap(SpeedUpResp* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = SpeedUpResp_descriptor_;
   metadata.reflection = SpeedUpResp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int BuyMaterialInfo::kPropsIdFieldNumber;
+const int BuyMaterialInfo::kPropsCntFieldNumber;
+#endif  // !_MSC_VER
+
+BuyMaterialInfo::BuyMaterialInfo()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:User.BuyMaterialInfo)
+}
+
+void BuyMaterialInfo::InitAsDefaultInstance() {
+}
+
+BuyMaterialInfo::BuyMaterialInfo(const BuyMaterialInfo& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:User.BuyMaterialInfo)
+}
+
+void BuyMaterialInfo::SharedCtor() {
+  _cached_size_ = 0;
+  props_id_ = 0u;
+  props_cnt_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BuyMaterialInfo::~BuyMaterialInfo() {
+  // @@protoc_insertion_point(destructor:User.BuyMaterialInfo)
+  SharedDtor();
+}
+
+void BuyMaterialInfo::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void BuyMaterialInfo::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BuyMaterialInfo::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BuyMaterialInfo_descriptor_;
+}
+
+const BuyMaterialInfo& BuyMaterialInfo::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_User_2eproto();
+  return *default_instance_;
+}
+
+BuyMaterialInfo* BuyMaterialInfo::default_instance_ = NULL;
+
+BuyMaterialInfo* BuyMaterialInfo::New() const {
+  return new BuyMaterialInfo;
+}
+
+void BuyMaterialInfo::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<BuyMaterialInfo*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(props_id_, props_cnt_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BuyMaterialInfo::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:User.BuyMaterialInfo)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 props_id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &props_id_)));
+          set_has_props_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_props_cnt;
+        break;
+      }
+
+      // required uint32 props_cnt = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_props_cnt:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &props_cnt_)));
+          set_has_props_cnt();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:User.BuyMaterialInfo)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:User.BuyMaterialInfo)
+  return false;
+#undef DO_
+}
+
+void BuyMaterialInfo::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:User.BuyMaterialInfo)
+  // required uint32 props_id = 1;
+  if (has_props_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->props_id(), output);
+  }
+
+  // required uint32 props_cnt = 2;
+  if (has_props_cnt()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->props_cnt(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:User.BuyMaterialInfo)
+}
+
+::google::protobuf::uint8* BuyMaterialInfo::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:User.BuyMaterialInfo)
+  // required uint32 props_id = 1;
+  if (has_props_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->props_id(), target);
+  }
+
+  // required uint32 props_cnt = 2;
+  if (has_props_cnt()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->props_cnt(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:User.BuyMaterialInfo)
+  return target;
+}
+
+int BuyMaterialInfo::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 props_id = 1;
+    if (has_props_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->props_id());
+    }
+
+    // required uint32 props_cnt = 2;
+    if (has_props_cnt()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->props_cnt());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BuyMaterialInfo::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BuyMaterialInfo* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BuyMaterialInfo*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BuyMaterialInfo::MergeFrom(const BuyMaterialInfo& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_props_id()) {
+      set_props_id(from.props_id());
+    }
+    if (from.has_props_cnt()) {
+      set_props_cnt(from.props_cnt());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BuyMaterialInfo::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BuyMaterialInfo::CopyFrom(const BuyMaterialInfo& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BuyMaterialInfo::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void BuyMaterialInfo::Swap(BuyMaterialInfo* other) {
+  if (other != this) {
+    std::swap(props_id_, other->props_id_);
+    std::swap(props_cnt_, other->props_cnt_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BuyMaterialInfo::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BuyMaterialInfo_descriptor_;
+  metadata.reflection = BuyMaterialInfo_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int BuyMaterialReq::kBuyInfoFieldNumber;
+#endif  // !_MSC_VER
+
+BuyMaterialReq::BuyMaterialReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:User.BuyMaterialReq)
+}
+
+void BuyMaterialReq::InitAsDefaultInstance() {
+}
+
+BuyMaterialReq::BuyMaterialReq(const BuyMaterialReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:User.BuyMaterialReq)
+}
+
+void BuyMaterialReq::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BuyMaterialReq::~BuyMaterialReq() {
+  // @@protoc_insertion_point(destructor:User.BuyMaterialReq)
+  SharedDtor();
+}
+
+void BuyMaterialReq::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void BuyMaterialReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BuyMaterialReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BuyMaterialReq_descriptor_;
+}
+
+const BuyMaterialReq& BuyMaterialReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_User_2eproto();
+  return *default_instance_;
+}
+
+BuyMaterialReq* BuyMaterialReq::default_instance_ = NULL;
+
+BuyMaterialReq* BuyMaterialReq::New() const {
+  return new BuyMaterialReq;
+}
+
+void BuyMaterialReq::Clear() {
+  buy_info_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BuyMaterialReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:User.BuyMaterialReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .User.BuyMaterialInfo buy_info = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_buy_info:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_buy_info()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_buy_info;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:User.BuyMaterialReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:User.BuyMaterialReq)
+  return false;
+#undef DO_
+}
+
+void BuyMaterialReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:User.BuyMaterialReq)
+  // repeated .User.BuyMaterialInfo buy_info = 1;
+  for (int i = 0; i < this->buy_info_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->buy_info(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:User.BuyMaterialReq)
+}
+
+::google::protobuf::uint8* BuyMaterialReq::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:User.BuyMaterialReq)
+  // repeated .User.BuyMaterialInfo buy_info = 1;
+  for (int i = 0; i < this->buy_info_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->buy_info(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:User.BuyMaterialReq)
+  return target;
+}
+
+int BuyMaterialReq::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .User.BuyMaterialInfo buy_info = 1;
+  total_size += 1 * this->buy_info_size();
+  for (int i = 0; i < this->buy_info_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->buy_info(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BuyMaterialReq::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BuyMaterialReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BuyMaterialReq*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BuyMaterialReq::MergeFrom(const BuyMaterialReq& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  buy_info_.MergeFrom(from.buy_info_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BuyMaterialReq::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BuyMaterialReq::CopyFrom(const BuyMaterialReq& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BuyMaterialReq::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->buy_info())) return false;
+  return true;
+}
+
+void BuyMaterialReq::Swap(BuyMaterialReq* other) {
+  if (other != this) {
+    buy_info_.Swap(&other->buy_info_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BuyMaterialReq::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BuyMaterialReq_descriptor_;
+  metadata.reflection = BuyMaterialReq_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int BuyMaterialResp::kCommonsFieldNumber;
+#endif  // !_MSC_VER
+
+BuyMaterialResp::BuyMaterialResp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:User.BuyMaterialResp)
+}
+
+void BuyMaterialResp::InitAsDefaultInstance() {
+  commons_ = const_cast< ::DataCommon::CommonItemsCPP*>(&::DataCommon::CommonItemsCPP::default_instance());
+}
+
+BuyMaterialResp::BuyMaterialResp(const BuyMaterialResp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:User.BuyMaterialResp)
+}
+
+void BuyMaterialResp::SharedCtor() {
+  _cached_size_ = 0;
+  commons_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+BuyMaterialResp::~BuyMaterialResp() {
+  // @@protoc_insertion_point(destructor:User.BuyMaterialResp)
+  SharedDtor();
+}
+
+void BuyMaterialResp::SharedDtor() {
+  if (this != default_instance_) {
+    delete commons_;
+  }
+}
+
+void BuyMaterialResp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* BuyMaterialResp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return BuyMaterialResp_descriptor_;
+}
+
+const BuyMaterialResp& BuyMaterialResp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_User_2eproto();
+  return *default_instance_;
+}
+
+BuyMaterialResp* BuyMaterialResp::default_instance_ = NULL;
+
+BuyMaterialResp* BuyMaterialResp::New() const {
+  return new BuyMaterialResp;
+}
+
+void BuyMaterialResp::Clear() {
+  if (has_commons()) {
+    if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool BuyMaterialResp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:User.BuyMaterialResp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .DataCommon.CommonItemsCPP commons = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_commons()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:User.BuyMaterialResp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:User.BuyMaterialResp)
+  return false;
+#undef DO_
+}
+
+void BuyMaterialResp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:User.BuyMaterialResp)
+  // required .DataCommon.CommonItemsCPP commons = 1;
+  if (has_commons()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->commons(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:User.BuyMaterialResp)
+}
+
+::google::protobuf::uint8* BuyMaterialResp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:User.BuyMaterialResp)
+  // required .DataCommon.CommonItemsCPP commons = 1;
+  if (has_commons()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->commons(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:User.BuyMaterialResp)
+  return target;
+}
+
+int BuyMaterialResp::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .DataCommon.CommonItemsCPP commons = 1;
+    if (has_commons()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->commons());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void BuyMaterialResp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const BuyMaterialResp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const BuyMaterialResp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void BuyMaterialResp::MergeFrom(const BuyMaterialResp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_commons()) {
+      mutable_commons()->::DataCommon::CommonItemsCPP::MergeFrom(from.commons());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void BuyMaterialResp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void BuyMaterialResp::CopyFrom(const BuyMaterialResp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool BuyMaterialResp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  if (has_commons()) {
+    if (!this->commons().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void BuyMaterialResp::Swap(BuyMaterialResp* other) {
+  if (other != this) {
+    std::swap(commons_, other->commons_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata BuyMaterialResp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = BuyMaterialResp_descriptor_;
+  metadata.reflection = BuyMaterialResp_reflection_;
   return metadata;
 }
 

@@ -52,6 +52,8 @@ public:
 	int Process(unsigned uid, ProtoBuilding::MoveReq* req, ProtoBuilding::MoveResp* resp);
 	//翻转
 	int Process(unsigned uid, ProtoBuilding::FlipReq* req, ProtoBuilding::FlipResp* resp);
+	//升级(粮仓、货仓)
+	int Process(unsigned uid, ProtoBuilding::BuildingUpReq *req, ProtoBuilding::BuildingUpResp* resp);
 
 	//获取仓库的剩余可用空间.type: 1-粮仓 2-货仓
 	int GetStorageRestSpace(unsigned uid, unsigned type);

@@ -49,6 +49,11 @@ BuildCfgWrap::BuildCfgWrap()
 
 }
 
+int BuildCfgWrap::GetUnlockUpgradeStarLevel() const
+{
+	return cfg_.unlock_upgardestar_level();
+}
+
 int BuildCfgWrap::GetBuildType(unsigned build_id) const
 {
 	int type = build_id/build_type_len;
@@ -390,4 +395,7 @@ const ConfigProductLine::AnimalLine & ProductlineCfgWrap::GetAnimallineCfg(unsig
 	return cfg_.animal_line(index);
 }
 
-
+const ConfigProductLine::MaterailReward & ProductlineCfgWrap::GetMaterialCfg() const
+{
+	return cfg_.get_storage_material();
+}

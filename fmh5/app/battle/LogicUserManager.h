@@ -41,6 +41,7 @@ public:
 	/////////////////////////////////////////////////////////////////////////
 	void CostCash(int cash, const std::string& reason);
 	void AddCash(int cash, const std::string& reason);
+	unsigned GetCash();
 	//累计充值
 	void AccRecharge(int count, bool isPush = true);
 	//

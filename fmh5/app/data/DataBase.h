@@ -28,6 +28,7 @@ struct DataBase{
 	uint32_t coin;//代币
 	uint32_t first_recharge;  	//首充领取标志。按位表示第一次，第二次首充状态
 	uint32_t alliance_id;//加入的联盟
+	uint32_t count; //收获次数
 	char barrier[BARRIER_LENGTH];   //障碍物状态
 
 	DataBase(){
@@ -50,6 +51,7 @@ struct DataBase{
 		coin = 0;
 		first_recharge = 0;
 		alliance_id = 0;
+		count = 0;
 
 		memset(forbid_reason, 0, sizeof(forbid_reason));
 		memset(name, 0, sizeof(name));
@@ -81,7 +83,7 @@ struct DataBase{
 		msg->set_coin(coin);
 		msg->set_firstrecharge(first_recharge);
 		msg->set_allianceid(alliance_id);
-		msg->set_barrier(barrier);
+		msg->set_barrier(barrier, BARRIER_LENGTH);
 	}
 
 	bool IsOnline()

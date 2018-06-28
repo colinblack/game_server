@@ -17,8 +17,16 @@ message AnimalLine
 	required CommonGiftConfig.CommonModifyItem product 	= 3; //产品
 }
 
+message MaterailReward
+{
+	required uint32 init_count	= 1;  //初始次数
+	required uint32  rate		= 2;  //是否有材料的概率
+	repeated CommonGiftConfig.CommonModifyItem random_reward	= 3;   //材料
+}
+
 message ProductLine
 {
 	repeated EquipLine equipline 	= 1;  //设备生产线
 	repeated AnimalLine animal_line	= 2; //动物生产线
+	required MaterailReward get_storage_material= 3;  //随机材料的获得
 }

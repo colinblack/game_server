@@ -106,6 +106,9 @@ void DataProduceEquipRoutine::SingleRoutineEnd(unsigned buildud, ProtoPush::Push
 	//获取设备数据
 	DataProduceequip & equipment = DataProduceequipManager::Instance()->GetData(uid_, buildud);
 
+	//设备升星功能
+	EquipmentStarUpgrade(equipment, msg);
+
 	//生产完成.此时设备可能状态有两种 1 -> 2或 1->0
 	equipment.FinishCurrentJob();
 
@@ -119,6 +122,67 @@ void DataProduceEquipRoutine::SingleRoutineEnd(unsigned buildud, ProtoPush::Push
 
 	//设备的最终状态
 	equipment.SetMessage(msg->add_equipments());
+}
+
+int DataProduceEquipRoutine::EquipmentStarUpgrade(DataProduceequip & equipment,	ProtoPush::PushBuildingsCPP * msg)
+{
+	//获取升星的解锁条件
+	BuildCfgWrap buildcfgwrap;
+	int needlevel = buildcfgwrap.GetUnlockUpgradeStarLevel();
+	unsigned uid = equipment.uid;
+
+	//判断用户等级是否满足升星的条件
+	if (BaseManager::Instance()->Get(uid).level < needlevel)
+	{
+		return 0;
+	}
+
+	//获取该设备的建筑id，根据id获取建筑的星级属性
+	DataBuildings & databuild = DataBuildingMgr::Instance()->GetData(uid, equipment.id);
+	DataEquipmentStar & datastar = DataEquipmentStarManager::Instance()->GetData(uid, databuild.build_id);
+
+	//获取生产设备的配置
+	const ConfigBuilding::ProduceEquipment & equipcfg = buildcfgwrap.GetProduceCfgById(databuild.build_id);
+
+	//判断星级属性是否达到最大
+	if (datastar.star >= equipcfg.upgrade_star_size())
+	{
+		//星级已达到最大，不再增加使用时间
+		return 0;
+	}
+
+	//获取当前商品的id，以此获得设备生产该商品所需的时间
+	int productid = equipment.GetQueueFront();
+	const ConfigItem::PropItem & propscfg = ItemCfgWrap().GetPropsItem(productid);
+
+	int percent = 0;
+
+	//计算星级属性中，生产时间缩短的百分比
+	for(int i = 0; i < datastar.star; ++i)
+	{
+		if (equipcfg.upgrade_star(i).ptype() == property_type_time)
+		{
+			percent = equipcfg.upgrade_star(i).value();  //扣除时间的百分比
+		}
+	}
+
+	datastar.usedtime += (100 - percent)/static_cast<double>(100) * propscfg.time_gain();
+
+	//根据设备的使用时间，更新当前的星级属性
+	int hour = datastar.usedtime/3600;  //小时
+
+	for(int i = equipcfg.upgrade_star_size() - 1; i >= 0 ; --i)
+	{
+		if (hour >= equipcfg.upgrade_star(i).need_time())
+		{
+			datastar.star = i+1;
+		}
+	}
+
+	DataEquipmentStarManager::Instance()->UpdateItem(datastar);
+	datastar.SetMessage(msg->add_equipmentstar());
+
+	return 0;
 }
 
 void DataAnimalRoutine::CheckUd(unsigned animalud)
@@ -297,7 +361,7 @@ int LogicProductLineManager::OnlineAnimal(unsigned uid)
 	return 0;
 }
 
-int LogicProductLineManager::ProduceAfterBuild(unsigned uid, unsigned ud, unsigned type)
+int LogicProductLineManager::ProduceAfterBuild(unsigned uid, unsigned ud, unsigned type, bool ispush, ProtoBuilding::BuildResp * resp)
 {
 	ProtoPush::PushBuildingsCPP *msg = NULL;
 	unsigned index = 0;
@@ -308,10 +372,19 @@ int LogicProductLineManager::ProduceAfterBuild(unsigned uid, unsigned ud, unsign
 			{
 				//农地
 				//新增地块生产需要的农地信息
-				msg = new ProtoPush::PushBuildingsCPP;
 				index = DataCroplandManager::Instance()->AddNewCropLand(uid, ud);
 				DataCropland & crop = DataCroplandManager::Instance()->GetDataByIndex(index);
-				crop.SetMessage(msg->add_croplands());
+
+				if (!ispush)
+				{
+					//不推送
+					crop.SetMessage(resp->mutable_lands());
+				}
+				else
+				{
+					msg = new ProtoPush::PushBuildingsCPP;
+					crop.SetMessage(msg->add_croplands());
+				}
 			}
 			break;
 		case build_type_animal_residence :
@@ -320,7 +393,6 @@ int LogicProductLineManager::ProduceAfterBuild(unsigned uid, unsigned ud, unsign
 		case build_type_produce_equipment :
 			{
 				//生产设备
-				msg = new ProtoPush::PushBuildingsCPP;
 				index = DataProduceequipManager::Instance()->AddNewEquip(uid, ud);
 
 				DataProduceequip & equip = DataProduceequipManager::Instance()->GetDataByIndex(index);
@@ -332,7 +404,14 @@ int LogicProductLineManager::ProduceAfterBuild(unsigned uid, unsigned ud, unsign
 				equip.queuenum = producecfg.init_queue();  //初始化队列长度
 
 				DataProduceequipManager::Instance()->UpdateItem(equip);
+
+				if (ispush)
+				{
+					msg = new ProtoPush::PushBuildingsCPP;
+					equip.SetMessage(msg->add_equipments());
+				}
 			}
+
 			break;
 		case build_type_fruit_tree :
 			break;
@@ -517,13 +596,13 @@ int LogicProductLineManager::ReapCrop(unsigned uid, vector<unsigned> & lands, Pr
 		unsigned ud = gainlands[i];
 		DataCropland & cropland = DataCroplandManager::Instance()->GetData(uid, ud);
 
-		crops[cropland.plant] += 2;  //产出2份
+		//获取收割作物的经验奖励
+		GetExpReward(cropland.plant, 2, reward);
 
+		crops[cropland.plant] += 2;  //产出2份
 		cropland.Harvest();
 		DataCroplandManager::Instance()->UpdateItem(cropland);
 		cropland.SetMessage(resp->add_cropland());
-
-		GetExpReward(cropland.plant, 2, reward);
 	}
 
 	//收获作物
@@ -545,6 +624,9 @@ int LogicProductLineManager::ReapCrop(unsigned uid, vector<unsigned> & lands, Pr
 	{
 		resp->set_isfull(false);
 	}
+
+	//更新收获次数
+	ActAfterHarvest(uid, gainum * 2, resp->mutable_commons());
 
 	return 0;
 }
@@ -646,20 +728,18 @@ int LogicProductLineManager::JoinEquipQueue(unsigned uid, unsigned equipud, unsi
 	//消耗
 	LogicUserManager::Instance()->CommonProcess(uid, propscfg.material(), "EquipProduce", resp->mutable_commons());
 
-	//向当前队列插入数据
+	//向设备的生产队列插入数据
 	equipment.InsertQueue(equipment.queuedata, productid);
 
 	//判断定时任务队列中是否有该设备的任务，如果有，则不做处理，否则，就加入队列
 	bool hasroutine = LogicQueueManager::Instance()->IsExistBuildRoutine(uid, equipud);
 
-	if (hasroutine)
+	if (!hasroutine)
 	{
-		//存在，则结束
-		DataProduceequipManager::Instance()->UpdateItem(equipment);
-		return 0;
+		//不存在正在生产的任务，则开始生产
+		ProduceEquipNextMove(equipment);
 	}
 
-	ProduceEquipNextMove(equipment);
 	DataProduceequipManager::Instance()->UpdateItem(equipment);
 
 	equipment.SetMessage(resp->mutable_equipment());
@@ -752,6 +832,8 @@ int LogicProductLineManager::FetchBackStorage(unsigned uid, unsigned equipud, un
 	DataProduceequipManager::Instance()->UpdateItem(equipment);
 	equipment.SetMessage(resp->mutable_equipment());
 
+	resp->set_isfull(false);
+
 	return 0;
 }
 
@@ -778,7 +860,23 @@ void LogicProductLineManager::ProduceEquipNextMove(DataProduceequip & equipment)
 		ItemCfgWrap itemcfgwrap;
 		const ConfigItem::PropItem & propscfg = itemcfgwrap.GetPropsItem(productid);
 
-		unsigned endts = Time::GetGlobalTime() + propscfg.time_gain();
+		//获取设备的星级属性，判断是否有减速的星级
+		unsigned build_id = GetBuildId(equipment.uid, equipment.id);
+		const ConfigBuilding::ProduceEquipment & equipcfg = BuildCfgWrap().GetProduceCfgById(build_id);
+
+		DataEquipmentStar & datastar = DataEquipmentStarManager::Instance()->GetData(equipment.uid, build_id);
+		int percent = 0;
+
+		//计算星级属性中，生产时间缩短的百分比
+		for(int i = 0; i < datastar.star; ++i)
+		{
+			if (equipcfg.upgrade_star(i).ptype() == property_type_time)
+			{
+				percent = equipcfg.upgrade_star(i).value();  //扣除时间的百分比
+			}
+		}
+
+		unsigned endts = Time::GetGlobalTime() + (100 - percent)/static_cast<double>(100) * propscfg.time_gain();
 
 		vector<unsigned> equips;
 		equips.push_back(equipment.id);
@@ -1027,6 +1125,9 @@ int LogicProductLineManager::Obtain(unsigned uid, unsigned animalud, ProtoProduc
 
 	animal.SetMessage(resp->mutable_animal());
 
+	//更新收获次数
+	ActAfterHarvest(uid, count, resp->mutable_commons());
+
 	return 0;
 }
 
@@ -1048,6 +1149,49 @@ int LogicProductLineManager::GetExpReward(unsigned productid, unsigned count, Co
 		//经验
 		reward.mutable_based()->set_exp(exp + oldexp);
 	}
+
+	return 0;
+}
+
+int LogicProductLineManager::ActAfterHarvest(unsigned uid, unsigned count, DataCommon::CommonItemsCPP * msg)
+{
+	//根据uid，获取当前已经收获的作物个数
+	DBCUserBaseWrap userwrap(uid);
+	userwrap.Obj().count += count;
+
+	//根据用户等级，开启随机产生道具的机会需要的次数
+	const ConfigProductLine::MaterailReward & materialcfg = ProductlineCfgWrap().GetMaterialCfg();
+
+	int cond_count = materialcfg.init_count() + userwrap.Obj().level;  //条件数量
+
+	//判断当前次数是否满足条件
+	if (userwrap.Obj().count < cond_count)
+	{
+		//条件不满足，返回
+		return 0;
+	}
+
+	//次数满足要求，随机一个数，判断是否能产生材料
+	int val = Math::GetRandomInt(100); //在0与100之间随机一个值
+
+	if (val >= materialcfg.rate())
+	{
+		//不满足概率的条件，次数重置
+		userwrap.Obj().count = 0;
+		userwrap.Save();
+
+		return 0;
+	}
+
+	//从材料的数组中随机抽取一个产品
+	int index = Math::GetRandomInt(materialcfg.random_reward_size());
+
+	//发放奖励
+	LogicUserManager::Instance()->CommonProcess(uid, materialcfg.random_reward(index), "HarvestRandom", msg);
+
+	//收获次数重置
+	userwrap.Obj().count = 0;
+	userwrap.Save();
 
 	return 0;
 }

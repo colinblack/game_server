@@ -53,6 +53,9 @@ class AccumulateCharge;
 class PushAccumulateChangeReq;
 class SpeedUpReq;
 class SpeedUpResp;
+class BuyMaterialInfo;
+class BuyMaterialReq;
+class BuyMaterialResp;
 
 // ===================================================================
 
@@ -731,6 +734,18 @@ class User : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >*
       mutable_animals();
 
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstars = 12;
+  inline int equipmentstars_size() const;
+  inline void clear_equipmentstars();
+  static const int kEquipmentstarsFieldNumber = 12;
+  inline const ::ProtoBuilding::EquipmentStarCPP& equipmentstars(int index) const;
+  inline ::ProtoBuilding::EquipmentStarCPP* mutable_equipmentstars(int index);
+  inline ::ProtoBuilding::EquipmentStarCPP* add_equipmentstars();
+  inline const ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >&
+      equipmentstars() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >*
+      mutable_equipmentstars();
+
   // @@protoc_insertion_point(class_scope:User.User)
  private:
   inline void set_has_base();
@@ -760,6 +775,7 @@ class User : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP > cropland_;
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP > equipments_;
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP > animals_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP > equipmentstars_;
   ::google::protobuf::uint32 ts_;
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
@@ -1690,6 +1706,258 @@ class SpeedUpResp : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static SpeedUpResp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BuyMaterialInfo : public ::google::protobuf::Message {
+ public:
+  BuyMaterialInfo();
+  virtual ~BuyMaterialInfo();
+
+  BuyMaterialInfo(const BuyMaterialInfo& from);
+
+  inline BuyMaterialInfo& operator=(const BuyMaterialInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuyMaterialInfo& default_instance();
+
+  void Swap(BuyMaterialInfo* other);
+
+  // implements Message ----------------------------------------------
+
+  BuyMaterialInfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuyMaterialInfo& from);
+  void MergeFrom(const BuyMaterialInfo& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 props_id = 1;
+  inline bool has_props_id() const;
+  inline void clear_props_id();
+  static const int kPropsIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 props_id() const;
+  inline void set_props_id(::google::protobuf::uint32 value);
+
+  // required uint32 props_cnt = 2;
+  inline bool has_props_cnt() const;
+  inline void clear_props_cnt();
+  static const int kPropsCntFieldNumber = 2;
+  inline ::google::protobuf::uint32 props_cnt() const;
+  inline void set_props_cnt(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:User.BuyMaterialInfo)
+ private:
+  inline void set_has_props_id();
+  inline void clear_has_props_id();
+  inline void set_has_props_cnt();
+  inline void clear_has_props_cnt();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 props_id_;
+  ::google::protobuf::uint32 props_cnt_;
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static BuyMaterialInfo* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BuyMaterialReq : public ::google::protobuf::Message {
+ public:
+  BuyMaterialReq();
+  virtual ~BuyMaterialReq();
+
+  BuyMaterialReq(const BuyMaterialReq& from);
+
+  inline BuyMaterialReq& operator=(const BuyMaterialReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuyMaterialReq& default_instance();
+
+  void Swap(BuyMaterialReq* other);
+
+  // implements Message ----------------------------------------------
+
+  BuyMaterialReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuyMaterialReq& from);
+  void MergeFrom(const BuyMaterialReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .User.BuyMaterialInfo buy_info = 1;
+  inline int buy_info_size() const;
+  inline void clear_buy_info();
+  static const int kBuyInfoFieldNumber = 1;
+  inline const ::User::BuyMaterialInfo& buy_info(int index) const;
+  inline ::User::BuyMaterialInfo* mutable_buy_info(int index);
+  inline ::User::BuyMaterialInfo* add_buy_info();
+  inline const ::google::protobuf::RepeatedPtrField< ::User::BuyMaterialInfo >&
+      buy_info() const;
+  inline ::google::protobuf::RepeatedPtrField< ::User::BuyMaterialInfo >*
+      mutable_buy_info();
+
+  // @@protoc_insertion_point(class_scope:User.BuyMaterialReq)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::User::BuyMaterialInfo > buy_info_;
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static BuyMaterialReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BuyMaterialResp : public ::google::protobuf::Message {
+ public:
+  BuyMaterialResp();
+  virtual ~BuyMaterialResp();
+
+  BuyMaterialResp(const BuyMaterialResp& from);
+
+  inline BuyMaterialResp& operator=(const BuyMaterialResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BuyMaterialResp& default_instance();
+
+  void Swap(BuyMaterialResp* other);
+
+  // implements Message ----------------------------------------------
+
+  BuyMaterialResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BuyMaterialResp& from);
+  void MergeFrom(const BuyMaterialResp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .DataCommon.CommonItemsCPP commons = 1;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 1;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  inline void set_allocated_commons(::DataCommon::CommonItemsCPP* commons);
+
+  // @@protoc_insertion_point(class_scope:User.BuyMaterialResp)
+ private:
+  inline void set_has_commons();
+  inline void clear_has_commons();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::DataCommon::CommonItemsCPP* commons_;
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+
+  void InitAsDefaultInstance();
+  static BuyMaterialResp* default_instance_;
 };
 // ===================================================================
 
@@ -2975,6 +3243,36 @@ User::mutable_animals() {
   return &animals_;
 }
 
+// repeated .ProtoBuilding.EquipmentStarCPP equipmentstars = 12;
+inline int User::equipmentstars_size() const {
+  return equipmentstars_.size();
+}
+inline void User::clear_equipmentstars() {
+  equipmentstars_.Clear();
+}
+inline const ::ProtoBuilding::EquipmentStarCPP& User::equipmentstars(int index) const {
+  // @@protoc_insertion_point(field_get:User.User.equipmentstars)
+  return equipmentstars_.Get(index);
+}
+inline ::ProtoBuilding::EquipmentStarCPP* User::mutable_equipmentstars(int index) {
+  // @@protoc_insertion_point(field_mutable:User.User.equipmentstars)
+  return equipmentstars_.Mutable(index);
+}
+inline ::ProtoBuilding::EquipmentStarCPP* User::add_equipmentstars() {
+  // @@protoc_insertion_point(field_add:User.User.equipmentstars)
+  return equipmentstars_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >&
+User::equipmentstars() const {
+  // @@protoc_insertion_point(field_list:User.User.equipmentstars)
+  return equipmentstars_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >*
+User::mutable_equipmentstars() {
+  // @@protoc_insertion_point(field_mutable_list:User.User.equipmentstars)
+  return &equipmentstars_;
+}
+
 // -------------------------------------------------------------------
 
 // RequestOtherUser
@@ -3486,6 +3784,137 @@ inline void SpeedUpResp::set_allocated_commons(::DataCommon::CommonItemsCPP* com
     clear_has_commons();
   }
   // @@protoc_insertion_point(field_set_allocated:User.SpeedUpResp.commons)
+}
+
+// -------------------------------------------------------------------
+
+// BuyMaterialInfo
+
+// required uint32 props_id = 1;
+inline bool BuyMaterialInfo::has_props_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BuyMaterialInfo::set_has_props_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BuyMaterialInfo::clear_has_props_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BuyMaterialInfo::clear_props_id() {
+  props_id_ = 0u;
+  clear_has_props_id();
+}
+inline ::google::protobuf::uint32 BuyMaterialInfo::props_id() const {
+  // @@protoc_insertion_point(field_get:User.BuyMaterialInfo.props_id)
+  return props_id_;
+}
+inline void BuyMaterialInfo::set_props_id(::google::protobuf::uint32 value) {
+  set_has_props_id();
+  props_id_ = value;
+  // @@protoc_insertion_point(field_set:User.BuyMaterialInfo.props_id)
+}
+
+// required uint32 props_cnt = 2;
+inline bool BuyMaterialInfo::has_props_cnt() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BuyMaterialInfo::set_has_props_cnt() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BuyMaterialInfo::clear_has_props_cnt() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BuyMaterialInfo::clear_props_cnt() {
+  props_cnt_ = 0u;
+  clear_has_props_cnt();
+}
+inline ::google::protobuf::uint32 BuyMaterialInfo::props_cnt() const {
+  // @@protoc_insertion_point(field_get:User.BuyMaterialInfo.props_cnt)
+  return props_cnt_;
+}
+inline void BuyMaterialInfo::set_props_cnt(::google::protobuf::uint32 value) {
+  set_has_props_cnt();
+  props_cnt_ = value;
+  // @@protoc_insertion_point(field_set:User.BuyMaterialInfo.props_cnt)
+}
+
+// -------------------------------------------------------------------
+
+// BuyMaterialReq
+
+// repeated .User.BuyMaterialInfo buy_info = 1;
+inline int BuyMaterialReq::buy_info_size() const {
+  return buy_info_.size();
+}
+inline void BuyMaterialReq::clear_buy_info() {
+  buy_info_.Clear();
+}
+inline const ::User::BuyMaterialInfo& BuyMaterialReq::buy_info(int index) const {
+  // @@protoc_insertion_point(field_get:User.BuyMaterialReq.buy_info)
+  return buy_info_.Get(index);
+}
+inline ::User::BuyMaterialInfo* BuyMaterialReq::mutable_buy_info(int index) {
+  // @@protoc_insertion_point(field_mutable:User.BuyMaterialReq.buy_info)
+  return buy_info_.Mutable(index);
+}
+inline ::User::BuyMaterialInfo* BuyMaterialReq::add_buy_info() {
+  // @@protoc_insertion_point(field_add:User.BuyMaterialReq.buy_info)
+  return buy_info_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::User::BuyMaterialInfo >&
+BuyMaterialReq::buy_info() const {
+  // @@protoc_insertion_point(field_list:User.BuyMaterialReq.buy_info)
+  return buy_info_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::User::BuyMaterialInfo >*
+BuyMaterialReq::mutable_buy_info() {
+  // @@protoc_insertion_point(field_mutable_list:User.BuyMaterialReq.buy_info)
+  return &buy_info_;
+}
+
+// -------------------------------------------------------------------
+
+// BuyMaterialResp
+
+// required .DataCommon.CommonItemsCPP commons = 1;
+inline bool BuyMaterialResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BuyMaterialResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BuyMaterialResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BuyMaterialResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& BuyMaterialResp::commons() const {
+  // @@protoc_insertion_point(field_get:User.BuyMaterialResp.commons)
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* BuyMaterialResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  // @@protoc_insertion_point(field_mutable:User.BuyMaterialResp.commons)
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* BuyMaterialResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
+}
+inline void BuyMaterialResp::set_allocated_commons(::DataCommon::CommonItemsCPP* commons) {
+  delete commons_;
+  commons_ = commons;
+  if (commons) {
+    set_has_commons();
+  } else {
+    clear_has_commons();
+  }
+  // @@protoc_insertion_point(field_set_allocated:User.BuyMaterialResp.commons)
 }
 
 

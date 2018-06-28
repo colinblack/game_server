@@ -55,6 +55,11 @@ void DBCUserBaseWrap::AddCash(int cash, const std::string& reason)
 	Save();
 }
 
+unsigned DBCUserBaseWrap::GetCash()
+{
+	return data_.cash;
+}
+
 void DBCUserBaseWrap::CostCash(int cash, const std::string& reason)
 {
 	if (cash <= 0)

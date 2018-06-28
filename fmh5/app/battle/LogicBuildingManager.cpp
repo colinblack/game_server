@@ -204,6 +204,21 @@ int LogicBuildManager::Build(unsigned uid, unsigned build_id, unsigned xpos, uns
 	databuild.position = xpos*grid_ypos_len + ypos;
 	databuild.direct = direct_right;
 
+	int type = BuildCfgWrap().GetBuildType(build_id);
+
+	//判断是否是生产设备
+	if (build_type_produce_equipment == type)
+	{
+		//生产设备，判断是否存在该设备的星级，如果不存在，则新增
+		if (!DataEquipmentStarManager::Instance()->IsExistItem(uid, build_id))
+		{
+			//不存在，新增
+			DataEquipmentStar & datastar = DataEquipmentStarManager::Instance()->GetData(uid, build_id);
+
+			datastar.SetMessage(resp->mutable_equipmentstar());
+		}
+	}
+
 	if (0 == wait_time)
 	{
 		//立即完成类型
@@ -215,7 +230,7 @@ int LogicBuildManager::Build(unsigned uid, unsigned build_id, unsigned xpos, uns
 		//处理建筑升级后的相关生产线
 		unsigned type = BuildCfgWrap().GetBuildType(databuild.build_id);
 
-		LogicProductLineManager::Instance()->ProduceAfterBuild(uid, databuild.id, type);
+		LogicProductLineManager::Instance()->ProduceAfterBuild(uid, databuild.id, type, false, resp);
 
 		return 0;
 	}
@@ -427,6 +442,50 @@ int LogicBuildManager::Flip(unsigned uid, unsigned build_ud, ProtoBuilding::Flip
 	return 0;
 }
 
+int LogicBuildManager::Process(unsigned uid, ProtoBuilding::BuildingUpReq *req, ProtoBuilding::BuildingUpResp* resp)
+{
+	unsigned build_ud = req->ud();
+	//根据ud，判断是否在建筑表中
+	bool isexist = DataBuildingMgr::Instance()->IsExistItem(uid, build_ud);
+	if (!isexist)
+	{
+		error_log("build not exist. uid=%u, ud=%u", uid, build_ud);
+		throw runtime_error("build_not_exist");
+	}
+
+	//获取建筑信息
+	DataBuildings & databuild = DataBuildingMgr::Instance()->GetData(uid, build_ud);
+	unsigned build_id = databuild.build_id;
+
+	//判定其是否为仓库
+	bool isstorage = BuildCfgWrap().IsStorage(build_id);
+	if (!isstorage)
+	{
+		error_log("build is not  storage. uid=%u, build_id=%u", uid, build_id);
+		throw runtime_error("build is not  storage");
+	}
+
+	//根据建筑id获取相应的配置信息
+	unsigned cur_level = databuild.level;
+	const ConfigBuilding::StorageHouse &storage_house_cfg = BuildCfgWrap().GetStorageCfgById(build_id);
+	unsigned max_level = storage_house_cfg.level_storage_size();
+	if(cur_level >= max_level)
+	{
+		error_log("build level is biggest. cur_level=%u", cur_level);
+		throw runtime_error("build level is biggest");
+	}
+	const CommonGiftConfig::CommonModifyItem &item_cfg = storage_house_cfg.need_cost(cur_level);
+
+	//处理升级消耗
+	string reason = "storage_house_up";
+	LogicUserManager::Instance()->CommonProcess(uid, item_cfg, reason, resp->mutable_commons());
+
+	//增加建筑等级
+	databuild.level = cur_level + 1;
+	DataBuildingMgr::Instance()->UpdateItem(databuild);
+	return 0;
+}
+
 bool LogicBuildManager::IsIntersect(unsigned uid, unsigned ud, int * build_status)
 {
 	//统计耗时
@@ -575,7 +634,7 @@ int LogicBuildManager::SeteBuildGrid(unsigned uid, unsigned xpos, unsigned ypos,
 int LogicBuildManager::GetStorageRestSpace(unsigned uid, unsigned type)
 {
 	//先获取仓库配置
-	const ConfigBuilding::StorageHouse & storagecfg = BuildCfgWrap().GetStorageCfg(type - 1);  //粮仓
+	const ConfigBuilding::StorageHouse & storagecfg = BuildCfgWrap().GetStorageCfg(type);  //粮仓
 
 	unsigned build_ud = DataBuildingMgr::Instance()->GetBuildUd(uid, storagecfg.id());
 

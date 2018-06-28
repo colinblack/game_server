@@ -143,6 +143,18 @@ class PushBuildingsCPP : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >*
       mutable_animals();
 
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstar = 5;
+  inline int equipmentstar_size() const;
+  inline void clear_equipmentstar();
+  static const int kEquipmentstarFieldNumber = 5;
+  inline const ::ProtoBuilding::EquipmentStarCPP& equipmentstar(int index) const;
+  inline ::ProtoBuilding::EquipmentStarCPP* mutable_equipmentstar(int index);
+  inline ::ProtoBuilding::EquipmentStarCPP* add_equipmentstar();
+  inline const ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >&
+      equipmentstar() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >*
+      mutable_equipmentstar();
+
   // @@protoc_insertion_point(class_scope:ProtoPush.PushBuildingsCPP)
  private:
 
@@ -154,6 +166,7 @@ class PushBuildingsCPP : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP > croplands_;
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::ProduceEquipCPP > equipments_;
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP > animals_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP > equipmentstar_;
   friend void  protobuf_AddDesc_ProtoPush_2eproto();
   friend void protobuf_AssignDesc_ProtoPush_2eproto();
   friend void protobuf_ShutdownFile_ProtoPush_2eproto();
@@ -436,6 +449,36 @@ inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::AnimalCPP >*
 PushBuildingsCPP::mutable_animals() {
   // @@protoc_insertion_point(field_mutable_list:ProtoPush.PushBuildingsCPP.animals)
   return &animals_;
+}
+
+// repeated .ProtoBuilding.EquipmentStarCPP equipmentstar = 5;
+inline int PushBuildingsCPP::equipmentstar_size() const {
+  return equipmentstar_.size();
+}
+inline void PushBuildingsCPP::clear_equipmentstar() {
+  equipmentstar_.Clear();
+}
+inline const ::ProtoBuilding::EquipmentStarCPP& PushBuildingsCPP::equipmentstar(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoPush.PushBuildingsCPP.equipmentstar)
+  return equipmentstar_.Get(index);
+}
+inline ::ProtoBuilding::EquipmentStarCPP* PushBuildingsCPP::mutable_equipmentstar(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoPush.PushBuildingsCPP.equipmentstar)
+  return equipmentstar_.Mutable(index);
+}
+inline ::ProtoBuilding::EquipmentStarCPP* PushBuildingsCPP::add_equipmentstar() {
+  // @@protoc_insertion_point(field_add:ProtoPush.PushBuildingsCPP.equipmentstar)
+  return equipmentstar_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >&
+PushBuildingsCPP::equipmentstar() const {
+  // @@protoc_insertion_point(field_list:ProtoPush.PushBuildingsCPP.equipmentstar)
+  return equipmentstar_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoBuilding::EquipmentStarCPP >*
+PushBuildingsCPP::mutable_equipmentstar() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoPush.PushBuildingsCPP.equipmentstar)
+  return &equipmentstar_;
 }
 
 // -------------------------------------------------------------------

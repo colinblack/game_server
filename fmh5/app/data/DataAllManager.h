@@ -8,6 +8,7 @@
 #include "DataItem.h"
 #include "DataProduceEquip.h"
 #include "DataAnimal.h"
+#include "DataEquipmentStar.h"
 
 class DataBuildingMgr: public DBCMultipleTemplate<DataBuildings, DB_BUILD,
 		DB_BUILD_FULL, CDataBuildings>, public CSingleton<DataBuildingMgr> {
@@ -142,5 +143,16 @@ private:
 	map<unsigned, map<uint32_t, vector<uint32_t> > > m_BuildUd; //uid =》(buildud->ud)  动物住所相关的映射
 };
 
+class DataEquipmentStarManager : public DBCMultipleTemplate<DataEquipmentStar, DB_EQUIPMENT_STAR, DB_EQUIPMENT_STAR_FULL, CDataEquipmentStar> ,
+	public CSingleton<DataEquipmentStarManager>
+{
+public:
+	virtual void CallDestroy() 	{ Destroy();}
+
+	const char* name() const
+	{
+		return "DataEquipment_starManager";
+	}
+};
 
 #endif //DATA_ALL_MANAGER_H_

@@ -40,11 +40,12 @@ void protobuf_AssignDesc_ProtoPush_2eproto() {
       "ProtoPush.proto");
   GOOGLE_CHECK(file != NULL);
   PushBuildingsCPP_descriptor_ = file->message_type(0);
-  static const int PushBuildingsCPP_offsets_[4] = {
+  static const int PushBuildingsCPP_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushBuildingsCPP, buildings_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushBuildingsCPP, croplands_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushBuildingsCPP, equipments_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushBuildingsCPP, animals_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PushBuildingsCPP, equipmentstar_),
   };
   PushBuildingsCPP_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -129,14 +130,15 @@ void protobuf_AddDesc_ProtoPush_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\017ProtoPush.proto\022\tProtoPush\032\023ProtoBuild"
     "ing.proto\032\022ProtoProduce.proto\032\020DataCommo"
-    "n.proto\"\314\001\n\020PushBuildingsCPP\022-\n\tbuilding"
+    "n.proto\"\204\002\n\020PushBuildingsCPP\022-\n\tbuilding"
     "s\030\001 \003(\0132\032.ProtoBuilding.BuildingCPP\022,\n\tc"
     "roplands\030\002 \003(\0132\031.ProtoProduce.CropLandCP"
     "P\0221\n\nequipments\030\003 \003(\0132\035.ProtoProduce.Pro"
     "duceEquipCPP\022(\n\007animals\030\004 \003(\0132\027.ProtoPro"
-    "duce.AnimalCPP\">\n\017PushUserUpLevel\022+\n\007com"
-    "mons\030\001 \002(\0132\032.DataCommon.CommonItemsCPP\"\030"
-    "\n\026PushOnceEveryDayReward", 384);
+    "duce.AnimalCPP\0226\n\requipmentstar\030\005 \003(\0132\037."
+    "ProtoBuilding.EquipmentStarCPP\">\n\017PushUs"
+    "erUpLevel\022+\n\007commons\030\001 \002(\0132\032.DataCommon."
+    "CommonItemsCPP\"\030\n\026PushOnceEveryDayReward", 440);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ProtoPush.proto", &protobuf_RegisterTypes);
   PushBuildingsCPP::default_instance_ = new PushBuildingsCPP();
@@ -162,6 +164,7 @@ const int PushBuildingsCPP::kBuildingsFieldNumber;
 const int PushBuildingsCPP::kCroplandsFieldNumber;
 const int PushBuildingsCPP::kEquipmentsFieldNumber;
 const int PushBuildingsCPP::kAnimalsFieldNumber;
+const int PushBuildingsCPP::kEquipmentstarFieldNumber;
 #endif  // !_MSC_VER
 
 PushBuildingsCPP::PushBuildingsCPP()
@@ -221,6 +224,7 @@ void PushBuildingsCPP::Clear() {
   croplands_.Clear();
   equipments_.Clear();
   animals_.Clear();
+  equipmentstar_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -287,6 +291,20 @@ bool PushBuildingsCPP::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(34)) goto parse_animals;
+        if (input->ExpectTag(42)) goto parse_equipmentstar;
+        break;
+      }
+
+      // repeated .ProtoBuilding.EquipmentStarCPP equipmentstar = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_equipmentstar:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_equipmentstar()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_equipmentstar;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -340,6 +358,12 @@ void PushBuildingsCPP::SerializeWithCachedSizes(
       4, this->animals(i), output);
   }
 
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstar = 5;
+  for (int i = 0; i < this->equipmentstar_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->equipmentstar(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -376,6 +400,13 @@ void PushBuildingsCPP::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         4, this->animals(i), target);
+  }
+
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstar = 5;
+  for (int i = 0; i < this->equipmentstar_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->equipmentstar(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -421,6 +452,14 @@ int PushBuildingsCPP::ByteSize() const {
         this->animals(i));
   }
 
+  // repeated .ProtoBuilding.EquipmentStarCPP equipmentstar = 5;
+  total_size += 1 * this->equipmentstar_size();
+  for (int i = 0; i < this->equipmentstar_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->equipmentstar(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -450,6 +489,7 @@ void PushBuildingsCPP::MergeFrom(const PushBuildingsCPP& from) {
   croplands_.MergeFrom(from.croplands_);
   equipments_.MergeFrom(from.equipments_);
   animals_.MergeFrom(from.animals_);
+  equipmentstar_.MergeFrom(from.equipmentstar_);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -471,6 +511,7 @@ bool PushBuildingsCPP::IsInitialized() const {
   if (!::google::protobuf::internal::AllAreInitialized(this->croplands())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->equipments())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->animals())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->equipmentstar())) return false;
   return true;
 }
 
@@ -480,6 +521,7 @@ void PushBuildingsCPP::Swap(PushBuildingsCPP* other) {
     croplands_.Swap(&other->croplands_);
     equipments_.Swap(&other->equipments_);
     animals_.Swap(&other->animals_);
+    equipmentstar_.Swap(&other->equipmentstar_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
