@@ -1,0 +1,47 @@
+package ProtoBuilding;
+
+message BuildingCPP
+{
+	required uint32 ud			= 1;
+	required uint32 buildId	= 2;
+	required uint32 position	= 3;
+	required uint32 direct		= 4;
+}
+
+//建造
+message BuildReq
+{
+	required uint32 buildId	= 1;  //建筑id
+	required uint32 pos			= 2;  //坐标
+}
+
+message BuildResp
+{
+	required BuildingCPP 	building	= 1;  //建筑
+}
+
+//移动
+message MoveReq
+{
+	required uint32 ud	= 1;  //建筑ud
+	required uint32 pos	= 2;  //新坐标
+}
+
+message MoveResp
+{
+	required BuildingCPP building	= 1;  //建筑
+}
+
+//翻转
+message FlipReq
+{
+	required uint32 ud	= 1;  //建筑ud
+}
+
+message FlipResp
+{
+	required BuildingCPP building	= 1;  //建筑	
+}
+
+
+ 

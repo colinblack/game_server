@@ -204,7 +204,8 @@ bool CSG17Packet::Encode(IBuffer *pBuffer)
 {
 	if(cmd == PROTOCOL_DELIVER
 	|| cmd == PROTOCOL_ADMIN
-	|| cmd == PROTOCOL_BOT)
+	|| cmd == PROTOCOL_BOT
+	|| cmd == PROTOCOL_ACCESS_TRANSFER)
 	{
 		if(!EncodePB())
 			return false;
@@ -279,7 +280,10 @@ bool CSG17Packet::Decode(IBuffer *pBuffer)
 
 	if(cmd == PROTOCOL_DELIVER
 	|| cmd == PROTOCOL_ADMIN
-	|| cmd == PROTOCOL_BOT)
+	|| cmd == PROTOCOL_BOT
+	|| cmd == PROTOCOL_ACCESS_ANSWER
+	|| cmd == PROTOCOL_ACCESS_SEND
+	|| cmd == PROTOCOL_ACCESS_BROAD_CAST)
 		return DecodePB();
 
 	return true;
