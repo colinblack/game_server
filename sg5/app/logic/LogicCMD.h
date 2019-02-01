@@ -1041,6 +1041,8 @@ public:
 	int ShengDan2018(unsigned uid, const Json::Value & input, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int GetDouble11Rcnt(unsigned uid, bool allserver, Json::Value &result, unsigned lasttime, unsigned seqid);
 
+	int XiaoNian2018(unsigned uid, const Json::Value & input, Json::Value &result, unsigned lasttime, unsigned seqid);
+
 	int Sell(unsigned uid, const Json::Value &data, Json::Value &result, unsigned lasttime, unsigned seqid);
 
 	int HouHuiYouQi(unsigned uid, unsigned b_index, unsigned s_index, Json::Value &result, unsigned lasttime, unsigned seqid);
@@ -1172,6 +1174,7 @@ private:
 	int resetTouch(Json::Value &dragonlist, Json::Value &uselist, const unsigned id);
 	int initDouble11NewAct(Json::Value &newAct, bool allserver);
 	int initShengdanNewAct(Json::Value &newAct, unsigned non_zero, bool day=false);
+	int initXiaonianNewAct(Json::Value &newAct);
 	int deterDouble11TS(unsigned type, bool allserver);
 	int adjustJuexueList(Json::Value &xllist, unsigned &zcount);
 	int isJsonNameArrSize(const Json::Value &data, const string &name, const unsigned size);

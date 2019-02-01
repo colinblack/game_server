@@ -1,0 +1,17 @@
+package QingRenJie;
+
+message QingRenJieUser {
+		required uint32	uid 	= 1;
+		required uint32 num		= 2;
+}
+
+message QingRenJieNvShen {
+		required uint32	nsid 	= 1;
+		repeated QingRenJieUser user  = 2;
+}
+
+message QingRenJie {
+	required uint32 ver							= 1;
+	required uint32 rewarded					= 2;
+	repeated QingRenJieNvShen nvshen	= 3;
+}

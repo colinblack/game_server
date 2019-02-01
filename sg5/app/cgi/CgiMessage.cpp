@@ -29,6 +29,7 @@ public:
 	CGI_SET_ACTION_MAP("remove", RemoveMessage)
 	CGI_SET_ACTION_MAP("sendhelpreward", SendHelpReward)
 	CGI_SET_ACTION_MAP("worldboss", GetWorldBoss)
+	CGI_SET_ACTION_MAP("nianshou", GetNianShou)
 	CGI_SET_ACTION_MAP("allianceboss", GetAllianceBoss)
 	CGI_SET_ACTION_MAP("lastallianceboss", GetLastAllianceBoss)
 	CGI_SET_ACTION_MAP("viewladder", ViewLadder)
@@ -357,6 +358,20 @@ public:
 		if (ret != 0)
 			return ret;
 		CGI_SEND_LOG("action=worldboss&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int GetNianShou()
+	{
+		unsigned id;
+		Json::GetUInt(m_data, "id", id);
+		unsigned bossid;
+		Json::GetUInt(m_data, "bossid", bossid);
+		CLogicNianShou logicNianShou;
+		int ret = logicNianShou.GetNianShouInfo(m_uid, m_jsonResult["nianshou"], bossid, id);
+		if (ret != 0)
+			return ret;
+		CGI_SEND_LOG("action=nianshou&uid=%u",m_uid);
 		return R_SUCCESS;
 	}
 

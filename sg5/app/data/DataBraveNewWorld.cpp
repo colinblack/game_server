@@ -254,7 +254,9 @@ BraveNewWorldPoint CDataBraveNewWorld::getRandPointEmpty(unsigned level)
 		if(k > 500)
 			throw runtime_error("getRandPointEmpty fail!");
 	}
-	while(m_data.city.count(p) || ConfigManager::Instance()->GetBraveNewWorldConfigPoint(p).type() == e_DataBraveNewWorldPointType_disable);
+	while(m_data.city.count(p) || ConfigManager::Instance()->GetBraveNewWorldConfigPoint(p).type() == e_DataBraveNewWorldPointType_disable
+			|| m_data.land[p].sdef
+			|| (m_data.land[p].fid && m_data.land[p].fts + BNW_ATTACK_MAX_TIME > Time::GetGlobalTime()));
 	return p;
 }
 int CDataBraveNewWorld::getZoneID(unsigned x, unsigned y)

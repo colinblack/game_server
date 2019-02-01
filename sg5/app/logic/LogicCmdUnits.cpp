@@ -6724,7 +6724,7 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 		skill[1u] = 1;
 
 		herodata["tskill"].append(skill);
-		//herodata["upts"] = Time::GetGlobalTime();
+		herodata["upts"] = Time::GetGlobalTime();
 
 		ret = logicHero.Chg(m_nUid, heroud, herodata);
 
@@ -6735,7 +6735,7 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 		}
 
 		result["tskill"] = herodata["tskill"];
-
+		result["upts"] = herodata["upts"];
 		return ;
 	}
 
@@ -6748,7 +6748,7 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 	idata["hud"] = heroud;
 	idata["l"] = level;
 	idata["sid"] = skid;
-
+	skillq["upts"] = Time::GetGlobalTime();
 	skillq[qkey]["i"] = idata;
 	userWrap.SetUserSkillQ(skillq);
 
@@ -6756,7 +6756,7 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 	//更新英雄的scd
 	herodata["scd"] = sectime;
 	herodata["sid"] = skid;
-
+	herodata["upts"] = Time::GetGlobalTime();
 	ret = logicHero.Chg(m_nUid, heroud, herodata);
 
 	if (ret)
@@ -6764,6 +6764,7 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 		error_log("[StartSkillTrain] update hero failed. uid=%u, heroud=%u", m_nUid, heroud);
 		throw std::runtime_error("update_hero_error");
 	}
+	result ["upts"] = herodata["upts"];
 }
 
 int SkillUnit::GetSkillTimeCost(unsigned lefttime, unsigned viplevel)
@@ -6795,7 +6796,7 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 		error_log("[EndSkillTrain] type's value error");
 		throw std::runtime_error("param_error");
 	}
-
+	info_log("[EndSkillTrain] start");
 	Json::Value skillq;
 	userWrap.GetUserSkillQ(skillq);
 
@@ -6896,7 +6897,9 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 	}
 
 	herodata["tskill"][index][1u] = herodata["tskill"][index][1u].asInt() + 1;
-
+	herodata["scd"] = 0;
+	herodata["sid"]="";
+	herodata["upts"] = Time::GetGlobalTime();
 	ret = logicHero.Chg(m_nUid, heroud, herodata);
 
 	if (ret)
@@ -6906,10 +6909,16 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 	}
 
 	result["tskill"] = herodata["tskill"];
-
+	result["scd"] = herodata["scd"];
+	result["sid"] =  herodata["sid"];
+	result["upts"] = herodata["upts"];
 	//处理技能队列
 	skillq[qkey].removeMember("i");
+	skillq["upts"] = Time::GetGlobalTime();
 	userWrap.SetUserSkillQ(skillq);
+
+	info_log("[EndSkillTrain] update stkill success! uid = %u,heroud=%u,skid=%d,skgrade=%d",m_nUid,
+			heroud,atoi(skid.c_str()),herodata["tskill"][index][1u].asInt());
 
 	result["skillQ"] = skillq;
 }

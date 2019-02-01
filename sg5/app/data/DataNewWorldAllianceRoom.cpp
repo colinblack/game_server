@@ -7,6 +7,8 @@
 
 #include "DataNewWorldAllianceRoom.h"
 #include "LogicAlliance.cpp"
+#include <fstream>
+#include <iostream>
 
 NewWorldAllianceRoomRoadMap CDataNewWorldAllianceRoom::m_roadmap;
 
@@ -162,6 +164,68 @@ void CDataNewWorldAllianceRoom::Reward()
 	}
 	Save();
 }
+
+void CDataNewWorldAllianceRoom::ShowCity(void){
+	string file_path = MainConfig::GetAllServerPath("datalog/alliance_city.log");
+	if (file_path.empty()){
+		return;
+	}
+	ofstream out_log(file_path.c_str(), ios::app);
+	if (!out_log.good()){
+		return;
+	}
+	out_log << "================" << getpid() << "===========" << endl;
+	NewWorldAllianceRoomMap::const_iterator it = m_data.room.begin();
+	for(; it!=m_data.room.end(); ++it) {
+		out_log << "rid=" << it->second.rid << endl;
+		NewWorldAllianceRoomCityMap::const_iterator itr = it->second.city.begin();
+		for(; itr!=it->second.city.end(); ++itr) {
+			out_log << "cid=" << itr->second.cid
+				<< ",aid=" << itr->second.aid
+				<< ",countN=" << itr->second.countN
+				<< ",count1=" << itr->second.count[0]
+				<< ",count2=" << itr->second.count[1]
+				<< ",count3=" << itr->second.count[2] << endl;
+			out_log << " version:" << endl;
+			NewWorldAllianceRoomHeroMap::const_iterator v_itr = itr->second.vision.begin();
+			for(; v_itr!=itr->second.vision.end(); ++v_itr) {
+				out_log << "  uid=" << v_itr->first.uid
+					<< ",index=" << v_itr->first.index
+					<< ",hid=" << v_itr->second.hid
+					<< ",hp=" << v_itr->second.hp
+					<< ",p=[";
+				for (unsigned i=0; i<NewWorldAllianceRoomProperty_max; ++i){
+					out_log << v_itr->second.property[i] << ",";
+				}
+				out_log << "],name=" << string(v_itr->second.name) << endl;
+			}
+			out_log << " attacker:" << endl;
+			NewWorldAllianceCityQueue::const_iterator a_itr = itr->second.attacker.begin();
+			for (; a_itr!=itr->second.attacker.end(); ++a_itr) {
+				out_log << "  mts=" << a_itr->first
+					<< ",uid=" << a_itr->second.uid
+					<< ",index=" << a_itr->second.index << endl;
+			}
+
+			out_log << " defender:" << endl;
+			NewWorldAllianceCityQueue::const_iterator d_itr = itr->second.defender.begin();
+			for (; d_itr!=itr->second.defender.end(); ++d_itr) {
+				out_log << "  mts=" << d_itr->first
+					<< ",uid=" << d_itr->second.uid
+					<< ",index=" << d_itr->second.index << endl;
+			}
+			out_log << " npc:" << endl;
+			NewWorldAllianceRoomHeroMap::const_iterator n_itr = itr->second.npc.begin();
+			for (; n_itr!=itr->second.npc.end(); ++n_itr) {
+				out_log << "  uid=" << n_itr->first.uid
+						<< ",index=" << n_itr->first.index
+						<< ",c_hp=" << n_itr->second.hp
+						<< ",m_hp=" << n_itr->second.property[0] << endl;
+			}
+		}
+	}
+}
+
 int CDataNewWorldAllianceRoom::Sig(int sig)
 {
 	if(sig == SIGRTMIN)
@@ -169,6 +233,8 @@ int CDataNewWorldAllianceRoom::Sig(int sig)
 	else if(sig == SIGRTMIN + 1)
 		Reward();
 
+	else if(sig == SIGRTMIN + 3)
+		ShowCity();
 	return 0;
 }
 
@@ -389,6 +455,7 @@ int CDataNewWorldAllianceRoom::Clone(unsigned rid, DataNewWorldAllianceRoomHeroI
 	m_data.room[rid].city[m_data.room[rid].hero[index].cid].vision[vi].index = vi;
 	m_data.room[rid].city[m_data.room[rid].hero[index].cid].vision[vi].hp = m_data.room[rid].city[m_data.room[rid].hero[index].cid].vision[vi].property[NewWorldAllianceRoomProperty_hp];
 	m_data.room[rid].city[m_data.room[rid].hero[index].cid].vision[vi].buff = 0;
+	m_data.room[rid].city[m_data.room[rid].hero[index].cid].vision[vi].mts = Time::GetGlobalTime();
 
 	++m_data.room[rid].city[m_data.room[rid].hero[index].cid].count[m_data.room[rid].aidmap[m_data.room[rid].hero[index].aid]%NEW_WORLD_ALLIANCE_MAP_ROOM_ALLIANCE];
 	if(m_data.room[rid].city[m_data.room[rid].hero[index].cid].aid != m_data.room[rid].hero[index].aid)

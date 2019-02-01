@@ -2701,6 +2701,24 @@ int CLogicCMD::initShengdanNewAct(Json::Value &newAct,unsigned non_zero,bool day
 	return R_SUCCESS;
 }
 
+int CLogicCMD::initXiaonianNewAct(Json::Value &newAct)
+{
+	ActInfoConfig actconfig(CONFIG_XIAONIAN_2018);
+
+	newAct["id"] = NAT_XIAONIAN_2018;
+	newAct["ts"] = Time::GetGlobalTime();
+
+	for (unsigned i = 0; i < XML_XIAONIAN_CHARGE_DANGCI_NUM; ++i)//充值每档
+	{
+		newAct["a"][i] = 0;
+	}
+	for (unsigned i = 0; i < XML_XIAONIAN_SHOP_DANGCI_NUM; ++i)//消费每档
+	{
+		newAct["b"][i] = 0;
+	}
+
+	return R_SUCCESS;
+}
 
 int CLogicCMD::deterDouble11TS(unsigned type, bool allserver)
 {
@@ -3103,6 +3121,155 @@ int CLogicCMD::ShengDan2018(unsigned uid, const Json::Value & input, Json::Value
 			newAct["j"] = newAct["j"].asUInt() + jifen;
 		}
 	}
+
+	result["newAct"] = newAct;
+
+	ret = logicSec.SetOneSecinc(uid, newAct);
+	if (ret)
+	{
+		return ret;
+	}
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::XiaoNian2018(unsigned uid, const Json::Value & input, Json::Value &result, unsigned lasttime, unsigned seqid)
+{
+	enum xiaoniantype {
+		chongzhi = 1,
+		shop = 2,
+		xiaonian_type_max
+	};
+
+	unsigned type;
+	Json::GetUInt(input,"type",type);
+	if (!type || type >= xiaonian_type_max) {
+		PARAM_ERROR_RETURN_MSG("type");
+	}
+	unsigned id;
+	Json::GetUInt(input,"id",id);
+	if (!id) {
+		PARAM_ERROR_RETURN_MSG("id");
+	}
+
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	int ret = logicUser.GetUser(uid, dataUser);
+	if (ret)
+	{
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+	{
+		return ret;
+	}
+
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	ActInfoConfig actconfig(CONFIG_XIAONIAN_2018);
+
+	CLogicSecinc logicSec;
+	Json::Value newAct;
+
+	if (!actconfig.IsActive())
+	{
+		LOGIC_ERROR_RETURN_MSG("time_is_error");
+	}
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	DataXMLXiaoNian config;
+	ret = dataXML->GetXiaoNianItem(config);
+	if (ret)
+	{
+		return ret;
+	}
+
+
+	ret = logicSec.GetSecinc(uid, NAT_XIAONIAN_2018,newAct);
+	if (R_ERR_NO_DATA == ret)
+	{
+		initXiaonianNewAct(newAct);
+	}
+	else if (ret)
+	{
+		return ret;
+	}
+
+
+	if (CTime::IsDiffDay(newAct["ts"].asUInt(), Time::GetGlobalTime()))
+	{
+		initXiaonianNewAct(newAct);
+	}
+
+	vector<GiftEquipItem> reward;
+	string code = "XiaoNian2018";
+	BaseCmdUnit basecmdUnit(uid);
+	UserWrap user(uid, false);
+
+	unsigned daily_charge = user.GetSingleDayRecharge(Time::GetGlobalTime());
+
+	if (type == chongzhi) {
+		if (id > XML_XIAONIAN_CHARGE_DANGCI_NUM) {
+			PARAM_ERROR_RETURN_MSG("id");
+		}
+		if (daily_charge < config.charge[id-1].require)
+		{
+			LOGIC_ERROR_RETURN_MSG("chongzhi_lack");
+		}
+		if (newAct["a"][id-1].asUInt()) {
+			LOGIC_ERROR_RETURN_MSG("chongzhi_has_reward");
+		}
+		newAct["a"][id-1] = 1;
+		for (int i=0;i<XML_XIAONIAN_REWARD_NUM;i++)
+			reward.push_back(config.charge[id-1].reward[i]);
+		basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+	}
+	else if (type == shop) {
+		if (id > XML_XIAONIAN_SHOP_DANGCI_NUM) {
+			PARAM_ERROR_RETURN_MSG("id");
+		}
+		unsigned limit = 1;
+		if (daily_charge >= 100)  limit++;
+		if (daily_charge >= 1000) limit++;
+		if (newAct["b"][id-1].asUInt() >= limit) {
+			LOGIC_ERROR_RETURN_MSG("shop_limited");
+		}
+		newAct["b"][id-1] = newAct["b"][id-1].asUInt() + 1;
+
+		if (config.shop[id-1].require && R_SUCCESS != user.CostAsset(config.shop[id-1].moneyType==1?config.shop[id-1].require:0, config.shop[id-1].moneyType==2?config.shop[id-1].require:0, code, result["cost"]))
+		{
+			error_log("Cost_diamond_error");
+			return R_ERROR;
+		}
+
+		for (int i=0;i<XML_XIAONIAN_REWARD_NUM;i++)
+			reward.push_back(config.shop[id-1].reward[i]);
+		basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+	}
+
 
 	result["newAct"] = newAct;
 

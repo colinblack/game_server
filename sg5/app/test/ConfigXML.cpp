@@ -242,6 +242,18 @@ int main(int argc, char *argv[])
 		ret = dataXML->InitShengDan();
 		dataXML->ViewShengDan();
 	}
+	else if ("xiaonianhuodong" == action)
+	{
+		ret = dataXML->InitXiaoNian();
+	}
+	else if ("qingrenjiemeigui" == action)
+	{
+		ret = dataXML->InitQingRenJieMeiGui();
+	}
+	else if ("nianshouboss" == action)
+	{
+		ret = dataXML->InitNianShouBoss();
+	}
 	else
 	{
 		cout<<"para error!"<<endl;

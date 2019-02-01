@@ -120,6 +120,8 @@
 #include "DataIdcard.h"
 #include "DataRotaryTableDraw.h"
 #include "DataChick.h"
+#include "DataQingRenJie.h"
+#include "DataNianShou.h"
 
 #endif /* DATAINC_H_ */
 

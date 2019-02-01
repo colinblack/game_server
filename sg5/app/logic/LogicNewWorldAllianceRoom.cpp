@@ -166,6 +166,8 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 	result["tower"]["dps"] = city->tower.dps;
 	result["tower"]["hit"] = city->tower.hit;
 
+	static unsigned need_log = 0;
+
 	if(city->attacker.size())
 	{
 		NewWorldAllianceCityQueue::const_iterator it = city->attacker.begin();
@@ -192,6 +194,8 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 		result["attacker1"]["property"].resize(NewWorldAllianceRoomProperty_max);
 		for(unsigned i=0;i<NewWorldAllianceRoomProperty_max;++i)
 			result["attacker1"]["property"][i] = hero->property[i];
+		if (result["attacker1"]["vision"].asUInt() && string(hero->name).find('&')==string::npos)
+			need_log++;
 	}
 	if(city->defender.size() || city->countN)
 	{
@@ -221,6 +225,8 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 		result["defender1"]["property"].resize(NewWorldAllianceRoomProperty_max);
 		for(unsigned i=0;i<NewWorldAllianceRoomProperty_max;++i)
 			result["defender1"]["property"][i] = hero->property[i];
+		if (result["defender1"]["vision"].asUInt() && string(hero->name).find('&')==string::npos)
+			need_log++;
 	}
 	if(city->attacker.size() > 1)
 	{
@@ -249,6 +255,8 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 		result["attacker2"]["property"].resize(NewWorldAllianceRoomProperty_max);
 		for(unsigned i=0;i<NewWorldAllianceRoomProperty_max;++i)
 			result["attacker2"]["property"][i] = hero->property[i];
+		if (result["attacker2"]["vision"].asUInt() && string(hero->name).find('&')==string::npos)
+			need_log++;
 	}
 	if(city->defender.size() > 1)
 	{
@@ -277,6 +285,8 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 		result["defender2"]["property"].resize(NewWorldAllianceRoomProperty_max);
 		for(unsigned i=0;i<NewWorldAllianceRoomProperty_max;++i)
 			result["defender2"]["property"][i] = hero->property[i];
+		if (result["defender2"]["vision"].asUInt() && string(hero->name).find('&')==string::npos)
+			need_log++;
 	}
 	if(city->attacker.size() > 2)
 	{
@@ -306,6 +316,8 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 		result["attacker3"]["property"].resize(NewWorldAllianceRoomProperty_max);
 		for(unsigned i=0;i<NewWorldAllianceRoomProperty_max;++i)
 			result["attacker3"]["property"][i] = hero->property[i];
+		if (result["attacker3"]["vision"].asUInt() && string(hero->name).find('&')==string::npos)
+			need_log++;
 	}
 	if(city->defender.size() > 2)
 	{
@@ -335,7 +347,14 @@ int CLogicNewWorldAllianceRoom::GetBattle(unsigned rid, unsigned cid, Json::Valu
 		result["defender3"]["property"].resize(NewWorldAllianceRoomProperty_max);
 		for(unsigned i=0;i<NewWorldAllianceRoomProperty_max;++i)
 			result["defender3"]["property"][i] = hero->property[i];
+		if (result["defender3"]["vision"].asUInt() && string(hero->name).find('&')==string::npos)
+			need_log++;
 	}
+
+	if (need_log == 1)
+		pData->ShowCity();
+	else
+		debug_log("need_log=%u",need_log);
 
 	NEW_WORLD_ALLIANCE_ROOM_PROCESS_CHANGE(pData,allresult)
 	return 0;
@@ -358,6 +377,7 @@ int CLogicNewWorldAllianceRoom::GetBattleList(unsigned rid, unsigned cid, unsign
 
 	result.resize(0);
 	const NewWorldAllianceCityQueue &list = camp?city->attacker:city->defender;
+	static unsigned need_log = 0;
 	for(NewWorldAllianceCityQueue::const_iterator it=list.begin();it!=list.end();++it)
 	{
 		Json::Value temp;
@@ -371,6 +391,8 @@ int CLogicNewWorldAllianceRoom::GetBattleList(unsigned rid, unsigned cid, unsign
 			temp["index"]		 = hero.index.index;
 			temp["hp"]			 = hero.hp;
 			temp["maxhp"]		 = hero.property[NewWorldAllianceRoomProperty_hp];
+			if ( string(hero.name).find('&')==string::npos)
+				need_log++;
 		}
 		else
 		{
@@ -389,6 +411,11 @@ int CLogicNewWorldAllianceRoom::GetBattleList(unsigned rid, unsigned cid, unsign
 
 		result.append(temp);
 	}
+
+	if (need_log == 1)
+		pData->ShowCity();
+	else
+		debug_log("need_log=%u",need_log);
 
 	NEW_WORLD_ALLIANCE_ROOM_PROCESS_CHANGE(pData,allresult)
 	return 0;

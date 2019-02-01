@@ -298,6 +298,9 @@ int CDataXML::Init(const std::string &path, semdat sem, bool initconfig)
 	INIT_XML_DAT(BirdBridge)
 	INIT_XML_DAT(UnionTech)
 	INIT_XML_DAT(ShengDan)
+	INIT_XML_DAT(XiaoNian)
+	INIT_XML_DAT(QingRenJieMeiGui)
+	INIT_XML_DAT(NianShouBoss)
 	if(!initconfig)
 	{
 		//building map
@@ -6128,3 +6131,72 @@ int CDataXML::GetShengDanItem(DataXMLShengDan &item) {
 	memcpy(&item, pdata, sizeof(DataXMLShengDan));
 	return 0;
 }
+
+int CDataXML::GetXiaoNianItem(DataXMLXiaoNian &item) {
+	DataXMLXiaoNian *pdata = (DataXMLXiaoNian*)m_shXiaoNian.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shXiaoNian), true);
+	memcpy(&item, pdata, sizeof(DataXMLXiaoNian));
+	return 0;
+}
+
+int CDataXML::InitXiaoNian() {
+	try {
+		return DataXMLXiaoNianUnit(m_shXiaoNian, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitXiaoNian]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+int CDataXML::InitQingRenJieMeiGui() {
+	try {
+		return DataXMLQingRenJieMeiGuiUnit(m_shQingRenJieMeiGui, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitQingRenJieMeiGui]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+int CDataXML::GetQingRenJieMeiGuitem(DataXMLQingRenJieMeiGui &item) {
+	DataXMLQingRenJieMeiGui *pdata = (DataXMLQingRenJieMeiGui*)m_shQingRenJieMeiGui.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shQingRenJieMeiGui), true);
+	memcpy(&item, pdata, sizeof(DataXMLQingRenJieMeiGui));
+	return 0;
+}
+
+int CDataXML::InitNianShouBoss() {
+	try {
+		return DataXMLNianShouBossUnit(m_shNianShouBoss, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitNianShouBoss]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+
+int CDataXML::GetNianShouBossReward(unsigned id, XMLNianShouBossItem &data)
+{
+	DataXMLNianShouBoss *pdata = (DataXMLNianShouBoss *)m_shNianShouBoss.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+
+	for (int i = 0; i < XML_NIANSHOU_BOSS_ITEM_NUM; ++i) {
+		if (id == pdata->item[i].id) {
+			memcpy(&data, &(pdata->item[i]), sizeof(XMLNianShouBossItem));
+			return 0;
+		}
+	}
+
+	return 0;
+}
+

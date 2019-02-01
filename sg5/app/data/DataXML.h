@@ -1741,6 +1741,9 @@ public:
 #define INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_NAME) m_##CONFIG_NAME = CONFIG_NAME##_CONFIG(data);
 /********************************************************************/
 //autolable3
+CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_qingrenjie)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_yuandan2018)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_yearend2018)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_winter2018)
@@ -3801,6 +3804,67 @@ struct DataXMLShengDan {
 	XMLExangeItem exchange[XML_SHENGDAN_EXANGE_DANGCI_NUM];
 };
 /*****************圣诞活动-end*************/
+/*****************小年活动-begin*************/
+#define XML_XIAONIAN_CHARGE_DANGCI_NUM 6
+#define XML_XIAONIAN_SHOP_DANGCI_NUM 8
+#define XML_XIAONIAN_REWARD_NUM 4
+struct XMLXiaoNianChargeItem {
+	unsigned id;
+	unsigned require;
+	GiftEquipItem reward[XML_XIAONIAN_REWARD_NUM];
+	XMLXiaoNianChargeItem(): id(0), require(0) {
+	}
+};
+struct XMLXiaoNianShopItem {
+	unsigned id;
+	unsigned moneyType;
+	unsigned require;
+	GiftEquipItem reward[XML_XIAONIAN_REWARD_NUM];
+	XMLXiaoNianShopItem(): id(0), moneyType(0), require(0) {
+	}
+};
+struct DataXMLXiaoNian {
+	XMLXiaoNianChargeItem charge[XML_XIAONIAN_CHARGE_DANGCI_NUM];
+	XMLXiaoNianShopItem shop[XML_XIAONIAN_SHOP_DANGCI_NUM];
+};
+/*****************小年活动-end*************/
+/*****************情人节玫瑰-begin*************/
+#define XML_QINGRENJIE_NVSHEN_NUM 7
+#define XML_QINGRENJIE_MEIGUI_REWARD_NUM 4
+#define XML_QINGRENJIE_LEIJI_NUM 5
+struct XMLQingRenJieMeiGuiItem {
+	unsigned id;
+	GiftEquipItem reward[XML_QINGRENJIE_MEIGUI_REWARD_NUM];
+	XMLQingRenJieMeiGuiItem(): id(0) {
+	}
+};
+struct XMLQingRenJieMeiGuiLeiJiItem {
+	unsigned id;
+	unsigned require;
+	GiftEquipItem reward[XML_QINGRENJIE_MEIGUI_REWARD_NUM];
+	XMLQingRenJieMeiGuiLeiJiItem(): id(0), require(0) {
+	}
+};
+struct DataXMLQingRenJieMeiGui {
+	XMLQingRenJieMeiGuiItem meigui[XML_QINGRENJIE_NVSHEN_NUM];
+	XMLQingRenJieMeiGuiItem quanfu[XML_QINGRENJIE_NVSHEN_NUM];
+	XMLQingRenJieMeiGuiLeiJiItem leiji[XML_QINGRENJIE_LEIJI_NUM];
+};
+/*****************情人节玫瑰-end*************/
+/******************nianshou boss*****************/
+#define XML_NIANSHOU_BOSS_REWARD_NUM 3
+#define XML_NIANSHOU_BOSS_ITEM_NUM 5
+struct XMLNianShouBossItem {
+	byte id;
+	uint32_t require;
+	GiftEquipItem reward[XML_NIANSHOU_BOSS_REWARD_NUM];
+	XMLNianShouBossItem(): id(0),require(0) {
+	}
+};
+struct DataXMLNianShouBoss {
+	XMLNianShouBossItem item[XML_NIANSHOU_BOSS_ITEM_NUM];
+};
+/**********************************************/
 
 class CDataXML
 {
@@ -4132,6 +4196,9 @@ public:
 	//vicky的开服活动
 	const ConfigVickyNewOpen& GetVickyNewOpen() const;
 //autolable4
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_qingrenjie)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yuandan2018)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yearend2018)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_winter2018)
@@ -4429,6 +4496,18 @@ GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_nnom)
 	int InitShengDan();
 	void ViewShengDan();
 	int GetShengDanItem( DataXMLShengDan &item);
+
+	/**************XiaoNian2018***************************/
+	int InitXiaoNian();
+	int GetXiaoNianItem( DataXMLXiaoNian &item);
+
+	/**************QingRenJieMeiGui***************************/
+	int InitQingRenJieMeiGui();
+	int GetQingRenJieMeiGuitem( DataXMLQingRenJieMeiGui &item);
+
+	/**************NianShouBoss***************************/
+	int InitNianShouBoss();
+	int GetNianShouBossReward(unsigned id, XMLNianShouBossItem &data);
 
 	/*解析XML函数指针*/
 	typedef int (CDataXML::* ParseComplete)(void * , CMarkupSTL & xmlConf);
@@ -4872,6 +4951,15 @@ protected:
 
 	//圣诞2018
 	CShareMemory m_shShengDan;
+
+	//小年2018
+	CShareMemory m_shXiaoNian;
+
+	//情人节玫瑰
+	CShareMemory m_shQingRenJieMeiGui;
+
+	//年兽BOSS
+	CShareMemory m_shNianShouBoss;
 private:
 	int genUsePool(unsigned opool, set<unsigned> &quforbid, unsigned &upool);
 	int addforbidPool(unsigned forbid, set<unsigned> &quforbid);

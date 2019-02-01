@@ -4,8 +4,8 @@
 #include "LogicInc.h"
 
 //fashion
-#define IS_TEMP_FASHION_EQID(eqid) (eqid >= 72001 && eqid <= 72050)
-#define IS_FOREVER_FASHION_EQID(eqid) (eqid >= 72101 && eqid <= 72150)
+#define IS_TEMP_FASHION_EQID(eqid) ((eqid >= 72001 && eqid <= 72050)||(eqid >= 71001 && eqid <= 71050))
+#define IS_FOREVER_FASHION_EQID(eqid) ((eqid >= 72101 && eqid <= 72150)||(eqid >= 71101 && eqid <= 71150))
 #define IS_FASHION_EQID(eqid) (IS_TEMP_FASHION_EQID(eqid) || IS_FOREVER_FASHION_EQID(eqid))
 //horse
 #define IS_HORSE_EQID(eqid)  (eqid >= 14001 && eqid <= 14999)

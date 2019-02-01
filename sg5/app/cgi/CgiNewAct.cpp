@@ -32,6 +32,9 @@ public:
 		ret = CLogicNewYearActive::Init(CONFIG_NEWYEAR_ACTIVNE_DATA, false);
 		if (ret)
 			exit(ret);
+		ret = CLogicQingRenJie::Init(CONFIG_QINGRENJIE_DATA, true);
+		if (ret)
+			exit(ret);
 	}
 
 	CGI_ACTION_MAP_BEGIN
@@ -47,18 +50,25 @@ public:
 	CGI_SET_ACTION_MAP("newyearactiveinfo", NewYearActiveInfo)
 	CGI_SET_ACTION_MAP("newyearactiverefresh", NewYearActiveRefresh)
 
+	CGI_SET_ACTION_MAP("QingRenJieXianHua", QingRenJieXianHua)
+	CGI_SET_ACTION_MAP("QingRenJieLeiJi", QingRenJieLeiJi)
+	CGI_SET_ACTION_MAP("GetQingRenJie", GetQingRenJie)
+
+
 	CGI_ACTION_MAP_END
 
 	~CCgiNewAct()
 	{
 		CLogicAllianceConsume::Exit();
 		CLogicNewYearActive::Exit();
+		CLogicQingRenJie::Exit();
 	}
 
 	void ProcessSig(int sig)
 	{
 		CLogicAllianceConsume::Sig(sig);
 		CLogicNewYearActive::Sig(sig);
+		CLogicQingRenJie::Sig(sig);
 	}
 
 	int AllianceShopInfo()
@@ -241,6 +251,59 @@ public:
 			return ret;
 		}
 		CGI_SEND_LOG("action=newyearactiverefresh&uid=%u", m_uid);
+		return 0;
+	}
+
+	int QingRenJieXianHua()
+	{
+		unsigned nsid;
+		if (!Json::GetUInt(m_data, "nsid", nsid))
+			return R_ERR_PARAM;
+
+		unsigned num;
+		if (!Json::GetUInt(m_data, "num", num))
+			return R_ERR_PARAM;
+
+		unsigned type;
+		if (!Json::GetUInt(m_data, "type", type))
+			return R_ERR_PARAM;
+
+		CLogicQingRenJie logicQingRenJie;
+		int ret = logicQingRenJie.QingRenJieXianHua(m_uid, nsid, type, num, m_jsonResult["result"]);
+		if (ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=QingRenJieXianHua&uid=%u", m_uid);
+		return 0;
+	}
+
+	int QingRenJieLeiJi()
+	{
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+
+		CLogicQingRenJie logicQingRenJie;
+		int ret = logicQingRenJie.QingRenJieLeiJi(m_uid, id, m_jsonResult["result"]);
+		if (ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=QingRenJieLeiJi&uid=%u", m_uid);
+		return 0;
+	}
+
+	int GetQingRenJie()
+	{
+		CLogicQingRenJie logicQingRenJie;
+		int ret = logicQingRenJie.GetQingRenJie(m_jsonResult["info"]);
+		if (ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=GetQingRenJie&uid=%u", m_uid);
 		return 0;
 	}
 };

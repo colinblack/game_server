@@ -306,6 +306,17 @@ int CLogicArchive::Load(unsigned uid, unsigned uidBy, const string &type,const J
 		//TIME_COUNT_LOG("[load world boss over]");
 		return 0;
 	}
+	if (IsValidNianShouId(uid)) {
+		CLogicNianShou logicNianShou;
+		ret = logicNianShou.Load(uid, uidBy, result);
+		if (ret != 0)
+			return ret;
+		result["online"] = 0;
+		if (IsBattleType(loadType))//Ralf20140225  后台增加pve或pvp保护
+				logicUser.SetBitInfo(uidBy,Time::GetGlobalTime());
+		//TIME_COUNT_LOG("[load world boss over]");
+		return 0;
+	}
 	//AllianceBoss
 	if (IsValidAllianceBossId(uid)) {
 			CLogicAllianceBoss logicAllianceBoss;
@@ -1482,6 +1493,14 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 		if (IsValidWorldBossId(uid)) {
 			CLogicWorldBoss logicWorldBoss;
 			ret = logicWorldBoss.Save(uid, userBy, data, result, loadType);
+			if (ret != 0)
+				return ret;
+			//TIME_COUNT_LOG("[save world boss over]");
+			return 0;
+		}
+		if (IsValidNianShouId(uid)) {
+			CLogicNianShou logicNianShou;
+			ret = logicNianShou.Save(uid, userBy, data, result, loadType);
 			if (ret != 0)
 				return ret;
 			//TIME_COUNT_LOG("[save world boss over]");
@@ -3264,6 +3283,13 @@ int CLogicArchive::UpdateSave(unsigned uid, unsigned uidBy, const string &type, 
 	if (IsValidWorldBossId(uid)) {
 		CLogicWorldBoss logicWorldBoss;
 		ret = logicWorldBoss.ViewWorldBoss(uidBy, uid, result["worldboss"]);
+		if (ret != 0)
+			return ret;
+		return 0;
+	}
+	if (IsValidNianShouId(uid)) {
+		CLogicNianShou logicNianShou;
+		ret = logicNianShou.ViewNianShou(uidBy, uid, result["nianshou"]);
 		if (ret != 0)
 			return ret;
 		return 0;

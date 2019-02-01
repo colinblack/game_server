@@ -311,4 +311,34 @@ public:
 protected:
 	int Parse(const std::string& fullCfg, DataXMLShengDan* pData);
 };
+///////////////////////////////////////////////////////////////////////////
+class DataXMLXiaoNianUnit : public DataXmlParseWrap<DataXMLXiaoNian>
+{
+public:
+	DataXMLXiaoNianUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLXiaoNian>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLXiaoNian* pData);
+};
+///////////////////////////////////////////////////////////////////////////
+class DataXMLQingRenJieMeiGuiUnit : public DataXmlParseWrap<DataXMLQingRenJieMeiGui>
+{
+public:
+	DataXMLQingRenJieMeiGuiUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLQingRenJieMeiGui>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLQingRenJieMeiGui* pData);
+};
+///////////////////////////////////////////////////////////////////////////
+class DataXMLNianShouBossUnit : public DataXmlParseWrap<DataXMLNianShouBoss>
+{
+public:
+	DataXMLNianShouBossUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLNianShouBoss>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLNianShouBoss* pData);
+};
 #endif /* DATAXMLUNIT_H_ */

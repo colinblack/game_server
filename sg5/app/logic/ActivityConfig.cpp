@@ -64,6 +64,9 @@ const char* all_activity_table[] = {
 	   CONFIG_VICKY_NNA, //vicky懒得给我说名字的活动
 	   CONFIG_BIRDBRIDGE, //七夕相会
 //autolable2
+CONFIG_fuzhuhesui,
+CONFIG_zhuniandaji,
+CONFIG_vicky_qingrenjie,
 CONFIG_yuandan2018,
 CONFIG_yearend2018,
 CONFIG_winter2018,
@@ -79,6 +82,9 @@ CONFIG_double11_2018,
 	   CONFIG_OPTIONAL_PAY,
 	   CONFIG_FREE_EXCHG,//兑换自选
 	   CONFIG_SHENGDAN_2018,
+	   CONFIG_XIAONIAN_2018,
+	   CONFIG_QINGRENJIE_MEIGUI,
+	   CONFIG_NIANSHOU_BOSS,
        NULL
 };
 

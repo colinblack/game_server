@@ -153,6 +153,7 @@
 #define CONFIG_VEDIO_DIR				"vedio/"
 #define ADMIN_OP_LOG_DIR				"adminlog/"
 #define CONFIG_WORLDBOSS_DIR			"data/worldboss/"
+#define CONFIG_NIANSHOU_DIR				"data/worldboss/"
 #define CONFIG_MATCH_DAT_PATH			"data/match.dat"
 #define CONFIG_BASE_MATCH_PATH			"data/basematch.dat"
 #define CONFIG_PERSON_MATCH_PATH		"data/personmatch.dat"
@@ -197,6 +198,7 @@
 #define CONFIG_ALLIANCE_CONSUME_DATA    	"data/allianceconsume.dat"
 #define CONFIG_NEWYEAR_ACTIVNE_DATA    	"data/newyearactive.dat"
 #define CONFIG_DOUBLE11_2018_PATH			"data/double11_2018.dat"			// 双11活动
+#define CONFIG_QINGRENJIE_DATA    	"data/qingrenjie.dat"
 
 //百服团购
 #define CONFIG_ALLSERVER_GROUPBUYING_PATH "data/allservergroupbuy.dat"
@@ -935,6 +937,10 @@
 
 #define CONFIG_OPTIONAL_PAY          "optional_pay"
 
+#define CONFIG_QINGRENJIE_MEIGUI          "qingrenjie_meigui"
+
+#define CONFIG_NIANSHOU_BOSS          "nianshouboss"
+
 
 
 /********************************************************************/
@@ -951,11 +957,15 @@
  */
 /********************************************************************/
 //autolable1
+#define CONFIG_fuzhuhesui "fuzhuhesui"
+#define CONFIG_zhuniandaji "zhuniandaji"
+#define CONFIG_vicky_qingrenjie "vicky_qingrenjie"
 #define CONFIG_yuandan2018 "yuandan2018"
 #define CONFIG_yearend2018 "yearend2018"
 #define CONFIG_winter2018 "winter2018"
 #define CONFIG_double11_2018 "double11_2018"
 #define CONFIG_SHENGDAN_2018 "shengdan_2018"
+#define CONFIG_XIAONIAN_2018 "xiaonian_2018"
 #define CONFIG_mid_aug_hao "mid_aug_hao"
 #define CONFIG_mid_aug_reu "mid_aug_reu"
 #define CONFIG_water_taotie "water_taotie"
@@ -1089,7 +1099,10 @@
 #define IsValidFightArenaId(id) (id >= FIGHT_ARENA_ID_MIN && id <= FIGHT_ARENA_ID_MAX)
 #define WORLD_BOSS_ID_MIN	50001
 #define WORLD_BOSS_ID_MAX	50004
+#define NIAN_SHOU_ID_MIN	50011
+#define NIAN_SHOU_ID_MAX	50012
 #define IsValidWorldBossId(id)	(id >= WORLD_BOSS_ID_MIN && id <= WORLD_BOSS_ID_MAX)
+#define IsValidNianShouId(id)	(id >= NIAN_SHOU_ID_MIN && id <= NIAN_SHOU_ID_MAX)
 #define ALLIANCE_BOSS_ID	50005   //帮会屠魔
 #define IsValidAllianceBossId(id)	(id == ALLIANCE_BOSS_ID)
 #define SESSION_TIME_OUT	3600	//会话超时
@@ -1438,6 +1451,12 @@ enum NewActType
 NAT_CONFIG_winter2018			= 194,
 NAT_CONFIG_yearend2018			= 195,
 NAT_CONFIG_yuandan2018			= 196,
+	NAT_XIAONIAN_2018			= 197,
+	NAT_QINGRENJIE_MEIGUI		= 198,
+NAT_CONFIG_vicky_qingrenjie			= 199,
+NAT_CONFIG_zhuniandaji			= 200,
+NAT_CONFIG_fuzhuhesui			= 201,
+	NAT_NIANSHOU_BOSS           = 202,
 NAT_MAX
 };
 

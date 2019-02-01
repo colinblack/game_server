@@ -71,6 +71,7 @@ enum semdat {
 	sem_fortune_pack,
 	sem_rotaty_table_draw,
 	sem_all_server_double11_2018,
+	sem_nianshou,
 };
 
 #define SEM_START 2000000000

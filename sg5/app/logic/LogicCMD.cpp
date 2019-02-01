@@ -2701,13 +2701,13 @@ int CLogicCMD::HeroExtraStone(unsigned uid, unsigned heroud, unsigned equd, unsi
 int CLogicCMD::FashionStar(unsigned uid, unsigned id, unsigned ud, unsigned id1, unsigned ud1, unsigned id2, unsigned ud2, Json::Value &result, unsigned lasttime,unsigned seqid)
 {
 	const unsigned mat_type = 5;
-	const unsigned mat_num = 3;
+	const unsigned mat_num = 3 + 2;
 	const unsigned mat[mat_type][mat_num+1] = {
-			{72101, 72105, 72109, 10},
-			{72102, 72106, 72110, 10},
-			{72103, 72107, 72111, 4},
-			{72104, 72108, 72112, 2},
-			{72113, 72114, 72115, 0},
+			{72101, 72105, 72109, -1, -1, 10},
+			{72102, 72106, 72110, -1, -1, 10},
+			{72103, 72107, 72111, -1, -1, 4},
+			{72104, 72108, 72112, -1, -1, 2},
+			{72113, 72114, 72115, 71101, 71102, 0},
 	};
 
 	unsigned type = mat_type, t1 = mat_type, t2 = mat_type;
@@ -2725,6 +2725,7 @@ int CLogicCMD::FashionStar(unsigned uid, unsigned id, unsigned ud, unsigned id1,
 		if(type != mat_type)
 			break;
 	}
+
 	if(type == mat_type)
 		return R_ERR_PARAM;
 

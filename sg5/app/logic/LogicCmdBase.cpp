@@ -731,9 +731,10 @@ int BaseActivityUnit::ResetAct()
 	return 0;
 }
 
-SecincActivityUnit::SecincActivityUnit(unsigned uid, const std::string& name, int nat_id)
+SecincActivityUnit::SecincActivityUnit(unsigned uid, const std::string& name, int nat_id, bool meiri)
 	: BaseActivityUnit(uid, name)
 	, nat_id_(nat_id)
+	, meiri_(meiri)
 {
 
 }
@@ -746,12 +747,24 @@ void SecincActivityUnit::Init()
 		throw std::runtime_error("get_new_active_data_error");
 	}
 
-	if (ret == R_ERR_NO_DATA
-		|| IsNewVersion(m_jsonData["v"].asInt()))
+	if (!meiri_)
 	{
-		m_jsonData["id"] = nat_id_;
-		m_jsonData["v"] = status_cfg_.Version();
-		Reset();
+		if (ret == R_ERR_NO_DATA
+			|| IsNewVersion(m_jsonData["v"].asInt()))
+		{
+			m_jsonData["id"] = nat_id_;
+			m_jsonData["v"] = status_cfg_.Version();
+			Reset();
+		}
+	}
+	else {
+		if (ret == R_ERR_NO_DATA
+			|| !Time::IsToday(m_jsonData["ts"].asUInt()))
+		{
+			m_jsonData["id"] = nat_id_;
+			m_jsonData["ts"] = Time::GetGlobalTime();
+			Reset();
+		}
 	}
 }
 
@@ -868,8 +881,8 @@ UnitUdCmdParams::UnitUdCmdParams(const Json::Value& jsonData)
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-BaseFeedbackActUnit::BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id, bool all)
-		: SecincActivityUnit(uid, name, nat_id), m_all(all)
+BaseFeedbackActUnit::BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id, bool all, bool meiri)
+		: SecincActivityUnit(uid, name, nat_id, meiri), m_all(all)
 {}
 
 void BaseFeedbackActUnit::Reset()
@@ -894,7 +907,12 @@ int BaseFeedbackActUnit::DrawImpl(UserWrap& user, const BaseFeedbackActUnit::Dra
 	}
 
 	int need_cost = item_cfg.Amount();
-	int total_point = user.GetRechargePoint(status_cfg_);
+
+	int total_point = 0;
+	if (!meiri_)
+		total_point = user.GetRechargePoint(status_cfg_);
+	else
+		total_point = user.GetSingleDayRecharge(Time::GetGlobalTime());
 	if (need_cost > total_point)
 	{
 		throw std::runtime_error("not_enough_recharge_point");

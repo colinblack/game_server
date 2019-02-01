@@ -102,5 +102,7 @@
 #include "LogicMVP.h"
 #include "LogicUnitWrap.h"
 #include "LogicChick.h"
+#include "LogicQingRenJie.h"
+#include "LogicNianShou.h"
 
 #endif /* LOGICINC_H_ */

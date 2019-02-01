@@ -422,12 +422,16 @@ public:
 	CGI_SET_ACTION_DEFAULT_MAP("InvestmentReward", InvestmentReward)
 	CGI_SET_ACTION_DEFAULT_MAP("BirdBridge", BirdBridge)
 	CGI_SET_ACTION_DEFAULT_MAP("ShengDan2018", ShengDan2018)
+	CGI_SET_ACTION_DEFAULT_MAP("XiaoNian2018", XiaoNian2018)
 	/********************************************************************/
 	/*  活动太多  先是抽象成模板  最后只能搞宏       */
 #define CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_NAME) \
 		CGI_SET_ACTION_DEFAULT_MAP(CONFIG_NAME, CONFIG_NAME##_ACT)
 	/********************************************************************/
 //autolable7
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_fuzhuhesui)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_zhuniandaji)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_vicky_qingrenjie)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yuandan2018)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yearend2018)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_winter2018)
@@ -4319,6 +4323,9 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	CGI_ACTION_FUNCTION(CONFIG_NAME##_ACT, CONFIG_NAME##_Unit::DrawParams, CONFIG_NAME##_Unit, false, DrawImpl);
 	/********************************************************************/
 //autolable8
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_fuzhuhesui)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_zhuniandaji)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_vicky_qingrenjie)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yuandan2018)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yearend2018)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_winter2018)
@@ -7421,6 +7428,23 @@ CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
 			return ret;
 
 		CGI_SEND_LOG("action=ShengDan2018&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int XiaoNian2018()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.XiaoNian2018(m_uid, m_data, m_jsonResult, lasttime, seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=XiaoNian2018&uid=%u", m_uid);
 		return R_SUCCESS;
 	}
 

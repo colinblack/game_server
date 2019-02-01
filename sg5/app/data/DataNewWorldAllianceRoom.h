@@ -614,6 +614,9 @@ public:
 	}
 	static NewWorldAllianceRoomRoadMap m_roadmap;
 
+public:
+	void ShowCity(void);
+
 private:
 	void Restart();
 	void Reward();

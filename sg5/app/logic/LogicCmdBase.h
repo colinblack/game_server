@@ -133,12 +133,13 @@ protected:
 class SecincActivityUnit : public BaseActivityUnit
 {
 public:
-	SecincActivityUnit(unsigned uid, const std::string& name, int nat_id);
+	SecincActivityUnit(unsigned uid, const std::string& name, int nat_id, bool meiri=false);
 protected:
 	void 	Init();
 	virtual void Reset() = 0;
 protected:
 	int nat_id_;
+	bool meiri_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +228,7 @@ public:
 		int eq_index_;
 	};
 
-	BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id, bool all = false);
+	BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id, bool all = false, bool meiri=false);
 
 	//领取奖励
 	virtual int DrawImpl(UserWrap& user, const DrawParams& params, Json::Value& result);

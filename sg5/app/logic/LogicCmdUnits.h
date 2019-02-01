@@ -2685,12 +2685,12 @@ public:
 
 /********************************************************************/
 /*  活动太多  先是抽象成模板  最后只能搞宏       */
-#define CHARGE_DRAW_ACT(CONFIG_NAME, CONFIG_ALL) \
+#define CHARGE_DRAW_ACT(CONFIG_NAME, CONFIG_ALL, CONFIG_MEIRI) \
 		class CONFIG_NAME##_Unit : public BaseFeedbackActUnit \
 		{ \
 		public: \
 			CONFIG_NAME##_Unit(const UserWrap& user) \
-			: BaseFeedbackActUnit(user.Id(), CONFIG_NAME, NAT_##CONFIG_NAME, CONFIG_ALL) \
+			: BaseFeedbackActUnit(user.Id(), CONFIG_NAME, NAT_##CONFIG_NAME, CONFIG_ALL, CONFIG_MEIRI) \
 			, cfg_(DataXmlPtr()->Get_##CONFIG_NAME()) {Init();} \
 		private: \
 			virtual int GetDrawItems() const {return cfg_.size();} \
@@ -2701,21 +2701,24 @@ public:
 		};
 /********************************************************************/
 //autolable6
-CHARGE_DRAW_ACT(CONFIG_yuandan2018, false)
-CHARGE_DRAW_ACT(CONFIG_yearend2018, false)
-CHARGE_DRAW_ACT(CONFIG_winter2018, false)
-CHARGE_DRAW_ACT(CONFIG_double11_2018, true)
-CHARGE_DRAW_ACT(CONFIG_mid_aug_hao, true)
-CHARGE_DRAW_ACT(CONFIG_mid_aug_reu, true)
-CHARGE_DRAW_ACT(CONFIG_water_taotie, true)
-CHARGE_DRAW_ACT(CONFIG_water_qilin, true)
-CHARGE_DRAW_ACT(CONFIG_water_pheonix, true)
-CHARGE_DRAW_ACT(CONFIG_vicky_nnom, false)
+CHARGE_DRAW_ACT(CONFIG_fuzhuhesui, true, false)
+CHARGE_DRAW_ACT(CONFIG_zhuniandaji, true, false)
+CHARGE_DRAW_ACT(CONFIG_vicky_qingrenjie, true, true)
+CHARGE_DRAW_ACT(CONFIG_yuandan2018, false, false)
+CHARGE_DRAW_ACT(CONFIG_yearend2018, false, false)
+CHARGE_DRAW_ACT(CONFIG_winter2018, false, false)
+CHARGE_DRAW_ACT(CONFIG_double11_2018, true, false)
+CHARGE_DRAW_ACT(CONFIG_mid_aug_hao, true, false)
+CHARGE_DRAW_ACT(CONFIG_mid_aug_reu, true, false)
+CHARGE_DRAW_ACT(CONFIG_water_taotie, true, false)
+CHARGE_DRAW_ACT(CONFIG_water_qilin, true, false)
+CHARGE_DRAW_ACT(CONFIG_water_pheonix, true, false)
+CHARGE_DRAW_ACT(CONFIG_vicky_nnom, false, false)
 //vicky没想好名字的活动
-CHARGE_DRAW_ACT(CONFIG_VICKY_NO_NAME, false)
-CHARGE_DRAW_ACT(CONFIG_VICKY_BINGSHU, false)
-CHARGE_DRAW_ACT(CONFIG_VICKY_QIANFU, false)
-CHARGE_DRAW_ACT(CONFIG_VICKY_NNA, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_NO_NAME, false, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_BINGSHU, false, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_QIANFU, false, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_NNA, false, false)
 ///////////////////////////////////////////////////////////////
 
 //任务好礼  活动
