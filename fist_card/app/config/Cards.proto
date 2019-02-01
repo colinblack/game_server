@@ -1,0 +1,109 @@
+package Cards;
+
+import "CommonGiftConfig.proto";
+
+message Card
+{
+    required uint32  id               = 1; //卡牌id
+    required uint32  star             = 2; //卡牌星级
+}
+
+message Compare
+{
+    required uint32  type             = 1;  //属性类型
+    required uint32  aim              = 2;  //0:己方 1:对方
+    required uint32  key              = 3;  //0: 数值方式 1: 百分比方式
+    required uint32  mod              = 4;  //0: 大于 1:等于 2:小于
+    optional uint32  obj              = 5;  //百分比方式属性类型
+    required double  value            = 6;  //数值或百分比
+}
+
+message Conditions
+{
+    required uint32  id               = 1;  //条件id 1概率2暴击3闪避4属性值(数值或者百分比)
+    optional double  p                = 2; //发生概率
+    optional Compare c                = 3; //属性值比较
+}
+
+message LastingEffect
+{
+    required uint32 type            = 1; //类型 0: 非持续 1: 回合 2: 受伤害 3: 攻击 4: 死亡
+    optional uint32 times           = 2; //次数
+}
+
+message ActionData
+{
+    optional uint32  id             = 1; //1数值2百分比3上次伤害4效果数值
+    optional uint32  type           = 2; //(属性类型)(清除或无效的buff对应方式类型)(攻击类型转换type)
+    optional double  v              = 3; //数值或百分比(清除或无效的buff对应数值)
+}
+
+message Action
+{
+    required uint32  id               = 1; //效果id
+    required uint32  type             = 2; //效果类型
+    required uint32  aim              = 3; //目标  0:己方1:对方
+    optional ActionData  value        = 4; //效果数值
+    required uint32  gain             = 5; //增益 0: 不是 1: 是
+    required uint32  overlay          = 6; //叠加类型 0: 不可叠加 1: 次数叠加 2: 数值叠加
+    required uint32  count            = 7; //执行次数
+    optional Conditions con           = 8; //执行条件
+    required LastingEffect last       = 9; //持续类型
+    repeated uint32  temp             = 10; //临时卡
+}
+
+message ActionList
+{
+    required uint32 star              = 1;  //星级
+    repeated Action list              = 2;  //效果列表
+
+}
+
+//卡牌数据
+message CardInfo
+{
+    required  uint32  id                =  1; //卡牌id
+    required  uint32  e_type            =  2; //效果类型  1: 攻击 2: 辅助 3: 咒术
+    required  uint32  r_type            =  3; //角色类型 1: 英雄卡 2: 职业卡 3: 通用卡
+    optional  uint32  heroid            =  4; //英雄卡所属英雄
+    optional  uint32  prof              =  5; //职业卡类型 1: 攻击 2: 暴击 3: 防御
+    required  uint32  point             =  6; //消耗点数
+    required  uint32  aim               =  7; //使用目标  0: 己方英雄 1: 对方英雄
+    required  uint32  times             =  8; //使用次数限制
+    required  uint32  temp              =  9; //临时卡标志 0: 非临时卡 1:临时卡
+    required  uint32  min               =  10; //卡包中持有的下限
+    required  uint32  max               =  11; //卡包中持有的上限
+    required  uint32  coin              =  12; //金币价值
+    repeated  ActionList    action      =  13; //效果列表
+}
+
+//升级配置
+message CardUpdateStar
+{
+    required  uint32    id                               =  1;  //卡牌id
+    repeated  CommonGiftConfig.CommonModifyItem cost     =  2;  //消耗
+}
+
+//复制卡牌配置
+message CardDup
+{
+    required  uint32    id                               =  1;  //卡牌id
+    required  CommonGiftConfig.CommonModifyItem cost     =  2;  //消耗
+}
+
+message CardPurchase
+{
+    required  uint32    id                               =  1;  //卡牌id
+    required  CommonGiftConfig.CommonModifyItem cost     =  2;  //消耗   
+}
+
+message CardsCfg
+{
+    repeated  CardInfo          cards       = 1; //卡牌数据
+    repeated  CardUpdateStar    update      = 2; //升星
+    repeated  CardDup           dup         = 3; //复制
+    repeated  CardPurchase      buy         = 4; //购买
+    required  int32             delCash     = 5; //删除卡牌消耗钻石
+}
+
+

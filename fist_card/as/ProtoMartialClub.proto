@@ -1,0 +1,362 @@
+package ProtoMartialClub;
+    
+import "ProtoHero.proto";
+import "DataCommon.proto";
+
+
+message MartialClubProp
+{
+    required uint32 id    = 1;
+    required uint32 count = 2;
+}
+
+message MartialClubInfo
+{
+    required uint32 uid               = 1; //武馆所属玩家id
+    required uint32 grade             = 2; //武馆星级
+    required uint32 level             = 3; //武馆等级
+    required uint32 nextTs            = 4; //下次可升级的时戳
+    required uint32 protectTs         = 5; //踢馆保护时戳
+    required string martialName       = 6; //武馆名
+    required uint32 incomeStartTs     = 7; //收益开始时戳
+    required uint32 coins             = 8; //金币收益
+    repeated MartialClubProp  props   = 9; //道具收益
+}
+
+message MartialHeroBaseInfo
+{
+    optional  uint32 heroid          = 1; //英雄id
+    optional  uint32 slot            = 2; //槽位
+    optional  uint32 battlePower     = 3; //战力
+    optional  uint32 coins           = 4; //金币收益
+    optional  uint32 startTs         = 5; //收益开始时间
+}
+
+//武馆中显示的玩家信息
+message MartialClubUserInfo
+{
+    required uint32 uid                 = 1;    
+    required string name                = 2;   //名字
+    required string fig                 = 3;   //头像
+    optional uint32 level               = 4;   //等级
+    optional uint32 grade               = 5;   //段位
+}
+
+message MartialHeroInfo
+{
+    required MartialClubUserInfo  user      = 1; //玩家信息
+    required MartialHeroBaseInfo  hero = 2; //英雄信息
+}
+
+
+//单个武馆信息
+message SingleMartialClub
+{
+   required ProtoMartialClub.MartialClubInfo clubInfo  = 1;  //武馆信息
+   repeated ProtoMartialClub.MartialHeroInfo heroInfo  = 2;  //武馆中英雄信息
+}
+
+//一组武馆
+message MartialClubGroup
+{
+    repeated SingleMartialClub clubs       = 1;
+}
+
+
+//开启武馆
+message ProtoOpenMartialClubReq
+{
+    required uint32 grade = 1;  //武馆星级
+}
+message ProtoOpenMartialClubResp
+{
+    required uint32 nextTs        = 1; //下次升级时间
+}
+
+//获取自己武馆中的信息
+message ProtoGetOwnerClubReq
+{
+    required uint32 grade       = 1; //武馆星级 
+}
+
+message ProtoGetOwnerClubResp
+{
+   required SingleMartialClub  info = 1;
+}
+
+//获取自己或别人武馆中的英雄
+message ProtoGetHeroReq
+{
+    required uint32 ownerUid    = 1; //获取武馆所属玩家
+    required uint32 grade       = 2; //武馆星级 
+}
+
+message ProtoGetHeroResp
+{
+    repeated MartialHeroInfo  hero  = 1;
+}
+
+//跨服获取武馆英雄
+message ProtoCSGetHeroReq
+{
+    required uint32 myUid    = 1; //我的uid
+    required uint32 ownerUid  = 2; //获取武馆所属玩家
+    required uint32 grade    = 3; //武馆星级
+}
+
+message ProtoCSGetHeroResp
+{
+    repeated MartialHeroInfo  hero  = 1;
+}
+
+//获取兼职武馆信息
+message ProtoGetPartTimeClubReq
+{
+}
+
+message ProtoGetPartTimeClubResp
+{
+    repeated SingleMartialClub  info = 1;
+}
+
+
+message ProtoPartimeInfo
+{
+    required uint32 grade                   = 1; //武馆等级
+    required MartialHeroBaseInfo heroInfo   = 2; //英雄信息
+}
+
+
+//跨服获取兼职武馆信息
+message ProtoCSGetPartTimeClubReq
+{
+    required uint32 myUid                   = 1; //我的uid
+    required uint32 othUid                  = 2; //兼职武馆玩家uid
+    repeated ProtoPartimeInfo clubInfo      = 3; //兼职武馆信息
+}
+
+message ProtoCSGetPartTimeClubResp
+{
+    repeated SingleMartialClub  info = 1;
+}
+
+
+
+//设置武馆中的英雄
+message ProtoSetHeroReq
+{
+    optional uint32 detachUid   = 1; //我派遣英雄所在武馆玩家uid
+    optional uint32 grade       = 2; //武馆星级
+    required uint32 heroId      = 3; //我的英雄id
+    required uint32 slot        = 4; //槽位号
+}
+
+message ProtoSetHeroResp
+{
+    required MartialHeroInfo  setHero   = 1; //设置英雄信息
+    optional uint32 incomeStartTs       = 2; //收益开始时间
+}
+
+
+//跨服设置武馆中的英雄
+message ProtoCSSetHeroReq
+{
+    required uint32 myUid               = 1; //我的uid
+    required uint32 detachUid           = 2; //我派遣英雄所在武馆玩家uid
+    required uint32 grade               = 3; //武馆星级
+    required uint32 slot                = 4; //槽位
+    required MartialHeroInfo setHero    = 5; //设置英雄信息
+}
+
+message ProtoCSSetHeroResp
+{
+    required MartialHeroInfo setHero    = 1; //设置英雄信息
+}
+
+//跨服设置武馆中的英雄返给服务器的信息
+message ProtoCSSetHeroToBattleReq
+{
+    required uint32 myUid               = 1;    //武馆玩家
+    required uint32 othUid              = 2;    //派遣英雄的玩家
+    required uint32 heroId              = 3;    //派遣的英雄
+    required uint32 slot                = 4;    //槽位号
+    required uint32 level               = 5;    //武馆等级
+    required uint32 heroNum             = 6;    //英雄数量
+}
+
+//获取邀请玩家列表
+message ProtoGetInviteUserReq
+{
+}
+
+message ProtoGetInviteUserResp
+{
+    repeated MartialClubUserInfo users   = 1; //推荐邀请玩家
+}
+
+//邀请玩家
+message ProtoInviteUserReq
+{
+    required uint32 othUid          = 1; //我要邀请的玩家uid
+    required uint32 martialGrade    = 2; //武馆星级
+}
+
+
+//跨服邀请玩家
+message ProtoCSInviteUserReq
+{
+    required uint32 myUid           = 1; //我的uid
+    required uint32 othUid          = 2; //我要邀请的玩家uid
+    required uint32 slot            = 3; //槽位号
+    required uint32 martialGrade    = 4; //我的武馆星级
+    required uint32 myLevel         = 5; //我的等级
+    required string myFig           = 6; //我的头像
+    required string myName          = 7; //我的名字
+}
+
+message ProtoCSInviteUserResp
+{
+    required uint32 myUid           = 1; //我的uid
+    required uint32 martialGrade    = 2; //我的武馆星级
+    required uint32 slot            = 3; //槽位号
+}
+
+//领取自己武馆收益
+message ProtoGetIncomeReq
+{
+    required uint32 martialGrade    = 1;  //武馆等级
+}
+
+message ProtoGetIncomeResp
+{
+    required  DataCommon.CommonItemsCPP commons = 1; 
+}
+
+//获取兼职武馆收益
+message ProtoGetOtherIncomeReq
+{
+    required uint32 othUid  = 1; //兼职武馆所属玩家
+    required uint32 heroId  = 2; //我派出去的英雄
+    required uint32 slot    = 3; //槽位
+}
+
+message ProtoGetOtherIncomeResp
+{
+    required DataCommon.CommonItemsCPP commons = 1; 
+}
+
+//跨服获取兼职武馆收益
+message ProtoCSGetOtherIncomReq
+{
+    required uint32 myUid   = 1;  //我的uid
+    required uint32 othUid  = 2;  //兼职武馆所属uid
+    required uint32 heroId  = 3;  //兼职英雄id
+    required uint32 slot    = 4;  //槽位
+}
+
+message ProtoCSGetOtherIncomeResp
+{
+    required DataCommon.CommonItemsCPP commons = 1; 
+}
+
+//推荐武馆
+message ProtoGetMartialClubReq
+{
+}
+
+message ProtoGetMartialClubResp
+{
+    repeated MartialClubGroup group    = 1;    //推荐武馆
+}
+
+//升级武馆
+message ProtoUpdateLevelReq
+{
+    required uint32 martialGrade    = 1; //武馆星级
+}
+
+message ProtoUpdateLevelResp
+{
+    required uint32 nextTs          = 1; //下次可以升级的时间
+}
+
+
+
+//卸载自己武馆中的英雄
+message  ProtoDelHeroReq
+{
+    required uint32 grade       = 2; //武馆星级
+    required uint32 heroId      = 3; //我的英雄id
+    required uint32 slot        = 4; //槽位号 
+}
+
+message ProtoDelHeroResp
+{
+
+}
+
+//跨服卸载自己武馆中的英雄
+message ProtoCSDelHeroReq
+{
+    required uint32 ownerUid    = 1; //英雄所属uid
+    required uint32 heroId      = 2; //要删掉的英雄
+}
+
+
+//卸载兼职武馆中的英雄
+message ProtoDelParttimerReq
+{
+    optional uint32 detachUid   = 1; //我派遣英雄所在武馆玩家uid
+    optional uint32 grade       = 2; //武馆星级
+    required uint32 heroId      = 3; //我的英雄id
+    required uint32 slot        = 4; //槽位号 
+}
+
+message ProtoDelParttimerResp
+{
+}
+
+//跨服卸载武馆中的英雄
+message ProtoCSDelParttimerReq
+{
+    required uint32 myUid               = 1; //我的uid
+    required uint32 detachUid           = 2; //我派遣英雄所在武馆玩家uid
+    required uint32 grade               = 3; //武馆星级
+    required uint32 slot                = 4; //槽位
+    required uint32 heroId              = 5; //英雄id
+}
+//跨服卸载武馆返给服务器
+message ProtoCSDelParttimerToBattleReq
+{
+    required uint32 myUid               = 1; //我的uid
+    required uint32 heroId              = 2; //英雄id
+}
+
+message ProtoCSDelParttimerResp
+{
+}
+
+//改名
+message ProtoChangeNameReq
+{
+    required uint32 grade   = 1;  //武馆星级
+    required string name    = 2;  //武馆名
+}
+
+
+//跨服更新武馆中的英雄信息
+message ProtoCSMartialHeroInfo
+{
+    required  uint32    uid                    = 1;
+    repeated  ProtoHero.HeroBaseInfoCPP  attr  = 2;
+}
+
+
+
+
+
+
+
+
+
+

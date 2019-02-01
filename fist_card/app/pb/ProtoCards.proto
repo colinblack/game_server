@@ -1,0 +1,71 @@
+package ProtoCards;
+
+import "DataCommon.proto";
+
+message UserCardsCPP
+{
+    required uint32  ud      = 1;  //卡牌ud
+    required uint32  cardId  = 2;  //卡牌id
+    optional uint32  star    = 3;  //星级
+}
+
+message UnlockCardsCPP
+{
+    required uint32 id      = 1;    //已解锁的卡牌
+}
+
+message CardsAllChangeCPP
+{
+    repeated  UserCardsCPP cards   = 1;   //卡牌
+}
+
+
+//卡牌升级
+message ProtoUpdateCardReq
+{
+    required uint32 cardId      = 1; //卡牌id
+    required uint32 ud          = 2; //卡牌ud
+}
+
+message ProtoUpdateCardResp
+{
+    required    DataCommon.CommonItemsCPP  commons = 1;   //消耗
+}
+
+//卡牌复制
+message ProtoDupCardReq
+{
+    required uint32 id      = 1; //卡牌id
+}
+
+message ProtoDupCardResp
+{
+    required  CardsAllChangeCPP  item            = 1;  //新增卡牌
+    required  DataCommon.CommonItemsCPP  commons = 2;   //消耗
+}
+
+
+//卡牌删除
+message ProtoDelCardReq
+{
+    required uint32 cardId  = 1; //卡牌id
+    required uint32 ud      = 2; //卡牌ud
+}
+
+message ProtoDelCardResp
+{
+    required DataCommon.CommonItemsCPP  commons = 1; //补偿 
+}
+
+//卡牌购买
+message ProtoBuyCardReq
+{
+    required uint32  cardId     = 1; //卡牌id
+}
+
+message ProtoBuyCardResp
+{
+    required  CardsAllChangeCPP item       = 1; //新增卡牌
+    required  DataCommon.CommonItemsCPP  commons = 2; //消耗
+}
+

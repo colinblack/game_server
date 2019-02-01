@@ -1,0 +1,17 @@
+package  FriendConfig;
+import "CommonGiftConfig.proto";
+
+
+message LevelReward
+{
+    required uint32 level           = 1;  //等级
+    required uint32 heroExp         = 2; //英雄经验
+    required CommonGiftConfig.CommonModifyItem reward   = 3; //奖励
+}
+
+
+message FriendInfo
+{
+    repeated LevelReward  rewards    = 1;
+}
+

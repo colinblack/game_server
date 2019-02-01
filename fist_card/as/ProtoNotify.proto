@@ -1,0 +1,85 @@
+package ProtoNotify;
+
+message NotifyItemCPP
+{
+	required uint32 id		= 1;  //通知id
+	required uint32 ts		= 2;   //时间
+	required bytes content	= 3; //内容
+}
+
+//随机玩家战报
+message RandomUserItemCPP
+{
+	required uint32 id		= 1;  //通知id
+    required uint32 type    = 2;  //战报类型
+    required uint32 uid     = 3;  //发送战报玩家uid
+	required uint32 ts		= 4;  //时间
+	required bytes content	= 5;  //内容
+}
+
+message PropsItemCpp
+{
+    required uint32 propId  = 1;
+    required uint32 count   = 2;
+}
+
+//武馆通知信息
+message MartialClubItemCpp
+{
+    required uint32 id          = 1; //消息id
+    required uint32 type        = 2; //消息类型
+    required uint32 ts          = 3; //时间
+    required uint32 uid         = 4; //玩家uid
+    required string name        = 5; //玩家名字
+    required uint32 level       = 6; //玩家等级  
+    required string fig         = 7; //头像 
+    required uint32 grade       = 8; //星级
+    optional uint32 slot        = 9; //槽位号
+    optional uint32 win         = 10; //0: 输, 1: 赢
+    optional uint32 coin        = 11; //抢夺金币 
+    repeated PropsItemCpp props = 12; //抢夺道具
+}
+
+message NotifyItemCPPAll
+{
+	repeated NotifyItemCPP notify	= 1; //通知
+}
+
+message GetNotifyReq
+{
+	required uint32 id	= 1;
+}
+
+message GetNotifyResp   
+{
+	required NotifyItemCPP  notify	= 1;  //通知
+}
+
+//通知的主动推送
+message PushNotifyReq
+{
+	required NotifyItemCPP  notify	= 1;  //通知
+}
+
+//邀请玩家通知
+message PushInvitePost
+{
+    required MartialClubItemCpp  post   = 1;
+}
+//踢馆战报
+message PushMartialBattlePost
+{
+    required MartialClubItemCpp  post   = 1;
+}
+message PostItemCPPAll
+{
+    repeated   MartialClubItemCpp       invite  = 1;  //邀请
+    repeated   MartialClubItemCpp       battle  = 2;  //踢馆
+}
+//删除消息
+message PostRemove
+{
+    required  uint32 type       = 1;
+    required  uint32 id         = 2;
+}
+

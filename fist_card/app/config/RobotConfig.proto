@@ -1,0 +1,40 @@
+package RobotConfig;
+import "Cards.proto";
+
+message Npc
+{
+    required uint32 id      =  1;
+    required uint32 level   =  2;
+}
+
+message RobotItem
+{
+    required uint32 id              = 1; 
+    required string name            = 2; //名字
+    required uint32 level           = 3; //等级
+    optional uint32 grade           = 4;//段位
+    repeated uint32 props           = 5; //道具
+    repeated Npc    npc             = 6; //npc
+    repeated Cards.Card  cards      = 7; //卡包中的卡牌id
+}
+
+//排位赛假玩家
+message RobotGradeBattleItem
+{
+    required uint32    grade          = 1;
+    repeated RobotItem item           = 2;
+    repeated Cards.Card  cards        = 3; //卡包中的卡牌id
+}
+
+//杯赛假玩家
+message RobotChampionshipItem
+{
+    repeated RobotItem item           = 1;
+    repeated uint32                 prob            = 3;  //比赛双方都是机器人时, 等级差值与概率对应关系
+}
+
+message  Robots
+{
+    repeated RobotGradeBattleItem  gradeBattle      = 1;  //排位赛配置
+    required RobotChampionshipItem championship     = 2;  //杯赛玩家
+}

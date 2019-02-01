@@ -1,0 +1,52 @@
+package NpcConfig;
+
+message NpcLevelAttribute
+{
+    required uint32 level           = 1; //等级
+    required uint32 hp              = 2; //初始血量
+    required uint32 att             = 3; //初始攻击
+    required uint32 def             = 4; //初始防御
+    required uint32 first           = 5; //先手
+}
+
+
+message NpcAttribute
+{
+    required uint32 hit                = 1; //命中
+    required uint32 dodge              = 2;  //闪避
+    required uint32 critStrike         = 3; //暴击
+    required uint32 critRate           = 4; //暴击伤害
+    required uint32 critResist         = 5; //抗暴击
+    repeated NpcLevelAttribute      levelAttr    = 6; //等级属性
+}
+
+
+//npc技能
+message SkillInfo
+{
+    required uint32     level        = 1;
+    required double     multiple     = 2;  //伤害倍数
+    required uint32     hurtValue    = 3;  //固定伤害值
+    required uint32     fight_power  = 4;  //战力
+}
+
+message NpcSkill
+{
+    required uint32     id               =  1;
+    repeated SkillInfo  skillInfo        =  2;
+}
+
+
+//npc
+message NpcInfo
+{
+    required uint32 id             = 1;
+    required uint32  prof          = 2; //职业
+    required NpcAttribute attr     = 3;
+    repeated NpcSkill  skill       = 4;
+}
+
+message Npc
+{
+    repeated NpcInfo  allNpc     = 2; //npc
+}

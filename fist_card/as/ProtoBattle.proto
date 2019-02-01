@@ -1,0 +1,294 @@
+package ProtoBattle;
+
+import "ProtoBattleDemo.proto";
+import "DataCommon.proto";
+import "ProtoHero.proto";
+import "ProtoCards.proto";
+import "ProtoMartialClub.proto";
+
+message BattleCommonCPP
+{
+   optional uint32 id                              = 1; //关卡id
+   repeated uint32 propId                          = 2; //道具id
+}
+
+message BattleCardsCPP
+{
+    repeated ProtoCards.UserCardsCPP   bag       = 1; //卡包牌
+    repeated ProtoCards.UserCardsCPP   hand      = 2; //手牌
+}
+
+message ProtoBattleHero
+{
+	required uint32 id				 	= 1;//英雄id
+	required uint32 hp				 	= 2;//血量
+    required uint32 att                 = 3;//攻击
+    required uint32 def                 = 4;//防御
+    required uint32 shield              = 5;//护盾
+    required uint32 battlePower         = 6;//战力
+    required double damInc              = 7;//伤害增加(百分比)
+    required double damDec              = 8;//伤害减免(百分比)
+}
+
+
+message ProtoBattleTeam
+{
+    optional uint32 uid                             = 1;
+	required uint32 level						 	= 2;    //玩家等级
+	repeated ProtoBattleHero heros			    	= 3;    //英雄
+}
+
+message ProtoBattleCPP
+{
+    required uint32 first                          = 1; //先手 0: 不是 1: 是
+    required BattleCardsCPP cards                  = 2; //卡牌信息
+    required ProtoBattleTeam attacker              = 3; //玩家信息
+    required ProtoBattleTeam defender              = 4; //玩家信息
+}
+
+//结束回合
+message ProtoTurnEndReq
+{
+    required uint32 battleid        = 1;  //战斗id
+    required uint32 type            = 2;  //战斗类型
+}
+
+message ProtoTurnEndResp
+{
+    required uint32 nextUser        = 1;  //下一个出牌玩家
+    required BattleCardsCPP cards   = 2; //卡牌信息
+    required uint32 point           = 3;  //剩余点数
+}
+
+//pve模式
+message ProtoPveBattleReq
+{
+    required BattleCommonCPP common                   = 1; 
+}
+
+message ProtoPveBattleResp
+{
+    required uint32 battleid                       = 1; //比赛id
+    required ProtoBattleCPP common                 = 2;
+}
+
+message ProtoPveBattleResult
+{
+    required  DataCommon.CommonItemsCPP   commons               = 1; //消耗和奖励
+    optional  ProtoCards.CardsAllChangeCPP     dropCards        = 2; //掉落的卡牌
+}
+
+
+//排位赛
+message ProtoGradeBattleReq
+{
+    optional BattleCommonCPP common               = 1;
+}
+
+message ProtoGradeBattleResp
+{
+    required  uint32 battleid                              = 1;    //比赛id
+    required ProtoBattleCPP common                         = 2;    //战斗信息
+
+}
+
+message ProtoGradeBattleResult
+{
+    required  uint32 grade                                 = 1;    //段位
+    required  uint32 score                                 = 2;    //积分
+    required  uint32 dailyScore                            = 3;    //每日积分
+}
+
+//随机玩家
+message ProtoRandomUserReq
+{
+    optional  BattleCommonCPP  common    = 1;
+}
+
+message ProtoRandomUserResp
+{
+    required  uint32 battleid                              = 1;    //比赛id
+    required ProtoBattleCPP common                         = 2;    //战斗信息
+}
+
+message ProtoRandomUserResult
+{
+     required  DataCommon.CommonItemsCPP    commons        = 1; //消耗和奖励
+}
+
+//随机玩家复仇
+message ProtoRevengeReq
+{
+    optional  BattleCommonCPP common           =   1;  
+}
+
+message ProtoRevengeResp
+{
+    required  uint32 battleid                              = 1;     //比赛id
+    required  ProtoBattleCPP common                         = 2;    //战斗信息
+}
+
+//挑战好友
+message ProtoFriendBattleReq
+{
+    required   uint32 otherId               = 1; //对方id
+    optional   BattleCommonCPP     common   = 2;
+}
+
+message ProtoFriendBattleResp
+{
+    required  uint32 battleid                               = 1;     //比赛id
+    required  ProtoBattleCPP common                         = 2;    //战斗信息
+}
+
+message ProtoFriendBattleResult
+{
+    required  DataCommon.CommonItemsCPP    commons          =  1; //奖励
+}
+
+
+//踢馆
+message ProtoMartialClubBattleReq
+{
+    required  uint32    myMartialGrade      = 1;    //我的武馆星级
+    required  uint32    othUid              = 2;   //对方id
+    required  uint32    othMartialGrade     = 3;   //对方武馆星级
+    optional  BattleCommonCPP  common       = 4;        
+}
+
+message ProtoMartialClubBattleResp
+{
+    required uint32 battleid                              = 1;    //比赛id
+    required ProtoBattleCPP common                        = 2;    //战斗信息
+}
+
+message ProtoMartialClubBattleResult
+{
+    required  DataCommon.CommonItemsCPP    commons                   =  1; //消耗和奖励
+}
+
+//跨服踢馆
+message ProtoCSMartialClubBattleReq
+{
+    required uint32 myUid           = 1; //我的uid
+    required uint32 mymGrade        = 2; //我的武馆等级
+    required uint32 othUid          = 3; //对方uid
+    required uint32 othmGrade       = 4; //对方武馆等级
+}
+
+message ProtoCSMartialClubBattleResp
+{
+    required uint32  myUid              = 1; //我的uid
+    required uint32  mymGrade           = 2; //我的武馆星级
+    required uint32  othUid             = 3; //对方uid
+    required uint32  othmGrade          = 4; //对方武馆星级
+    required uint32  othProtectTs       = 5; //对方武馆保护时间
+    required uint32  othCoins           = 6; //对方金币收益
+    repeated ProtoMartialClub.MartialClubProp  othProps           = 7; //对方道具收益
+    repeated ProtoHero.HeroBaseInfoCPP     hero =  8; //英雄信息
+    optional BattleCommonCPP  common    = 9;
+}
+
+//跨服同步对手武馆信息
+message ProtoCSSynOthMartialInfo
+{
+    required uint32  othUid             = 1;        //对方uid
+    required uint32  othmGrade          = 2;        //对方武馆星级
+    required uint32  othCoins           = 3;        //金币收益
+    required uint32  othProtectTs       = 4;        //踢馆保护时间
+    repeated ProtoMartialClub.MartialClubProp  othProps = 5; //道具收益
+}
+
+//匹配玩家
+message ProtoMatchReq
+{    
+}
+
+message ProtoMatchResp
+{
+    optional string fig         = 1; //头像
+    required string name        = 2; //名字
+    required uint32 grade       = 3; //段位
+    repeated uint32 heroid      = 4; //英雄id 
+}
+
+//升级奖励
+message UpgradeRewardReq
+{
+    required uint32  grade          = 1;
+}
+message UpgradeRewardResp
+{
+   required  DataCommon.CommonItemsCPP    rewards                   =  1; //奖励
+}
+
+//每日奖励
+message DailyRewardReq
+{
+}
+
+message DailRewardResp
+{
+   required  uint32     ts  = 1;        
+   required  DataCommon.CommonItemsCPP    rewards                   =  2; //奖励
+}
+
+//连胜分享奖励
+message WinStreakRewardReq
+{
+    required uint32  count  = 1;
+}
+
+message WinStreakRewardResp
+{
+   required  DataCommon.CommonItemsCPP    rewards                   =  1; //奖励
+}
+
+//升级分享奖励
+message UpgradeShareRewardReq
+{
+    required uint32  grade          = 1;
+}
+message UpgradeShareRewardResp
+{
+    required  DataCommon.CommonItemsCPP    rewards                   =  1; //奖励
+}
+
+
+
+//设置阵型
+message SetFormationReq
+{
+    repeated uint32 heroid         = 1;
+}
+
+message SetFormationResp
+{
+}
+
+
+//刷新玩家
+message ProtoRefreshReq
+{
+}
+
+message ProtoRefreshResp
+{
+    optional string fig                                         = 1; //头像
+    required string name                                        = 2; //名字
+    repeated ProtoHero.HeroBaseInfoCPP     hero                 = 3; //英雄信息  
+}
+//战报
+message ProtoPost
+{
+    required string info                = 1; //评语
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+package ProtoBattleDemo1;
+        
+        
+        
+message ProtoBattleDemoTurn{
+
+    required uint32 actionType         = 1; //效果类型
+    optional uint32 turn               = 2; //持续回合
+}        
+
+message ProtoBattleDemoTurnInfo{
+    required int32 ahp     = 1; //att剩余血量
+    required int32 dhp     = 2; //def剩余血量
+}
+
+
+message ProtoBattleDemo{
+    repeated ProtoBattleDemoTurn turn       = 1;
+    repeated ProtoBattleDemoTurnInfo info   = 2;   
+}
+
+//出牌
+message ProtoBattleReq
+{
+    required  uint32 battleid               = 1;  //比赛id
+    required  uint32 type                   = 2;  //比赛类型
+    required  uint32 ud                     = 3; //卡牌ud
+    required  uint32 heroid                 = 4; //出牌英雄
+}
+
+message ProtoBattleResp
+{
+    required uint32 currentUser                = 1; //当前出牌玩家
+    required uint32 point                      = 2;  //剩余点数
+    repeated ProtoBattleDemo demo              = 3;  //战斗记录
+    optional uint32  winUid                    = 4;  //胜利的玩家
+}

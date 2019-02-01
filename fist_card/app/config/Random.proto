@@ -1,0 +1,24 @@
+package Random;
+import "CommonGiftConfig.proto";
+
+message UserInfo
+{
+    required uint32 id          = 1;
+    required string name        = 2;
+    repeated uint32 npcId       = 3; 
+    repeated uint32 propsId     = 4;
+}
+
+
+message RewardInfo
+{
+    required uint32 level       = 1;
+    required CommonGiftConfig.CommonModifyItem reward = 2; //奖励  
+}
+
+//随机玩家
+message Random
+{
+    repeated  UserInfo users        = 1;
+    repeated  RewardInfo rewards    = 2;
+}

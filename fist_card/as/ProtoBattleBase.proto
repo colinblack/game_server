@@ -1,0 +1,87 @@
+package ProtoBattleBase;
+
+import "ProtoBattle.proto";
+
+//每一次效果后的单前属性值,如果有定义说明属性有变化  
+message ProtoBattleAttr
+{
+    required uint32 heroid             = 1;
+ 	optional int32 hp                  = 2;//血量
+    optional int32 att                 = 3;//攻击
+    optional int32 def                 = 4;//防御
+    optional int32 shield              = 5;//护盾
+    optional int32 battlePower         = 6;//战力
+    optional double damInc             = 7;//伤害增加(百分比)
+    optional double damDec             = 8;//伤害减免(百分比)
+}      
+
+//buff标志
+message ProtoBuff
+{
+
+}
+        
+message ProtoBattleTurn{
+    optional uint32 dam                = 1; //伤害 0表示未命中
+    optional uint32 blood              = 2; //流血 0表示没有
+    optional uint32 hurtBack           = 3; //伤害反弹 0表示没有
+    optional uint32 attCast            = 4; //0无2当前血量4攻击5防御6护盾
+    optional bool   crit               = 5; //是否发生暴击
+    optional bool   invalid            = 6; //是否发生有免疫
+    optional bool   hurtTrans          = 7; //伤害发生转化
+    optional bool   bomb               = 8; //是否发生引爆 
+}
+
+//每次效果数据
+//效果类型:1普通伤害2血量伤害3刺穿伤害4修改属性5恢复当前血量6获得行动点数7重置所有手牌8清除效果9引爆10整蛊11抽卡
+//12连击13加反击14加攻击转换15加免疫16加流血17加伤害反弹18加伤害转化19加复活20反击21流血22复活23免疫
+message ProtoBattleInfo{
+    required uint32                 actionType  = 1; //效果类型
+    required uint32                 aim         = 2; //作用对象0:攻方,1:守方
+    optional ProtoBattleTurnInfo    att         = 3; //攻方信息
+    optional ProtoBattleTurnInfo    def         = 4; //守方信息
+}
+
+
+message ProtoBattleTurnInfo{
+    optional ProtoBattleTurn info       = 1;    
+    optional ProtoBattleAttr attr       = 2;   
+//    required ProtoBuff       buff       = 3;
+    optional ProtoBattle.BattleCardsCPP  cards = 3; //用于抽卡和重置手牌
+    optional uint32          addPoint  = 4;         //获得的点数, 用该获取行动点数效果
+}
+
+
+//出牌
+message ProtoBattleReq
+{
+    required  uint32 battleid               = 1;  //比赛id
+    required  uint32 type                   = 2;  //比赛类型
+    required  uint32 ud                     = 3;  //卡牌ud
+    required  uint32 cardid                 = 4;  //卡牌id
+    required  uint32 heroid                 = 5;  //出牌英雄
+}
+
+
+message ProtoBattleResp
+{
+    optional uint32 cardid                     = 1;  //出的牌id
+    required uint32 point                      = 2;  //剩余点数
+    repeated ProtoBattleInfo  battle           = 3;  //战斗记录
+    optional uint32  winUid                    = 4;  //胜利的玩家
+}
+
+message ProtoComputerCards
+{
+    required uint32 cardid                     = 1;  //出的牌id
+    repeated ProtoBattleInfo  battle           = 2;  //战斗记录
+}
+
+//电脑出牌
+message ProtoComputerBattle
+{   
+    required uint32 nextuser                  = 1;  //下一个出牌玩家
+    repeated ProtoComputerCards   outcards    = 2;  //出牌信息
+    optional uint32  winUid                   = 3;  //胜利的玩家
+  	required uint32 point                     = 4;  //剩余点数
+}

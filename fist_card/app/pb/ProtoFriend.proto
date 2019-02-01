@@ -1,0 +1,103 @@
+package ProtoFriend;
+
+import "DataCommon.proto";
+
+message RecommendInfo
+{
+    required uint32 uid                 = 1;    
+    required string name                = 2;   //名字
+    required string fig                 = 3;   //头像
+    required uint32 level               = 4;   //等级
+    required uint32 grade               = 5;  //段位
+    optional uint32 onlineTs            = 6;  //离线时间          
+    optional uint32 donationTs          = 7;  //赠送体力标志
+    optional uint32 battleTs            = 8;  //战斗标志
+    optional uint32 battle              = 9;  //战斗结果
+    repeated uint32 heroId              = 10;  //对方英雄
+}
+//推荐好友
+message ProtoRecommendUserReq
+{    
+}
+
+message ProtoRecommendUserResp
+{
+    repeated   RecommendInfo user      = 1; 
+}
+
+//获取好友列表
+message ProtoGetFriendsReq
+{
+}
+
+message ProtoGetFriendsResp
+{
+    repeated   RecommendInfo user      = 1; //好友信息 
+}
+
+//跨服获取好友列表
+message ProtoCSGetFriendsReq
+{
+	required uint32 myuid   = 1;//自己的uid
+	repeated uint32 othuid  = 2;//需要获取信息的uid
+}
+
+message ProtoCSGetFriendsResp
+{
+    required uint32 myuid         = 1; //自己uid
+    repeated RecommendInfo  info  = 2; //好友信息  
+}
+
+//关注好友
+message ProtoConcernReq
+{
+    required  uint32   otherId      = 1;  //对方id
+}
+
+message ProtoConcernResp
+{
+    optional RecommendInfo info     = 1; //好友信息
+}
+
+//跨服关注好友
+message ProtoCSConcernReq
+{
+    required uint32 myuid   = 1; //自己的uid
+	required uint32 othuid	= 2;  //需要关注的uid
+}
+
+message ProtoCSConcernResp
+{
+    required uint32 myuid           = 1; //自己的uid
+    required RecommendInfo info     = 2; //关注人的信息
+}
+
+//取消关注
+message ProtoCancelConcernReq
+{
+    required  uint32  otherId       = 1; //对方id
+}
+
+//送体力
+message ProtoDonatePowerReq
+{
+    required  uint32  ts            = 1;  //计算恢复体力时戳
+    required  uint32  otherId       = 2; //对方id
+}
+
+message ProtoDonatePowerResp
+{
+    optional DataCommon.CommonItemsCPP commons	= 1;    //体力
+}
+
+//跨服送体力
+message ProtoCSDonatePowerReq
+{
+    required uint32 othuid          = 1;    //需赠送人的id
+}
+
+
+
+
+
+

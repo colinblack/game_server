@@ -1,0 +1,38 @@
+package Combine;
+
+message LimitsList
+{
+    optional uint32 star      = 1;         //星级
+}
+
+message AttributesList
+{
+    optional  uint32 hp              = 1; //血量
+    optional  uint32 att             = 2; //攻击
+    optional  uint32 def             = 3; //防御
+    optional  uint32 first           = 4; //先手
+    optional  uint32 hit             = 5; //命中
+    optional  uint32 dodge           = 6;  //闪避
+    optional  uint32 critStrike      = 7; //暴击
+    optional  uint32 critRate        = 8; //暴击伤害
+    optional  uint32 critResist      = 9; //抗暴击
+    optional  double hp_add          = 10; //血量加成
+    optional  double att_add         = 11; //攻击加成
+    optional  double def_add         = 12; //防御加成
+    optional  LimitsList limit      = 13; //激活条件
+}
+
+
+message HeroCombine
+{
+    required uint32         id                 = 1;  //组合id
+    repeated uint32         heroid             = 2; //英雄id
+    repeated AttributesList list               = 3; //图鉴属性
+
+}
+
+
+message HeroCombineInfo
+{
+    repeated  HeroCombine  combineInfo  = 1;
+}

@@ -1,0 +1,309 @@
+import "ProtoNotify.proto";
+import "ProtoActivity.proto";
+import "DataCommon.proto";
+import "ProtoHero.proto";
+import "ProtoBattle.proto";
+import "ProtoFriend.proto";
+import "ProtoMartialClub.proto";
+import "ProtoCards.proto";
+
+package User;
+
+message Base {
+	required uint32 uid					 = 1;
+	required uint32 registerPlatform	 = 2;
+	required uint32 registerTime		 = 3;
+	required uint32 lastLoginPlatform	 = 4;
+	required uint32 lastLoginTime		 = 5;
+	required uint32 loginTimes			 = 6;
+	required uint32 loginDays			 = 7;
+	required uint32 lastActiveTime 		 = 8;
+	required uint32 lastOffTime	 		 = 9;
+	required uint32 forbidTs			 = 10;
+	required bytes forbidReason			 = 11;
+	required uint32 tutorialStage		 = 12;
+	required bytes name					 = 13;
+	required bytes fig					 = 14;
+	required uint64 exp					 = 15;
+	required uint32 level				 = 16;
+	required uint32 acccharge			 = 17;
+	required uint32 viplevel			 = 18;
+	required uint32 cash				 = 19;
+	required uint32 coin				 = 20;
+	required uint32 firstRecharge 		 = 21;  //首充 1--可领取 2--已经领取
+	required uint32 allianceId			 = 22;
+	required bytes archiveChip		     = 23;  //图鉴碎片状态位标志
+    required bytes archiveLevel          = 24;  //图鉴等级
+    required bytes archiveReward         = 25;  //图鉴奖励已领次数
+    required uint32 power                = 26;  //体力
+    required uint32 recoverTime          = 27;  //恢复时间
+    required uint32 pass                 = 28;  //关卡
+    required bytes limitTimesProps       = 29;  //每日限次道具使用记录
+    required uint32 usePropsTs           = 30;  //每日限次道具使用时戳
+    required uint32 heroId               = 31;  //上阵英雄
+    required uint64 honor                = 32;  //荣誉值
+    required uint32 dailyPower           = 33;  //每日赠送体力值
+    required uint32 dailyPowerTs         = 34;  //每日赠送体力时戳
+    required uint32 onhookCoinTs         = 35;  //挂机金币时戳
+    required uint32 onhookExpTs          = 36;  //挂机经验时戳
+    required uint32 dailyBattleTs        = 37;  //上次踢馆时戳
+    required uint32 dailyBattleCount     = 38;  //每日踢馆次数 
+    required uint32 inviteFriendCount    = 39;  //邀请好友人数
+    required uint64 inviteRewardMark     = 40;  //邀请玩家奖励领取标志
+    required uint32 inviteAddRewardMark  = 41;  //累积邀请玩家奖励标志
+    required uint32 freeDrawRewardsTs    = 42;  //免费抽奖时戳
+}
+
+message ActivityItem{
+	required uint32	id			= 1;
+	required uint32	bts			= 2;
+	required uint32	ets			= 3;
+	required uint32	ver			= 4;
+}
+message Activity{
+	repeated ActivityItem act	 = 1;
+}
+
+//排位赛
+message GradeBattle
+{
+    required uint32 grade           = 1; //排位
+    required uint32 dailyScore      = 2; //每日积分
+    required uint32 score           = 3; //积分
+    required uint32 ts              = 4; //每日奖励时戳
+}
+
+
+message User 
+{
+	required Base base										= 1;
+	required uint32 ts										= 2; //服务器时间
+	required Activity activity								= 3; //活动时间
+	optional ProtoNotify.NotifyItemCPPAll 	notifies		= 4; //活动的通知
+	required AccumulateCharge	       charges				= 5; //累积充值.与累积充值活动无关。只保留7日充值数据
+	required ProtoActivity.GameAcitivityAllCPP gameactivity	= 6; //已开启的活动
+	repeated DataCommon.PropsItemCPP	 item	            = 7; //物品
+	required uint32 opents									= 8; //开服时间
+    required HerosInfo heros                                = 9; //英雄属性
+    required CardsInfo cards                                = 10; //卡牌信息
+    required UnlockCards unlock                             = 11; //已解锁的卡牌
+    required GradeBattle grade                              = 12; //排位赛
+    required FriendInfo friends                             = 13; //好友
+    required OnhookReward  onhook                           = 14; //挂机
+    required MartialClub   allclub                          = 15; //武馆
+    required ProtoNotify.PostItemCPPAll  post               = 16; //通知
+    required uint32  drawRewardId                           = 17; //抽奖活动奖励id
+    repeated InivteUserInfoCPP   inviteInfo                 = 18; //邀请玩家信息  
+}
+
+message RequestOtherUser{
+		required uint32 uid = 1;
+}
+message OtherUser {
+		required Base base								= 1;
+}
+
+message Tutorialstage{	
+	required uint32 tutorialStage		 = 1;
+}
+
+message ServerTime{	
+	required uint32 ts					 = 1;
+}
+
+//////////////////////////////////
+//消耗钻石
+message CostCashReq {
+	required uint32  cash 	 	= 1;  //消耗钻石数
+	required string  opCode 	= 2;  //操作备注（不能为空,勿用中文）
+	required uint32	 operation 	= 3;  //用于区分客户端逻辑
+}
+
+message CostCashResp {
+	required uint32  cash 		= 1;  //最新钻石数
+	required uint32	 operation 	= 2;  //用于区分客户端逻辑
+}
+//////////////////////////////////
+
+//7天内的充值数据
+message ChargeItem
+{
+	required uint32 cash = 1;  //充值金额
+	required uint32 ts 	 = 2;   //充值时间
+}
+
+message AccumulateCharge
+{
+	repeated ChargeItem accumulateCharge	= 1;   //累积充值
+}
+
+//充值后的推送
+message PushAccumulateChangeReq
+{
+	required AccumulateCharge  changeAcccharge = 1;  //改变后的累积充值
+}
+
+message BuyMaterialInfo
+{
+	required uint32 propsid  = 1;
+	required uint32 propscnt = 2;
+}
+
+message BuyMaterialReq
+{
+	repeated BuyMaterialInfo buyinfo = 1;
+}
+
+message BuyMaterialResp
+{
+	required DataCommon.CommonItemsCPP commons  = 1;  //属性或者道具的通用修改
+}
+
+
+//跨服访问
+message RequestOtherUserBC
+{
+	required uint32 othuid = 1;  //要访问的他人uid
+	required uint32 myuid = 2;  //访问者的uid
+}
+
+//加速
+message SpeedUpReq
+{
+	required uint32 type 	= 1;  //加速的功能类型. 1-建筑和各生产线  2-订单  3-卡车  4-航运
+	optional uint32 ud		= 2; //ud.适合于同一类型下的多个ud.当只有一个ud时，可不填
+} 
+
+message SpeedUpResp
+{
+	optional DataCommon.CommonItemsCPP commons  = 1; //钻石或收获
+}
+
+message HerosInfo
+{
+    repeated ProtoHero.HeroBaseInfoCPP hero 		= 1;
+}
+
+message CardsInfo
+{
+    repeated ProtoCards.UserCardsCPP userCards      = 1;
+}
+
+message UnlockCards
+{
+    repeated ProtoCards.UnlockCardsCPP  unlockInfo     = 1;
+}
+
+message FriendInfo
+{
+     repeated ProtoFriend.RecommendInfo info  = 11; //好友
+}
+
+message OnhookReward
+{
+     required DataCommon.CommonItemsCPP commons   = 1;  //离线挂机奖励  
+}
+
+
+message MartialClub
+{
+    repeated ProtoMartialClub.SingleMartialClub  club   =  1;
+}
+
+
+
+//武馆英雄信息
+message MartialHero
+{
+    repeated ProtoMartialClub.MartialHeroInfo heroInfo = 1;
+}
+
+//体力购买
+message  BuyPowerReq
+{
+    required uint32 propid         = 1; //道具id
+    required uint32 ts             = 2; //用于计算体力
+}
+
+message BuyPowerResp
+{
+    required  DataCommon.CommonItemsCPP commons = 1; //道具消耗,体力增加值
+}
+
+
+//玩家在线挂机道具奖励
+message OnhookOnlinePropReward
+{
+    required DataCommon.CommonItemsCPP commons   = 1;
+}
+
+//邀请好友信息
+message InivteUserInfoCPP
+{
+    required uint32 uid                  = 1;
+    required bytes name                  = 2;
+	required bytes fig                   = 3;
+}
+
+//邀请好友链接
+message InviteActivityUrlReq
+{
+   required uint32 uuid     = 1; //发出邀请链接的人
+}
+
+//跨服邀请好友链接
+message CSInviteActivityUrlReq
+{
+   required uint32 uuid     = 1; //发出邀请链接的人
+   required uint32 uid      = 2; //被邀请的人
+}
+
+//领取邀请好友奖励
+message GetInviteRewardReq
+{
+    required uint32 seq     = 1; //邀请好友序号
+}
+
+message GetInviteRewardResp
+{
+    required  uint64        mark        = 1; 
+    required  DataCommon.CommonItemsCPP commons = 2; //奖励
+}
+
+//领取累积邀请好友奖励
+message GetAddInviteRewardReq
+{
+    required uint32 num     = 1; //累积邀请人数
+}
+
+message GetAddInviteRewardResp
+{
+    required  uint32     mark                   = 1;
+    required  DataCommon.CommonItemsCPP commons = 2; //奖励
+}
+
+
+//获取抽奖奖励
+message GetDrawRewardReq
+{
+    required uint32  free       = 1;  //0: 免费 1: 花钻
+}
+
+message GetDrawRewardResp
+{
+    required  uint32     nextId                 =   1; //下次奖励id
+    required  uint32     index                  =   2; //奖励索引
+    required  DataCommon.CommonItemsCPP commons =   3; //奖励
+}
+
+//新手加经验
+message NewUserAddExpReq
+{
+    required  uint32  exp   = 1;
+}
+
+message NewUserAddExpResp
+{
+    required DataCommon.CommonItemsCPP commons	= 1;
+}
+

@@ -1,0 +1,33 @@
+package AddWeight;
+
+message PlayerAddWeight
+{
+    required  uint32 level      =   1;  //等级
+    repeated  uint32 weight     =   2;  //不同技能对应权重
+}
+
+message PvpAddWeight
+{
+    required  uint32 failCnt        =  1;  //失败次数
+    repeated  uint32 weight         =  2; //不同技能对应权重
+}
+
+message VipAddWeight
+{
+    required  uint32 level          =  1;  //等级
+    repeated  uint32 weight         =  2;  //不同技能对应权重
+}
+
+
+message AddWeightList
+{
+    repeated PlayerAddWeight player    = 1; //玩家等级增加权重 
+    repeated PvpAddWeight    pvp       = 2; //pvp失败次数增加权重
+    repeated VipAddWeight    vip       = 3; //vip等级增加权重
+}
+
+
+message AddWeightInfo
+{
+    required AddWeightList addWeight      = 1; //增加权重
+}

@@ -1,0 +1,28 @@
+//武馆
+package MartialClub;
+import "CommonGiftConfig.proto"; 
+
+//收益
+message MartialClubReward
+{
+    required uint32 level   = 1;    //武馆等级
+    optional uint32 propsTs  = 2;   //道具产出时戳
+    required uint32 levelUpTs  = 3; //升级时间
+    required CommonGiftConfig.CommonModifyItem reward 	= 4; //奖励    
+}
+
+message MartialClubInfo
+{
+    required uint32  grade              = 1; //星级
+    required uint32  capacity           = 2; //容量(邀请好友英雄数)
+    required uint32  unlockLevel        = 3; //解锁等级
+    required uint32  multiple           = 4; //倍数
+    repeated MartialClubReward rewards  = 5; //收益
+
+}
+
+
+message MartialClubCfg
+{
+    repeated MartialClubInfo club  = 1;
+}
