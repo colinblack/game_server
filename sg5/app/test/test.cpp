@@ -571,7 +571,7 @@ int main(int argc, char *argv[]) {
 		*/
 
 
-/**********道具发放*********************************
+/**********道具发放*********************************/
 	if (argc < 4)
 	{
 		std::cout << "parsms error" << std::endl;
@@ -590,7 +590,7 @@ int main(int argc, char *argv[]) {
 		unsigned uid = 0;
 		fin >> uid;
 		lgEq.AddOneItem(uid, id, c, "test", result);
-	}*/
+	}/**/
 
 /*************统计查询************************
 	if (argc < 2)
@@ -783,7 +783,7 @@ int main(int argc, char *argv[]) {
 		system(c.c_str());
 	}*/
 
-	/**************混元技*********************/
+	/**************混元技*********************
 	if (argc < 2)
 	{
 		std::cout << "parsms error" << std::endl;
@@ -835,6 +835,6 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-
+**************************************************/
 	return R_SUCCESS;
 }

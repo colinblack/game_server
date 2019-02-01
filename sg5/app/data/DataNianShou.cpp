@@ -97,8 +97,10 @@ int CDataNianShou::LoadNianShou(unsigned uid, unsigned bossId, unsigned &blood, 
 	}
 	CAutoLock lock(&(m_sh[index]), true);
 
-
-	if(!Time::IsToday(pdata->ts))
+	unsigned fullblood;
+	if (!Config::GetUIntValue(fullblood, "nianshou_blood"))
+		fullblood = 100000000;
+	if(!Time::IsToday(pdata->ts) || (pdata->fullBlood == pdata->blood && pdata->fullBlood!=fullblood))
 	{
 		/*
 		if(CTime::GetDayInterval(Config::GetIntValue(CONFIG_OPEN_TS), Time::GetGlobalTime()) == 0)
@@ -219,7 +221,7 @@ int CDataNianShou::LoadNianShou(unsigned uid, unsigned bossId, unsigned &blood, 
 			pdata->fullBlood = m_minNianshouBlood[index];
 		else if(pdata->fullBlood > m_maxNianshouBlood[index])
 			pdata->fullBlood = m_maxNianshouBlood[index];*/
-		pdata->fullBlood = 7000000;
+		pdata->fullBlood = fullblood;
 		pdata->blood = pdata->fullBlood ;
 		memset(pdata->challengers, 0, sizeof(pdata->challengers));
 		pdata->challNum = 0;

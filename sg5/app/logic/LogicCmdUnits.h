@@ -2701,6 +2701,7 @@ public:
 		};
 /********************************************************************/
 //autolable6
+CHARGE_DRAW_ACT(CONFIG_hanjiajingxuan, false, false)
 CHARGE_DRAW_ACT(CONFIG_fuzhuhesui, true, false)
 CHARGE_DRAW_ACT(CONFIG_zhuniandaji, true, false)
 CHARGE_DRAW_ACT(CONFIG_vicky_qingrenjie, true, true)

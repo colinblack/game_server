@@ -103,7 +103,7 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 
 				if (pTable->day.user[p].cash >= 148888)
 					p2 = 1;
-				else if (pTable->day.user[p].cash >= 88888)
+				else if (pTable->day.user[p].cash >= 98888)
 					p2 = 2;
 				else if (pTable->day.user[p].cash >= 28888)
 					p2 = 3;
@@ -221,7 +221,7 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 						p2 = 1;
 					else if (pTable->all.user[p].cash >= 288888)
 						p2 = 2;
-					else if (pTable->all.user[p].cash >= 88888)
+					else if (pTable->all.user[p].cash >= 98888)
 						p2 = 3;
 					else if (pTable->all.user[p].cash >= 28888)
 						p2 = 4;

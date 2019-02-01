@@ -429,6 +429,7 @@ public:
 		CGI_SET_ACTION_DEFAULT_MAP(CONFIG_NAME, CONFIG_NAME##_ACT)
 	/********************************************************************/
 //autolable7
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_hanjiajingxuan)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_fuzhuhesui)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_zhuniandaji)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_vicky_qingrenjie)
@@ -4323,6 +4324,7 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	CGI_ACTION_FUNCTION(CONFIG_NAME##_ACT, CONFIG_NAME##_Unit::DrawParams, CONFIG_NAME##_Unit, false, DrawImpl);
 	/********************************************************************/
 //autolable8
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_hanjiajingxuan)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_fuzhuhesui)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_zhuniandaji)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_vicky_qingrenjie)

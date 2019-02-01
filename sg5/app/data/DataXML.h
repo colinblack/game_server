@@ -1741,6 +1741,7 @@ public:
 #define INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_NAME) m_##CONFIG_NAME = CONFIG_NAME##_CONFIG(data);
 /********************************************************************/
 //autolable3
+CHARGE_DRAW_ACT_CONFIG(CONFIG_hanjiajingxuan)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_qingrenjie)
@@ -4196,6 +4197,7 @@ public:
 	//vicky的开服活动
 	const ConfigVickyNewOpen& GetVickyNewOpen() const;
 //autolable4
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_hanjiajingxuan)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_qingrenjie)

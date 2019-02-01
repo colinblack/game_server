@@ -5801,6 +5801,7 @@ int CDataXML::InitVickyAccX()
 		m_huangzhong = Confighuangzhong(data);
 		m_VickyNewOpen = ConfigVickyNewOpen(data);
 //autolable5
+INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_hanjiajingxuan)
 INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
 INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
 INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_qingrenjie)

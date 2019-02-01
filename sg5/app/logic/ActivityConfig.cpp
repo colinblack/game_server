@@ -64,6 +64,7 @@ const char* all_activity_table[] = {
 	   CONFIG_VICKY_NNA, //vicky懒得给我说名字的活动
 	   CONFIG_BIRDBRIDGE, //七夕相会
 //autolable2
+CONFIG_hanjiajingxuan,
 CONFIG_fuzhuhesui,
 CONFIG_zhuniandaji,
 CONFIG_vicky_qingrenjie,

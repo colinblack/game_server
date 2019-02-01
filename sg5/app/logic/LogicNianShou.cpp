@@ -124,6 +124,11 @@ int CLogicNianShou::GetNianShouInfo(unsigned uid, Json::Value &data, unsigned bo
 	NianShouChallenger self;
 	NianShouChallenger last;
 	vector<NianShouChallenger> top;
+
+	unsigned now = Time::GetGlobalTime();
+	time_t ttt = time(NULL);
+	struct tm* stime=localtime(&ttt);
+
 	unsigned fullBlood = 0;
 	data.resize(NIAN_SHOU_ID_MAX - NIAN_SHOU_ID_MIN + 1);
 	for (unsigned id = NIAN_SHOU_ID_MIN; id <= NIAN_SHOU_ID_MAX; id++)
@@ -222,18 +227,13 @@ int CLogicNianShou::GetNianShouInfo(unsigned uid, Json::Value &data, unsigned bo
 			temp_data["newAct"] = newAct;
 			data.append(temp_data);
 		}
+
+		if (id == NIAN_SHOU_ID_MIN && stime->tm_hour >= 15 && !pBoss->SetRewarded(NIAN_SHOU_ID_MIN))
+			rewardNianShou(0, NIAN_SHOU_ID_MIN, 0,top,last);
+
+		if (id == NIAN_SHOU_ID_MAX && stime->tm_hour >= 19 && !pBoss->SetRewarded(NIAN_SHOU_ID_MAX))
+			rewardNianShou(0, NIAN_SHOU_ID_MAX, 0,top,last);
 	}
-
-	unsigned now = Time::GetGlobalTime();
-	time_t ttt = time(NULL);
-	struct tm* stime=localtime(&ttt);
-
-	if (stime->tm_hour >= 13 && !pBoss->SetRewarded(50011))
-		rewardNianShou(0, 50011, 0,top,last);
-
-	if (stime->tm_hour >= 19 && !pBoss->SetRewarded(50012))
-		rewardNianShou(0, 50012, 0,top,last);
-
 	return 0;
 }
 
@@ -553,6 +553,7 @@ void CLogicNianShou::rewardNianShou(unsigned uid, int bossId,unsigned damage,con
 	for (unsigned i = 0; i < top.size(); i++)
 	{
 		if (i >= 10) break;
+		if (top[i].damage < 100000) break;
 		if(updatesmap.count(top[i].uid))
 		{
 			updatesmap[top[i].uid]["canjuan"] = canjuan[i];

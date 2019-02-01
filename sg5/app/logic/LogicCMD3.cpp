@@ -3184,6 +3184,12 @@ int CLogicCMD::XiaoNian2018(unsigned uid, const Json::Value & input, Json::Value
 	result["lastseq"] = dataUser.lastseq;
 	result["saveuserid"] = uid;
 
+	ret = logicUser.SetUser(uid, dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
 	ActInfoConfig actconfig(CONFIG_XIAONIAN_2018);
 
 	CLogicSecinc logicSec;
@@ -3270,16 +3276,12 @@ int CLogicCMD::XiaoNian2018(unsigned uid, const Json::Value & input, Json::Value
 		basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
 	}
 
+	user.Save();
+
 
 	result["newAct"] = newAct;
 
 	ret = logicSec.SetOneSecinc(uid, newAct);
-	if (ret)
-	{
-		return ret;
-	}
-
-	ret = logicUser.SetUser(uid, dataUser);
 	if (ret)
 	{
 		return ret;

@@ -957,6 +957,7 @@
  */
 /********************************************************************/
 //autolable1
+#define CONFIG_hanjiajingxuan "hanjiajingxuan"
 #define CONFIG_fuzhuhesui "fuzhuhesui"
 #define CONFIG_zhuniandaji "zhuniandaji"
 #define CONFIG_vicky_qingrenjie "vicky_qingrenjie"
@@ -1457,6 +1458,7 @@ NAT_CONFIG_vicky_qingrenjie			= 199,
 NAT_CONFIG_zhuniandaji			= 200,
 NAT_CONFIG_fuzhuhesui			= 201,
 	NAT_NIANSHOU_BOSS           = 202,
+NAT_CONFIG_hanjiajingxuan			= 203,
 NAT_MAX
 };
 
