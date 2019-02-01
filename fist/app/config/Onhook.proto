@@ -1,0 +1,18 @@
+package Onhook;
+
+import "CommonGiftConfig.proto";
+
+message OnhookInfo
+{
+    required uint32  stageId        = 1;  //关卡id
+    required uint32  exp            = 2;
+    required uint32  coin           = 3;
+    repeated uint32  propsId        = 4; //道具id
+}
+
+
+message Onhook
+{
+    repeated  OnhookInfo  onhooks   = 1;
+}
+

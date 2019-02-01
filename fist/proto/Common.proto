@@ -1,0 +1,48 @@
+package Common;
+
+message Login {
+		required uint32 uid 				= 1;
+		required string openid				= 2;
+		required string openkey				= 3;
+		required uint32 ts 					= 4;
+		required string sig					= 5;
+		required bool 	isnew				= 6;
+		required uint32 platform 			= 7;
+		optional bytes fig					= 8;
+		optional bytes name					= 9;
+		optional uint32 uuid				= 10;//分享者的uid
+		optional uint32 uact				= 11;//分享类型 从1开始
+		optional uint32 uts					= 12;//分享时间
+		optional uint32 uinfo				= 13;//分享链接的额外信息
+}
+message Kick{
+		required string reason				= 1;
+}
+message ChangeName {
+		required uint32 uid 				= 1;
+		required bytes name				 	= 2;
+		required bytes fig				 	= 3;
+}
+message ReplyChangeName {
+		required bytes name				 	= 1;
+		required bytes fig				 	= 2;
+}
+message Pay {
+		required uint32 uid 				= 1;
+		required uint32 cash 				= 2;
+		required uint32 ts 					= 3;
+}
+message ReplyPay {
+		required uint32 ret 				= 1;
+		optional bytes name				 	= 2;
+}
+message NoticePay {
+		required uint32 cash 				= 1;
+		required uint32 viplevel			= 2; 
+		required uint32	accrecharge		= 3;
+}
+
+message ShutDown {
+		required uint32 ts					= 1;
+		required string sign				= 2;
+}

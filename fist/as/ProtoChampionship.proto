@@ -1,0 +1,51 @@
+package ProtoChampionship;
+
+import "ProtoBattleDemo.proto";
+import "DataCommon.proto";
+
+
+//比赛玩家信息
+message MatchUserInfoCPP
+{
+    required uint32 uid         = 1;
+    required uint32 battleid	= 2;
+    optional string fig         = 3; //头像
+    optional string name        = 4; //名字
+    optional uint32 grade       = 5; //段位
+    optional uint32 heroid      = 6; //英雄id
+}
+
+//比赛信息
+message MatchInfoCPP
+{
+    repeated  MatchUserInfoCPP players = 1;  //所有比赛玩家
+}
+
+
+//战斗信息
+message BattleInfoCPP
+{
+    required  uint32    attack    = 1; //0: 进攻, 1: 防守
+    optional  ProtoBattleDemo.ProtoBattleDemo  battle       =   2; //战斗结果
+    optional  DataCommon.CommonItemsCPP    commons          =   3; //消耗
+}
+
+
+message ProtoJoinInMatchReq
+{
+    required  uint32 id         = 1;  //场次id
+    required  uint32 heroid     = 2;  //参加比赛的英雄
+    required  uint32 free       = 3;  //0: 免费, 1: 付费
+}
+
+message ProtoJoinInMatchResp
+{
+    optional  DataCommon.CommonItemsCPP    commons                  =   1; //消耗
+}
+
+//开始比赛
+message ProtoStartBattleReq
+{
+	required  uint32 battleid	= 1; //比赛id
+    repeated  uint32 props  	= 2; //道具
+}

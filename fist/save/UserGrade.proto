@@ -1,0 +1,19 @@
+package UserGrade;
+
+message User
+{
+    required  uint32  uid           =  1;
+    required  uint32  grade         =  2;      //段位
+    required  uint32  score         =  3;      //积分
+    required  uint32  dailyScore    =  4;      //每日积分
+    required  uint32   win          =  5;      //胜利累计次数    
+    repeated  bool  winRecord       =  6;      //连胜纪录
+    required  uint32  dailyRewardTs =  7;      //每日奖励时戳
+    required  uint32  refreshCnt    =  8;      //随机挑战玩家刷新次数
+}
+
+
+message Grade
+{
+    repeated  User users        = 1;
+}

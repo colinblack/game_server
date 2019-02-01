@@ -1,0 +1,76 @@
+import "CommonGiftConfig.proto";
+
+package Hero;
+
+
+message HeroLevelAttribute
+{
+    required uint32 level           = 1; //等级
+    required uint32 hp              = 2; //初始血量
+    required uint32 att             = 3; //初始攻击
+    required uint32 def             = 4; //初始防御
+    required uint32 first           = 5; //先手
+}
+
+
+message HeroAttribute
+{
+    required uint32 hit                = 1; //命中
+    required uint32 dodge              = 2;  //闪避
+    required uint32 critStrike         = 3; //暴击
+    required uint32 critRate           = 4; //暴击伤害
+    required uint32 critResist         = 5; //抗暴击
+    repeated  HeroLevelAttribute      levelAttr    = 6; //等级属性
+    
+}
+
+message SkillInfo
+{
+    required  uint32    level        = 1; //等级
+    required double     multiple     = 2;  //伤害倍数
+    required uint32     hurtValue    = 3;  //固定伤害值
+    required uint32     fight_power  = 4;  //战力
+}
+
+
+message HeroSkill
+{
+    required uint32     id               =  1;
+    repeated SkillInfo  skillInfo        = 2;
+}
+
+message HeroInfoList
+{
+    required  uint32                id                  = 1; 
+    required  HeroAttribute         attr                = 2;  //属性
+    required CommonGiftConfig.CommonModifyItem 	cost    = 3;  //消耗
+    optional  uint32                unlockLevel         = 4; //英雄等级解锁
+    optional  uint32                unLockDayNum        = 5; //英雄解锁天数
+    optional  uint32                unLockHeroNum       = 6; //英雄解锁数量
+    repeated  HeroSkill             skill               = 7;  //技能
+    required CommonGiftConfig.CommonModifyItem 	shareReward  = 8;  //获得英雄分享奖励
+}
+
+//英雄升级
+message HeroLevelExp
+{
+    required  uint32               level          = 1; //等级
+    required  uint64               exp            = 2; //经验
+    required  int32               coin            = 3; //金币
+}
+
+//英雄技能升级
+message HeroSkillUp
+{
+    required  uint32 level                     = 1;  //等级    
+    required CommonGiftConfig.CommonModifyItem 	cost		= 2; //金币和道具
+}
+
+
+message HeroInfo
+{
+    repeated  HeroInfoList hero        = 1;
+    repeated  HeroLevelExp levelExp    = 2;
+    repeated  HeroSkillUp  skillUp     = 3;  
+}
+

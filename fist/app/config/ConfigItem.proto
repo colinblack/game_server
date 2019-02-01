@@ -1,0 +1,20 @@
+package ConfigItem;
+import "CommonGiftConfig.proto";
+
+message PropItem
+{
+	required uint32 id										= 1;
+    required uint32 type                                    = 2;  //道具类型
+	required uint32 limitnum								= 3;  //数量上限
+	optional CommonGiftConfig.CommonModifyItem dimond_cost	= 4;  //钻石购买价格
+    optional uint32 value                                   = 5;  //道具固定值
+    optional double factor                                  = 6;  //道具系数
+    optional uint32 turn                                    = 7;  //持续回合
+    optional uint32 heroid                                  = 8;   //图鉴所属英雄id
+    optional uint32 seq                                     = 9;  //图鉴碎片序号
+}
+
+message Items
+{
+	repeated PropItem itemes	= 1; //道具
+}

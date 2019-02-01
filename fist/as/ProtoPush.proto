@@ -1,0 +1,58 @@
+package ProtoPush;
+
+import "DataCommon.proto";
+import "ProtoHero.proto";
+
+
+//用户升级了
+message PushUserUpLevel
+{
+	required DataCommon.CommonItemsCPP commons	= 1;
+}
+
+//英雄升级
+message PushHeroUpLevel
+{
+    required  ProtoHero.HeroBaseInfoCPP     hero      = 1;   //英雄属性信息
+}
+
+//段位升级
+message PushGradeUp
+{
+	required DataCommon.CommonItemsCPP commons	= 1;
+}
+
+//图鉴升级
+message PushArchiveUp
+{
+    required  ProtoHero.HeroBaseInfoCPP     hero      = 1;   //英雄属性信息
+}
+
+
+//连胜纪录
+message PushWinstreak
+{
+    required  uint32    count      =    1;
+}
+
+//整点推送
+message PushOnceEveryDayReward
+{
+	
+}
+
+//好友送体力推送
+message PushDonationPower
+{
+    required DataCommon.CommonItemsCPP commons	= 1;
+}
+
+//武馆收益更新
+message PushMartialIncomeUpdate
+{
+}
+
+
+
+
+

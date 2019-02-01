@@ -1,0 +1,44 @@
+package Archive;
+import "CommonGiftConfig.proto"; 
+
+message Attributes
+{
+    optional  uint32 hp              = 1; //血量
+    optional  uint32 att             = 2; //攻击
+    optional  uint32 def             = 3; //防御
+    optional  uint32 first           = 4; //先手
+    optional  uint32 hit             = 5; //命中
+    optional  uint32 dodge           = 6; //闪避
+    optional  uint32 critStrike      = 7; //暴击
+    optional  uint32 critRate        = 8; //暴击伤害
+    optional  uint32 critResist      = 9; //抗暴击
+    optional  double hp_add          = 10; //血量加成
+    optional  double att_add         = 11; //攻击加成
+    optional  double def_add         = 12; //防御加成
+    required  uint32 fight_power     = 13; //战力
+}
+
+message LevelAttribute
+{
+    required  uint32   level                 = 1; //等级
+    required Attributes   attr               = 2; //图鉴属性  
+}
+
+message HeroWithArchive
+{
+    required uint32         id             = 1; //图鉴id
+    repeated LevelAttribute levelAttr      = 2; 
+}
+
+message ArchiveRward
+{
+    required    uint32      level                       = 1; 
+    required CommonGiftConfig.CommonModifyItem reward 	= 2; //奖励    
+}
+
+message ArchiveInfo
+{
+    repeated  HeroWithArchive  archiveInfo  = 1;
+    repeated  ArchiveRward     rewards       = 2; 
+}
+

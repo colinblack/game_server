@@ -1,0 +1,40 @@
+package Stars;
+
+import "CommonGiftConfig.proto";
+
+message Attributes
+{
+    optional  uint32 hp              = 1; //血量
+    optional  uint32 att             = 2; //攻击
+    optional  uint32 def             = 3; //防御
+    optional  uint32 first           = 4; //先手
+    optional  uint32 hit             = 5; //命中
+    optional  uint32 dodge           = 6;  //闪避
+    optional  uint32 critStrike      = 7; //暴击
+    optional  uint32 critRate        = 8; //暴击伤害
+    optional  uint32 critResist      = 9; //抗暴击
+    optional  double hp_add          = 10; //血量加成
+    optional  double att_add         = 11; //攻击加成
+    optional  double def_add         = 12; //防御加成
+}
+
+message StarList
+{
+    required   uint32     id          = 1; //星级id
+    required   Attributes attr        = 2; //星级属性
+    required   CommonGiftConfig.CommonModifyItem price = 3; //消耗
+    required   uint32     fight_power = 4; //战力
+}
+
+
+message HeroWithStars
+{
+    required uint32       heroid             = 1; //英雄id
+    repeated StarList     list               = 2; //星级列表
+}
+
+
+message StarInfo
+{
+    repeated  HeroWithStars  starInfo  = 1;
+}

@@ -1,0 +1,36 @@
+package RobotConfig;
+
+message Npc
+{
+    required uint32 id      =  1;
+    required uint32 level   =  2;
+}
+
+message RobotItem
+{
+    required uint32 id              = 1; 
+    required string name            = 2; //名字
+    required uint32 level           = 3; //等级
+    optional uint32 grade           = 4;//段位
+    repeated uint32 props           = 5; //道具
+    repeated Npc    npc             = 6; //npc
+}
+
+//排位赛假玩家
+message RobotGradeBattleItem
+{
+    required uint32    grade          = 1;
+    repeated RobotItem item           = 2;
+}
+
+//杯赛假玩家
+message RobotChampionshipItem
+{
+    repeated RobotItem item           = 1;
+}
+
+message  Robots
+{
+    repeated RobotGradeBattleItem  gradeBattle      = 1;  //排位赛配置
+    required RobotChampionshipItem championship     = 2;  //杯赛玩家
+}

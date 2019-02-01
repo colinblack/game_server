@@ -1,0 +1,143 @@
+import  "DataCommon.proto";
+
+package ProtoHero;
+
+message HeroBaseInfoCPP
+{
+    required  uint32 heroid          = 1; //英雄id
+    optional  uint64 exp             = 2; //经验
+    optional  uint32 addExp          = 3; //当前经验-当前等级经验,前端显示用
+    optional  uint32 level           = 4; //等级 
+    optional  uint32 hp              = 5; //血量
+    optional  uint32 att             = 6; //攻击
+    optional  uint32 def             = 7; //防御
+    optional  uint32 first           = 8; //先手
+    optional  uint32 hit             = 9; //命中
+    optional  uint32 dodge           = 10;  //闪避
+    optional  uint32 critStrike      = 11; //暴击
+    optional  uint32 critRate        = 12; //暴击伤害
+    optional  uint32 critResist      = 13; //抗暴击
+    optional  uint32 dragonBall      = 14; //龙珠
+    optional  uint32 stars           = 15; //星级
+    repeated  uint32 skill           = 16; //技能
+    optional  uint32 detachUid       = 17; //兼职的武馆所属uid
+    optional  uint32 detachSlot      = 18; //在兼职武馆中的slot
+    optional  uint32 battlePower     = 19; //战力
+}
+
+//购买英雄
+message BuyHeroReq
+{
+    required uint32 heroid          = 1;
+}
+
+message BuyHeroResp
+{
+    required  HeroBaseInfoCPP     hero      = 1;   //英雄属性信息
+    required  DataCommon.CommonItemsCPP commons  = 2;  //消耗
+}
+
+//花金币升级英雄
+message UpgradeHeroByCoinReq
+{
+    required   uint32   heroid   = 1;  //英雄
+    required   uint32   oneclick = 2;   //一键升级 0: 升一级 1 : 升多级
+    
+}
+
+message UpgradeHeroByCoinResp
+{
+    required  DataCommon.CommonItemsCPP commons  = 1;  //消耗
+    required   HeroBaseInfoCPP hero     = 2; //英雄信息
+}
+
+//英雄技能升级
+message UpGradeHeroSkillReq
+{
+     required  uint32  heroid           = 1; 
+     required  uint32  skillid          = 2; //0-3    
+}
+
+message UpGradeHeroSkillResp
+{
+    required  uint32  level                      = 1;
+    required  DataCommon.CommonItemsCPP commons  = 2; //剩下的道具和金币
+    required  uint32  battlePower                = 3; //战力
+}
+
+
+//英雄升星
+message UpGradeHeroStarReq
+{
+    required  uint32  heroid   = 1; 
+    required  uint32  starid   = 2; //星级id
+}
+
+message UpGradeHeroStarResp
+{
+    required  DataCommon.CommonItemsCPP commons  = 1; //剩下的道具和金币
+    required  HeroBaseInfoCPP hero               = 2; //英雄信息
+}
+
+//设置英雄
+message SetHeroReq
+{
+    required  uint32  heroid   = 1;
+}
+
+message SetHeroResp
+{
+}
+
+//图鉴碎片激活或取消激活
+message ActArchiveChipReq
+{    
+    required  uint32 id       =  1;
+    required  uint32 act      =  2; //0: 激活 1 取消
+}
+
+message ActArchiveChipResp
+{
+   required  DataCommon.CommonItemsCPP commons  = 1; //消耗
+   optional  HeroBaseInfoCPP     hero           = 2; //英雄属性信息
+}
+
+//图鉴奖励
+message ArchiveRewardReq
+{
+    required  uint32     id             = 1; //图鉴id
+}
+
+message ArchiveRewardResp
+{
+    required   DataCommon.CommonItemsCPP commons  = 1; //奖励
+}
+
+//激活龙珠
+message ProtoActDragonBallReq
+{
+    required   uint32  heroid           = 1; //英雄id
+    required   uint32  idx              = 2; //索引1~9
+}
+
+message ProtoActDragonBallResp
+{
+    required   DataCommon.CommonItemsCPP commons  = 1; //奖励
+    required   HeroBaseInfoCPP     hero           = 2; //英雄属性信息
+}
+
+//购买英雄分享奖励s
+message ProtoBuyHeroShareRewardReq
+{
+    required  uint32  heroid        = 1; //英雄id
+}
+
+message ProtoBuyHeroShareRewardResp
+{
+    required   DataCommon.CommonItemsCPP commons  = 1; //奖励
+}
+
+
+
+
+

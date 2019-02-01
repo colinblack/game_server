@@ -1,0 +1,40 @@
+package  ActivityConfig;
+
+import "CommonGiftConfig.proto";
+
+//邀请奖励
+message InviteFriendReward
+{
+    required  uint32  seq       = 1; //被邀请的玩家序号
+    required CommonGiftConfig.CommonModifyItem rewards 	= 2; //奖励
+}
+
+//累积奖励
+message AccumulateReward
+{
+    required  uint32  num       = 1; //被邀请玩家数量
+    required CommonGiftConfig.CommonModifyItem rewards 	= 2; //奖励
+}
+
+message  LuckyDrawItem
+{
+    required  CommonGiftConfig.CommonModifyItem rewards            = 1; //奖励  
+    required  uint32 weight                                        = 2; //权重
+    required  uint32 freeWeight                                    = 3; //免费邀请权限
+}
+
+//幸运抽奖
+message LuckyDrawReward
+{
+    required  uint32 id                                     = 1; //奖励表id
+    required  uint32 range                                  = 2; //消耗钻石范围
+    repeated  LuckyDrawItem  items                          = 3;  
+}
+
+message Activity
+{
+    repeated  InviteFriendReward  inviteRewards     = 1;   //邀请奖励
+    repeated  AccumulateReward    accRewards        = 2;   //累积邀请奖励
+    required  uint32              luckyRewardCost   = 3;   //抽奖消耗钻石
+    repeated  LuckyDrawReward     luckyReward       = 4;   //幸运抽奖
+}

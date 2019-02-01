@@ -1,0 +1,53 @@
+package Offline;
+
+
+message Skill
+{
+    optional uint32 id              = 1;
+    optional uint32 type            = 2;
+    optional double hurt            = 3;
+    optional double multiple        = 4;
+    optional uint32 initWeight      = 5;
+    optional uint32 userAddWeight   = 6;
+}
+
+message Attr
+{
+    optional  double hp             = 1;
+    optional  double att            = 2;
+    optional  double def            = 3;
+    optional  uint32 first          = 4; //先手
+    optional  uint32 hit            = 5; //命中
+    optional  uint32 dodge          = 6;  //闪避
+    optional  uint32 critStrike     = 7; //暴击
+    optional  double critRate       = 8; //暴击伤害
+    optional  uint32 critResist     = 9; //抗暴击
+    optional  double battlePower    = 10; //战力
+}
+
+message Hero
+{
+    required uint32 id          = 1;
+    required Attr   attr        = 2;
+    repeated Skill  skills      = 3;
+}
+
+
+message User
+{
+    required  uint32 uid        = 1;
+    required  uint32 level      = 2;
+    optional  uint32 vipLevel   = 3;
+    optional  uint32 allianceId = 4;
+    optional  uint32 ts         = 5;
+    required  string name       = 6;
+    required  string fig        = 7;
+    repeated  Hero   heros      = 8;
+    repeated  uint32 props      = 9;  
+    required  uint32 lastLoginTime = 10;
+}
+
+message Info
+{
+    repeated User users         = 1;
+}

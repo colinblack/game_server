@@ -1,0 +1,66 @@
+package ProtoBattleDemo;
+
+message ProtoBattleDemoHeroSkill {	//发送给前端时只有id type
+	required uint32 id				 	= 1;//技能id
+	optional uint32 type			 	= 2;//技能类型0-3
+	optional double s				 	= 3;//技能系数	
+	optional int32 c				 	= 4;//技能固定值
+	optional uint32 pc				 	= 5;//初始权重
+	optional uint32 pa			 		= 6;//增加权重
+}
+
+message ProtoBattleDemoItem {		//发送给前端时只有id type
+	required uint32 id				 	= 1;//道具id	
+	optional uint32 type			 	= 2;//道具类型0-2
+	optional double s				 	= 3;//道具系数
+	optional int32 c				 	= 4;//道具固定值
+	optional uint32 turn				= 5;//持续回合
+}
+
+message ProtoBattleDemoHero {		//发送给前端时只有id hp
+	required uint32 id				 	= 1;//英雄id
+	optional uint32 hp				 	= 2;//血量
+	optional uint32 att				 	= 3;//攻击
+	optional uint32 def				 	= 4;//防御
+	optional uint32 crit			 	= 5;//暴击
+	optional uint32 acrit			 	= 6;//抗暴击
+	optional uint32 dodge			 	= 7;//闪避
+	optional uint32 adodge			 	= 8;//命中
+	optional double critt			 	= 9;//暴击倍数 暴击伤害=伤害*（1+critt）
+	optional uint32 speed		 		= 10;//先手
+    optional uint32 battlePower         = 11;//战力
+	repeated ProtoBattleDemoHeroSkill skill	= 12;
+}
+
+message ProtoBattleDemoTeam {
+	repeated ProtoBattleDemoHero hero			 	= 1;
+	repeated ProtoBattleDemoItem item			 	= 2;
+	required uint32 level						 	= 3;
+}
+
+message ProtoBattleDemoTurn {
+	required uint32 skillindex						= 1;//技能索引
+	required uint32 itemindex						= 2;//道具索引 01, 2表示不使用道具
+	optional uint32 skilldam						= 3;//技能伤害 0表示未命中
+	optional bool crit								= 4;//是否暴击
+	optional uint32 extradam						= 5;//怒气技能伤害
+}
+
+message ProtoBattleDemoTurnInfo {	
+	required int32 ahp						= 1;
+	required uint32 ap						= 2;
+	required int32 dhp						= 3;
+	required uint32 dp						= 4;
+}
+
+message ProtoBattleDemo {
+	required ProtoBattleDemoTeam attacker		 	= 1;
+	required ProtoBattleDemoTeam defender		 	= 2;
+	optional uint32 first							= 3;//0=攻方先手，1=守方先手
+	optional bool attackerWin						= 4;//攻防是否胜利
+	repeated ProtoBattleDemoTurn turn				= 5;//战斗记录
+	repeated ProtoBattleDemoTurnInfo info			= 6;//战斗记录
+}
+
+
+

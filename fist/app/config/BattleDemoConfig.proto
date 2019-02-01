@@ -1,0 +1,23 @@
+package BattleDemoConfig;
+
+message BattleDemoConfig {
+		required uint32 turn_max			= 1;//两个英雄战斗回合最大限制为30；回合到时，血少的下阵，如果血量一样则攻击方下阵。
+		
+		required double dodge_p				= 2;//概率 = 80% * （攻击方命中值/被攻击方闪避值）
+		required uint32 dodge_max			= 3;//概率最大不超过100%
+		required uint32 dodge_min			= 4;//最小不低于50%
+		required uint32 dodge_c				= 5;//如果9次攻击连续命中，则下次攻击一定被闪避
+		
+		required double crit_p				= 6;//概率 = 30% * （攻击方暴击值/被攻击方抗暴击值）
+		required uint32 crit_max			= 7;//概率最大不超过80%
+		required uint32 crit_min			= 8;//最小不低于5%
+		repeated uint32 crit_l				= 9;//如果n次攻击连续没有触发暴击，则下次攻击一定触发暴击
+		repeated uint32 crit_c				= 10;//n随玩家等级变化
+		
+		required double att_p				= 11;//如果：攻击方攻击力属性值*0.95 > 防御方的防御属性值
+		required double def_p				= 12;//否则：基础伤害 = 攻击方攻击力属性值*0.05
+		
+		repeated uint32 skill_power			= 13;//根据不同技能增加对应的怒气值
+		
+		required uint32 slow_power			= 14;//后手怒气
+}

@@ -1,0 +1,29 @@
+package Stages;
+import "CommonGiftConfig.proto";
+
+message Dragon
+{
+    required uint32 heroid      = 1;
+    required uint32 idx         = 2;
+}
+
+message AllStage
+{
+    required uint32 id        = 1; //关卡id
+    required uint32 level     = 2; //未打过关卡npc等级和技能对应的属性
+    repeated uint32 npcId     = 3; //npc id    
+    repeated uint32 propsId   = 4; //道具id 
+    repeated Dragon dragon    = 5; //掉落龙珠
+    required CommonGiftConfig.CommonModifyItem rewards = 6; //奖励 
+    required uint32 heroExp   = 7; //英雄经验
+}
+
+message StagesInfo
+{
+    repeated AllStage stage      = 1; //关卡
+
+    
+}
+
+
+
