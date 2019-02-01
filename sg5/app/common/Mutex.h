@@ -10,8 +10,8 @@ public:
 	CMutex();
 	~CMutex();
 
-	bool Lock();
-	bool Unlock();
+	bool Lock(int vnum = 1);
+	bool Unlock(int vnum = 1);
 
 private:
 	pthread_mutex_t m_mutex;

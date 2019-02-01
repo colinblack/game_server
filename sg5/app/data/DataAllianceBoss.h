@@ -40,7 +40,7 @@ public:
 	int LoadAllianceBossOpener(unsigned uid, unsigned bossId, unsigned &blood,
 					unsigned &fullBlood,unsigned &vip_grade,unsigned &alliance_id,unsigned &ts);
 	int LoadAllianceBoss(unsigned uid, unsigned bossId, unsigned &blood, unsigned &number, int &selfRank, AllianceBossChallenger &self,
-				vector<AllianceBossChallenger> &top, AllianceBossChallenger &last,unsigned &fullBlood,unsigned &alliance_id);
+				vector<AllianceBossChallenger> &top, AllianceBossChallenger &last,unsigned &fullBlood,unsigned &alliance_id, unsigned &startts);
 	int AttackAllianceBoss(unsigned uid, unsigned bossId, unsigned damage, const string &name,
 			bool &dying, unsigned &blood, unsigned &number, int &selfRank, AllianceBossChallenger &self,
 			vector<AllianceBossChallenger> &top, AllianceBossChallenger &last, vector<AllianceBossChallenger> &lucks

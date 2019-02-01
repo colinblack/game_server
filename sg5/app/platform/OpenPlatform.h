@@ -19,8 +19,18 @@ namespace OpenPlatform
 	//获取当前平台类型
 	PlatformType GetType();
 
+	bool IsOurPlatform();
+	bool IsLYPlatform();
+	bool IsLY_ALL_Platform();
+	bool IsQQPlatform();
+	bool IsFBPlatform();
+	bool IsEN();
+	bool IsDS();
+
 	//更新当前平台类型
 	bool Reset(const string &host_suffix = "");
+
+	void SetPlatform(int plat);
 }
 
 #define IsTencentPlatform(pt) ((pt) == PT_PENGYOU || (pt) == PT_QZONE || (pt) == PT_TXWEIBO)

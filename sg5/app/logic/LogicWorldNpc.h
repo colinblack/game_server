@@ -15,6 +15,7 @@ public:
 	CDataWorldNpc *GetDataWorldNpc();
 	int ReplaceNpc(const NpcItem &npc );
 	int GetNpc(NpcItem &npc );
+	int GetOneNPC(unsigned world_pos, Json::Value &result);
 	int GetAllNpc( Json::Value &npcValue);
 	int RemoveNpc(const NpcItem &npc );
 	//int UpdateNpc(const NpcItem)

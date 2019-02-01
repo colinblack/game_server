@@ -91,7 +91,8 @@ int CDataUserAttack::GetUserAttacksAfter(unsigned uid, unsigned time, vector<Dat
 	DBCREQ_ARRAY_GET_INT(datas, status);
 	DBCREQ_ARRAY_GET_INT(datas, start_time);
 	DBCREQ_ARRAY_GET_END();
-		return 0;
+
+	return 0;
 }
 int CDataUserAttack::GetUserAttacksAfter(unsigned uid,unsigned worldpos, unsigned time, vector<DataUserAttack> &datas)
 {
@@ -303,5 +304,14 @@ int CDataUserAttack::GetUserAttacksCount(unsigned uid,unsigned worldpos, unsigne
 
 	count = m_dbcret.TotalRows();
 
+	return 0;
+}
+
+int CDataUserAttack::DelUserAttacksBeforeTS(unsigned uid, unsigned ts)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(LE, start_time, ts);
+	DBCREQ_EXEC;
 	return 0;
 }

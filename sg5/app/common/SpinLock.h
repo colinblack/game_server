@@ -17,8 +17,8 @@ public:
 	CSpinLock();
 	~CSpinLock();
 
-	bool Lock();
-	bool Unlock();
+	bool Lock(int vnum = 1);
+	bool Unlock(int vnum = 1);
 
 private:
 	pthread_spinlock_t m_spinlock;

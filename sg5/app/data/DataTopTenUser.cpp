@@ -208,6 +208,9 @@ int CDataTopTenUser::SetRewardFlage(int type)
 		return R_ERR_DATA;
 	}
 	CAutoLock lock(&m_sh, true);
+
+	if(pdata->reward_flag == type)
+		return R_ERR_LOGIC;
 	pdata->reward_flag = type;
 	return 0;
 }

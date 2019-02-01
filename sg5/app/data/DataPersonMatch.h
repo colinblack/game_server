@@ -7,8 +7,8 @@
 #define PERSONMATCH_PLAYERS_MAX 5000
 #define PERSONMATCH_NAME_LEN_MAX 32
 
-#define PERSON_INST_PATH  "person_inst_path"
-#define ALL_SERVER_PERSON_INST_PATH  "all_server_person_inst_path"
+//#define PERSON_INST_PATH  "person_inst_path"
+//#define ALL_SERVER_PERSON_INST_PATH  "all_server_person_inst_path"
 
 
 struct PersonMatchPlayer

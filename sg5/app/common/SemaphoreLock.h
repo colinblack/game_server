@@ -14,8 +14,8 @@ public:
 	bool CreateOrOpen(const char *name, int semid = 0);
 	bool Close();
 
-	bool Lock();
-	bool Unlock();
+	bool Lock(int vnum = 1);
+	bool Unlock(int vnum = 1);
 
 private:
 	void *m_sem;

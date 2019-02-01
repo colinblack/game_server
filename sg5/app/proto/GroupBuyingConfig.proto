@@ -1,0 +1,22 @@
+package GroupBuyingConfig;
+
+import "RewardConfig.proto";
+
+message CountPrice
+{
+	required uint32 count	= 1;  //参团起始人数
+	required uint32 price	= 2;   //价格
+}
+
+message GroupBuyingItem
+{
+	required uint32 id							= 1;  //团购项目id
+	required uint32 oriprice 					= 2;  //原始价格
+	required RewardConfig.RewardItemCfg reward	= 3;  //奖励
+	repeated CountPrice people 					= 4;  //参团的优惠项
+}
+
+message GroupBuyingItemsCfg
+{
+	repeated GroupBuyingItem tuangou	= 1;  //团购项目
+}

@@ -17,7 +17,7 @@ public:
 	virtual ~CLogicMysticalShop();
 	int InitMysticalShop();
 	int GetTopEquipNum(DataEquipItem dataEquipItem[], int &equipNum);
-	int PayMysticalEquip(unsigned uid, string name, unsigned eid);
+	int PayMysticalEquip(unsigned uid, string name, unsigned eid, Json::Value &result);
 	int GetInfobuys(DataEquipSells dataEquipSells[], int &buyNums);
 
 protected:

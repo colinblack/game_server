@@ -114,8 +114,35 @@ int CLogicCustomServiceAdmin::ChangePwd(const string &name, const string &OldPwd
 	return 0;
 }
 
-int CLogicCustomServiceAdmin::CheckSession(const string &name, const string &skey)
+int CLogicCustomServiceAdmin::CheckSession(const string &name, const string &skey, const string& openid, const unsigned& uid)
 {
+	if(!openid.empty())
+	{
+		CLogicAdmin logicAdmin;
+		unsigned gmFlag = gm_none;
+		logicAdmin.CheckGM(openid, gmFlag);
+		if(gmFlag != gm_th)
+		{
+			SESS_ERROR_RETURN_MSG("no auth");
+		}
+	}
+	else if(uid)
+	{
+		DataUserBasic datauserbasic;
+		CDataUserBasic datausr;
+		int ret = datausr.GetUserBasic(uid,OpenPlatform::GetType(),datauserbasic);
+		if(ret)
+		{
+			SESS_ERROR_RETURN_MSG("no auth");
+		}
+		CLogicAdmin logicAdmin;
+		unsigned gmFlag = gm_none;
+		logicAdmin.CheckGM(datauserbasic.open_id, gmFlag);
+		if(gmFlag != gm_th)
+		{
+			SESS_ERROR_RETURN_MSG("no auth");
+		}
+	}
 	if (name.empty())
 	{
 		SESS_ERROR_RETURN_MSG("Name is empty");
@@ -149,11 +176,6 @@ int CLogicCustomServiceAdmin::CopyArchive(unsigned fromUid, unsigned toUid)
 	return 0;
 }
 
-int CLogicCustomServiceAdmin::CheckTH(unsigned uid, bool &isTH)
-{
-	return 0;
-}
-
 void CLogicCustomServiceAdmin::Log
 (
 	const string &admin,
@@ -164,7 +186,7 @@ void CLogicCustomServiceAdmin::Log
 	const string &detail
 )
 {
-	string dir = "/data/release/sgonline/s1/adminlog/";
+	string dir = "/data/release/sgonline/s3/adminlog/";
 	char buf[256];
 	time_t now;
 	time( &now );

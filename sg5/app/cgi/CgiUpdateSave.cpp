@@ -26,7 +26,7 @@ public:
 
 	int UpdateSave()
 	{
-		string ip = m_ipstr;
+		//string ip = m_ipstr;
 		unsigned uid = 0;
 		if (!Json::GetUInt(m_data, "userid", uid) || uid == 0)
 		{
@@ -39,8 +39,11 @@ public:
 			worldpos = 0;
 		}
 
+		string type;
+		Json::GetString(m_data, "type", type);
+
 		CLogicArchive logicArchive;
-		int result = logicArchive.UpdateSave(uid, m_uid, worldpos,m_jsonResult);
+		int result = logicArchive.UpdateSave(uid, m_uid, type, worldpos,m_jsonResult);
 		if(result != 0)
 		{
 			return result;
@@ -48,8 +51,9 @@ public:
 
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
 
-		CGI_SEND_LOG("uid=%u&userid=%u", m_uid, uid);
+		CGI_SEND_LOG("operator=%u&operated=%u", m_uid, uid);
 
+		/*已作废
 		result = logicArchive.SaveRefresh(m_uid, ip, m_data);
 
 		if (0 != result)
@@ -57,6 +61,8 @@ public:
 			error_log("save data error! ret=%d", result);
 			return result;
 		}
+		*/
+
 		// add by aaron 20121228
 		if(IsValidUid(uid))
 		{
@@ -85,7 +91,7 @@ public:
 				{
 					return 0;
 				}
-				OpenPlatform::GetPlatform()->Is_Login(openid,openkey,pf);;
+				OpenPlatform::GetPlatform()->Is_Login(openid,openkey,pf);
 			}
 		}
 		// add by aaron 20121228

@@ -49,7 +49,8 @@ int main(int argc, char *argv[])
 		cout << "add user fail.ret:" << ret << ",errMsg:" << ::GetErrorMessage() << endl;
 		return 0;
 	}
-	ret = logicUserBasic.SetUserBasic(uid, true, platform, userInfo, friendList);
+	string via="NULL";
+	ret = logicUserBasic.SetUserBasic(uid, true, platform, userInfo, friendList,via, gm_admin);
 	if (ret != 0)
 	{
 		cout << "SetUserBasic fail.ret:" << ret << ",errMsg:" << ::GetErrorMessage() << endl;

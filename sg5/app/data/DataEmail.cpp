@@ -104,11 +104,27 @@ int CDataEmail::DeleteEmails(unsigned uid, const vector<uint64_t> &vEmail_Id)
 	vector<uint64_t>::const_iterator end_it = vEmail_Id.end();
 	for(vector<uint64_t>::const_iterator it = begin_it; it != end_it; it++)
 	{
-		DBCREQ_DECLARE(DBC::DeleteRequest, *it);
+		DBCREQ_DECLARE(DBC::DeleteRequest, uid);
 		DBCREQ_SET_KEY(uid);
 		DBCREQ_SET_CONDITION(EQ,email_id, *it);
 		DBCREQ_EXEC;
 	}
+	return 0;
+}
+int CDataEmail::DeleteEmailBeforeTs(unsigned uid, unsigned ts)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(LE,post_ts, ts);
+	DBCREQ_EXEC;
+	return 0;
+}
+int CDataEmail::DeleteEmailFrom(unsigned uid, unsigned opposite_uid)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(EQ,opposite_uid, opposite_uid);
+	DBCREQ_EXEC;
 	return 0;
 }
 int CDataEmail::GetAttachments(unsigned uid, const vector<uint64_t> &vEmail_Id,vector<string> &vattchments)
@@ -122,7 +138,7 @@ int CDataEmail::GetAttachments(unsigned uid, const vector<uint64_t> &vEmail_Id,v
 	for(vector<uint64_t>::const_iterator it = begin_it; it != end_it; it++)
 	{
 		attachments.clear();
-		DBCREQ_DECLARE(DBC::GetRequest, *it);
+		DBCREQ_DECLARE(DBC::GetRequest, uid);
 		DBCREQ_SET_KEY(uid);
 		DBCREQ_SET_CONDITION(EQ,email_id,*it);
 		DBCREQ_SET_CONDITION(EQ,attach_flag,1);
@@ -149,7 +165,7 @@ int CDataEmail::SetAttach_Flag(unsigned uid, const vector<uint64_t> &vEmail_Id)
 	int attach_flag=2;
 	for(vector<uint64_t>::const_iterator it = begin_it; it != end_it; it++)
 	{
-		DBCREQ_DECLARE(DBC::UpdateRequest, *it);
+		DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 		DBCREQ_SET_KEY(uid);
 		DBCREQ_SET_CONDITION(EQ,email_id,*it);
 		DBCREQ_SET_INT_S(attach_flag);
@@ -160,7 +176,7 @@ int CDataEmail::SetAttach_Flag(unsigned uid, const vector<uint64_t> &vEmail_Id)
 }
 int CDataEmail::ReadEmail(unsigned uid, const uint64_t email_Id,DataEmail &data)
 {
-	DBCREQ_DECLARE(DBC::GetRequest, email_Id);
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
 	DBCREQ_SET_CONDITION(EQ, email_id,email_Id);
 	DBCREQ_NEED_BEGIN();
@@ -202,7 +218,7 @@ int CDataEmail::ReadEmail(unsigned uid, const uint64_t email_Id,DataEmail &data)
 int CDataEmail::SetReadTime(unsigned uid,const uint64_t email_Id)
 {
 	unsigned int read_ts = Time::GetGlobalTime();;
-	DBCREQ_DECLARE(DBC::UpdateRequest, email_Id);
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
 	DBCREQ_SET_CONDITION(EQ,email_id,email_Id);
 	DBCREQ_SET_INT_S(read_ts);

@@ -53,20 +53,25 @@ int CLogicUserBasic::LoginPlatformUser(
 		const OPFriendList &friendList,
 		const string &iopenid,
 		unsigned &uid,
-		bool &isNewUser)
+		bool &isNewUser,
+		string& via,
+		unsigned gmFlag,
+		unsigned inviteUid)
 {
 	int ret = 0;
+	/*
 	bool isBlackUser = false;
 	CheckBlackUser(userInfo.OpenId,isBlackUser);
 	if (isBlackUser)
 	{
 		REFUSE_RETURN_MSG("being_blocked");
 	}
+	*/
 	CLogicUser logicUser;
 	ret = GetUid(uid, platform, userInfo.OpenId);
 	if (ret == 0)
 	{
-		ret = SetUserBasic(uid, isNewUser, platform, userInfo, friendList);
+		ret = SetUserBasic(uid, isNewUser, platform, userInfo, friendList,via,gmFlag);
 		if (ret != 0)
 		{
 			return ret;
@@ -90,15 +95,19 @@ int CLogicUserBasic::LoginPlatformUser(
 			return full;
 	}
 	isNewUser = true;
-	unsigned inviteUid = 0;
-	if (!iopenid.empty())
+	vector<unsigned> uids;
+	if (inviteUid == 0 && !iopenid.empty())
 	{
+		CDataUserMapping dbUserMapping;
+		dbUserMapping.GetAllMapping(iopenid,uids);
 		ret = GetUid(inviteUid, platform, iopenid);
 		if (ret != 0)
 		{
-			inviteUid = 0;
-			error_log("[iopenid invaild][platform=%d,iopenid=%s,openid=%s]",
-					platform, iopenid.c_str(),userInfo.OpenId.c_str());
+			if(uids.empty())
+				inviteUid = ADMIN_UID;
+			else
+				inviteUid = uids[0];
+			//error_log("[iopenid invaild][platform=%d,iopenid=%s,openid=%s]",platform, iopenid.c_str(),userInfo.OpenId.c_str());
 		}
 	}
 	//生成uid
@@ -135,7 +144,7 @@ int CLogicUserBasic::LoginPlatformUser(
 		fatal_log("[AddUser fail][ret=%d,platform=%d,openid=%s]", ret, platform, userInfo.OpenId.c_str());
 		return ret;
 	}
-	ret = SetUserBasic(uid, isNewUser, platform, userInfo, friendList);
+	ret = SetUserBasic(uid, isNewUser, platform, userInfo, friendList,via,gmFlag);
 	if (ret != 0)
 	{
 		fatal_log("[SetUserBasic fail][ret=%d,uid=%u,platform=%d,openid=%s]",
@@ -156,15 +165,16 @@ int CLogicUserBasic::LoginPlatformUser(
 	}
 ****************************************/
 	//邀请好友的处理
-	logicUser.ProcessInvite(uid, inviteUid);
+	for(vector<unsigned>::iterator it=uids.begin();it!=uids.end();++it)
+		logicUser.ProcessInvite(uid, *it);
 
+	/*
 	if (platform == PT_FACEBOOK)
 	{
 		CLogicPlatformUser logicPlatformUser;
 		logicPlatformUser.OnRegisterUser(userInfo.OpenId, platform, uid);
 	}
-	DATA_INFO_LOG("new_user", "uid=%u&platform=%d&openid=%s&invite_uid=%u",
-				uid, platform, userInfo.OpenId.c_str(), inviteUid);
+	*/
 
 	//推荐好友的处理
 	CLogicUserNomenate logicNomenate;
@@ -176,27 +186,16 @@ int CLogicUserBasic::LoginPlatformUser(
 		fatal_log("add usernomenate fail,ret=%d", ret);
 	}
 
-	if((platform == PT_PENGYOU || platform == PT_3366 || platform == PT_QZONE || platform == PT_qqgame || platform == PT_FACEBOOK ) && inviteUid != 0)
-	{
-		CDataInviteMapping dbInviteMapping;
-		ret = dbInviteMapping.AddMapping(inviteUid, uid);
-		if (0 != ret)
-		{
-			error_log("[add invite mapping fail][uid=%u,inviteUid=%u,ret=%d]", uid, inviteUid, ret);
-		}
-	}
-	// add by arron for tw new activity
-	// add world user
-
-	// add world user
 	DATA_INFO_LOG("new_user", "uid=%u&platform=%d&openid=%s&invite_uid=%u",
 			uid, platform, userInfo.OpenId.c_str(), inviteUid);
-
 	return 0;
 }
 
 int CLogicUserBasic::GetFriendsJson(unsigned uid, PlatformType platform, Json::Value &friends, bool encode)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	int ret;
 	UidList friendList;
 	ret = GetFriends(uid, platform, friendList);
@@ -232,10 +231,12 @@ int CLogicUserBasic::GetFriendsJson(unsigned uid, PlatformType platform, Json::V
 		{
 			continue;
 		}
+		/* Ralf 20141203 change to job
 		if(user.status != US_ACTIVE)
 		{
 			continue;
 		}
+		*/
 
 		Json::Value userData;
 		userData["userid"] = *itr;
@@ -284,11 +285,30 @@ int CLogicUserBasic::GetUserBasic(unsigned uid, PlatformType platform, DataUserB
 
 int CLogicUserBasic::GetUserBasicLimit(unsigned uid, PlatformType platform, DataUserBasic &user)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	CDataUserBasic dbUserBasic;
 	int ret = dbUserBasic.GetUserBasicLimit(uid, platform, user);
 	if (ret != 0)
 	{
-		error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, uid, platform);
+		if(ret != R_ERR_NO_DATA)
+			error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, uid, platform);
+		DB_ERROR_RETURN_MSG("db_get_uesr_basic_fail");
+	}
+	return 0;
+}
+
+int CLogicUserBasic::GetUserBasicLimitWithoutPlatform(unsigned uid, DataUserBasic &user)
+{
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
+	CDataUserBasic dbUserBasic;
+	int ret = dbUserBasic.GetUserBasicLimitWithoutPlatform(uid, user);
+	if (ret != 0)
+	{
+		error_log("[GetUserBasicLimit fail][ret=%d,uid=%u]", ret, uid);
 		DB_ERROR_RETURN_MSG("db_get_uesr_basic_fail");
 	}
 	return 0;
@@ -296,32 +316,37 @@ int CLogicUserBasic::GetUserBasicLimit(unsigned uid, PlatformType platform, Data
 
 int CLogicUserBasic::GetUserBasicLimitSmart(unsigned uid, PlatformType platform, DataUserBasic &user)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	int ret = 0;
 	CDataUserBasic dbUserBasic;
-	if(platform == PT_PENGYOU || platform == PT_QZONE || platform == PT_3366 || platform == PT_qqgame)
+	//if(platform == PT_PENGYOU || platform == PT_QZONE || platform == PT_3366 || platform == PT_qqgame)
 	{
 		ret = dbUserBasic.GetUserBasicLimit(uid, platform, user);
-		if(ret == 0)
+		if(ret)
 		{
-			return 0;
-		}
-		if(ret != R_ERR_NO_DATA)
-		{
-			error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, uid, platform);
+			if(ret != R_ERR_NO_DATA)
+				error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, uid, platform);
 			DB_ERROR_RETURN_MSG("db_get_uesr_basic_fail");
 		}
 	}
+	/*
 	ret = dbUserBasic.GetUserBasicRegisterLimit(uid, user);
-	if(ret != 0 && ret != R_ERR_NO_DATA)
+	if(ret != 0)
 	{
 		error_log("[GetUserBasicRegisterLimit fail][ret=%d,uid=%u,platform=%d]", ret, uid, platform);
 		DB_ERROR_RETURN_MSG("db_get_uesr_basic_fail");
 	}
+	*/
 	return 0;
 }
 
 int CLogicUserBasic::GetFriends(unsigned uid, PlatformType platform, UidList &friends)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	int ret = 0,ret2=0;
 	string black_list("");
 	CDataUserBasic dbUserBasic;
@@ -420,6 +445,9 @@ int CLogicUserBasic::SetOidFriends(unsigned uid, PlatformType platform, const st
 }
 int CLogicUserBasic::GetBlacksJson(unsigned uid, PlatformType platform, Json::Value &blacks)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	int ret;
 	unsigned fid;
 	string black_list("");
@@ -449,7 +477,7 @@ int CLogicUserBasic::GetBlacksJson(unsigned uid, PlatformType platform, Json::Va
 			ret = logicUserBasic.GetUserBasicLimit(fid, platform, userBasicDB);
 			if(ret != 0)
 			{
-				error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, fid, platform);
+				//error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, fid, platform);
 				continue;
 				//DB_ERROR_RETURN_MSG("db_get_uesr_basic_limit_fail");
 			}
@@ -481,6 +509,9 @@ int CLogicUserBasic::GetBlacksJson(unsigned uid, PlatformType platform, Json::Va
 }
 bool CLogicUserBasic::IsFriend(unsigned uid, PlatformType platform, unsigned fid)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	int ret = 0, i;
 	string sFriends("|");
 	UidList friendlist;
@@ -533,7 +564,7 @@ int CLogicUserBasic::RemoveUserMapping(unsigned uid)
 	return 0;
 }
 
-int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platform, OPUserInfo &userInfo, const OPFriendList &friendList)
+int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platform, OPUserInfo &userInfo, const OPFriendList &friendList, string& via, unsigned gmFlag)
 {
 	int ret = 0;
 	DataUserBasic userOld;
@@ -577,22 +608,39 @@ int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platf
 	user.extra = userOld.extra;
 
 	bool b_3366_changed = false;
-	if(platform == PT_PENGYOU || platform == PT_QZONE || platform == PT_3366 || platform == PT_qqgame)
+	if(OpenPlatform::IsQQPlatform())
 	{
-		user.vip_type = VT_NORMAL;
-		if(userInfo.ExtraIntInfo["bIsYearVip"])
-			user.vip_type |= VT_QQ_YELLOW_YEAR;
-		if(userInfo.ExtraIntInfo["bIsVip"])
-			user.vip_type |= VT_QQ_YELLOW;
-		if(userInfo.ExtraIntInfo["is_blue_vip"])
-			user.vip_type |= VT_QQ_BLUE;
-		if(userInfo.ExtraIntInfo["is_blue_year_vip"])
-			user.vip_type |= VT_QQ_BLUE_YEAR;
-		if(userInfo.ExtraIntInfo["is_super_blue_vip"])
-			user.vip_type |= VT_QQ_SUPER_BULE;
+		if(gmFlag == gm_th)
+		{
+			if(add)
+			{
+				user.vip_type |= VT_QQ_YELLOW;
+				user.vip_type |= VT_QQ_BLUE;
+				user.vip_level = 1*16 + 1;
+			}
+			else
+			{
+				user.vip_type = userOld.vip_type;
+				user.vip_level = userOld.vip_level;
+			}
+		}
+		else
+		{
+			user.vip_type = VT_NORMAL;
+			if(userInfo.ExtraIntInfo["bIsYearVip"])
+				user.vip_type |= VT_QQ_YELLOW_YEAR;
+			if(userInfo.ExtraIntInfo["bIsVip"])
+				user.vip_type |= VT_QQ_YELLOW;
+			if(userInfo.ExtraIntInfo["is_blue_vip"])
+				user.vip_type |= VT_QQ_BLUE;
+			if(userInfo.ExtraIntInfo["is_blue_year_vip"])
+				user.vip_type |= VT_QQ_BLUE_YEAR;
+			if(userInfo.ExtraIntInfo["is_super_blue_vip"])
+				user.vip_type |= VT_QQ_SUPER_BULE;
 
-		user.vip_level = (userInfo.ExtraIntInfo["blue_vip_level"])*16 + userInfo.ExtraIntInfo["nVipLevel"];
-		//error_log("[SetUserBasic]user.vip_level=%d,blue_vip_level=%d,blue_vip_level*16=%d,nVipLevel=%d",user.vip_level,userInfo.ExtraIntInfo["blue_vip_level"],userInfo.ExtraIntInfo["blue_vip_level"]*16,userInfo.ExtraIntInfo["nVipLevel"]);
+			user.vip_level = (userInfo.ExtraIntInfo["blue_vip_level"])*16 + userInfo.ExtraIntInfo["nVipLevel"];
+			//debug_log("[SetUserBasic]user.vip_level=%d,blue_vip_level=%d,blue_vip_level*16=%d,nVipLevel=%d",user.vip_level,userInfo.ExtraIntInfo["blue_vip_level"],userInfo.ExtraIntInfo["blue_vip_level"]*16,userInfo.ExtraIntInfo["nVipLevel"]);
+		}
 
 		Json::FastWriter writer;
 		Json::Value extraJson;
@@ -621,6 +669,15 @@ int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platf
 		if(b_3366_changed)
 			user.extra = writer.write(extraJson);
 	}
+	else if(OpenPlatform::GetType() == PT_7k7k)
+	{
+		user.vip_type = VT_NORMAL;
+		if(userInfo.ExtraIntInfo["7k_vip_type"] > 0)
+			user.vip_type |= VT_QQ_BLUE;
+		if(userInfo.ExtraIntInfo["7k_vip_type"] > 1)
+			user.vip_type |= VT_QQ_BLUE_YEAR;
+		user.vip_level = 16;
+	}
 	else
 	{
 		if (add)
@@ -640,7 +697,7 @@ int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platf
 	{
 		if(user.name.empty())
 		{
-			user.name = userOld.name;
+			userInfo.Name = user.name = userOld.name;
 		}
 		if(user.gender == GD_UNKNOW)
 		{
@@ -786,7 +843,7 @@ int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platf
 		}
 		//add mapping
 		CDataUserMapping dbUserMapping;
-		ret = dbUserMapping.AddMapping(user.open_id, platform, uid);
+		ret = dbUserMapping.AddMapping(user.open_id, platform, uid, via);
 		if(ret != 0)
 		{
 			error_log("[AddMapping fail][ret=%d,uid=%u,openid=%s,platform=%d]", ret, uid, user.open_id.c_str(), platform);
@@ -814,6 +871,15 @@ int CLogicUserBasic::SetUserBasic(unsigned uid, bool newUser, PlatformType platf
 				error_log("[SetUser fail][ret=%d,uid=%u,platform=%d]", ret, uid, platform);
 				DB_ERROR_RETURN_MSG("db_set_user_basic_fail");
 			}
+		}
+
+		//login mapping
+		CDataUserMapping dbUserMapping;
+		ret = dbUserMapping.UpdateLastLogin(user.open_id, platform);
+		if(ret != 0)
+		{
+			error_log("[login mapping fail][ret=%d,uid=%u,openid=%s,platform=%d]", ret, uid, user.open_id.c_str(), platform);
+			//DB_ERROR_RETURN_MSG("db_add_user_mapping_fail");
 		}
 	}
 
@@ -910,4 +976,16 @@ int CLogicUserBasic::CheckBlackUser(const string &openid,bool &black)
 		black = true;
 	}
 	return 0;
+}
+
+int CLogicUserBasic::GetName(unsigned uid, string &name)
+{
+	CDataUserBasic userBasic;
+	return userBasic.GetUserName(uid,PT_TEST,name);
+}
+
+int CLogicUserBasic::GetNameFig(unsigned uid, string &name, string &fig)
+{
+	CDataUserBasic userBasic;
+	return userBasic.GetNameFig(uid,name,fig);
 }

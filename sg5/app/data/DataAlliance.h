@@ -48,6 +48,8 @@ public:
 	int GetAllianceLimit(unsigned alliance_id, DataAlliance &alliance);
 	int AddPoint(unsigned alliance_id, int point);
 	int AddCurrPoint(unsigned alliance_id, int curr_point);
+
+	int GetName(unsigned alliance_id, string& name);
 };
 
 #endif /* DATAALLIANCE_H_ */

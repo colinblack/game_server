@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
+
 map<string, AdminInfo> CLogicAdmin::adminList;
 map<string, AdminSession> CLogicAdmin::adminSession;
 
@@ -136,7 +137,7 @@ int CLogicAdmin::GetLevel(const string &name)
 	map<string, AdminInfo>::iterator it = adminList.find(name);
 	if (it == adminList.end())
 		return ADMIN_LEVEL_0;
-	return (it->second).level;
+	return (it->second.level > ADMIN_LEVEL_ALL ? ADMIN_LEVEL_0 : it->second.level);
 }
 
 int CLogicAdmin::CheckLevel(const string &name, ADMIN_LEVEL needLevel)
@@ -206,17 +207,27 @@ int CLogicAdmin::ModifyPassword(const string &name, const string &password, cons
 	return 0;
 }
 
-int CLogicAdmin::ChangePay(unsigned uid, int cash, int coins, DataPay &pay)
+
+int CLogicAdmin::ChangePay(unsigned uid, int cash, int coins, DataPay &pay,int channel)
 {
 	CLogicPay logicPay;
-	int ret = logicPay.ChangePay(uid, cash, coins, pay, "ADMINOP");
+	Json::Value user_flag;
+	CLogicUser logicUser;
+	bool save = false;
+	int ret = logicUser.GetUserFlag(uid,user_flag);
+	if(ret)
+		return ret;
+	ret = logicPay.ChangePay(uid, cash, coins, pay, "ADMINOP", user_flag, save, PAY_FLAG_CHARGE | PAY_FLAG_ADMIN | PAY_FLAG_COST_ALL);
+	if (ret)
+		return ret;
 
-	if(ret == 0){
+	if(channel == 0)
+	{
 		DataPayHistory payhis;
-		payhis.channel = PCT_TEST;
+		payhis.channel = channel;
 		payhis.channel_pay_id = "0";
-		payhis.count = 1;
-		payhis.credit = cash + coins;
+		payhis.count = cash + coins;
+		payhis.credit = 0;
 		payhis.status = PST_OK;
 		payhis.type = 0;
 		payhis.uid = uid;
@@ -228,6 +239,44 @@ int CLogicAdmin::ChangePay(unsigned uid, int cash, int coins, DataPay &pay)
 					ret,"gm","0","0",cash + coins);
 		}
 	}
+	else if(channel == 99)
+	{
+		DataPayHistory payhis;
+		payhis.channel = channel;
+		payhis.channel_pay_id = "0";
+		payhis.count = cash;
+		payhis.credit = 0;
+		payhis.status = PST_OK;
+		payhis.type = 0;
+		payhis.uid = uid;
+		payhis.open_id = "R";
+		ret = logicPay.AddPayHistory(payhis);
+		if (ret != 0)
+		{
+			error_log("[AddPayHistory fail][ret=%d,openid=%s,billno=%s,payitem=%s,amt=%d]",
+					ret,"gm","0","0",cash);
+		}
+	}
+	else if(channel == 100)
+	{
+		DataPayHistory payhis;
+		payhis.channel = channel;
+		payhis.channel_pay_id = "0";
+		payhis.count = cash;
+		payhis.credit = 0;
+		payhis.status = PST_OK;
+		payhis.type = 0;
+		payhis.uid = uid;
+		payhis.open_id = "TH";
+		ret = logicPay.AddPayHistory(payhis);
+		if (ret != 0)
+		{
+			error_log("[AddPayHistory fail][ret=%d,openid=%s,billno=%s,payitem=%s,amt=%d]",
+					ret,"gm","0","0",cash);
+		}
+	}
+	if(save)
+		logicUser.SetUserFlag(uid,user_flag);
 	return ret;
 }
 
@@ -408,9 +457,9 @@ int CLogicAdmin::ChangeR1(unsigned uid, int r1, unsigned &balance)
 		return ret;
 	int temp = r1 + user.r1;
 	if (temp < 0)
-	{
-		LOGIC_ERROR_RETURN_MSG("balance less than zero");
-	}
+		temp = 0;
+	if(temp > user.r1_max)
+		temp = user.r1_max;
 	user.r1 = temp;
 	ret = logicUser.SetUserLimit(uid, user);
 	if (ret != 0)
@@ -428,9 +477,9 @@ int CLogicAdmin::ChangeR2(unsigned uid, int r2, unsigned &balance)
 		return ret;
 	int temp = r2 + user.r2;
 	if (temp < 0)
-	{
-		LOGIC_ERROR_RETURN_MSG("balance less than zero");
-	}
+		temp = 0;
+	if(temp > user.r2_max)
+		temp = user.r2_max;
 	user.r2 = temp;
 	ret = logicUser.SetUserLimit(uid, user);
 	if (ret != 0)
@@ -448,9 +497,9 @@ int CLogicAdmin::ChangeR3(unsigned uid, int r3, unsigned &balance)
 		return ret;
 	int temp = r3 + user.r3;
 	if (temp < 0)
-	{
-		LOGIC_ERROR_RETURN_MSG("balance less than zero");
-	}
+		temp = 0;
+	if(temp > user.r3_max)
+		temp = user.r3_max;
 	user.r3 = temp;
 	ret = logicUser.SetUserLimit(uid, user);
 	if (ret != 0)
@@ -468,9 +517,9 @@ int CLogicAdmin::ChangeR4(unsigned uid, int r4, unsigned &balance)
 		return ret;
 	int temp = r4 + user.r4;
 	if (temp < 0)
-	{
-		LOGIC_ERROR_RETURN_MSG("balance less than zero");
-	}
+		temp = 0;
+	if(temp > user.r4_max)
+		temp = user.r4_max;
 	user.r4 = temp;
 	ret = logicUser.SetUserLimit(uid, user);
 	if (ret != 0)
@@ -488,14 +537,50 @@ int CLogicAdmin::ChangeR5(unsigned uid, int r5, unsigned &balance)
 		return ret;
 	int temp = r5 + user.r5;
 	if (temp < 0)
-	{
-		LOGIC_ERROR_RETURN_MSG("balance less than zero");
-	}
+		temp = 0;
 	user.r5 = temp;
 	ret = logicUser.SetUserLimit(uid, user);
 	if (ret != 0)
 		return ret;
 	balance = user.r5;
+	return 0;
+}
+
+int CLogicAdmin::AddR(unsigned uid, const string &reason, int r1, int r2, int r3, int r4){
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUserLimit(uid, user);
+	if (ret != 0)
+			return ret;
+	if(r1 != 0) {
+		int temp = r1 + user.r1;
+		if (temp < 0 || temp > user.r1_max)
+			temp = user.r1_max;
+		user.r1 = temp;
+	}
+	if(r2 != 0) {
+		int temp = r2 + user.r2;
+		if (temp < 0 || temp > user.r2_max)
+			temp = user.r2_max;
+		user.r2 = temp;
+	}
+	if(r3 != 0) {
+		int temp = r3 + user.r3;
+		if (temp < 0 || temp > user.r3_max)
+			temp = user.r3_max;
+		user.r3 = temp;
+	}
+	if(r4 != 0) {
+		int temp = r4 + user.r4;
+		if (temp < 0 || temp > user.r4_max)
+			temp = user.r4_max;
+		user.r4 = temp;
+	}
+
+	ret = logicUser.SetUserLimit(uid, user);
+	if (ret != 0)
+		return ret;
+	RESOURCE_LOG("[%s][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d]",reason.c_str(), uid,r1,r2,r3,r4);
 	return 0;
 }
 
@@ -589,6 +674,20 @@ int CLogicAdmin::ChangeBlockTs(unsigned uid, unsigned block_time, const string &
 	return 0;
 }
 
+int CLogicAdmin::ChangeRefreshTs(unsigned uid, unsigned refresh_time)
+{
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUserLimit(uid, user);
+	if (ret != 0)
+		return ret;
+	user.refresh = refresh_time;
+	ret = logicUser.SetUserLimit(uid, user);
+	if (ret != 0)
+		return ret;
+	return 0;
+}
+
 int CLogicAdmin::ChangeProtectTs(unsigned uid, unsigned pro_time)
 {
 	CLogicUser logicUser;
@@ -597,7 +696,12 @@ int CLogicAdmin::ChangeProtectTs(unsigned uid, unsigned pro_time)
 	if (ret != 0)
 		return ret;
 	user.protected_time = pro_time;
-	ret = logicUser.SetUserLimit(uid, user);
+	/*20141225 ralf
+	user.last_breath_time = pro_time;
+	if(IsBeingAttacked(user.last_breath_time))
+		user.last_breath_time = Time::GetGlobalTime() - ATTACK_PRO_TIME;
+	*/
+	ret = logicUser.SetUserLimit(uid, user/*, DATA_USER_LBT*/);
 	if (ret != 0)
 		return ret;
 	return 0;
@@ -605,6 +709,9 @@ int CLogicAdmin::ChangeProtectTs(unsigned uid, unsigned pro_time)
 
 int CLogicAdmin::ChangeBlockTs(const string &openid,unsigned block_time, const string &close_reason)
 {
+	if(block_time < gm_max && block_time != gm_none)
+		return 0;
+
 	int ret = 0;
 
 	vector<unsigned> uids;
@@ -678,6 +785,7 @@ int CLogicAdmin::ExportArchive(unsigned uid, Json::Value &result)
 	if (ret != 0)
 		return ret;
 	result["kingdom"] = user.kingdom;
+	result["bnwm"] = user.type;
 	result["invite_count"] = user.invite_count;
 	result["today_invite_count"] = user.today_invite_count;
 	result["level"] = user.level;
@@ -697,6 +805,7 @@ int CLogicAdmin::ExportArchive(unsigned uid, Json::Value &result)
 	result["currencys"][(unsigned)0] = user.gcbase;
 	result["currencys"][(unsigned)1] = user.gcbuy;
 	result["currencys"][(unsigned)2] = user.prosper;
+	result["currencys"][(unsigned)3] = user.battle_spirits;
 	result["lasttime"] = user.last_save_time;
 	result["newgcbase"] = user.newgcbase;
 	result["protected_time"] = user.protected_time;
@@ -712,7 +821,7 @@ int CLogicAdmin::ExportArchive(unsigned uid, Json::Value &result)
 	}
 	if (!user.user_tech.empty() && !reader.parse(user.user_tech, result["tech"]))
 	{
-		DB_ERROR_RETURN_MSG("parse_user_tech_fail");
+		//DB_ERROR_RETURN_MSG("parse_user_tech_fail");
 	}
 	if (!user.barrackQ.empty() && !reader.parse(user.barrackQ, result["barrackQ"]))
 	{
@@ -767,7 +876,7 @@ int CLogicAdmin::ExportArchive(unsigned uid, Json::Value &result)
 	//	return ret;
 	//equipment
 	CLogicEquipment logicEquip;
-	ret = logicEquip.GetEquipment(uid, result["equipment"]);
+	ret = logicEquip.GetEquipment(uid, 0, result["equipment"]);
 	//if (ret != 0)
 	//	return ret;
 	CLogicQuest logicQuest;
@@ -801,10 +910,30 @@ int CLogicAdmin::ExportArchive(unsigned uid, Json::Value &result)
 	{
 		//DB_ERROR_RETURN_MSG("get godfb fail!");
 	}
+
+	DataUserBasic userBasic;
+	CDataUserBasic dbUser;
+	ret = dbUser.GetUserBasicExt(uid, OpenPlatform::GetType(),userBasic);
+	if (ret == 0)
+	{
+		Json::Value extra;
+		if (!userBasic.extra.empty() && reader.parse(userBasic.extra, extra))
+		{
+			unsigned nonage = 0;
+			if (Json::GetUInt(extra, "nng", nonage))
+				result["nonage"] = nonage;
+		}
+	}
+
+	CLogicSecinc logicSecinc;
+	ret = logicSecinc.GetSecinc(uid, result["newAct"]);
+	//if (ret != 0)
+	//	return ret;
+
 	return 0;
 }
 
-int CLogicAdmin::ImportArchive(unsigned uid, const Json::Value &data)
+int CLogicAdmin::ImportArchive(unsigned uid, Json::Value &data, bool keepvip, uint64_t exp, unsigned level, unsigned lastlogin)
 {
 	Json::FastWriter writer;
 	CLogicUser logicUser;
@@ -871,19 +1000,35 @@ int CLogicAdmin::ImportArchive(unsigned uid, const Json::Value &data)
 		user.glory = writer.write(data["md"]);
 	}
 
-	Json::GetUInt(data, "kingdom", user.kingdom);
+	if(!keepvip)
+		Json::GetUInt(data, "kingdom", user.kingdom);
+	Json::GetInt(data, "bnwm", user.type);
 	Json::GetInt(data, "invite_count", user.invite_count);
 	Json::GetInt(data, "today_invite_count", user.today_invite_count);
-	Json::GetInt(data, "tutorialstage", user.tutorial_stage);
-	Json::GetInt(data, "level", user.level);
-	Json::GetUInt64(data, "exp", user.point);
+	if(!keepvip)
+		Json::GetInt(data, "tutorialstage", user.tutorial_stage);
+	else
+		user.tutorial_stage = 10000;
+	if(!keepvip)
+		Json::GetInt(data, "level", user.level);
+	else
+		user.level = level;
+	if(!keepvip)
+		Json::GetUInt64(data, "exp", user.point);
+	else
+		user.point = exp;
 	Json::GetUInt(data, "gcbase", user.gcbase);
 	Json::GetUInt(data, "newgcbase", user.newgcbase);
 	Json::GetUInt(data, "gcbuy", user.gcbuy);
 	Json::GetUInt(data, "lasttime", user.last_save_time);
 	Json::GetUInt(data, "protected_time", user.protected_time);
 	Json::GetUInt(data, "prosper", user.prosper);
-	Json::GetUInt(data, "acccharge", user.accCharge);
+	if(!keepvip)
+		Json::GetUInt(data, "acccharge", user.accCharge);
+	OpenPlatform::SetPlatform(user.register_platform);
+	logicUser.TransformVipLevel(user.accCharge, user.viplevel);
+	if(keepvip)
+		user.last_login_time = lastlogin;
 	if (Json::IsArray(data, "currencys"))
 	{
 		if (data["currencys"].size() > 0)
@@ -897,6 +1042,10 @@ int CLogicAdmin::ImportArchive(unsigned uid, const Json::Value &data)
 		if (data["currencys"].size() > 2)
 		{
 			Json::GetUInt(data["currencys"], (unsigned)2, user.prosper);
+		}
+		if (data["currencys"].size() > 3)
+		{
+			Json::GetUInt(data["currencys"], (unsigned)3, user.battle_spirits);
 		}
 	}
 	if (Json::IsArray(data, "resources"))
@@ -927,7 +1076,7 @@ int CLogicAdmin::ImportArchive(unsigned uid, const Json::Value &data)
 			Json::GetUInt(data["resources"][(unsigned)4], "m", user.r5_max);
 		}
 	}
-	ret = logicUser.SetUser(uid, user);
+	ret = logicUser.SetUser(uid, user, DATA_USER_LSUID|DATA_USER_LBT|DATA_USER_BI);
 	if (ret != 0)
 		return ret;
 
@@ -971,7 +1120,7 @@ int CLogicAdmin::ImportArchive(unsigned uid, const Json::Value &data)
 			DB_ERROR_RETURN_MSG("rm_equipment_fail");
 		}
 		CLogicEquipment logicEquip;
-		ret = logicEquip.UpdateEquipment(uid, data["equipment"]);
+		ret = logicEquip.ImportEquipment(uid,data["equipment"]);
 		if (ret != 0)
 			return ret;
 	}
@@ -1027,14 +1176,94 @@ int CLogicAdmin::ImportArchive(unsigned uid, const Json::Value &data)
 		CLogicWeapon logicWeapon;
 		logicWeapon.SetWeapon(uid, data["godfb"]);
 	}
+	if (data.isMember("nonage"))
+	{
+		unsigned nonage = 0;
+		Json::GetUInt(data, "nonage", nonage);
+		DataUserBasic userBasic;
+		CDataUserBasic dbUser;
+		ret = dbUser.GetUserBasicExt(uid, OpenPlatform::GetType(),userBasic);
+		if (ret == 0)
+		{
+			Json::Value extra;
+			Json::FastWriter writer;
+			Json::Reader reader;
+			if (!userBasic.extra.empty())
+				reader.parse(userBasic.extra, extra);
+			extra["nng"] = nonage;
+			userBasic.extra = writer.write(extra);
+			dbUser.SetUserBasicExt(uid, OpenPlatform::GetType(), userBasic);
+		}
+	}
+	if (Json::IsArray(data, "newAct"))
+	{
+		CLogicSecinc logicSecinc;
+		logicSecinc.ImportSecinc(uid, data["newAct"]);
+	}
+	CDataRank dataRank;
+	dataRank.ClearRank(uid);
+
+	if(keepvip)
+	{
+		DataPay pay;
+		pay.uid = uid;
+		pay.cash = Math::GetRandomInt(256);
+		pay.coins = Math::GetRandomInt(256);
+		CDataPay().SetPay(uid, pay);
+	}
 	return 0;
+}
+
+void CLogicAdmin::R_Log(const string &admin,const string &op,const string &reason,
+	unsigned uid,const string &value,const string &detail)   //国内大R加钱log
+{
+	string dir = "/data/release/sgonline/s2/adminlog/";
+	char buf[256];
+	time_t now;
+	time( &now );
+	struct tm *ptm;
+	ptm = localtime(&now);
+	snprintf(buf, sizeof(buf), "%sop_%04d%02d%02d.log",
+			dir.c_str(),
+			ptm->tm_year+1900,
+			ptm->tm_mon+1,
+			ptm->tm_mday);
+	FILE *fp = fopen(buf, "a");
+	if (!fp)
+	{
+		return;
+	}
+	fprintf(fp, "%04d%02d%02d %02d:%02d:%02d|%s|%s|%s|%u|%s\n",
+			ptm->tm_year+1900,ptm->tm_mon+1,ptm->tm_mday,ptm->tm_hour,ptm->tm_min,ptm->tm_sec,
+			admin.c_str(),
+			op.c_str(),
+			reason.c_str(),
+			uid,
+			value.c_str()
+			);
+	fclose(fp);
+	if (!detail.empty())
+	{
+		snprintf(buf, sizeof(buf), "%sdetail_%04d%02d%02d.log",
+				dir.c_str(),
+				ptm->tm_year+1900,
+				ptm->tm_mon+1,
+				ptm->tm_mday);
+
+		fp = fopen(buf, "a");
+		if (!fp) return;
+		fprintf(fp, "%04d%02d%02d %02d:%02d:%02d|%s|%s|%u|%s\n", ptm->tm_year+1900,ptm->tm_mon+1,ptm->tm_mday,
+				ptm->tm_hour,ptm->tm_min,ptm->tm_sec,admin.c_str(),op.c_str(),uid,detail.c_str());
+		fclose(fp);
+	}
+	return;
 }
 
 void CLogicAdmin::Log(const string &admin, const string &op, const string &reason,
 		unsigned uid, const string &value, const string &detail)
 {
-	string dir;
-	if (!Config::GetValue(dir, ADMIN_OP_LOG_DIR) || dir.empty())
+	string dir = Config::GetPath(ADMIN_OP_LOG_DIR);
+	if (dir.empty())
 		return;
 	if (dir[dir.length()-1] != '/') dir += "/";
 	char buf[256];
@@ -1061,6 +1290,98 @@ void CLogicAdmin::Log(const string &admin, const string &op, const string &reaso
 	}
 }
 
+void CLogicAdmin::AddHeroOrEquip_Log(const string &admin, const string &op,  string &reason,
+	unsigned uid, unsigned id, unsigned count)   //后端在装备和英雄
+{
+	reason.erase( remove( reason.begin(), reason.end(), '\r\n' ), reason.end());
+	reason.erase( remove( reason.begin(), reason.end(), '\n' ), reason.end());
+	string dir = Config::GetPath(ADMIN_OP_LOG_DIR);
+	if (dir.empty())
+		return;
+	if (dir[dir.length()-1] != '/') dir += "/";
+	char buf[256];
+	time_t now;
+	time( &now );
+	struct tm *ptm;
+	ptm = localtime(&now);
+	snprintf(buf, sizeof(buf), "%sheroORequip_%04d%02d%02d.log",
+			dir.c_str(),
+			ptm->tm_year+1900,
+			ptm->tm_mon+1,
+			ptm->tm_mday);
+	FILE *fp = fopen(buf, "a");
+	if (!fp)
+	{
+		return;
+	}
+	fprintf(fp, "%04d%02d%02d %02d:%02d:%02d|%s|%s|%s|%u|%u|%u\n",
+			ptm->tm_year+1900,ptm->tm_mon+1,ptm->tm_mday,ptm->tm_hour,ptm->tm_min,ptm->tm_sec,
+			admin.c_str(),
+			op.c_str(),
+			reason.c_str(),
+			uid,
+			id,
+			count
+			);
+	fclose(fp);
+	return;
+}
+
+void CLogicAdmin::AddCheckLog(const string &admin, const string &ip, const string &op, string &reason, unsigned uid, unsigned id, int count)
+{
+	reason.erase( remove( reason.begin(), reason.end(), '\r\n' ), reason.end());
+	reason.erase( remove( reason.begin(), reason.end(), '\n' ), reason.end());
+	string dir = "/data/release/sgonline/pi/webroot/monitor/op_";
+	char buf[256];
+	time_t now;
+	time( &now );
+	struct tm *ptm;
+	ptm = localtime(&now);
+	snprintf(buf, sizeof(buf), "%s%04d%02d%02d.log",
+			dir.c_str(),
+			ptm->tm_year+1900,
+			ptm->tm_mon+1,
+			ptm->tm_mday);
+	FILE *fp = fopen(buf, "a");
+	if (!fp)
+	{
+		return;
+	}
+	CLogicUserBasic logicUserBasic;
+	DataUserBasic dataUserBasic;
+	logicUserBasic.GetUserBasicLimitWithoutPlatform(uid,dataUserBasic);
+	fprintf(fp, "%04d-%02d-%02d %02d:%02d:%02d|%s|%s|%u|%u|0|%s|%s|%u|%d|%s\n",
+			ptm->tm_year+1900,ptm->tm_mon+1,ptm->tm_mday,ptm->tm_hour,ptm->tm_min,ptm->tm_sec,
+			admin.c_str(),
+			ip.c_str(),
+			Config::GetZoneByUID(uid),
+			uid,
+			dataUserBasic.name.c_str(),
+			op.c_str(),
+			id,
+			count,
+			reason.c_str()
+			);
+	fclose(fp);
+	return;
+}
+int CLogicAdmin::BroadCastByTool(string message, int repeats, int interval,string serverid)
+{
+	if(repeats == 1)
+		BroadCast(message, repeats, interval, serverid);
+	else
+	{
+		string path = Config::GetPath("tools/");
+		string file = path + "broadcast.dat";
+		string cmd = "cd " + path + " && nohup ./BroadCast "
+				+ CTrans::ITOS(repeats) + " "
+				+ CTrans::ITOS(interval) + " "
+				+ serverid + " &";
+		File::Write(file, message);
+		system(cmd.c_str());
+	}
+	return 0;
+}
 int CLogicAdmin::BroadCast(string message, int repeats, int interval,string serverid)
 {
 	string splatform = Convert::UIntToString(OpenPlatform::GetType());
@@ -1197,7 +1518,7 @@ int CLogicAdmin::BroadCast(string message, int repeats, int interval,string serv
 	cpacketChartRequest.Encode(&buffer);
 	if (!(socket.Send(buffer.GetConstBuffer(), buffer.GetSize(), 0)))
 	{
-		error_log("chart send socket error");
+		error_log("chat send socket error");
 		socket.Close();
 		return R_ERR_REFUSE;
 	}
@@ -1205,46 +1526,37 @@ int CLogicAdmin::BroadCast(string message, int repeats, int interval,string serv
 	if (repeats > 1)
 	{
 		CStaticBuffer<100> UpdateSavebuffer;
-		if (fork() == 0)
+		int tmpinterval = interval;
+		int sendsize;
+		cpacketChartRequest.ProtocolType = PROTOCOL_TYPE_REFRESH;
+		cpacketChartRequest.ProtocolBody.Clear();
+		cpacketChartRequest.ProtocolBody.Append((byte *)"\0",1);
+		while (--repeats)
 		{
-			int tmpinterval = interval;
-			if (fork() == 0)
+			cpacketChartRequest.Encode(&UpdateSavebuffer);
+			while (tmpinterval > UPDATE_SAVE_INTERVAL)
 			{
-				int sendsize;
-				cpacketChartRequest.ProtocolType = PROTOCOL_TYPE_REFRESH;
-				cpacketChartRequest.ProtocolBody.Clear();
-				cpacketChartRequest.ProtocolBody.Append((byte *)"\0",1);
-				while (--repeats)
+				sleep(UPDATE_SAVE_INTERVAL);
+				tmpinterval -= UPDATE_SAVE_INTERVAL;
+				sendsize = (socket.Send(UpdateSavebuffer.GetConstBuffer(),UpdateSavebuffer.GetSize(), 0));
+				if (sendsize < 0)
 				{
-					cpacketChartRequest.Encode(&UpdateSavebuffer);
-					while (tmpinterval > UPDATE_SAVE_INTERVAL)
-					{
-						sleep(UPDATE_SAVE_INTERVAL);
-						tmpinterval -= UPDATE_SAVE_INTERVAL;
-						sendsize = (socket.Send(UpdateSavebuffer.GetConstBuffer(),UpdateSavebuffer.GetSize(), 0));
-						if (sendsize < 0)
-						{
-							error_log("updatesave  error sendsize = %d",sendsize);
-							exit(-1);
-						}
-					}
-					sleep(tmpinterval);
-					sendsize = socket.Send(buffer.GetConstBuffer(),buffer.GetSize(), 0);
-					if(sendsize < 0 )
-					{
-						error_log("chart send socket error,sendsize = %d",sendsize);
-						exit(-1);
-					}
-					info_log("auto to send success sendsize = %d",sendsize);
-					tmpinterval = interval;
+					error_log("updatesave  error sendsize = %d",sendsize);
+					socket.Close();
+					return R_ERR_REFUSE;
 				}
-				socket.Close();
-				exit(0);
 			}
-			socket.Close();
-			exit(0);
+			sleep(tmpinterval);
+			sendsize = socket.Send(buffer.GetConstBuffer(),buffer.GetSize(), 0);
+			if(sendsize < 0 )
+			{
+				error_log("chart send socket error,sendsize = %d",sendsize);
+				socket.Close();
+				return R_ERR_REFUSE;
+			}
+			info_log("auto to send success sendsize = %d",sendsize);
+			tmpinterval = interval;
 		}
-		sleep(2);
 	}
 
 	buffer.Clear();
@@ -1265,19 +1577,21 @@ int CLogicAdmin::BroadCast(string message, int repeats, int interval,string serv
 	}
 	if (cpacketChartReply.ProtocolResult != 0) {
 		error_log("protocol error");
+		socket.Close();
 		return R_ERROR;
 	}
 
+	socket.Close();
 	return R_SUCCESS;
 }
 
 int CLogicAdmin::AddForbidUser(unsigned uid, unsigned forbidts, string serverid, string splatform) {
 	string tcpserver = Config::GetValue(CONFIG_TCP_HOST);
 
-	int serveridint = (uid - UID_MIN) / 500000 + 1;
+	int serveridint = Config::GetZoneByUID(uid);
 	serveridint = MainConfig::GetMergedDomain(serveridint);
 	if(!serveridint)
-		serveridint = (uid - UID_MIN) / 500000 + 1;
+		serveridint = Config::GetZoneByUID(uid);
 	else
 		serverid = Convert::IntToString(serveridint);
 	if(serverid.empty())
@@ -1443,92 +1757,20 @@ int CLogicAdmin::AddForbidUser(unsigned uid, unsigned forbidts, string serverid,
 	return 0;
 }
 
-int CLogicAdmin::Query_th(Json::Value &buffer)
+int CLogicAdmin::SetFlag(const string &openid, unsigned flag)
 {
-	CDataGM *pData = GetDataGM();
-	if (NULL == pData)
-	{
-		error_log("GetDataGM faile");
-		return R_ERR_DATA;
-	}
+	if(flag >= gm_max)
+		return 0;
 
-	int ret = pData->Query(buffer, gm_th);
-
-	return 0;
+	CDataBlackUser dbBlackUser;
+	DataBlackUser blackUser;
+	blackUser.open_id = openid;
+	blackUser.block_time = flag;
+	return dbBlackUser.SetBlackUser(blackUser);
 }
-
-int CLogicAdmin::Add_th(string &openid)
+int CLogicAdmin::CheckGM(const string &openid, unsigned &flag)
 {
-	CDataGM *pData = GetDataGM();
-	if (NULL == pData)
-	{
-		error_log("GetDataGM faile");
-		return R_ERR_DATA;
-	}
-
-	int ret = pData->Add(openid, gm_th);
-
-	return 0;
-}
-
-int CLogicAdmin::Del_th(string &openid)
-{
-	CDataGM *pData = GetDataGM();
-	if (NULL == pData)
-	{
-		error_log("GetDataGM faile");
-		return R_ERR_DATA;
-	}
-
-	int ret = pData->Del(openid, gm_th);
-
-	return 0;
-
-}
-
-int CLogicAdmin::QueryGM(Json::Value &buffer)
-{
-	CDataGM *pData = GetDataGM();
-	if (NULL == pData)
-	{
-		error_log("GetDataGM faile");
-		return R_ERR_DATA;
-	}
-
-	int ret = pData->Query(buffer, gm_admin);
-
-	return 0;
-}
-int CLogicAdmin::DelGm(string &openid)
-{
-	CDataGM *pData = GetDataGM();
-	if (NULL == pData)
-	{
-		error_log("GetDataGM faile");
-		return R_ERR_DATA;
-	}
-
-	int ret = pData->Del(openid, gm_admin);
-
-	return 0;
-}
-
-int CLogicAdmin::AddGm(string &openid)
-{
-	CDataGM *pData = GetDataGM();
-	if (NULL == pData)
-	{
-		error_log("GetDataGM faile");
-		return R_ERR_DATA;
-	}
-
-	int ret = pData->Add(openid, gm_admin);
-
-	return 0;
-}
-
-int CLogicAdmin::CheckGM(string &openid, unsigned &flag)
-{
+	/*
 	CDataGM *pData = GetDataGM();
 	if (NULL == pData)
 	{
@@ -1537,6 +1779,19 @@ int CLogicAdmin::CheckGM(string &openid, unsigned &flag)
 	}
 
 	int ret = pData->Check(openid, flag);
+	*/
+
+	flag =  gm_none;
+	CDataBlackUser dbBlackUser;
+	DataBlackUser data;
+	int ret = dbBlackUser.GetBlackUser(openid, data);
+	if(ret)
+		return ret;
+
+	if (data.block_time > Time::GetGlobalTime())
+		flag = gm_forbid;
+	else if(data.block_time < gm_max)
+		flag = data.block_time;
 
 	return 0;
 }
@@ -1808,7 +2063,7 @@ int CLogicAdmin::AddAttack(unsigned uid1, unsigned uid2, unsigned res)
 	attackData.r3_loot = res;
 	attackData.r4_loot = res;
 	attackData.r5_loot = res;
-	unsigned dbId = (unsigned)((attackData.attack_uid - 10000000) / 500000 + 1);
+	unsigned dbId = Config::GetZoneByUID(attackData.attack_uid);
 	int ret = logicAttack.AddAttack(attackData, dbId);
 	return ret;
 }
@@ -1869,7 +2124,7 @@ int CLogicAdmin::UpdateBuildingLevel(unsigned uid, int buildingId, int buildingL
 	{
 		return ret;
 	}
-	if (buildingLev > user.level)
+	if ((user.level < 120 && buildingLev > user.level) || (user.level >= 120 && buildingLev > 150))
 	{
 		LOGIC_ERROR_RETURN_MSG("blv_is_too_high");
 	}
@@ -1904,7 +2159,8 @@ int CLogicAdmin::UpdateBuildingLevel(unsigned uid, int buildingId, int buildingL
 
 	if (save)
 	{
-		ret = logicBuilding.UpdateBuilding(uid, 0, data, true);
+		Json::Value res;
+		ret = logicBuilding.UpdateBuilding(uid, 0, data, res,true, true);
 		if (0 != ret)
 		{
 			return ret;
@@ -1921,7 +2177,7 @@ CDataGM* CLogicAdmin::GetDataGM(void)
 	}
 	data = new CDataGM();
 
-	int ret = data->Init(CONFIG_GM_TH_SHM,sem_gm);
+	int ret = data->Init(MainConfig::GetAllServerPath(CONFIG_GM_TH_SHM),sem_gm);
 	if (0 != ret)
 	{
 		error_log("Init data fail!");
@@ -1931,3 +2187,351 @@ CDataGM* CLogicAdmin::GetDataGM(void)
 	//debug_log("Init data!");
 	return data;
 }
+
+int CLogicAdmin::AddJueXueBao(unsigned uid,unsigned juexue_id,unsigned exp,Json::Value &result)
+{
+
+	int ret = 0;
+	Json::FastWriter writer;
+	Json::Reader reader;
+	CLogicUser LogicUser;
+	DataUser user;
+	ret = LogicUser.GetUser(uid, user);
+	if (ret != 0 )
+	{
+		error_log("[get_User_fail][uid=%u,ret=%d]",uid,ret);
+		DB_ERROR_RETURN_MSG("get_User_fail");
+	}
+
+	Json::Value user_tech;
+	user_tech.clear();
+	reader.parse(user.user_tech,user_tech);
+
+	if(!user_tech.isMember("baglist"))
+	{
+		error_log("[juexuebag_user_tech_error][uid=%u | juexue_id=%u]",uid,juexue_id);
+		return -1;
+	}
+	else
+	{
+		int flag = 0;
+		for(int i=0;i<20;i++)
+		{
+			if(user_tech["baglist"][i][0u].asInt() ==0)
+			{
+				user_tech["baglist"][i][0u] = juexue_id;
+				user_tech["baglist"][i][1u] = exp;
+				user_tech["baglist"][i][2u] = 0;
+				flag =1;
+				break;
+			}
+		}
+
+		if(flag == 0)
+		{
+			error_log("[juexue_baglist_is_full][uid=%u | juexue_id=%u]",uid,juexue_id);
+			return R_ERR_DATA;
+		}
+	}
+
+	user.user_tech = writer.write(user_tech);
+	ret = LogicUser.SetUser(uid,user);
+	if (ret != 0)
+	{
+		error_log("[setuser_fail][uid=%u,ret=%d]",uid,ret);
+		DB_ERROR_RETURN_MSG("db_set_user_fail");
+	}
+
+	result = user_tech["baglist"];
+
+	return 0;
+}
+
+int CLogicAdmin::AddLonglin(unsigned uid,unsigned longlin,unsigned &balance)
+{
+
+	int ret = 0;
+	Json::FastWriter writer;
+	Json::Reader reader;
+	CLogicUser LogicUser;
+	DataUser user;
+	ret = LogicUser.GetUser(uid, user);
+	if (ret != 0 )
+	{
+		error_log("[GetUserlonglin_fail][uid=%u,ret=%d]",uid,ret);
+		DB_ERROR_RETURN_MSG("get_User_fail");
+	}
+
+	Json::Value user_tech;
+	user_tech.clear();
+	reader.parse(user.user_tech,user_tech);
+
+	if(!user_tech.isMember("yinliang"))
+	{
+		user_tech["yinliang"] = longlin;
+	}
+	else
+	{
+		unsigned total_longlin = user_tech["yinliang"].asUInt() + longlin;
+		user_tech["yinliang"] = total_longlin;
+	}
+	balance = user_tech["yinliang"].asUInt();
+	user.user_tech = writer.write(user_tech);
+	ret = LogicUser.SetUser(uid,user);
+	if (ret != 0)
+	{
+		error_log("[setuserlonglin_fail][uid=%u,ret=%d]",uid,ret);
+		DB_ERROR_RETURN_MSG("db_set_user_fail");
+	}
+	return 0;
+}
+
+int CLogicAdmin::Changewuhujiang(unsigned uid, unsigned zhang, unsigned jie)
+{
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUser(uid,user);
+	if(ret != 0 )
+	{
+		return ret;
+	}
+
+	string user_stat = user.user_stat;
+	Json::Value stat;
+	Json::FromString(stat, user_stat);
+	int size = stat["whp"].size();
+
+
+	for(int i=0;i < size;++i)
+	{
+		if(0==i)
+			stat["whp"][i] = zhang;
+		else if(i>0 && i<zhang)
+			stat["whp"][i] = 11;
+		else if(i == zhang)
+			stat["whp"][i] = jie;
+		else
+			stat["whp"][i] = 1;
+	}
+
+	string new_stat =Json::ToString(stat);
+	user.user_stat = new_stat;
+	ret = logicUser.SetUser(uid,user);
+	if(ret != 0 )
+	{
+		return ret;
+	}
+	return 0;
+}
+
+int CLogicAdmin::ChangeHeroCoin(unsigned uid, int coin, const string &reaseon, unsigned &blance)
+{
+	if(coin == 0)
+		return 0;
+
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUser(uid, user);
+	if(ret)
+		return ret;
+	Json::Reader reader;
+	Json::FastWriter writer;
+	Json::Value userFlag;
+	if(!user.user_flag.empty() && !reader.parse(user.user_flag, userFlag))
+		return R_ERR_DATA;
+	CLogicPay logicPay;
+	ret = logicPay.ChangePayHeroCoins(uid, coin, reaseon, userFlag);
+	if (ret != 0)
+		return ret;
+	user.user_flag = writer.write(userFlag);
+	blance = userFlag["heroCoins"][1u].asInt();
+	return logicUser.SetUser(uid, user);
+}
+int CLogicAdmin::ChangeRechargeAlliance(unsigned uid, int cash)
+{
+	if(cash == 0)
+		return 0;
+
+	AllianceMember recharge;
+	CLogicRechargeAlliance Rechargealliance;
+
+	recharge.uid = uid;
+	recharge.cash = cash;
+
+	return Rechargealliance.UpdateRechargeAllianceData(recharge);
+}
+
+int CLogicAdmin::Th_ExportUserTech(unsigned uid, Json::Value &result)
+{
+	Json::Reader reader;
+
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUser(uid, user);
+	if (ret != 0)
+		return ret;
+
+	if (!user.user_tech.empty() && !reader.parse(user.user_tech, result["user_tech"]))
+	{
+		result["data_error"] = "null_error";
+		//DB_ERROR_RETURN_MSG("parse_stats_fail");
+	}
+	return 0;
+}
+
+int CLogicAdmin::Th_ImportUserTech(unsigned uid, Json::Value &data)
+{
+	Json::FastWriter writer;
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUser(uid, user);
+	if (ret != 0)
+		return ret;
+	// user
+	if (data.isMember("user_tech"))
+	{
+		user.user_tech = writer.write(data["user_tech"]);
+	}
+
+	ret = logicUser.SetUser(uid, user);
+	if (ret != 0)
+		return ret;
+	return 0;
+}
+
+int CLogicAdmin::Th_ExportUserStat(unsigned uid, Json::Value &result)
+{
+	Json::Reader reader;
+
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUser(uid, user);
+	if (ret != 0)
+		return ret;
+
+	if (!user.user_stat.empty() && !reader.parse(user.user_stat, result["user_stat"]))
+	{
+		result["data_error"] = "null_error";
+		//DB_ERROR_RETURN_MSG("parse_stats_fail");
+	}
+	return 0;
+}
+
+int CLogicAdmin::Th_ImportUserStat(unsigned uid, Json::Value &data)
+{
+	Json::FastWriter writer;
+	CLogicUser logicUser;
+	DataUser user;
+	int ret = logicUser.GetUser(uid, user);
+	if (ret != 0)
+		return ret;
+
+	if (data.isMember("user_stat"))
+	{
+		user.user_stat = writer.write(data["user_stat"]);
+	}
+
+	ret = logicUser.SetUser(uid, user);
+	if (ret != 0)
+		return ret;
+	return 0;
+}
+
+int CLogicAdmin::Th_ExportHero(unsigned uid, unsigned hero_ud, Json::Value &result)
+{
+	//hero
+	CLogicHero logicHero;
+	int ret = logicHero.Get(uid, hero_ud,  result["hero"]);
+	if (ret != 0)
+	{
+		result["data_error"] = "null_error";
+		return ret;
+	}
+	return 0;
+}
+
+int CLogicAdmin::Th_ImportHero(unsigned uid, Json::Value &data)
+{
+	Json::FastWriter writer;
+	//hero
+	if (data.isMember("hero"))
+	{
+		unsigned id = data["hero"]["ud"].asUInt();
+		CDataHero heroDB;
+		int ret = heroDB.ReplaceHero(uid, id, writer.write(data["hero"]));
+		if (ret != 0)
+		{
+			DB_ERROR_RETURN_MSG("replace_hero_fail");
+		}
+	}
+	return 0;
+}
+
+int CLogicAdmin::Th_ExportEquip(unsigned uid, unsigned equip_ud, Json::Value &result)
+{
+	//equipment
+	CLogicEquipment logicEquip;
+	int ret = logicEquip.Get(uid, equip_ud, result["equipment"]);
+	if (ret != 0)
+	{
+		result["data_error"] = "null_error";
+		return ret;
+	}
+	return 0;
+}
+
+int CLogicAdmin::Th_ImportEquip(unsigned uid, Json::Value &data)
+{
+	Json::FastWriter writer;
+	//equipment
+	if (data.isMember("equipment"))
+	{
+		unsigned id = data["equipment"]["ud"].asUInt();
+		CDataEquipment eqDB;
+		int ret = eqDB.ReplaceEquipment(uid, id, writer.write(data["equipment"]));
+		if (ret != 0)
+		{
+			DB_ERROR_RETURN_MSG("replace_equipment_fail");
+		}
+	}
+
+	return 0;
+}
+
+int CLogicAdmin::KickOffline(unsigned uid)
+{
+	int ret = Session::RemoveSession(uid);
+	if (ret)
+		return ret;
+
+	return R_SUCCESS;
+}
+
+int CLogicAdmin::Th_ExportNewAct(unsigned uid, unsigned sid, Json::Value &result)
+{
+	CLogicSecinc logicSecinc;
+	int ret = logicSecinc.GetSecinc(uid, sid, result["newAct"]);
+	if (ret != 0)
+	{
+		result["data_error"] = "null_error";
+		return ret;
+	}
+
+	return 0;
+}
+
+int CLogicAdmin::Th_ImportNewAct(unsigned uid, Json::Value &data)
+{
+	if (data.isMember("newAct"))
+	{
+		CLogicSecinc logicSecinc;
+		int ret = logicSecinc.SetOneSecinc(uid, data["newAct"]);
+		if (ret != 0)
+		{
+			DB_ERROR_RETURN_MSG("replace_NewAct_fail");
+		}
+	}
+
+	return 0;
+}
+

@@ -6,8 +6,8 @@
 class ILock : IBase
 {
 public:
-	virtual bool Lock() = 0;
-	virtual bool Unlock() = 0;
+	virtual bool Lock(int vnum = 1) = 0;
+	virtual bool Unlock(int vnum = 1) = 0;
 };
 
 #endif //__ILOCK_H__

@@ -8,7 +8,7 @@ class CLogicInstance
 public:
 	int GetInstanceInfoJson(unsigned uid, Json::Value &data);
 	int Load(unsigned instanceId, unsigned uidBy, bool restart, Json::Value &result);
-	int Save(unsigned instanceId, DataUser &userBy, Json::Value &data, Json::Value &result);
+	int Save(unsigned instanceId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype);
 	int GetMinInstance(unsigned uid, Json::Value &data);
 	int ReplaceInstance(const DataInstance &instance);
 	int ExportInstanceData(unsigned uid, unsigned instanceId, const string &dir);

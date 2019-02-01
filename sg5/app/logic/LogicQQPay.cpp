@@ -1,5 +1,8 @@
 #include "LogicQQPay.h"
 
+#define BLUE1_VIP_MAX 12
+#define BLUE2_VIP_MAX 60
+
 CLogicQQPay::T_ItemMap CLogicQQPay::g_ItemInfo;
 
 int CLogicQQPay::GetItemInfo(
@@ -10,7 +13,7 @@ int CLogicQQPay::GetItemInfo(
 	if (!bInit)
 	{
 		string itemFile;
-		itemFile = Config::GetValue(CONFIG_QQ_ITEM_INFO);
+		itemFile = MainConfig::GetAllServerPath(CONFIG_QQ_ITEM_INFO);
 		if (itemFile.empty())
 		{
 			fatal_log("[empty item info][path=%s]", itemFile.c_str());
@@ -182,9 +185,17 @@ int CLogicQQPay::deliver(
 		items[0] = uidanitem[1];
 	}
 
-	CLogicUserBasic logicUserBasic;
+	DataPayHistory payHis;
+	CDataPayHistory dbPayHis;
+	ret = dbPayHis.GetPayHistory(uid, OpenPlatform::GetType(), billno, payHis);
+	if (0 == ret)
+	{
+		CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+		return R_SUCCESS;
+	}
 
-	/*ret = logicUserBasic.GetUid(uid, OpenPlatform::GetType(), openid, true);
+	/*CLogicUserBasic logicUserBasic;
+	ret = logicUserBasic.GetUid(uid, OpenPlatform::GetType(), openid, true);
 	if (ret == R_ERR_NO_DATA)
 	{
 		ERROR_RETURN_MSG(4, "请求参数错误：（openid）");
@@ -201,110 +212,43 @@ int CLogicQQPay::deliver(
 	}
 	int count = CTrans::STOI(items[2]);
 
-	CLogicPay logicPay;
-
-	if (itemInfo.cash != 0 && Config::GetIntValue("new_flag") != 1)
-	{
-		if (Config::GetIntValue("new_flag") == 2) { //群豪有二级货币问题特殊处理
-			Json::Value updates;
-			updates.resize(1);
-			updates[(unsigned) 0]["s"] = "QQTOPUP";
-			updates[(unsigned) 0]["itemid"] = itemInfo.itemid;
-			updates[(unsigned) 0]["count"] = count;
-			updates[(unsigned) 0]["ts"] = (unsigned) time(0);
-			CLogicUpdates logicUpdates;
-			ret = logicUpdates.AddUpdates(uid, updates);
-			ret = logicPay.ChangePay(uid, itemInfo.cash * count, 0, "QQTOPUP",
-					1);
-			if (0 != ret) {
-				error_log("qqdeliever failed");
-				ERROR_RETURN_MSG(1, "系统繁忙 ");
-			}
-			//else
-			//	error_log("qqdeliever sucessed uid=%d itemid=%s count=%d",uid,itemInfo.itemid.c_str(),count);
-		} else {
-			int coins = 0;
-			ret = PayRewarld(uid, itemInfo.cash * count, coins);
-			if (0 != ret)
-				coins = 0;
-			ret = logicPay.ChangePay(uid, itemInfo.cash * count, coins,
-					"QQTOPUP", 1);
-			if (ret != 0) {
-				error_log("qqdeliever failed");
-				ERROR_RETURN_MSG(1, "系统繁忙 ");
-			}
-		}
-	}
-
-	/* daily accharge  add by aaron */
-	int accCharge = itemInfo.cash * count;
-	CDataUser userDb;
-	DataUser user;
-	userDb.GetUserLimit(uid,user);
-	/*if (0 == user.accCharge)
-	{
-		DataEmail email;
-		CLogicEmail logicEmail;
-		vector<uint64_t> toUidList;
-		toUidList.push_back(uid);
-		email.attach_flag = 0;
-		email.attachments = "";
-		email.uid = ADMIN_UID;
-		email.post_ts = Time::GetGlobalTime();
-		email.title = "VIP会员";
-		email.text = "尊敬的充值用户:感谢您的支持与信赖，我们将会派出专业客服一对一为您贴心服务，第一时间解决您在游戏中遇到的各种问题，优先通知你各种精彩活动与更新内容。请联系客服，客服qq：1093133533";
-		logicEmail.AddEmail(email,toUidList,OpenPlatform::GetType());
-	}*/
-
-	userDb.AddAccCharge(uid, accCharge);
-
-	if(user.accCharge < 50000 && user.accCharge + accCharge >= 50000
-	&& (Time::GetGlobalTime()-user.register_time) < (86400*21))
-	{
-		DataEmail email;
-		CLogicEmail logicEmail;
-		vector<uint64_t> toUidList;
-		toUidList.push_back(uid);
-		email.attach_flag = 0;
-		email.attachments = "";
-		email.uid = ADMIN_UID;
-		email.post_ts = Time::GetGlobalTime();
-		email.title = "至尊会员";
-		email.text = "尊敬的玩家您好，恭喜您成为我们的高级VIP用户。请联系QQ：2592360979领取VIP礼包并有专业人士为您一对一服务。";
-		logicEmail.AddEmail(email,toUidList,OpenPlatform::GetType());
-	}
+	bool bsave = false;
+	DataPay pay;
 	CLogicUser logicUser;
-	Json::Value userFlag;
+	DataUser user;
+	Json::Value user_flag;
+	Json::Reader reader;
+	ret = logicUser.GetUser(uid,user);
+	if(ret)
+		return ret;
+	reader.parse(user.user_flag, user_flag);
 
-	ret = logicUser.GetUserFlag(uid, userFlag);
-	if (ret != 0)
+	CLogicPay logicPay;
+	if (itemInfo.cash != 0 /*&& Config::GetIntValue("new_flag") != 1*/)
 	{
-
-		error_log("[add daily charge fail][uid=%u,coins=%u]",uid,accCharge);
-	}
-	else
-	{
-		if (!userFlag.isMember("dchg")
-				|| CTime::GetDayInterval(userFlag["dchg"][0u].asUInt(), Time::GetGlobalTime()) != 0)
-		{
-
-			userFlag["dchg"][0u] = Time::GetGlobalTime();
-			userFlag["dchg"][1u] = 0;
-		}
-		userFlag["dchg"][1u] = userFlag["dchg"][1u].asInt() + accCharge;
-
-		ret = logicUser.SetUserFlag(uid, userFlag);
-		if (ret != 0)
-		{
-			error_log("[add daily charge fail][uid=%u,coins=%u]",uid,accCharge);
+		Json::Value updates;
+		updates.resize(1);
+		updates[(unsigned) 0]["s"] = "QQTOPUP";
+		updates[(unsigned) 0]["itemid"] = itemInfo.itemid;
+		updates[(unsigned) 0]["count"] = count;
+		updates[(unsigned) 0]["ts"] = (unsigned) time(0);
+		CLogicUpdates logicUpdates;
+		ret = logicUpdates.AddUpdates(uid, updates);
+		ret = logicPay.ChangePay(uid, itemInfo.cash * count, 0, pay, "QQTOPUP", user_flag, bsave, PAY_FLAG_CHARGE);
+		if (0 != ret) {
+			error_log("qqdeliever failed");
+			ERROR_RETURN_MSG(1, "系统繁忙 ");
 		}
 	}
-	/*  daily accharge  add by aaron */
+
+	logicPay.DoPay(uid,user,itemInfo.cash * count);
+	if(bsave)
+		logicUser.SetUserFlag(uid,user_flag);
 
 	DataPayHistory payhis;
 	payhis.channel = user.last_login_platform;
 	payhis.channel_pay_id = billno;
-	payhis.count = count;
+	payhis.count = itemInfo.cash * count;
 	payhis.credit = amt;
 	payhis.status = PST_OK;
 	payhis.type = itemInfo.type;
@@ -316,8 +260,8 @@ int CLogicQQPay::deliver(
 		error_log("[AddPayHistory fail][ret=%d,openid=%s,billno=%s,payitem=%s,amt=%d]",
 				ret,openid.c_str(),billno.c_str(),payitem.c_str(),amt);
 	}
-	// add by aaron
 
+/*
 	if(Config::GetIntValue("new_flag") == 1)
 	{
 		CLogicBuyGoods buyGoods;
@@ -339,7 +283,7 @@ int CLogicQQPay::deliver(
 		info_log("buy equipments success uid=%u,id=%s,count=%d,",uid,itemInfo.itemid.c_str(),count);
 	}
 	// add by aaron
-
+*/
 	return 0;
 }
 
@@ -579,8 +523,396 @@ int CLogicQQPay::ReqQQPanel(const string &pf,
 		return R_ERR_LOGIC;
 }
 
-int CLogicQQPay::CheckTask(const string &appid, const string &openid, const string &contractid)
+int CLogicQQPay::CheckTask(const string &appid, const string &openid, const string &contractid, const string &cmd, int step, unsigned eqid, const string &billno, unsigned &zoneid)
 {
+	int ret = 0;
+	if (contractid.empty())
+	{
+		ERROR_RETURN_MSG(103, "请求参数错误：（contractid）");
+	}
+	string o_appid = OpenPlatform::GetPlatform()->GetAppId();
+	if (appid != o_appid)
+	{
+		ERROR_RETURN_MSG(103, "请求参数错误：（appid）");
+	}
+
+	CDataMarketTask dbMarketTask;
+	DataMarketTask task;
+	task.openid = openid;
+	task.contractid = contractid;
+
+	ret = dbMarketTask.GetTask(task);
+	if(0 != ret || !IsValidUid(task.uid))
+	{
+		ERROR_RETURN_MSG(1, "用户尚未在应用内创建角色");
+	}
+
+	zoneid = Config::GetZoneByUID(task.uid);
+
+	int level = 0, ms2 = 0, ms3 = 0;
+	level = CTrans::STOI(task.taskid);
+	ms2 = level / 100;
+	ms3 = level % 100;
+
+	switch(step)
+	{
+	case 1:
+	{
+		if(cmd == "award")
+		{
+			if(task.flag & MARKET_QUEST_STEP_1)
+			{
+				ERROR_RETURN_MSG(3, "该步骤奖励已发放过");
+			}
+
+			task.flag &= MARKET_QUEST_STEP_1;
+			ret = dbMarketTask.SetTask(task);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(102, "奖励发放失败");
+			}
+
+			if(eqid)
+			{
+				CLogicEquipment logicEquipment;
+				Json::Value temp;
+				ret = logicEquipment.AddOneItem(task.uid, eqid, 1,  billno, temp);
+				if(0 != ret)
+				{
+					ERROR_RETURN_MSG(102, "奖励发放失败");
+				}
+			}
+		}
+		else
+		{
+			ERROR_RETURN_MSG(103, "请求参数错误：（cmd）");
+		}
+	}
+		break;
+	case 2:
+	{
+		if(cmd == "check")
+		{
+			if(task.flag & MARKET_QUEST_STEP_2)
+			{
+				ERROR_RETURN_MSG(3, "该步骤奖励已发放过");
+			}
+
+			CLogicUser logicUser;
+			DataUser user;
+			ret = logicUser.GetUserLimit(task.uid, user);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+
+			if(user.level < ms2)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+		}
+		else if(cmd == "check_award")
+		{
+			if(task.flag & MARKET_QUEST_STEP_2)
+			{
+				ERROR_RETURN_MSG(3, "该步骤奖励已发放过");
+			}
+
+			CLogicUser logicUser;
+			DataUser user;
+			ret = logicUser.GetUserLimit(task.uid, user);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+
+			if(user.level < ms2)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+
+			task.flag &= MARKET_QUEST_STEP_2;
+			ret = dbMarketTask.SetTask(task);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(102, "奖励发放失败");
+			}
+
+			if(eqid)
+			{
+				CLogicEquipment logicEquipment;
+				Json::Value temp;
+				ret = logicEquipment.AddOneItem(task.uid, eqid, 1,  billno, temp);
+				if(0 != ret)
+				{
+					ERROR_RETURN_MSG(102, "奖励发放失败");
+				}
+			}
+		}
+		else
+		{
+			ERROR_RETURN_MSG(103, "请求参数错误：（cmd）");
+		}
+	}
+		break;
+	case 3:
+	{
+		if(cmd == "check")
+		{
+			if(task.flag & MARKET_QUEST_STEP_3)
+			{
+				ERROR_RETURN_MSG(3, "该步骤奖励已发放过");
+			}
+
+			CLogicUser logicUser;
+			DataUser user;
+			ret = logicUser.GetUserLimit(task.uid, user);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+
+			if(user.level < ms3)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+		}
+		else if(cmd == "check_award")
+		{
+			if(task.flag & MARKET_QUEST_STEP_3)
+			{
+				ERROR_RETURN_MSG(3, "该步骤奖励已发放过");
+			}
+
+			CLogicUser logicUser;
+			DataUser user;
+			ret = logicUser.GetUserLimit(task.uid, user);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+
+			if(user.level < ms3)
+			{
+				ERROR_RETURN_MSG(2, "用户尚未完成本步骤");
+			}
+
+			task.flag &= MARKET_QUEST_STEP_3;
+			ret = dbMarketTask.SetTask(task);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(102, "奖励发放失败");
+			}
+
+			if(eqid)
+			{
+				CLogicEquipment logicEquipment;
+				Json::Value temp;
+				ret = logicEquipment.AddOneItem(task.uid, eqid, 1,  billno, temp);
+				if(0 != ret)
+				{
+					ERROR_RETURN_MSG(102, "奖励发放失败");
+				}
+			}
+		}
+		else
+		{
+			ERROR_RETURN_MSG(103, "请求参数错误：（cmd）");
+		}
+	}
+		break;
+	case 4:
+	{
+		if(cmd == "award")
+		{
+			if(task.flag & MARKET_QUEST_STEP_4)
+			{
+				ERROR_RETURN_MSG(3, "该步骤奖励已发放过");
+			}
+
+			task.flag &= MARKET_QUEST_STEP_4;
+			ret = dbMarketTask.SetTask(task);
+			if(0 != ret)
+			{
+				ERROR_RETURN_MSG(102, "奖励发放失败");
+			}
+
+			if(eqid)
+			{
+				CLogicEquipment logicEquipment;
+				Json::Value temp;
+				ret = logicEquipment.AddOneItem(task.uid, eqid, 1,  billno, temp);
+				if(0 != ret)
+				{
+					ERROR_RETURN_MSG(102, "奖励发放失败");
+				}
+			}
+		}
+		else
+		{
+			ERROR_RETURN_MSG(103, "请求参数错误：（cmd）");
+		}
+	}
+		break;
+	default:
+	{
+		ERROR_RETURN_MSG(103, "请求参数错误：（step）");
+	}
+		break;
+	}
+
+	return 0;
+}
+
+int CLogicQQPay::v3_pay_get_token(const string &pfkey,
+		const string &pf,
+		const string &openkey,
+		const string &openid,
+		const string &tokentype,
+		const string &discountid,
+		string &appid,
+		string &token,
+		string &zoneid)
+{
+	int ret = 0;
+	string ts = CTrans::UTOS((unsigned)time(NULL));
+	if(!Config::GetValue(zoneid, CONFIG_ZONE_ID))
+		zoneid = "0";
+
+	appid = OpenPlatform::GetPlatform()->GetAppId();
+	string appkey = OpenPlatform::GetPlatform()->GetAppKey();
+
+	string url = "https://" + OpenPlatform::GetPlatform()->GetConfig("v3domain") + "/v3/pay/get_token?";
+	//string url = "https://119.147.19.43/v3/pay/get_token?";
+	string qsig = "appid=" + appid + "&discountid=" + discountid + "&openid=" + openid + "&openkey=" + openkey +"&pf="+ pf+ "&pfkey=" + pfkey + "&tokentype=" + tokentype +"&ts=" + ts + "&version=v3&zoneid=" + zoneid;
+	string qstr = "appid=" + appid + "&discountid=" + discountid + "&openid=" + openid + "&openkey=" + openkey +"&pf="+ pf+ "&pfkey=" + pfkey + "&tokentype=" + tokentype +"&ts=" + ts + "&version=v3&zoneid=" + zoneid;
+
+	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/pay/get_token") + "&" + Crypt::UrlEncodeForTX(qsig);
+	string key = appkey + "&";
+	string bsig = Crypt::HmacSha1(osig, key);
+	string sig;
+	Crypt::Base64Encode(sig, bsig);
+
+	url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
+
+	//info_log("[qqtopup][url=%s]",url.c_str());
+	//info_log("[qqtopup][osig=%s,key=%s]",osig.c_str(),key.c_str());
+	string response;
+	if (!Network::HttpGetRequest(response, url) || response.empty())
+	{
+		error_log("[http request fail][pfkey=%s]",openid.c_str());
+		ERROR_RETURN_MSG(R_ERR_NO_DATA, "http_request_fail");
+	}
+	Json::Value result;
+	Json::Reader reader;
+	int responsetRet = 0;
+	if (response.empty()
+		|| !reader.parse(response, result)
+		|| !Json::GetInt(result,"ret", responsetRet)
+		|| responsetRet != 0)
+	{
+		error_log("[response error][openid=%s,response=%s]",openid.c_str(),response.c_str());
+		ERROR_RETURN_MSG(R_ERR_NO_DATA, "response_error");
+	}
+
+	token = result["token"].asString();
+
+	return 0;
+}
+
+int CLogicQQPay::vip_charge_deliver(
+		const string &appid,
+		const string &openid,
+		const string &payitem)
+{
+	if(Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_VIP_CHARGE_BEGIN_TS)
+		&&Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_VIP_CHARGE_END_TS))
+	{
+		int ret = 0;
+		string o_appid = OpenPlatform::GetPlatform()->GetAppId();
+		if (appid != o_appid)
+		{
+			ERROR_RETURN_MSG(4, "请求参数错误：（appid）");
+		}
+		vector<string> items;
+		CBasic::StringSplit(payitem, "*", items);
+		if (items.size() != 3)
+		{
+			ERROR_RETURN_MSG(4, "请求参数错误：（payitem）");
+		}
+
+		int month = CTrans::STOI(items[0]);
+		int num = CTrans::STOI(items[2]);
+
+		int total = 0;
+		int used = 0;
+		unsigned updatetime = 0;
+		CDataVipCharge charge;
+		int getret = charge.GetVipCharge(openid,total,used,updatetime);
+
+		string type;
+		Config::GetValue(type, CONFIG_VIP_CHARGE_TYPE);
+		int flag = 1;
+		if(type.find("1") != string::npos)
+			flag = 1;
+		else if(type.find("2") != string::npos)
+			flag = 2;
+		//本次活动时间内
+		if(updatetime >= Config::GetIntValue(CONFIG_VIP_CHARGE_BEGIN_TS)
+			&&updatetime <= Config::GetIntValue(CONFIG_VIP_CHARGE_END_TS))
+		{
+			if(flag == 1)
+			{
+				total += month*num;
+				if(total > BLUE1_VIP_MAX)
+					total = BLUE1_VIP_MAX;
+			}
+			else if(flag == 2)
+			{
+				++total;
+				if(total > BLUE2_VIP_MAX)
+					total = BLUE2_VIP_MAX;
+			}
+		}
+		else
+		{
+			if(flag == 1)
+			{
+				if(total > BLUE1_VIP_MAX)
+					total = BLUE1_VIP_MAX;
+				total = month*num;
+			}
+			else if(flag == 2)
+			{
+				total = 1;
+				if(total > BLUE2_VIP_MAX)
+					total = BLUE2_VIP_MAX;
+			}
+			used = 0;
+		}
+
+		if(R_ERR_NO_DATA == getret)
+		{
+			ret = charge.AddVipCharge(openid,total,used);
+			if(ret != 0)
+				return ret;
+		}
+		else
+		{
+			ret = charge.UpdateVipChargeUsed(openid,total,used);
+			if(ret != 0)
+				return ret;
+		}
+	}
+	return 0;
+}
+
+int CLogicQQPay::blue_year_charge_deliver(
+		const string &appid,
+		const string &openid,
+		const string &payitem)
+{
+
 	int ret = 0;
 	string o_appid = OpenPlatform::GetPlatform()->GetAppId();
 	if (appid != o_appid)
@@ -588,24 +920,25 @@ int CLogicQQPay::CheckTask(const string &appid, const string &openid, const stri
 		ERROR_RETURN_MSG(4, "请求参数错误：（appid）");
 	}
 
-	CLogicMarketTask logicMarketTask;
-	int flag = 0;
-	string taskid;
-	if (contractid.empty())
-	{
-		ERROR_RETURN_MSG(4, "请求参数错误：（contractid）");
-	}
+	int hero_total = 0;
+	int hero_used = 0;
 
-	ret = logicMarketTask.GetMarketTask(openid, contractid, taskid, flag);
-	if(0 != ret)
-	{
-		ERROR_RETURN_MSG(1, "系统繁忙");
-	}
+	CDataVipCharge charge;
+	int getret = charge.GetBlueYearVipCharge(openid,hero_total,hero_used);
 
-	if (0 == flag)
+	if(R_ERR_NO_DATA == getret)
 	{
-		ERROR_RETURN_MSG(1, "系统繁忙");
+		ret = charge.AddBlueYearVipCharge(openid,1,0);
+		if(ret != 0)
+			return ret;
 	}
-
+	else
+	{
+		hero_total += 1;
+		ret = charge.UpdateBlueYearVipChargeUsed(openid,hero_total,hero_used);
+		if(ret != 0)
+			return ret;
+	}
 	return 0;
 }
+

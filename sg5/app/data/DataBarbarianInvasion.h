@@ -8,7 +8,7 @@
 #ifndef DATABARBARIANINVASION_H_
 #define DATABARBARIANINVASION_H_
 #include "Kernel.h"
-#define MAX_PONITS_NUM 60
+#define MAX_PONITS_NUM 100
 #define TEAM_NAME_LEN_MAX 32
 #define MAX_TEAM_NUM 512
 struct DataPlayerItem{
@@ -51,11 +51,13 @@ struct DataTeamItem{
 	unsigned aid;
 	char     aname[TEAM_NAME_LEN_MAX];
 	unsigned teamPoints;
+	unsigned kingdom;
 	DataTeamItem &operator=(DataTeamItem const &other)
 	{
 		aid = other.aid;
 		memcpy(aname,other.aname, sizeof(aname) - 1);
 		teamPoints = other.teamPoints;
+		kingdom = other.kingdom;
 		return *this;
 	}
 };
@@ -70,10 +72,12 @@ public:
 	CDataBarbarianInvasion();
 	virtual ~CDataBarbarianInvasion();
 	int Init(const std::string &path, semdat sem=sem_barbarian);
-	int UpdateRank(DataPlayerItem const &playerItem, unsigned aid);
+	int UpdateRank(DataPlayerItem const &playerItem, unsigned aid, int max);
 	int GetTeamPlayersRank(DataPlayersPoints &playerRank, unsigned aid);
 	int GetTeamRank(DataTeamItem teamRank[MAX_TEAM_NUM], int &teamsNum);
-	int RewardCashCaculate(DataBarbarianInvasionRank *pdata);
+	int GetTeamPlayersRankSorted(DataPlayersPoints &playerRank, unsigned aid);
+	int GetTeamRankSorted(unsigned kingdom,DataTeamItem teamRank[MAX_TEAM_NUM], int &teamsNum);
+	//int RewardCashCaculate(DataBarbarianInvasionRank *pdata);
 
 protected:
 	bool m_init;

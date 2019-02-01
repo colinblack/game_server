@@ -59,6 +59,37 @@ int CDataHDaysAcvitityRank::UpdateRankList(const DataHDaysAcvitityPay &points)
 		DB_ERROR_RETURN_MSG("init_hundreddaysavtivityrank_fail");
 	}
 	CAutoLock lock(&m_sh, true);
+	//版本控制
+	if(pdata->version != Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION))
+	{
+		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
+	}
+
+	if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS) + 24*60*60)
+		&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS) + 46*60*60)
+		&& pdata->flag == 1)
+	{
+		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
+		pdata->awardflag[0] = 1;
+	}
+	else if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS) + 48*60*60)
+		&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) - 2*60*60)
+		&& pdata->flag == 2)
+	{
+		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
+		pdata->awardflag[1] = 2;
+	}
+	else if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) + 60*60 ) //第三天
+		&& pdata->flag == 3)
+	{
+		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
+		pdata->awardflag[2] = 3;
+	}
+
 	for(i = RANK_SIZE -1;i >= 0; i--)
 	{
 		if(pdata->HDAcvitityRank[i].uid == points.uid  )
@@ -100,6 +131,13 @@ int CDataHDaysAcvitityRank::GetRankList( DataHDaysAcvitityPay vecPoints[])
 		DB_ERROR_RETURN_MSG("init_hundreddaysavtivityrank_fail");
 	}
 	CAutoLock lock(&m_sh, true);
+	//版本控制
+	if(pdata->version != Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION))
+	{
+		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
+	}
+
 	memcpy(vecPoints,pdata->HDAcvitityRank,sizeof(DataHDaysAcvitityPay) * RANK_SIZE);
 	return 0;
 }
@@ -120,20 +158,23 @@ int CDataHDaysAcvitityRank::RewardHundredDaysActivityRank(vector <UpdatesHundDay
 		&& pdata->flag == 1)
 	{
 		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
 		pdata->awardflag[0] = 1;
 	}
 	else if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS) + 48*60*60)
-		&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS))
+		&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) - 2*60*60)
 		&& pdata->flag == 2)
 	{
 		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
 		pdata->awardflag[1] = 2;
 	}
 	else if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) + 60*60 ) //第三天
 		&& pdata->flag == 3)
 	{
 		memset(pdata, 0, sizeof(*pdata));
-//		error_log("hundreddays_is_clean");
+		pdata->version = Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_VERSION);
+		pdata->awardflag[2] = 3;
 	}
 
 	//第一天、
@@ -154,12 +195,12 @@ int CDataHDaysAcvitityRank::RewardHundredDaysActivityRank(vector <UpdatesHundDay
 			temp.ts = Time::GetGlobalTime();
 			temp.pay = pdata->HDAcvitityRank[i].pay;
 			data.push_back(temp);
-//			error_log("test111111111:%u | %u | %d",data[i].uid,data[i].pay,data[i].rank);
+			//debug_log("test111111111:%u | %u | %d",data[i].uid,data[i].pay,data[i].rank);
 		}
 
 	}
 	else if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS) + 46*60*60)  //第二天
-			&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS))
+			&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) - 2*60*60)
 			&& pdata->awardflag[1] == 0)
 	{
 		pdata->flag = 2;
@@ -175,10 +216,10 @@ int CDataHDaysAcvitityRank::RewardHundredDaysActivityRank(vector <UpdatesHundDay
 			temp.ts = Time::GetGlobalTime();
 			temp.pay = pdata->HDAcvitityRank[i].pay;
 			data.push_back(temp);
-//			error_log("test222222222222:%u | %u | %d",data[i].uid,data[i].pay,data[i].rank);
+			//debug_log("test222222222222:%u | %u | %d",data[i].uid,data[i].pay,data[i].rank);
 		}
 	}
-	else if(Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS)  //第三天
+	else if(Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) - 2*60*60  //第三天
 		&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS) + 24*60*60)
 		&& pdata->awardflag[2] == 0)
 	{
@@ -195,21 +236,9 @@ int CDataHDaysAcvitityRank::RewardHundredDaysActivityRank(vector <UpdatesHundDay
 			temp.ts = Time::GetGlobalTime();
 			temp.pay = pdata->HDAcvitityRank[i].pay;
 			data.push_back(temp);
-//			error_log("test333333333:%u | %u | %d",data[i].uid,data[i].pay,data[i].rank);
+			//debug_log("test333333333:%u | %u | %d",data[i].uid,data[i].pay,data[i].rank);
 		}
 	}
 	return 0;
 }
 
-
-int CDataHDaysAcvitityRank::CleanRankList(void)
-{
-	AcvitityPayRank *pdata = (AcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("init_hundreddaysavtivityrank_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	memset(pdata, 0, sizeof(*pdata));
-	return 0;
-}

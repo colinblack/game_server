@@ -97,7 +97,13 @@ int CLogicUserInteract::AddAttack(unsigned uidFrom, unsigned uidTo)
 	int ret = GetInteract(uidFrom, uidTo, userInteract);
 	if(ret == 0)
 	{
-		userInteract.attack_to++;
+		if(Time::IsThisWeek(userInteract.last_attack_time))
+			userInteract.attack_to++;
+		else
+		{
+			userInteract.attack_to = 1;
+			userInteract.attack_from = 0;
+		}
 		if(userInteract.retaliate_count > 0)
 		{
 			userInteract.retaliate_count--;
@@ -137,7 +143,13 @@ int CLogicUserInteract::AddAttack(unsigned uidFrom, unsigned uidTo)
 	ret = GetInteract(uidTo, uidFrom, userInteract);
 	if(ret == 0)
 	{
-		userInteract.attack_from++;
+		if(Time::IsThisWeek(userInteract.last_attack_time))
+			userInteract.attack_from++;
+		else
+		{
+			userInteract.attack_to = 0;
+			userInteract.attack_from = 1;
+		}
 		if(userInteract.retaliate_count < 10000)
 		{
 			userInteract.retaliate_count++;
@@ -533,7 +545,7 @@ int CLogicUserInteract::SendRequest(unsigned uid, const string &type, const stri
 				}
 				ret = 1;
 				OPUserInfo userInfo;
-				if (OpenPlatform::GetType() == PT_FACEBOOK)
+				if (OpenPlatform::IsFBPlatform())
 				{
 					ret = ((CFacebookPlatform *)(OpenPlatform::GetPlatform()))->GetOtherUserInfo(userInfo, toOpenId, openid, openkey);
 				}
@@ -1026,4 +1038,24 @@ int CLogicUserInteract::GetInteracts(unsigned uid, map<unsigned, DataUserInterac
 		return ret;
 	}
 	return R_ERR_REFUSE;
+}
+
+int CLogicUserInteract::ResetAttackNumByWeek(DataUserInteract &interact)
+{
+	if((interact.attack_from || interact.attack_to) && !Time::IsThisWeek(interact.last_attack_time))
+	{
+		//debug_log("uid=%u,opposite_uid=%u,attack_from=%u,attack_to=%u,last_attack_time=%u",interact.uid,interact.opposite_uid,interact.attack_from, interact.attack_to,interact.last_attack_time);
+
+		interact.attack_from = interact.attack_to = 0;
+		SetInteract(interact);
+
+		DataUserInteract opp_interact;
+		int ret = GetInteract(interact.opposite_uid, interact.uid, opp_interact);
+		if(!ret)
+		{
+			opp_interact.attack_from = opp_interact.attack_to = 0;
+			SetInteract(opp_interact);
+		}
+	}
+	return 0;
 }

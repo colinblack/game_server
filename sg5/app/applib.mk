@@ -6,7 +6,7 @@ TARGET = libsgonline$(TARGET_DIR_NAME).so
 all	: $(TARGET) 
 
 clean : 
-	rm -f $(TARGET) *.o
+	rm -f $(TARGET) *.o *.d
 
 $(TARGET) : $(OBJS)
 	$(CXX) $(OBJS) $(CXXFLAGS) $(INC) -Xlinker "-(" $(LINK) -Xlinker "-)" -shared -o $(TARGET)

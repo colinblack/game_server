@@ -1,11 +1,12 @@
 #include "LogicInc.h"
 
-class CCgiQQReport : public CCgiBase
+class CCgiPostReport : public CCgiBase
 {
 public:
-	CCgiQQReport() : CCgiBase("postreport")
+	CCgiPostReport() : CCgiBase("postreport")
 	{
 		SetFeature(CF_PRINT_JSON);
+		SetFeature(CF_GET_REMOTE_IP);
 	}
 
 	CGI_DIRECT_PROCESS(PostReport)
@@ -18,13 +19,13 @@ public:
 		string action = CCGIIn::GetCGIStr("action");
 		string msg = CCGIIn::GetCGIStr("msg");
 		if(error == "1")
-			error_log("uid=%s,error=%s,cgi=%s,action=%s,msg=%s",uid.c_str(),error.c_str(),cgi.c_str(),action.c_str(),msg.c_str());
+			error_log("uid=%s,error=%s,cgi=%s,action=%s,msg=%s,ip=%s",uid.c_str(),error.c_str(),cgi.c_str(),action.c_str(),msg.c_str(),m_ipstr.c_str());
 		else if(error == "2")
-			error_log("uid=%s,error=%s,msg=%s",uid.c_str(),error.c_str(),msg.c_str());
+			error_log("uid=%s,error=%s,msg=%s,ip=%s",uid.c_str(),error.c_str(),msg.c_str(),m_ipstr.c_str());
 		else
-			debug_log("uid=%s,error=%s,msg=%s",uid.c_str(),error.c_str(),msg.c_str());
+			debug_log("uid=%s,error=%s,msg=%s,ip=%s",uid.c_str(),error.c_str(),msg.c_str(),m_ipstr.c_str());
 		return R_SUCCESS;
 	}
 };
 
-CGI_MAIN(CCgiQQReport)
+CGI_MAIN(CCgiPostReport)

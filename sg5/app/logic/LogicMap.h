@@ -26,6 +26,12 @@ struct MapUserData
 	int retaliate_count;
 	unsigned alliance_id;
 	string alliance_name;
+	unsigned r1;
+	unsigned r2;
+	unsigned r3;
+	unsigned r4;
+	unsigned r5;
+	unsigned r5_max;
 };
 
 enum AttackPermitType
@@ -45,9 +51,10 @@ enum AttackPermitType
 	APT_BAN_ALLIANCE			= 13,	//同联盟
 	APT_BAN_TOO_MANY_ATTACK		= 14,
 	APT_BAN_OTHER				= 15,
-	APT_BAN_WORLD_PROTECT       = 16
+	APT_BAN_WORLD_PROTECT       = 16,
+	APT_BAN_BATTLE      		= 17    //Ralf20140225  后台增加pve或pvp保护
 };
-#define IsAllowAttack(permit) (permit==APT_ALLOW||permit==APT_ALLOW_REVENGE||permit==APT_ALLOW_ALLIANCE_REVENGE)
+#define IsAllowAttack(permit) (permit==APT_ALLOW||permit==APT_ALLOW_REVENGE||permit==APT_ALLOW_ALLIANCE_REVENGE||permit==APT_BAN_ONLINE)
 
 class CLogicMap
 {
@@ -56,6 +63,7 @@ public:
 
 	int GetMapUsersJson(unsigned uid, PlatformType platform, Json::Value &data, bool reset = false);
 	int GetMapUsers(unsigned uid, PlatformType platform, vector<MapUserData> &userList, bool reset = false);
+	int LY_GetMapUsers(unsigned uid, PlatformType platform, vector<MapUserData> &userList, bool reset = false);
 	int GetUserData(unsigned uid, PlatformType platform, const DataUser& userQuery, bool isFriend, MapUserData & userData);
 	int GetUserByType(CDataMap *pDbMap, int group, unsigned &uidNew, int type, int level);
 	int GetChallenger(unsigned uid, unsigned &challenger, PlatformType platform);

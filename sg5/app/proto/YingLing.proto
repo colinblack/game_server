@@ -1,0 +1,38 @@
+package YingLing;
+
+
+message YingLingP
+{
+	required uint32 id		= 1;  //id	
+	required uint32 count	= 2;  //count
+	required uint32 p		= 3;  //权重
+}
+
+message YingLingExp
+{
+	required uint32 id	= 1;  //id	
+	required uint32 time= 2;  //消耗时间
+	required uint32 exp	= 3;  //增加exp
+	required uint32 r1	= 4;  //消耗
+	required uint32 r2	= 5;  //消耗
+	required uint32 r3	= 6;  //消耗	
+	required uint32 r4	= 7;  //消耗
+}
+
+message YingLingStar
+{
+	required uint32 id	= 1;  //id	
+	required uint32 sid	= 2;  //碎片id	
+	repeated uint32 cost= 3;  //消耗
+}
+
+message YingLing
+{
+	repeated YingLingP normal	= 1;  //普通抽
+	repeated YingLingP advance	= 2;  //高级抽
+	required uint32 normaltime	= 3;  //每日普通抽次数
+	required uint32 advancetime	= 4;  //免费高级抽间隔秒数
+	required uint32 advancecost	= 5;  //高级抽消耗钻
+	repeated YingLingExp exp	= 6;  //训练
+	repeated YingLingStar star	= 7;  //升星
+}

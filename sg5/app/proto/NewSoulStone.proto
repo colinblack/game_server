@@ -1,0 +1,25 @@
+package NewSoulStone;
+
+message OldSoulStoneA
+{
+	required uint32 id				= 1;  //id
+	repeated uint32 a 				= 2;  //
+}
+
+message NewSoulStoneP
+{
+	required uint32 id				= 1;  //id
+	required uint32 p 				= 2;  //
+}
+
+message NewSoulStoneP3
+{
+	repeated NewSoulStoneP newstone	= 1;  //
+	required uint32 a 				= 2;  //
+}
+
+message NewSoulStone
+{
+	repeated OldSoulStoneA oldstone	= 1;  //
+	repeated NewSoulStoneP3 newstone3 = 2;
+}

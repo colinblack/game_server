@@ -29,8 +29,8 @@ public:
 		const string serverid = CCGIIn::GetCGIStr("serverid");
 		if (serverid.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（payitem）\"}");
-			ERROR_RETURN_MSG(4, "请求参数错误：（payitem）");
+			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（serverid）\"}");
+			ERROR_RETURN_MSG(4, "请求参数错误：（serverid）");
 		}
 		const string num = CCGIIn::GetCGIStr("num");
 		if (num.empty())
@@ -94,9 +94,10 @@ public:
 			}
 			string osig = "GET&%2Fcgi%2Fvndeliver&" + Crypt::UrlEncodeForTX(qsig);
 			string sha1Key = appkey + "&";
-			string bnsig = Crypt::HmacSha1(osig, sha1Key);
-			string nsig;
-			Crypt::Base64Encode(nsig, bnsig);
+			string nsig = Crypt::Md5Encode(osig.append(sha1Key));//fix20140621
+			//string bnsig = Crypt::HmacSha1(osig, sha1Key);
+			//string nsig;
+			//Crypt::Base64Encode(nsig, bnsig);
 			//info_log("[vndeliver sig][dsig=%s,nsig=%s,osig=%s,key=%s]",dsig.c_str(),nsig.c_str(),osig.c_str(),sha1Key.c_str());
 			if (dsig != nsig)
 			{
@@ -114,7 +115,7 @@ public:
 			return ret;
 		}
 
-		CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+		//CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");防止回调过久移动到各平台虚函数
 		CGI_SEND_LOG("openid=%s&billno=%s&serverid=%s&num=%s", openid.c_str(),token.c_str(),serverid.c_str(),num.c_str());
 		return R_SUCCESS;
 	}

@@ -20,10 +20,13 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 	Config::SetDomain(0);
-	if (argc != 5) {
-		cout << "usage: " << argv[0] << " [cash] [coin] [type] [serverid]" << endl;
+	if (argc < 5) {
+		cout << "usage: " << argv[0] << " [cash] [coin] [type] [serverid/1 or 1-2] [reason/not necessary]" << endl;
 		return 1;
 	}
+	string reason;
+	if(argc > 5)
+		reason = argv[5];
 	int ret;
 	string strserver(argv[4]);
 	vector<string> rlt;
@@ -40,7 +43,7 @@ int main(int argc, char *argv[]) {
 			uint64_t uidEnd;
 			int cash = CTrans::STOI(argv[1]);
 			int coin = CTrans::STOI(argv[2]);
-			unsigned userid = UID_MIN + 500000 * (i - 1);
+			unsigned userid = Config::GetUIDStart(i);
 			string type(argv[3]);
 			CLogicPay logicPay;
 			CLogicIdCtrl logicIdCtrl;
@@ -52,24 +55,22 @@ int main(int argc, char *argv[]) {
 			}
 			int i = time(NULL);
 			cout << "i=" << i << endl;
-			DataPay pay;
 			cout << "uid_min=" << userid << "uid_max=" << uidEnd << endl;
 			CLogicUpdates logicUpdates;
 			for (; userid <= (unsigned) uidEnd; ++userid) {
-				ret = logicPay.ChangePay(userid, cash, coin, pay, type, 1);
+				ret = logicPay.ChangePay(userid, cash, coin, "ADMINOP");
 				if (ret != 0) {
 					cout << "change failed.ret:" << ret << ",uid:" << userid<<endl;
-				} else {
+				} else if(!reason.empty()){
 					Json::Value updatesData = Json::Value(Json::arrayValue);
 					updatesData.resize(1);
 					updatesData[0u]["ts"] = Time::GetGlobalTime();
 					updatesData[0u]["s"] = "paybackmessage";
+					updatesData[0u]["r"] = reason;
 					updatesData[0u]["coins"] = cash + coin;
 					ret = logicUpdates.AddUpdates(userid, updatesData);
-					if (0 != ret) {
-						cout << "AddUpdates fail,ret=" << ret << ",uid="
-								<< userid << endl;
-					}
+					if (0 != ret)
+						cout << "AddUpdates fail,ret=" << ret << ",uid="<< userid << endl;
 				}
 			}
 			int j = time(NULL);
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]) {
 		uint64_t uidEnd;
 		int cash = CTrans::STOI(argv[1]);
 		int coin = CTrans::STOI(argv[2]);
-		unsigned userid = UID_MIN + 500000 * (serverid - 1);
+		unsigned userid = Config::GetUIDStart(serverid);
 		string type(argv[3]);
 		CLogicPay logicPay;
 		CLogicIdCtrl logicIdCtrl;
@@ -97,24 +98,22 @@ int main(int argc, char *argv[]) {
 		}
 		int i = time(NULL);
 		cout << "i=" << i << endl;
-		DataPay pay;
 		cout << "uid_min=" << userid << "uid_max=" << uidEnd << endl;
 		CLogicUpdates logicUpdates;
 		for (; userid <= (unsigned) uidEnd; ++userid) {
-			ret = logicPay.ChangePay(userid,  cash, coin, pay, type, 1);
+			ret = logicPay.ChangePay(userid,  cash, coin, "ADMINOP");
 			if (ret != 0) {
 				cout << "change failed.ret:" << ret << ",uid:" << userid<<endl;
-			} else {
+			} else if(!reason.empty()){
 				Json::Value updatesData = Json::Value(Json::arrayValue);
 				updatesData.resize(1);
 				updatesData[0u]["ts"] = Time::GetGlobalTime();
 				updatesData[0u]["s"] = "paybackmessage";
+				updatesData[0u]["r"] = reason;
 				updatesData[0u]["coins"] = cash + coin;
 				ret = logicUpdates.AddUpdates(userid, updatesData);
-				if (0 != ret) {
-					cout << "AddUpdates fail,ret=" << ret << ",uid=" << userid
-							<< endl;
-				}
+				if (0 != ret)
+					cout << "AddUpdates fail,ret=" << ret << ",uid=" << userid<< endl;
 			}
 		}
 		int j = time(NULL);

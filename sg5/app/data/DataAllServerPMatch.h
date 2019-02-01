@@ -4,6 +4,20 @@
 #include "Kernel.h"
 #include "DataPersonMatch.h"
 
+#define ALL_SERVER_PERSONMATCH_PLAYERS_MAX 100000
+struct AllServerPersonMatchData
+{
+	unsigned instance_ndx;
+	char stage;
+	unsigned numOfApply;
+	PersonMatchPlayer rival[8];
+	PersonMatchPlayer mems[ALL_SERVER_PERSONMATCH_PLAYERS_MAX];
+	PersonMatchPlayer top8[8];
+	PersonMatchPlayer top4[4];
+	PersonMatchPlayer top2[2];
+	PersonMatchPlayer champion;
+};
+
 class CAllServerPersonBaseMatch
 {
 public:
@@ -26,11 +40,11 @@ public:
 	int FinishMatch(PersonMatchPlayer *champion);
 	int GetTop8Data(vector<GuessViewData> &dataVec);
 	int GetRival(int idx,PersonMatchPlayer& rival);
-	PersonMatchData* GetPersonMatchData(CShareMemory* sh);
+	AllServerPersonMatchData* GetAllServerPersonMatchData(CShareMemory* sh);
 
 private:
 	int setPersonInst(int uid,int instId);
-	unsigned getInstId(PersonMatchData *pdata);
+	unsigned getInstId(AllServerPersonMatchData *pdata);
 protected:
 	CShareMemory m_sh;
 	bool m_init;

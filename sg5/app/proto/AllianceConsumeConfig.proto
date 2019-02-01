@@ -1,0 +1,20 @@
+package AllianceConsumeConfig;
+
+message AllianceConsumeConfigItem {
+		required uint32	eqid 	= 1;
+		required int32 price	= 2;
+		required int32 count	= 3;
+}
+message AllianceConsumeConfigItemLimit {
+		required uint32	eqid 	= 1;
+		required int32 price	= 2;
+		required uint32	limit 	= 3;
+		required int32 count	= 4;
+}
+
+message AllianceConsumeConfig {
+	repeated AllianceConsumeConfigItem a		= 1;
+	repeated AllianceConsumeConfigItemLimit b	= 2;
+	repeated AllianceConsumeConfigItemLimit c	= 3;
+	repeated AllianceConsumeConfigItemLimit d	= 4;
+}

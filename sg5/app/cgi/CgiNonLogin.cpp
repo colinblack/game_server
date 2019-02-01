@@ -9,7 +9,6 @@ public:
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
-		SetFeature(CF_CHECK_VERSION);
 		SetFeature(CF_APPEND_HASH);
 		SetFeature(CF_PARSE_DATA);
 		SetFeature(CF_CRYPT_DATA);

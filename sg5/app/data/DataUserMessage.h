@@ -27,6 +27,7 @@ public:
 			unsigned startTime, vector<DataUserMessage> &datas);
 	int GetUserMessageForTime(unsigned uid, int type, unsigned startTime, vector<DataUserMessage> &datas);
 	int GetUserMessageForTime(unsigned uid, int type, int toward, unsigned startTime, vector<DataUserMessage> &datas);
+	int DelUserMessageBeforeTS(unsigned uid, unsigned ts);
 };
 
 #endif

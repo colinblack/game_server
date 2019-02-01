@@ -37,7 +37,11 @@ int main()
 	unsigned now = Time::GetGlobalTime();
 	unsigned userid = UID_MIN + 1;
 	DataUser user;
-	for( userid = Config::GetIntValue(CONFIG_UID_MIN); userid <= (unsigned)u64Id; ++userid)
+	string serverid;
+	unsigned zone;
+	Config::GetValue(serverid, CONFIG_SERVER_ID);
+	Convert::StringToUInt(zone, serverid);
+	for( userid = Config::GetUIDStart(zone); userid <= (unsigned)u64Id; ++userid)
 	{
 		ret = logicUser.GetUser(userid, user);
 		if(ret == 0)

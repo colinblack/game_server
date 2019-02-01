@@ -1,0 +1,53 @@
+package NewWorldAllianceRoom;
+
+message NewWorldAllianceRoomHeroIndex {
+		required uint32 uid 		= 1;
+		required uint32 index 		= 2;
+}
+
+message NewWorldAllianceRoomHero {
+		required NewWorldAllianceRoomHeroIndex index	= 1;
+		required uint32 aid 		= 2;
+		required uint32 hid 		= 3;
+		required string name 		= 4;
+		required uint32 job 		= 5;
+		required uint32 level 		= 6;
+		required uint32 type 		= 7;
+		required uint32 cid 		= 8;
+		required uint32 mts 		= 9;
+		required int32 hp 			= 10;
+		required uint32 kill 		= 11;
+		required uint32 seq 		= 12;
+		repeated int32 property 	= 13;
+		optional uint32 buff	 	= 14;
+}
+
+message NewWorldAllianceRoomTower {
+		required uint32 uid         = 1;
+		required uint32 dps         = 2;
+		required uint32 hit		    = 3;
+}
+
+message NewWorldAllianceRoomCity {
+		required uint32 cid 		= 1;
+		required uint32 aid 		= 2;
+		required int32 countN 		= 3;
+		required uint32 npcts 		= 4;
+		repeated NewWorldAllianceRoomHero npc		= 5;
+		repeated NewWorldAllianceRoomHero vision  	= 6;
+		optional NewWorldAllianceRoomTower tower	= 7;
+}
+
+message NewWorldAllianceRoomBattle {
+		required uint32 rid 				= 1;
+		required uint32 level       		= 2;
+		required uint32 reward       		= 3;
+		required uint32 ts					= 4;
+		repeated uint32 aid					= 5;
+		repeated NewWorldAllianceRoomHero hero 	= 6;
+		repeated NewWorldAllianceRoomCity city 	= 7;		
+}
+
+message NewWorldAllianceRoom {
+		repeated NewWorldAllianceRoomBattle room = 1;	
+}

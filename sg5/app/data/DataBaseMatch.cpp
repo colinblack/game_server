@@ -106,16 +106,25 @@ int CDataBaseMatch::Apply(unsigned aid, const string &aname,
 	}
 	CAutoLock lock(&m_sh, true);
 	if (pdata->stage != BMS_APPLY)
+	{
+		error_log("[stage error][stage=%u,uid=%u]",pdata->stage,uid);
 		return R_ERR_LOGIC;
+	}
 	if (allserver)
 	{
 		if (!IsValidAllServerBMatchInstId(pdata->instance_ndx + min_match_instance_id))
+		{
+			error_log("[instance_ndx error][instance_ndx=%u,uid=%u]",pdata->instance_ndx,uid);
 			return R_ERR_LOGIC;
+		}
 	}
 	else
 	{
 		if (!IsValidBMatchInstId(pdata->instance_ndx + min_match_instance_id))
+		{
+			error_log("[instance_ndx error][instance_ndx=%u,uid=%u]",pdata->instance_ndx,uid);
 			return R_ERR_LOGIC;
+		}
 	}
 	unsigned apos = 0;
 	for (; apos < pdata->numOfApply; apos++)
@@ -132,9 +141,15 @@ int CDataBaseMatch::Apply(unsigned aid, const string &aname,
 				break;
 		}
 		if (upos < (pdata->teams[apos]).number)
+		{
+			error_log("[already apply][uid=%u]",uid);
 			return R_ERR_LOGIC;
+		}
 		if ((pdata->teams[apos]).number >= BASEMATCH_PLAYERS_MAX)
+		{
+			error_log("[alliance member full][uid=%u]",uid);
 			return R_ERR_LOGIC;
+		}
 		instanceid = pdata->instance_ndx++ + min_match_instance_id;
 		(pdata->teams[apos]).players[upos].uid = uid;
 		snprintf((pdata->teams[apos]).players[upos].name, sizeof((pdata->teams[apos]).players[upos].name),
@@ -145,7 +160,10 @@ int CDataBaseMatch::Apply(unsigned aid, const string &aname,
 	else
 	{
 		if (pdata->numOfApply >= BASEMATCH_TEAMS_MAX)
+		{
+			error_log("[alliance full][uid=%u]",uid);
 			return R_ERR_LOGIC;
+		}
 		(pdata->teams[pdata->numOfApply]).aid = aid;
 		snprintf((pdata->teams[pdata->numOfApply]).aname, sizeof((pdata->teams[pdata->numOfApply]).aname),
 				"%s", aname.c_str());
@@ -275,7 +293,7 @@ int CDataBaseMatch::StartRegular()
 		int rest = (pdata->teams[i]).number > 60 ? 60 : (pdata->teams[i]).number;
         for (int k = 0; k < 5; k++,rest--)
         {
-			int r = ((unsigned)rand()) % rest + 1;
+			int r = Math::GetRandomInt(rest) + 1;
 			int j = 0;
 			while (r > 0 && j < 60)
 			{
@@ -332,16 +350,16 @@ int CDataBaseMatch::StartRegular()
 		{
 			for (unsigned j = 0; j < 5; j++)
 			{
-				r = ((unsigned)rand()) % (rnum - 1) + 1;
-				r2 = ((unsigned)rand()) % 2;
+				r = Math::GetRandomInt(rnum - 1) + 1;
+				r2 = Math::GetRandomInt(2);
 				an = (i + r) % rnum;
 				(pdata->rteams[i]).rivals[j].rplayers[0] = (pdata->rteams[an]).rivals[r2].player;
-				r = ((unsigned)rand()) % (rnum - 1) + 1;
-				r2 = ((unsigned)rand()) % 2 + 1;
+				r = Math::GetRandomInt(rnum - 1) + 1;
+				r2 = Math::GetRandomInt(2) + 1;
 				an = (i + r) % rnum;
 				(pdata->rteams[i]).rivals[j].rplayers[1] = (pdata->rteams[an]).rivals[r2].player;
-				r = ((unsigned)rand()) % (rnum - 1) + 1;
-				r2 = ((unsigned)rand()) % 2 + 2;
+				r = Math::GetRandomInt(rnum - 1) + 1;
+				r2 = Math::GetRandomInt(2) + 2;
 				an = (i + r) % rnum;
 				(pdata->rteams[i]).rivals[j].rplayers[2] = (pdata->rteams[an]).rivals[r2].player;
 			}
@@ -476,11 +494,11 @@ int CDataBaseMatch::StartGuess(bool allserver)
 	int ret = 0;
 	if (allserver)
 	{
-		ret = guessData.Init(Config::GetValue(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
+		ret = guessData.Init(MainConfig::GetAllServerPath(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
 	}
 	else
 	{
-		ret = guessData.Init(Config::GetValue(GUESS_DATA_PATH),1,sem_guess);
+		ret = guessData.Init(Config::GetPath(GUESS_DATA_PATH),1,sem_guess);
 	}
 	if(ret != 0)
 	{
@@ -673,11 +691,11 @@ int CDataBaseMatch::StartPlayoff4(bool allserver)
 			int ret = 0;
 			if (allserver)
 			{
-				ret = guessData.Init(Config::GetValue(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
+				ret = guessData.Init(MainConfig::GetAllServerPath(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
 			}
 			else
 			{
-				ret = guessData.Init(Config::GetValue(GUESS_DATA_PATH),1,sem_guess);
+				ret = guessData.Init(Config::GetPath(GUESS_DATA_PATH),1,sem_guess);
 			}
 			if(0 == ret)
 			{
@@ -770,11 +788,11 @@ int CDataBaseMatch::StartPlayoff2(bool allserver)
 			int ret = 0;
 			if (allserver)
 			{
-				ret = guessData.Init(Config::GetValue(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
+				ret = guessData.Init(MainConfig::GetAllServerPath(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
 			}
 			else
 			{
-				ret = guessData.Init(Config::GetValue(GUESS_DATA_PATH),1,sem_guess);
+				ret = guessData.Init(Config::GetPath(GUESS_DATA_PATH),1,sem_guess);
 			}
 			if(0 == ret)
 			{
@@ -873,11 +891,11 @@ int CDataBaseMatch::FinishMatch(const BaseMatchData **p,bool allserver)
 		int ret = 0;
 		if (allserver)
 		{
-			ret = guessData.Init(Config::GetValue(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
+			ret = guessData.Init(MainConfig::GetAllServerPath(ALL_SERVER_GUESS_DATA_PATH),1,sem_guessallserver);
 		}
 		else
 		{
-			ret = guessData.Init(Config::GetValue(GUESS_DATA_PATH),1,sem_guess);
+			ret = guessData.Init(Config::GetPath(GUESS_DATA_PATH),1,sem_guess);
 		}
 		if(ret != 0)
 		{

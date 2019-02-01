@@ -14,7 +14,7 @@ int CLogicNpc::Load(unsigned npcId, unsigned uidBy, Json::Value &result)
 	{
 		REFUSE_RETURN_MSG("invalid_npc_id");
 	}
-	if(IsGateNPCUid(npcId) || IsWorldNPCUid(npcId))
+	if(IsGateNPCUid(npcId) || IsOtherNPCUid(npcId))
 	{
 		ret = GetNpcArchive(npcId, result);
 		if (ret != 0)
@@ -128,72 +128,134 @@ int CLogicNpc::Load(unsigned npcId, unsigned uidBy, Json::Value &result)
 	return 0;
 }
 
-int CLogicNpc::Save(unsigned npcId, DataUser &userBy, Json::Value &data, Json::Value &result)
+int CLogicNpc::Save(unsigned npcId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
 	if (!IsNPCUid(npcId))
 	{
 		REFUSE_RETURN_MSG("invalid_npc_id");
 	}
 
+	bool newnpc = false;
 	int ret = 0;
 	int destroy = 0;
 	int damage = 0;
+	int attackend = 0;
+	Json::GetInt(data, "attackend", attackend);
 	Json::GetInt(data, "destroy", destroy);
 	Json::GetInt(data, "damage", damage);
-	if (destroy == 1 )
+	if (destroy == 1 && IsCityNPCUid(npcId))
 	{
 		CLogicUser logicUser;
 		if (userBy.wf_status.empty())
 			userBy.wf_status = "[]";
 		Json::Reader reader;
 		Json::Value json;
-		if (!reader.parse(userBy.wf_status, json) || !json.isArray())
+		if (reader.parse(userBy.wf_status, json) && json.isArray())
 		{
-			error_log("[data error][uid=%u,npcId=%u]",userBy.uid,npcId);
-			DB_ERROR_RETURN_MSG("wf_status_data_error");
-		}
-		bool append = true;
-		for (unsigned i = 0; i < json.size(); i++)
-		{
-			if (json[i].isIntegral() && json[i].asInt() == (int)npcId)
+			unsigned i = 0;
+			for (; i < json.size(); i++)
 			{
-				append = false;
-				break;
+				if (json[i].isIntegral() && json[i].asInt() == (int)npcId)
+					break;
+			}
+			if (i == json.size())
+			{
+				newnpc = true;
+				json.append(npcId);
+				Json::FastWriter writer;
+				userBy.wf_status = writer.write(json);
+				if(userBy.wf_status.length() < 1024)
+					logicUser.SetUser(userBy.uid, userBy);
+				else
+				{
+					Json::Value newjson;
+					newjson.resize(0);
+					for (unsigned i = 0; i < json.size(); i++)
+					{
+						if(json[i].isIntegral())
+						{
+							unsigned oldid =  json[i].asInt();
+							if (IsCityNPCUid(oldid))
+								newjson.append(oldid);
+						}
+					}
+					Json::FastWriter writer;
+					userBy.wf_status = writer.write(json);
+					if(userBy.wf_status.length() < 1024)
+						logicUser.SetUser(userBy.uid, userBy);
+					else
+						error_log("wf_status too long uid=%u",userBy.uid);
+				}
 			}
 		}
-		if (append)
+		else
 		{
-			json.append(npcId);
+			error_log("[data error][uid=%u,npcId=%u]",userBy.uid,npcId);
+			userBy.wf_status = "[]";
+			logicUser.SetUser(userBy.uid, userBy);
 		}
-		Json::FastWriter writer;
-		userBy.wf_status = writer.write(json);
-		ret = logicUser.SetUser(userBy.uid, userBy);
-		if (ret != 0)
-			return ret;
 	}
-	if(IsGateNPCUid(npcId) || IsWorldNPCUid(npcId))
+	if(IsGateNPCUid(npcId) || IsOtherNPCUid(npcId))
 	{
 		if (Json::IsObject(data, "attackinfo"))
 		{
 			CLogicArchive logicArchive;
-			ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
+			ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], npcId, loadtype);
 			if (ret != 0)
 				return ret;
 		}
+
+		if(loadtype == LT_CHALLENGE)
+		{
+			if (attackend && damage > 99) {
+				//challenge win
+				unsigned cid = 0;
+				Json::GetUInt(data,"cid",cid);
+				CLogicUserBasic logicUserBasic;
+				DataUserBasic userByBasic;
+				logicUserBasic.GetUserBasicLimit(userBy.uid, OpenPlatform::GetType(),userByBasic);
+				unsigned olduid = npcId;
+				string oldname = userByBasic.name;
+				DataAlliance alliance;
+				CLogicAlliance logicAlliance;
+				ret = logicAlliance.GetAlliance(userBy.alliance_id, alliance);
+				if (ret == 0)
+				{
+					oldname = alliance.name + "-" + oldname;
+				}
+				CLogicNewWorld logicNewWorld;
+				logicNewWorld.Challenge(userBy.uid,olduid,cid,oldname,userBy.kingdom);
+				result["cityuid"] = olduid;
+				result["cityname"] = oldname;
+			}
+			else if (attackend)
+			{
+				unsigned cid = 0;
+				Json::GetUInt(data,"cid",cid);
+				CLogicNewWorld logicNewWorld;
+				logicNewWorld.SetChallengeTS(cid, 0, userBy.kingdom);
+			}
+		}
+
 		return 0;
 	}
 
 	CLogicInstance logicInstanc;
-	ret = logicInstanc.Save(npcId,userBy,data,result);
+	if(newnpc && npcId != ATTACK_NPC_1_MAX && npcId != ATTACK_NPC_2_MAX && npcId != ATTACK_NPC_3_MAX)
+	{
+		logicInstanc.RemoveInstance(userBy.uid, npcId);
+
+		if (Json::IsObject(data, "attackinfo"))
+		{
+			CLogicArchive logicArchive;
+			ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], npcId, loadtype);
+			if (ret != 0)
+				return ret;
+		}
+	}
+	else
+		ret = logicInstanc.Save(npcId,userBy,data,result, loadtype);
 	return ret;
-//	if (Json::IsObject(data, "attackinfo"))
-//	{
-//		CLogicArchive logicArchive;
-//		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
-//		if (ret != 0)
-//			return ret;
-//	}
-	//return 0;
 }
 
 int CLogicNpc::ExportNpcData(unsigned uid, unsigned npcId, const string &dir)
@@ -222,8 +284,8 @@ int CLogicNpc::ExportNpcData(unsigned uid, unsigned npcId, const string &dir)
 	result["resources"][(unsigned)2]["m"] = user.r3_max;
 	result["resources"][(unsigned)3]["c"] = user.r4;
 	result["resources"][(unsigned)3]["m"] = user.r4_max;
-	result["resources"][(unsigned)4]["c"] = user.r5;
-	result["resources"][(unsigned)4]["m"] = user.r5_max;
+	result["resources"][(unsigned)4]["c"] = 0;
+	result["resources"][(unsigned)4]["m"] = 0;
 	result["lasttime"] = Time::GetGlobalTime();
 	if (!user.barrackQ.empty() && !reader.parse(user.barrackQ, result["barrackQ"]))
 	{
@@ -255,7 +317,7 @@ int CLogicNpc::ExportNpcData(unsigned uid, unsigned npcId, const string &dir)
 	}
 
 	CLogicBuilding logicBuiding;
-	ret = logicBuiding.GetBuilding(uid, result["baseop"]);
+	ret = logicBuiding.GetBuilding(uid,0, result["baseop"],true);
 	if (ret != 0)
 		return ret;
 
@@ -285,7 +347,7 @@ int CLogicNpc::GetNpcArchive(unsigned npcId, Json::Value &data)
 	map<unsigned, NPC_Archive>::iterator it = npcMap.find(npcId);
 	if (it == npcMap.end() || Time::GetGlobalTime() - (it->second).updateTime > 1800)
 	{
-		string path = Config::GetValue(CONFIG_NPC_DATA);
+		string path = MainConfig::GetAllServerPath(CONFIG_NPC_DATA);
 		if (path.empty())
 		{
 			error_log("[npc config error][npcId=%u]",npcId);

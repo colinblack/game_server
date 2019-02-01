@@ -35,6 +35,7 @@ public:
 
 	CCgiBase(const string &cgiName = NULL);
 	virtual ~CCgiBase();
+	virtual void ProcessSig(int sig) {};
 
 	int Run();
 	virtual int Process() = 0;
@@ -50,13 +51,22 @@ public:
 	int ParseData();
 	int DecryptData();
 	int GetData();
-	int Die();
+	int Die(bool decrypt);
 
 	void PrintResult(int result = 0);
 
 	string GetHash(const string &data, const string &hn);
 
+	static void OnSig(int signum,siginfo_t *info,void *myact);
+
 protected:
+	void StartWorking();
+	void CheckSig();
+	void RegSig();
+	static volatile bool b_exit_sig;
+	static volatile bool b_reload_sig;
+	static volatile bool b_working_sig;
+	static volatile int sig_val;
 
 	int m_features[CF_TOTAL];			/* 校验标志 */
 
@@ -79,8 +89,16 @@ protected:
 #define CGI_DIRECT_PROCESS(ActionCallback)	\
 virtual int Process()	\
 {	\
-	int result = ActionCallback();	\
-	return result;	\
+	try \
+	{ \
+		int result = ActionCallback();	\
+		return result;	\
+	} \
+	catch(const std::exception& e) \
+	{ \
+		SetError(R_ERROR, e.what()); \
+		return R_ERROR; \
+	} \
 }	\
 
 #define CGI_SIMPLE_ACTION_MAP_BEGIN	\
@@ -102,12 +120,21 @@ virtual int Process()	\
 #define CGI_SET_ACTION_MAP(ActionName, ActionCallback)	\
 	if(m_actionName == ActionName)	\
 	{	\
-		result = ActionCallback();	\
+		try \
+		{ \
+			result = ActionCallback();	\
+		} \
+		catch(const std::exception& e) \
+		{ \
+			SetError(R_ERROR, e.what()); \
+			result = R_ERROR; \
+		} \
 	}	\
 	else	\
 
 #define CGI_ACTION_MAP_END	\
 	{	\
+		m_actionName.clear(); \
 		SetError(R_ERR_PARAM);	\
 		return R_ERR_PARAM;	\
 	}	\
@@ -120,7 +147,15 @@ virtual int Process()	\
 	int result = R_SUCCESS;	\
 	if(!Json::GetString(m_data, "action", m_actionName) || m_actionName.empty())	\
 	{	\
-		result = ActionCallback();	\
+		try \
+		{ \
+			result = ActionCallback();	\
+		} \
+		catch(const std::exception& e) \
+		{ \
+			SetError(R_ERROR, e.what()); \
+			result = R_ERROR; \
+		} \
 	}	\
 	else \
 	{	\
@@ -128,12 +163,21 @@ virtual int Process()	\
 #define CGI_SET_ACTION_DEFAULT_MAP(ActionName, ActionCallback)	\
 		if(m_actionName == ActionName)	\
 		{	\
-			result = ActionCallback();	\
+			try \
+			{ \
+				result = ActionCallback();	\
+			} \
+			catch(const std::exception& e) \
+			{ \
+				SetError(R_ERROR, e.what()); \
+				result = R_ERROR; \
+			} \
 		}	\
 		else	\
 
 #define CGI_ACTION_DEFAULT_MAP_END \
 		{	\
+			m_actionName.clear(); \
 			SetError(R_ERR_PARAM);	\
 			return R_ERR_PARAM;	\
 		}	\
@@ -149,7 +193,7 @@ int main()	\
 		fatal_log("[Kernel::Init fail][cgi=%s]", #CgiClass);	\
 		return -1;	\
 	}	\
-	CgiClass cgi;	\
+	static CgiClass cgi;	\
 	int result = cgi.Run();	\
 	return result;	\
 }	\

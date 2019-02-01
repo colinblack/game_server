@@ -1,5 +1,5 @@
 #include "DataSecinc.h"
-
+/* 2014901 Ralf change to save activity
 int CDataSecinc::AddSecinc(unsigned uid, unsigned sid, const string &data)
 {
 	DBCREQ_DECLARE(DBC::InsertRequest, uid);
@@ -22,16 +22,6 @@ int CDataSecinc::SetSecinc(unsigned uid, unsigned sid, const string &data)
 	return 0;
 }
 
-int CDataSecinc::GetSecinc(unsigned uid, unsigned sid, string &data)
-{
-	DBCREQ_DECLARE(DBC::GetRequest, uid);
-	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, sid, sid);
-
-	DBCREQ_GET_STR_V(data);
-	return 0;
-}
-
 int CDataSecinc::RemoveSecinc(unsigned uid, unsigned sid)
 {
 	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
@@ -41,13 +31,7 @@ int CDataSecinc::RemoveSecinc(unsigned uid, unsigned sid)
 	return 0;
 }
 
-int CDataSecinc::RemoveSecinc(unsigned uid)
-{
-	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
-	DBCREQ_SET_KEY(uid);
-	DBCREQ_EXEC;
-	return 0;
-}
+*/
 
 int CDataSecinc::GetSecinc(unsigned uid, vector<DataSecinc> &datas)
 {
@@ -67,5 +51,35 @@ int CDataSecinc::GetSecinc(unsigned uid, vector<DataSecinc> &datas)
 	DBCREQ_ARRAY_GET_STR(datas, data);
 	DBCREQ_ARRAY_GET_END();
 
+	return 0;
+}
+
+int CDataSecinc::ReplaceSecinc(unsigned uid, unsigned sid, const string &data)
+{
+	DBCREQ_DECLARE(DBC::ReplaceRequest, uid);
+	DBCREQ_SET_KEY(uid);
+
+	DBCREQ_SET_INT_S(sid);
+	DBCREQ_SET_STR_S(data);
+
+	DBCREQ_EXEC;
+	return 0;
+}
+
+int CDataSecinc::GetSecinc(unsigned uid, unsigned sid, string &data)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(EQ, sid, sid);
+
+	DBCREQ_GET_STR_V(data);
+	return 0;
+}
+
+int CDataSecinc::RemoveSecinc(unsigned uid)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_EXEC;
 	return 0;
 }

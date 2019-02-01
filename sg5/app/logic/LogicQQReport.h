@@ -32,6 +32,7 @@ public:
 	int Report(unsigned report, string openid, unsigned uid=0, unsigned fee=0, string userip="", string pf="", string zoneid="");
 	QQPT GetQQPT(string pt);
 	int SetFeed(const string &openid, const string &openkey, const string &pf, const string &imgurl, const string &text);
+	int SetAchievement(const string &openid, const string &openkey, const string &pf,string level, string zoneid);
 
 private:
 	static unsigned m_ip;

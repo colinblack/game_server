@@ -165,3 +165,12 @@ int CDataUserMessage::GetUserMessageForTime(unsigned uid, int type, int toward, 
 
 	return 0;
 }
+
+int CDataUserMessage::DelUserMessageBeforeTS(unsigned uid, unsigned ts)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(LE, time, ts);
+	DBCREQ_EXEC;
+	return 0;
+}

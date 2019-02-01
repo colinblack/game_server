@@ -22,6 +22,7 @@ public:
 	int RemoveEquipment(unsigned uid);
 
 	int GetEquipment(unsigned uid, vector<DataEquipment> &datas);
+	int GetEquipment(unsigned uid, map<unsigned, string> &datas);
 	int ReplaceEquipment(unsigned uid, unsigned id, const string &data);
 };
 

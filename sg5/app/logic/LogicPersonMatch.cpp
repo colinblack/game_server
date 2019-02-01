@@ -3,7 +3,7 @@
 
 CPersonBaseMatch* CLogicPersonMatch::GetPsersonBaseMatch()
 {
-	GET_MEM_DATA_SEM(CPersonBaseMatch, CONFIG_PERSON_MATCH_PATH, sem_personmatch)
+	GET_MEM_DATA_SEM(CPersonBaseMatch, CONFIG_PERSON_MATCH_PATH, sem_personmatch,false)
 	/*static CPersonBaseMatch* pMatch = NULL;
 
 	if(!pMatch){

@@ -41,7 +41,7 @@ public:
 
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
 
-		CGI_SEND_LOG("uid=%u&userid=%u", m_uid, uid);
+		CGI_SEND_LOG("operator=%u&operated=%u", m_uid, uid);
 		return R_SUCCESS;
 	}
 

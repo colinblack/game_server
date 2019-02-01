@@ -10,7 +10,7 @@ int CLogicVNPay::GetItemInfo(
 	if (!bInit)
 	{
 		string itemFile;
-		itemFile = Config::GetValue(CONFIG_QQ_ITEM_INFO);
+		itemFile = MainConfig::GetAllServerPath(CONFIG_QQ_ITEM_INFO);
 		if (itemFile.empty())
 		{
 			fatal_log("[empty item info][path=%s]", itemFile.c_str());
@@ -84,71 +84,51 @@ int CLogicVNPay::deliver(
 	if( ret!=0 || uid == 0)
 		return R_ERR_DB;
 
+	/****change to ourself's platform************/
+	//防重发, 如果该payment_id已经处理, 那么不再增加钻石
+	DataPayHistory payHistory;
+	CDataPayHistory dbPayHistory;
+	ret = dbPayHistory.GetPayHistory(uid, OpenPlatform::GetType(), billno, payHistory);
+	if(ret != R_ERR_NO_DATA)
+	{
+		error_log("vndeliever failed: payment_id %s had been paid", billno.c_str());
+		ERROR_RETURN_MSG(1, "账单已支付，宝石已发 ");
+	}
+
+	unsigned quantity_sales = count; //加上送的宝石数
+	if (count == 5000)      quantity_sales += 500;
+	else if (count == 10000) quantity_sales += 1500;
+	else if (count == 20000) quantity_sales += 4000;
+	/*********************************************/
+
+	bool bsave = false;
+	DataPay pay;
+	CLogicUser logicUser;
+	DataUser user;
+	Json::Value user_flag;
+	Json::Reader reader;
+	ret = logicUser.GetUser(uid,user);
+	if(ret)
+		return ret;
+	reader.parse(user.user_flag, user_flag);
+
 	if (count != 0)
 	{
-		ret = logicPay.ChangePay(uid, count, 0,"VNTOPUP", 1);
+		ret = logicPay.ChangePay(uid, quantity_sales, 0, pay, "VNTOPUP", user_flag, bsave, PAY_FLAG_CHARGE);
 		if (ret != 0) {
 			error_log("qqdeliever failed");
 			ERROR_RETURN_MSG(1, "系统繁忙 ");
 		}
 	}
-
-	/* daily accharge  add by aaron */
-	int accCharge = count;
-	CDataUser userDb;
-	DataUser user;
-	userDb.GetUserLimit(uid,user);
-	userDb.AddAccCharge(uid, accCharge);
-
-	/*********************
-	if(user.accCharge < 20000 && user.accCharge + accCharge >= 20000
-	&& Time::GetGlobalTime()-user.register_time<86400*60)
-	{
-		DataEmail email;
-		CLogicEmail logicEmail;
-		vector<uint64_t> toUidList;
-		toUidList.push_back(uid);
-		email.attach_flag = 0;
-		email.attachments = "";
-		email.uid = ADMIN_UID;
-		email.post_ts = Time::GetGlobalTime();
-		email.title = "至尊会员";
-		email.text = "尊敬的玩家您好，恭喜您成为我们的高级VIP用户。请联系VN：2592360979领取VIP礼包并有专业人士为您一对一服务。";
-		logicEmail.AddEmail(email,toUidList,OpenPlatform::GetType());
-	}
-	********************/
-	CLogicUser logicUser;
-	Json::Value userFlag;
-
-	ret = logicUser.GetUserFlag(uid, userFlag);
-	if (ret != 0)
-	{
-		error_log("[add daily charge fail][uid=%u,coins=%u]",uid,accCharge);
-	}
-	else
-	{
-		if (!userFlag.isMember("dchg")
-				|| CTime::GetDayInterval(userFlag["dchg"][0u].asUInt(), Time::GetGlobalTime()) != 0)
-		{
-
-			userFlag["dchg"][0u] = Time::GetGlobalTime();
-			userFlag["dchg"][1u] = 0;
-		}
-		userFlag["dchg"][1u] = userFlag["dchg"][1u].asInt() + accCharge;
-
-		ret = logicUser.SetUserFlag(uid, userFlag);
-		if (ret != 0)
-		{
-			error_log("[add daily charge fail][uid=%u,coins=%u]",uid,accCharge);
-		}
-	}
-	/*  daily accharge  add by aaron */
+	logicPay.DoPay(uid,user,count);
+	if(bsave)
+		logicUser.SetUserFlag(uid,user_flag);
 
 	DataPayHistory payhis;
-	payhis.channel = PCT_VN;
+	payhis.channel = OpenPlatform::GetType();
 	payhis.channel_pay_id = billno;
-	payhis.count = 1;
-	payhis.credit = count;
+	payhis.count = count;
+	payhis.credit = count*2;//count*10000;
 	payhis.status = PST_OK;
 	payhis.type = 0;
 	payhis.uid = uid;
@@ -159,7 +139,6 @@ int CLogicVNPay::deliver(
 		error_log("[AddPayHistory fail][ret=%d,openid=%s,billno=%s]",
 				ret,openid.c_str(),billno.c_str());
 	}
-	// add by aaron
 
 	return 0;
 }

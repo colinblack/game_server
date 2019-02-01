@@ -16,6 +16,7 @@ namespace Network
 	//return: true - success; false - error, error message in response;
 	bool HttpGetRequest(string &response, const string &url);
 	bool HttpGetRequest(string &response, const string &url, const map<string, string> &headers);
+	bool HttpGetRequestWithCookie(string &response, const string &url, const string &cookie);
 	bool HttpPostRequest(string &response, const string &url, const string &data);
 	bool HttpPostRequest(string &response, const string &url, const string &data, const map<string, string> &headers);
 }

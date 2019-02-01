@@ -4,38 +4,28 @@
 typedef pair<unsigned, int> U_L_MAP;
 typedef pair<unsigned, unsigned> U_U_MAP;
 
-void EmailPlaye(int rank,unsigned uid, PlatformType pt)
+void EmailPlaye(int rank,unsigned uid)
 {
 	if (1 < rank || rank > 4)
 	{
 		return;
 	}
-	const string strRank[4] =
-	{
-		"因为您的杰出表现，您的联盟在跨服争霸的联盟主城赛中获得冠军，",
-		"因为您的杰出表现，您的联盟在跨服争霸的联盟主城赛中获得亚军，",
-		"因为您的杰出表现，您的联盟在跨服争霸的联盟主城赛中进入四强，",
-		"因为您的杰出表现，您的联盟在跨服争霸的联盟主城赛中进入八强，"
-	};
-	const string strReward[4] =
-	{
-		"特奖励20000联盟贡献。",
-		"特奖励12000联盟贡献。",
-		"特奖励8000联盟贡献。",
-		"特奖励5000联盟贡献。"
-	};
+	Json::Value temp;
+	temp["s"] = "allserverbasematch_p";
+	temp["rank"] = rank;
+	temp["ts"] = Time::GetGlobalTime();
 	DataEmail data;
 	CLogicEmail matchSendEmail;
-	data.text = strRank[rank - 1] + strReward[rank - 1];
-	data.title = "跨服争霸";
+	data.text = Json::ToString(temp);
+	data.title = "allserverbasematch_p";
 	data.post_ts = Time::GetGlobalTime();
 	data.read_ts = 0;
-	data.from_name = "系统管理员";
+	data.from_name = "";
 	data.attach_flag = 0;
 	data.uid = ADMIN_UID;
 	vector<uint64_t> vecUsersUid;
 	vecUsersUid.push_back(uid);
-	int ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
+	int ret = matchSendEmail.AddEmail(data, vecUsersUid,true);
 	if(0 != ret)
 	{
 		cout << "AddEmail faile." << ret << endl;
@@ -43,53 +33,28 @@ void EmailPlaye(int rank,unsigned uid, PlatformType pt)
 	return;
 }
 
-void EmailLeader(int rank,unsigned uid, AllianceMemberType type, PlatformType pt)
+void EmailLeader(int rank,unsigned uid, AllianceMemberType type)
 {
 	if (1 < rank || rank > 4)
 	{
 		return;
 	}
-	const string LeaderContent[4] =
-	{
-		"在您的带领下，您的联盟在跨服争霸的联盟主城赛中获得冠军，",
-		"在您的带领下，您的联盟在跨服争霸的联盟主城赛中获得亚军，",
-		"在您的带领下，您的联盟在跨服争霸的联盟主城赛中进入四强，",
-		"在您的带领下，您的联盟在跨服争霸的联盟主城赛中进入八强，"
-	};
-	const string strLeaderReward[4] =
-	{
-		"特奖励500金币。",
-		"特奖励300进步。",
-		"特奖励200金币。",
-		"特奖励150金币。"
-	};
-	const string strManagerReward[4] =
-	{
-		"特奖励300金币。",
-		"特奖励200进步。",
-		"特奖励100金币。",
-		"特奖励50金币。"
-	};
-
+	Json::Value temp;
+	temp["s"] = "allserverbasematch_l";
+	temp["rank"] = rank;
+	temp["ts"] = Time::GetGlobalTime();
 	DataEmail data;
 	CLogicEmail matchSendEmail;
-	if (type == AMT_LEADER)
-	{
-		data.text = LeaderContent[rank - 1] + strLeaderReward[rank - 1];
-	}
-	else
-	{
-		data.text = LeaderContent[rank - 1] + strManagerReward[rank - 1];
-	}
-	data.title = "跨服争霸";
+	data.title = "allserverbasematch_l_1";
+	data.text = Json::ToString(temp);
 	data.post_ts = Time::GetGlobalTime();
 	data.read_ts = 0;
-	data.from_name = "系统管理员";
+	data.from_name = "";
 	data.attach_flag = 0;
 	data.uid = ADMIN_UID;
 	vector<uint64_t> vecUsersUid;
 	vecUsersUid.push_back(uid);
-	int ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
+	int ret = matchSendEmail.AddEmail(data, vecUsersUid,true);
 	if(0 != ret)
 	{
 		cout << "AddEmail faile." << ret << endl;
@@ -109,7 +74,7 @@ void usage()
 
 int main(int argc, char *argv[])
 {
-	if (argc != 3)
+	if (argc < 2)
 	{
 		usage();
 		return 0;
@@ -121,16 +86,14 @@ int main(int argc, char *argv[])
 	}
 	Config::SetDomain(0);
 
-	int tpt = atoi(argv[2]); //获取用户昵称 需要平台信息
-	PlatformType pt = static_cast<PlatformType>(tpt);
 	CLogicEmail matchSendEmail;
 	DataEmail data;
 	vector <U_L_MAP> vecAlliances;
 
 	string action = argv[1];
 	int ret = 0;
-	CDataBaseMatch match;
-	ret = match.Init(Config::GetValue(CONFIG_ALL_SERVER_BASE_MATCH_PATH),sem_basematchallserver);
+	CDataAllServerBaseMatch match;
+	ret = match.Init(MainConfig::GetAllServerPath(CONFIG_ALL_SERVER_BASE_MATCH_PATH),sem_basematchallserver);
 	if (ret != 0)
 	{
 		cout << "init match fail,ret:" << ret << endl;
@@ -187,7 +150,7 @@ int main(int argc, char *argv[])
 	}
 	else if (action == "finish")
 	{
-		const BaseMatchData *pdata = NULL;
+		const AllServerBaseMatchData *pdata = NULL;
 		ret = match.FinishMatch(&pdata,true);
 		if (ret != 0)
 		{
@@ -201,7 +164,7 @@ int main(int argc, char *argv[])
 		{
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->rteams[i]).rivals[j].player.uid, 0, 10, "ALL_SERVER_BASEMATCH_REGULAR", 1);
+				logicPay.ChangePay((pdata->rteams[i]).rivals[j].player.uid, 0, 10, "ALL_SERVER_BASEMATCH_REGULAR");
 			}
 		}
 		CDataAllianceMember dbMember;
@@ -248,9 +211,10 @@ int main(int argc, char *argv[])
 		}
 
 		CLogicAllServerGuess logicGuess;
-		vector<U_U_MAP> vecGuessors;
+		//vector<U_U_MAP> vecGuessors;
 		logicGuess.GuessorsPay(pdata->champion.aid,1);
 		// 获取投中竞猜者的uid和获奖金币
+		/*
 		logicGuess.GuessorsUidCoins(pdata->champion.aid, vecGuessors, 1,0);
 		for(vector<U_U_MAP>::iterator myItr = vecGuessors.begin(); myItr != vecGuessors.end(); myItr++)
 		{
@@ -268,13 +232,13 @@ int main(int argc, char *argv[])
 			data.uid = ADMIN_UID;
 			vector<uint64_t> vecUsersUid;
 			vecUsersUid.push_back(myItr->first);
-			ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
+			ret = matchSendEmail.AddEmail(data, vecUsersUid);
 			if(0 != ret)
 			{
 				cout << "champion leader prize send mail fail!ret=" << ret << ",uid=" << myItr->first << endl;
 			}
 		}
-
+		*/
 		for(vector<U_L_MAP>::iterator myItr=vecAlliances.begin(); myItr != vecAlliances.end(); myItr++)
 		{
 			if (myItr->second == 1)
@@ -290,7 +254,7 @@ int main(int argc, char *argv[])
 					}
 					else
 					{
-						EmailPlaye(1,(pdata->champion).players[j].uid,pt);
+						EmailPlaye(1,(pdata->champion).players[j].uid);
 					}
 				}
 				vector<DataAllianceMember> members;
@@ -299,18 +263,18 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 500, "ALL_BASEMATCH_CHAMPION_LEADER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 500, "ALL_BASEMATCH_CHAMPION_LEADER");
 						if (0 == ret)
 						{
-							EmailLeader(1,itr->uid,AMT_LEADER,pt);
+							EmailLeader(1,itr->uid,AMT_LEADER);
 						}
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 300, "ALL_BASEMATCH_CHAMPION_MANAGER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 300, "ALL_BASEMATCH_CHAMPION_MANAGER");
 						if (0 == ret)
 						{
-							EmailLeader(1,itr->uid,AMT_MANAGER,pt);
+							EmailLeader(1,itr->uid,AMT_MANAGER);
 						}
 					}
 				}
@@ -336,7 +300,7 @@ int main(int argc, char *argv[])
 							}
 							else
 							{
-								EmailPlaye(2,(pdata->top2[i]).players[j].uid,pt);
+								EmailPlaye(2,(pdata->top2[i]).players[j].uid);
 							}
 						}
 					}
@@ -347,18 +311,18 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 300, "ALL_BASEMATCH_TOP2_LEADER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 300, "ALL_BASEMATCH_TOP2_LEADER");
 						if (0 == ret)
 						{
-							EmailLeader(2,itr->uid,AMT_LEADER,pt);
+							EmailLeader(2,itr->uid,AMT_LEADER);
 						}
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 200, "ALL_BASEMATCH_TOP2_MANAGER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 200, "ALL_BASEMATCH_TOP2_MANAGER");
 						if (0 == ret)
 						{
-							EmailLeader(2,itr->uid,AMT_MANAGER,pt);
+							EmailLeader(2,itr->uid,AMT_MANAGER);
 						}
 					}
 				}
@@ -385,7 +349,7 @@ int main(int argc, char *argv[])
 							}
 							else
 							{
-								EmailPlaye(3,(pdata->top4[i]).players[j].uid,pt);
+								EmailPlaye(3,(pdata->top4[i]).players[j].uid);
 							}
 						}
 					}
@@ -397,18 +361,18 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 200, "ALL_BASEMATCH_TOP4_LEADER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 200, "ALL_BASEMATCH_TOP4_LEADER");
 						if (0 == ret)
 						{
-							EmailLeader(3,itr->uid,AMT_LEADER,pt);
+							EmailLeader(3,itr->uid,AMT_LEADER);
 						}
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 100, "ALL_BASEMATCH_TOP4_MANAGER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 100, "ALL_BASEMATCH_TOP4_MANAGER");
 						if (0 == ret)
 						{
-							EmailLeader(3,itr->uid,AMT_MANAGER,pt);
+							EmailLeader(3,itr->uid,AMT_MANAGER);
 						}
 					}
 				}
@@ -435,7 +399,7 @@ int main(int argc, char *argv[])
 							}
 							else
 							{
-								EmailPlaye(4,(pdata->top8[i]).players[j].uid,pt);
+								EmailPlaye(4,(pdata->top8[i]).players[j].uid);
 							}
 						}
 					}
@@ -447,18 +411,18 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 150, "ALL_BASEMATCH_TOP8_LEADER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 150, "ALL_BASEMATCH_TOP8_LEADER");
 						if (0 == ret)
 						{
-							EmailLeader(4,itr->uid,AMT_LEADER,pt);
+							EmailLeader(4,itr->uid,AMT_LEADER);
 						}
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						ret = logicPay.ChangePay((*itr).uid, 0, 50, "ALL_BASEMATCH_TOP8_MANAGER", 1);
+						ret = logicPay.ChangePay((*itr).uid, 0, 50, "ALL_BASEMATCH_TOP8_MANAGER");
 						if (0 == ret)
 						{
-							EmailLeader(4,itr->uid,AMT_MANAGER,pt);
+							EmailLeader(4,itr->uid,AMT_MANAGER);
 						}
 					}
 				}
@@ -493,9 +457,9 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-int CDataBaseMatch::ResetInsts(){
+int CDataAllServerBaseMatch::ResetInsts(){
 
-	BaseMatchData *pdata = (BaseMatchData *)m_sh.GetAddress();
+	AllServerBaseMatchData *pdata = (AllServerBaseMatchData *)m_sh.GetAddress();
 	if(pdata == NULL)
 	{
 		error_log("[GetAddress fail][]");

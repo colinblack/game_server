@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 	Config::SetDomain(0);
 
 	CDataBroadcast* pBroadcast = new CDataBroadcast();
-	if (pBroadcast->Init(Config::GetValue(CONFIG_BROADCAST_DATA)) != 0)
+	if (pBroadcast->Init(Config::GetPath(CONFIG_BROADCAST_DATA),sem_broadcast) != 0)
 	{
 		cout << "init fail" << endl;
 		return 1;

@@ -36,7 +36,7 @@ int CLogicInventory::ChangeItem(unsigned uid, const string &type, int count)
 				DB_ERROR_RETURN_MSG("set_inventory_fail");
 			}
 		}
-		info_log("[inventory][uid=%u&item=%s&delta=%d&count=%u]",  uid, type.c_str(), count, oldCount);
+		//info_log("[inventory][uid=%u&item=%s&delta=%d&count=%u]",  uid, type.c_str(), count, oldCount);
 	}
 	else if(ret == R_ERR_NO_DATA)
 	{
@@ -50,7 +50,7 @@ int CLogicInventory::ChangeItem(unsigned uid, const string &type, int count)
 		{
 			error_log("[AddItem fail][ret=%d,uid=%u,type=%s,count=%d]", ret, uid, type.c_str(), count);
 		}
-		info_log("[inventory][uid=%u&item=%s&delta=%d&count=%u]",  uid, type.c_str(), count, count);
+		//info_log("[inventory][uid=%u&item=%s&delta=%d&count=%u]",  uid, type.c_str(), count, count);
 	}
 	else
 	{

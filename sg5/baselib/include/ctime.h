@@ -14,7 +14,8 @@ public:
     */
     enum
     {
-        SECONDS_OF_DAY = 24*60*60
+        SECONDS_OF_DAY = 24*60*60 ,
+        SECONDS_OF_WEEK = 7*24*60*60
     };
 
 public:
@@ -28,6 +29,8 @@ public:
     */
     static int GetDayInterval(time_t tFrom, time_t tTo);
     
+    static int GetWeekInterval(time_t tFrom, time_t tTo);
+
     /*!
      * \brief 获取当前年份
      * \return 年份
@@ -54,6 +57,9 @@ public:
     * \remark 以本地时间为准进行处理
     */
     static time_t GetDayBeginTime(time_t tTime);
+
+
+    static time_t GetWeekBeginTime(time_t tTime);
 
 	/*!
 	* \brief 返回时间点所以日开始时间点: 如 2005-01-10 12:10:29 -> 2005-01-01 00:00:00
@@ -149,9 +155,9 @@ public:
 	*/
 	static time_t GetMSInterval(const timeval& tvfrom, const timeval& tvto);
 
+	static bool IsDiffDay( time_t t1, time_t t2 );
+	static bool IsDiffHour(time_t t1, time_t t2);
+	static bool IsDiffWeek(time_t t1, time_t t2);
 };
-
-bool IsDiffDay( time_t t1, time_t t2 );
-bool IsDiffHour(time_t t1, time_t t2);
 #endif
 

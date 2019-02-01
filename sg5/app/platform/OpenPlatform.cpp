@@ -13,6 +13,15 @@
 #include "FetionPlatform.h"
 #include "TencentPlatform.h"
 #include "VNPlatform.h"
+#include "TWPlatform.h"
+#include "PlatForm4399.h"
+#include "C9Platform.h"
+#include "SogouPlatform.h"
+#include "BaiduPlatform.h"
+#include "New4399Platform.h"
+#include "XunLeiPlatform.h"
+#include "Platform7K.h"
+#include "Platform360.h"
 
 static map<int,bool> g_bInitPlatform;
 static bool g_bMultiPlatform = true;
@@ -64,9 +73,11 @@ IOpenPlatform *InitPlatform(const string &configPath)
 	case PT_TXWEIBO:
 	case PT_3366:
 	case PT_qqgame:
+	case PT_TX_C9:
 		pPlatform = new CTencentPlatform();
 		break;
 	case PT_FACEBOOK:
+	case PT_EN:
 		pPlatform = new CFacebookPlatform();
 		break;
 	/*case PT_PENGYOU:
@@ -106,8 +117,50 @@ IOpenPlatform *InitPlatform(const string &configPath)
 		pPlatform = new CFetionPlatform();
 		break;
 	case PT_VN:
+	case PT_DO:
 		pPlatform = new CVNPlatform();
 		break;
+    case PT_TW:
+        pPlatform = new CTWPlatform();
+        break;
+    case PT_4399:
+        pPlatform = new CPlatform4399();
+        break;
+    case PT_C9:
+    case PT_7477:
+    case PT_KW:
+    case PT_7K:
+    case PT_360UU:
+    case PT_QD:
+    case PT_V1:
+    case PT_66YOU:
+    case PT_51IGAME:
+    case PT_HUANLEYUAN:
+    case PT_51WAN:
+    case PT_YUNQU:
+    case PT_TIEXUE:
+    case PT_FENGHUANG:
+    case PT_RUS:
+        pPlatform = new C9Platform();
+        break;
+    case PT_SOGOU:
+    	pPlatform = new SogouPlatform();
+    	break;
+    case PT_BAIDU:
+    	pPlatform = new BaiduPlatform();
+    	break;
+    case PT_NEW_4399:
+        pPlatform = new CNew4399Platform();
+        break;
+    case PT_XUNLEI:
+    	pPlatform = new XunLeiPlatform();
+    	break;
+    case PT_7k7k:
+    	pPlatform = new Platform7K();
+    	break;
+    case PT_360:
+    	pPlatform = new Platform360();
+    	break;
 	default:
 		fatal_log("[parse platform config fail][path=%s, error=unknow_platform, platform=%s]",
 				configPath.c_str(), config["platform"].c_str());
@@ -137,6 +190,69 @@ PlatformType OpenPlatform::GetType()
 {
 	return g_currPlatformType;
 }
+bool OpenPlatform::IsOurPlatform()
+{
+	return g_currPlatformType == PT_TEST
+		|| g_currPlatformType == PT_FACEBOOK
+		|| g_currPlatformType == PT_EN
+		|| g_currPlatformType == PT_VN
+		|| IsQQPlatform()
+		|| IsLY_ALL_Platform();
+}
+bool OpenPlatform::IsLYPlatform()
+{
+	return g_currPlatformType == PT_7477
+		|| g_currPlatformType == PT_KW
+		|| g_currPlatformType == PT_7K
+		|| g_currPlatformType == PT_360UU
+		|| g_currPlatformType == PT_QD
+		|| g_currPlatformType == PT_V1
+		|| g_currPlatformType == PT_66YOU
+		|| g_currPlatformType == PT_51IGAME
+		|| g_currPlatformType == PT_HUANLEYUAN
+		|| g_currPlatformType == PT_SOGOU
+		|| g_currPlatformType == PT_BAIDU
+		|| g_currPlatformType == PT_C9
+		|| g_currPlatformType == PT_NEW_4399
+		|| g_currPlatformType == PT_51WAN
+		|| g_currPlatformType == PT_YUNQU
+		|| g_currPlatformType == PT_XUNLEI
+		|| g_currPlatformType == PT_TIEXUE
+		|| g_currPlatformType == PT_FENGHUANG
+		|| g_currPlatformType == PT_7k7k
+		|| g_currPlatformType == PT_360
+		|| g_currPlatformType == PT_RUS;
+}
+bool OpenPlatform::IsLY_ALL_Platform()
+{
+	return g_currPlatformType == PT_4399
+		|| IsLYPlatform();
+}
+bool OpenPlatform::IsQQPlatform()
+{
+	return g_currPlatformType == PT_PENGYOU
+		|| g_currPlatformType == PT_QZONE
+		|| g_currPlatformType == PT_3366
+		|| g_currPlatformType == PT_qqgame
+		|| g_currPlatformType == PT_TX_C9;
+}
+bool OpenPlatform::IsFBPlatform()
+{
+	return g_currPlatformType == PT_FACEBOOK
+		|| g_currPlatformType == PT_EN;
+}
+bool OpenPlatform::IsEN()
+{
+	return g_currPlatformType == PT_EN
+		|| g_currPlatformType == PT_VN
+		|| g_currPlatformType == PT_DO;
+}
+bool OpenPlatform::IsDS()
+{
+	return g_currPlatformType == PT_4399
+		|| g_currPlatformType == PT_NEW_4399
+		|| g_currPlatformType == PT_RUS;
+}
 
 //更新当前平台类型
 bool OpenPlatform::Reset(const string &host_suffix)
@@ -148,8 +264,8 @@ bool OpenPlatform::Reset(const string &host_suffix)
 	{
 		//init
 		g_bInitPlatform[domain] = true;
-		string mappingPath;
-		if(!Config::GetValue(mappingPath, CONFIG_PLATFORM_MAPPING))
+		string mappingPath = MainConfig::GetAllServerPath(CONFIG_PLATFORM_MAPPING);
+		if(mappingPath.empty())
 		{
 			//single platform init
 			g_bMultiPlatform = false;
@@ -246,12 +362,20 @@ bool OpenPlatform::Reset(const string &host_suffix)
 	itrMapConfig = g_mapPlatformConfig[domain].find(host);
 	if(itrMapConfig == g_mapPlatformConfig[domain].end())
 	{
-		string all = "default";
-		itrMapConfig = g_mapPlatformConfig[domain].find(all);
+		for(itrMapConfig=g_mapPlatformConfig[domain].begin();itrMapConfig!=g_mapPlatformConfig[domain].end();++itrMapConfig)
+		{
+			if(host.find(itrMapConfig->first) != string::npos)
+				break;
+		}
 		if(itrMapConfig == g_mapPlatformConfig[domain].end())
 		{
-			error_log("[unknow_host][host=%s]", host.c_str());
-			return false;
+			string all = "default";
+			itrMapConfig = g_mapPlatformConfig[domain].find(all);
+			if(itrMapConfig == g_mapPlatformConfig[domain].end())
+			{
+				error_log("[unknow_host][host=%s]", host.c_str());
+				return false;
+			}
 		}
 	}
 	g_pCurrPlatform = InitPlatform(itrMapConfig->second);
@@ -262,4 +386,9 @@ bool OpenPlatform::Reset(const string &host_suffix)
 	g_currPlatformType = g_pCurrPlatform->GetPlatformType();
 	g_mapPlatform[host] = g_pCurrPlatform;
 	return true;
+}
+
+void OpenPlatform::SetPlatform(int plat)
+{
+	g_currPlatformType = (PlatformType)plat;
 }

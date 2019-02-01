@@ -2,7 +2,7 @@
 
 CDataArena* CLogicArena::GetCDataArena()
 {
-	GET_MEM_DATA_SEM(CDataArena, CONFIG_ARENA_DIR, sem_arena);
+	GET_MEM_DATA_SEM(CDataArena, CONFIG_ARENA_DIR, sem_arena,false);
 	/*static CDataArena* pArena = NULL;
 	if (!pArena)
 	{
@@ -116,7 +116,7 @@ int CLogicArena::GetArenaJson(Json::Value &arena)
 	return 0;
 }
 
-int CLogicArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int regfee, Json::Value &result)
+int CLogicArena::Load(unsigned arenaid, unsigned uidBy, unsigned level, LoadType loadType, int regfee, Json::Value &result)
 {
 	if (!IsValidArenaId(arenaid))
 	{
@@ -161,6 +161,10 @@ int CLogicArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int r
 			}
 			if (userFlag["arn"][(unsigned)0].asString() == today)
 			{
+				if (level < 40 && userFlag["arn"][(unsigned)1].asInt() >= 1)
+				{
+					LOGIC_ERROR_RETURN_MSG("challenge_count_limit");
+				}
 				if (userFlag["arn"][(unsigned)1].asInt() >= 10)
 				{
 					LOGIC_ERROR_RETURN_MSG("challenge_count_limit");
@@ -184,11 +188,11 @@ int CLogicArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int r
 		}
 
 		int hostfee = 0, prize = 0;
-		if (regfee > 0)
+		/*if (regfee > 0)
 		{
 			hostfee = regfee * 4 / 10;
 			prize = regfee * 5 / 10;
-		}
+		}*/
 		if (!EnableChallenge(arenaid, uidBy, prize, dataArena))
 		{
 			LOGIC_ERROR_RETURN_MSG("arena_not_idle");
@@ -235,7 +239,7 @@ int CLogicArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int r
 	return 0;
 }
 
-int CLogicArena::Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Json::Value &result)
+int CLogicArena::Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
 	if (!IsValidArenaId(arenaid))
 	{
@@ -278,8 +282,8 @@ int CLogicArena::Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Jso
 			archive["resources"][(unsigned)2]["m"] = userBy.r3_max;
 			archive["resources"][(unsigned)3]["c"] = userBy.r4;
 			archive["resources"][(unsigned)3]["m"] = userBy.r4_max;
-			archive["resources"][(unsigned)4]["c"] = userBy.r5;
-			archive["resources"][(unsigned)4]["m"] = userBy.r5_max;
+			archive["resources"][(unsigned)4]["c"] = 0;
+			archive["resources"][(unsigned)4]["m"] = 0;
 			archive["currencys"][(unsigned)0] = userBy.gcbase;
 			archive["currencys"][(unsigned)1] = userBy.gcbuy;
 			archive["currencys"][(unsigned)2] = userBy.prosper;
@@ -295,7 +299,7 @@ int CLogicArena::Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Jso
 			userBy.skillQ.empty() || reader.parse(userBy.skillQ, archive["skillQ"]);
 			userBy.trainQ.empty() || reader.parse(userBy.trainQ, archive["trainQ"]);
 			CLogicBuilding logicBuiding;
-			ret = logicBuiding.GetBuilding(userBy.uid, archive["baseop"]);
+			ret = logicBuiding.GetBuilding(userBy.uid,0, archive["baseop"],true);
 			if (ret != 0)
 				return ret;
 			CLogicHero logicHero;
@@ -343,7 +347,7 @@ int CLogicArena::Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Jso
 	if (Json::IsObject(data, "attackinfo"))
 	{
 		CLogicArchive logicArchive;
-		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
+		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], arenaid, loadtype);
 		if (ret != 0)
 			return ret;
 	}

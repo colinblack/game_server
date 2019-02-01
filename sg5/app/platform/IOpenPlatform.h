@@ -9,28 +9,54 @@
 #define __IOPENPLATFORM_H__
 
 #include "Common.h"
+#include "Kernel.h"
 
 enum PlatformType
 {
-	PT_UNKNOW = -1,	//未知
-	PT_TEST = 0,	//测试平台
-	PT_FACEBOOK = 1,	//Facebook平台
-	PT_PENGYOU = 2, //朋友平台
-	PT_RENREN = 3,	//人人平台
-	PT_QZONE = 4,	//QZONE平台
-	PT_SINAWB = 5,	//新浪微博
-	PT_WEIYOUXI = 6,	//新浪微游戏
-	PT_KUAIWAN = 7,	//快玩平台
-	PT_MIXI = 8,	//Mixi平台
-	PT_TXWEIBOAPP = 9,	//腾讯微博应用平台
-	PT_MOBAGE = 10,	//日本Yahoo!Mobage平台
-	PT_TXWEIBO = 11,	//腾讯微博
-	PT_KAIXIN = 12,	//开心网
-	PT_FETION = 13,	//飞信
-	PT_VN = 14,
-	PT_3366 = 15,
-	PT_qqgame=16,
-	PT_TW=17,
+	PT_UNKNOW 		= -1,	//未知
+	PT_TEST 		= 0,	//测试平台
+	PT_FACEBOOK 	= 1,	//Facebook平台中文版
+	PT_PENGYOU		= 2, 	//朋友平台
+	PT_RENREN 		= 3,	//人人平台
+	PT_QZONE 		= 4,	//QZONE平台
+	PT_SINAWB 		= 5,	//新浪微博
+	PT_WEIYOUXI 	= 6,	//新浪微游戏
+	PT_KUAIWAN 		= 7,	//快玩平台
+	PT_MIXI 		= 8,	//Mixi平台
+	PT_TXWEIBOAPP 	= 9,	//腾讯微博应用平台
+	PT_MOBAGE 		= 10,	//日本Yahoo!Mobage平台
+	PT_TXWEIBO 		= 11,	//腾讯微博
+	PT_KAIXIN 		= 12,	//开心网
+	PT_FETION 		= 13,	//飞信
+	PT_VN 			= 14,	//英文版自建平台
+	PT_3366 		= 15,	//3366
+	PT_qqgame		= 16,	//qq游戏大厅
+	PT_TW			= 17, 	//台湾BSG
+	PT_EN			= 18,	//FB英文版
+	PT_DO			= 19,	//英文版联运
+	PT_4399			= 20,	//4399联运
+	PT_C9			= 21,	//C9
+	PT_SOGOU		= 22,	//搜狗游戏联运平台
+	PT_7477			= 23,   //7477联运
+	PT_TX_C9		= 24,   //tx-c9
+	PT_KW			= 25,  	//mix for PT_7477
+	PT_7K			= 26,	//mix for PT_7477
+	PT_360UU		= 27,	//mix for PT_7477
+	PT_QD			= 28,	//mix for PT_7477
+	PT_V1			= 29,	//mix for PT_7477
+	PT_66YOU		= 30,	//mix for PT_7477
+	PT_51IGAME		= 31,	//mix for PT_7477
+	PT_HUANLEYUAN	= 32,	//mix for PT_7477
+	PT_BAIDU	    = 33,	//baidu联运
+	PT_NEW_4399	    = 34,	//4399联运
+	PT_51WAN	    = 35,	//
+	PT_YUNQU	    = 36,	//
+	PT_XUNLEI	    = 37,	//
+	PT_TIEXUE	    = 38,	//
+	PT_FENGHUANG    = 39,	//
+	PT_7k7k		    = 40,	//
+	PT_360		    = 41,	//
+	PT_RUS		    = 42,	//
 
 	PT_MAX,
 };
@@ -99,7 +125,7 @@ public:
 	//获取平台类型
 	virtual PlatformType GetPlatformType() {return m_type;}
 	virtual void SetPlatformType(PlatformType type) {m_type = type;}
-	virtual unsigned GetPlatformByPF(){return m_type;}
+	virtual PlatformType GetPlatformByPF(){return m_type;}
 
 	//获取平台应用ID
 	virtual const string &GetAppId() { return m_appId; }
@@ -133,6 +159,8 @@ public:
 	virtual string GetConfig(const string &name);
 	virtual int Is_Login(const string &openid, const string &openkey,const string &pf);
 
+	virtual void ReplyCharge(){}
+	virtual void SetReply(string& reply){}
 public:
 
 	IOpenPlatform():m_type(PT_UNKNOW) {}

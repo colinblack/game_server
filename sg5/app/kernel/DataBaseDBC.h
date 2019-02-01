@@ -22,8 +22,8 @@ public:
 public:
 	virtual int Init();
 	virtual int SetTableId(int table_id);
-	virtual DBC::Server* LoadHandle( unsigned uId );
-	virtual DBC::Server* GetHandle( unsigned uId );
+	virtual DBC::Server* LoadHandle( unsigned long long uId );
+	virtual DBC::Server* GetHandle( unsigned long long uId );
 	virtual void PrintfError();
 
 public:

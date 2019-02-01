@@ -7,6 +7,7 @@
 
 #include "DataQixi.h"
 #include "DataUserBasic.h"
+#include "DataXML.h"
 
 
 CDataQixijie::CDataQixijie(){
@@ -46,9 +47,12 @@ int  CDataQixijie::Init(const std::string &path, semdat sem)
 	m_init = true;
 	return 0;
 }
+
+
 int sortFunc(const DataQixiRank& left,const DataQixiRank& right){
 	return left.pay > right.pay;
 }
+/*
 int CDataQixijie::UpdateRankList(const DataQixiRank &points)
 {
 	int i= 0;
@@ -91,8 +95,9 @@ int CDataQixijie::UpdateRankList(const DataQixiRank &points)
 	}
 	return 0;
 }
+*/
 
-int CDataQixijie::GetRankList( DataQixiRank vecPoints[])
+int CDataQixijie::GetRankList( vector <DataQixiRank> &vecPoints,const int version)
 {
 	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
 	if(pdata == NULL)
@@ -100,48 +105,19 @@ int CDataQixijie::GetRankList( DataQixiRank vecPoints[])
 		DB_ERROR_RETURN_MSG("init_qixiactivity_fail");
 	}
 	CAutoLock lock(&m_sh, true);
-	memcpy(vecPoints,pdata->QixiAcvitityRank,sizeof(DataQixiRank) * RANK_SIZE);
+	if(version != pdata->version)
+	{
+		memset(pdata, 0, sizeof(*pdata));
+		pdata->version = version;
+	}
+	for(int i=0; i<RANK_SIZE;i++)
+	{
+		vecPoints.push_back(pdata->QixiAcvitityRank[i]);
+	}
 	return 0;
 }
 
-int CDataQixijie::SetPrizeNum(const  DataGetWinners &prize)
-{
-	unsigned now = Time::GetGlobalTime();
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("init_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-
-	for(int i = 0; i < 4; i++ )
-	{
-		if(CTime::GetDayInterval(pdata->GetRewards[i].ts, now) != 0)
-		{
-			memset(pdata->GetRewards, 0, sizeof(pdata->GetRewards));
-			break;
-		}
-
-	}
-	for(int i = 0; i < 4; i++ )
-	{
-		if(pdata->GetRewards[i].uid == 0)
-		{
-
-			pdata->GetRewards[i].reward = prize.reward;
-			pdata->GetRewards[i].uid = prize.uid;
-			pdata->GetRewards[i].ts = now;
-			memcpy(pdata->GetRewards[i].name,prize.name,sizeof(prize.name) - 1);
-//			error_log("aaaaaaaaaa:%u | %d",pdata->GetRewards[i].uid,pdata->GetRewards[i].reward);
-			break;
-		}
-	}
-
-	return 0;
-
-}
-
-int CDataQixijie::GetPrizeNum(DataGetWinners vecPrize[])
+int CDataQixijie::GetReturnData(DataGetWinners vecPrize[],int &Lotterynumber,int &markreward,vector <int> &prizenum)
 {
 	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
 	if(pdata == NULL)
@@ -151,10 +127,176 @@ int CDataQixijie::GetPrizeNum(DataGetWinners vecPrize[])
 	CAutoLock lock(&m_sh, true);
 
 	memcpy(vecPrize,pdata->GetRewards,sizeof(pdata->GetRewards));
+	Lotterynumber = pdata->Lotterynumber;
+	markreward = pdata->markreward;
+	for(int i =0; i < 4; i++)
+	{
+		prizenum.push_back(pdata->prizenum[i]);
+	}
 	return 0;
 }
 
-int CDataQixijie::SetRecordLotterynumber()
+int CDataQixijie::QixiChoujiang(unsigned uid,unsigned count, unsigned integral, vector <unsigned> &awards_index_id, vector <unsigned> &awards_type_id,
+		vector <unsigned> &awards_eqid, vector <unsigned> &awards_num, Json::Value &result)
+{
+	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
+	if(pdata == NULL)
+	{
+		DB_ERROR_RETURN_MSG("init_qixiactivity_fail");
+	}
+	CAutoLock lock(&m_sh, true);
+
+	CDataXML *pDataXML = CDataXML::GetCDataXML();
+	if(!pDataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+
+	unsigned floors = 1;
+	if(pdata->Lotterynumber >= Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_OPEN_SECOND))
+	{
+		floors = 2;
+	}
+
+	if(CTime::GetDayInterval(pdata->ts, Time::GetGlobalTime()) != 0)
+		pdata->Lotterynumber = count;
+	else
+		pdata->Lotterynumber = pdata->Lotterynumber + count;
+	pdata->ts = Time::GetGlobalTime();
+
+	vector <unsigned> limit_items;
+	for(int i=0; i<4; ++i)
+	{
+		limit_items.push_back(pdata->prizenum[i]);
+	}
+	int ret =  pDataXML->GetChoujiangWupin(uid, floors, count, awards_index_id, awards_type_id,
+			awards_eqid, awards_num, limit_items);
+	if(ret)
+	{
+		error_log("[XMLchoujiang_error][uid=%u,]", uid);
+		return R_ERR_DATA;
+	}
+
+	DataUserBasic dataUserBasic;
+	CDataUserBasic dbUserBasic;
+	ret = dbUserBasic.GetUserBasicLimitWithoutPlatform(uid, dataUserBasic);
+	if (ret != 0)
+	{
+		error_log("[GetUserBasicLimit fail][ret=%d,uid=%u,platform=%d]", ret, uid);
+		DB_ERROR_RETURN_MSG("db_get_uesr_basic_fail");
+	}
+	///////////////////////大奖上电视
+	for(int i=0; i<awards_index_id.size(); ++i)
+	{
+		if(awards_index_id[i] == 10 || awards_index_id[i] == 13 || awards_index_id[i] == 17 || awards_index_id[i] == 20
+		|| awards_index_id[i] == 8 || awards_index_id[i] == 9 || awards_index_id[i] == 18 || awards_index_id[i] == 23)
+		{
+			DataGetWinners points;
+			points.uid = uid;
+			points.reward = awards_index_id[i];
+			points.ts = Time::GetGlobalTime();
+			memcpy(points.name,dataUserBasic.name.c_str(),sizeof(points.name) - 1);
+			if(pdata->markreward == 0)
+			{
+				for(int i=0; i<4; ++i)
+				{
+					if(pdata->GetRewards[i].uid == 0)
+					{
+						memcpy(&pdata->GetRewards[i],&points,sizeof(DataGetWinners));
+						if(i == 3)
+							pdata->markreward = 1;
+						break;
+					}
+				}
+			}
+			else
+			{
+				for(int i=0; i<3; ++i)
+				{
+					memcpy(&pdata->GetRewards[i],&pdata->GetRewards[i+1],sizeof(DataGetWinners));
+				}
+				memcpy(&pdata->GetRewards[3], &points, sizeof(DataGetWinners));
+			}
+		}
+	}
+
+	//////////更新排行榜
+	DataQixiRank people_rank;
+	people_rank.uid = uid;
+	people_rank.pay = integral;
+	memcpy(people_rank.name,dataUserBasic.name.c_str(),sizeof(people_rank.name) - 1);
+	int i;
+	bool inFlag = false;  // 用户是否在排行榜中
+	for(i = RANK_SIZE -1;i >= 0; i--)
+	{
+		if(pdata->QixiAcvitityRank[i].uid == people_rank.uid  )
+		{
+			pdata->QixiAcvitityRank[i].pay = people_rank.pay;
+			// 如果用户已在排行榜，inFlag = true
+			inFlag = true;
+			break;
+		}
+	}
+	if(!inFlag)
+	{
+		pdata->QixiAcvitityRank[RANK_SIZE] = people_rank;
+	}
+	else
+	{
+		memset(&(pdata->QixiAcvitityRank[RANK_SIZE]),0,sizeof(DataQixiRank));
+	}
+
+	vector<DataQixiRank> vecQixi;
+	for(i = 0; i<=RANK_SIZE;++i)
+	{
+		vecQixi.push_back(pdata->QixiAcvitityRank[i]);
+	}
+
+	sort(vecQixi.begin(),vecQixi.end(),sortFunc);
+
+	for(i = 0; i<=RANK_SIZE;++i){
+		pdata->QixiAcvitityRank[i] = vecQixi[i];
+	}
+
+	for(int i=0; i <limit_items.size(); ++i)
+	{
+		pdata->prizenum[i] = limit_items[i];
+		result["value"][i] = limit_items[i];
+		result["awards"][i]["name"] = pdata->GetRewards[i].name;
+		result["awards"][i]["reward"] = pdata->GetRewards[i].reward;
+		result["awards"][i]["uid"] = pdata->GetRewards[i].uid;
+	}
+	result["Lotterynumber"] = pdata->Lotterynumber;
+	result["self_pay"] = integral;
+	return 0;
+}
+
+int CDataQixijie::GetRewardData(vector <DataQixiRank> &reward_vec)
+{
+	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
+	if(pdata == NULL)
+	{
+		DB_ERROR_RETURN_MSG("GetRewardData_qixiactivity_fail");
+	}
+	CAutoLock lock(&m_sh, true);
+
+	if( Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS)
+	&& Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS) + 48*60*60
+	&& pdata->rewardflag ==0)
+	{
+		pdata->rewardflag = 1;
+		for(int i=0; i<RANK_SIZE;i++)
+		{
+			reward_vec.push_back(pdata->QixiAcvitityRank[i]);
+		}
+	}
+	return 0;
+}
+
+/*
+// modify by vincent
+int CDataQixijie::SetRecordLotterynumber(int addNum)
 {
 	unsigned now = Time::GetGlobalTime();
 
@@ -173,38 +315,12 @@ int CDataQixijie::SetRecordLotterynumber()
 	else
 	{
 		pdata->ts = now;
-		pdata->Lotterynumber = pdata->Lotterynumber + 1;
+		pdata->Lotterynumber = pdata->Lotterynumber + addNum;
 	}
 	return 0;
 }
 
-int CDataQixijie::GetRecordLotterynumber(int &num)
-{
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("init_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	num = pdata->Lotterynumber;
-
-	return 0;
-}
-int CDataQixijie::GetMarkreward(int &markReward)
-{
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("init_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	markReward = pdata->markreward;
-
-	return 0;
-
-}
-
-int CDataQixijie::LotteryResults(unsigned uid,Json::Value input,int s1, int s2,int platform)
+int CDataQixijie::LotteryResults(unsigned uid,Json::Value input,int s1, int s2,int platform,int &mark_reward)
 {
 	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
 	if(pdata == NULL)
@@ -214,97 +330,82 @@ int CDataQixijie::LotteryResults(unsigned uid,Json::Value input,int s1, int s2,i
 	CAutoLock lock(&m_sh, true);
 	int Lotterynumber = pdata->Lotterynumber;
 
-	if(Lotterynumber <= 288 )
+	int open_second = Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_OPEN_SECOND);
+	if(Lotterynumber <= open_second )
 	{
-		int mark = rand()%s1;
+		int mark = Math::GetRandomInt(s1);                   //产生0至(s1-1)的随机数
 		int s0 = 0;
 
-		if(mark >= 0 && mark < input["qixifirstlayer"]["rate"][0u].asInt())
+		for(int i=0;i<10;i++)
 		{
-			pdata->markreward = input["qixifirstlayer"]["grid"][0u].asInt();
-		}
-		for(int i = 0; i < 9; i++)
-		{
-
+			if(mark >= s0 && mark < s0 + input["qixifirstlayer"]["rate"][i].asInt())
+			{
+				pdata->markreward = i + 1;
+				break;
+			}
 			s0 += input["qixifirstlayer"]["rate"][i].asInt();
-
-			if(mark >= s0
-			&& mark < s0 + input["qixifirstlayer"]["rate"][i+1].asInt())
-			{
-				pdata->markreward = input["qixifirstlayer"]["grid"][i+1].asInt();
-				break;
-			}
 		}
-	}
 
-	else if(Lotterynumber > 288 )
+	}
+	else if(Lotterynumber > open_second )
 	{
-		int mark = rand()%s2;
+		int mark = Math::GetRandomInt(s2);
 		int s0 = 0;
 
-		if(mark >= 0 && mark < input["qixisecondlayer"]["rate"][0u].asInt())
+		for(int i=0;i<24;i++)
 		{
-			pdata->markreward = input["qixisecondlayer"]["grid"][0u].asInt();
-		}
-		for(int i = 1; i < 24; i++)
-		{
-			s0 += input["qixisecondlayer"]["rate"][i].asInt() ;
-			if(mark >= s0
-					&& mark < s0 + input["qixisecondlayer"]["rate"][i+1].asInt())
+			if(mark >= s0 && mark < s0 + input["qixisecondlayer"]["rate"][i].asInt())
 			{
-				pdata->markreward = input["qixisecondlayer"]["grid"][i+1].asInt();
+				pdata->markreward = i + 1;
 				break;
 			}
+			s0 += input["qixisecondlayer"]["rate"][i].asInt();
 		}
 	}
 
-	if(pdata->markreward == 11 || pdata->markreward == 14 || pdata->markreward == 18 || pdata->markreward == 21
-		|| pdata->markreward == 9 || pdata->markreward == 10 || pdata->markreward == 19 || pdata->markreward == 24)
+
+
+	//4个全区限量奖励物品
+	if(pdata->markreward == 11 )
 	{
-
-		if(pdata->markreward == 11 )
+		pdata->prizenum[0] = pdata->prizenum[0] +1;
+		if(pdata->prizenum[0] >= 5)
 		{
-			pdata->prizenum[0] = pdata->prizenum[0] +1;
-			if(pdata->prizenum[0] >= 5)
-			{
-				pdata->prizenum[0] = 5;
-				pdata->markreward = pdata->markreward + 1;
-
-			}
-
+			pdata->prizenum[0] = 5;
+			pdata->markreward = pdata->markreward + 1;
 		}
-		if(pdata->markreward == 14 )
-		{
-			pdata->prizenum[1] = pdata->prizenum[1] +1;
-			if(pdata->prizenum[1] >= 5)
-			{
-				pdata->prizenum[1] = 5;
-				pdata->markreward = pdata->markreward + 1;
-			}
-
-		}
-		if(pdata->markreward == 18 )
-		{
-			pdata->prizenum[2] = pdata->prizenum[2] +1;
-			if(pdata->prizenum[2] >= 5)
-			{
-				pdata->prizenum[2] = 5;
-				pdata->markreward = pdata->markreward + 1;
-			}
-
-		}
-		if(pdata->markreward == 21 )
-		{
-			pdata->prizenum[3] = pdata->prizenum[3] +1;
-			if(pdata->prizenum[3] >= 5)
-			{
-				pdata->prizenum[3] = 5;
-				pdata->markreward = pdata->markreward + 1;
-			}
-
-		}
-
 	}
+	else if(pdata->markreward == 14 )
+	{
+		pdata->prizenum[1] = pdata->prizenum[1] +1;
+		if(pdata->prizenum[1] >= 5)
+		{
+			pdata->prizenum[1] = 5;
+			pdata->markreward = pdata->markreward + 1;
+		}
+	}
+	else if(pdata->markreward == 18 )
+	{
+		pdata->prizenum[2] = pdata->prizenum[2] +1;
+		if(pdata->prizenum[2] >= 5)
+		{
+			pdata->prizenum[2] = 5;
+			pdata->markreward = pdata->markreward + 1;
+		}
+	}
+	else if(pdata->markreward == 21 )
+	{
+		pdata->prizenum[3] = pdata->prizenum[3] +1;
+		if(pdata->prizenum[3] >= 5)
+		{
+			pdata->prizenum[3] = 5;
+			pdata->markreward = pdata->markreward + 1;
+		}
+	}
+
+	mark_reward = pdata->markreward;
+
+	//大奖展示更新
 	if(pdata->markreward == 11 || pdata->markreward == 14 || pdata->markreward == 18 || pdata->markreward == 21
 		|| pdata->markreward == 9 || pdata->markreward == 10 || pdata->markreward == 19 || pdata->markreward == 24)
 	{
@@ -332,9 +433,9 @@ int CDataQixijie::LotteryResults(unsigned uid,Json::Value input,int s1, int s2,i
 				{
 					pdata->GetRewards[i].reward = points.reward;
 					pdata->GetRewards[i].uid = points.uid;
-					pdata->GetRewards[i].ts = now;
+					pdata->GetRewards[i].ts = Time::GetGlobalTime();
 					memcpy(pdata->GetRewards[i].name,points.name,sizeof(points.name) - 1);
-					error_log("aaaaaaaaaa:%u | %d",pdata->GetRewards[i].uid,pdata->GetRewards[i].reward);
+					//debug_log("aaaaaaaaaa:%u | %d",pdata->GetRewards[i].uid,pdata->GetRewards[i].reward);
 					break;
 				}
 			}
@@ -352,62 +453,10 @@ int CDataQixijie::LotteryResults(unsigned uid,Json::Value input,int s1, int s2,i
 			}
 			pdata->GetRewards[3].reward = points.reward;
 			pdata->GetRewards[3].uid = points.uid;
-			pdata->GetRewards[3].ts = now;
+			pdata->GetRewards[3].ts = Time::GetGlobalTime();
 			memcpy(pdata->GetRewards[3].name,points.name,sizeof(points.name) - 1);
 		}
 	}
-
 	return 0;
 }
-
-int CDataQixijie::GetPrizeNum11(int *num)
-{
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("clean_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	for(int i =0; i < 4; i++)
-	{
-		num[i] = pdata->prizenum[i];
-	}
-	return 0;
-}
-
-int CDataQixijie::Setrewardflag()
-{
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("clean_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	pdata->rewardflag = pdata->rewardflag + 1;
-	return 0;
-}
-
-
-int CDataQixijie::Getrewardflag(int &rewardflag)
-{
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("clean_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	rewardflag = pdata->rewardflag;
-	return 0;
-}
-
-int CDataQixijie::CleanRankList(void)
-{
-	QixiAcvitityPayRank *pdata = (QixiAcvitityPayRank *)m_sh.GetAddress();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("clean_qixiactivity_fail");
-	}
-	CAutoLock lock(&m_sh, true);
-	memset(pdata, 0, sizeof(*pdata));
-	return 0;
-}
+*/

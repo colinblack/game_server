@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
 	CDataDragonball dragonball;
 	CLogicUpdates logicUpdates;
-	ret = dragonball.Init(Config::GetValue(CONFIG_DRAGONBALL_DATA));
+	ret = dragonball.Init(Config::GetPath(CONFIG_DRAGONBALL_DATA),sem_dragonball);
 	if (ret != 0)
 	{
 		cout << "init dragonball fail" << endl;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	}
 	else if (action == "finish")
 	{
-		string DragonDataPath = Config::GetValue(CONFIG_DRAGONBALL_DATA);
+		string DragonDataPath = Config::GetPath(CONFIG_DRAGONBALL_DATA);
 
 		int semgroup = 0;
 		int semserver = 0;
@@ -106,10 +106,7 @@ int main(int argc, char *argv[])
 		}
 		unsigned index = 0;
 		if (num > 1)
-		{
-			unsigned r = rand();
-			index = r % num;
-		}
+			index = Math::GetRandomInt(num);
 		if (!IsValidUid(uids[index]))
 		{
 			cout << "error" << endl;
@@ -119,7 +116,7 @@ int main(int argc, char *argv[])
 
 		DataUserBasic userBasic;
 		CDataUserBasic userBasicDB;
-		ret = userBasicDB.GetUserBasicRegisterLimit(uid, userBasic);
+		ret = userBasicDB.GetUserBasicLimit(uid,PT_TEST, userBasic);
 		if (ret != 0)
 		{
 			cout << "get user basic fail" << endl;
@@ -141,7 +138,7 @@ int main(int argc, char *argv[])
 		updates2[(unsigned)0]["ballid"] = ballid;
 		updates2[(unsigned)0]["ballts"] = Time::GetGlobalTime();
 		updates2[(unsigned)0]["ts"] = Time::GetGlobalTime();
-		logicUpdates.AddUpdates(uid, updates2,true);
+		logicUpdates.AddUpdates(uid, updates2,false,true);
 
 		if(ballid == 7){
 			CLogicDragonball logicBall;

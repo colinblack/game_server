@@ -25,7 +25,7 @@ CDataLadder* CLogicAllServerLadder::GetCDataLadder(int level)
 		error_log("[new Ladder data fail]");
 		return NULL;
 	}
-	string dataPath = Config::GetValue(CONFIG_ALL_SERVER_LADDER_PATH);
+	string dataPath = MainConfig::GetAllServerPath(CONFIG_ALL_SERVER_LADDER_PATH);
 	if (dataPath.empty())
 	{
 		error_log("[data path is empty]");
@@ -114,7 +114,7 @@ void CLogicAllServerLadder::RandLadderPlayers(Json::Value &ladder)
 			int rest = num;
 	        for (int k = 0; k < 5; k++,rest--)
 	        {
-				int r = ((unsigned)rand()) % rest + 1;
+				int r = Math::GetRandomInt(rest) + 1;
 				int j = 0;
 				while (r > 0 && j < 100)
 				{
@@ -194,8 +194,10 @@ int CLogicAllServerLadder::ViewLadder(unsigned uid, Json::Value &result, int lev
 	LadderItem player3;
 	LadderItem player4;
 	LadderItem player5;
+	LadderItem top[3];
 	pladder->GetFivePlayers(rank1, rank2, rank3, rank4, rank5,
-			player1, player2, player3, player4, player5);
+			player1, player2, player3, player4, player5,
+			top);
 
 	Json::Value &players = result["players"];
 	players.resize(0);
@@ -249,6 +251,20 @@ int CLogicAllServerLadder::ViewLadder(unsigned uid, Json::Value &result, int lev
 		json["pic"] = player5.pic;
 		players.append(json);
 	}
+
+	Json::Value &topt = result["top"];
+	topt.resize(0);
+	for(unsigned i=0;i<3;++i)
+	{
+		Json::Value json;
+		json["rank"] = i+1;
+		json["uid"] = top[i].uid;
+		json["level"] = top[i].level;
+		json["name"] = top[i].name;
+		json["pic"] = top[i].pic;
+		topt.append(json);
+	}
+
 	return 0;
 }
 
@@ -294,8 +310,10 @@ int CLogicAllServerLadder::Refresh(unsigned uid, Json::Value &result,int level)
 	LadderItem player3;
 	LadderItem player4;
 	LadderItem player5;
+	LadderItem top[3];
 	pladder->GetFivePlayers(rank1, rank2, rank3, rank4, rank5,
-			player1, player2, player3, player4, player5);
+			player1, player2, player3, player4, player5,
+			top);
 
 	Json::Value &players = result["players"];
 	players.resize(0);
@@ -349,6 +367,20 @@ int CLogicAllServerLadder::Refresh(unsigned uid, Json::Value &result,int level)
 		json["pic"] = player5.pic;
 		players.append(json);
 	}
+
+	Json::Value &topt = result["top"];
+	topt.resize(0);
+	for(unsigned i=0;i<3;++i)
+	{
+		Json::Value json;
+		json["rank"] = i+1;
+		json["uid"] = top[i].uid;
+		json["level"] = top[i].level;
+		json["name"] = top[i].name;
+		json["pic"] = top[i].pic;
+		topt.append(json);
+	}
+
 	return 0;
 }
 

@@ -5,8 +5,12 @@
  *  Created on: 2013-08-13
  *      Author: Administrator
  */
+/*
+ * 国战报名
+ */
 
 #include "LogicNationalWarRgt.h"
+
 
 
 CLogicNationalWarRgt::CLogicNationalWarRgt() {
@@ -20,7 +24,7 @@ CLogicNationalWarRgt::~CLogicNationalWarRgt() {
 
 CDataNationalWarRgt* CLogicNationalWarRgt::GetNationalWarRgtData()
 {
-	GET_MEM_DATA_SEM(CDataNationalWarRgt, NATIONAL_WAR_RGT, sem_nationalwarrgt)
+	GET_MEM_DATA_SEM(CDataNationalWarRgt, NATIONAL_WAR_RGT, sem_nationalwarrgt,false)
 
 }
 

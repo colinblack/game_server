@@ -12,6 +12,7 @@ public:
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
 		SetFeature(CF_CHECK_SESSION);
+		SetFeature(CF_CHECK_TIME);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
 		SetFeature(CF_CHECK_VERSION);
@@ -38,9 +39,24 @@ public:
 	CGI_SET_ACTION_MAP("reportallserverladder", ReportAllServerLadder)
 	CGI_SET_ACTION_MAP("gethelphist", GetHelpHist)
 	CGI_SET_ACTION_MAP("dragonball", GetDragonball)
-	CGI_SET_ACTION_MAP("setmarketquest", SetMarketTask)
-	CGI_SET_ACTION_MAP("getmarketquest", GetMarketTask)
+	//CGI_SET_ACTION_MAP("setmarketquest", SetMarketTask)
+	//CGI_SET_ACTION_MAP("getmarketquest", GetMarketTask)
+	CGI_SET_ACTION_MAP("setmarketquest", AddMarketTask)
 	CGI_SET_ACTION_MAP("viewallserverladdertop1", ViewAllServerLadderTop1)
+	CGI_SET_ACTION_MAP("ViewAllServerRank", ViewAllServerRank)
+	CGI_SET_ACTION_MAP("GetAllServerRank", GetAllServerRank)
+	CGI_SET_ACTION_MAP("getAllServerNewWorldBattlelist", GetAllServerNewWorldBattlelist)
+	CGI_SET_ACTION_MAP("setAllServerNewWorldBattleAttack", SetAllServerNewWorldBattleAttack)
+	CGI_SET_ACTION_MAP("GetAllServerMVP", GetAllServerMVP)
+	CGI_SET_ACTION_MAP("StartAllServerMVP", StartAllServerMVP)
+	CGI_SET_ACTION_MAP("EndAllServerMVP", EndAllServerMVP)
+	CGI_SET_ACTION_MAP("SetAllServerMVP", SetAllServerMVP)
+	CGI_SET_ACTION_MAP("StartAllServerBattleMVP", StartAllServerBattleMVP)
+	CGI_SET_ACTION_MAP("EndAllServerBattleMVP", EndAllServerBattleMVP)
+	CGI_SET_ACTION_MAP("gameapi_real_name_query", gameapi_real_name_query)
+	CGI_SET_ACTION_MAP("idcard_time", idcard_time)
+	CGI_SET_ACTION_MAP("NewWorldFight", NewWorldFight)
+	CGI_SET_ACTION_MAP("EndAllServerNewWorldFightMVP", EndAllServerNewWorldFightMVP)
 	CGI_ACTION_MAP_END
 
 	int SendMessage()
@@ -385,7 +401,7 @@ public:
 		}
 		url.append("&level=").append(level);
 
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url,m_jsonResult);
 		if (0 != ret)
 		{
@@ -394,7 +410,6 @@ public:
 
 		CGI_SEND_LOG("action=viewallserverladder&uid=%u",m_uid);
 		return R_SUCCESS;
-
 	}
 
 	int RefreshLadder()
@@ -421,7 +436,7 @@ public:
 		}
 		url.append("&level=").append(level);
 
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url,m_jsonResult);
 		if (0 != ret)
 		{
@@ -473,7 +488,7 @@ public:
 		}
 		url.append("&level=").append(level);
 
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		Json::Value result;
 		int ret = logicBaseMatch.RequestBaseMatch(url,result);
 		if (0 != ret)
@@ -496,7 +511,7 @@ public:
 		}
 		return R_SUCCESS;
 	}
-
+/*
 	int SetMarketTask()
 	{
 		int ret = 0;
@@ -602,17 +617,525 @@ public:
 		m_jsonResult["quest"] = questRet;
 		return 0;
 	}
+*/
+	int AddMarketTask()
+	{
+		int ret = 0;
+		string openid;
+		if(!Json::GetString(m_data, "openid", openid))
+		{
+			PARAM_ERROR_RETURN();
+		}
+		if (!Json::IsArray(m_data, "quest"))
+		{
+			PARAM_ERROR_RETURN();
+		}
+		Json::Value quest;
+		if (!Json::GetArray(m_data, "quest", quest))
+		{
+			PARAM_ERROR_RETURN();
+		}
+
+		CLogicMarketTask logicMarketTask;
+		int flag = 0;
+		string contractid;
+		string sttaskid;
+		for (int i=0; i<quest.size(); ++i)
+		{
+			if (!Json::GetString(quest[i], "marketquestid", contractid))
+			{
+				error_log("get marketquestid fail,i=%d", i);
+				continue;
+			}
+			if (!Json::GetString(quest[i], "param", sttaskid))
+			{
+				error_log("get taskid fail,i=%d", i);
+				continue;
+			}
+			ret = logicMarketTask.AddMarketTask(openid, contractid, sttaskid, 0);
+			if (0 != ret)
+			{
+				error_log("AddMarketTask fail,ret=%d", ret);
+				continue;
+			}
+		}
+
+		return 0;
+	}
 
 	int ViewAllServerLadderTop1()
 	{
 		string url = "action=viewtop1";
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url, m_jsonResult);
 		if (0 != ret)
 		{
 			return ret;
 		}
 		return 0;
+	}
+
+	int ViewAllServerRank()
+	{
+		string uid;
+		String::Format(uid, "%u", m_uid);
+		string url = "action=fight";
+		url.append("&uid=").append(uid);
+
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.RequestBaseMatch(url,m_jsonResult["ViewAllServerRank"],CONFIG_ALLS_RANK_PATH, true);
+		if (0 != ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=ViewAllServerRank&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int GetAllServerRank()
+	{
+		string url = "action=rank";
+
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.RequestBaseMatch(url,m_jsonResult["GetAllServerRank"],CONFIG_ALLS_RANK_PATH, true);
+		if (0 != ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=GetAllServerRank&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int GetAllServerNewWorldBattlelist()
+	{
+		CLogicAllServerNewWorldBattle logicAllServerNewWorldBattle;
+		int ret = logicAllServerNewWorldBattle.GetList(m_jsonResult["getAllServerNewWorldBattlelist"]);
+		if (ret != 0)
+			return ret;
+		CGI_SEND_LOG("action=getAllServerNewWorldBattlelist&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int SetAllServerNewWorldBattleAttack()
+	{
+		unsigned attack = 0, kingdom = 0, defend = 0;
+		Json::GetUInt(m_data, "attack", attack);
+		Json::GetUInt(m_data, "kingdom", kingdom);
+		Json::GetUInt(m_data, "defend", defend);
+
+		if(!attack || !defend || !kingdom || kingdom > 3)
+			return R_ERR_PARAM;
+
+		CLogicAllServerNewWorldBattle logicAllServerNewWorldBattle;
+		int ret = logicAllServerNewWorldBattle.SetAttack(m_uid, attack, kingdom, defend, m_jsonResult["setAllServerNewWorldBattleAttack"]);
+		if (ret != 0)
+			return ret;
+		CGI_SEND_LOG("action=setAllServerNewWorldBattleAttack&uid=%u&attack=%u&kingdom=%u&defend=%u",m_uid,attack,kingdom,defend);
+		return R_SUCCESS;
+	}
+
+	int GetAllServerMVP()
+	{
+		string url = "action=GetAllServerMVP";
+		Json::Value t;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+		if (ret)
+			return ret;
+
+		m_jsonResult["mvp"] = t["mvp"];
+		m_jsonResult["fightmvp"] = t["fightmvp"];
+		m_jsonResult["battlemvp"] = t["battlemvp"];
+		m_jsonResult["allmvp"] = t["allmvp"];
+
+		CGI_SEND_LOG("action=GetAllServerMVP&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int StartAllServerMVP()
+	{
+		unsigned rank = 0;
+		Json::GetUInt(m_data, "rank", rank);
+
+		string url = "action=StartAllServerMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank);
+		Json::Value t;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+		if (ret)
+			return ret;
+
+		bool cash = true;
+		do
+		{
+			CLogicUser logicUser;
+			DataUser dataUser;
+			AUTO_LOCK_USER(m_uid)
+			ret = logicUser.GetUser(m_uid, dataUser);
+			if(ret)
+			{
+				cash = false;
+				break;
+			}
+			Json::Value user_flag;
+			bool bsave = false;
+			Json::Reader().parse(dataUser.user_flag, user_flag);
+			DataPay payData;
+			ret = CLogicPay().ProcessOrderForBackend(m_uid, -100, 0, payData, "StartAllServerMVP", user_flag, bsave);
+			if(ret)
+			{
+				cash = false;
+				break;
+			}
+			if(bsave)
+			{
+				dataUser.user_flag = Json::FastWriter().write(user_flag);
+				ret = logicUser.SetUser(m_uid, dataUser);
+				if(ret)
+				{
+					cash = false;
+					break;
+				}
+			}
+		}while(0);
+		if(!cash)
+		{
+			string url = "action=EndAllServerMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank)
+					   + "&win=0&data={}";
+			Json::Value t;
+			CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+			return R_ERR_LOGIC;
+		}
+
+		CGI_SEND_LOG("action=StartAllServerMVP&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int EndAllServerMVP()
+	{
+		unsigned rank = 0, win = 0;
+		Json::GetUInt(m_data, "rank", rank);
+		Json::GetUInt(m_data, "win", win);
+		string data;
+		if(win)
+		{
+			string name, sign, fig;
+			CLogicUserBasic().GetWorldUserInfo(m_uid, PT_TEST, sign, fig, name);
+			Json::Value t;
+			t["sign"] = sign;
+			t["fig"] = fig;
+			t["name"] = name;
+			t["mcity"] = m_data["mcity"];
+			t["hero"] = m_data["hero"];
+			data = Json::FastWriter().write(t);
+		}
+		else
+			data = "{}";
+
+		string url = "action=EndAllServerMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank)
+				   + "&win=" + CTrans::UTOS(win) + "&data=" + data;
+		Json::Value t;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+		if (ret)
+			return ret;
+
+		CGI_SEND_LOG("action=EndAllServerMVP&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int SetAllServerMVP()
+	{
+		string sign;
+		Json::GetString(m_data, "sign", sign);
+
+		string url = "action=SetAllServerMVP&uid=" + CTrans::UTOS(m_uid) + "&sign=" + sign;
+		Json::Value t;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+		if (ret)
+			return ret;
+
+		CLogicUserBasic().SetWorldUserInfo(m_uid, PT_TEST, sign);
+
+		CGI_SEND_LOG("action=SetAllServerMVP&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int StartAllServerBattleMVP()
+	{
+		unsigned rank = 0;
+		Json::GetUInt(m_data, "rank", rank);
+
+		string url = "action=StartAllServerBattleMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank);
+		Json::Value t;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+		if (ret)
+			return ret;
+
+		bool cash = true;
+		do
+		{
+			CLogicUser logicUser;
+			DataUser dataUser;
+			AUTO_LOCK_USER(m_uid)
+			ret = logicUser.GetUser(m_uid, dataUser);
+			if(ret)
+			{
+				cash = false;
+				break;
+			}
+			Json::Value user_flag;
+			bool bsave = false;
+			Json::Reader().parse(dataUser.user_flag, user_flag);
+			DataPay payData;
+			ret = CLogicPay().ProcessOrderForBackend(m_uid, -100, 0, payData, "StartAllServerBattleMVP", user_flag, bsave);
+			if(ret)
+			{
+				cash = false;
+				break;
+			}
+			if(bsave)
+			{
+				dataUser.user_flag = Json::FastWriter().write(user_flag);
+				ret = logicUser.SetUser(m_uid, dataUser);
+				if(ret)
+				{
+					cash = false;
+					break;
+				}
+			}
+		}while(0);
+		if(!cash)
+		{
+			string url = "action=EndAllServerBattleMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank)
+					   + "&win=0&data={}";
+			Json::Value t;
+			CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+			return R_ERR_LOGIC;
+		}
+
+		CGI_SEND_LOG("action=StartAllServerBattleMVP&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int EndAllServerBattleMVP()
+	{
+		unsigned rank = 0, win = 0;
+		Json::GetUInt(m_data, "rank", rank);
+		Json::GetUInt(m_data, "win", win);
+		string data;
+		if(win)
+		{
+			string name, sign, fig;
+			CLogicUserBasic().GetWorldUserInfo(m_uid, PT_TEST, sign, fig, name);
+			Json::Value t;
+			t["sign"] = sign;
+			t["fig"] = fig;
+			t["name"] = name;
+			t["hero"] = m_data["hero"];
+			data = Json::FastWriter().write(t);
+		}
+		else
+			data = "{}";
+
+		string url = "action=EndAllServerBattleMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank)
+				   + "&win=" + CTrans::UTOS(win) + "&data=" + data;
+		Json::Value t;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t, CONFIG_MVP_PATH, true);
+		if (ret)
+			return ret;
+
+		CGI_SEND_LOG("action=EndAllServerBattleMVP&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int gameapi_real_name_query()
+	{
+		string openid, openkey;
+		Json::GetString(m_data, "openid", openid);
+		Json::GetString(m_data, "openkey", openkey);
+		string appid = OpenPlatform::GetPlatform()->GetAppId();
+		string appkey = OpenPlatform::GetPlatform()->GetAppKey();
+
+		string url = "http://openapi.minigame.qq.com/v3/user/gameapi_real_name_query?";
+		string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/gameapi_real_name_query") + "&";
+		string qsig = "appid=" + appid + "&openid=" + openid + "&openkey=" + openkey;
+		string qstr = "appid=" + Crypt::UrlEncodeForTX(appid) + "&openid="
+				+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey);
+		osig += Crypt::UrlEncodeForTX(qsig);
+		string key = appkey + "&";
+		string bsig = Crypt::HmacSha1(osig, key);
+		string sig;
+		Crypt::Base64Encode(sig, bsig);
+		url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
+
+
+		string response;
+		if (!Network::HttpGetRequest(response, url) || response.empty())
+		{
+			error_log("[http request fail][openid=%s,openkey=%s,errmsg=%s]",
+					openid.c_str(), openkey.c_str(), response.c_str());
+			error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+			return -1;
+		}
+		Json::Value value;
+		if(!Json::Reader().parse(response, value))
+		{
+			error_log("[json parse fail][openid=%s,openkey=%s,response=%s]",
+					openid.c_str(), openkey.c_str(), response.c_str());
+			error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+			return -1;
+		}
+		int ret;
+		if (!Json::GetInt(value, "ret", ret) || ret != 0)
+		{
+			error_log("[get_info fail][openid=%s,openkey=%s,msg=%s]",
+					openid.c_str(), openkey.c_str(), response.c_str());
+			error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+			return -1;
+		}
+
+		m_jsonResult["response"] = value;
+
+		CGI_SEND_LOG("action=gameapi_real_name_query&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int idcard_time()
+	{
+		string idcard, openid;
+		Json::GetString(m_data, "idcard", idcard);
+		Json::GetString(m_data, "openid", openid);
+
+		if(idcard.empty() || openid.empty())
+			return R_ERR_PARAM;
+
+		set<string> open_id;
+		CDataIdcard dbid;
+		dbid.GetAllIdcard(idcard, open_id);
+		if(!open_id.count(openid))
+		{
+			dbid.AddIdcard(idcard, openid);
+			open_id.insert(openid);
+		}
+
+		unsigned ext = 0;
+		CDataUserMapping dbUserMapping;
+		CDataUser dbUser;
+		for(set<string>::iterator it=open_id.begin();it!=open_id.end();++it)
+		{
+			vector<unsigned> uids;
+			dbUserMapping.GetAllMapping(*it,uids);
+			for(vector<unsigned>::iterator iter=uids.begin();iter!=uids.end();++iter)
+			{
+				unsigned e = 0, l = 0;
+				dbUser.GetExt(*iter, l, e);
+				if(!CTime::IsDiffDay(l, Time::GetGlobalTime()))
+					ext += e;
+			}
+		}
+
+		m_jsonResult["ext"] = ext;
+
+		CGI_SEND_LOG("action=idcard_time&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	int NewWorldFight()
+	{
+		if(!m_data.isMember("fighter") || !m_data["fighter"].isArray() || m_data["fighter"].size() != 2)
+			return R_ERR_PARAM;
+		NewWorldHero fighter[2][NEW_WORLD_HERO_INDEX];
+		for(unsigned i=0;i<2;i++)
+		{
+			if(!m_data["fighter"][i].isArray() || m_data["fighter"][i].size() == 0 || m_data["fighter"][i].size() > NEW_WORLD_HERO_INDEX)
+				return R_ERR_PARAM;
+			unsigned uid = ADMIN_UID + i + 1;
+			for(unsigned j=0;j<m_data["fighter"][i].size();++j)
+			{
+				Json::Value& para = m_data["fighter"][i][j];
+				unsigned level = 1;
+				Json::GetUInt(para, "level", level);
+				unsigned job = 1;
+				Json::GetUInt(para, "job", job);
+				unsigned type = 0;
+				Json::GetUInt(para, "type", type);
+				fighter[i][j].index.uid		= uid;
+				fighter[i][j].index.index	= j;
+				fighter[i][j].level			= level;
+				fighter[i][j].job			= (job - 1)%NewWorldHeroJob_max;
+				fighter[i][j].type			= (type - 1)%NewWorldHeroJob_max;
+				if(para.isMember("property") && para["property"].isArray() && para["property"].size()<=NewWorldProperty_max)
+				{
+					for(unsigned k=0;k<para["property"].size();++k)
+						fighter[i][j].property[k] = para["property"][k].asUInt();
+				}
+				fighter[i][j].hp = fighter[i][j].property[NewWorldProperty_hp];
+			}
+		}
+
+		Json::Value& res = m_jsonResult["res"];
+		res.resize(0);
+		unsigned i = 0, j = 0;
+		int a, b;
+		while(i < NEW_WORLD_HERO_INDEX && j < NEW_WORLD_HERO_INDEX && fighter[0][i].index.uid && fighter[1][j].index.uid)
+		{
+			CDataNewWorld::attacking(fighter[0][i], fighter[1][j], a, b);
+			Json::Value t;
+			t.resize(0);
+			t.append(fighter[0][i].hp);
+			t.append(fighter[1][j].hp);
+			res.append(t);
+			if(fighter[0][i].hp <= 0)
+				i++;
+			if(fighter[1][j].hp <= 0)
+				j++;
+		}
+
+		CGI_SEND_LOG("action=NewWorldFight&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int EndAllServerNewWorldFightMVP()
+	{
+		CLogicUser logicUser;
+		DataUser dataUser;
+		AUTO_LOCK_USER(m_uid)
+		int ret = logicUser.GetUser(m_uid, dataUser);
+		if(ret)
+			return ret;
+		Json::Value user_flag;
+		bool bsave = false;
+		Json::Reader().parse(dataUser.user_flag, user_flag);
+		DataPay payData;
+		ret = CLogicPay().ProcessOrderForBackend(m_uid, -100, 0, payData, "EndAllServerNewWorldFightMVP", user_flag, bsave);
+		if(ret)
+			return ret;
+		if(bsave)
+		{
+			dataUser.user_flag = Json::FastWriter().write(user_flag);
+			ret = logicUser.SetUser(m_uid, dataUser);
+			if(ret)
+				return ret;
+		}
+
+		unsigned rank = 0, win = 0;
+		Json::GetUInt(m_data, "win", win);
+		string data;
+		if(win)
+		{
+			Json::GetUInt(m_data, "rank", rank);
+			string name, sign, fig;
+			CLogicUserBasic().GetWorldUserInfo(m_uid, PT_TEST, sign, fig, name);
+			Json::Value t;
+			t["sign"] = sign;
+			t["fig"] = fig;
+			t["name"] = name;
+			t["hero"] = m_data["hero"];
+			data = Json::FastWriter().write(t);
+
+			string url = "action=EndAllServerNewWorldFightMVP&uid=" + CTrans::UTOS(m_uid) + "&rank=" + CTrans::UTOS(rank)
+					   + "&win=" + CTrans::UTOS(win) + "&data=" + data;
+			Json::Value tt;
+			ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, tt, CONFIG_MVP_PATH, true);
+			if (ret)
+				return ret;
+		}
+
+		CGI_SEND_LOG("action=EndAllServerNewWorldFightMVP&uid=%u",m_uid);
+		return R_SUCCESS;
 	}
 };
 

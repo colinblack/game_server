@@ -14,9 +14,9 @@ public:
 	CShareMemory();
 	~CShareMemory();
 
-	bool Create(const char *name, int size, int semid = 0);
-	bool Open(const char *name, int size, int semid = 0);
-	bool CreateOrOpen(const char *name, int size, int semid = 0);
+	bool Create(const char *name, int size, int semid = 0, unsigned vnum = 1);
+	bool Open(const char *name, int size, int semid = 0, unsigned vnum = 1);
+	bool CreateOrOpen(const char *name, int size, int semid = 0, unsigned vnum = 1);
 	bool Close();
 	bool Flush();
 
@@ -26,8 +26,8 @@ public:
 	bool HasInit();
 	void SetInitDone();
 
-	bool Lock();
-	bool Unlock();
+	bool Lock(int vnum = 1);
+	bool Unlock(int vnum = 1);
 
 private:
 	void *m_pAddress;

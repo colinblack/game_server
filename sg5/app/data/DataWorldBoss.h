@@ -31,7 +31,7 @@ public:
 	int AttackWorldBoss(unsigned uid, unsigned bossId, unsigned damage, const string &name,
 			bool &dying, unsigned &blood, unsigned &number, int &selfRank, WorldBossChallenger &self,
 			vector<WorldBossChallenger> &top, WorldBossChallenger &last, vector<WorldBossChallenger> &lucks
-			, vector<WorldBossChallenger> &dam);
+			, vector<WorldBossChallenger> &dam, bool bAll, vector<WorldBossChallenger> &all);
 	int ViewWorldBoss(unsigned uid, unsigned bossId, unsigned &blood, unsigned &fullBlood,unsigned &number, int &selfRank, WorldBossChallenger &self,
 			vector<WorldBossChallenger> &top, WorldBossChallenger &last);
 	int ViewWorldBoss( unsigned bossId, unsigned &blood, unsigned &fullblood, unsigned &standts, unsigned ts);

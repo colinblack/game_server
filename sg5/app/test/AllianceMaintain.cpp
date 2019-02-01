@@ -1,6 +1,6 @@
 #include "LogicInc.h"
 
-static int EmailToMembers(unsigned allianceId, const string &text);
+static int EmailToMembers(unsigned allianceId, int days);
 
 int main(int argc, char *argv[])
 {
@@ -22,10 +22,12 @@ int main(int argc, char *argv[])
 	}
 
 	unsigned minAllianceId = ALLIANCE_ID_START;
-	string aid_start;
-	if (Config::GetValue(aid_start, CONFIG_AID_START))
+	string serverid;
+	unsigned zone;
+	if (Config::GetValue(serverid, CONFIG_SERVER_ID))
 	{
-		Convert::StringToUInt(minAllianceId, aid_start);
+		Convert::StringToUInt(zone, serverid);
+		minAllianceId = Config::GetAIDStart(zone);
 	}
 
 	string buffer;
@@ -56,6 +58,7 @@ int main(int argc, char *argv[])
 
 	CDataAlliance dbAlliance;
 	DataAlliance alliance;
+	CLogicAlliance logicAlliance;
 	unsigned allianceId = minAllianceId + 1;
 	unsigned expenses = 0;
 	string configBuffer;
@@ -95,9 +98,7 @@ int main(int argc, char *argv[])
 			if (lowPointAllianceList[alliance.alliance_id] <= 6)
 			{
 				lowPointAllianceList[alliance.alliance_id]++;
-				string emailText;
-				String::Format(emailText, "联盟维持费不足，请抓紧捐献或掠夺，否则联盟将于%d天后自动解散!", 7 - lowPointAllianceList[alliance.alliance_id]);
-				EmailToMembers(alliance.alliance_id, emailText);
+				EmailToMembers(alliance.alliance_id, 7 - lowPointAllianceList[alliance.alliance_id]);
 			}
 		}
 		else
@@ -110,10 +111,12 @@ int main(int argc, char *argv[])
 				continue;
 			}
 			lowPointAllianceList[alliance.alliance_id] = 0;
+
+			if(alliance.level >= 5)
+				logicAlliance.SetR5(alliance.alliance_id);
 		}
 	}
 
-	CLogicAlliance logicAlliance;
 	Json::Value wData = Json::Value(Json::arrayValue);
 	for (vector<unsigned>::iterator aItr=allianceList.begin(); aItr!=allianceList.end(); ++aItr)
 	{
@@ -145,15 +148,19 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-static int EmailToMembers(unsigned allianceId, const string &text)
+static int EmailToMembers(unsigned allianceId, int days)
 {
+	Json::Value temp;
+	temp["s"] = "AllianceMaintain";
+	temp["days"] = days;
+	temp["ts"] = Time::GetGlobalTime();
 	int ret;
 	DataEmail data;
-	data.title = "联盟维持费不足";
-	data.text = text;
+	data.title = "AllianceMaintain";
+	data.text = Json::ToString(temp);
 	data.post_ts = Time::GetGlobalTime();
 	data.attach_flag = 0;
-	data.from_name = "系统管理员";
+	data.from_name = "";
 	data.uid = UID_MIN;
 	CDataUserBasic dbUserBasic;
 	string name;
@@ -169,14 +176,13 @@ static int EmailToMembers(unsigned allianceId, const string &text)
 
 	CLogicEmail logicEmail;
 	vector<uint64_t> vto_uid;
-	PlatformType platform = PT_PENGYOU;
 
 	for (vector<DataAllianceMember>::iterator itr=members.begin(); itr!=members.end(); ++itr)
 	{
 		vto_uid.push_back(itr->uid);
 	}
 
-	ret = logicEmail.AddEmail(data,vto_uid,platform);
+	ret = logicEmail.AddEmail(data,vto_uid,true);
 	if (0 != ret)
 	{
 		cout << "EmailToMembers AddEmail fail,alliance=" << allianceId << ",ret=" << ret << endl;

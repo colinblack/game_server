@@ -1,5 +1,6 @@
 ﻿
 #include "LogicPay.h"
+#include "LogicCmdUnits.h"
 
 int CLogicPay::InitailizePay(unsigned uid)
 {
@@ -63,20 +64,14 @@ int CLogicPay::GetPay(unsigned uid, DataPay &pay)
 //}
 
 //用于购买隐藏武将碎片的积分
-int CLogicPay::ChangePayHeroCoins(unsigned uid,int coins2,const string &type, int count)
+int CLogicPay::ChangePayHeroCoins(unsigned uid,int coins2,const string &type, Json::Value &user_flag)
 {
-	Json::Value userFlag;
-	CLogicUser logicUser;
-	userFlag.clear();
-	int ret = logicUser.GetUserFlag(uid,userFlag);
-	if(ret)
-		return ret;
-	if(!userFlag.isMember("heroCoins"))
+	if(!user_flag.isMember("heroCoins"))
 	{
 		ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "ChangePayNewCoins_limit_error");
 	}
 
-	int hero_coins_old = userFlag["heroCoins"][1u].asInt();
+	int hero_coins_old = user_flag["heroCoins"][1u].asInt();
 
 	int hero_coins = hero_coins_old + coins2;
 	if(hero_coins < 0)
@@ -84,76 +79,55 @@ int CLogicPay::ChangePayHeroCoins(unsigned uid,int coins2,const string &type, in
 		ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "ChangePayNewCoins_limit_error");
 	}
 
-	userFlag["heroCoins"][1u] = hero_coins;
+	user_flag["heroCoins"][1u] = hero_coins;
 
-	ret = logicUser.SetUserFlag(uid, userFlag);
-	if (ret != 0)
-	{
-		error_log("[set user flag fail][uid=%u,oherocoins=%d,herocoins=%d]",uid,hero_coins_old,hero_coins);
-		return ret;
-	}
-
-	COINS_LOG("[change hero_coins pay log][uid=%u,oherocoins=%d,herocoins=%d,type=%s,count=%d]",
-			uid,hero_coins_old,coins2,type.c_str(),count);
+	COINS_LOG("[change hero_coins pay log][uid=%u,oherocoins=%d,herocoins=%d,type=%s]",
+			uid,hero_coins_old,coins2,type.c_str());
 
 	return 0;
 }
 
-int CLogicPay::AddHeroCoins(unsigned uid,int cash,const string &type)
+int CLogicPay::AddHeroCoins(unsigned uid,int cash,const string &type, Json::Value &user_flag)
 {
 	unsigned now = Time::GetGlobalTime();
-	Json::Value userFlag;
-	CLogicUser logicUser;
 	int cash_total=0;
 	int ocash_total = 0;
 	int old_herocoins = 0;
-	userFlag.clear();
-	int ret = logicUser.GetUserFlag(uid,userFlag);
-	if(ret)
-		return ret;
 
-	if(!userFlag.isMember("heroCoins"))
+	if(!user_flag.isMember("heroCoins"))
 	{
 		ocash_total =0;
 		old_herocoins = 0;
-		userFlag["heroCoins"][0u]= now;
-		userFlag["heroCoins"][1u]= 0;          //herocoins
-		userFlag["heroCoins"][2u]= cash;
+		user_flag["heroCoins"][0u]= now;
+		user_flag["heroCoins"][1u]= 0;          //herocoins
+		user_flag["heroCoins"][2u]= cash;
 	}
 	else
 	{
-		unsigned last_ts = userFlag["heroCoins"][0u].asInt();
-		old_herocoins = userFlag["heroCoins"][1u].asInt();
+		unsigned last_ts = user_flag["heroCoins"][0u].asInt();
+		old_herocoins = user_flag["heroCoins"][1u].asInt();
 		if(CTime::GetDayInterval(last_ts,now) == 0)
 		{
-			ocash_total = userFlag["heroCoins"][2u].asInt();
-			cash_total = userFlag["heroCoins"][2u].asInt() + cash;
-			userFlag["heroCoins"][2u] = cash_total;
-			userFlag["heroCoins"][0u] = now;
+			ocash_total = user_flag["heroCoins"][2u].asInt();
+			cash_total = user_flag["heroCoins"][2u].asInt() + cash;
+			user_flag["heroCoins"][2u] = cash_total;
+			user_flag["heroCoins"][0u] = now;
 		}
 		else
 		{
 			ocash_total =0;
-			userFlag["heroCoins"][2u] = cash;
-			userFlag["heroCoins"][0u] = now;
+			user_flag["heroCoins"][2u] = cash;
+			user_flag["heroCoins"][0u] = now;
 		}
 	}
 
-	unsigned oldcount = ocash_total / HERO_COIN_CASH;
-	unsigned newcount = userFlag["heroCoins"][2u].asInt()  / HERO_COIN_CASH;
-	unsigned count = (newcount - oldcount) * 10;
-	userFlag["heroCoins"][0u] = now;
-	userFlag["heroCoins"][1u] = count + userFlag["heroCoins"][1u].asInt();
-
-	ret = logicUser.SetUserFlag(uid, userFlag);
-	if (ret != 0)
-	{
-		error_log("[set user flag fail][uid=%u,cash=%u]",uid,-cash);
-		return ret;
-	}
-	else
-		debug_log("[addHeroCoins][uid=%u,herocoins=%d,cash=%d,ts=%u]",uid,
-				userFlag["heroCoins"][1u].asInt(),userFlag["heroCoins"][2u].asInt(),userFlag["heroCoins"][0u].asInt());
+	unsigned cu = OpenPlatform::GetType() == PT_4399 ? HERO_COIN_CASH_4399 : HERO_COIN_CASH;
+	unsigned cn = OpenPlatform::GetType() == PT_4399 ? HERO_COIN_NUM_4399 : HERO_COIN_NUM;
+	unsigned oldcount = ocash_total / cu;
+	unsigned newcount = user_flag["heroCoins"][2u].asInt()  / cu;
+	unsigned count = (newcount - oldcount) * cn;
+	user_flag["heroCoins"][0u] = now;
+	user_flag["heroCoins"][1u] = count + user_flag["heroCoins"][1u].asInt();
 
 	COINS_LOG("[change hero_coins pay log][uid=%u,oherocoins=%d,herocoins=%d,type=%s]",
 			uid,old_herocoins,count,type.c_str());
@@ -161,7 +135,7 @@ int CLogicPay::AddHeroCoins(unsigned uid,int cash,const string &type)
 	return 0;
 }
 
-int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const string &type, int count)
+int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag)
 {
 	int ret = GetPay(uid, pay);
 	if (ret != 0)
@@ -169,11 +143,21 @@ int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const 
 	unsigned org_cash = pay.cash;
 	unsigned org_coins = pay.coins;
 	if ((cash < 0 && (unsigned)(-cash) > pay.cash)
-			|| (coins < 0 && (unsigned)(-coins) > pay.coins))
+	|| (coins < 0 && (unsigned)(-coins) > pay.coins))
 	{
-		error_log("[pay overspend][uid=%u,cash=%d,coins=%d,cashbal=%u,coinsbal=%u]",
-				uid, cash, coins, pay.cash, pay.coins);
-		ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "pay_limit_error");
+		if(flag & PAY_FLAG_COST_ALL)
+		{
+			if(cash < 0 && (unsigned)(-cash) > pay.cash)
+				cash = -pay.cash;
+			if(coins < 0 && (unsigned)(-coins) > pay.coins)
+				coins = -pay.coins;
+		}
+		else
+		{
+			error_log("[pay overspend][uid=%u,cash=%d,coins=%d,cashbal=%u,coinsbal=%u]",
+					uid, cash, coins, pay.cash, pay.coins);
+			ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "pay_limit_error");
+		}
 	}
 	pay.cash += cash;
 	pay.coins += coins;
@@ -186,43 +170,111 @@ int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const 
 		DB_ERROR_RETURN_MSG("set_pay_fail");
 	}
 
-	//累积消费
-	ret = SetUserPayTotal(uid, cash, type);
-	if (0 != ret)
-	{
-		error_log("[set user pay total fail][uid=%d,ret=%d,cash=%d]", uid, ret, -cash);
-	}
-	//百日庆典消费钻石
-	ret = UserPayHundredDaysActivities( uid, cash, type);
-	if (0 != ret)
-	{
-		error_log("[set user hundred days activity rank fail][uid=%d,ret=%d,cash=%d]", uid, ret, -cash);
-	}
-	//消费积分
-	ret = SetUserPayRank(uid, cash+coins, type);
-	if (0 != ret)
-	{
-		error_log("[set user pay rank fail][uid=%d,ret=%d,cash=%d]", uid, ret, -cash);
-	}
+	//处理充值回调
+	if((flag & PAY_FLAG_CHARGE) && !(flag & PAY_FLAG_ADMIN) && !(flag & PAY_FLAG_NO_REPLY) && OpenPlatform::GetPlatform())
+		OpenPlatform::GetPlatform()->ReplyCharge();
 
-	if( cash > 0)
+	bool saveUserPay = false;
+	bool saveHero = false;
+	//消费活动
+	if((cash < 0 || coins < 0) && !(flag & PAY_FLAG_ADMIN))
 	{
-		ret = AddHeroCoins(uid,cash,type);
-		if(0 != ret)
+		//消费积分
+		saveUserPay = true;
+		addUserConsumeByDay(user_flag, coins, cash);
+		if(cash < 0)
 		{
-			error_log("[add herocoins  fail][uid=%d,ret=%d,cash=%d]", uid, ret, cash);
+			//百日庆典消费钻石
+			SetHundredDaysActivities( uid, cash, user_flag);
+			SetConsumeRank( uid, cash, user_flag);
 		}
 	}
 
-	COINS_LOG("[change pay log][uid=%u,ocash=%u,ocoins=%u,ncash=%u,nconis=%u,cash=%d,coins=%d,type=%s,count=%d]",
-			uid,org_cash,org_coins,pay.cash,pay.coins,cash,coins,type.c_str(),count);
+	//处理充值
+	if( cash > 0 && (flag & PAY_FLAG_CHARGE) && !(flag & PAY_FLAG_ADMIN))
+	{
+		if (!user_flag.isMember("dchg")
+		|| CTime::GetDayInterval(user_flag["dchg"][0u].asUInt(), Time::GetGlobalTime()) != 0)
+		{
+			user_flag["dchg"][0u] = Time::GetGlobalTime();
+			user_flag["dchg"][1u] = 0;
+		}
+		user_flag["dchg"][1u] = user_flag["dchg"][1u].asInt() + cash;
+		// 累计充值
+		addPaymentByDay(user_flag, cash);
+		uint32_t now = Time::GetGlobalTime();
+		/** 每日首次充值, add by vincent 2014-07-14*/
+		if(CTime::IsDiffDay(user_flag["dfchg"][0u].asUInt(), now))
+		{
+			user_flag["dfchg"][0u] = (uint32_t)now;
+			user_flag["dfchg"][1u] = cash;
+		}
+		else
+		{
+			user_flag["dfchg"][0u] = (uint32_t)now;
+			user_flag["dfchg"][1u] = user_flag["dfchg"][1u].asUInt() + cash;
+		}
+
+		//武将碎片
+		AddHeroCoins(uid,cash,type,user_flag);
+		saveHero = true;
+
+		//改为跨服架构---ralf 20140101
+		//联盟为单位充值活动
+		AllianceMember recharge;
+		CLogicRechargeAlliance Rechargealliance;
+
+		recharge.uid = uid;
+		recharge.cash = cash;
+
+		ret = Rechargealliance.UpdateRechargeAllianceData(recharge);
+		if(0 != ret)
+		{
+			error_log("[update recharge alliance fail][uid=%d,ret=%d,cash=%d]", uid, ret, cash);
+		}
+
+		//充值排行榜
+		SetRechargeRank(uid, cash, user_flag);
+	}
+
+	bsave =  saveUserPay || saveHero;
+
+	COINS_LOG("[change pay log][uid=%u,ocash=%u,ocoins=%u,ncash=%u,nconis=%u,cash=%d,coins=%d,type=%s]",
+			uid,org_cash,org_coins,pay.cash,pay.coins,cash,coins,type.c_str());
 	return 0;
 }
 
-int CLogicPay::ChangePay(unsigned uid, int cash, int coins, const string &type, int count)
+int CLogicPay::ProcessOrderForBackend(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag)
+{
+	int ret = ChangePay(uid, cash, coins, pay, type, user_flag, bsave, flag);
+	if(ret)
+	{
+		return ret;
+	}
+	if(cash < 0) {
+		ORDERS_LOG("uid=%u&code=%s&price=%d&amount=%d&type=%d",uid,type.c_str(),cash,1,1);
+	}
+
+	if(coins < 0) {
+		ORDERS_LOG("uid=%u&code=%s&price=%d&amount=%d&type=%d",uid,type.c_str(),coins,1,0);
+	}
+	return ret;
+}
+
+
+int CLogicPay::ChangePay(unsigned uid, int cash, int coins, const string &type, unsigned flag)
 {
 	DataPay pay;
-	return ChangePay(uid, cash, coins, pay, type, count);
+	Json::Value user_flag;
+	bool save = false;
+	return ChangePay(uid, cash, coins, pay, type, user_flag, save, flag | PAY_FLAG_ADMIN);
+}
+
+int CLogicPay::ChangePay(unsigned uid, int cash, int coins, const string &type, DataPay &pay, unsigned flag)
+{
+	Json::Value user_flag;
+	bool save = false;
+	return ChangePay(uid, cash, coins, pay, type, user_flag, save, flag | PAY_FLAG_ADMIN);
 }
 
 int CLogicPay::AddPayHistory(DataPayHistory &payHistory)
@@ -370,50 +422,140 @@ int CLogicPay::ChangeAlliancePay(unsigned aid, int coins, const string &type, in
 	return 0;
 }
 
-int CLogicPay::SetUserPayRank(unsigned uid, int cash, const string &type)
+/** 玩家支付完后需要做的处理 */
+int CLogicPay::DoPay(unsigned uid, DataUser &user, const unsigned cash)
 {
-	int ret = 0;
-	unsigned now = Time::GetGlobalTime();
-	if(    now >= Config::GetIntValue(CONFIG_PAYRANK_BEGIN_TS)
-		&& now <= Config::GetIntValue(CONFIG_PAYRANK_END_TS)
-		&& cash < 0
-		&& type != "MATCHGUESSAPPLY")
+	CDataUser userDb;
+	int t = cash;
+	userDb.AddAccCharge(uid, t);
+	// 指定的平台才需要发邮件
+	if(OpenPlatform::IsQQPlatform())
 	{
-		Json::Value userFlag;
-		CLogicUser logicUser;
+#ifdef SG_16_VER
+		if(user.accCharge < 30000 && user.accCharge + cash >= 30000
+		&& (Time::GetGlobalTime()-user.register_time) < (86400*30))
+		{
+			DataEmail email;
+			CLogicEmail logicEmail;
+			vector<uint64_t> toUidList;
+			toUidList.push_back(uid);
+			email.attach_flag = 0;
+			email.attachments = "";
+			email.uid = ADMIN_UID;
+			email.post_ts = Time::GetGlobalTime();
+			email.title = "至尊会员";
+			email.text = "尊敬的玩家您好，恭喜您成为我们的高级VIP用户。请联系QQ：3139311550 领取VIP礼包并有专业人士进行游戏指导。";
+			logicEmail.AddEmail(email,toUidList);
+		}
+#else
+		if(user.accCharge < 50000 && user.accCharge + cash >= 50000
+		&& (Time::GetGlobalTime()-user.register_time) < (86400*21))
+		{
+			DataEmail email;
+			CLogicEmail logicEmail;
+			vector<uint64_t> toUidList;
+			toUidList.push_back(uid);
+			email.attach_flag = 0;
+			email.attachments = "";
+			email.uid = ADMIN_UID;
+			email.post_ts = Time::GetGlobalTime();
+			email.title = "至尊会员";
+			email.text = "尊敬的玩家您好，恭喜您成为我们的高级VIP用户。请联系QQ：2624248020领取VIP礼包并有专业人士进行游戏指导。";
+			logicEmail.AddEmail(email,toUidList);
+		}
+#endif
+	}
+	user.accCharge += cash;
+	return 0;
+}
+
+int CLogicPay::addPaymentByDay(Json::Value &userFlag, int accCharge){
+	uint32_t now = Time::GetGlobalTime();
+	if(!userFlag.isMember("chgs") || !userFlag["chgs"].isArray() || userFlag["chgs"].size() == 0) {
+		//补丁
+		if(userFlag.isMember("hqchg")) {
+			accCharge += userFlag["hqchg"][1u].asInt();
+			userFlag.removeMember("hqchg");
+		}
+		userFlag["chgs"][0u][0u] = now;
+		userFlag["chgs"][0u][1u] = accCharge;
+		return 0;
+	}
+
+	size_t size = userFlag["chgs"].size();
+	vector<pair<uint32_t, int> > vec_chg;
+	for(size_t i = 0; i < size; ++i){
+		pair<uint32_t, int> pair;
+		pair.first  = userFlag["chgs"][i][0u].asUInt();
+		pair.second = userFlag["chgs"][i][1u].asInt();
+		vec_chg.push_back(pair);
+	}
+
+	if(!CTime::IsDiffDay(vec_chg.back().first, now)) {
+		vec_chg.back().second += accCharge;
+	} else {
+		pair<uint32_t, int> pair;
+		pair.first = now;
+		pair.second = accCharge;
+		vec_chg.push_back(pair);
+	}
+
+	while(vec_chg.size() > 15) {
+		vec_chg.erase(vec_chg.begin());
+	}
+	userFlag["chgs"].clear();
+	for(size_t i = 0; i < vec_chg.size(); ++i) {
+		uint32_t chgTime = vec_chg[i].first;
+		int chrg = vec_chg[i].second;
+		userFlag["chgs"][i][0u] = chgTime;
+		userFlag["chgs"][i][1u] = chrg;
+	}
+	return 0;
+}
+
+int CLogicPay::SetUserPayRank(unsigned uid, int cash, Json::Value &user_flag, bool &bsave)
+{
+	unsigned now = Time::GetGlobalTime();
+	if(now >= Config::GetIntValue(CONFIG_PAYRANK_BEGIN_TS)
+	&& now <= Config::GetIntValue(CONFIG_PAYRANK_END_TS)
+	&& cash < 0)
+	{
+		bsave = true;
+
+		int ret = 0;
 		int lastpay_ts = 0;
 		int payTotal = 0;
-		userFlag.clear();
-		ret = logicUser.GetUserFlag(uid,userFlag);
-		if(ret)
-			return ret;
-		if(!userFlag.isMember("pointpay"))
+		if(!user_flag.isMember("pointpay"))
 		{
-			userFlag["pointpay"][0u]= -cash;
-			userFlag["pointpay"][1u]= now;
+			user_flag["pointpay"][0u]= -cash;
+			user_flag["pointpay"][1u]= now;
+			payTotal = -cash;
 		}
 		else
 		{
-			lastpay_ts = userFlag["pointpay"][1u].asInt();
+			lastpay_ts = user_flag["pointpay"][1u].asInt();
 			if(    lastpay_ts >= Config::GetIntValue(CONFIG_PAYRANK_BEGIN_TS)
 				&& lastpay_ts <= Config::GetIntValue(CONFIG_PAYRANK_END_TS))
 			{
-				payTotal = userFlag["pointpay"][0u].asUInt() - cash;
-				userFlag["pointpay"][0u] = payTotal;
-				userFlag["pointpay"][1u]= now;
+				payTotal = user_flag["pointpay"][0u].asUInt() - cash;
+				user_flag["pointpay"][0u] = payTotal;
+				user_flag["pointpay"][1u]= now;
 			}
 			else
 			{
-				userFlag["pointpay"][0u] = payTotal = - cash;
-				userFlag["pointpay"][1u] = now;
+				user_flag["pointpay"][0u] = payTotal = - cash;
+				user_flag["pointpay"][1u] = now;
+			}
+
+			string activity_type;
+			Config::GetValue(activity_type, CONFIG_PAYRANK_TYPE);
+			if(activity_type == "cutprice" && CTime::GetDayInterval(lastpay_ts, now) != 0)   //五一活动需要每天清积分
+			{
+				user_flag["pointpay"][0u] = payTotal = - cash;
+				user_flag["pointpay"][1u] = now;
 			}
 		}
-		ret = logicUser.SetUserFlag(uid, userFlag);
-		if (ret != 0)
-		{
-			error_log("[set user flag fail][uid=%u,cash=%u]", uid, -cash);
-			return ret;
-		}
+		/*
 		CLogicUserBasic logicUserBasic;
 		DataUserBasic userBasic;
 		ret = logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),userBasic);
@@ -429,146 +571,382 @@ int CLogicPay::SetUserPayRank(unsigned uid, int cash, const string &type)
 		ret = logicPayRank.UpdatePayRank(uid,payItem);
 		if (0 != ret)
 		{
-			error_log("[UpdatePayRank fail][uid=%u,ret=%d]", uid, ret);
+			error_log("[UpdatePayRank fail][uid=%u,ret=%d,points=%d]", uid, ret,payItem.payTotal);
 		}
+		*/
 	}
 	return 0;
 }
-
-int CLogicPay::SetUserPayTotal(unsigned uid, int cash, const string &type)
+int CLogicPay::SetUserPayTotal(unsigned uid, int cash, Json::Value &user_flag, bool &bsave)
 {
-	int ret = 0;
 	unsigned now = Time::GetGlobalTime();
-	if(    now >= Config::GetIntValue(CONFIG_PAY_TOTAL_BEGIN_TS)
-		&& now <= Config::GetIntValue(CONFIG_PAY_TOTAL_END_TS)
-		&& cash < 0
-		&& type != "MATCHGUESSAPPLY")
+	if(now >= Config::GetIntValue(CONFIG_PAY_TOTAL_BEGIN_TS)
+	&& now <= Config::GetIntValue(CONFIG_PAY_TOTAL_END_TS)
+	&& cash < 0)
 	{
-		Json::Value userFlag;
-		CLogicUser logicUser;
+		bsave = true;
+
+		int ret = 0;
 		int lastpay_ts = 0;
 		int payTotal = 0;
-		userFlag.clear();
-		ret = logicUser.GetUserFlag(uid,userFlag);
-		if(ret)
-			return ret;
-		if(!userFlag.isMember("payTotal"))
+		if(!user_flag.isMember("payTotal"))
 		{
-			userFlag["payTotal"][0u]= -cash;
-			userFlag["payTotal"][1u]= now;
+			user_flag["payTotal"][0u]= -cash;
+			user_flag["payTotal"][1u]= now;
 		}
 		else
 		{
-			lastpay_ts = userFlag["payTotal"][1u].asInt();
+			lastpay_ts = user_flag["payTotal"][1u].asInt();
 			if(    lastpay_ts >= Config::GetIntValue(CONFIG_PAY_TOTAL_BEGIN_TS)
 				&& lastpay_ts <= Config::GetIntValue(CONFIG_PAY_TOTAL_END_TS))
 			{
-				payTotal = userFlag["payTotal"][0u].asUInt() - cash;
-				userFlag["payTotal"][0u] = payTotal;
-				userFlag["payTotal"][1u]= now;
+				payTotal = user_flag["payTotal"][0u].asUInt() - cash;
+				user_flag["payTotal"][0u] = payTotal;
+				user_flag["payTotal"][1u]= now;
 			}
 			else
 			{
-				userFlag["payTotal"][0u] = payTotal = - cash;
-				userFlag["payTotal"][1u] = now;
+				user_flag["payTotal"][0u] = payTotal = - cash;
+				user_flag["payTotal"][1u] = now;
 			}
-		}
-		ret = logicUser.SetUserFlag(uid, userFlag);
-		if (ret != 0)
-		{
-			error_log("[set user flag fail][uid=%u,coins=%u]",uid,-cash);
-			return ret;
 		}
 	}
 	return 0;
 }
-
 //百日庆典活动
-int CLogicPay::UserPayHundredDaysActivities(unsigned uid, int cash, const string &type)
+int CLogicPay::SetHundredDaysActivities(unsigned uid, int cash, Json::Value &user_flag)
 {
-	int ret = 0;
-	unsigned now = Time::GetGlobalTime();
-	if(    now >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)
-		&& now <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS)
-		&& cash < 0
-		&& type != "MATCHGUESSAPPLY")
+	time_t now;
+	time(&now);
+	struct tm *pTm = localtime(&now);
+	int tempSec = pTm->tm_sec;
+	int tempMin = pTm->tm_min;
+	int tempHour = pTm->tm_hour;
+	unsigned tempNow = tempSec + tempMin * 60 + tempHour *3600;
+	if((unsigned)now >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)
+	&& (unsigned)now <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS)
+	&& tempNow < 79200					//每天的0点至22点
+	&& cash < 0)
 	{
-		Json::Value userFlag;
-		CLogicUser logicUser;
-		unsigned lastpay_ts = 0;
-		int payTotal = 0;
-		userFlag.clear();
-		ret = logicUser.GetUserFlag(uid,userFlag);
-		if(ret)
-			return ret;
-		if(!userFlag.isMember("hundredDaysPay"))
+		if(user_flag.isMember("hundredDaysPay"))
 		{
-			userFlag["hundredDaysPay"][0u]= -cash;
-			userFlag["hundredDaysPay"][1u]= now;
-			payTotal = -cash;
+			user_flag.removeMember("hundredDaysPay");
 		}
-		else
+		unsigned payTotal = 0;
+		unsigned size = user_flag["user_pay"].size();
+		for(int i = 0; i < size; ++i)
 		{
-			lastpay_ts = userFlag["hundredDaysPay"][1u].asUInt();
-			if(    lastpay_ts >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)  //一天的累计消费
-				&& lastpay_ts <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS)
-				&& CTime::GetDayInterval(lastpay_ts,now) == 0)
+			unsigned ts  = user_flag["user_pay"][i][0u].asUInt();
+			if(!CTime::IsDiffDay(ts, now))
 			{
-				payTotal = userFlag["hundredDaysPay"][0u].asUInt() - cash;
-				userFlag["hundredDaysPay"][0u] = payTotal;
-				userFlag["hundredDaysPay"][1u]= now;
+				payTotal = user_flag["user_pay"][i][1u].asUInt();
+				break;
 			}
-			else if(lastpay_ts >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)  //不是同一天的第一次
-				 && lastpay_ts <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS)
-				 && CTime::GetDayInterval(lastpay_ts,now) != 0)
-			{
-				userFlag["hundredDaysPay"][0u] = -cash;
-				payTotal = -cash;
-				userFlag["hundredDaysPay"][1u] = now;
-			}
-			else if(lastpay_ts <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)
-				&&  Time::GetGlobalTime() >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)
-				&&  Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS))
-			{
-				userFlag["hundredDaysPay"][0u] = -cash;
-				payTotal = -cash;
-				userFlag["hundredDaysPay"][1u] = now;
-
-			}
-			else if(lastpay_ts >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS)
-				&&  Time::GetGlobalTime() >= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_BEGIN_TS)
-				&&  Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_HUNDRED_DAYS_END_TS))
-			{
-				userFlag["hundredDaysPay"][0u] = -cash;
-				payTotal = -cash;
-				userFlag["hundredDaysPay"][1u] = now;
-			}
-		}
-
-
-		ret = logicUser.SetUserFlag(uid, userFlag);
-		if (ret != 0)
-		{
-			error_log("[set user flag fail][uid=%u,cash=%u]",uid,-cash);
-			return ret;
 		}
 
 		DataHDaysAcvitityPay points;
 		CLogicUserBasic logicUserBasic;
 		DataUserBasic dataUserBasic;
-		int ret = 0;
 		CLogicHundredDaysActivityRank hdaysactivittyRank;
 		logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),dataUserBasic);
 		points.uid = uid;
 		points.pay = payTotal;
 		memcpy(points.name,dataUserBasic.name.c_str(),sizeof(points.name) - 1);
-		ret = hdaysactivittyRank.UpdateHundredDaysActivityRank(uid,points);
+		int ret = hdaysactivittyRank.UpdateHundredDaysActivityRank(uid,points);
 		if(ret != 0)
 		{
-			return ret;
+			error_log("UpdateHundredDaysActivityRank error uid=%u,ret=%d,points=%d",uid,ret,points.pay);
 		}
 	}
+	return 0;
+}
+
+int CLogicPay::SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag)
+{
+	time_t now;
+	time(&now);
+	struct tm *pTm = localtime(&now);
+	int tempSec = pTm->tm_sec;
+	int tempMin = pTm->tm_min;
+	int tempHour = pTm->tm_hour;
+	unsigned tempNow = tempSec + tempMin * 60 + tempHour *3600;
+	if((unsigned)now >= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_B_TS)
+	&& (unsigned)now <= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_E_TS)
+	&& tempNow < 79200					//每天的0点至22点
+	&& cash < 0)
+	{
+		int ret = 0;
+		unsigned lastpay_ts = 0;
+		unsigned dayTotal = 0;
+		unsigned allTotal = 0;
+		unsigned need = 0;
+		if(user_flag.isMember("consumeRank"))
+		{
+			user_flag.removeMember("consumeRank");
+		}
+
+		if(!user_flag.isMember("pay_need")
+		|| user_flag["pay_need"][1u].asInt() != Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_VER))
+		{
+			user_flag["pay_need"][0u] = need;
+			user_flag["pay_need"][1u] = Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_VER);
+		}
+
+		unsigned size = user_flag["user_pay"].size();
+		for(int i = 0; i < size; ++i)
+		{
+			unsigned ts  = user_flag["user_pay"][i][0u].asUInt();
+			if(!CTime::IsDiffDay(ts, now))
+			{
+				need = user_flag["pay_need"][0u].asUInt();
+				dayTotal = user_flag["user_pay"][i][1u].asUInt();
+			}
+			else
+			{
+				user_flag["pay_need"][0u] = need;
+			}
+			if(ts >= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_B_TS)
+			&& ts <= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_E_TS))
+			{
+				allTotal += user_flag["user_pay"][i][1u].asUInt();
+			}
+		}
+
+		if(-cash >= need)
+		{
+			CLogicUserBasic logicUserBasic;
+			DataUserBasic dataUserBasic;
+			logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),dataUserBasic);
+
+			CLogicConsumeRank logicConsumeRank;
+			logicConsumeRank.SetUser(uid, dayTotal, allTotal, dataUserBasic.name, need);
+			user_flag["pay_need"][0u] = need;
+		}
+		else
+		{
+			need += cash;
+			user_flag["pay_need"][0u] = need;
+		}
+	}
+	if((unsigned)now >= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_B_TS)
+	&& (unsigned)now <= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_E_TS)
+	&& cash < 0)
+	{
+		int ret = 0;
+		int allTotal = 0;
+		unsigned size = user_flag["user_pay"].size();
+		for(int i = 0; i < size; ++i)
+		{
+			unsigned ts  = user_flag["user_pay"][i][0u].asUInt();
+			if(ts >= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_B_TS)
+			&& ts <= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_E_TS))
+			{
+				allTotal += user_flag["user_pay"][i][1u].asUInt();
+			}
+		}
+		int oat = allTotal + cash;
+		unsigned check[8] = {998,5888,28888,48888,88888,118888,288888,588888};
+		unsigned gift[8] = {31111,31112,31113,31114,31115,31116,31117,31118};
+		for(int i=0;i<8;++i)
+		{
+			if(oat < check[i] && allTotal >= check[i])
+			{
+				Json::Value temp;
+				CLogicEquipment().AddOneItem(uid, gift[i], 1, "SetConsumeRank", temp);
+				Json::Value updates;
+				updates["s"] = "SetConsumeRank";
+				updates["uid"] = uid;
+				updates["ts"] = (unsigned)now;
+				updates["cash"] = check[i];
+				updates["eqid"] = gift[i];
+				CLogicUpdates().AddUpdate(uid,updates,true);
+			}
+		}
+	}
+	return 0;
+}
+
+int CLogicPay::SetRechargeRank(unsigned uid, int cash, Json::Value &user_flag)
+{
+	time_t now;
+	time(&now);
+	struct tm *pTm = localtime(&now);
+	int tempSec = pTm->tm_sec;
+	int tempMin = pTm->tm_min;
+	int tempHour = pTm->tm_hour;
+	unsigned tempNow = tempSec + tempMin * 60 + tempHour *3600;
+	if((unsigned)now >= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_B_TS)
+	&& (unsigned)now <= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_E_TS)
+	&& tempNow < 79200					//每天的0点至22点
+	&& cash > 0)
+	{
+		int ret = 0;
+		unsigned dayTotal = 0;
+		unsigned allTotal = 0;
+		unsigned need = 0;
+
+		if(!user_flag.isMember("recharge_need")
+		|| user_flag["recharge_need"][1u].asInt() != Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_VER))
+		{
+			user_flag["recharge_need"][0u] = need;
+			user_flag["recharge_need"][1u] = Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_VER);
+			user_flag["recharge_need"][2u] = (unsigned)now;
+		}
+
+		if(CTime::IsDiffDay(user_flag["recharge_need"][2u].asUInt(), now))
+		{
+			user_flag["recharge_need"][0u] = 0;
+			user_flag["recharge_need"][2u] = (unsigned)now;
+		}
+		else
+		{
+			need = user_flag["recharge_need"][0u].asUInt();
+		}
+
+		unsigned size = user_flag["chgs"].size();
+		for(int i = 0; i < size; ++i)
+		{
+			unsigned ts  = user_flag["chgs"][i][0u].asUInt();
+			if(!CTime::IsDiffDay(ts, now))
+			{
+				dayTotal = user_flag["chgs"][i][1u].asUInt();
+			}
+
+			if(ts >= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_B_TS)
+			&& ts <= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_E_TS))
+			{
+				allTotal += user_flag["chgs"][i][1u].asUInt();
+			}
+		}
+
+		if(cash >= need)
+		{
+			CLogicUserBasic logicUserBasic;
+			DataUserBasic dataUserBasic;
+			logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),dataUserBasic);
+
+			CLogicRechargeRank logicRechargeRank;
+			logicRechargeRank.SetUser(uid, dayTotal, allTotal, dataUserBasic.name, need);
+			user_flag["recharge_need"][0u] = need;
+		}
+		else
+		{
+			need -= cash;
+			user_flag["recharge_need"][0u] = need;
+		}
+	}
+	if((unsigned)now >= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_B_TS)
+	&& (unsigned)now <= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_E_TS)
+	&& cash > 0)
+	{
+		int ret = 0;
+		unsigned allTotal = 0;
+		unsigned size = user_flag["chgs"].size();
+		for(int i = 0; i < size; ++i)
+		{
+			unsigned ts  = user_flag["chgs"][i][0u].asUInt();
+			if(ts >= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_B_TS)
+			&& ts <= Config::GetIntValue(CONFIG_ACTIVITY_RECHARGE_RANK_E_TS))
+			{
+				allTotal += user_flag["chgs"][i][1u].asUInt();
+			}
+		}
+		int oat = allTotal - cash;
+		unsigned check[8] = {998,5888,28888,48888,88888,118888,288888,588888};
+		unsigned gift[8] = {31119,31120,31121,31122,31123,31124,31125,31126};
+		for(int i=0;i<8;++i)
+		{
+			if(oat < check[i] && allTotal >= check[i])
+			{
+				Json::Value temp;
+				CLogicEquipment().AddOneItem(uid, gift[i], 1, "SetRechargeRank", temp);
+				Json::Value updates;
+				updates["s"] = "SetRechargeRank";
+				updates["uid"] = uid;
+				updates["ts"] = (unsigned)now;
+				updates["cash"] = check[i];
+				updates["eqid"] = gift[i];
+				CLogicUpdates().AddUpdate(uid,updates,true);
+			}
+		}
+	}
+	return 0;
+}
+
+int CLogicPay::Try(unsigned int uid, int cash, int coins)
+{
+	DataPay pay;
+	int ret = GetPay(uid, pay);
+	if (ret != 0)
+		return ret;
+
+	if ((cash < 0 && (unsigned)(-cash) > pay.cash) || (coins < 0 && (unsigned)(-coins) > pay.coins))
+		return R_ERR_LOGIC;
 
 	return 0;
 }
 
+int CLogicPay::addUserConsumeByDay(Json::Value &userFlag, int coins, int cash)
+{
+	if(coins > 0)
+		coins = 0;
+	if(cash > 0)
+		cash = 0;
+
+	if(userFlag.isMember("pointpay"))
+	{
+		userFlag.removeMember("pointpay");
+	}
+	if(userFlag.isMember("payTotal"))
+	{
+		userFlag.removeMember("payTotal");
+	}
+	unsigned now = Time::GetGlobalTime();
+	if(!userFlag.isMember("user_pay") || !userFlag["user_pay"].isArray() || userFlag["user_pay"].size() == 0)
+	{
+		userFlag["user_pay"][0u][0u] = now;
+		userFlag["user_pay"][0u][1u] = -cash;
+		userFlag["user_pay"][0u][2u] = -coins;
+		return 0;
+	}
+
+	unsigned size = userFlag["user_pay"].size();
+	vector<User_Pay> vec_chg;
+	for(int i = 0; i < size; ++i)
+	{
+		User_Pay pair;
+		pair.ts  = userFlag["user_pay"][i][0u].asUInt();
+		pair.cash = userFlag["user_pay"][i][1u].asInt();
+		pair.coins = userFlag["user_pay"][i][2u].asInt();
+		vec_chg.push_back(pair);
+	}
+
+	if(!CTime::IsDiffDay(vec_chg.back().ts, now))
+	{
+		vec_chg.back().cash -= cash;
+		vec_chg.back().coins -= coins;
+	}
+	else
+	{
+		User_Pay pair;
+		pair.ts = now;
+		pair.cash = -cash;
+		pair.coins = -coins;
+		vec_chg.push_back(pair);
+	}
+
+	while(vec_chg.size() > 7)
+	{
+		vec_chg.erase(vec_chg.begin());
+	}
+
+	userFlag["user_pay"].clear();
+	for(int i = 0; i < vec_chg.size(); ++i)
+	{
+		userFlag["user_pay"][i][0u] = vec_chg[i].ts;
+		userFlag["user_pay"][i][1u] = vec_chg[i].cash;
+		userFlag["user_pay"][i][2u] = vec_chg[i].coins;
+	}
+
+	return 0;
+}

@@ -12,7 +12,7 @@ int CLogicInstance::GetInstanceArchive(unsigned id, Json::Value &data)
 	map<unsigned, INSTANCE_Archive>::iterator it = instanceMap.find(id);
 	if (it == instanceMap.end() || Time::GetGlobalTime() - (it->second).updateTime > 1800)
 	{
-		string path = Config::GetValue(CONFIG_INSTANCE_DATA);
+		string path = Config::GetPath(CONFIG_INSTANCE_DATA);
 		if (path.empty())
 		{
 			error_log("[instance config error][id=%u]",id);
@@ -173,7 +173,7 @@ int CLogicInstance::Load(unsigned instanceId, unsigned uidBy, bool restart, Json
 	return 0;
 }
 
-int CLogicInstance::Save(unsigned instanceId, DataUser &userBy, Json::Value &data, Json::Value &result)
+int CLogicInstance::Save(unsigned instanceId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
 	//CDataInstance instanceDb;
 	DataInstance instance;
@@ -276,7 +276,7 @@ int CLogicInstance::Save(unsigned instanceId, DataUser &userBy, Json::Value &dat
 	if (Json::IsObject(data, "attackinfo"))
 	{
 		CLogicArchive logicArchive;
-		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
+		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], instanceId, loadtype);
 		if (ret != 0)
 			return ret;
 	}

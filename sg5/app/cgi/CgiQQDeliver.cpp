@@ -20,6 +20,293 @@ public:
 			CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
 			return 0;
 		}
+		const string discountid = CCGIIn::GetCGIStr("discountid");
+		//蓝钻包月活动回调
+		if(discountid.find("UM140305160606500") != string::npos)
+		{
+			const string openid = CCGIIn::GetCGIStr("openid");
+			if(openid.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（openid）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（openid）");
+			}
+
+			const string appid = CCGIIn::GetCGIStr("appid");
+			if (appid.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（appid）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（appid）");
+			}
+
+			const string ts = CCGIIn::GetCGIStr("ts");
+			if (ts.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（ts）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（ts）");
+			}
+
+			const string payitem = CCGIIn::GetCGIStr("payitem");
+			if (payitem.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（payitem）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（payitem）");
+			}
+
+			const string token = CCGIIn::GetCGIStr("token");
+			if (token.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（token）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（token）");
+			}
+
+			const string billno = CCGIIn::GetCGIStr("billno");
+			if (billno.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（billno）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（billno）");
+			}
+
+			const string version = CCGIIn::GetCGIStr("version");
+			if (version.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（version）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（version）");
+			}
+
+			const string zoneid = CCGIIn::GetCGIStr("zoneid");
+			if (zoneid.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（zoneid）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（zoneid）");
+			}
+
+			const string providetype = CCGIIn::GetCGIStr("providetype");
+			if (providetype.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（providetype）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（providetype）");
+			}
+
+			const string sig = CCGIIn::GetCGIStr("sig");
+			if (sig.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（sig）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（sig）");
+			}
+			else
+			{
+				string appkey = OpenPlatform::GetPlatform()->GetAppKey();
+				string qstr = getenv("QUERY_STRING");
+				map<string, string> params;
+				vector<string> reqs;
+				CBasic::StringSplit(qstr, "&", reqs);
+				for (unsigned i = 0; i < reqs.size(); i++)
+				{
+					string key;
+					string value;
+					size_t found;
+					found = reqs[i].find('=');
+					if (found != string::npos)
+					{
+						key = reqs[i].substr(0, found);
+						value = reqs[i].substr(found + 1);
+					}
+					else
+					{
+						key = reqs[i];
+						value = "";
+					}
+					params[key] = value;
+				}
+				string dsig;
+				bool bfirst = true;
+				string qsig;
+				map<string, string>::const_iterator it = params.begin();
+				for (; it != params.end(); it++)
+				{
+					if (it->first == "sig")
+					{
+						dsig = CBasic::unescape(it->second);
+					}
+					else
+					{
+						if (!bfirst) qsig += "&";
+						qsig += it->first + "=" + Crypt::EncodeForTXSig(it->second);
+						bfirst = false;
+					}
+				}
+				string osig = "GET&%2Fcgi%2Fqqdeliver&" + Crypt::UrlEncodeForTX(qsig);
+				string sha1Key = appkey + "&";
+				string bnsig = Crypt::HmacSha1(osig, sha1Key);
+				string nsig;
+				Crypt::Base64Encode(nsig, bnsig);
+				//info_log("[qqdeliver sig][dsig=%s,nsig=%s,osig=%s,key=%s]",dsig.c_str(),nsig.c_str(),osig.c_str(),sha1Key.c_str());
+				if (dsig != nsig)
+				{
+					error_log("[qqdeliver vipcharge sig error][dsig=%s,nsig=%s,osig=%s]",dsig.c_str(),nsig.c_str(),osig.c_str());
+					CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（sig）\"}");
+					ERROR_RETURN_MSG(4, "请求参数错误：（sig）");
+				}
+				CLogicQQPay logicPay;
+				int ret = logicPay.vip_charge_deliver(appid, openid, payitem);
+				if (ret != 0)
+				{
+					CgiUtil::PrintText("{\"ret\":"+CTrans::ITOS(::GetError())+",\"msg\":\""+::GetErrorMessage()+"\"}");
+					return ret;
+				}
+				CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+
+				CGI_SEND_LOG("action=vipcharge&openid=%s&payitem=%s", openid.c_str(),payitem.c_str());
+				return R_SUCCESS;
+
+			}
+
+		}
+		else if(discountid.find("UM140505105610317") != string::npos) //冲年费蓝钻送将
+		{
+			const string openid = CCGIIn::GetCGIStr("openid");
+			if(openid.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（openid）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（openid）");
+			}
+
+			const string appid = CCGIIn::GetCGIStr("appid");
+			if (appid.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（appid）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（appid）");
+			}
+
+			const string ts = CCGIIn::GetCGIStr("ts");
+			if (ts.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（ts）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（ts）");
+			}
+
+			const string payitem = CCGIIn::GetCGIStr("payitem");
+			if (payitem.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（payitem）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（payitem）");
+			}
+
+			const string token = CCGIIn::GetCGIStr("token");
+			if (token.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（token）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（token）");
+			}
+
+			const string billno = CCGIIn::GetCGIStr("billno");
+			if (billno.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（billno）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（billno）");
+			}
+
+			const string version = CCGIIn::GetCGIStr("version");
+			if (version.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（version）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（version）");
+			}
+
+			const string zoneid = CCGIIn::GetCGIStr("zoneid");
+			if (zoneid.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（zoneid）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（zoneid）");
+			}
+
+			const string providetype = CCGIIn::GetCGIStr("providetype");
+			if (providetype.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（providetype）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（providetype）");
+			}
+
+			const string sig = CCGIIn::GetCGIStr("sig");
+			if (sig.empty())
+			{
+				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（sig）\"}");
+				ERROR_RETURN_MSG(4, "请求参数错误：（sig）");
+			}
+			else
+			{
+				string appkey = OpenPlatform::GetPlatform()->GetAppKey();
+				string qstr = getenv("QUERY_STRING");
+				map<string, string> params;
+				vector<string> reqs;
+				CBasic::StringSplit(qstr, "&", reqs);
+				for (unsigned i = 0; i < reqs.size(); i++)
+				{
+					string key;
+					string value;
+					size_t found;
+					found = reqs[i].find('=');
+					if (found != string::npos)
+					{
+						key = reqs[i].substr(0, found);
+						value = reqs[i].substr(found + 1);
+					}
+					else
+					{
+						key = reqs[i];
+						value = "";
+					}
+					params[key] = value;
+				}
+				string dsig;
+				bool bfirst = true;
+				string qsig;
+				map<string, string>::const_iterator it = params.begin();
+				for (; it != params.end(); it++)
+				{
+					if (it->first == "sig")
+					{
+						dsig = CBasic::unescape(it->second);
+					}
+					else
+					{
+						if (!bfirst) qsig += "&";
+						qsig += it->first + "=" + Crypt::EncodeForTXSig(it->second);
+						bfirst = false;
+					}
+				}
+				string osig = "GET&%2Fcgi%2Fqqdeliver&" + Crypt::UrlEncodeForTX(qsig);
+				string sha1Key = appkey + "&";
+				string bnsig = Crypt::HmacSha1(osig, sha1Key);
+				string nsig;
+				Crypt::Base64Encode(nsig, bnsig);
+				//info_log("[qqdeliver sig][dsig=%s,nsig=%s,osig=%s,key=%s]",dsig.c_str(),nsig.c_str(),osig.c_str(),sha1Key.c_str());
+				if (dsig != nsig)
+				{
+					error_log("[qqdeliver blue year charge sig error][dsig=%s,nsig=%s,osig=%s]",dsig.c_str(),nsig.c_str(),osig.c_str());
+					CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（sig）\"}");
+					ERROR_RETURN_MSG(4, "请求参数错误：（sig）");
+				}
+				CLogicQQPay logicPay;
+				int ret = logicPay.blue_year_charge_deliver(appid, openid, payitem);
+				if (ret != 0)
+				{
+					CgiUtil::PrintText("{\"ret\":"+CTrans::ITOS(::GetError())+",\"msg\":\""+::GetErrorMessage()+"\"}");
+					return ret;
+				}
+				CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+
+				CGI_SEND_LOG("action=blue_year_charge&openid=%s&payitem=%s", openid.c_str(),payitem.c_str());
+				return R_SUCCESS;
+
+			}
+		}
+		else if(!discountid.empty())
+		{
+			CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+			return R_SUCCESS;
+		}
+
 		//error_log("qqdeliever failed");
 		const string openid = CCGIIn::GetCGIStr("openid");
 		if (openid.empty())
@@ -154,7 +441,7 @@ public:
 			CgiUtil::PrintText("{\"ret\":"+CTrans::ITOS(::GetError())+",\"msg\":\""+::GetErrorMessage()+"\"}");
 			return ret;
 		}
-		CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+		//CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");防止回调过久移动到各平台虚函数
 
 		CGI_SEND_LOG("openid=%s&billno=%s&payitem=%s&amt=%s", openid.c_str(),billno.c_str(),payitem.c_str(),amt.c_str());
 		return R_SUCCESS;

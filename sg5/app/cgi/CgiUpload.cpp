@@ -9,10 +9,9 @@ public:
 		SetFeature(CF_PRINT_JSON);
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
-		SetFeature(CF_CHECK_SESSION);
+		//SetFeature(CF_CHECK_SESSION);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
-		SetFeature(CF_CHECK_VERSION);
 		SetFeature(CF_APPEND_HASH);
 		SetFeature(CF_CRYPT_DATA);
 		SetFeature(CF_DECRYPT_DATA);

@@ -1,4 +1,3 @@
-#include "DataPersonMatch.h"
 #include "DataInc.h"
 #include <iostream>
 #include <fstream>
@@ -23,15 +22,15 @@ int CAllServerPersonBaseMatch::Init(const string &path, semdat sem) {
 	Config::GetDomain(semserver);
 	if (!semserver)
 		Config::GetDB(semserver);
-	if (!m_sh.CreateOrOpen(path.c_str(), sizeof(PersonMatchData),
+	if (!m_sh.CreateOrOpen(path.c_str(), sizeof(AllServerPersonMatchData),
 			SEM_ID(sem,semgroup,semserver))) {
 		error_log("[init_personmatch_fail][path=%s]", path.c_str());
 		return R_ERROR;
 	}
 	CAutoLock lock(&m_sh, true);
 	if (!m_sh.HasInit()) {
-		PersonMatchData *pData = (PersonMatchData *) m_sh.GetAddress();
-		memset(pData, 0, sizeof(PersonMatchData));
+		AllServerPersonMatchData *pData = (AllServerPersonMatchData *) m_sh.GetAddress();
+		memset(pData, 0, sizeof(AllServerPersonMatchData));
 		m_sh.SetInitDone();
 	}
 	m_init = true;
@@ -40,7 +39,7 @@ int CAllServerPersonBaseMatch::Init(const string &path, semdat sem) {
 
 int CAllServerPersonBaseMatch::View(unsigned uid, int &stage,
 		PersonMatchPlayer& person, vector<PersonMatchPlayer> &playoff) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -74,7 +73,7 @@ int CAllServerPersonBaseMatch::View(unsigned uid, int &stage,
 	return 0;
 }
 
-unsigned CAllServerPersonBaseMatch::getInstId(PersonMatchData *pdata) {
+unsigned CAllServerPersonBaseMatch::getInstId(AllServerPersonMatchData *pdata) {
 	unsigned id = pdata->instance_ndx++;
 	bool flag = false;
 	do {
@@ -96,7 +95,7 @@ unsigned CAllServerPersonBaseMatch::getInstId(PersonMatchData *pdata) {
 
 int CAllServerPersonBaseMatch::Apply(unsigned uid, const string &name,
 		unsigned &instanceid) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -113,7 +112,7 @@ int CAllServerPersonBaseMatch::Apply(unsigned uid, const string &name,
 		}
 	}
 
-	if (pdata->numOfApply > PERSONMATCH_PLAYERS_MAX - 1) {
+	if (pdata->numOfApply > ALL_SERVER_PERSONMATCH_PLAYERS_MAX - 1) {
 		error_log("full members");
 		return R_ERR_LOGIC;
 	}
@@ -139,7 +138,7 @@ int CAllServerPersonBaseMatch::ReportResult(unsigned uid, int order,
 	if (order < 1 || order > 6 || damage < 0 || damage > 100)
 		return R_ERR_LOGIC;
 
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -186,7 +185,7 @@ int CAllServerPersonBaseMatch::ReportResult(unsigned uid, int order,
 }
 
 int CAllServerPersonBaseMatch::SetCurrInstId(unsigned instId) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -197,7 +196,7 @@ int CAllServerPersonBaseMatch::SetCurrInstId(unsigned instId) {
 }
 
 int CAllServerPersonBaseMatch::GetNextInstId(unsigned &instId) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -224,7 +223,7 @@ int CAllServerPersonBaseMatch::GetNextInstId(unsigned &instId) {
 }
 
 int CAllServerPersonBaseMatch::GetStage(int &stage) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -235,7 +234,7 @@ int CAllServerPersonBaseMatch::GetStage(int &stage) {
 }
 
 int CAllServerPersonBaseMatch::SetRivals(PersonMatchPlayer rival[8]) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -246,7 +245,7 @@ int CAllServerPersonBaseMatch::SetRivals(PersonMatchPlayer rival[8]) {
 }
 
 int CAllServerPersonBaseMatch::NextTurn(void) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -258,7 +257,7 @@ int CAllServerPersonBaseMatch::NextTurn(void) {
 }
 
 int CAllServerPersonBaseMatch::StartRegular(void) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -305,7 +304,7 @@ static bool PersonCompare(const PersonMatchPlayer &left,
 	pdata->top8[idx].instanceid = personVector[ddx].instanceid;
 
 int CAllServerPersonBaseMatch::StartGuess(void) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -343,7 +342,7 @@ int CAllServerPersonBaseMatch::StartGuess(void) {
 }
 
 int CAllServerPersonBaseMatch::StartPlayoff8(void) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -359,7 +358,7 @@ int CAllServerPersonBaseMatch::StartPlayoff8(void) {
 }
 
 int CAllServerPersonBaseMatch::StartPlayoff4(PersonMatchPlayer *top4) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -376,7 +375,7 @@ int CAllServerPersonBaseMatch::StartPlayoff4(PersonMatchPlayer *top4) {
 }
 
 int CAllServerPersonBaseMatch::StartPlayoff2(PersonMatchPlayer *top2) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -392,7 +391,7 @@ int CAllServerPersonBaseMatch::StartPlayoff2(PersonMatchPlayer *top2) {
 }
 
 int CAllServerPersonBaseMatch::FinishMatch(PersonMatchPlayer *champion) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -404,7 +403,7 @@ int CAllServerPersonBaseMatch::FinishMatch(PersonMatchPlayer *champion) {
 	pdata->stage = PMS_MATCH_FINISH;
 
 	CGuessData guessData;
-	if (guessData.Init(Config::GetValue(GUESS_DATA_PATH), 2) != 0) {
+	if (guessData.Init(Config::GetPath(GUESS_DATA_PATH), 2) != 0) {
 		cerr << "guess data init fail" << endl;
 		return R_ERR_LOGIC;
 	}
@@ -414,7 +413,7 @@ int CAllServerPersonBaseMatch::FinishMatch(PersonMatchPlayer *champion) {
 }
 
 int CAllServerPersonBaseMatch::Watch(void) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -425,7 +424,7 @@ int CAllServerPersonBaseMatch::Watch(void) {
 	cout << "instance_ndx:" << pdata->instance_ndx << endl;
 	cout << "numOfApply:" << pdata->numOfApply << endl;
 	cout << "mems:" << endl;
-	for (unsigned i = 0; i < PERSONMATCH_PLAYERS_MAX && i <= pdata->numOfApply;
+	for (unsigned i = 0; i < ALL_SERVER_PERSONMATCH_PLAYERS_MAX && i <= pdata->numOfApply;
 			i++) {
 		if (IsValidUid(pdata->mems[i].uid)) {
 			cout << i << "," << pdata->mems[i].uid << "," << pdata->mems[i].name
@@ -485,7 +484,7 @@ int CAllServerPersonBaseMatch::Watch(void) {
 }
 
 int CAllServerPersonBaseMatch::GetTop8Data(vector<GuessViewData> &dataVec) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -504,7 +503,7 @@ int CAllServerPersonBaseMatch::GetTop8Data(vector<GuessViewData> &dataVec) {
 }
 
 int CAllServerPersonBaseMatch::GetRival(int idx, PersonMatchPlayer& rival) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return R_ERR_DB;
@@ -521,9 +520,9 @@ int CAllServerPersonBaseMatch::GetRival(int idx, PersonMatchPlayer& rival) {
 	return 0;
 }
 
-PersonMatchData* CAllServerPersonBaseMatch::GetPersonMatchData(
+AllServerPersonMatchData* CAllServerPersonBaseMatch::GetAllServerPersonMatchData(
 		CShareMemory* sh) {
-	PersonMatchData *pdata = (PersonMatchData *) m_sh.GetAddress();
+	AllServerPersonMatchData *pdata = (AllServerPersonMatchData *) m_sh.GetAddress();
 	if (pdata == NULL) {
 		error_log("[GetAddress fail][]");
 		return NULL;

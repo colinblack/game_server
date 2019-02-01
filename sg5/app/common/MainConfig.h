@@ -24,5 +24,8 @@ namespace MainConfig
 	int GetMergedDomain(int serverid);
 	void GetDomains(set<int> &domains);
 	void GetIncludeDomains(int serverid,set<int> &domains);
+	string GetHost(int serverid);
+
+	string GetAllServerPath(string path);
 }
 #endif /* MAIN_CONFIG_H_ */

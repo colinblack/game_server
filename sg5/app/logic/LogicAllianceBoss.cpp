@@ -1,5 +1,4 @@
 #include "LogicAllianceBoss.h"
-#include "DataUser.h"
 
 struct AllianceBoss_Archive
 {
@@ -27,7 +26,7 @@ int CLogicAllianceBoss::GetAllianceBossArchive(unsigned bossId, Json::Value &dat
 	map<unsigned, AllianceBoss_Archive>::iterator it = bossMap.find(bossId);
 	if (it == bossMap.end() || Time::GetGlobalTime() - (it->second).updateTime > 1800)
 	{
-		string path = Config::GetValue(CONFIG_WORLDBOSS_MAP);
+		string path = MainConfig::GetAllServerPath(CONFIG_NPC_DATA);
 		if (path.empty())
 		{
 			error_log("[config error][bossId=%u]",bossId);
@@ -90,23 +89,20 @@ CDataAllianceBoss* CLogicAllianceBoss::GetCDataAllianceBoss()
 	if (itr != dataMap.end() && NULL != itr->second)
 		return itr->second;
 
-	static CDataAllianceBoss* pAllianceBoss = NULL;
-	if (!pAllianceBoss)
+	string minBloodStr = Config::GetValue(CONFIG_MIN_WORLDBOSS_BLOOD);
+	string maxBloodStr = Config::GetValue(CONFIG_MAX_WORLDBOSS_BLOOD);
+	vector<int> vminBloods;
+	vector<int> vmaxBloods;
+	CBasic::StringSplit(minBloodStr, ",", vminBloods);
+	CBasic::StringSplit(maxBloodStr, ",", vmaxBloods);
+	CDataAllianceBoss* pAllianceBoss = new CDataAllianceBoss();
+	if (pAllianceBoss->Init(Config::GetPath(CONFIG_WORLDBOSS_DIR), vminBloods,vmaxBloods,sem_alliance) != 0)
 	{
-		string minBloodStr = Config::GetValue(CONFIG_MIN_WORLDBOSS_BLOOD);
-		string maxBloodStr = Config::GetValue(CONFIG_MAX_WORLDBOSS_BLOOD);
-		vector<int> vminBloods;
-		vector<int> vmaxBloods;
-		CBasic::StringSplit(minBloodStr, ",", vminBloods);
-		CBasic::StringSplit(maxBloodStr, ",", vmaxBloods);
-		pAllianceBoss = new CDataAllianceBoss();
-		if (pAllianceBoss->Init(Config::GetValue(CONFIG_WORLDBOSS_DIR), vminBloods,vmaxBloods,sem_alliance) != 0)
-		{
-			delete pAllianceBoss;
-			pAllianceBoss = NULL;
-			return NULL;
-		}
+		delete pAllianceBoss;
+		pAllianceBoss = NULL;
+		return NULL;
 	}
+
 	dataMap[serverId] = pAllianceBoss;
 	return pAllianceBoss;
 }
@@ -118,7 +114,7 @@ int CLogicAllianceBoss::GetAllianceBossInfo1(unsigned uid, Json::Value &data,uns
 	CDataUser datauser;
 	DataUser user;
 	int ret = 0;
-	ret = datauser.GetUser(uid,user);
+	ret = datauser.GetUserLimit(uid,user);
 	if(ret !=0 )
 	{
 		return ret;
@@ -135,6 +131,11 @@ int CLogicAllianceBoss::GetAllianceBossInfo1(unsigned uid, Json::Value &data,uns
 	unsigned fullBlood = 0;
 	data.resize(1);
 	unsigned id = ALLIANCE_BOSS_ID;
+
+	CLogicAlliance logicAlliance;
+	ret = logicAlliance.ChangeResource(alliance_id, 0, 0, 0, 0, 0, -30, "AllBoss");
+	if(ret)
+		return ret;
 
 	ret = pBoss->LoadAllianceBossOpener(uid, id, blood,fullBlood,vip_gr,alliance_id,ts);
 	if (ret != 0)
@@ -162,7 +163,7 @@ int CLogicAllianceBoss::GetAllianceBossInfo(unsigned uid, Json::Value &data)
 	unsigned alliance_id = 0;  //通过uid获取其帮会id
 	CDataUser datauser;
 	DataUser user;
-	int ret = datauser.GetUser(uid,user);
+	int ret = datauser.GetUserLimit(uid,user);
 	if(ret != 0)
 		return ret;
 	alliance_id = user.alliance_id;
@@ -184,10 +185,11 @@ int CLogicAllianceBoss::GetAllianceBossInfo(unsigned uid, Json::Value &data)
 	data.resize(1);
 
 	unsigned id = ALLIANCE_BOSS_ID;
+	unsigned startts;
 	blood = 0;
 	number = 0;
 	top.clear();
-	ret = pBoss->LoadAllianceBoss(uid, id, blood, number, selfRank, self, top, last,fullBlood,alliance_id);
+	ret = pBoss->LoadAllianceBoss(uid, id, blood, number, selfRank, self, top, last,fullBlood,alliance_id,startts);
 	if (ret != 0)
 	{
 		DB_ERROR_RETURN_MSG("Alliance_boss_need_wait  ");
@@ -195,9 +197,11 @@ int CLogicAllianceBoss::GetAllianceBossInfo(unsigned uid, Json::Value &data)
 
 	unsigned temp = id - ALLIANCE_BOSS_ID;
 	data[temp]["uid"] = uid;
+	data[temp]["startts"] = startts;
 	data[temp]["blood"] = blood;
 	data[temp]["fullblood"] = fullBlood;
 	data[temp]["number"] = number;
+	data[temp]["last"] = last.name;
 	data[temp]["top"].resize(top.size());
 	for (unsigned i = 0; i < top.size(); i++)
 	{
@@ -206,7 +210,7 @@ int CLogicAllianceBoss::GetAllianceBossInfo(unsigned uid, Json::Value &data)
 		data[temp]["top"][i]["name"] = top[i].name;
 	}
 
-	debug_log("logic_allianceboss:uid=%u|blood=%u  | fullblood=%u",uid,blood,fullBlood);
+	//debug_log("logic_allianceboss:uid=%u|blood=%u  | fullblood=%u",uid,blood,fullBlood);
 
 	return 0;
 }
@@ -217,7 +221,7 @@ int CLogicAllianceBoss::GetLastAllianceBossInfo(unsigned uid, Json::Value &data)
 	unsigned alliance_id;  //通过uid获取其帮会id
 	CDataUser datauser;
 	DataUser user;
-	int ret = datauser.GetUser(uid,user);
+	int ret = datauser.GetUserLimit(uid,user);
 	if(ret != 0)
 	{
 		return ret;
@@ -268,17 +272,12 @@ int CLogicAllianceBoss::GetLastAllianceBossInfo(unsigned uid, Json::Value &data)
 	return 0;
 }
 
-int CLogicAllianceBoss::Load(unsigned bossId, unsigned uidBy, Json::Value &result)
+int CLogicAllianceBoss::Load(unsigned bossId, DataUser &userBy, Json::Value &result)
 {
-
+	unsigned uidBy = userBy.uid;
 	unsigned alliance_id;  //通过uid获取其帮会id
-	CDataUser datauser;
-	DataUser user;
 	int ret = 0;
-	ret = datauser.GetUser(uidBy,user);
-	if (ret != 0)
-		return ret;
-	alliance_id = user.alliance_id;
+	alliance_id = userBy.alliance_id;
 
 	if (!IsValidAllianceBossId(bossId))
 	{
@@ -303,15 +302,17 @@ int CLogicAllianceBoss::Load(unsigned bossId, unsigned uidBy, Json::Value &resul
 	unsigned fullBlood = 0;
 	unsigned number = 0;
 	int selfRank = 0;
+	unsigned startts = 0;
 	AllianceBossChallenger self;
 	AllianceBossChallenger last;
 	vector<AllianceBossChallenger> top;
-	ret =pBoss->LoadAllianceBoss(uidBy, bossId, blood, number, selfRank, self, top, last,fullBlood,alliance_id);
+	ret =pBoss->LoadAllianceBoss(uidBy, bossId, blood, number, selfRank, self, top, last,fullBlood,alliance_id,startts);
 	if (ret != 0)
 	{
 		DB_ERROR_RETURN_MSG("load_allianceboss_fail_11");
 	}
-	debug_log("logic_allianceboss11:uid=%u|blood=%u  | fullblood=%u",uidBy,blood,fullBlood);
+	//debug_log("logic_allianceboss11:uid=%u|blood=%u  | fullblood=%u",uidBy,blood,fullBlood);
+	result["allianceboss"]["startts"] = startts;
 	result["allianceboss"]["blood"] = blood;
 	result["allianceboss"]["fullblood"] = fullBlood;
 	result["allianceboss"]["number"] = number;
@@ -336,7 +337,7 @@ int CLogicAllianceBoss::Load(unsigned bossId, unsigned uidBy, Json::Value &resul
 	return 0;
 }
 
-int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, Json::Value &result)
+int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
 	if (!IsValidAllianceBossId(bossId))
 	{
@@ -360,10 +361,10 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 
 	unsigned damage = 0;
 	Json::GetUInt(data, "hurt", damage);    //获取个人对boss伤害值
-	if(damage > 500000)
+	/*if(damage > 500000)
 	{
 		debug_log("hurt_is_large: hurt=%u,uid=%u",damage,userBy.uid);
-	}
+	}*/
 	bool dying = false;
 	unsigned blood = 0;
 	unsigned number = 0;
@@ -477,7 +478,7 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 	if (Json::IsObject(data, "attackinfo"))
 	{
 		CLogicArchive logicArchive;
-		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
+		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], bossId, loadtype);
 		if (ret != 0)
 			return ret;
 	}
@@ -493,7 +494,7 @@ int CLogicAllianceBoss::ViewAllianceBoss(unsigned uid, unsigned bossId, Json::Va
 	unsigned alliance_id;  //通过uid获取其帮会id
 	CDataUser datauser;
 	DataUser user;
-	datauser.GetUser(uid,user);
+	datauser.GetUserLimit(uid,user);
 	alliance_id = user.alliance_id;
 	//CDataWorldBoss* pBoss = GetCDataWorldBoss();
 	CDataAllianceBoss* pBoss = GetCDataAllianceBoss();
@@ -538,11 +539,7 @@ int CLogicAllianceBoss::ViewAllianceBoss(unsigned uid, unsigned bossId, Json::Va
 int CLogicAllianceBoss::GetAllianceJsonUpdates(unsigned uid, unsigned allianceId, Json::Value &value,unsigned ts,unsigned vip_gr)
 {
 	int ret;
-	DataUser userBy;
 	CLogicUser logicUser;
-	ret = logicUser.GetUserLimit(uid, userBy);
-	if (ret != 0)
-		return ret;
 
 	DataAlliance alliance;
 	CLogicAlliance logcialliance;
@@ -551,39 +548,33 @@ int CLogicAllianceBoss::GetAllianceJsonUpdates(unsigned uid, unsigned allianceId
 	{
 		return ret;
 	}
-	map<unsigned, int> interacts;
-	CLogicUserInteract logicInteract;
-	ret = logicInteract.GetFriendInteracts(uid, interacts);
 
 	Json::Value &membersData = value["members"];
 	membersData = Json::Value(Json::arrayValue);
 	vector<DataAllianceMember> members;
 	ret = logcialliance.GetMembers(allianceId, members);
+
+	DataUserBasic datauserbasic;
+	CDataUserBasic datausr;
+	string name;
+	ret = datausr.GetUserBasic(uid,OpenPlatform::GetType(),datauserbasic);
+	name = datauserbasic.name;
+
 	for(vector<DataAllianceMember>::iterator itr = members.begin(); itr != members.end(); itr++)
 	{
 		DataUser user;
-		ret = logicUser.GetUser(itr->uid, user);
+		ret = logicUser.GetUserLimit(itr->uid, user);
 		if(0 != ret)
 		{
 			continue;
 		}
 
 		Json::Value &member = membersData[membersData.size()];
-
 		member["online"] = (Time::GetGlobalTime() - ONLINE_TIMEOUT < user.last_active_time) ? 1 : 0;
 		if(member["online"] == 1)
 		{
 			if(uid != itr->uid)
 			{
-				DataUserBasic datauserbasic;
-				CDataUserBasic datausr;
-				string name;
-				int ret = datausr.GetUserBasic(itr->uid,OpenPlatform::GetType(),datauserbasic);
-				if(ret != 0)
-				{
-					return ret;
-				}
-				name = datauserbasic.name;
 				unsigned now = Time::GetGlobalTime();
 				Json::Value updates;
 				updates.resize(1);
@@ -603,7 +594,6 @@ int CLogicAllianceBoss::GetAllianceJsonUpdates(unsigned uid, unsigned allianceId
 			}
 		}
 	}
-
 
 	return 0;
 }

@@ -3,7 +3,7 @@
 
 typedef pair<unsigned, int> U_L_MAP;
 typedef pair<unsigned, unsigned> U_U_MAP;
-
+/*
 static int extractItem(const string &configPath, map<string, string>& config)
 {
 	//load config
@@ -27,7 +27,7 @@ static int extractItem(const string &configPath, map<string, string>& config)
 	}
 	return 0;
 }
-
+*/
 void usage()
 {
 	cout << "usage: MatchTool regular PlatformType" << endl
@@ -38,9 +38,40 @@ void usage()
 		 << "                 next PlatformType" << endl;
 }
 
+int AddEmail(unsigned uid, int rank, int cash)
+{
+	Json::Value temp;
+	temp["s"] = "match";
+	temp["rank"] = rank;
+	temp["cash"] = cash;
+	temp["ts"] = Time::GetGlobalTime();
+	DataEmail data;
+	CLogicEmail matchSendEmail;
+	data.title = "match";
+	data.text = Json::ToString(temp);
+	data.post_ts = Time::GetGlobalTime();
+	data.read_ts = 0;
+	data.from_name = "";
+	data.attach_flag = 0;
+	data.uid = ADMIN_UID;
+	vector<uint64_t> vecUsersUid;
+	vecUsersUid.push_back(uid);
+	int ret = matchSendEmail.AddEmail(data, vecUsersUid,true);
+	if(0 == ret)
+	{
+		cout<<rank<<" "<<cash<<" 发送成功" << ret << endl;
+	}
+	else
+	{
+		error_log("champion leader prize send mail fail!");
+	}
+
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
-	if (argc != 3)
+	if (argc < 2)
 	{
 		usage();
 		return 0;
@@ -52,8 +83,6 @@ int main(int argc, char *argv[])
 	}
 	Config::SetDomain(0);
 
-	int tpt = atoi(argv[2]); //获取用户昵称 需要平台信息
-	PlatformType pt = static_cast<PlatformType>(tpt);
 	CLogicEmail matchSendEmail;
 	DataEmail data;
 	vector <U_L_MAP> vecAlliances;
@@ -61,7 +90,7 @@ int main(int argc, char *argv[])
 	string action = argv[1];
 	int ret = 0;
 	CDataMatch match;
-	ret = match.Init(Config::GetValue(CONFIG_MATCH_DAT_PATH));
+	ret = match.Init(Config::GetPath(CONFIG_MATCH_DAT_PATH),sem_match);
 	if (ret != 0)
 	{
 		cout << "init match fail,ret:" << ret << endl;
@@ -117,6 +146,7 @@ int main(int argc, char *argv[])
 	}
 	else if (action == "finish")
 	{
+		/*
 		// 获取邮件文字信息
 		map<string, string> config;
 		map<string, string> mapLanguageConfig;
@@ -163,7 +193,7 @@ int main(int argc, char *argv[])
 		{
 			error_log("load mail info text fail!");
 		}
-
+		 */
 		const MatchData *pdata = NULL;
 		ret = match.FinishMatch(&pdata);
 		if (ret != 0)
@@ -179,7 +209,7 @@ int main(int argc, char *argv[])
 			vecRMailAid.push_back((pdata->rteams[i]).aid);
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->rteams[i]).rivals[j].player.uid , 0, 10, "MATCH_REGULAR", 1);
+				logicPay.ChangePay((pdata->rteams[i]).rivals[j].player.uid , 0, 10, "MATCH_REGULAR");
 			}
 		}
 		CDataAllianceMember dbMember;
@@ -191,7 +221,7 @@ int main(int argc, char *argv[])
 			vecAlliances.push_back(make_pair((pdata->top8[i]).aid, 8));
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->top8[i]).players[j].uid, 0, 40, "MATCH_TOP8", 1);
+				logicPay.ChangePay((pdata->top8[i]).players[j].uid, 0, 40, "MATCH_TOP8");
 			}
 		}
 		for (unsigned i = 0; i < 4; i++)
@@ -207,7 +237,7 @@ int main(int argc, char *argv[])
 			}
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->top4[i]).players[j].uid, 0, 50,"MATCH_TOP4", 1);
+				logicPay.ChangePay((pdata->top4[i]).players[j].uid, 0, 50,"MATCH_TOP4");
 			}
 		}
 		for (unsigned i = 0; i < 2; i++)
@@ -223,7 +253,7 @@ int main(int argc, char *argv[])
 			}
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->top2[i]).players[j].uid, 0, 50, "MATCH_TOP2", 1);
+				logicPay.ChangePay((pdata->top2[i]).players[j].uid, 0, 50, "MATCH_TOP2");
 			}
 		}
 		if ((pdata->champion).aid != 0)
@@ -237,20 +267,19 @@ int main(int argc, char *argv[])
 			}
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->champion).players[j].uid, 0, 50, "MATCH_CHAMPION", 1);
+				logicPay.ChangePay((pdata->champion).players[j].uid, 0, 50, "MATCH_CHAMPION");
 			}
 		}
 
 		CLogicGuess logicGuess;
-		vector<U_U_MAP> vecGuessors;
+		//vector<U_U_MAP> vecGuessors;
 		logicGuess.GuessorsPay(pdata->champion.aid,0);
 
 		// 获取投中竞猜者的uid和获奖金币
+		/*
 		logicGuess.GuessorsUidCoins(pdata->champion.aid, vecGuessors, 0);
-
 		for(vector<U_U_MAP>::iterator myItr = vecGuessors.begin(); myItr != vecGuessors.end(); myItr++)
 		{
-
 			//int tmpUid = myItr->first;
 			string tmpCoinsStr = "";
 			stringstream ss;
@@ -268,7 +297,7 @@ int main(int argc, char *argv[])
 			data.uid = ADMIN_UID;
 			vector<uint64_t> vecUsersUid;
 			vecUsersUid.push_back(myItr->first);
-			ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
+			ret = matchSendEmail.AddEmail(data, vecUsersUid);
 			if(0 == ret)
 			{
 				cout << "竞猜金币发送成功" << ret << endl;
@@ -278,7 +307,7 @@ int main(int argc, char *argv[])
 				error_log("champion leader prize send mail fail!");
 			}
 		}
-
+		*/
 		// 盟主、副盟主额外奖励与参赛队员邮件通知
 		for(vector<U_L_MAP>::iterator myItr=vecAlliances.begin(); myItr != vecAlliances.end(); myItr++)
 		{
@@ -292,55 +321,15 @@ int main(int argc, char *argv[])
 					//myMember = *itr;
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 200, "MATCH_CHAMPION_LEADER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 200, "MATCH_CHAMPION_LEADER");
 						// 发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "冠军", "200");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "冠军盟主发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("champion leader prize send mail fail!");
-						}
+						AddEmail((*itr).uid,1,200);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 100, "MATCH_CHAMPION_MANAGER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 100, "MATCH_CHAMPION_MANAGER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "冠军", "100");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "冠军副盟主发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("champion manager prize send mail fail!");
-						}
+						AddEmail((*itr).uid,1,100);
 					}
 					else // 非比赛成员邮件奖励通知
 					{
@@ -355,57 +344,15 @@ int main(int argc, char *argv[])
 						}
 						if (flag)
 						{
-							logicPay.ChangePay(itr->uid, 0, 20, "MATCH_CHAMPION_MEMBER", 1);
-							data.title = config["mailTitle"];
-							char str[200];
-							snprintf(str,sizeof(str),config["templetNormalContent0"].c_str(), "冠军", "20");
-							string tempString(str);
-							data.text = tempString;
-							data.post_ts = Time::GetGlobalTime();
-							data.read_ts = 0;
-							data.from_name = "系统管理员";
-							data.attach_flag = 0;
-							data.uid = ADMIN_UID;
-							vector<uint64_t> vecUsersUid;
-							vecUsersUid.push_back(itr->uid);
-							ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-							if(0 == ret)
-							{
-								cout << "冠军联盟成员奖励发送成功" << ret << endl;
-							}
-							else
-							{
-								error_log("champion member prize send mail fail!");
-							}
+							logicPay.ChangePay(itr->uid, 0, 20, "MATCH_CHAMPION_MEMBER");
+							AddEmail((*itr).uid,1,20);
 						}
 					}
 				}
 
 				//比赛队伍邮件通知
 				for (unsigned j = 0; j < 5; j++)
-				{
-					data.title = config["mailTitle"];
-					char str[200];
-					snprintf(str,sizeof(str),config["templetNormalContent1"].c_str(), "冠军", "200");
-					string tempString(str);
-					data.text = tempString;
-					data.post_ts = Time::GetGlobalTime();
-					data.read_ts = 0;
-					data.from_name = "系统管理员";
-					data.attach_flag = 0;
-					data.uid = ADMIN_UID;
-					vector<uint64_t> vecUsersUid;
-					vecUsersUid.push_back((pdata->champion).players[j].uid);
-					ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-					if(0 == ret)
-					{
-						cout << "冠军邮件发送成功" << j << endl;
-					}
-					else
-					{
-						error_log("champion team prize send mail fail!");
-					}
-				}
+					AddEmail((pdata->champion).players[j].uid,1,200);
 			}
 			else if (myItr->second == 2)
 			{
@@ -415,56 +362,15 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 150, "MATCH_TOP2_LEADER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 150, "MATCH_TOP2_LEADER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "亚军", "150");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "二强盟主邮件发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("top2 leader prize send mail fail!");
-						}
-
+						AddEmail((*itr).uid,2,150);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 75, "MATCH_TOP2_MANAGER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 75, "MATCH_TOP2_MANAGER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "亚军", "75");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "二强副盟主邮件发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("top2 manager prize send mail fail!");
-						}
+						AddEmail((*itr).uid,2,75);
 					}
 					else // 非比赛成员邮件奖励通知
 					{
@@ -488,28 +394,8 @@ int main(int argc, char *argv[])
 						}
 						if (flag)
 						{
-							logicPay.ChangePay(itr->uid, 0, 15, "MATCH_TOP2_MEMBER", 1);
-							data.title = config["mailTitle"];
-							char str[200];
-							snprintf(str,sizeof(str),config["templetNormalContent0"].c_str(), "亚军", "15");
-							string tempString(str);
-							data.text = tempString;
-							data.post_ts = Time::GetGlobalTime();
-							data.read_ts = 0;
-							data.from_name = "系统管理员";
-							data.attach_flag = 0;
-							data.uid = ADMIN_UID;
-							vector<uint64_t> vecUsersUid;
-							vecUsersUid.push_back(itr->uid);
-							ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-							if(0 == ret)
-							{
-								cout << "亚军联盟成员奖励发送成功" << ret << endl;
-							}
-							else
-							{
-								error_log("top2 member prize send mail fail!");
-							}
+							logicPay.ChangePay(itr->uid, 0, 15, "MATCH_TOP2_MEMBER");
+							AddEmail((*itr).uid,2,15);
 						}
 					}
 				}
@@ -524,29 +410,7 @@ int main(int argc, char *argv[])
 					}
 				}
 				for (unsigned j = 0; j < 5; j++)
-				{
-					data.title = config["mailTitle"];
-					char str[200];
-					snprintf(str,sizeof(str),config["templetNormalContent1"].c_str(), "亚军", "150");
-					string tempString(str);
-					data.text = tempString;
-					data.post_ts = Time::GetGlobalTime();
-					data.read_ts = 0;
-					data.from_name = "系统管理员";
-					data.attach_flag = 0;
-					data.uid = ADMIN_UID;
-					vector<uint64_t> vecUsersUid;
-					vecUsersUid.push_back((pdata->top2[tempI]).players[j].uid);
-					ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-					if(0 == ret)
-					{
-						cout << "亚军邮件发送成功" << j << endl;
-					}
-					else
-					{
-						error_log("top2 team prize send mail fail!");
-					}
-				}
+					AddEmail((pdata->top2[tempI]).players[j].uid,2,150);
 			}
 			else if (myItr->second == 4)
 			{
@@ -556,55 +420,15 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 100, "MATCH_TOP4_LEADER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 100, "MATCH_TOP4_LEADER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "四强", "100");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "四强盟主邮件发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("top4 leader prize send mail fail!");
-						}
+						AddEmail((*itr).uid,3,100);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 50, "MATCH_TOP4_MANAGER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 50, "MATCH_TOP4_MANAGER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "四强", "50");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "四强副盟主邮件发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("top4 manager prize send mail fail!");
-						}
+						AddEmail((*itr).uid,3,50);
 					}
 					else
 					{
@@ -625,28 +449,8 @@ int main(int argc, char *argv[])
 								}
 								if (flag)
 								{
-									logicPay.ChangePay(itr->uid, 0, 10, "MATCH_TOP4_MEMBER", 1);
-									data.title = config["mailTitle"];
-									char str[200];
-									snprintf(str,sizeof(str),config["templetNormalContent0"].c_str(), "四强", "10");
-									string tempString(str);
-									data.text = tempString;
-									data.post_ts = Time::GetGlobalTime();
-									data.read_ts = 0;
-									data.from_name = "系统管理员";
-									data.attach_flag = 0;
-									data.uid = ADMIN_UID;
-									vector<uint64_t> vecUsersUid;
-									vecUsersUid.push_back(itr->uid);
-									ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-									if(0 == ret)
-									{
-										cout << "四强联盟成员奖励发送成功" << ret << endl;
-									}
-									else
-									{
-										error_log("top4 member prize send mail fail!");
-									}
+									logicPay.ChangePay(itr->uid, 0, 10, "MATCH_TOP4_MEMBER");
+									AddEmail((*itr).uid,3,10);
 								}
 							}
 						}
@@ -661,29 +465,7 @@ int main(int argc, char *argv[])
 					if ((pdata->top4[i]).aid == myItr->first)
 					{
 						for (unsigned j = 0; j < 5; j++)
-						{
-							data.title = config["mailTitle"];
-							char str[200];
-							snprintf(str,sizeof(str),config["templetNormalContent1"].c_str(), "四强", "100");
-							string tempString(str);
-							data.text = tempString;
-							data.post_ts = Time::GetGlobalTime();
-							data.read_ts = 0;
-							data.from_name = "系统管理员";
-							data.attach_flag = 0;
-							data.uid = ADMIN_UID;
-							vector<uint64_t> vecUsersUid;
-							vecUsersUid.push_back((pdata->top4[i]).players[j].uid);
-							ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-							if(0 == ret)
-							{
-								cout << "四强赛邮件发送成功" << j << endl;
-							}
-							else
-							{
-								error_log("top4 team prize send mail fail!");
-							}
-						}
+							AddEmail((pdata->top4[i]).players[j].uid,3,100);
 					}
 				}
 			}
@@ -695,56 +477,15 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 50, "MATCH_TOP8_LEADER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 50, "MATCH_TOP8_LEADER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "八强", "50");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "八强盟主发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("top8 leader prize send mail fail!");
-						}
-
+						AddEmail((*itr).uid,4,50);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 25, "MATCH_TOP8_MANAGER", 1);
+						logicPay.ChangePay((*itr).uid, 0, 25, "MATCH_TOP8_MANAGER");
 						// 增加发送邮件
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetLeaderStrContent"].c_str(), "八强", "25");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((*itr).uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "八强副盟主邮件发送成功" << ret << endl;
-						}
-						else
-						{
-							error_log("top8 manager prize send mail fail!");
-						}
+						AddEmail((*itr).uid,4,25);
 					}
 					else
 					{
@@ -765,28 +506,8 @@ int main(int argc, char *argv[])
 								}
 								if (flag)
 								{
-									logicPay.ChangePay(itr->uid, 0, 5, "MATCH_TOP8_MEMBER", 1);
-									data.title = config["mailTitle"];
-									char str[200];
-									snprintf(str,sizeof(str),config["templetNormalContent0"].c_str(), "八强", "5");
-									string tempString(str);
-									data.text = tempString;
-									data.post_ts = Time::GetGlobalTime();
-									data.read_ts = 0;
-									data.from_name = "系统管理员";
-									data.attach_flag = 0;
-									data.uid = ADMIN_UID;
-									vector<uint64_t> vecUsersUid;
-									vecUsersUid.push_back(itr->uid);
-									ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-									if(0 == ret)
-									{
-										cout << "八强联盟成员奖励发送成功" << ret << endl;
-									}
-									else
-									{
-										error_log("top8 member prize send mail fail!");
-									}
+									logicPay.ChangePay(itr->uid, 0, 5, "MATCH_TOP8_MEMBER");
+									AddEmail((*itr).uid,4,5);
 								}
 							}
 						}
@@ -799,29 +520,7 @@ int main(int argc, char *argv[])
 					if ((pdata->top8[i]).aid == myItr->first)
 					{
 						for (unsigned j = 0; j < 5; j++)
-						{
-							data.title = config["mailTitle"];
-							char str[200];
-							snprintf(str,sizeof(str),config["templetNormalContent1"].c_str(), "八强", "50");
-							string tempString(str);
-							data.text = tempString;
-							data.post_ts = Time::GetGlobalTime();
-							data.read_ts = 0;
-							data.from_name = "系统管理员";
-							data.attach_flag = 0;
-							data.uid = ADMIN_UID;
-							vector<uint64_t> vecUsersUid;
-							vecUsersUid.push_back((pdata->top8[i]).players[j].uid);
-							ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-							if(0 == ret)
-							{
-								cout << "八强赛金币邮件发送成功" << j << endl;
-							}
-							else
-							{
-								error_log("top8 team prize send mail fail!");
-							}
-						}
+							AddEmail((pdata->top8[i]).players[j].uid,4,50);
 					}
 				}
 			}
@@ -850,38 +549,12 @@ int main(int argc, char *argv[])
 				{
 					//cout << "*itr12" << *itr << endl;
 					for (unsigned j = 0; j < 5; j++)
-					{
-						// 发送邮件通知
-						data.title = config["mailTitle"];
-						char str[200];
-						snprintf(str,sizeof(str),config["templetRegularContent0"].c_str(), "10");
-						string tempString(str);
-						data.text = tempString;
-						data.post_ts = Time::GetGlobalTime();
-						data.read_ts = 0;
-						data.from_name = "系统管理员";
-						data.attach_flag = 0;
-						data.uid = ADMIN_UID;
-						vector<uint64_t> vecUsersUid;
-						vecUsersUid.push_back((pdata->rteams[i]).rivals[j].player.uid);
-						ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-						if(0 == ret)
-						{
-							cout << "常规赛金币邮件发送成功" << j << endl;
-						}
-						else
-						{
-							error_log("regular prize mail send fail!");
-						}
-					}
+						AddEmail((pdata->rteams[i]).rivals[j].player.uid,5,10);
 					vecRMailAid.erase(itr);
 					break;
 				}
 			}
 		}
-
-
-
 	}
 	else if (action == "next")
 	{
@@ -896,9 +569,6 @@ int main(int argc, char *argv[])
 	else
 	{
 		usage();
-		CLogicPay logicPay;
-		int cash = 0;
-		logicPay.ChangePay(20045042, 0, cash, "MATCH_CHAMPION", 1);
 	}
 
 	return 0;

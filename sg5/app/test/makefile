@@ -11,7 +11,7 @@ TARGETS =$(patsubst %.cpp,%,$(wildcard *.cpp))
 all: $(TARGETS)
 
 %:%.cpp
-	$(CXX) $< $(CFLAGS) $(INC) -Xlinker "-(" $(LIB) -Xlinker "-)" -o $@ 
+	$(CXX) $< $(CFLAGS) $(INC) -Xlinker "-(" $(LIB) -Xlinker "-)" -o $@ -pthread -I/usr/local/include  -pthread -lprotobuf -lpthread  
 #	 cp $* $(PATH_CGI)/$(shell echo $*.fcgi | sed "s/cgi_//g" )
 	cp $@ $(PATH_TOOL) -f
 
@@ -20,5 +20,5 @@ all: $(TARGETS)
 #	 cp $* $(PATH_CGI)/$*
 
 clean:
-	@rm -f $(TARGETS)
+	@rm -f $(TARGETS) *.o *.d
 

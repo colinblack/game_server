@@ -12,7 +12,7 @@ CLogicRiver::CLogicRiver(){
 
 CDataRiver* CLogicRiver::GetDataRiver(void)
 {
-	GET_MEM_DATA_SEM(CDataRiver, CONFIG_RIVER_PATH, sem_river)
+	GET_MEM_DATA_SEM(CDataRiver, CONFIG_RIVER_PATH, sem_river,false)
 	/*static CDataRiver *pData = NULL;
 	if (NULL == pData)
 	{
@@ -60,13 +60,15 @@ int CLogicRiver::SetShip(unsigned uid, const Json::Value &param)
 	{
 		PARAM_ERROR_RETURN_MSG("uid");
 	}
+	unsigned yellow_torch_burning = 0;
+	Json::GetUInt(param, "yellow_torch_burning", yellow_torch_burning);
 
 	DataShip data;
 	data.uid = userid;
 	data.posy = posy;
 	data.attack_num = attactnum;
 	data.start_time = startTs;
-	data.type = type;
+	data.type = type + yellow_torch_burning*10;
 	data.end_time = endTs;
 
 	CLogicUserBasic logicUserBasic;
@@ -101,7 +103,7 @@ int CLogicRiver::SetShip(unsigned uid, const Json::Value &param)
 		return R_ERR_DATA;
 	}
 
-	ret = pData->AddShip(data);
+	ret = pData->AddShip(data, uid != data.uid);
 	if (0 != ret)
 	{
 		error_log("add ship to mem fail,ret=%d", ret);
@@ -120,50 +122,24 @@ int CLogicRiver::GetAllShipJson(Json::Value &result)
 		error_log("GetDataRiver faile");
 		return R_ERR_DATA;
 	}
-	vector<DataShip> data;
-	ret = pData->GetShips(data);
+	vector<DataShip> data,over;
+	ret = pData->GetShips(data,over);
 	if (0 != ret)
 	{
 		return ret;
 	}
 
-	Json::Value shipJson;
+	result.resize(0);
 	vector<DataShip>::iterator itr = data.begin();
-	for (; itr!=data.end(); itr++)
+	for (;itr!=data.end();++itr)
 	{
+		Json::Value shipJson;
 		GetShipJson(*itr, shipJson);
-
-		unsigned shipEndTimn = 0;
-		if (Json::GetUInt(shipJson, "endts", shipEndTimn) && shipEndTimn <= Time::GetGlobalTime())
-		{
-			ret = pData->RemoveShip((*itr).uid);
-			if (0 == ret)
-			{
-				UpdatesEndOfShipping(*itr);
-				continue;
-			}
-		}
-		result[result.size()] = shipJson;
+		result.append(shipJson);
 	}
+	for (itr=over.begin();itr!=over.end();++itr)
+		UpdatesEndOfShipping(*itr);
 
-	return 0;
-}
-
-int CLogicRiver::RemoveShip(unsigned uid)
-{
-	int ret = 0;
-	CDataRiver *pData = GetDataRiver();
-	if (NULL == pData)
-	{
-		error_log("GetDataRiver fail");
-		return R_ERR_DATA;
-	}
-	ret = pData->RemoveShip(uid);
-	if (0 != ret)
-	{
-		error_log("RemoveShip fai ret=%d", ret);
-		return ret;
-	}
 	return 0;
 }
 
@@ -185,7 +161,7 @@ int CLogicRiver::GetShipJson(unsigned uid, Json::Value &result)
 		return ret;
 	}
 
-	result["type"] = ship.type;
+	result["type"] = ship.type % 10;
 	result["uid"] = ship.uid;
 	result["name"] = string(ship.user_name);
 	result["attacktimes"] = ship.attack_num;
@@ -199,7 +175,7 @@ int CLogicRiver::GetShipJson(unsigned uid, Json::Value &result)
 }
 int CLogicRiver::GetShipJson(DataShip ship, Json::Value &result)
 {
-	result["type"] = ship.type;
+	result["type"] = ship.type % 10;
 	result["uid"] = ship.uid;
 	result["name"] = string(ship.user_name);
 	result["attacktimes"] = ship.attack_num;
@@ -221,8 +197,8 @@ int CLogicRiver::SetAttackLog(unsigned uid, const Json::Value &logdata)
 	string attackLog;
 	ret = dbWeapon.GetAttackLog(uid, attackLog);
 	if(ret == R_ERR_NO_DATA)
-			ret = dbWeapon.AddAttackLog(uid, attackLog);
-	if (0 != ret)
+		dbWeapon.AddAttackLog(uid, attackLog);
+	else if (0 != ret)
 	{
 		error_log("[db get ship fail][uid=%u,ret=%d]",ship.uid, ret);
 		DB_ERROR_RETURN_MSG("db_get_ship_fail");
@@ -298,7 +274,8 @@ int CLogicRiver::UpdatesEndOfShipping(DataShip ship)
 	updates[(unsigned) 0]["uid"] = ship.uid;
 	updates[(unsigned) 0]["ts"] = Time::GetGlobalTime();
 	updates[(unsigned) 0]["attacktimes"] = ship.attack_num;
-	updates[(unsigned) 0]["type"] = ship.type;
+	updates[(unsigned) 0]["type"] = ship.type % 10;
+	updates[(unsigned) 0]["torch"] = ship.type / 10;
 	updates[(unsigned) 0]["level"] = ship.user_level;
 	CLogicUpdates logicUpdates;
 	ret = logicUpdates.AddUpdates(ship.uid, updates);
@@ -307,7 +284,7 @@ int CLogicRiver::UpdatesEndOfShipping(DataShip ship)
 		error_log("AddUpdates fail uid=%u", ship.uid);
 		return ret;
 	}
-	info_log("[boat finish][uid=%u,type=%d,end_time=%u]", ship.uid, ship.type, ship.end_time);
+	//info_log("[boat finish][uid=%u,type=%d,end_time=%u]", ship.uid, ship.type, ship.end_time);
 	return 0;
 }
 

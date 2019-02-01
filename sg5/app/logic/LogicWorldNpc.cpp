@@ -18,7 +18,7 @@ CLogicWorldNpc::~CLogicWorldNpc() {
 
 CDataWorldNpc *CLogicWorldNpc::GetDataWorldNpc()
 {
-	GET_MEM_DATA_SEM(CDataWorldNpc, CONFIG_WORLDNPC_DATA, sem_worldnpc)
+	GET_MEM_DATA_SEM(CDataWorldNpc, CONFIG_WORLDNPC_DATA, sem_worldnpc,false)
 	/*static CDataWorldNpc *pData = NULL;
 
 	if(pData == NULL)
@@ -54,7 +54,32 @@ int CLogicWorldNpc::GetNpc(NpcItem &npc )
 	int ret = pdata->GetNpc(npc);
 	return ret;
 }
+int CLogicWorldNpc::GetOneNPC(unsigned world_pos, Json::Value &result)
+{
+	NpcItem npc;
+	memset(&npc,0x00,sizeof(npc));
+	npc.worldpos = world_pos;
+	int ret = GetNpc(npc);
+	if(ret != 0)
+		return ret;
 
+	result["world_pos"] = npc.worldpos;
+	result["type"] = npc.GetType();
+	result["reward"] = npc.GetReward();
+	result["nextreward"] = npc.GetNextReward();
+	result["npcid"] = npc.uid;
+	result["cityname"] = npc.cityName;
+	result["name"] = npc.name;
+	CLogicBaseExtra logicBaseExtra;
+	DataBaseExtra baseExtra;
+	logicBaseExtra.GetBaseExtra(npc.uid,npc.worldpos,baseExtra);
+	if(baseExtra.protected_time <=  Time::GetGlobalTime())
+		result["attackpermitted"] = APT_ALLOW;
+	else
+		result["attackpermitted"] = APT_BAN_DAMAGE_PROTECT;
+
+	return 0;
+}
 int CLogicWorldNpc::GetAllNpc( Json::Value &npcValue)
 {
 	CDataWorldNpc *pdata = GetDataWorldNpc();
@@ -159,7 +184,6 @@ int CLogicWorldNpc::GetAllNpc( Json::Value &npcValue)
 			}
 			zhouCount++;
 		}
-
 	}
 	return ret;
 }

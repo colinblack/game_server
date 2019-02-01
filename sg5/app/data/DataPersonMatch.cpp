@@ -196,7 +196,7 @@ int CPersonBaseMatch::getInstPath(string & path){
 	time_t nt = time(NULL) + (8 * 3600);
 	struct tm* pTm = gmtime(&nt);
 	char buf[512] = {0};
-	string instPath = Config::GetValue(PERSON_INST_PATH);
+	string instPath = Config::GetPath(PERSON_INST_PATH);
 
 	snprintf(buf,sizeof(buf),"%s.%d",instPath.c_str(),pTm->tm_wday);
 
@@ -224,7 +224,7 @@ int CPersonBaseMatch::StartPlayoff4(){
 	memset(pdata->top4,0,sizeof(pdata->top4));
 
 	CGuessData guessData;
-	if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),2) != 0){
+	if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),2) != 0){
 		cerr << "guess data init fail" << endl;
 		return R_ERR_LOGIC;
 	}
@@ -398,7 +398,7 @@ int CPersonBaseMatch::StartPlayoff2(){
 	memset(pdata->top2,0,sizeof(pdata->top2));
 
 	CGuessData guessData;
-	if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),2) != 0){
+	if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),2) != 0){
 		cerr << "guess data init fail" << endl;
 		return R_ERR_LOGIC;
 	}
@@ -493,7 +493,7 @@ int CPersonBaseMatch::FinishMatch(const PersonMatchData **p)
 	pdata->stage = PMS_MATCH_FINISH;
 
 	CGuessData guessData;
-	if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),2) != 0){
+	if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),2) != 0){
 		cerr << "guess data init fail" << endl;
 		return R_ERR_LOGIC;
 	}

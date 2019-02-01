@@ -9,11 +9,13 @@ public:
 	int InitializeTribute(unsigned uid);
 	int ProcessTribute(unsigned uid, const Json::Value &tributes);
 	int GetTribute(unsigned uid, Json::Value &tributes);
-	int Tribute(unsigned uid, unsigned tributeUid, const Json::Value &tribute);
+	int Tribute(unsigned uid, unsigned tributeUid, const Json::Value &tribute,bool &bfull);
 	int IsEnableTribute(const DataUser &user, unsigned tributeUid, bool &enable);
 	int DaliyTribute(unsigned uid, int invite_count);
 	int GetTributeLimit(unsigned uid, int invite_count);
-	int GetTributeList(unsigned uid, Json::Value &tributeList);
+	int GetTributeList(unsigned uid, Json::Value &tributeList, unsigned max=0);
+private:
+	int GetTributeRes(unsigned uid, Json::Value & triJson);
 };
 
 #endif

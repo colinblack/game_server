@@ -1,21 +1,11 @@
 #include "LogicDragonball.h"
 
-static int CalcStartTime()
-{
-	time_t now;
-	time(&now);
-	int tempNow = now;
-	struct tm *pTm = localtime(&now);
-	int tempSec = pTm->tm_sec;
-	int tempMin = pTm->tm_min;
-	int tempHour = pTm->tm_hour;
-	int startTime = tempNow - tempSec - tempMin * 60 - tempHour *3600;
-	return startTime;
-}
+Json::Value CLogicDragonball::m_ConfigValue;
+bool CLogicDragonball::m_bInit = false;
 
 CDataDragonball* CLogicDragonball::GetCDataDragonball()
 {
-	GET_MEM_DATA_SEM(CDataDragonball, CONFIG_DRAGONBALL_DATA ,sem_dragonball)
+	GET_MEM_DATA_SEM(CDataDragonball, CONFIG_DRAGONBALL_DATA ,sem_dragonball,false)
 	/*static CDataDragonball* pdragonball = NULL;
 	if (!pdragonball)
 	{
@@ -29,41 +19,62 @@ CDataDragonball* CLogicDragonball::GetCDataDragonball()
 	return pdragonball;*/
 }
 
-int CLogicDragonball::WhichDragonballHold(unsigned uid, unsigned &ballId, unsigned &ts)
+int CLogicDragonball::WhichDragonballHold(unsigned uid, unsigned &ballId, unsigned &ts, DragonballActivityStatus flag)
 {
+	if(flag == DragonballActivityStatus_max)
+		flag = IsDragonballActivityTs();
+	if(flag == DragonballActivityStatus_none)
+	{
+		ballId = 0;
+		ts = 0;
+		return 0;
+	}
+
 	CDataDragonball* pball = GetCDataDragonball();
 	if (!pball)
 	{
 		DB_ERROR_RETURN_MSG("get_ball_instance_fail");
 	}
-	int ret = pball->WhichDragonballHold(uid, ballId, ts);
+
+	int ret = pball->WhichDragonballHold(uid, ballId, ts, flag==DragonballActivityStatus_attack);
 	if (ret != 0)
 	{
 		DB_ERROR_RETURN_MSG("get_dragonball_fail");
 	}
+
+	if(ballId && flag==DragonballActivityStatus_show)
+		ballId = INVALID_BALL_ID;
+
 	return 0;
 }
 
 int CLogicDragonball::GetDragonballs(Json::Value &data)
 {
-	CDataDragonball* pball = GetCDataDragonball();
-	if (!pball)
-	{
-		DB_ERROR_RETURN_MSG("get_ball_instance_fail");
-	}
 	DragonballData balls;
-	int ret = pball->ViewAllDragonball(balls);
-	if (ret != 0)
+	DragonballActivityStatus flag = IsDragonballActivityTs();
+
+	if(flag != DragonballActivityStatus_none)
 	{
-		DB_ERROR_RETURN_MSG("get_dragonball_fail");
+		CDataDragonball* pball = GetCDataDragonball();
+		if (!pball)
+		{
+			DB_ERROR_RETURN_MSG("get_ball_instance_fail");
+		}
+
+		int ret = pball->ViewAllDragonball(balls,flag==DragonballActivityStatus_attack);
+		if (ret != 0)
+		{
+			DB_ERROR_RETURN_MSG("get_dragonball_fail");
+		}
 	}
+
 	DataUser user;
 	CLogicUser logicUser;
 	data.resize(DRAGONBALL_ID_MAX - DRAGONBALL_ID_MIN + 1);
 	for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
 	{
 		unsigned index = DragonballIdToIndex(i);
-		if (!IsDragonballActivityTs() || !IsValidUid(balls.ball[index].holderUid))
+		if (flag==DragonballActivityStatus_show || !IsValidUid(balls.ball[index].holderUid))
 		{
 			data[index]["ballid"] = INVALID_BALL_ID;
 		}
@@ -76,7 +87,8 @@ int CLogicDragonball::GetDragonballs(Json::Value &data)
 		data[index]["union_id"] = balls.ball[index].allianceId;
 		data[index]["union_name"] = balls.ball[index].aname;
 		data[index]["ts"] = balls.ball[index].ts;
-		if (logicUser.GetUserLimit(balls.ball[index].holderUid, user) == 0)
+		if(IsValidUid(balls.ball[index].holderUid)
+		&& logicUser.GetUserLimit(balls.ball[index].holderUid, user) == 0)
 			data[index]["level"] = user.level;
 	}
 	return 0;
@@ -99,6 +111,11 @@ int CLogicDragonball::ViewAllDragonball(DragonballData &balls)
 
 bool CLogicDragonball::EnableAttackForDragonball(unsigned ballid, unsigned level)
 {
+	if(level >= 30)
+		return true;
+	return false;
+	//取消等级限制
+
 	switch(ballid)
 	{
 	case 1: return (level >= 30 && level <= 44);
@@ -113,14 +130,13 @@ bool CLogicDragonball::EnableAttackForDragonball(unsigned ballid, unsigned level
 	return false;
 }
 
-int CLogicDragonball::SnatchDragonball(unsigned ballid, unsigned snatchUid, const string &snatchName)
+int CLogicDragonball::SnatchDragonball(unsigned ballid, unsigned snatchUid, string &snatchName, unsigned &preUid)
 {
 	CDataDragonball* pball = GetCDataDragonball();
 	if (!pball)
 	{
 		DB_ERROR_RETURN_MSG("get_ball_instance_fail");
 	}
-	unsigned preUid = 0;
 	unsigned preTs = 0;
 	string preName;
 	int ret = pball->SetDragonball(ballid, snatchUid, snatchName, Time::GetGlobalTime(), preUid, preTs, preName);
@@ -144,7 +160,7 @@ int CLogicDragonball::SnatchDragonball(unsigned ballid, unsigned snatchUid, cons
 	updates[(unsigned)0]["tm"] = detlatime;
 	updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
 	CLogicUpdates logicUpdates;
-	logicUpdates.AddUpdates(preUid, updates, true);
+	logicUpdates.AddUpdates(preUid, updates,false, true);
 
 	Json::Value updates2;
 	updates2.resize(1);
@@ -154,6 +170,9 @@ int CLogicDragonball::SnatchDragonball(unsigned ballid, unsigned snatchUid, cons
 	updates2[(unsigned)0]["ballts"] = Time::GetGlobalTime();
 	updates2[(unsigned)0]["ts"] = Time::GetGlobalTime();
 	logicUpdates.AddUpdates(snatchUid, updates2);
+
+	preUid = snatchUid;
+
 	return 0;
 }
 
@@ -216,24 +235,56 @@ int CLogicDragonball::ResetAlliance(){
 	return pball->ResetAlliance();
 }
 
-bool CLogicDragonball::IsDragonballActivityTs(void)
+DragonballActivityStatus CLogicDragonball::IsDragonballActivityTs(void)
 {
-	string rangeTime = Config::GetValue(CONFIG_DRAGONBALL_ACTIVITY_TS);
-	Json::Value value;
-	Json::Reader().parse(rangeTime, value);
-
-	unsigned tempNow = time(NULL);
-	unsigned startTime = CalcStartTime();
-	tempNow -= startTime;
-
-	for(unsigned int i=0;i<value.size();++i)
+	if(!m_bInit)
 	{
-		if(tempNow >= value[i][0u].asUInt() && tempNow <= value[i][1u].asUInt())
+		string rangeTime = Config::GetValue(CONFIG_DRAGONBALL_ACTIVITY_TS);
+		Json::Reader().parse(rangeTime, m_ConfigValue);
+		m_bInit = true;
+	}
+
+	time_t now;
+	time(&now);
+	struct tm *pTm = localtime(&now);
+	int tempSec = pTm->tm_sec;
+	int tempMin = pTm->tm_min;
+	int tempHour = pTm->tm_hour;
+	int tempWeek = pTm->tm_wday;
+	unsigned tempNow = tempSec + tempMin * 60 + tempHour *3600;
+
+	if(m_ConfigValue.size() > 0)
+	{
+		if(m_ConfigValue.size() > 1)
 		{
-			return true;
+			bool flag = true;
+			for(int i=0;i<m_ConfigValue[1u].size();++i)
+			{
+				if(tempWeek == m_ConfigValue[1u][i].asUInt())
+				{
+					flag = false;
+					break;
+				}
+			}
+			if(flag)
+				return DragonballActivityStatus_none;
+		}
+		else
+		{
+			if(tempWeek != 2 && tempWeek != 6)
+				return DragonballActivityStatus_none;
+		}
+
+		if(tempNow >= m_ConfigValue[0u][0u].asUInt() && tempNow <= m_ConfigValue[0u][1u].asUInt())
+		{
+			return DragonballActivityStatus_attack;
+		}
+		else if(tempNow >=  m_ConfigValue[0u][1u].asUInt())
+		{
+			return DragonballActivityStatus_show;
 		}
 	}
-	return false;
+	return DragonballActivityStatus_none;
 }
 
 

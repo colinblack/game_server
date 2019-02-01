@@ -32,7 +32,10 @@ public:
 			const OPFriendList &friendList,
 			const string &iopenid,
 			unsigned &uid,
-			bool &isNewUser );
+			bool &isNewUser,
+			string& via,
+			unsigned gmFlag,
+			unsigned inviteUid = 0);
 
 	int GetFriendsJson(unsigned uid, PlatformType platform, Json::Value &friends, bool encode = false);
 
@@ -40,6 +43,7 @@ public:
 
 	//no include: friends
 	int GetUserBasicLimit(unsigned uid, PlatformType platform, DataUserBasic &users);
+	int GetUserBasicLimitWithoutPlatform(unsigned uid, DataUserBasic &users);
 
 	//不返回friends，自动切换互通平台
 	int GetUserBasicLimitSmart(unsigned uid, PlatformType platform, DataUserBasic &user);
@@ -52,13 +56,16 @@ public:
 
 	int RemoveUserMapping(unsigned uid);
 
-	int SetUserBasic(unsigned uid, bool newUser, PlatformType platform, OPUserInfo &userInfo, const OPFriendList &friendList);
+	int SetUserBasic(unsigned uid, bool newUser, PlatformType platform, OPUserInfo &userInfo, const OPFriendList &friendList, string& via, unsigned gmFlag);
 
 	int GetOpenKey(unsigned uid, string &openid, string &openkey);
 	int GetWorldUserInfo(unsigned uid, int platform,string &signature,string &figure_url,string &name);
 	int SetWorldUserInfo(unsigned uid, int platform,const string &signature);
 	int OldServerToNewServerReward(unsigned uid, string &openId);
 	int CheckBlackUser(const string &openid,bool &black);
+
+	int GetName(unsigned uid, string &name);
+	int GetNameFig(unsigned uid, string &name, string &fig);
 
 };
 

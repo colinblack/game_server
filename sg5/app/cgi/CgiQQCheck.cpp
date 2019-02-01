@@ -14,52 +14,74 @@ public:
 
 	int deliver()
 	{
+		const string payitem = CCGIIn::GetCGIStr("payitem");
+		unsigned eqid = 0;
+		if (!payitem.empty())
+			eqid = CTrans::STOI(payitem);
+
+		string billno = CCGIIn::GetCGIStr("billno");
+		billno = "MARKETQUEST_" + billno;
+
+		const string cmd = CCGIIn::GetCGIStr("cmd");
+		if (cmd.empty())
+		{
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（cmd）\"}");
+			ERROR_RETURN_MSG(4, "请求参数错误：（cmd）");
+		}
+
+		const string step = CCGIIn::GetCGIStr("step");
+		if (step.empty())
+		{
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（step）\"}");
+			ERROR_RETURN_MSG(4, "请求参数错误：（step）");
+		}
+
 		const string openid = CCGIIn::GetCGIStr("openid");
 		if (openid.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（openid）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（openid）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（openid）");
 		}
 
 		const string appid = CCGIIn::GetCGIStr("appid");
 		if (appid.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（appid）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（appid）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（appid）");
 		}
-
+/*
 		const string pf = CCGIIn::GetCGIStr("pf");
 		if (pf.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（pf）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（pf）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（pf）");
 		}
 
 		const string ts = CCGIIn::GetCGIStr("ts");
 		if (ts.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（ts）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（ts）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（ts）");
 		}
 
 		const string version = CCGIIn::GetCGIStr("version");
 		if (version.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（version）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（version）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（version）");
 		}
-
+*/
 		const string contractid = CCGIIn::GetCGIStr("contractid");
 		if (contractid.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（contractid）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（contractid）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（contractid）");
 		}
 
 		const string sig = CCGIIn::GetCGIStr("sig");
 		if (sig.empty())
 		{
-			CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（sig）\"}");
+			CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（sig）\"}");
 			ERROR_RETURN_MSG(4, "请求参数错误：（sig）");
 		}
 		else
@@ -112,20 +134,21 @@ public:
 			if (dsig != nsig)
 			{
 				error_log("[CheckTask sig error][dsig=%s,nsig=%s,osig=%s]",dsig.c_str(),nsig.c_str(),osig.c_str());
-				CgiUtil::PrintText("{\"ret\":4,\"msg\":\"请求参数错误：（sig）\"}");
+				CgiUtil::PrintText("{\"ret\":103,\"msg\":\"请求参数错误：（sig）\"}");
 				ERROR_RETURN_MSG(4, "请求参数错误：（sig）");
 			}
 
 		}
 
+		unsigned zoneid = 0;
 		CLogicQQPay logicPay;
-		int ret = logicPay.CheckTask(appid, openid, contractid);
+		int ret = logicPay.CheckTask(appid, openid, contractid, cmd, CTrans::STOI(step), eqid, billno, zoneid);
 		if (ret != 0)
 		{
 			CgiUtil::PrintText("{\"ret\":"+CTrans::ITOS(::GetError())+",\"msg\":\""+::GetErrorMessage()+"\"}");
 			return ret;
 		}
-		CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+		CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\",\"zoneid\":\"" + CTrans::ITOS(zoneid) + "\"}");
 		CGI_SEND_LOG("openid=%s,contractid=%s", openid.c_str(),contractid.c_str());
 		return R_SUCCESS;
 	}

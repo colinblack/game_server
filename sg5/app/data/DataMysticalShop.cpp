@@ -88,7 +88,7 @@ int CalcEquipRatio(const vector<DataEquipItem>& vEquipRank, map<int,DataEquipIte
 		{
 			break;
 		}
-		int pos = rand()%equipMaps.size();
+		int pos = Math::GetRandomInt(equipMaps.size());
 		equipSells[equipMaps[pos].eid] = equipMaps[pos];
 	}
 	if(equipSells.size() < SELL_EQUIPS_NUM)
@@ -136,7 +136,7 @@ int SetEquipItemPrice(unsigned min, unsigned max)
 	{
 		return max;
 	}
-	int i = rand()%(max - min + 1);
+	int i = Math::GetRandomInt(max - min + 1);
 	return min + i;
 }
 
@@ -300,11 +300,14 @@ int CDataMysticalShop::GetTopEquipNum(DataEquipItem dataEquipItem[],  int &equip
 	return 0;
 }
 
-int CDataMysticalShop::PayMysticalEquip(unsigned uid, string name, unsigned eid,unsigned& cost)
+
+int CDataMysticalShop::PayMysticalEquip(unsigned uid, unsigned eid,unsigned& index)
 {
 	DataEquipShop *pdata = (DataEquipShop *)m_sh.GetAddress();
+
 	if(pdata == NULL)
 	{
+		error_log("init_mysticalshop_fail. uid=%u", uid);
 		DB_ERROR_RETURN_MSG("init_mysticalshop_fail");
 	}
 
@@ -312,6 +315,7 @@ int CDataMysticalShop::PayMysticalEquip(unsigned uid, string name, unsigned eid,
 	bool flag = JudgeTime(tempNow);
 	if (flag == false)
 	{
+		error_log("buy_time_range error. uid=%u", uid);
 		DB_ERROR_RETURN_MSG("buy_time_range error!");
 	}
 
@@ -321,19 +325,75 @@ int CDataMysticalShop::PayMysticalEquip(unsigned uid, string name, unsigned eid,
 	{
 		if (pdata->equipForSell[i].eid == eid)
 		{
-			if(pdata->equipForSell[i].nums == 0){
+			if(pdata->equipForSell[i].nums == 0)
+			{
 				DB_ERROR_RETURN_MSG("mysticalshop_no_goods");
 			}
 
-			cost = pdata->equipForSell[i].price;
-			pdata->equipForSell[i].nums--;
+			for(int j=0;j<pdata->sellsCount;++j)
+			{
+				if(pdata->sells[j].uid == uid && pdata->sells[j].buy_Equip.eid == eid)
+				{
+					error_log("mysticalshop_had_buy. uid=%u", uid);
+					LOGIC_ERROR_RETURN_MSG("mysticalshop_had_buy");
+				}
+			}
+
+			index = i;
+
 			break;
 		}
 	}
-	if(i >= SELL_EQUIPS_NUM){
-		info_log("uid = %u, MysticalEquip no_such_equip: eid = %d; right eid: %d, %d, %d",uid, eid, pdata->equipForSell[0].eid, pdata->equipForSell[1].eid, pdata->equipForSell[2].eid);
+
+	if(i >= SELL_EQUIPS_NUM)
+	{
+		error_log("uid = %u, MysticalEquip no_such_equip: eid = %d; right eid: %d, %d, %d",uid, eid, pdata->equipForSell[0].eid, pdata->equipForSell[1].eid, pdata->equipForSell[2].eid);
 		DB_ERROR_RETURN_MSG("no_such_equip");
 	}
+
+	return 0;
+}
+
+DataEquipItem & CDataMysticalShop::GetEquipItemByIndex(unsigned index)
+{
+	DataEquipShop *pdata = (DataEquipShop *)m_sh.GetAddress();
+
+	if(pdata == NULL)
+	{
+		throw runtime_error("init_mysticalshop_fail");
+	}
+
+	return pdata->equipForSell[index];
+}
+
+int CDataMysticalShop::RecordMysticalEquip(unsigned uid, string name, unsigned eid, unsigned index)
+{
+	DataEquipShop *pdata = (DataEquipShop *)m_sh.GetAddress();
+
+	if(pdata == NULL)
+	{
+		DB_ERROR_RETURN_MSG("init_mysticalshop_fail");
+	}
+
+	unsigned cost = pdata->equipForSell[index].price;
+	pdata->equipForSell[index].nums--;
+
+	int numSell = pdata->sellsCount;
+
+	if (numSell >= MAX_EQUIPS_NUM)
+	{
+		// 后续完善
+		numSell = 0;
+		pdata->sellsCount = 0;
+	}
+
+	pdata->sells[numSell].uid = uid;
+	snprintf(pdata->sells[numSell].name, sizeof(pdata->sells[numSell].name)-1, "%s", name.c_str());
+	pdata->sells[numSell].buy_time = time(NULL);
+	pdata->sells[numSell].buy_Equip.eid = eid;
+	pdata->sells[numSell].buy_Equip.price = cost;
+	pdata->sellsCount++;
+
 	return 0;
 }
 

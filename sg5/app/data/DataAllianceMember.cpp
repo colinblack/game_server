@@ -113,6 +113,24 @@ int CDataAllianceMember::GetMembers(unsigned alliance_id, vector<DataAllianceMem
 	return 0;
 }
 
+int CDataAllianceMember::GetMembers(unsigned alliance_id, vector<unsigned> &members)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, alliance_id);
+	DBCREQ_SET_KEY(alliance_id);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(uid);
+
+	DBCREQ_EXEC;
+
+	DBCREQ_ARRAY_GET_BEGIN(members);
+	DBCREQ_ARRAY_GET_INT_S(members, uid);
+	DBCREQ_ARRAY_GET_END();
+
+
+	return 0;
+}
+
 int CDataAllianceMember::RemoveMember(unsigned alliance_id, unsigned uid)
 {
 	DBCREQ_DECLARE(DBC::DeleteRequest, alliance_id);

@@ -18,6 +18,9 @@ CLogicBaseExtra::~CLogicBaseExtra() {
 
 int CLogicBaseExtra::AddBaseExtra(unsigned uid, const DataBaseExtra &data)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra baseExtra;
 	int ret = baseExtra.AddBaseExtra(uid,data);
 	if(ret != 0)
@@ -31,12 +34,18 @@ int CLogicBaseExtra::AddBaseExtra(unsigned uid, const DataBaseExtra &data)
 }
 int CLogicBaseExtra::GetBaseExtra(unsigned uid, unsigned worldpos,  DataBaseExtra &data)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra baseExtra;
 	int ret = baseExtra.GetBaseExtra(uid,worldpos,data);
 	return ret;
 }
 int CLogicBaseExtra::GetBaseExtraOnType(unsigned uid,int type, vector<DataBaseExtra> &data)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra baseExtra;
 	int ret = baseExtra.GetBaseExtraOnType(uid,type,data);
 	if(!(ret == 0 || ret == R_ERR_NO_DATA))
@@ -49,6 +58,9 @@ int CLogicBaseExtra::GetBaseExtraOnType(unsigned uid,int type, vector<DataBaseEx
 }
 int CLogicBaseExtra::GetBaseExtra(unsigned uid, vector<DataBaseExtra> &data)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra baseExtra;
 	int ret = baseExtra.GetBaseExtra(uid,data);
 	if(!(ret == 0 || ret == R_ERR_NO_DATA))
@@ -61,6 +73,9 @@ int CLogicBaseExtra::GetBaseExtra(unsigned uid, vector<DataBaseExtra> &data)
 }
 int CLogicBaseExtra::SetBaseExtra(unsigned uid, unsigned worldpos,const DataBaseExtra &data)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra baseExtra;
 	int ret = baseExtra.SetBaseExtra(uid,worldpos,data);
 	if(ret != 0 )
@@ -126,6 +141,9 @@ int CLogicBaseExtra::SetBaseExtra(unsigned uid, unsigned worldpos,const DataBase
 //}
 int CLogicBaseExtra::GetWorldPosList(unsigned uid,Json::Value &worldposList)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	vector<DataBaseExtra> vWpList;
 	int ret = dbBaseExtra.GetWorldposList(uid,vWpList);
@@ -145,6 +163,9 @@ int CLogicBaseExtra::GetWorldPosList(unsigned uid,Json::Value &worldposList)
 
 int CLogicBaseExtra::GetSubBaseInfoJson(unsigned uid,Json::Value &worldres)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	vector<DataBaseExtra> vSubBases;
 	Json::Reader reader;
@@ -172,6 +193,9 @@ int CLogicBaseExtra::GetSubBaseInfoJson(unsigned uid,Json::Value &worldres)
 
 int CLogicBaseExtra::SetSubBaseResource(unsigned uid, unsigned worldpos,string const &resource)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	int ret = dbBaseExtra.SetSubBaseResource(uid,worldpos,resource);
 	if(0 != ret)
@@ -183,6 +207,9 @@ int CLogicBaseExtra::SetSubBaseResource(unsigned uid, unsigned worldpos,string c
 }
 int CLogicBaseExtra::GetProtectedTime(unsigned uid,unsigned worldpos,unsigned &protectedTime)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	int ret = dbBaseExtra.GetProtectedTime(uid,worldpos,protectedTime);
 	if(0 != ret)
@@ -194,6 +221,9 @@ int CLogicBaseExtra::GetProtectedTime(unsigned uid,unsigned worldpos,unsigned &p
 }
 int CLogicBaseExtra::UpdateProtectedTime(unsigned uid,unsigned worldpos,unsigned const protectedTime)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	int ret = dbBaseExtra.UpdateProtectedTime(uid,worldpos,protectedTime);
 	if(0 != ret)
@@ -218,6 +248,9 @@ int CLogicBaseExtra::UpdateProtectedTime(unsigned uid,unsigned worldpos,unsigned
 
 int CLogicBaseExtra::UpdateBreathInfo(unsigned uid,unsigned worldpos, const DataBreathInfo &breathInfo)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	int ret = dbBaseExtra.UpdateBreathInfo(uid,worldpos,breathInfo);
 	if(0 != ret)
@@ -229,6 +262,9 @@ int CLogicBaseExtra::UpdateBreathInfo(unsigned uid,unsigned worldpos, const Data
 }
 int CLogicBaseExtra::GetLastBreathTime(unsigned uid,unsigned worldpos,unsigned &last_breath_time)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	int ret = dbBaseExtra.GetLastBreathTime(uid,worldpos,last_breath_time);
 	if(0 != ret)
@@ -240,6 +276,9 @@ int CLogicBaseExtra::GetLastBreathTime(unsigned uid,unsigned worldpos,unsigned &
 }
 int CLogicBaseExtra::RemoveSubBase(unsigned uid, unsigned worldpos)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_NO_DATA;
+
 	CDataBaseExtra dbBaseExtra;
 	int ret = dbBaseExtra.RemoveSubBase(uid,worldpos);
 	if(0 != ret)

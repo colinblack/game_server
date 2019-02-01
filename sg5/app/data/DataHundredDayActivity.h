@@ -38,6 +38,7 @@ public:
 
 struct AcvitityPayRank
 {
+	int version;	//每次重新开活动版本控制
 	int flag;
 	int awardflag[3];
 	DataHDaysAcvitityPay HDAcvitityRank[RANK_SIZE + 1];
@@ -50,7 +51,6 @@ public:
 	int UpdateRankList(const  DataHDaysAcvitityPay &point);
 	int GetRankList( DataHDaysAcvitityPay vecPoints[]);
 	int RewardHundredDaysActivityRank(vector <UpdatesHundDays> &data);
-	int CleanRankList(void);
 private:
 	bool m_init;
 	CShareMemory m_sh;

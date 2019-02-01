@@ -1,0 +1,15 @@
+package ConfigScrollFeedback;
+
+import "RewardConfig.proto";
+
+message FeedBackItem
+{
+	required uint32 diamond						= 1;  //充值钻石数
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+message ScrollFeedBack
+{
+	repeated FeedBackItem scrollfeedback	= 1;
+}
+

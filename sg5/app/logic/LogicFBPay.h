@@ -19,6 +19,7 @@ struct FBItemInfo
 class CLogicFBPay
 {
 public:
+    /*
 	int payments_get_items(
 			const string &openid,
 			const string &orderId,
@@ -31,14 +32,44 @@ public:
 			const string &orderId,
 			const string &status,
 			string &next_state);
+	*/
+
+	int deliver_no_serverid(
+	        const string &openid,
+	        const string &payment_id,
+	        const string &product,
+	        const unsigned quantity);
+
+	int deliver_serverid(
+	        const string &openid,
+	        const unsigned serverid,
+	        const string &payment_id,
+	        const string &product,
+	        const unsigned quantity);
+
+	int chargeback(
+			const string &openid,
+			const unsigned serverid,
+			const string &payment_id,
+			const unsigned quantity);
 
 private:
-	static int GetItemInfo(
-			unsigned item_id,
-			const string &locale,
-			FBItemInfo &item);
+	int deliver(
+	        const unsigned uid,
+	        const string &openid,
+	        const string &payment_id,
+	        const string &product,
+	        const unsigned quantity);
 
-	typedef map<unsigned, FBItemInfo> T_ItemMap;
+    static int GetItemInfo(
+            const string &product,
+            const string &locale,
+            FBItemInfo &item);
+
+	static int Init();
+	int PayRewarld(unsigned uid, int cash, int &coins);
+
+	typedef map<string, FBItemInfo> T_ItemMap;
 	static T_ItemMap g_ItemInfo;
 };
 

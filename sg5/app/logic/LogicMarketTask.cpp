@@ -12,6 +12,7 @@ int CLogicMarketTask::AddMarketTask(const string &openid, const string &contract
 	int ret = 0;
 	CDataMarketTask dbMarketTask;
 	DataMarketTask task;
+	/*
 	int temflag = 0;
 	string stTaskId;
 	ret = GetMarketTask(openid, contractid, stTaskId, temflag);
@@ -23,6 +24,7 @@ int CLogicMarketTask::AddMarketTask(const string &openid, const string &contract
 	{
 		return R_ERR_DB;
 	}
+	*/
 
 	task.openid = openid;
 	task.contractid = contractid;

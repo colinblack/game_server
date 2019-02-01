@@ -26,6 +26,16 @@ int CDataBuilding::AddBuilding(unsigned uid, unsigned id,unsigned worldpos, cons
 	return 0;
 }
 
+int CDataBuilding::SetBuilding(unsigned uid, unsigned id, unsigned worldpos, const string &data)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(EQ, id, id);
+	DBCREQ_SET_CONDITION(EQ, worldpos, worldpos);
+
+	DBCREQ_SET_STR_V(data);
+	return 0;
+}
 int CDataBuilding::SetBuilding(unsigned uid, unsigned id, const string &data)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
@@ -35,6 +45,7 @@ int CDataBuilding::SetBuilding(unsigned uid, unsigned id, const string &data)
 	DBCREQ_SET_STR_V(data);
 	return 0;
 }
+
 int CDataBuilding::GetBuilding(unsigned uid, unsigned id, string &data)
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);

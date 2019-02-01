@@ -11,7 +11,7 @@ CGuessData* CLogicGuess::GetDataGuess(int type){
 		return itr->second;
 	}
 	CGuessData *pdata = new CGuessData();
-	string dataPath = Config::GetValue(GUESS_DATA_PATH);
+	string dataPath = Config::GetPath(GUESS_DATA_PATH);
 	if (dataPath.empty())
 	{
 		return NULL;
@@ -49,7 +49,8 @@ int CLogicGuess::GuessorsPay(unsigned gid,int type){
 		}
 	}
 
-	CLogicPay logicPay;
+	//CLogicPay logicPay;
+	CLogicUser logicUser;
 	CLogicUpdates logicUpdates;
 	for(int i = 0; i < GUESS_GROUP_COUNT; ++i){
 		if(pData->guessor[i].gid == gid){
@@ -57,14 +58,15 @@ int CLogicGuess::GuessorsPay(unsigned gid,int type){
 			for(unsigned j = 0; j < pData->guessor[i].numOfApply;++j){
 				int reward = int((pSupports[j].coins*1.0/winCoins)*failCoins*0.9 * PER_BET_COINS);
 				if(reward < 1) reward = 1;
-				logicPay.ChangePay(pSupports[j].uid, 0, pSupports[j].coins * PER_BET_COINS + reward, "MATCHGUESS",1);
+				//logicPay.ChangePay(pSupports[j].uid, 0, pSupports[j].coins * PER_BET_COINS + reward, "MATCHGUESS",1);
+				logicUser.ChangeBet(pSupports[j].uid, pSupports[j].coins * PER_BET_COINS + reward);
 
 				Json::Value updates;
 				updates.resize(1);
 				updates[(unsigned)0]["s"] = "MATCHGUESS";
-				updates[(unsigned)0]["coins"] = reward;
+				updates[(unsigned)0]["coins"] = pSupports[j].coins * PER_BET_COINS + reward;
 				updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
-				logicUpdates.AddUpdates(pSupports[j].uid, updates);
+				logicUpdates.AddUpdates(pSupports[j].uid, updates,true);
 			}
 			break;
 		}

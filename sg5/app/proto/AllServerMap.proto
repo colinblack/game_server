@@ -1,0 +1,10 @@
+package AllServerMap;
+
+message AllServerMapUser {
+		required uint32	uid 	= 1;
+		required uint32 level 	= 2;
+}
+
+message AllServerMap {
+		repeated AllServerMapUser user  = 1;
+}

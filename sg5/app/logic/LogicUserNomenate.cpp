@@ -52,6 +52,9 @@ int CLogicUserNomenate::AddUserNomenate(const DataUserNomenate &data)
 }
 int CLogicUserNomenate::GetUserNomenate(unsigned uid, DataUserNomenate &data)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_DATA;
+
 	CDataUserNomenate cuserNomenate;
 	int ret = cuserNomenate.getNomenate(uid, data);
 	if (ret != 0 && ret != R_ERR_NO_DATA)
@@ -147,6 +150,9 @@ int CLogicUserNomenate::setFriendBlackList(unsigned uid, const string &black_lis
 }
 int CLogicUserNomenate::getFriendBlackList(unsigned uid, string &black_list)
 {
+	if(!IsValidUid(uid))
+		return R_ERR_PARAM;
+
 	CDataUserNomenate cuserNomenate;
 	int ret = cuserNomenate.getBlackList(uid, black_list);
 	if(ret != 0)
@@ -195,7 +201,7 @@ int CLogicUserNomenate::GetNewUserRecList(string &list)
 		return ret;
 	}
 
-	int index = rand() % MAX_REC_LIST_COUNT;
+	int index = Math::GetRandomInt(MAX_REC_LIST_COUNT);
 	index = (index==0) ? index+1 : index;
 	int count = 0;
 	for (unsigned i=index; count < 26 && i != index-1; i++)
@@ -235,6 +241,6 @@ int CLogicUserNomenate::JoinNewUserRecList(unsigned uid)
 
 CDataNewUserRecList * CLogicUserNomenate::GetCDataNewUserRecList(void)
 {
-	GET_MEM_DATA_SEM(CDataNewUserRecList, CONFIG_NEW_USER_REC_LIST_PATH,sem_new_user_rec)
+	GET_MEM_DATA_SEM(CDataNewUserRecList, CONFIG_NEW_USER_REC_LIST_PATH,sem_new_user_rec,false)
 }
 

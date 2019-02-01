@@ -1,0 +1,12 @@
+package NewWorldAllianceMap;
+
+message NewWorldAllianceMapAlliance {
+	required uint32 rid         = 1;
+	required uint32 level       = 2;
+	required uint32 reward      = 3;
+	repeated uint32 aid         = 4;
+}
+
+message NewWorldAllianceMap {
+    repeated NewWorldAllianceMapAlliance alliance	= 1;
+}

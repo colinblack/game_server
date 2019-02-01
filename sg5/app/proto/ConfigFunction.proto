@@ -1,0 +1,13 @@
+package ConfigFunction;
+import "RewardConfig.proto";
+
+message OpenSpecialEquipItem
+{
+	required uint32 					eqid			= 1;  //礼包id
+	repeated RewardConfig.RewardItemCfg replace_equips	= 2;  //可供选择的物品
+}
+
+message Functions
+{
+	repeated OpenSpecialEquipItem open_special_equip	= 1;  //打开特殊礼包
+}

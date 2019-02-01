@@ -23,7 +23,7 @@ CLogicBarbarianInvasion::~CLogicBarbarianInvasion() {
 
 CDataBarbarianInvasion* CLogicBarbarianInvasion::GetCDataBarbarianInvasion()
 {
-	GET_MEM_DATA_SEM(CDataBarbarianInvasion, CONFIG_BARBARIANINVASION_PATH,sem_barbarian)
+	GET_MEM_DATA_SEM(CDataBarbarianInvasion, CONFIG_BARBARIANINVASION_PATH,sem_barbarian,false)
 	/*static map<int, CDataBarbarianInvasion*> dataMap;
 	int serverId = 0;
 	Config::GetDomain(serverId);
@@ -50,7 +50,7 @@ CDataBarbarianInvasion* CLogicBarbarianInvasion::GetCDataBarbarianInvasion()
 }
 int CLogicBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigned aid)
 {
-	info_log("uid = %u,points = %d",playerItem.uid,playerItem.points);
+	//info_log("uid = %u,points = %d",playerItem.uid,playerItem.points);
 	time_t now;
 	time( &now );
 	struct tm *ptm = localtime(&now);
@@ -63,7 +63,16 @@ int CLogicBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsign
 	{
 		return -1;
 	}
-	int ret = pdata->UpdateRank(playerItem,aid);
+	DataAlliance alliance;
+	CLogicAlliance logicalliance;
+	int ret = logicalliance.GetAllianceLimit(aid, alliance);
+	if(ret)
+	{
+		error_log("get alliance error aid=%u",aid);
+		return 0;
+	}
+
+	ret = pdata->UpdateRank(playerItem,aid,CLogicAlliance::GetMemberMaxCount(alliance.level));
 	if(0 != ret)
 	{
 		return ret;
@@ -98,4 +107,31 @@ int CLogicBarbarianInvasion::GetTeamRank(DataTeamItem teamRank[], int &teamsNum)
 	}
 	return 0;
 }
-
+int CLogicBarbarianInvasion::GetTeamPlayersRankSorted(DataPlayersPoints &playerRank, unsigned aid)
+{
+	CDataBarbarianInvasion *pdata = GetCDataBarbarianInvasion();
+	if(pdata == NULL)
+	{
+		return -1;
+	}
+	int ret = pdata->GetTeamPlayersRankSorted(playerRank,aid);
+	if(0 != ret)
+	{
+		return ret;
+	}
+	return 0;
+}
+int CLogicBarbarianInvasion::GetTeamRankSorted(unsigned kingdom,DataTeamItem teamRank[], int &teamsNum)
+{
+	CDataBarbarianInvasion *pdata = GetCDataBarbarianInvasion();
+	if(pdata == NULL)
+	{
+		return -1;
+	}
+	int ret = pdata->GetTeamRankSorted(kingdom,teamRank,teamsNum);
+	if(0 != ret)
+	{
+		return ret;
+	}
+	return 0;
+}

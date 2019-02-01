@@ -10,6 +10,8 @@
 
 #include "LogicInc.h"
 
+#define ALLIANCE_TECH_NUM 17
+
 enum AllianceStatus
 {
 	AS_ACTIVE = 0,
@@ -50,9 +52,9 @@ public:
 	int AddActivity(unsigned &allianceId, const Json::Value &activity);
 	int AddLastAttack(unsigned allianceId, unsigned uid, const Json::Value &attackData);
 	bool IsInSameAlliance(unsigned uid, unsigned targetUid);
-	int Donate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int r5, int cash, bool isCoins=true);
+	int Donate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int cash, bool isCoins=true);
 	int ChangeResource(unsigned allianceId, int64_t r1, int64_t r2, int64_t r3, int64_t r4, int64_t r5, int cash, const string &reason);
-	int SetAllianceData(unsigned uid, unsigned allianceId, const Json::Value &data);
+	int SetAllianceData(unsigned uid, unsigned allianceId, Json::Value &data);
 	int SetMemberData(unsigned uid, unsigned allianceId, const Json::Value &data);
 	bool IsLeader(unsigned uid, unsigned allianceId);
 	bool IsManager(unsigned uid, unsigned allianceId);
@@ -60,21 +62,27 @@ public:
 	int RemoveMember(unsigned uid, unsigned allianceId, unsigned uidRemove);
 	int SetMemberType(unsigned uid, unsigned allianceId, unsigned memberUid, int type);
 	int AddAllianceUpdates(unsigned uid, unsigned allianceId, Json::Value &updates);
-	int AddMemberDonate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int r5, int cash);
+	int AddMemberDonate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int cash);
 	int SetAllianceMemberData(unsigned uid, unsigned allianceId, int point, const Json::Value &data);
 	int RankMemberDonate(unsigned allianceId);
 	int AllianceEmail(unsigned allianceId, unsigned uid, DataEmail &data);
+	int AllianceUpdate(unsigned allianceId, Json::Value updates);
 	int CompeteLaeder(unsigned allianceId, unsigned uid);
 
 	int ProcessRequest(const DataMessage &request, unsigned from, unsigned to, const string &type, int action, const Json::Value &data);
 
 	int GetAllianceJson(unsigned uid, unsigned allianceId, Json::Value &value);
+	int GetAllianceJsonLimit(unsigned allianceId, Json::Value &value);
 	int SearchAllianceJson(const string &name, Json::Value &value);
 	int GetRandomAlliancesJson(Json::Value &value);
 	int GetAllianceEnemys(unsigned uidBy, unsigned allianceId, unsigned startIndex, unsigned count, Json::Value &value);
 
-	int GetMemberMaxCount(int level);
-	int DonatePoint(int level,int r1, int r2, int r3, int r4, int r5, int &points);
+	static int GetMemberMaxCount(int level);
+	int DonatePoint(int level,int r1, int r2, int r3, int r4, int &points);
+
+	int SetAllianceTech(unsigned allianceId, unsigned index, unsigned lvl);
+
+	int SetR5(unsigned allianceId);
 };
 
 #endif /* LOGICALLIANCE_H_ */

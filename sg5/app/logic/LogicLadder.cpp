@@ -2,7 +2,7 @@
 
 CDataLadder* CLogicLadder::GetCDataLadder()
 {
-	GET_MEM_DATA_SEM(CDataLadder, CONFIG_LADDER_PATH, sem_ladder)
+	GET_MEM_DATA_SEM(CDataLadder, CONFIG_LADDER_PATH, sem_ladder,false)
 	/*static CDataLadder* pladder = NULL;
 	if (!pladder)
 	{
@@ -85,7 +85,7 @@ void CLogicLadder::RandLadderPlayers(Json::Value &ladder)
 			int rest = num;
 	        for (int k = 0; k < 5; k++,rest--)
 	        {
-				int r = ((unsigned)rand()) % rest + 1;
+				int r = Math::GetRandomInt(rest) + 1;
 				int j = 0;
 				while (r > 0 && j < 100)
 				{
@@ -160,8 +160,10 @@ int CLogicLadder::ViewLadder(unsigned uid, Json::Value &result)
 	LadderItem player3;
 	LadderItem player4;
 	LadderItem player5;
+	LadderItem top[3];
 	pladder->GetFivePlayers(rank1, rank2, rank3, rank4, rank5,
-			player1, player2, player3, player4, player5);
+			player1, player2, player3, player4, player5,
+			top);
 
 	Json::Value &players = result["players"];
 	players.resize(0);
@@ -215,6 +217,20 @@ int CLogicLadder::ViewLadder(unsigned uid, Json::Value &result)
 		json["pic"] = player5.pic;
 		players.append(json);
 	}
+
+	Json::Value &topt = result["top"];
+	topt.resize(0);
+	for(unsigned i=0;i<3;++i)
+	{
+		Json::Value json;
+		json["rank"] = i+1;
+		json["uid"] = top[i].uid;
+		json["level"] = top[i].level;
+		json["name"] = top[i].name;
+		json["pic"] = top[i].pic;
+		topt.append(json);
+	}
+
 	return 0;
 }
 
@@ -253,8 +269,10 @@ int CLogicLadder::Refresh(unsigned uid, Json::Value &result)
 	LadderItem player3;
 	LadderItem player4;
 	LadderItem player5;
+	LadderItem top[3];
 	pladder->GetFivePlayers(rank1, rank2, rank3, rank4, rank5,
-			player1, player2, player3, player4, player5);
+			player1, player2, player3, player4, player5,
+			top);
 
 	Json::Value &players = result["players"];
 	players.resize(0);
@@ -308,6 +326,20 @@ int CLogicLadder::Refresh(unsigned uid, Json::Value &result)
 		json["pic"] = player5.pic;
 		players.append(json);
 	}
+
+	Json::Value &topt = result["top"];
+	topt.resize(0);
+	for(unsigned i=0;i<3;++i)
+	{
+		Json::Value json;
+		json["rank"] = i+1;
+		json["uid"] = top[i].uid;
+		json["level"] = top[i].level;
+		json["name"] = top[i].name;
+		json["pic"] = top[i].pic;
+		topt.append(json);
+	}
+
 	return 0;
 }
 

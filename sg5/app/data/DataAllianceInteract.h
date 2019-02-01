@@ -25,6 +25,7 @@ public:
 	int GetAllianceInteractsAttackAfter(unsigned uid, unsigned last_attack_time, vector<DataUserInteract> &interacts);
 	int RemoveAllianceInteracts(unsigned uid);
 	int RemoveAllianceInteracts(unsigned uid, unsigned opposite_uid);
+	int DelAllianceInteractsBeforeTS(unsigned uid, unsigned last_attack_time);
 };
 
 #endif /* DATAALLIANCEINTERACT_H_ */

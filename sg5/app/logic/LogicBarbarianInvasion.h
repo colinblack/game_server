@@ -16,6 +16,8 @@ public:
 	int UpdateRank(DataPlayerItem const &playerItem, unsigned aid);
 	int GetTeamPlayersRank(DataPlayersPoints &playerRank, unsigned aid);
 	int GetTeamRank(DataTeamItem teamRank[],  int &teamsNum);
+	int GetTeamPlayersRankSorted(DataPlayersPoints &playerRank, unsigned aid);
+	int GetTeamRankSorted(unsigned kingdom,DataTeamItem teamRank[],  int &teamsNum);
 
 protected:
 	CDataBarbarianInvasion *GetCDataBarbarianInvasion();

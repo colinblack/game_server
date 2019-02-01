@@ -68,6 +68,28 @@ int CDataEquipment::GetEquipment(unsigned uid, vector<DataEquipment> &datas)
 	return 0;
 }
 
+int CDataEquipment::GetEquipment(unsigned uid, map<unsigned, string> &datas)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(id);
+	DBCREQ_NEED(data);
+
+	DBCREQ_EXEC;
+
+	datas.clear();
+	int count = m_dbcret.TotalRows();
+	for(int i = 0; i < count; i++)
+	{
+		DBCREQ_IFFETCHROW;
+		datas[m_dbcret.IntValue(1)] = m_dbcret.StringValue(2);
+	}
+
+	return 0;
+}
+
 int CDataEquipment::ReplaceEquipment(unsigned uid, unsigned id, const string &data)
 {
 	DBCREQ_DECLARE(DBC::ReplaceRequest, uid);

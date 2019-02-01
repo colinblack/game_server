@@ -5,6 +5,7 @@
  *      Author: colin
  */
 #include "LogicMysticalShop.h"
+#include "LogicUnitWrap.h"
 
 CLogicMysticalShop::CLogicMysticalShop()
 {
@@ -18,7 +19,7 @@ CLogicMysticalShop::~CLogicMysticalShop()
 
 CDataMysticalShop* CLogicMysticalShop::GetCDataMysticalShop()
 {
-	GET_MEM_DATA_SEM(CDataMysticalShop,CONFIG_MYSTICALSHOP_PATH,sem_mysticalshop)
+	GET_MEM_DATA_SEM(CDataMysticalShop,CONFIG_MYSTICALSHOP_PATH,sem_mysticalshop,false)
 	/*static CDataMysticalShop* pdata = NULL;
 	if (!pdata)
 	{
@@ -59,33 +60,90 @@ int CLogicMysticalShop::GetTopEquipNum(DataEquipItem dataEquipItem[],  int &equi
 
 }
 
-int CLogicMysticalShop::PayMysticalEquip(unsigned uid, string name, unsigned eid)
+int CLogicMysticalShop::PayMysticalEquip(unsigned uid, string name, unsigned eid, Json::Value &result)
 {
 	CDataMysticalShop *pdata = GetCDataMysticalShop();
 	if(pdata == NULL)
 	{
 		return -1;
 	}
-	unsigned cost = 0;
-	int ret = pdata->PayMysticalEquip(uid, name, eid, cost);
-	info_log("uid = %u,buying MysticalEquip: eid = %d,cost = %d",uid,eid,cost);
-	if(0 == ret)
+	unsigned index = 0;
+
+	//判断是否已购买或者是否还有可购买物品
+	int ret = pdata->PayMysticalEquip(uid, eid, index);  //只用于获取物品在池中的索引
+
+	if (ret)
 	{
-		CLogicPay logicPay;
-		ret = logicPay.ChangePay(uid ,-cost, 0, "MysticalShop", 1);
-		if (ret != 0)
+		error_log("PayMysticalEquip error. uid=%u,eid=%u,ret=%d" , uid, eid, ret);
+		return ret;
+	}
+
+	//扣钻
+	string reason = "MysticalShop";
+	DataEquipItem equipitem;
+
+	try
+	{
+		DataEquipItem & dataequip = pdata->GetEquipItemByIndex(index);
+		UserWrap userWrap(uid, false); //使用true,调用getuserlimit，反之，调用getuser
+
+		userWrap.CostAsset(dataequip.price, 0, reason, result);
+
+		equipitem = dataequip;
+	}
+	catch(exception &e)
+	{
+		error_log("exception happen. uid=%u, reason=%s", uid, e.what());
+		return R_ERROR;
+	}
+
+	//发放物品
+	char eqid[100] = {0};
+	sprintf(eqid, "%u", equipitem.eid);
+
+	if (eqid[0] == '3' || 0 == strncmp(eqid, "130", 3))
+	{
+		//英雄
+		std::vector<std::string> vHeros;
+		std::vector<std::string> vReasons;
+
+		for(int i = 0; i < 1; ++i)
 		{
-			info_log("uid = %u,buying MysticalEquip cost fail!: eid = %d,cost = %d",uid,eid,cost);
-			int tmpRet = pdata->AddOneNumForSell(eid);
-			return ret;
+			vHeros.push_back(CDataXML::Hero2Str(equipitem.eid));
+			vReasons.push_back(reason);
 		}
-		else
+
+		CLogicHero logicHero;
+
+		if (0 != logicHero.AddHeros(uid, vHeros, vReasons, result["heros"]))
 		{
-			info_log("uid = %u,bought MysticalEquip: eid = %d,cost = %d",uid,eid,cost);
-			int tmpRet = pdata->AddSelledEquip(uid, name, eid, cost);
-			return ret;
+			error_log("add heros error. uid=%u", uid);
+			LOGIC_ERROR_RETURN_MSG("add_heros_error");
 		}
 	}
+	else
+	{
+		vector<ItemAdd> vItemAdds;
+		ItemAdd item;
+		item.eqid = equipitem.eid;
+		item.reason = reason;
+		item.count = 1;
+
+		vItemAdds.push_back(item);
+		CLogicEquipment logicEquipMent;
+
+		ret = logicEquipMent.AddItems(uid, vItemAdds, result["equipments"], true);
+
+		if(ret)
+		{
+			error_log("Add_Equip_error uid=%u， ret=%u", uid, ret);
+			LOGIC_ERROR_RETURN_MSG("add_equipitems_failed");
+		}
+	}
+
+	//记录黑市的购买
+	ret = pdata->RecordMysticalEquip(uid, name, eid, index);
+
 	return ret;
 }
 

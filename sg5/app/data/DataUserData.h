@@ -26,9 +26,11 @@ public:
 
 	int SetTributeList(unsigned uid, const string &tribute_list);
 	int SetNpcattack(unsigned uid, const string &npcattack);
+	int GetGift(unsigned uid, string &gift);
 	int SetGift(unsigned uid, const string &gift);
 	int SetLadder(unsigned uid, const string &ladder);
 	int SetDailyQuest(unsigned uid, const string &dailyquest);
+    int GetDailyQuest(unsigned uid, string &dailyquest);
 	int GetWorldposCollect(unsigned uid,string &worldpos_collect);
 	int SetWorldposCollect(unsigned uid,const string &worldpos_collect);
 	int SetAllServerLadder(unsigned uid, const string &allserver_ladder);

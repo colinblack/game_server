@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	int uid = atoi(argv[1]);
-	if (!uid) {
+	if (!IsValidUid(uid)) {
 		cout << "uid wrong!" << endl;
 		return 1;
 	}
@@ -35,10 +35,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	unsigned userid = 0;
-	if (!Json::GetUInt(data, "userid", userid)) {
-		cout << "uid fail!" << endl;
-		return 1;
-	}
+	Json::GetUInt(data, "userid", userid);
 	if (userid != uid)
 		data["userid"] = uid;
 

@@ -94,7 +94,7 @@ int CLogicAlliance::AddAlliance(unsigned uid, string &name, int flag, const stri
 
 	//名字检查
 	String::Trim(name);
-	if(OpenPlatform::GetType() != PT_FACEBOOK)
+	if(!OpenPlatform::IsEN())
 	{
 		if(!StringFilter::Check(name))
 		{
@@ -133,6 +133,7 @@ int CLogicAlliance::AddAlliance(unsigned uid, string &name, int flag, const stri
 	//检查资源
 	CLogicUser logicUser;
 	DataUser user;
+	AUTO_LOCK_USER(uid)
 	ret = logicUser.GetUserLimit(uid, user);
 	if(ret != 0)
 	{
@@ -182,11 +183,7 @@ int CLogicAlliance::AddAlliance(unsigned uid, string &name, int flag, const stri
 	{
 		return ret;
 	}
-	unsigned allianc_id_start;
-	if(!Config::GetUIntValue(allianc_id_start,CONFIG_AID_START))
-	{
-		allianc_id_start = ALLIANCE_ID_START;
-	}
+	unsigned allianc_id_start = Config::GetAIDStart();
 	alliance.alliance_id = (unsigned)u64AllianceId;
 	alliance.kingdom = user.kingdom;
 	alliance.name = name;
@@ -263,13 +260,15 @@ int CLogicAlliance::AddAlliance(unsigned uid, string &name, int flag, const stri
 			user.res -= count;	\
 		}	\
 
-		DECREASE_RESOUCE(r1, 1000000);
-		DECREASE_RESOUCE(r2, 1000000);
-		DECREASE_RESOUCE(r3, 1000000);
-		DECREASE_RESOUCE(r4, 1000000);
-		DECREASE_RESOUCE(r5, 1000000);
+		DECREASE_RESOUCE(r1, 250000);
+		DECREASE_RESOUCE(r2, 250000);
+		DECREASE_RESOUCE(r3, 250000);
+		DECREASE_RESOUCE(r4, 250000);
 	}
 	user.alliance_id = alliance.alliance_id;
+	user.r5 = 0;
+	user.r5_max = 0;
+	user.cdn = Time::GetGlobalTime();
 	ret = logicUser.SetUserLimit(user);
 	if(ret != 0)
 	{
@@ -355,6 +354,9 @@ int CLogicAlliance::GetAlliance(unsigned allianceId, DataAlliance &alliance)
 
 int CLogicAlliance::GetAllianceLimit(unsigned allianceId, DataAlliance &alliance)
 {
+	if(!IsAllianceId(allianceId))
+		return R_ERR_PARAM;
+
 	int ret;
 	CDataAlliance dbAlliance;
 	ret = dbAlliance.GetAllianceLimit(allianceId, alliance);
@@ -409,7 +411,7 @@ int CLogicAlliance::RemoveAlliance(unsigned allianceId)
 	string sMessage = Json::ToString(message);
 	for(vector<DataAllianceMember>::iterator itr = members.begin(); itr != members.end(); itr++)
 	{
-		ret = dbUser.SetAllianceId(itr->uid, ALLIANCE_ID_NULL);
+		ret = dbUser.SetAllianceId(itr->uid, ALLIANCE_ID_NULL, 0, 0, Time::GetGlobalTime());
 		if(ret != 0)
 		{
 			error_log("[SetAllianceId fail][ret=%d,uid=%u,allianceId=%u]", ret, itr->uid, ALLIANCE_ID_NULL);
@@ -553,7 +555,7 @@ int CLogicAlliance::AddMember(unsigned allianceId, unsigned uid)
 	}
 
 	//设置用户联盟
-	ret = dbUser.SetAllianceId(uid, allianceId);
+	ret = dbUser.SetAllianceId(uid, allianceId, 0, 0, Time::GetGlobalTime());
 	if(ret != 0)
 	{
 		error_log("[SetAllianceId fail][ret=%d,uid=%u,allianceId=%u]", ret, uid, allianceId);
@@ -656,7 +658,7 @@ int CLogicAlliance::RemoveMember(unsigned allianceId, unsigned uid)
 
 	//设置用户联盟
 	CDataUser dbUser;
-	ret = dbUser.SetAllianceId(uid, ALLIANCE_ID_NULL);
+	ret = dbUser.SetAllianceId(uid, ALLIANCE_ID_NULL, 0, 0, Time::GetGlobalTime());
 	if(ret != 0)
 	{
 		error_log("[SetAllianceId fail][ret=%d,uid=%u,allianceId=%u]", ret, uid, ALLIANCE_ID_NULL);
@@ -839,6 +841,20 @@ int CLogicAlliance::AddPoint(unsigned allianceId, unsigned uid, int point)
 			error_log("[AddCurrPoint fail][ret=%d,target=member,allianceId=%u,uid=%u,point=%d]", ret, allianceId, uid, point);
 			return ret;
 		}
+	}
+
+	//联盟贡献合区活动
+	if(point > 0 && Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_HEQU_ACTIVITY_BEGIN_TS)
+		&& Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_HEQU_ACTIVITY_END_TS))
+	{
+		DataAlliance alliance_data;
+		AlliancePoint points;
+		points.alliance_id = allianceId;
+		points.point = point;
+		dbAlliance.GetAllianceLimit(allianceId,alliance_data);
+		memcpy(points.name,alliance_data.name.c_str(),sizeof(points.name) - 1);
+		CLogicHequActivity alliancepoint;
+		alliancepoint.UpdateHequAlliancePointRank(uid,points);
 	}
 	return 0;
 }
@@ -1049,11 +1065,11 @@ bool CLogicAlliance::IsInSameAlliance(unsigned uid, unsigned targetUid)
 	return allianceId == targetAllianceId;
 }
 
-int CLogicAlliance::Donate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int r5, int cash, bool isCoins)
+int CLogicAlliance::Donate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int cash, bool isCoins)
 {
-	if(r1 < 0 || r2 < 0 || r3 < 0 || r4 < 0 || r5 < 0 || cash < 0)
+	if(r1 < 0 || r2 < 0 || r3 < 0 || r4 < 0 || cash < 0)
 	{
-		error_log("[donate_param_error][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,r5=%d,cash=%d]", uid, r1, r2, r3, r4, r5, cash);
+		error_log("[donate_param_error][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,cash=%d]", uid, r1, r2, r3, r4, cash);
 		PARAM_ERROR_RETURN();
 	}
 	int ret;
@@ -1087,11 +1103,10 @@ int CLogicAlliance::Donate(unsigned uid, unsigned allianceId, int r1, int r2, in
 	}
 
 	if( (unsigned)r1 > user.r1 || (unsigned)r2 > user.r2 ||
-		(unsigned)r3 > user.r3 || (unsigned)r4 > user.r4 ||
-		(unsigned)r5 > user.r5)
+		(unsigned)r3 > user.r3 || (unsigned)r4 > user.r4 )
 	{
-		error_log("[donate_not_enough_resource][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,r5=%d,rr1=%u,rr2=%u,rr3=%u,rr4=%u,rr5=%d]",
-				uid, r1, r2, r3, r4, r5, user.r1, user.r2, user.r3, user.r4, user.r5);
+		error_log("[donate_not_enough_resource][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,rr1=%u,rr2=%u,rr3=%u,rr4=%u]",
+				uid, r1, r2, r3, r4, user.r1, user.r2, user.r3, user.r4);
 		ERROR_RETURN_MSG(R_ERR_LOGIC, "not_enough_resource");
 	}
 	DataPay pay;
@@ -1121,37 +1136,36 @@ int CLogicAlliance::Donate(unsigned uid, unsigned allianceId, int r1, int r2, in
 		}
 	}
 
-	ret = AddMemberDonate(uid, allianceId, r1, r2, r3, r4, r5, cash);
+	ret = AddMemberDonate(uid, allianceId, r1, r2, r3, r4, cash);
 	if (0 != ret)
 	{
 		return ret;
 	}
 	int dPoint = 0;
-	ret = DonatePoint(user.level, r1, r2, r3, r4, r5, dPoint);
-	int point = dPoint + cash;
+	ret = DonatePoint(user.level, r1, r2, r3, r4, dPoint);
+	int point = dPoint + cash*10;
 	ret = AddPoint(allianceId, uid, point);
 	if (0 != ret )
 	{
 		return ret;
 	}
 
-	ret = ChangeResource(allianceId, r1, r2, r3, r4, r5, cash, "ALRECV");
+	ret = ChangeResource(allianceId, r1, r2, r3, r4, 0, cash, "ALRECV");
 	if(ret != 0)
 	{
 		return ret;
 	}
 
-	if(r1 > 0 || r2 > 0 || r3 > 0 || r4 > 0 || r5 > 0)
+	if(r1 > 0 || r2 > 0 || r3 > 0 || r4 > 0)
 	{
 		int res1 = r1 * 10000;
 		int res2 = r2 * 10000;
 		int res3 = r3 * 10000;
 		int res4 = r4 * 10000;
-		int res5 = r5 * 10000;
-		ret = logicUser.ChangeResource(uid, -res1, -res2, -res3, -res4, -res5);
+		ret = logicUser.ChangeResource(uid, -res1, -res2, -res3, -res4);
 		if(ret != 0)
 		{
-			error_log("[change_user_resource_fail][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,r5=%d]", uid, r1, r2, r3, r4, r5);
+			error_log("[change_user_resource_fail][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d]", uid, r1, r2, r3, r4);
 		}
 	}
 	if(cash > 0)
@@ -1193,9 +1207,9 @@ int CLogicAlliance::ChangeResource(unsigned allianceId, int64_t r1, int64_t r2, 
 		Json::Value &resource = data["resource"];
 
 #define CHANGE_ALLIANCE_RESOURCE(res)	\
+		uint64_t old##res = 0;	\
 		if(res != 0)	\
 		{	\
-			uint64_t old##res = 0;	\
 			Json::GetUInt64(resource, #res, old##res);	\
 			if(res < 0 && (unsigned)-res > old##res)	\
 			{	\
@@ -1211,6 +1225,16 @@ int CLogicAlliance::ChangeResource(unsigned allianceId, int64_t r1, int64_t r2, 
 		CHANGE_ALLIANCE_RESOURCE(r3);
 		CHANGE_ALLIANCE_RESOURCE(r4);
 		CHANGE_ALLIANCE_RESOURCE(r5);
+
+		if(r5 != 0)//ralf 20140422 add hufu log
+		{
+			RESOURCE_LOG("[hufu][uid=%u,chg=%d,r5=%u]",allianceId,r5,oldr5);
+		}
+		if(r1 != 0 || r2 != 0 || r3 != 0 || r4 != 0)
+		{
+			RESOURCE_LOG("[alnc][uid=%u,r1chg=%d,r1=%u,r2chg=%d,r2=%u,r3chg=%d,r3=%u,r4chg=%d,r4=%u]"
+					,allianceId,r1,oldr2,r2,oldr2,r3,oldr4,r4,oldr4);
+		}
 
 		alliance.extra_data = Json::ToString(data);
 	}
@@ -1263,7 +1287,7 @@ int CLogicAlliance::ChangeResource(unsigned allianceId, int64_t r1, int64_t r2, 
 	return 0;
 }
 
-int CLogicAlliance::SetAllianceData(unsigned uid, unsigned allianceId, const Json::Value &data)
+int CLogicAlliance::SetAllianceData(unsigned uid, unsigned allianceId, Json::Value &data)
 {
 	int ret;
 	DataAlliance alliance;
@@ -1279,6 +1303,23 @@ int CLogicAlliance::SetAllianceData(unsigned uid, unsigned allianceId, const Jso
 //	}
 	Json::Value extraData;
 	Json::FromString(extraData, alliance.extra_data);
+
+	if((extraData["cdata"].isMember("techLv") && !data["alliancedata"].isMember("techLv"))
+	|| (data["alliancedata"].isMember("techLv") && data["alliancedata"]["techLv"].size() != ALLIANCE_TECH_NUM))
+	{
+		error_log("[tech_wrong][aid=%u,uid=%u]", allianceId, uid);
+		ERROR_RETURN_MSG(R_ERR_PARAM, "tech_wrong");
+	}
+	if(extraData["cdata"].isMember("techLv") && data["alliancedata"].isMember("techLv")
+	&& extraData["cdata"]["techLv"].size() == data["alliancedata"]["techLv"].size())
+	{
+		for(unsigned i=0;i<extraData["cdata"]["techLv"].size();++i)
+		{
+			if(extraData["cdata"]["techLv"][i].asInt() > data["alliancedata"]["techLv"][i].asInt())
+				data["alliancedata"]["techLv"][i] = extraData["cdata"]["techLv"][i];
+		}
+	}
+
 	extraData["cdata"] = data["alliancedata"];
 	alliance.extra_data = Json::ToString(extraData);
 	ret = SetAlliance(alliance);
@@ -1345,9 +1386,15 @@ int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int
 		return ret;
 	}
 
-	if ( member.curr_point - point <= 0 )
+	if ( member.curr_point < point  )
 	{
 		error_log("[No enough point!][uid=%u,aid=%u]",uid,allianceId);
+		PARAM_ERROR_RETURN();
+	}
+
+	if(point < 100)
+	{
+		error_log("[point less than 100][uid=%u,aid=%u]",uid,allianceId);
 		PARAM_ERROR_RETURN();
 	}
 
@@ -1355,11 +1402,44 @@ int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int
 
 	CLogicUser logicUser;
 	DataUser user;
+	AUTO_LOCK_USER(uid)
 	ret = logicUser.GetUser(uid,user);
 	if (0 != ret)
 	{
 		error_log("[Get user failed!][uid=%u,ret=%d]",uid, ret);
 		return R_ERR_DATA;
+	}
+
+	Json::Value oldtech;
+	Json::Reader reader;
+	if(!user.alliance_tech.empty()
+	&& reader.parse(user.alliance_tech,oldtech)
+	&& oldtech.isMember("techLv")
+	&& oldtech["techLv"].isArray()
+	&& data.isMember("techLv")
+	&& data["techLv"].isArray()
+	&& oldtech["techLv"].size() == data["techLv"].size())
+	{
+		bool one = false;
+		for(unsigned i=0;i<oldtech["techLv"].size();++i)
+		{
+			unsigned o = oldtech["techLv"][i].asUInt();
+			unsigned n = data["techLv"][i].asUInt();
+			if(n > o)
+			{
+				if(n - o != 1)
+				{
+					error_log("[alliance tech too high][uid=%u,aid=%u]",uid,allianceId);
+					PARAM_ERROR_RETURN();
+				}
+				if(one)
+				{
+					error_log("[alliance tech too much][uid=%u,aid=%u]",uid,allianceId);
+					PARAM_ERROR_RETURN();
+				}
+				one = true;
+			}
+		}
 	}
 
 	user.alliance_tech = Json::ToString(data);
@@ -1706,8 +1786,8 @@ int CLogicAlliance::GetAllianceJson(unsigned uid, unsigned allianceId, Json::Val
 	value["flag"] = alliance.flag;
 	value["leader"] = alliance.leader_uid;
 	value["level"] = alliance.level;
-	value["point"] = Convert::UInt64ToString(alliance.point);
-	value["curr_point"] = Convert::UInt64ToString(alliance.curr_point);
+	value["point"] = Convert::UInt64ToString(alliance.point>0x7fffffff?0x7fffffff:alliance.point);
+	value["curr_point"] = Convert::UInt64ToString(alliance.curr_point>0x7fffffff?0x7fffffff:alliance.curr_point);
 	value["rank"] = alliance.rank;
 	value["mc"] = alliance.member_count;
 	value["enemyid"] = alliance.enemy_alliance_id;
@@ -1743,20 +1823,21 @@ int CLogicAlliance::GetAllianceJson(unsigned uid, unsigned allianceId, Json::Val
 	map<unsigned, int> interacts;
 	CLogicUserInteract logicInteract;
 	ret = logicInteract.GetFriendInteracts(uid, interacts);
+	CLogicMap logicMap;
 
-	Json::Value &membersData = value["members"];
-	membersData = Json::Value(Json::arrayValue);
+	value["members"].resize(0);
 	vector<DataAllianceMember> members;
 	ret = GetMembers(allianceId, members);
+	int memberN = members.size();
 	for(vector<DataAllianceMember>::iterator itr = members.begin(); itr != members.end(); itr++)
 	{
 		DataUser user;
 		ret = logicUser.GetUser(itr->uid, user);
-		if(0 != ret)
+		if(ret != R_ERR_NO_DATA && 0 != ret)
 		{
 			continue;
 		}
-		if (user.alliance_id != itr->alliance_id)
+		if (ret == R_ERR_NO_DATA || user.alliance_id != itr->alliance_id)
 		{
 			CDataAllianceMember dbMember;
 			ret = dbMember.RemoveMember(itr->alliance_id, itr->uid);
@@ -1765,23 +1846,42 @@ int CLogicAlliance::GetAllianceJson(unsigned uid, unsigned allianceId, Json::Val
 				error_log("[RemoveMember fail][ret=%d,uid=%u,allianceId=%u]", ret, itr->uid, itr->alliance_id);
 				DB_ERROR_RETURN_MSG("remove_alliance_member_fail");
 			}
-			itr = members.erase(itr);
+			--memberN;
 			continue;
 		}
 
-		Json::Value &member = membersData[membersData.size()];
+		logicUser.CheckR5(user);
+
+		Json::Value member;
 		member["uid"] = itr->uid;
 		member["type"] = itr->type;
-		member["point"] = Convert::UInt64ToString(itr->point);
-		member["curr_point"] = Convert::UInt64ToString(itr->curr_point);
+		member["point"] = Convert::UInt64ToString(itr->point>0x7fffffff?0x7fffffff:itr->point);
+		member["curr_point"] = Convert::UInt64ToString(itr->curr_point>0x7fffffff?0x7fffffff:itr->curr_point);
 		member["jt"] = itr->join_time;
 
 		Json::FromString(member["data"], itr->extra_data);
 
 		Json::FromString(member["donate"], itr->donate_data);
-		Json::Value &tempDonateData = member["donate"];
-		tempDonateData["rank"] = itr->donate_rank;
-		tempDonateData["drank"] = itr->donate_drank;
+
+		unsigned donate_time = 0;
+		Json::GetUInt(member["donate"],"ts", donate_time);
+		if (!Time::IsToday(donate_time)) //不是当天的
+		{
+			//debug_log("before reset donate uid=%u, drank=%d, data=%s",itr->uid, itr->donate_drank, itr->donate_data.c_str());
+			member["donate"]["ts"] = Time::GetGlobalTime();
+			member["donate"]["dr1"] = 0;
+			member["donate"]["dr2"] = 0;
+			member["donate"]["dr3"] = 0;
+			member["donate"]["dr4"] = 0;
+			member["donate"]["dcash"] = 0;
+			itr->donate_data = Json::ToString(member["donate"]);
+			itr->donate_drank = 0;
+			int ret = SetMember(*itr);
+			//debug_log("after reset donate ret=%d, uid=%u, drank=%d, data=%s", ret, itr->uid, itr->donate_drank, itr->donate_data.c_str());
+		}
+
+		member["donate"]["rank"] = itr->donate_rank;
+		member["donate"]["drank"] = itr->donate_drank;
 
 		CLogicUserBasic logicUserBasic;
 		DataUserBasic userBasic;
@@ -1792,7 +1892,7 @@ int CLogicAlliance::GetAllianceJson(unsigned uid, unsigned allianceId, Json::Val
 		}
 
 		member["level"] = user.level;
-		member["online"] = (Time::GetGlobalTime() - ONLINE_TIMEOUT < user.last_active_time) ? 1 : 0;
+		member["online"] = IsOnlineUser(user.last_active_time) ? 1 : 0;
 		member["lat"] = user.last_active_time;
 		member["viplevel"] = user.viplevel;
 		Json::Value userState;
@@ -1806,7 +1906,7 @@ int CLogicAlliance::GetAllianceJson(unsigned uid, unsigned allianceId, Json::Val
 		{
 			member["ic"] = itrInteract->second;
 		}
-		CLogicMap logicMap;
+
 		AttackPermitType permit = APT_ALLOW;
 		if (userBy.alliance_id == allianceId)
 		{
@@ -1817,14 +1917,19 @@ int CLogicAlliance::GetAllianceJson(unsigned uid, unsigned allianceId, Json::Val
 			ret = logicMap.GetAttackPermit(user, userBy, permit);
 		}
 		member["attackpermitted"] = permit;
+
+		member["r5"] = user.r5;
+		member["r5_max"] = user.r5_max;
+
+		value["members"].append(member);
 	}
 
 	//sync member count
-	if((int)members.size() != alliance.member_count)
+	if(memberN != alliance.member_count)
 	{
-		info_log("[member_count_mismatch][allianceId=%u,mc=%d,rmc=%d]",
-				allianceId, alliance.member_count, (int)members.size());
-		alliance.member_count = members.size();
+		error_log("[member_count_mismatch][allianceId=%u,mc=%d,rmc=%d]",
+				allianceId, alliance.member_count, memberN);
+		alliance.member_count = memberN;
 		ret = SetAllianceLimit(alliance);
 	}
 
@@ -1858,7 +1963,7 @@ int CLogicAlliance::SearchAllianceJson(const string &name, Json::Value &value)
 	value["flag"] = alliance.flag;
 	value["leader_uid"] = alliance.leader_uid;
 	value["level"] = alliance.level;
-	value["point"] = Convert::UInt64ToString(alliance.point);
+	value["point"] = Convert::UInt64ToString(alliance.point>0x7fffffff?0x7fffffff:alliance.point);
 	value["rank"] = alliance.rank;
 	value["mc"] = alliance.member_count;
 	value["enemyid"] = alliance.enemy_alliance_id;
@@ -1917,7 +2022,7 @@ int CLogicAlliance::GetRandomAlliancesJson(Json::Value &value)
 		alliance["flag"] = itr->flag;
 		alliance["leader"] = itr->leader_uid;
 		alliance["level"] = itr->level;
-		alliance["point"] = Convert::UInt64ToString(itr->point);
+		alliance["point"] = Convert::UInt64ToString(itr->point>0x7fffffff?0x7fffffff:itr->point);
 		alliance["rank"] = itr->rank;
 		alliance["mc"] = itr->member_count;
 		alliance["enemyid"] = itr->enemy_alliance_id;
@@ -2017,6 +2122,13 @@ int CLogicAlliance::GetAllianceEnemys(unsigned uidBy, unsigned allianceId, unsig
 			enemy["level"] = user.level;
 			enemy["online"] = (Time::GetGlobalTime() - ONLINE_TIMEOUT < user.last_active_time) ? 1 : 0;
 			enemy["lat"] = user.last_active_time;
+			enemy["resources"][(unsigned) 0]["c"] = user.r1;
+			enemy["resources"][(unsigned) 1]["c"] = user.r2;
+			enemy["resources"][(unsigned) 2]["c"] = user.r3;
+			enemy["resources"][(unsigned) 3]["c"] = user.r4;
+			enemy["resources"][(unsigned) 4]["c"] = 0;
+			enemy["r5"]	= user.r5;
+			enemy["r5_max"] = user.r5_max;
 		}
 
 		if(IsAllianceId(user.alliance_id))
@@ -2041,14 +2153,16 @@ int CLogicAlliance::GetAllianceEnemys(unsigned uidBy, unsigned allianceId, unsig
 int CLogicAlliance::GetMemberMaxCount(int level)
 {
 	const int memberRange[10] = {20,25,30,35,40,45,50,55,60,65};
-	return memberRange[level-1];
+	if(level <= 10 && level)
+		return memberRange[level-1];
+	return 0;
 }
 
-int CLogicAlliance::AddMemberDonate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int r5, int cash)
+int CLogicAlliance::AddMemberDonate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int cash)
 {
-	if(r1 < 0 || r2 < 0 || r3 < 0 || r4 < 0 || r5 < 0 || cash < 0)
+	if(r1 < 0 || r2 < 0 || r3 < 0 || r4 < 0 || cash < 0)
 	{
-		error_log("[donate_param_error][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,r5=%d,cash=%d]", uid, r1, r2, r3, r4, r5, cash);
+		error_log("[donate_param_error][uid=%u,r1=%d,r2=%d,r3=%d,r4=%d,r5=%d,cash=%d]", uid, r1, r2, r3, r4, cash);
 		PARAM_ERROR_RETURN();
 	}
 
@@ -2085,7 +2199,7 @@ int CLogicAlliance::AddMemberDonate(unsigned uid, unsigned allianceId, int r1, i
 	unsigned donate_time = 0;
 	Json::GetUInt(donate_data,"ts", donate_time);
 
-	if ( (Time::GetGlobalTime() - donate_time) > 24*60*60) //不是当天的
+	if (!Time::IsToday(donate_time)) //不是当天的
 	{
 		donate_data["ts"] = Time::GetGlobalTime();
 		donate_data["dr1"] = r1;
@@ -2200,10 +2314,12 @@ int CLogicAlliance::RankMemberDonate(unsigned allianceId)
 		}
 		++rank;
 	}
+	/*
 	for (donateItr = membersForDonateTotal.begin(); donateItr!=membersForDonateTotal.end(); ++donateItr)
 	{
 		info_log("uid=%u,donate_total=%d.", donateItr->uid, donateItr->donate_total);
 	}
+	*/
 	sort(membersForTodayDonate.begin(), membersForTodayDonate.end(), CompareTodayDonate);
 	int drank = 1;
 	for (donateItr = membersForTodayDonate.begin(); donateItr!=membersForTodayDonate.end(); ++donateItr)
@@ -2230,7 +2346,23 @@ int CLogicAlliance::RankMemberDonate(unsigned allianceId)
 	}
 	return 0;
 }
-
+int CLogicAlliance::AllianceUpdate(unsigned allianceId, Json::Value updates)
+{
+	if (!IsAllianceId(allianceId))
+	{
+		error_log("%u is not alliance id!", allianceId);
+		PARAM_ERROR_RETURN();
+	}
+	int ret;
+	CLogicUpdates logicUpdates;
+	vector<DataAllianceMember> members;
+	ret = GetMembers(allianceId, members);
+	if(ret != 0)
+		return ret;
+	for(vector<DataAllianceMember>::const_iterator itr = members.begin(); itr != members.end(); itr++)
+		logicUpdates.AddUpdates(itr->uid, updates);
+	return 0;
+}
 int CLogicAlliance::AllianceEmail(unsigned allianceId, unsigned uid, DataEmail &data)
 {
 	if (!IsAllianceId(allianceId))
@@ -2246,11 +2378,13 @@ int CLogicAlliance::AllianceEmail(unsigned allianceId, unsigned uid, DataEmail &
 		return ret;
 	}
 
+	/*
 	if (uid != alliance.leader_uid)
 	{
 		error_log("[is_not_leader][aid=%u,uid=%u]", allianceId, uid);
 		ERROR_RETURN_MSG(R_ERR_LOGIC, "is_not_leader");
 	}
+	*/
 
 	CDataAllianceMember dbMembers;
 	vector<DataAllianceMember> members;
@@ -2262,23 +2396,34 @@ int CLogicAlliance::AllianceEmail(unsigned allianceId, unsigned uid, DataEmail &
 	}
 
 	CDataEmail cDataEmail;
+	CLogicUserBasic logicUserBasic;
+	DataUserBasic userBasic;
+	CLogicUser logicUser;
+	DataUser user;
 	CDataUserBasic dbUserBasic;
-	string name;
 
-	data.opposite_uid = alliance.leader_uid;
+	data.opposite_uid = uid;
 	data.post_flag = 1;
-	ret = dbUserBasic.GetUserName(alliance.leader_uid, OpenPlatform::GetType(), name);
-	if (0 == ret)
-	{
-		data.from_name = name;
-	}
+	logicUserBasic.GetUserBasicLimitWithoutPlatform(uid,userBasic);
+	data.from_name = userBasic.name;
+	logicUser.GetUserLimit(uid,user);
+	Json::Value temp;
+	Json::FastWriter writer;
+	temp["text"] = data.text;
+	temp["vt"] = userBasic.vip_type;
+	temp["vl"] = userBasic.vip_level;
+	temp["vip"] = user.viplevel;
+	data.text = writer.write(temp);
 
 	for (vector<DataAllianceMember>::iterator itr=members.begin(); itr!=members.end(); ++itr)
 	{
+		/*
 		if (alliance.leader_uid == itr->uid)
 		{
 			continue;
 		}
+		*/
+		string name;
 		ret = dbUserBasic.GetUserName(itr->uid, OpenPlatform::GetType(), name);
 		if (0 != ret)
 		{
@@ -2308,23 +2453,118 @@ int CLogicAlliance::AllianceEmail(unsigned allianceId, unsigned uid, DataEmail &
 	return 0;
 }
 
-int CLogicAlliance::DonatePoint(int level,int r1, int r2, int r3, int r4, int r5, int &points)
+int CLogicAlliance::DonatePoint(int level,int r1, int r2, int r3, int r4, int &points)
 {
 	points = 0;
-	double resource = (double)(r1 + r2 + r3 + r4 + r5)*10000;
+	double resource = (double)(r1 + r2 + r3 + r4)*10000;
 	if(resource <= 0)
 	{
 		return 0;
 	}
 
 	double nPoint;
-	double tempData = pow(level+1, 3.767) + 5000;
+	double tempData = pow(level+10, 3.7) + 1000;
 	nPoint = (double)resource / tempData;
-	points = (int)(nPoint * 10);
+	points = (int)(nPoint * 50);
 
 	if(points <= 0)
 	{
 		points = 0;
 	}
+	return 0;
+}
+
+int CLogicAlliance::SetAllianceTech(unsigned allianceId, unsigned index, unsigned lvl)
+{
+	if(index >= ALLIANCE_TECH_NUM)
+		return R_ERR_PARAM;
+
+	DataAlliance alliance;
+	int ret = GetAlliance(allianceId, alliance);
+	if(ret != 0)
+	{
+		return ret;
+	}
+
+	Json::Value extraData;
+	Json::FromString(extraData, alliance.extra_data);
+
+	if(!extraData["cdata"].isMember("techLv"))
+	{
+		extraData["cdata"]["techLv"].resize(ALLIANCE_TECH_NUM);
+		for(unsigned i=0;i<ALLIANCE_TECH_NUM;++i)
+			extraData["cdata"]["techLv"][i] = 0;
+	}
+	extraData["cdata"]["techLv"][index] = lvl;
+
+	alliance.extra_data = Json::ToString(extraData);
+	ret = SetAlliance(alliance);
+	if(ret != 0)
+	{
+		return ret;
+	}
+
+	return 0;
+}
+
+int CLogicAlliance::SetR5(unsigned allianceId)
+{
+	int ret;
+	vector<unsigned> members;
+	CDataAllianceMember dbMember;
+	ret = dbMember.GetMembers(allianceId, members);
+	if(ret != 0)
+	{
+		error_log("[GetMembers fail][ret=%d,allianceId=%u]", ret, allianceId);
+		DB_ERROR_RETURN_MSG("get_alliance_member_fail");
+	}
+	CLogicUser logicUser;
+	for(int i=0;i<members.size();++i)
+		logicUser.SetR5(members[i], Math::GetRandomInt(3)+1);
+
+	return 0;
+}
+
+int CLogicAlliance::GetAllianceJsonLimit(unsigned allianceId, Json::Value &value)
+{
+	int ret;
+	DataAlliance alliance;
+	ret = GetAllianceLimit(allianceId, alliance);
+	if(ret != 0)
+	{
+		return ret;
+	}
+	value["aid"] = alliance.alliance_id;
+	value["kingdom"] = alliance.kingdom;
+	value["name"] = alliance.name;
+	value["flag"] = alliance.flag;
+	value["leader"] = alliance.leader_uid;
+	value["level"] = alliance.level;
+	value["point"] = Convert::UInt64ToString(alliance.point>0x7fffffff?0x7fffffff:alliance.point);
+	value["curr_point"] = Convert::UInt64ToString(alliance.curr_point>0x7fffffff?0x7fffffff:alliance.curr_point);
+	value["rank"] = alliance.rank;
+	value["mc"] = alliance.member_count;
+
+	value["members"].resize(0);
+	vector<DataAllianceMember> members;
+	ret = GetMembers(allianceId, members);
+	int memberN = members.size();
+	CLogicUserBasic logicUserBasic;
+	for(vector<DataAllianceMember>::iterator itr = members.begin(); itr != members.end(); itr++)
+	{
+		Json::Value member;
+		member["uid"] = itr->uid;
+		member["type"] = itr->type;
+
+		DataUserBasic userBasic;
+		ret = logicUserBasic.GetUserBasicLimitSmart(itr->uid, OpenPlatform::GetType(), userBasic);
+		if(ret == 0)
+		{
+			member["name"] = userBasic.name;
+			member["pic"] = userBasic.figure_url;
+		}
+		value["members"].append(member);
+	}
+
 	return 0;
 }

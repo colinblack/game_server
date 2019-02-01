@@ -1,0 +1,54 @@
+package ConfigScrollActivity;
+
+import "RewardConfig.proto";
+
+//刷新机制
+message RefreshPolicy
+{
+	required uint32 type			= 1;  //材料类型
+	repeated uint32 land_num 		= 2; //不同等级的地块刷新数量
+	repeated uint32 material_num	= 3;  //不同等级的单个地块刷新的材料数量	
+}
+
+//兑换机制
+message ExchangePolicy
+{
+	required uint32 count						= 1;
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+	required uint32 active_value				= 3; //活跃值
+	optional uint32 	type					= 4; //材料类型
+}
+
+message Affair
+{
+	required uint32 id				= 1;
+	required ExchangePolicy props 	= 2;  //道具兑换
+	required ExchangePolicy cash 	= 3;  //钻石兑换
+}
+
+message DayAffairs
+{
+	required uint32 day		= 1; //活动持续天数
+	repeated Affair affairs	= 2;  //事件
+}
+
+message ActiveValueReward
+{
+	required uint32 value						= 1;  //活力值的起始值
+	required RewardConfig.RewardItemCfg reward	= 2;  //活力值阶段奖励
+}
+
+message ExtraReward
+{
+	required RewardConfig.RewardItemCfg reward = 1;  //额外奖励
+}
+
+message ScrollActivity
+{
+	repeated RefreshPolicy refresh					= 1;  //材料刷新
+	repeated DayAffairs activity_affairs			= 2; //活动事件
+	repeated ActiveValueReward active_value_reward 	= 3;  //活力值阶段奖励
+	repeated ExtraReward 	extra_reward			= 4;  //额外奖励
+}
+
+

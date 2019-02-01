@@ -1,0 +1,21 @@
+package CrowdFunding;
+
+message CrowdFundingUser {
+		required uint32	uid 	= 1;
+		required uint32 had 	= 2;
+}
+
+message CrowdFundingItem {
+		required uint32	id 				= 1;
+		required uint32 count			= 2;
+		required uint32 need 			= 3;
+		required uint32 had 			= 4;
+		required uint32 lastuid 		= 5;
+		required string lastname 		= 6;
+		required uint32 lasthad 		= 7;
+		repeated CrowdFundingUser user  = 8;
+}
+
+message CrowdFunding {
+	repeated CrowdFundingItem item  = 1;
+}

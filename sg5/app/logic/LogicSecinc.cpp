@@ -1,5 +1,5 @@
 #include "LogicSecinc.h"
-
+/* 2014901 Ralf change to save activity
 int CLogicSecinc::AddSecinc(unsigned uid, unsigned eqid, unsigned amount)
 {
 	if (amount == 0) return 0;
@@ -33,26 +33,6 @@ int CLogicSecinc::AddSecinc(unsigned uid, unsigned eqid, unsigned amount)
 	return 0;
 }
 
-int CLogicSecinc::GetSecinc(unsigned uid, Json::Value &data)
-{
-	CDataSecinc secincDb;
-	vector<DataSecinc> datas;
-	int ret = secincDb.GetSecinc(uid, datas);
-	if (ret != 0 && ret != R_ERR_NO_DATA)
-	{
-		error_log("[GetSecinc fail][ret=%d,uid=%u]", ret, uid);
-		DB_ERROR_RETURN_MSG("get_secinc_fail");
-	}
-	unsigned size = datas.size();
-	data.resize(size);
-	Json::Reader reader;
-	for (unsigned i = 0; i < size; i++)
-	{
-		reader.parse(datas[i].data, data[i]);
-	}
-	return 0;
-}
-
 int CLogicSecinc::ProcessSecinc(unsigned uid, const Json::Value &data)
 {
 	if (!data.isArray())
@@ -75,6 +55,151 @@ int CLogicSecinc::ProcessSecinc(unsigned uid, const Json::Value &data)
 		{
 			error_log("[RemoveSecinc fail][uid=%u,sid=%u]",uid,sid);
 			DB_ERROR_RETURN_MSG("remove_secinc_fail");
+		}
+	}
+	return 0;
+}
+*/
+
+int CLogicSecinc::GetSecinc(unsigned uid, Json::Value &data)
+{
+	CDataSecinc secincDb;
+	vector<DataSecinc> datas;
+	int ret = secincDb.GetSecinc(uid, datas);
+	if (ret != 0 && ret != R_ERR_NO_DATA)
+	{
+		error_log("[GetSecinc fail][ret=%d,uid=%u]", ret, uid);
+		DB_ERROR_RETURN_MSG("get_secinc_fail");
+	}
+	data.resize(0);
+	Json::Reader reader;
+	int err = 0;
+	for (unsigned i = 0; i < datas.size(); i++)
+	{
+		Json::Value temp;
+		if(!datas[i].data.empty() && reader.parse(datas[i].data, temp))
+			data.append(temp);
+		else
+		{
+			error_log("[parse secinc fail][uid=%u,newAct=%s]",uid,datas[i].data.c_str());
+			++err;
+		}
+	}
+	if(err)
+	{
+		DATA_ERROR_RETURN_MSG("parse_secinc_fail");
+	}
+	return 0;
+}
+
+int CLogicSecinc::SetSecinc(unsigned uid, Json::Value &data)
+{
+	if(!data.isArray())
+	{
+		error_log("[ReplaceSecinc data error][uid=%u]", uid);
+		DB_ERROR_RETURN_MSG("replace_secinc_fail");
+	}
+	CDataSecinc secincDb;
+	Json::FastWriter writer;
+	for (unsigned i = 0; i < data.size(); ++i)
+	{
+		if(!data[i].isMember("id"))
+		{
+			error_log("[Secinc no id][uid=%u]", uid);
+			DB_ERROR_RETURN_MSG("secinc_no_id");
+		}
+
+		std::string szData = writer.write(data[i]);
+		if (szData.size() > 128)
+		{
+			error_log("uid: %u, id: %u, data_size: %d", uid, data[i]["id"].asUInt(), szData.size());
+			DATA_ERROR_RETURN_MSG("save_secinc_data_too_long");
+		}
+
+		int ret = secincDb.ReplaceSecinc(uid, data[i]["id"].asUInt(), szData);
+		if (ret)
+		{
+			error_log("[ReplaceSecinc fail][ret=%d,uid=%u]", ret, uid);
+			DB_ERROR_RETURN_MSG("replace_secinc_fail");
+		}
+	}
+	return 0;
+}
+
+int CLogicSecinc::GetSecinc(unsigned uid, unsigned sid, Json::Value &data)
+{
+	CDataSecinc secincDb;
+	string str;
+	int ret = secincDb.GetSecinc(uid, sid, str);
+	if (ret != 0 && ret != R_ERR_NO_DATA)
+	{
+		error_log("[GetSecinc fail][ret=%d,uid=%u]", ret, uid);
+		DB_ERROR_RETURN_MSG("get_secinc_fail");
+	}
+	if(ret)
+		return ret;
+	Json::Reader reader;
+	if(!str.empty() && !reader.parse(str, data))
+	{
+		error_log("[parse secinc fail][uid=%u]",uid);
+		DB_ERROR_RETURN_MSG("parse_secinc_fail");
+	}
+	return 0;
+}
+
+int CLogicSecinc::SetOneSecinc(unsigned uid, Json::Value &data)
+{
+	CDataSecinc secincDb;
+	Json::FastWriter writer;
+	if(!data.isMember("id"))
+	{
+		error_log("[Secinc no id][uid=%u]", uid);
+		DB_ERROR_RETURN_MSG("secinc_no_id");
+	}
+
+	std::string szData = writer.write(data);
+	if (szData.size() > 128)
+	{
+		error_log("uid: %u, id: %u, data_size: %d, data: %s", uid, data["id"].asUInt(), szData.size(), szData.c_str());
+		DATA_ERROR_RETURN_MSG("save_secinc_data_too_long");
+	}
+
+	int ret = secincDb.ReplaceSecinc(uid, data["id"].asUInt(), szData);
+	if (ret)
+	{
+		error_log("[ReplaceSecinc fail][ret=%d,uid=%u]", ret, uid);
+		DB_ERROR_RETURN_MSG("replace_secinc_fail");
+	}
+	return 0;
+}
+
+int CLogicSecinc::ImportSecinc(unsigned uid, Json::Value &data)
+{
+	int ret;
+	CDataSecinc secincDb;
+	Json::FastWriter writer;
+
+	ret = secincDb.RemoveSecinc(uid);
+	if(ret)
+	{
+		error_log("[RemoveSecinc error][ret=%d,uid=%u]", ret, uid);
+		DB_ERROR_RETURN_MSG("RemoveSecinc_Fail");
+	}
+
+	if(!data.isArray())
+		return 0;
+	for (unsigned i = 0; i < data.size(); ++i)
+	{
+		if(!data[i].isMember("id"))
+		{
+			error_log("[Secinc no id][uid=%u]", uid);
+			DB_ERROR_RETURN_MSG("secinc_no_id");
+		}
+		ret = secincDb.ReplaceSecinc(uid, data[i]["id"].asUInt(), writer.write(data[i]));
+		if (ret)
+		{
+			error_log("[ReplaceSecinc fail][ret=%d,uid=%u]", ret, uid);
+			DB_ERROR_RETURN_MSG("replace_secinc_fail");
 		}
 	}
 	return 0;

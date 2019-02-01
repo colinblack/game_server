@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
 	if (argc != 4) {
-		cout << "usage: AddCashUpdate uid1 uid2 res" << endl;
+		cout << "usage: AddAttack uid1 uid2 res" << endl;
 		return 1;
 	}
 

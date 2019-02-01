@@ -38,6 +38,7 @@ public:
 	int GetInteractsAttackAfter(unsigned uid, unsigned last_attack_time, vector<DataUserInteract> &interacts);
 	int RemoveInteracts(unsigned uid);
 	int RemoveInteracts(unsigned uid, unsigned opposite_uid);
+	int DelUserInteractsBeforeTS(unsigned uid, unsigned last_attack_time);
 };
 
 #endif /* DATAUSERINTERACT_H_ */

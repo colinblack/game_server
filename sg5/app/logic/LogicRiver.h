@@ -16,7 +16,6 @@ public:
 	static CDataRiver* GetDataRiver(void);
 	int SetShip(unsigned uid,const Json::Value &param);
 	int GetAllShipJson(Json::Value &result);
-	int RemoveShip(unsigned uid);
 	int GetShipJson(unsigned uid, Json::Value &result);
 	int GetShipJson(DataShip ship, Json::Value &result);
 	int UpdatesEndOfShipping(DataShip ship);

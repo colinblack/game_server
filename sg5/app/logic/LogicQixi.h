@@ -13,10 +13,10 @@ public:
 	CLogicQixijie();
 	virtual ~CLogicQixijie();
 	static CDataQixijie* GetQixijieData();
-	int GetQixiActivityRank(unsigned uid, DataQixiRank vecPoints[]);
+	int GetQixiActivityRank(unsigned uid,vector <DataQixiRank> &vecPoints);
 	int GetQixiActivityRankJson(unsigned uid, Json::Value &result);
-	int UpdateQixiActivityRank(int unsigned uid, Json::Value &input);
-	int RewardQixiActivityRank(void);
-	int CleanRankList(void);
+	//int UpdateQixiActivityRank(int unsigned uid, Json::Value &input,Json::Value &result); //old
+
+
 };
 #endif /* LOGICPOINTRANK_H_ */

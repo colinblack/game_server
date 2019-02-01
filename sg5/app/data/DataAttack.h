@@ -45,6 +45,7 @@ public:
 	int GetAttack(uint64_t attack_id, DataAttack &attack);
 	int GetAttackLimit(uint64_t attack_id, DataAttack &attack);	//不返回LOG
 	int SetAttackFlag(uint64_t attack_id, int flag);
+	int DelAttack(uint64_t attack_id);
 };
 
 #endif /* DATAATTACK_H_ */

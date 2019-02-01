@@ -6,7 +6,7 @@
 class CLogicAllServerPersonMatch
 {
 public:
-	static CAllServerPersonBaseMatch* GetAllServerPsersonBaseMatch(int level);
+	static CAllServerPersonBaseMatch* GetAllServerPersonMatchData(int level);
 
 	int GetBaseMatchInfo(unsigned uid, Json::Value &data, int level);
 	int Apply(unsigned uid,int level);
@@ -23,7 +23,6 @@ public:
 	int GetRival(int idx,PersonMatchPlayer& rival);
 	int Watch(int lev);
 	int getInstPath(string &path, int lev);
-	PersonMatchData* GetPersonMatchData();
 private:
 	int PromotionRule(const PersonMatchPlayer &p1,const PersonMatchPlayer &p2,int lev,PersonMatchPlayer &winner);
 };

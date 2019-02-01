@@ -1,0 +1,28 @@
+package MVP;
+
+message MVPHero {
+		required uint32 id		= 1;
+		required uint32 lv		= 2;
+		required uint32 dehp	= 3;
+		required bytes icon		= 4;
+		required bytes name		= 5;
+}
+
+message MVPUser {
+		required uint32 rank	= 1;
+		required uint32 uid		= 2;
+		required bytes name		= 3;
+		required bytes fig		= 4;
+		required bytes sign		= 5;
+		required uint32 mcity	= 6;
+		required MVPHero hero	= 7;
+		required uint32 fid		= 8;
+		required uint32 fts		= 9;
+}
+
+message MVP {
+		repeated MVPUser user	= 1;	//攻城	
+		repeated MVPUser player	= 2;	//斗将
+		repeated MVPUser fight	= 3;	//争霸
+		repeated MVPUser all	= 4;	//总榜
+}

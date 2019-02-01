@@ -15,7 +15,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <sys/time.h>
-
+#include <signal.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
 
@@ -27,6 +30,7 @@
 #include <queue>
 #include <stack>
 #include <algorithm>
+#include <stdexcept>
 
 using std::string;
 using std::pair;

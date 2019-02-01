@@ -16,11 +16,11 @@ public:
 	virtual ~CLogicTopTenUser();
 
 	int GetInfo(DataTopTenUser &data);
-	int SetUserLevel(unsigned uid, int level);
-	int SetHeroPower(unsigned uid, int power, string& stat);
-	int SetUserPlunder(unsigned uid);
-	bool CheckTime(int type);
-	int Reward(int type);
+	int SetUserLevel(unsigned uid, int level,int leveltemp);
+	int SetHeroPower(unsigned uid, unsigned power, bool &error);
+	int SetUserPlunder(unsigned uid, unsigned uidLock);
+	bool CheckTime(unsigned uid, int type);
+	int Reward(unsigned uid, int type);
 protected :
 	CDataTopTenUser* GetCDataTopTenUser();
 };

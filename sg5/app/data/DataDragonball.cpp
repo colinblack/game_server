@@ -33,11 +33,12 @@ int CDataDragonball::Init(const string &path, semdat sem)
 		memset(pdata, 0, sizeof(*pdata));
 		m_sh.SetInitDone();
 	}
+	memcpy(&m_tempData, m_sh.GetAddress(),sizeof(DragonballData));
 	m_init = true;
 	return 0;
 }
 
-int CDataDragonball::SetDragonball(int ballId, unsigned uid, const string &name, unsigned now,
+int CDataDragonball::SetDragonball(int ballId, unsigned uid, string &name, unsigned now,
 		unsigned &preUid, unsigned &preTs, string &preName)
 {
 	if (!IsValidDragonballId(ballId))
@@ -53,12 +54,19 @@ int CDataDragonball::SetDragonball(int ballId, unsigned uid, const string &name,
 
 	DataUser dataUser;
 	CDataUser userDB;
-	if(userDB.GetUser(uid,dataUser) != 0){
+	if(userDB.GetUserLimit(uid,dataUser) != 0){
 		return R_ERR_DB;
 	}
 
 	CAutoLock lock(&m_sh, true);
 	int index = DragonballIdToIndex(ballId);
+
+	if(preUid && (pdata->ball[index]).holderUid != preUid)
+	{
+		preUid = (pdata->ball[index]).holderUid;
+		name = (pdata->ball[index]).name;
+		return R_ERR_LOGIC;
+	}
 
 	preUid = (pdata->ball[index]).holderUid;
 	preTs = (pdata->ball[index]).ts;
@@ -79,92 +87,159 @@ int CDataDragonball::SetDragonball(int ballId, unsigned uid, const string &name,
 		}
 		snprintf((pdata->ball[index]).aname, sizeof((pdata->ball[index]).aname), "%s", dataAlliance.name.c_str());
 	}
+
+	memcpy(&m_tempData, m_sh.GetAddress(),sizeof(DragonballData));
 	return 0;
 }
 
-int CDataDragonball::ViewAllDragonball(DragonballData &balls)
+int CDataDragonball::ViewAllDragonball(DragonballData &balls,bool real)
 {
-	DragonballData *pdata = (DragonballData *)m_sh.GetAddress();
-	if(pdata == NULL)
+	_clear_temp();
+	DragonballData *pdata = &m_tempData;
+	if(real)
 	{
-		error_log("[GetAddress fail][]");
-		return R_ERR_DB;
+		pdata = (DragonballData *)m_sh.GetAddress();
+		if(pdata == NULL)
+		{
+			error_log("[GetAddress fail][]");
+			return R_ERR_DB;
+		}
+		CAutoLock lock(&m_sh, true);
+
+		memcpy(&balls, pdata, sizeof(DragonballData));
 	}
-	CAutoLock lock(&m_sh, true);
-	memcpy(&balls, pdata, sizeof(DragonballData));
+	else
+	{
+		memcpy(&balls, pdata, sizeof(DragonballData));
+	}
 	return 0;
 }
 
-int CDataDragonball::WhichDragonballHold(unsigned uid, unsigned &ballId, unsigned &ts)
+int CDataDragonball::WhichDragonballHold(unsigned uid, unsigned &ballId, unsigned &ts,bool real)
 {
 	ballId = ts = 0;
-	DragonballData *pdata = (DragonballData *)m_sh.GetAddress();
-	if(pdata == NULL)
+
+	_clear_temp();
+	DragonballData *pdata = &m_tempData;
+	if(real)
 	{
-		error_log("[GetAddress fail][]");
-		return R_ERR_DB;
-	}
-	CAutoLock lock(&m_sh, true);
-	for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
-	{
-		if ((pdata->ball[DragonballIdToIndex(i)]).holderUid && uid &&
-				(pdata->ball[DragonballIdToIndex(i)]).ts &&
-				(pdata->ball[DragonballIdToIndex(i)]).holderUid == uid)
+		pdata = (DragonballData *)m_sh.GetAddress();
+		if(pdata == NULL)
 		{
-			ballId = i;
-			ts = (pdata->ball[DragonballIdToIndex(i)]).ts;
-			return 0;
+			error_log("[GetAddress fail][]");
+			return R_ERR_DB;
+		}
+		CAutoLock lock(&m_sh, true);
+
+		for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
+		{
+			if ((pdata->ball[DragonballIdToIndex(i)]).holderUid && uid &&
+					(pdata->ball[DragonballIdToIndex(i)]).ts &&
+					(pdata->ball[DragonballIdToIndex(i)]).holderUid == uid)
+			{
+				ballId = i;
+				ts = (pdata->ball[DragonballIdToIndex(i)]).ts;
+				return 0;
+			}
+		}
+	}
+	else
+	{
+		for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
+		{
+			if ((pdata->ball[DragonballIdToIndex(i)]).holderUid && uid &&
+					(pdata->ball[DragonballIdToIndex(i)]).ts &&
+					(pdata->ball[DragonballIdToIndex(i)]).holderUid == uid)
+			{
+				ballId = i;
+				ts = (pdata->ball[DragonballIdToIndex(i)]).ts;
+				return 0;
+			}
 		}
 	}
 	return -1;
 }
 
-int CDataDragonball::GetAllianceDragons(map<unsigned,AllianceBall>& allianceBalls){
-
+int CDataDragonball::GetAllianceDragons(map<unsigned,AllianceBall>& allianceBalls,bool real)
+{
 	allianceBalls.clear();
 
-	DragonballData *pdata = (DragonballData *)m_sh.GetAddress();
-	if(pdata == NULL)
+	_clear_temp();
+	DragonballData *pdata = &m_tempData;
+	if(real)
 	{
-		error_log("[GetAddress fail][]");
-		return R_ERR_DB;
+		pdata = (DragonballData *)m_sh.GetAddress();
+		if(pdata == NULL)
+		{
+			error_log("[GetAddress fail][]");
+			return R_ERR_DB;
+		}
+		CAutoLock lock(&m_sh, true);
+
+		for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
+		{
+			Dragonball* pBall = &(pdata->ball[DragonballIdToIndex(i)]);
+			if(pBall->allianceId == 0)
+				continue;
+
+			if(allianceBalls.find(pBall->allianceId) == allianceBalls.end())
+			{
+				AllianceBall aBall;
+				aBall.allianceId = pBall->allianceId;
+				aBall.count = 0;
+				aBall.ts = 0;
+
+				allianceBalls[pBall->allianceId] = aBall;
+			}
+
+			allianceBalls[pBall->allianceId].count++;
+			if(pBall->ts > allianceBalls[pBall->allianceId].ts)
+			{
+				allianceBalls[pBall->allianceId].ts = pBall->ts;
+			}
+		}
 	}
-	CAutoLock lock(&m_sh, true);
-	for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
+	else
 	{
-		Dragonball* pBall = &(pdata->ball[DragonballIdToIndex(i)]);
-		if(pBall->allianceId == 0){
-			continue;
-		}
+		for (int i = DRAGONBALL_ID_MIN; i <= DRAGONBALL_ID_MAX; i++)
+		{
+			Dragonball* pBall = &(pdata->ball[DragonballIdToIndex(i)]);
+			if(pBall->allianceId == 0)
+				continue;
 
-		if(allianceBalls.find(pBall->allianceId) == allianceBalls.end()){
-			AllianceBall aBall;
-			aBall.allianceId = pBall->allianceId;
-			aBall.count = 0;
-			aBall.ts = 0;
+			if(allianceBalls.find(pBall->allianceId) == allianceBalls.end())
+			{
+				AllianceBall aBall;
+				aBall.allianceId = pBall->allianceId;
+				aBall.count = 0;
+				aBall.ts = 0;
 
-			allianceBalls[pBall->allianceId] = aBall;
-		}
+				allianceBalls[pBall->allianceId] = aBall;
+			}
 
-		allianceBalls[pBall->allianceId].count++;
-		if(pBall->ts > allianceBalls[pBall->allianceId].ts){
-			allianceBalls[pBall->allianceId].ts = pBall->ts;
+			allianceBalls[pBall->allianceId].count++;
+			if(pBall->ts > allianceBalls[pBall->allianceId].ts)
+			{
+				allianceBalls[pBall->allianceId].ts = pBall->ts;
+			}
 		}
 	}
 
 	return 0;
 }
 
-int CDataDragonball::GetAllianceWithBalls(AllianceBall& allianceBalls){
+int CDataDragonball::GetAllianceWithBalls(AllianceBall& allianceBalls,bool real)
+{
 	map<unsigned,AllianceBall> ballMap;
-	int ret = GetAllianceDragons(ballMap);
-	if(ret != 0){
+	int ret = GetAllianceDragons(ballMap,real);
+	if(ret != 0)
 		return -1;
-	}
 
-	for(map<unsigned,AllianceBall>::iterator it = ballMap.begin(); it != ballMap.end();++it ){
+	for(map<unsigned,AllianceBall>::iterator it = ballMap.begin(); it != ballMap.end();++it )
+	{
 		AllianceBall& aBall = it->second;
-		if(aBall.count >= ALLIANCE_DRAGONBALL_COUNT){
+		if(aBall.count >= ALLIANCE_DRAGONBALL_COUNT)
+		{
 			allianceBalls.allianceId = aBall.allianceId;
 			allianceBalls.count = aBall.count;
 			allianceBalls.ts = aBall.ts;
@@ -176,7 +251,8 @@ int CDataDragonball::GetAllianceWithBalls(AllianceBall& allianceBalls){
 	return 0;
 }
 
-int CDataDragonball::SetAlliance(AllianceBall& aBall){
+int CDataDragonball::SetAlliance(AllianceBall& aBall)
+{
 	aBall.allianceId = 0;
 	AllianceBall newABall;
 	int ret = GetAllianceWithBalls(newABall);
@@ -215,10 +291,12 @@ int CDataDragonball::SetAlliance(AllianceBall& aBall){
 		pdata->aBall.count = newABall.count;
 	}
 
+	memcpy(&m_tempData, m_sh.GetAddress(),sizeof(DragonballData));
 	return 0;
 }
 
-int CDataDragonball::SetAlliance2(AllianceBall& aBall){
+int CDataDragonball::SetAlliance2(AllianceBall& aBall)
+{
 	aBall.allianceId = 0;
 	AllianceBall newABall;
 	int ret = GetAllianceWithBalls(newABall);
@@ -249,10 +327,12 @@ int CDataDragonball::SetAlliance2(AllianceBall& aBall){
 		pdata->aBall.count = newABall.count;
 	}
 
+	memcpy(&m_tempData, m_sh.GetAddress(),sizeof(DragonballData));
 	return 0;
 }
 
-int  CDataDragonball::ResetAlliance(){
+int  CDataDragonball::ResetAlliance()
+{
 	DragonballData *pdata = (DragonballData *)m_sh.GetAddress();
 	if(pdata == NULL)
 	{
@@ -263,23 +343,40 @@ int  CDataDragonball::ResetAlliance(){
 
 	memset(&(pdata->aBall),0,sizeof(AllianceBall));
 
+	memcpy(&m_tempData, m_sh.GetAddress(),sizeof(DragonballData));
 	return 0;
 }
 
-int CDataDragonball::GetDragonballStatus(int ballId,Dragonball &ballData)
+int CDataDragonball::GetDragonballStatus(int ballId,Dragonball &ballData,bool real)
 {
 	if (!IsValidDragonballId(ballId))
 	{
 		return R_ERR_REFUSE;
 	}
-	DragonballData *pdata = (DragonballData *)m_sh.GetAddress();
-	if(pdata == NULL)
+
+	_clear_temp();
+	DragonballData *pdata = &m_tempData;
+	if(real)
 	{
-		error_log("[GetAddress fail]");
-		return R_ERR_DB;
+		pdata = (DragonballData *)m_sh.GetAddress();
+		if(pdata == NULL)
+		{
+			error_log("[GetAddress fail]");
+			return R_ERR_DB;
+		}
+		CAutoLock lock(&m_sh, true);
+
+		memcpy(&ballData, &pdata->ball[DragonballIdToIndex(ballId)],sizeof(Dragonball));
 	}
-	CAutoLock lock(&m_sh, true);
-	memcpy(&ballData, &pdata->ball[DragonballIdToIndex(ballId)],sizeof(Dragonball));
+	else
+	{
+		memcpy(&ballData, &pdata->ball[DragonballIdToIndex(ballId)],sizeof(Dragonball));
+	}
 	return 0;
 }
 
+void CDataDragonball::_clear_temp()
+{
+	if(m_tempData.ball[0].ts && !Time::IsToday(m_tempData.ball[0].ts))
+		memset(&m_tempData,0,sizeof(DragonballData));
+}

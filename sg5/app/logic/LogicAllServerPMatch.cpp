@@ -19,16 +19,13 @@ static int AddUpdate(unsigned uid, int rank, int level)
 	UpdateData[0u]["rank"] = rank;
 	UpdateData[0u]["level"] = level;
 	CLogicUpdates logicUpdates;
-	ret = logicUpdates.AddUpdates(uid,UpdateData);
-	if (0 != ret)
-	{
-		cout << "AddUpdates fail,uid=" << uid << ",ret=" << ret << endl;
-		return ret;
-	}
-	return 0;
+	ret = logicUpdates.AddUpdates(uid,UpdateData,true);
+	if(rank < 1000 || ret)
+		cout<<"AddUpdates, uid="<<uid<<", rank="<<rank<<", level="<<level<<",ret="<<ret<<endl;
+	return ret;
 }
 
-CAllServerPersonBaseMatch* CLogicAllServerPersonMatch::GetAllServerPsersonBaseMatch(int level)
+CAllServerPersonBaseMatch* CLogicAllServerPersonMatch::GetAllServerPersonMatchData(int level)
 {
 	if (level < 1 || level > 3)
 	{
@@ -42,7 +39,7 @@ CAllServerPersonBaseMatch* CLogicAllServerPersonMatch::GetAllServerPsersonBaseMa
 	}
 
 	CAllServerPersonBaseMatch *pdata = new CAllServerPersonBaseMatch;
-	string dataPath = Config::GetValue(CONFIG_ALL_SERVER_PERSON_MATCH_PATH);
+	string dataPath = MainConfig::GetAllServerPath(CONFIG_ALL_SERVER_PERSON_MATCH_PATH);
 	if (dataPath.empty())
 	{
 		return NULL;
@@ -67,7 +64,7 @@ int CLogicAllServerPersonMatch::GetBaseMatchInfo(unsigned uid, Json::Value &data
 {
 	CheckLevel(level);
 	int ret = 0;
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(level);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(level);
 	if (!pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -205,7 +202,7 @@ int CLogicAllServerPersonMatch::GetBaseMatchInfo(unsigned uid, Json::Value &data
 int CLogicAllServerPersonMatch::Apply(unsigned uid,int level)
 {
 	CheckLevel(level);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(level);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(level);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -229,7 +226,7 @@ int CLogicAllServerPersonMatch::Apply(unsigned uid,int level)
 		}
 	}*/
 
-	int serverid = (int)(uid - UID_MIN) / 500000 + 1;
+	int serverid = Config::GetZoneByUID(uid);
 	string userName;
 	String::Format(userName, "%d区_%s", serverid, userBasic.name.c_str());
 	//debug_log("servreid=%d,username=%s",serverid,userName.c_str());
@@ -259,7 +256,7 @@ int CLogicAllServerPersonMatch::Apply(unsigned uid,int level)
 int CLogicAllServerPersonMatch::ReportResult(unsigned uid, int order, int damage, int level)
 {
 	CheckLevel(level);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(level);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(level);
 	if (!pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -285,7 +282,7 @@ int CLogicAllServerPersonMatch::Load(unsigned instid, unsigned uidBy, Json::Valu
 int CLogicAllServerPersonMatch::GetStage(int& stage,int level)
 {
 	CheckLevel(level);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(level);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(level);
 	if (!pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -297,7 +294,7 @@ int CLogicAllServerPersonMatch::GetStage(int& stage,int level)
 int CLogicAllServerPersonMatch::NextTurn(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -411,7 +408,7 @@ int CLogicAllServerPersonMatch::NextTurn(int lev)
 int CLogicAllServerPersonMatch::StartRegular(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -430,7 +427,7 @@ int CLogicAllServerPersonMatch::StartRegular(int lev)
 int CLogicAllServerPersonMatch::StartGuess(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -442,7 +439,7 @@ int CLogicAllServerPersonMatch::StartGuess(int lev)
 		return ret;
 	}
 	CShareMemory* sh = NULL;
-	PersonMatchData *pMatchData = pmatch->GetPersonMatchData(sh);
+	AllServerPersonMatchData *pMatchData = pmatch->GetAllServerPersonMatchData(sh);
 	if (NULL == pMatchData)
 	{
 		return R_ERR_DATA;
@@ -489,7 +486,7 @@ int CLogicAllServerPersonMatch::StartGuess(int lev)
 int CLogicAllServerPersonMatch::StartPlayoff8(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
@@ -506,14 +503,14 @@ int CLogicAllServerPersonMatch::StartPlayoff8(int lev)
 int CLogicAllServerPersonMatch::StartPlayoff4(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
 	}
 
 	CShareMemory* sh = NULL;
-	PersonMatchData *pdata = pmatch->GetPersonMatchData(sh);
+	AllServerPersonMatchData *pdata = pmatch->GetAllServerPersonMatchData(sh);
 	if (NULL == pdata)
 	{
 		return R_ERR_DATA;
@@ -540,14 +537,14 @@ int CLogicAllServerPersonMatch::StartPlayoff4(int lev)
 int CLogicAllServerPersonMatch::StartPlayoff2(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
 	}
 
 	CShareMemory* sh = NULL;
-	PersonMatchData *pdata = pmatch->GetPersonMatchData(sh);
+	AllServerPersonMatchData *pdata = pmatch->GetAllServerPersonMatchData(sh);
 	if (NULL == pdata)
 	{
 		return R_ERR_DATA;
@@ -571,14 +568,14 @@ int CLogicAllServerPersonMatch::StartPlayoff2(int lev)
 int CLogicAllServerPersonMatch::FinishMatch(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");
 	}
 
 	CShareMemory* sh = NULL;
-	PersonMatchData *matchData = pmatch->GetPersonMatchData(sh);
+	AllServerPersonMatchData *matchData = pmatch->GetAllServerPersonMatchData(sh);
 	if (NULL == matchData)
 	{
 		return R_ERR_DATA;
@@ -659,14 +656,15 @@ int CLogicAllServerPersonMatch::FinishMatch(int lev)
 
 	//发奖励
 	CLogicAllServerGuess logicGuess;
-	vector<U_U_MAP> vecGuessors;
+	//vector<U_U_MAP> vecGuessors;
 	logicGuess.GuessorsPay(matchData->champion.uid,2,lev);
-	logicGuess.GuessorsUidCoins(matchData->champion.uid, vecGuessors, 0,lev);
+	//logicGuess.GuessorsUidCoins(matchData->champion.uid, vecGuessors, 0,lev);
 	vector<unsigned>::iterator pitr = players.begin();
 	for (;pitr != players.end(); ++pitr)
 	{
 		AddUpdate(*pitr,1000,lev);
 	}
+
 	return 0;
 }
 
@@ -674,7 +672,7 @@ int CLogicAllServerPersonMatch::getInstPath(string &path, int lev)
 {
 	CheckLevel(lev);
 	char buf[512] = {0};
-	string instPath = Config::GetValue(ALL_SERVER_PERSON_INST_PATH);
+	string instPath = MainConfig::GetAllServerPath(ALL_SERVER_PERSON_INST_PATH);
 	snprintf(buf,sizeof(buf),"%s.%d",instPath.c_str(),lev);
 	path = buf;
 	return 0;
@@ -732,7 +730,7 @@ int CLogicAllServerPersonMatch::PromotionRule(
 int CLogicAllServerPersonMatch::Watch(int lev)
 {
 	CheckLevel(lev);
-	CAllServerPersonBaseMatch *pmatch = GetAllServerPsersonBaseMatch(lev);
+	CAllServerPersonBaseMatch *pmatch = GetAllServerPersonMatchData(lev);
 	if (NULL == pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_personmatch_fail");

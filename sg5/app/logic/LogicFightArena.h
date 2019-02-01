@@ -15,8 +15,8 @@ public:
 	int UpdateLoseFightArena(int arenaId, unsigned challenger, DataFightArenaLimit &data);
 
 	int GetFightArenaJson(Json::Value &arena);
-	int Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int regfee, Json::Value &result);
-	int Save(unsigned arenaid, DataUser &userBy, const Json::Value &data, Json::Value &result);
+	int Load(unsigned arenaid, unsigned uidBy, unsigned level, LoadType loadType, int regfee, Json::Value &result);
+	int Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype);
 	int FightOver(unsigned arenaid, unsigned challenger, bool isWin, Json::Value &result);
 
 	static CDataFightArena* GetCDataFightArena();

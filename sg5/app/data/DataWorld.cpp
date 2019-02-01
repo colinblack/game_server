@@ -517,22 +517,50 @@ int CDataWorld::MoveCity(unsigned uid,const unsigned oldWorldPos,const unsigned 
 	short old_y = (oldWorldPos - 1001) % 1000;
 	short to_x = (toWorldPos - 1001) / 1000;
 	short to_y = (toWorldPos - 1001) % 1000;
-	if(pdata->worldPoints[old_x][old_y].uid != uid)
-	{
-		error_log("move city failed,uid miss match, olduid= %u,touid=%u",uid,pdata->worldPoints[old_x][old_y].uid);
-		return R_ERR_DB;
-	}
+
 	if(pdata->worldPoints[to_x][to_y].uid != 0)
 	{
 		error_log("move city failed city is being using,uid= %d, oldpos = %u,newpos = %d");
 		return R_ERR_DB;
 	}
-	pdata->worldPoints[to_x][to_y]=pdata->worldPoints[old_x][old_y];
-	pdata->worldPoints[to_x][to_y].x = to_x + 1;
-	pdata->worldPoints[to_x][to_y].y = to_y + 1;
-	memset(&(pdata->worldPoints[old_x][old_y]),0x00,sizeof(pdata->worldPoints[old_x][old_y]));
-	pdata->worldPoints[old_x][old_y].x = old_x + 1;
-	pdata->worldPoints[old_x][old_y].y = old_y + 1;
+
+	short int x = 0, y = 0;
+	if(pdata->worldPoints[old_x][old_y].uid != uid)
+	{
+		//error_log("move city failed,uid miss match, olduid= %u,touid=%u",uid,pdata->worldPoints[old_x][old_y].uid);
+		//return R_ERR_DB;
+		error_log("move city error,uid miss match, olduid= %u,touid=%u",uid,pdata->worldPoints[old_x][old_y].uid);
+		for(;x < WORLD_LENGTH_OF_SIDE; x++)
+		{
+			for(y = 0;y < WORLD_LENGTH_OF_SIDE; y++)
+			{
+				if(pdata->worldPoints[x][y].uid == uid && pdata->worldPoints[x][y].map_flag == USER_MAIN_CITY)
+				{
+					old_x = x;
+					old_y = y;
+					break;
+				}
+			}
+			if(y != WORLD_LENGTH_OF_SIDE)
+				break;
+		}
+	}
+	if(x == WORLD_LENGTH_OF_SIDE && y == WORLD_LENGTH_OF_SIDE)
+	{
+		error_log("move city error,uid not found, olduid= %u,touid=%u",uid,pdata->worldPoints[old_x][old_y].uid);;
+		return -1;
+	}
+	else
+	{
+		pdata->worldPoints[to_x][to_y]=pdata->worldPoints[old_x][old_y];
+		pdata->worldPoints[to_x][to_y].x = to_x + 1;
+		pdata->worldPoints[to_x][to_y].y = to_y + 1;
+
+		memset(&(pdata->worldPoints[old_x][old_y]),0x00,sizeof(pdata->worldPoints[old_x][old_y]));
+		pdata->worldPoints[old_x][old_y].x = old_x + 1;
+		pdata->worldPoints[old_x][old_y].y = old_y + 1;
+	}
+
 	return 0;
 }
 

@@ -1,6 +1,10 @@
 #ifndef DATAINC_H_
 #define DATAINC_H_
 
+#define SERVER_EQUIP_ADDABLE 1
+#define SERVER_HERO_ADDABLE  1
+#define SERVER_BUILD_ADDABLE 0
+
 #include "Kernel.h"
 #include "DataIdCtrl.h"
 #include "DataUserMapping.h"
@@ -76,9 +80,49 @@
 #include "DataNationalWarRgt.h"
 #include "DataGroupsFighting.h"
 #include "DataGM.h"
+#include "DataRechargeAlliance.h"
+#include "DataVipCharge.h"
+#include "DataAllianceBattle.h"
+#include "DataBarbarianKing.h"
+#include "DataXML.h"
+#include "DataAllServerBaseMatch.h"
+#include "DataKingdom.h"
+#include "DataVipRebates.h"
+#include "DataHequActivity.h"
+#include "DataAllServerRank.h"
+#include "DataOpenAreaActivity.h"
+#include "DataNewWorld.h"
+#include "DataRank.h"
+#include "DataNewLottry.h"
+#include "DataDragonScaleGiftBag.h"
+#include "DataConsumeRank.h"
+#include "DataRechargeRank.h"
+#include "DataNewWorldBattle.h"
+#include "DataAllServerNewWorldBattle.h"
+#include "DataRestriction.h"
+#include "DataName.h"
+#include "DataDouble11.h"
+#include "DataNewMatch.h"
+#include "DataBattleRoom.h"
+#include "DataAllServerMap.h"
+#include "DataAllServerMapBuffer.h"
+#include "DataCrowdFunding.h"
+#include "DataNewWorldAllianceMap.h"
+#include "DataNewWorldAllianceRoom.h"
+#include "DataAllianceTorch.h"
+#include "DataTokenIntensify.h"
+#include "ConfigManager.h"
+#include "DataBraveNewWorld.h"
+#include "DataAllianceConsume.h"
+#include "ConfigWrap.h"
+#include "DataKingTreasure.h"
+#include "DataMVP.h"
+#include "DataIdcard.h"
+#include "DataRotaryTableDraw.h"
+
 #endif /* DATAINC_H_ */
 
-#define GET_MEM_DATA_SEM(type,path,sem) \
+#define GET_MEM_DATA_SEM(type,path,sem,allserver) \
 	static map<int, type*> dataMap; \
 	int serverId = 0; \
 	Config::GetDomain(serverId); \
@@ -88,12 +132,18 @@
 		return itr->second; \
 	} \
 	type *pdata = new type(); \
-	string dataPath = Config::GetValue(path); \
+	\
+	string dataPath; \
+	if (allserver == true) \
+		dataPath = MainConfig::GetAllServerPath(path); \
+	else \
+		dataPath = Config::GetPath(path); \
 	if (dataPath.empty()) \
 	{ \
 		error_log("Init data fail!"); \
 		return NULL; \
 	} \
+	\
 	int ret = pdata->Init(dataPath,sem); \
 	if (0 != ret) \
 	{ \
@@ -103,12 +153,5 @@
 	} \
 	dataMap[serverId] = pdata; \
 	return pdata; \
-/*****************跨服数据问题***************/
-#define MAP_USER_COUNT 500000
-#define MAP_USER_COUNT_CONTENT 10000
-#define MAP_USER_COUNT_COUNT 49
 
-#define SHIP_USER_COUNT 10000
-#define SHIP_USER_COUNT_CONTENT 1000
-#define SHIP_USER_COUNT_COUNT 9
-
+/*************************/

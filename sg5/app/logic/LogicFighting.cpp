@@ -12,7 +12,7 @@ int CLogicFighting::GetFightingArchive(unsigned id, Json::Value &data)
 	map<unsigned, FIGHTING_Archive>::iterator it = fightingMap.find(id);
 	if (it == fightingMap.end() || Time::GetGlobalTime() - (it->second).updateTime > 1800)
 	{
-		string path = Config::GetValue(CONFIG_FIGHTING_DATA);
+		string path = MainConfig::GetAllServerPath(CONFIG_NPC_DATA);
 		if (path.empty())
 		{
 			error_log("[fighting config error][id=%u]",id);
@@ -73,8 +73,15 @@ int CLogicFighting::Load(unsigned fightingId, unsigned uidBy, Json::Value &resul
 	return 0;
 }
 
-int CLogicFighting::Save(unsigned fightingId, DataUser &userBy, const Json::Value &data, Json::Value &result)
+int CLogicFighting::Save(unsigned fightingId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
+	if (Json::IsObject(data, "attackinfo"))
+	{
+		CLogicArchive logicArchive;
+		int ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], fightingId, loadtype);
+		if (ret != 0)
+			return ret;
+	}
 	return 0;
 }
 
@@ -126,7 +133,7 @@ int CLogicFighting::ExportFightingData(unsigned uid, unsigned fightingId, const 
 	}
 
 	CLogicBuilding logicBuiding;
-	ret = logicBuiding.GetBuilding(uid, result["baseop"]);
+	ret = logicBuiding.GetBuilding(uid,0, result["baseop"],true);
 	if (ret != 0)
 		return ret;
 

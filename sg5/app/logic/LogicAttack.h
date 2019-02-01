@@ -24,7 +24,7 @@ enum AttackFlag
 class CLogicAttack
 {
 public:
-	int AddAttack(DataAttack &attack, unsigned db = 0);
+	int AddAttack(DataAttack &attack, unsigned db = 0, bool isMain=false);
 	int UpdateAttack(const DataAttack &attack);
 	int UpdateAttack(const DataAttack &attack,uint64_t &attackId);
 	int GetAttack(uint64_t attackId, DataAttack &attack);

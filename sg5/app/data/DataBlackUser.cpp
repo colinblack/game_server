@@ -49,7 +49,7 @@ int CDataBlackUser::SetBlackUser(const DataBlackUser &data)
 			crc += UID_MIN;
 		}
 	}
-	DBCREQ_DECLARE(DBC::UpdateRequest, crc);
+	DBCREQ_DECLARE(DBC::ReplaceRequest, crc);
 	DBCREQ_SET_KEY(data.open_id.c_str());
 	DBCREQ_SET_INT(data,block_time);
 	DBCREQ_SET_STR(data,close_reason);

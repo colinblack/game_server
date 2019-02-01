@@ -16,26 +16,9 @@ void usage()
 		 << "                                next PlatformType" << endl;
 }
 
-int AddUpdate(unsigned uid, int rank)
-{
-	int ret = 0;
-	Json::Value UpdateData = Json::Value(Json::arrayValue);
-	UpdateData[0u]["ts"] = Time::GetGlobalTime();
-	UpdateData[0u]["s"] = "allserverpersonmatch";
-	UpdateData[0u]["rank"] = rank;
-	CLogicUpdates logicUpdates;
-	ret = logicUpdates.AddUpdates(uid,UpdateData);
-	if (0 != ret)
-	{
-		cout << "AddUpdates fail,uid=" << uid << ",ret=" << ret << endl;
-		return ret;
-	}
-	return 0;
-}
-
 int main(int argc, char *argv[])
 {
-	if (argc != 3)
+	if (argc < 2)
 	{
 		usage();
 		return 0;

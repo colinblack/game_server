@@ -14,8 +14,8 @@ public:
 			const string &pic, const string &archive, DataArenaLimit &data);
 
 	int GetArenaJson(Json::Value &arena);
-	int Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int regfee, Json::Value &result);
-	int Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Json::Value &result);
+	int Load(unsigned arenaid, unsigned uidBy, unsigned level, LoadType loadType, int regfee, Json::Value &result);
+	int Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype);
 
 	static CDataArena* GetCDataArena();
 };

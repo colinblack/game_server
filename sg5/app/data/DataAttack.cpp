@@ -206,3 +206,13 @@ int CDataAttack::SetAttackFlag(uint64_t attack_id, int flag)
 	DBCREQ_SET_INT_V(flag);
 	return 0;
 }
+
+
+int CDataAttack::DelAttack(uint64_t attack_id)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, attack_id);
+	DBCREQ_SET_KEY(attack_id);
+	DBCREQ_EXEC;
+
+	return 0;
+}

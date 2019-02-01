@@ -1,0 +1,16 @@
+package AllianceConsume;
+
+message AllianceConsumeUser {
+		required uint32	uid 	= 1;
+		required uint32 consume	= 2;
+}
+
+message AllianceConsumeAlliance {
+		required uint32	aid 	= 1;
+		repeated AllianceConsumeUser user  = 2;
+}
+
+message AllianceConsume {
+	required uint32 ver							= 1;
+	repeated AllianceConsumeAlliance alliance	= 2;
+}

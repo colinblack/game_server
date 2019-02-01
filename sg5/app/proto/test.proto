@@ -1,0 +1,25 @@
+package test;
+
+message tm {
+		required int32 	tm1 	= 1;
+		required uint32 tm2 	= 2;
+		required int64 	tm3 	= 3;
+		required uint64 tm4 	= 4;
+		required float 	tm5		= 5 ;
+		required double tm6 	= 6;
+		required string tm7 	= 7;
+		required bool	tm8 	= 8;
+}
+
+message test {
+		repeated int32 	test1 	= 1;
+		repeated uint32 test2 	= 2;
+		repeated int64 	test3 	= 3;
+		repeated uint64 test4 	= 4;
+		repeated float 	test5	= 5 ;
+		repeated double test6 	= 6;
+		repeated string test7 	= 7;
+		repeated bool	test8 	= 8;		
+		required tm 	test9 	= 9;
+		repeated tm 	test10  = 10;
+}

@@ -2,7 +2,7 @@
 
 CDataBroadcast* CLogicBroadcast::GetCDataBroadcast()
 {
-	GET_MEM_DATA_SEM(CDataBroadcast, CONFIG_BROADCAST_DATA, sem_broadcast)
+	GET_MEM_DATA_SEM(CDataBroadcast, CONFIG_BROADCAST_DATA, sem_broadcast,false)
 	/*static CDataBroadcast* pBroadcast = NULL;
 	if (!pBroadcast)
 	{

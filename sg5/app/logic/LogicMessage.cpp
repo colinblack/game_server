@@ -1,10 +1,10 @@
 #include "LogicMessage.h"
 
-#define MSG_LIVE_TIME (14*24*3600)
+#define MSG_LIVE_TIME (7*24*3600)
 #define CHAT_LIVE_TIME (7*24*3600)
 #define GET_CHAT_MAX 50
-#define REQUEST_LIVE_TIME (24*3600*30)
-#define MAX_ALLIANCE_REQUEST_MSG 100
+#define REQUEST_LIVE_TIME (7*24*3600)
+#define MAX_ALLIANCE_REQUEST_MSG 400
 
 bool compareUserMsg(const DataUserMessage &umsg1, const DataUserMessage &umsg2)
 {
@@ -71,7 +71,7 @@ int CLogicMessage::AddMessage(uint64_t &msgid, const DataUserBasic &user, UserMs
 	ret = msgDB.AddMessage(msg);
 	if (ret != 0)
 	{
-		error_log("[AddMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,user.uid,msgid);
+		error_log("[AddMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,user.uid,msgid);
 		DB_ERROR_RETURN_MSG("add_msg_fail");
 	}
 
@@ -79,7 +79,7 @@ int CLogicMessage::AddMessage(uint64_t &msgid, const DataUserBasic &user, UserMs
 	ret = userMsgDB.AddUserMessage(userMsg);
 	if (ret != 0)
 	{
-		error_log("[AddUserMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,user.uid,msgid);
+		error_log("[AddUserMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,user.uid,msgid);
 		DB_ERROR_RETURN_MSG("add_msg_fail");
 	}
 	return 0;
@@ -101,6 +101,8 @@ int CLogicMessage::AddMessage(uint64_t &msgid, const DataUserBasic &user, UserMs
 	if ( (ret = GetMessageId(msgid)) != 0)
 		return ret;
 
+	//debug_log("[AddMessage][uid=%u,toUid=%u,msgid=%llu]",user.uid,toUser.uid,msgid);
+
 	DataMessage msg;
 	msg.content = content;
 	msg.from_photo = user.figure_url;
@@ -121,7 +123,7 @@ int CLogicMessage::AddMessage(uint64_t &msgid, const DataUserBasic &user, UserMs
 	ret = msgDB.AddMessage(msg);
 	if (ret != 0)
 	{
-		error_log("[AddMessage fail][ret=%d,uid=%u,msgid=%ul,toUid=%u]",ret,user.uid,msgid,toUser.uid);
+		error_log("[AddMessage fail][ret=%d,uid=%u,msgid=%llu,toUid=%u]",ret,user.uid,msgid,toUser.uid);
 		DB_ERROR_RETURN_MSG("add_msg_fail");
 	}
 
@@ -139,7 +141,7 @@ int CLogicMessage::AddMessage(uint64_t &msgid, const DataUserBasic &user, UserMs
 		ret = userMsgDB.AddUserMessage(userMsg1);
 		if (ret != 0)
 		{
-			error_log("[AddUserMessage1 fail][ret=%d,uid=%u,msgid=%ul,toUid=%d]",ret,user.uid,msgid,toUser.uid);
+			error_log("[AddUserMessage1 fail][ret=%d,uid=%u,msgid=%llu,toUid=%d]",ret,user.uid,msgid,toUser.uid);
 			DB_ERROR_RETURN_MSG("add_msg_fail");
 		}
 	}
@@ -157,7 +159,7 @@ int CLogicMessage::AddMessage(uint64_t &msgid, const DataUserBasic &user, UserMs
 		ret = userMsgDB.AddUserMessage(userMsg2);
 		if (ret != 0)
 		{
-			error_log("[AddUserMessage2 fail][ret=%d,uid=%u,msgid=%ul,toUid=%d]",ret,user.uid,msgid,toUser.uid);
+			error_log("[AddUserMessage2 fail][ret=%d,uid=%u,msgid=%llu,toUid=%d]",ret,user.uid,msgid,toUser.uid);
 			DB_ERROR_RETURN_MSG("add_msg_fail");
 		}
 	}
@@ -204,7 +206,7 @@ int CLogicMessage::GetNewSysMessage(unsigned uid, vector<DataMessage> &msgVec)
 		ret = msgDB.GetMessage(userMsgVec[i].message_id, msg);
 		if (ret != 0)
 		{
-			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,uid,userMsgVec[i].message_id);
+			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,uid,userMsgVec[i].message_id);
 		}
 		else
 		{
@@ -294,7 +296,7 @@ int CLogicMessage::GetChat(unsigned uid, int toward, vector<DataMessage> &msgVec
 		ret = msgDB.GetMessage(userMsgVec[i].message_id, msg);
 		if (ret != 0)
 		{
-			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,uid,userMsgVec[i].message_id);
+			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,uid,userMsgVec[i].message_id);
 		}
 		else
 		{
@@ -485,7 +487,7 @@ int CLogicMessage::CancelRequest(unsigned uid, const string &mtype, uint64_t mes
 			ret = msgDB.GetMessage(userMsgVec[i].message_id, msg);
 			if (ret != 0)
 			{
-				error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,uid,userMsgVec[i].message_id);
+				error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,uid,userMsgVec[i].message_id);
 			}
 			else
 			{
@@ -544,7 +546,7 @@ int CLogicMessage::CancelRequest(unsigned uid, TowardType toward)
 		ret = msgDB.GetMessage(userMsgVec[i].message_id, msg);
 		if (ret != 0)
 		{
-			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,uid,userMsgVec[i].message_id);
+			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,uid,userMsgVec[i].message_id);
 		}
 		else
 		{
@@ -591,7 +593,7 @@ int CLogicMessage::GetRequest(unsigned uid, const set<string> &mtypes, int towar
 		ret = msgDB.GetMessage(userMsgVec[i].message_id, msg);
 		if (ret != 0)
 		{
-			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,uid,userMsgVec[i].message_id);
+			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,uid,userMsgVec[i].message_id);
 		}
 		else
 		{
@@ -788,7 +790,7 @@ int CLogicMessage::CheckAllianceJoinMsg(unsigned aid)
 	{
 		return ret;
 	}
-	int limitCount = alliancelogic.GetMemberMaxCount(alliance.level);
+	int limitCount = CLogicAlliance::GetMemberMaxCount(alliance.level);
 	if(alliance.member_count >= limitCount)
 	{
 		ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "alliance_member_count_limit");
@@ -814,7 +816,7 @@ int CLogicMessage::CheckAllianceJoinMsg(unsigned aid)
 		ret = msgDB.GetMessage(userMsgVec[i].message_id, msg);
 		if (ret != 0)
 		{
-			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%ul]",ret,aid,userMsgVec[i].message_id);
+			error_log("[GetMessage fail][ret=%d,uid=%u,msgid=%llu]",ret,aid,userMsgVec[i].message_id);
 		}
 		else
 		{
@@ -834,14 +836,14 @@ int CLogicMessage::CheckAllianceJoinMsg(unsigned aid)
 	//alliance request message over MAX_ALLIANCE_REQUEST_MSG return can not add message.
 	if (messageTotal >= MAX_ALLIANCE_REQUEST_MSG)
 	{
-		ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "alliance_member_count_limit");
+		ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "union_request_full_member");
 	}
 	return 0;
 }
 
 int CLogicMessage::AutoRejectRequest(DataMessage &message)
 {
-	if ( (Time::GetGlobalTime() - message.time) < (12 * 60 * 60)
+	if ( (Time::GetGlobalTime() - message.time) < REQUEST_LIVE_TIME
 		|| message.type != 2)
 	{
 		return R_ERROR;

@@ -1,0 +1,24 @@
+package AllianceTorch;
+
+message CurrTorchStatus {
+	required uint32 tid    		  	= 1;   
+	required uint32 status        	= 2;   
+	required uint32 uid          	= 3;    
+	required uint32 ts          	= 4;    
+}
+
+message LogBuyRecord {
+	required uint32 time         	= 1;
+	required uint32 uid           	= 2;   
+	required uint32 tid           	= 3; 
+}
+
+message SingleAllianceTorch {
+	required uint32 aid             = 1;   
+	repeated CurrTorchStatus curr	= 2;
+    repeated LogBuyRecord   log	    = 3;
+}
+
+message AllianceTorch {
+    repeated SingleAllianceTorch alliance	= 1;
+}

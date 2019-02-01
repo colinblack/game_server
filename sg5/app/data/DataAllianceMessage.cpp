@@ -173,4 +173,11 @@ int CDataAllianceMessage::GetAllianceMessageForTime(unsigned uid, int type, int 
 	return 0;
 }
 
-
+int CDataAllianceMessage::DelAllianceMessageBeforeTS(unsigned uid, unsigned ts)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(LE, time, ts);
+	DBCREQ_EXEC;
+	return 0;
+}

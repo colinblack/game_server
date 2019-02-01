@@ -6,8 +6,8 @@
 #define MAX_GUESS_COUNT 1000
 #define GUESS_GROUP_COUNT 8
 #define PER_BET_COINS 10
-#define GUESS_DATA_PATH "guess_data_path"
-#define ALL_SERVER_GUESS_DATA_PATH "all_server_guess_data_path"
+//#define GUESS_DATA_PATH "guess_data_path"
+//#define ALL_SERVER_GUESS_DATA_PATH "all_server_guess_data_path"
 
 struct GuessItem{
 	unsigned uid;

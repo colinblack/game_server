@@ -1,0 +1,85 @@
+package BraveNewWorld;
+
+message BraveNewWorldHistory {
+		required uint32 uid			= 1;//进攻者（被进攻者）
+		required uint32 type		= 2;//类型：被进攻（0普通 1要塞 2城堡） 345(相应的进攻)
+		required uint32 x			= 3;//
+		required uint32 y			= 4;//
+		required uint32 lm			= 5;//被抢资源
+		required uint32 nm			= 6;//剩余资源
+		required uint32 lh			= 7;//损失血量
+		required uint32 nh			= 8;//剩余血量
+		required uint32 ts			= 9;//
+}
+
+message BraveNewWorldFavourate {
+		required uint32 x			= 1;//
+		required uint32 y			= 2;//
+}
+
+message BraveNewWorldUserMission {
+		required int32 m1			= 1;//迁城任务 012
+		required int32 m2			= 2;//铜钱任务 0x-1
+		required uint32 mx			= 3;//占领任务
+		required uint32 my			= 4;//占领任务
+		required int32 m3			= 5;//占领任务 012
+}
+
+message BraveNewWorldAllianceMission {
+		required uint32 id			= 1;//任务目标
+		required bool m				= 2;//任务状态
+}
+
+message BraveNewWorldAlliance {
+		required uint32 aid						= 1;
+		repeated BraveNewWorldAllianceMission mission = 2;
+}
+
+message BraveNewWorldUser {
+		required uint32 uid			= 1;
+		required uint32 seq 		= 2;//包序号
+		required uint32 aid 		= 3;//联盟id
+		required uint32 lv	 		= 4;//城堡等级
+		required uint32 x 			= 5;//城堡坐标
+		required uint32 y 			= 6;//城堡坐标
+		required uint32 rts			= 7;//收获ts
+		required uint32 hts 		= 8;//回血ts
+		required uint32 pts 		= 9;//保护ts
+		required uint32 bts 		= 10;//扫荡ts
+		required uint32 bt	 		= 11;//攻城令
+		required uint32 tts 		= 12;//攻城令回复ts
+		repeated uint32 hp 			= 13;//血量0-100 [1个主将，伏兵处4*3个将，驿站3个将，3个仓库，主城]
+		repeated BraveNewWorldHistory his = 14;//战报
+		repeated BraveNewWorldFavourate fav = 15;//收藏
+		optional uint32 rl			= 16;//今日已获得2029的个数
+		optional BraveNewWorldUserMission mission = 17;//任务
+}
+
+message BraveNewWorldPoint {
+		required uint32 x 		= 1;
+		required uint32 y 		= 2;
+		required uint32 uid		= 3;//拥有者
+		required bool def		= 4;//是否要塞
+		required uint32 hero	= 5;//要塞武将ud，0表示没有
+		required uint32 hp		= 6;//要塞武将血量0-100
+		required uint32 fid		= 7;//进攻者uid
+		required uint32 fts		= 8;//进攻ts
+		required uint32 rts		= 9;//收获ts
+		optional uint32 rc		= 10;//占领可获得的2029数量
+		optional uint32 mtype 	= 11;  //占领可获得的材料类型
+		optional uint32 mcount	= 12; //占领可获得的材料数量
+		optional uint32 defts 	= 13;  //堡垒建立的时间
+}
+
+message BraveNewWorldZone {
+		required uint32 id 		= 1;//编号
+		required uint32 aid		= 2;//占领者联盟id
+		required uint32 ts		= 3;//占领ts
+}
+
+message BraveNewWorld {
+		repeated BraveNewWorldPoint land	= 1;	
+		repeated BraveNewWorldUser user 	= 2;		
+		repeated BraveNewWorldZone zone 	= 3;	
+		repeated BraveNewWorldAlliance alliance = 4;
+}

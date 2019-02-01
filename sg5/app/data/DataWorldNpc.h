@@ -45,7 +45,7 @@ struct NpcItem{
 	}
 	void MakeReward()
 	{
-		unsigned n = (rand()%5) << 16;
+		unsigned n = (Math::GetRandomInt(5)) << 16;
 		unsigned r = (type & 0x00ff0000) >> 8;
 		type = (type & 0xff) | n | r;
 	}

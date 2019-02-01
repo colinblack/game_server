@@ -30,6 +30,8 @@ public:
 	int GetInteractsAttackAfter(unsigned uid, unsigned last_attack_time, vector<DataUserInteract> &interacts);
 	int RemoveInteracts(unsigned uid);
 	int RemoveInteracts(unsigned uid, unsigned opposite_uid);
+
+	int ResetAttackNumByWeek(DataUserInteract &interact);
 };
 
 #endif /* LOGICUSERINTERACT_H_ */

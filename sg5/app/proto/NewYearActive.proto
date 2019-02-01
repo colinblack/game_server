@@ -1,0 +1,38 @@
+package NewYearActive;
+
+message NewYearActiveHistory
+{
+	required uint32 t_uid = 1;
+	required uint32 f_uid = 2;
+	required uint32 type = 3;
+	required uint32 ts = 4;
+	required uint32 equid = 5;
+	required uint32 equc = 6;
+	required string t_name = 7;
+	required string f_name = 8;
+}
+
+message NewYearActiveUser
+{
+	required uint32 uid = 1;
+	required uint32 count = 2;
+	required uint32 ts = 3;
+	repeated NewYearActiveHistory history = 4;
+	repeated uint32 uids = 5;
+}
+
+message NewYearActiveRank
+{
+	required uint32 uid = 1;
+	required uint32 count = 2;
+	required string name = 3;
+	required string pic = 4;
+}
+
+message NewYearActive
+{
+	required uint32 version = 1;
+	repeated NewYearActiveUser users = 2;
+	repeated NewYearActiveRank ranks = 3;
+	repeated NewYearActiveHistory historys = 4;
+}

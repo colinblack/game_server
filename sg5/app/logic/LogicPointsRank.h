@@ -18,5 +18,12 @@ public:
 	int UpdatePointsRank(int unsigned uid, const DataPoints &points);
 	int RewardPointRank(void);
 	int CleanRankList(void);
+
+	//砸罐子跨服排行榜
+	static CDataPointsRankAllServer* GetPointsRankAllServerData();
+	int SetUser(int unsigned uid, unsigned pointsDay, unsigned pointsAll, string& name, unsigned& need);
+	int ReplyUser(unsigned uid, unsigned pointsDay, unsigned pointsAll, string& name, Json::Value &result);
+	int GetList(unsigned uid, Json::Value &result);
+	int ReplyList(unsigned uid, Json::Value &result);
 };
 #endif /* LOGICPOINTRANK_H_ */

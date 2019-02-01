@@ -51,7 +51,8 @@ int  CDataGroupsFigthing::Init(const std::string &path,int cityid, semdat sem)
 }
 
 
-int CDataGroupsFigthing::GetAllCombatData(vector <EveryoneFormation> &All_data,int cityindex,unsigned &Data_id,unsigned &Senduid,vector <EveryoneFormation> &Self_data)
+int CDataGroupsFigthing::GetAllCombatData(vector <EveryoneFormation> &All_data,int cityindex,int &map_id,unsigned &seq_id
+										  ,unsigned &Senduid,struct EveryoneFormation Self_data,int &num_flag,int holdsNum)
 {
 	AllCombatData *pdata = (AllCombatData *)m_sh[cityindex].GetAddress();
 	if(pdata == NULL)
@@ -59,13 +60,15 @@ int CDataGroupsFigthing::GetAllCombatData(vector <EveryoneFormation> &All_data,i
 		DB_ERROR_RETURN_MSG("init_GroupsFighting_fail");
 	}
 	CAutoLock lock(&m_sh[cityindex], true);
-	Data_id = pdata->Data_id;
+	pdata->Map_id = map_id;
+	pdata->holdsNum = holdsNum;
+	seq_id = pdata->seq_id;
 	Senduid = pdata->Senduid;
 
 	int exist = 0;
 	for(int i = 0; i < MAXNUM_OF_PEOPLE; i++)
 	{
-		if(pdata->All_people[i].uid == Self_data[0].uid)
+		if(pdata->All_people[i].uid == Self_data.uid)
 		{
 			exist++;
 		}
@@ -75,72 +78,74 @@ int CDataGroupsFigthing::GetAllCombatData(vector <EveryoneFormation> &All_data,i
 		}
 	}
 
-	error_log("exist=%d",exist);
 	if(exist == 0)
 	{
-		for(int i = 0; i < MAXNUM_OF_PEOPLE; i++)
+		All_data.push_back(Self_data);
+		int i = 0;
+		for(; i < MAXNUM_OF_PEOPLE; i++)
 		{
-//			if(pdata->All_people[i].uid != 0)
-//			{
-//				error_log("alldata%d|%u",i,pdata->All_people[i].uid);
-//			}
 			if(pdata->All_people[i].uid == 0)
 			{
-				pdata->All_people[i].alliance_id = Self_data[0].alliance_id;
-				pdata->All_people[i].camp = Self_data[0].camp;
-				pdata->All_people[i].fullmorale = Self_data[0].fullmorale;
-				pdata->All_people[i].morale = Self_data[0].morale;
-				pdata->All_people[i].position = Self_data[0].position;
-				pdata->All_people[i].role = Self_data[0].role;
-				pdata->All_people[i].state = Self_data[0].state;
-				pdata->All_people[i].target = Self_data[0].target;
-				pdata->All_people[i].ts = Self_data[0].ts;
-				pdata->All_people[i].uid = Self_data[0].uid;
-				pdata->All_people[i].personalWarData.attack = Self_data[0].personalWarData.attack;
-				pdata->All_people[i].personalWarData.attackRate = Self_data[0].personalWarData.attackRate;
-				pdata->All_people[i].personalWarData.critRate = Self_data[0].personalWarData.critRate;
-				pdata->All_people[i].personalWarData.defence = Self_data[0].personalWarData.defence;
-				pdata->All_people[i].personalWarData.dodgeRate = Self_data[0].personalWarData.dodgeRate;
-				pdata->All_people[i].personalWarData.level = Self_data[0].personalWarData.level;
-				pdata->All_people[i].personalWarData.maxHp = Self_data[0].personalWarData.maxHp;
-				pdata->All_people[i].personalWarData.type = Self_data[0].personalWarData.type;
-				pdata->All_people[i].personalWarData.typeLevels[0] = Self_data[0].personalWarData.typeLevels[0];
-				pdata->All_people[i].personalWarData.typeLevels[1] = Self_data[0].personalWarData.typeLevels[1];
-				pdata->All_people[i].personalWarData.typeLevels[2] = Self_data[0].personalWarData.typeLevels[2];
-				error_log("first_time_enter_uid=%u|%u |%d",pdata->All_people[i].uid,pdata->All_people[i].uid,i);
-				break;
+				pdata->All_people[i].alliance_id = Self_data.alliance_id;
+				pdata->All_people[i].camp = Self_data.camp;
+				pdata->All_people[i].fullmorale = Self_data.fullmorale;
+				pdata->All_people[i].morale = Self_data.morale;
+				pdata->All_people[i].position = Self_data.position;
+				pdata->All_people[i].role = Self_data.role;
+				pdata->All_people[i].state = Self_data.state;
+				pdata->All_people[i].target = Self_data.target;
+				pdata->All_people[i].ts = Self_data.ts;
+				pdata->All_people[i].uid = Self_data.uid;
+				pdata->All_people[i].personalWarData.attack = Self_data.personalWarData.attack;
+				pdata->All_people[i].personalWarData.attackRate = Self_data.personalWarData.attackRate;
+				pdata->All_people[i].personalWarData.critRate = Self_data.personalWarData.critRate;
+				pdata->All_people[i].personalWarData.defence = Self_data.personalWarData.defence;
+				pdata->All_people[i].personalWarData.dodgeRate = Self_data.personalWarData.dodgeRate;
+				pdata->All_people[i].personalWarData.level = Self_data.personalWarData.level;
+				pdata->All_people[i].personalWarData.maxHp = Self_data.personalWarData.maxHp;
+				pdata->All_people[i].personalWarData.type = Self_data.personalWarData.type;
+				pdata->All_people[i].personalWarData.typeLevels[0] = Self_data.personalWarData.typeLevels[0];
+				pdata->All_people[i].personalWarData.typeLevels[1] = Self_data.personalWarData.typeLevels[1];
+				pdata->All_people[i].personalWarData.typeLevels[2] = Self_data.personalWarData.typeLevels[2];
+//				error_log("first_time_enter_uid=%u|%u |%d",pdata->All_people[i].uid,pdata->All_people[i].uid,i);
+				return 0;
 			}
+		}
+
+		if(i == MAXNUM_OF_PEOPLE)
+		{
+			//战场人数已满
+			num_flag = 999;
 		}
 	}
 	return 0;
 }
 
-int CDataGroupsFigthing::UpdatasFightingData(vector <EveryoneFormation> &All_data,int cityindex,unsigned &Data_id,unsigned &Senduid,int &map_id)
+int CDataGroupsFigthing::UpdatesFightingData(vector <EveryoneFormation> &All_data,int cityindex,unsigned &seq_id,unsigned &Senduid,int &map_id,int holdsNum,int &flag)
 {
 	AllCombatData *pdata = (AllCombatData *)m_sh[cityindex].GetAddress();
 	if(pdata == NULL)
 	{
-		DB_ERROR_RETURN_MSG("clean_GroupsFighting_fail");
+		DB_ERROR_RETURN_MSG("init_groupsfighting_fail");
 	}
 	CAutoLock lock(&m_sh[cityindex], true);
 
-	if((Data_id > pdata->Data_id)
-	||(Data_id == pdata->Data_id && Senduid <= pdata->Senduid))
+	if((seq_id > pdata->seq_id)
+	||(seq_id == pdata->seq_id && Senduid <= pdata->Senduid) || pdata->Senduid == 0)
 	{
 		memset(pdata, 0, sizeof(*pdata));
 
-		pdata->Data_id = Data_id;
+		pdata->seq_id = seq_id;
 		pdata->Senduid = Senduid;
 		pdata->Map_id = map_id;
-
-		for(int i = 0; i < MAXNUM_OF_PEOPLE; i++)
+		pdata->holdsNum = holdsNum;
+		for(int i = 0; i < All_data.size(); i++)
 		{
 			pdata->All_people[i].alliance_id = All_data[i].alliance_id;
 			pdata->All_people[i].camp = All_data[i].camp;
 			pdata->All_people[i].fullmorale = All_data[i].fullmorale;
 			pdata->All_people[i].morale = All_data[i].morale;
 			pdata->All_people[i].position = All_data[i].position;
-			pdata->All_people[i].role = All_data[i].role;
 			pdata->All_people[i].state = All_data[i].state;
 			pdata->All_people[i].target = All_data[i].target;
 			pdata->All_people[i].ts = All_data[i].ts;
@@ -157,13 +162,11 @@ int CDataGroupsFigthing::UpdatasFightingData(vector <EveryoneFormation> &All_dat
 			pdata->All_people[i].personalWarData.typeLevels[1] = All_data[i].personalWarData.typeLevels[1];
 			pdata->All_people[i].personalWarData.typeLevels[2] = All_data[i].personalWarData.typeLevels[2];
 		}
-
 	}
 	else
 	{
-
+		flag = 1;
 	}
-
 	return 0;
 }
 

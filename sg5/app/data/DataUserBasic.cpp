@@ -27,7 +27,7 @@ int CDataUserBasic::SetUserBasic(unsigned uid, int platform, const DataUserBasic
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_SET_INT(user, is_register_platform);
 	DBCREQ_SET_STR(user, open_id);
@@ -50,7 +50,7 @@ int CDataUserBasic::GetUserBasic(unsigned uid, int platform, DataUserBasic &user
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_NEED_BEGIN();
 	DBCREQ_NEED(uid);
@@ -97,7 +97,7 @@ int CDataUserBasic::SetUserBasicLimit(unsigned uid, int platform, const DataUser
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_SET_INT(user, is_register_platform);
 	DBCREQ_SET_STR(user, open_id);
@@ -119,7 +119,51 @@ int CDataUserBasic::GetUserBasicLimit(unsigned uid, int platform, DataUserBasic 
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(uid);
+	DBCREQ_NEED(platform);
+	DBCREQ_NEED(is_register_platform);
+	DBCREQ_NEED(open_id);
+	DBCREQ_NEED(name);
+	DBCREQ_NEED(gender);
+	DBCREQ_NEED(nation);
+	DBCREQ_NEED(province);
+	DBCREQ_NEED(city);
+	DBCREQ_NEED(figure_url);
+	DBCREQ_NEED(vip_type);
+	DBCREQ_NEED(vip_level);
+	DBCREQ_NEED(fnum);
+	DBCREQ_NEED(extra);
+
+	DBCREQ_EXEC;
+	DBCREQ_IFNULLROW;
+	DBCREQ_IFFETCHROW;
+
+	DBCREQ_GET_BEGIN();
+	DBCREQ_GET_INT(user, uid);
+	DBCREQ_GET_INT(user, platform);
+	DBCREQ_GET_INT(user, is_register_platform);
+	DBCREQ_GET_STR(user, open_id);
+	DBCREQ_GET_STR(user, name);
+	DBCREQ_GET_INT(user, gender);
+	DBCREQ_GET_STR(user, nation);
+	DBCREQ_GET_STR(user, province);
+	DBCREQ_GET_STR(user, city);
+	DBCREQ_GET_STR(user, figure_url);
+	DBCREQ_GET_INT(user, vip_type);
+	DBCREQ_GET_INT(user, vip_level);
+	DBCREQ_GET_INT(user, fnum);
+	DBCREQ_GET_STR(user, extra);
+
+	return 0;
+}
+
+int CDataUserBasic::GetUserBasicLimitWithoutPlatform(unsigned uid, DataUserBasic &user)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
 
 	DBCREQ_NEED_BEGIN();
 	DBCREQ_NEED(uid);
@@ -235,7 +279,7 @@ int CDataUserBasic::SetFriends(unsigned uid, int platform, int fnum, const strin
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_SET_INT_S(fnum);
 	DBCREQ_SET_STR_S(friends);
@@ -247,7 +291,7 @@ int CDataUserBasic::GetFriends(unsigned uid, int platform, string &friends)
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 	DBCREQ_GET_STR_V(friends);
 	return 0;
 }
@@ -256,7 +300,7 @@ int CDataUserBasic::SetOidFriends(unsigned uid, int platform, const string &oid_
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_SET_STR_S(oid_friends);
 	DBCREQ_EXEC;
@@ -267,7 +311,7 @@ int CDataUserBasic::GetOidFriends(unsigned uid, int platform, string &oid_friend
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 	DBCREQ_GET_STR_V(oid_friends);
 	return 0;
 }
@@ -300,7 +344,7 @@ int CDataUserBasic::GetUserBasicExt(unsigned uid, int platform, DataUserBasic &u
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_NEED_BEGIN();
 	DBCREQ_NEED(uid);
@@ -348,7 +392,7 @@ int CDataUserBasic::SetUserBasicExt(unsigned uid, int platform, const DataUserBa
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 
 	DBCREQ_SET_INT(user, is_register_platform);
 	DBCREQ_SET_STR(user, open_id);
@@ -372,7 +416,7 @@ int CDataUserBasic::GetUserName(unsigned uid, int platform, string &name)
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 	DBCREQ_GET_STR_V(name);
 	return 0;
 }
@@ -381,7 +425,7 @@ int CDataUserBasic::GetWorldUserInfo(int unsigned uid,int platform,string &signa
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 	DBCREQ_NEED_BEGIN()	;
 	DBCREQ_NEED(signature);
 	DBCREQ_NEED(figure_url);
@@ -402,9 +446,28 @@ int CDataUserBasic::SetWorldUserInfo(int unsigned uid,int platform, const string
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, platform, platform);
+	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 	DBCREQ_SET_STR_V(signature);
 	DBCREQ_EXEC;
 	return 0;
 }
 
+
+int CDataUserBasic::GetNameFig(unsigned uid, string &name, string &figure_url)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_NEED_BEGIN()	;
+	DBCREQ_NEED(figure_url);
+	DBCREQ_NEED(name);
+
+	DBCREQ_EXEC;
+	DBCREQ_IFNULLROW;
+	DBCREQ_IFFETCHROW;
+
+	DBCREQ_GET_BEGIN();
+	DBCREQ_GET_STR_S(figure_url);
+	DBCREQ_GET_STR_S(name);
+	return 0;
+
+}

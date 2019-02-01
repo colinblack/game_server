@@ -16,7 +16,7 @@ static bool CompaerMemberPoint(const DataAllianceMember &left, const DataAllianc
 class UpdateAlliance
 {
 public:
-	int InitAllianceList(vector<unsigned>& db);
+	int InitAllianceList(set<int>& db);
 	int RankAlliance(void);
 	int CleanDonate(void);
 	int AutoChangeLeader(void);
@@ -52,7 +52,7 @@ private:
 	vector<DataAllianceMember> m_Members;
 };
 
-int UpdateAlliance::InitAllianceList(vector<unsigned>& db)
+int UpdateAlliance::InitAllianceList(set<int>& db)
 {
 	if(db.empty())
 	{
@@ -65,10 +65,13 @@ int UpdateAlliance::InitAllianceList(vector<unsigned>& db)
 			printf("get alliance id fail %d\n", ret);
 			return ret;
 		}
-		unsigned allianceId = 0;
-		if (!Config::GetUIntValue(allianceId, CONFIG_AID_START))
+		unsigned allianceId = ALLIANCE_ID_START;
+		string serverid;
+		unsigned zone;
+		if (Config::GetValue(serverid, CONFIG_SERVER_ID))
 		{
-			allianceId = ALLIANCE_ID_START;
+			Convert::StringToUInt(zone, serverid);
+			allianceId = Config::GetAIDStart(zone);
 		}
 
 		CLogicAlliance logicAlliance;
@@ -103,18 +106,18 @@ int UpdateAlliance::InitAllianceList(vector<unsigned>& db)
 	}
 	else
 	{
-		for(int i=0;i<db.size();++i)
+		for(set<int>::iterator it=db.begin();it!=db.end();++it)
 		{
 			int ret = 0;
 			CLogicIdCtrl logicIdCtrl;
 			uint64_t u64Id;
-			ret = logicIdCtrl.GetCurrentId(KEY_ALLIANCE_ID_CTRL, u64Id, db[i]);
+			ret = logicIdCtrl.GetCurrentId(KEY_ALLIANCE_ID_CTRL, u64Id, *it);
 			if(ret != 0)
 			{
 				printf("get alliance id fail %d\n", ret);
 				return ret;
 			}
-			unsigned allianceId = ALLIANCE_ID_START + 500000*(db[i]-1);
+			unsigned allianceId = Config::GetAIDStart(*it);
 
 			CLogicAlliance logicAlliance;
 			for(; allianceId <= (unsigned)u64Id; allianceId++)
@@ -298,7 +301,7 @@ int UpdateAlliance::UpdataeDegree(void)
 		}
 
 		vector<DataUserInteract> interacts;
-		CDataUserInteract dbInteract;
+		CLogicUserInteract dbInteract;
 		int ret = dbInteract.GetInteractsAttackAfter(aItr->alliance_id, Time::GetGlobalTime() - 3*24*60*60, interacts);
 		if(ret == 0)
 		{
@@ -359,7 +362,7 @@ int UpdateAlliance::RankAlliance(void)
 int UpdateAlliance::GetAllianceEnemy(void)
 {
 	vector<DataUserInteract> interacts;
-	CDataUserInteract dbInteract;
+	CLogicUserInteract dbInteract;
 	vector<DataAlliance>::iterator aItr = m_AllianceList.begin();
 	for (; aItr != m_AllianceList.end(); aItr++)
 	{
@@ -429,7 +432,7 @@ int UpdateAlliance::GetRankAllianceJson(Json::Value &reslt)
 		allianceData["flag"] = aItr->flag;
 		allianceData["leader"] = aItr->leader_uid;
 		allianceData["level"] = aItr->level;
-		allianceData["point"] = Convert::UInt64ToString(aItr->point);
+		allianceData["point"] = Convert::UInt64ToString(aItr->point>0x7fffffff?0x7fffffff:aItr->point);
 		allianceData["rank"] = rank;
 		allianceData["mc"] = aItr->member_count;
 		allianceData["enemyid"] = aItr->enemy_alliance_id;
@@ -519,6 +522,7 @@ int UpdateAlliance::RewardFastAlliance(void)
 	for(; itr != m_AllianceList.end(); itr++)
 	{
 		 unsigned aid = itr->alliance_id;
+		 logicAlliance.GetAlliance(aid,alliance);
 		 vector<DataAllianceMember> vVembers;
 		 result = logicAlliance.GetMembers(aid,vVembers);
 		 if(result != 0)
@@ -566,6 +570,7 @@ int UpdateAlliance::RewardFastAlliance(void)
 
 		 for(unsigned index = 0; index < vVembers.size();index++)
 		 {
+			 AUTO_LOCK_USER(vVembers[index].uid)
 			 result = logicUser.GetUserLimit(vVembers[index].uid, user);
 			 if(result != 0)
 			 {
@@ -575,7 +580,7 @@ int UpdateAlliance::RewardFastAlliance(void)
 
 			 if(user.uid != alliance.leader_uid)
 			 {
-				 result = logicPay.ChangePay(user.uid,0,memCoinReward,"ALLIANCE_RUSH_REWARD",1);
+				 result = logicPay.ChangePay(user.uid,0,memCoinReward,"ALLIANCE_RUSH_REWARD");
 				 if(result != 0)
 				 {
 					 printf("change cash failed,uid=%u,coins=%u,result=%d.\n",user.uid, memCoinReward,result);
@@ -583,18 +588,17 @@ int UpdateAlliance::RewardFastAlliance(void)
 			 }
 			 else
 			 {
-				 result = logicPay.ChangePay(user.uid,0,leaderCoinReward,"ALLIANCE_RUSH_REWARD",1);
+				 result = logicPay.ChangePay(user.uid,0,leaderCoinReward,"ALLIANCE_RUSH_REWARD");
 				 if(result != 0)
 				 {
 					 printf("change cash failed,uid=%u,coins=%u,ret=%d.\n",user.uid,leaderCoinReward,result);
 				 }
 
-			 user.r1 += RecReward;
-			 user.r2 += RecReward;
-			 user.r3 += RecReward;
-			 user.r4 += RecReward;
-			 user.r5 += RecReward;
-			 uidList.push_back(user.uid);
+				 user.r1 += RecReward;
+				 user.r2 += RecReward;
+				 user.r3 += RecReward;
+				 user.r4 += RecReward;
+				 uidList.push_back(user.uid);
 			 }
 			 result = logicUser.SetUserLimit(vVembers[index].uid,user);
 			 if(result != 0)
@@ -609,14 +613,17 @@ int UpdateAlliance::RewardFastAlliance(void)
 		 vVembers.clear();
 	}
 
+	Json::Value temp;
+	temp["s"] = "RewardFastAlliance";
+	temp["ts"] = Time::GetGlobalTime();
 	CLogicEmail logicEmail;
 	DataEmail email;
 	email.attach_flag = 0;
 	email.post_ts = Time::GetGlobalTime();
-	email.title = "联盟冲级奖励";
-	email.text = "联盟冲级奖励已发放完毕（无需提取附件，系统已自动发放）,如有疑问，请联系GM";
+	email.title = "RewardFastAlliance";
+	email.text = Json::ToString(temp);
 	email.uid = ADMIN_UID;
-	result = logicEmail.AddEmail(email,uidList,(PlatformType)2);
+	result = logicEmail.AddEmail(email,uidList,true);
 	if(result != 0)
 	{
 		printf("send email fail,ret=%d\n", result);
@@ -776,9 +783,24 @@ int main(int argc, char *argv[])
 	Config::SetDomain(0);
 	int ret;
 
-	vector<unsigned> db;
-	for(int i=1;i<argc;++i)
-		db.push_back(atoi(argv[i]));
+	set<int> db;
+	string serverid;
+	unsigned zone;
+	if (Config::GetValue(serverid, CONFIG_SERVER_ID))
+	{
+		Convert::StringToUInt(zone, serverid);
+		unsigned domain = MainConfig::GetMergedDomain(zone);
+		if(domain != zone)
+		{
+			cout<<domain<<"!="<<zone<<endl;
+			return 0;
+		}
+		MainConfig::GetIncludeDomains(domain, db);
+		for(set<int>::iterator it=db.begin();it!=db.end();++it)
+			cout<<*it<<" ";
+		cout<<endl;
+	}
+
 	UpdateAlliance UpAlliance;
 	ret = UpAlliance.InitAllianceList(db);
 	if (0 != ret)
@@ -804,11 +826,13 @@ int main(int argc, char *argv[])
 	{
 		printf("[AutoChangeLeader fail][ret=%d]\n", ret);
 	}
+	/*
 	ret = UpAlliance.CleanDonate();
 	if (0 != ret)
 	{
 		printf("[CleanDonate fail][ret=%d]\n", ret);
 	}
+	*/
 	ret = UpAlliance.UpdataeDegree();
 	if (0 != ret)
 	{

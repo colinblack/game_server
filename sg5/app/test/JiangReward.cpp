@@ -114,13 +114,13 @@ int main(int argc, char *argv[])
 				 }
 				 if(user.uid != alliance.leader_uid)
 				 {
-					 result = logicPay.ChangePay(user.uid,0,memCoinReward,"ALLIANCE_RUSH_REWARD",1);
+					 result = logicPay.ChangePay(user.uid,0,memCoinReward,"ALLIANCE_RUSH_REWARD");
 					 if(result != 0)
 					 {
 						 cout<<"change cash failed,uid="<<user.uid<<"cash = "<<memCoinReward<<endl;
 					 }
 				 }else{
-					 result = logicPay.ChangePay(user.uid,0,leaderCoinReward,"ALLIANCE_RUSH_REWARD",1);
+					 result = logicPay.ChangePay(user.uid,0,leaderCoinReward,"ALLIANCE_RUSH_REWARD");
 					 if(result != 0)
 					 {
 						 cout<<"change cash failed,uid="<<user.uid<<"cash = "<<leaderCoinReward<<endl;
@@ -130,7 +130,6 @@ int main(int argc, char *argv[])
 				 user.r2 += RecReward;
 				 user.r3 += RecReward;
 				 user.r4 += RecReward;
-				 user.r5 += RecReward;
 				 uidList.push_back(user.uid);
 			 }
 			 result = logicUser.SetUserLimit(vVembers[index].uid,user);
@@ -150,7 +149,7 @@ int main(int argc, char *argv[])
 	email.title = "联盟冲级奖励";
 	email.text = "联盟冲级奖励已发放完毕（无需提取附件，系统已自动发放）,如有疑问，请联系GM";
 	email.uid = ADMIN_UID;
-	result = logicEmail.AddEmail(email,uidList,(PlatformType)2);
+	result = logicEmail.AddEmail(email,uidList);
 	if(result != 0)
 	{
 		cout<<"send email failed"<<endl;

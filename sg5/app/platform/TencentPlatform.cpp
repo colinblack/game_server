@@ -3,6 +3,8 @@
 
 CTencentPlatform::CTencentPlatform()
 {
+	m_app_appbitmap = 0;
+	m_time = m_cm = 0;
 }
 
 int CTencentPlatform::Initialize(const string &appid, const string &appkey, map<string, string> &params)
@@ -25,8 +27,7 @@ int CTencentPlatform::Initialize(const string &appid, const string &appkey, map<
 		SetPlatformType(PT_qqgame);
 	}
 
-	info_log("[init ok][appid=%s,appkey=%s,v3domain=%s]",
-			appid.c_str(), appkey.c_str(), params["v3domain"].c_str());
+	//info_log("[init ok][appid=%s,appkey=%s,v3domain=%s]",	appid.c_str(), appkey.c_str(), params["v3domain"].c_str());
 	return 0;
 }
 
@@ -34,15 +35,26 @@ void CTencentPlatform::SetParameter(const map<string, string> &params)
 {
 	m_pf.clear();
 	m_userip.clear();
+	m_app_appbitmap = 0;
+	m_time = m_cm = 0;
 	map<string, string>::const_iterator it = params.find("pf");
 	if (it != params.end())
 		m_pf = it->second;
 	it = params.find("userip");
 	if (it != params.end())
 		m_userip = it->second;
+	it = params.find("app_appbitmap");
+	if (it != params.end())
+		m_app_appbitmap = CTrans::STOI(it->second);
+	it = params.find("time");
+	if (it != params.end())
+		m_time = CTrans::STOI(it->second);
+    it = params.find("cm");
+    if (it != params.end())
+        m_cm = CTrans::STOI(it->second);
 }
 
-unsigned CTencentPlatform::GetPlatformByPF()
+PlatformType CTencentPlatform::GetPlatformByPF()
 {
 	if (m_pf == "qzone")
 		return PT_QZONE;
@@ -54,12 +66,43 @@ unsigned CTencentPlatform::GetPlatformByPF()
 		return PT_qqgame;
 	else if (m_pf == "pengyou")
 		return PT_PENGYOU;
+	else if (m_pf == "c9")
+		return PT_TX_C9;
 	else
 		return PT_UNKNOW;
 }
 
 int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, const string &openkey)
 {
+	if(GetPlatformByPF() == PT_TX_C9)
+	{
+		userInfo.Clear();
+		m_errorMessage.clear();
+
+		if (Math::Abs(Time::GetGlobalTime() - m_time) > 7200)
+		{
+			m_errorMessage = "time_out";
+			error_log("[time_out][openid=%s,openkey=%s,cm=%u,m_time=%u,errmsg=%s]",
+					openid.c_str(), openkey.c_str(), m_cm, m_time, m_errorMessage.c_str());
+			return -1;
+		}
+
+		int server = 0;
+		Config::GetDB(server);
+		string osig  = CTrans::ITOS(server) + openid + CTrans::ITOS(m_time)	+ CTrans::ITOS(m_cm) + m_appKey;
+		string sig = Crypt::Md5Encode(osig);
+		if(sig != openkey)
+		{
+			m_errorMessage = "openkey_error";
+			error_log("[openkey_error][openid=%s,openkey=%s,osig=%s,sig=%s]",
+					openid.c_str(), openkey.c_str(), osig.c_str(), sig.c_str());
+			return -1;
+		}
+		userInfo.OpenId = openid;
+
+		return 0;
+	}
+
 	m_errorMessage.clear();
 
 	string url = "http://" + m_config["v3domain"] + "/v3/user/get_info?";
@@ -166,11 +209,34 @@ int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, co
 	else
 		userInfo.ExtraIntInfo["is_super_blue_vip"] = 0;
 
+	if((m_app_appbitmap & 0x000F) == 1 || (m_app_appbitmap & 0x000F) == 2)
+	{
+		unsigned customflag;
+		Get_app_flag(openid, openkey, m_pf, customflag);
+		if(ret)
+			return R_SUCCESS;
+
+		customflag &= 0x000F;
+		if(customflag != 1 || customflag != 2)
+			return R_SUCCESS;
+
+		ret = Del_app_flag(openid, openkey, m_pf, customflag);
+		if(ret)
+			return R_SUCCESS;
+
+		userInfo.ExtraIntInfo["customflag"] = customflag;
+	}
+
 	return 0;
 }
 
 int CTencentPlatform::GetAppFriendList(OPFriendList &friendList, const string &openid, const string &openkey)
 {
+	if(GetPlatformByPF() != PT_QZONE)
+	{
+		return 0;
+	}
+
 	m_errorMessage.clear();
 
 	string url = "http://" + m_config["v3domain"] + "/v3/relation/get_app_friends?";
@@ -225,6 +291,11 @@ int CTencentPlatform::GetAppFriendList(OPFriendList &friendList, const string &o
 }
 int CTencentPlatform::Is_Login(const string &openid, const string &openkey,const string &pf)
 {
+	if(pf == "c9")
+	{
+		return 0;
+	}
+
 	m_errorMessage.clear();
 	string url = "http://" + m_config["v3domain"] + "/v3/user/is_login?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/is_login") + "&";
@@ -568,4 +639,132 @@ int CTencentPlatform::Get_Figure(OPUserInfo &userInfo,const string &openid, cons
 string CTencentPlatform::GetErrorMessage()
 {
 	return m_errorMessage;
+}
+
+void CTencentPlatform::ReplyCharge()
+{
+	if(!m_reply.empty())
+	{
+		CgiUtil::PrintText(m_reply.c_str());
+		m_reply.clear();
+		return;
+	}
+
+	CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
+}
+void CTencentPlatform::SetReply(string& reply)
+{
+	m_reply = reply;
+}
+
+int CTencentPlatform::Get_app_flag(const string &openid, const string &openkey,const string &pf, unsigned &customflag)
+{
+	m_errorMessage.clear();
+	string url = "http://" + m_config["v3domain"] + "/v3/user/get_app_flag?";
+	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/get_app_flag") + "&";
+	string qsig = "appid=" + m_appId + "&format=json&openid=" + openid + "&openkey=" + openkey
+			+ "&pf=" + pf + "&userip=" + m_userip;
+	string qstr = "appid=" + Crypt::UrlEncodeForTX(m_appId) + "&format=json&openid="
+			+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey)
+			+ "&pf=" + Crypt::UrlEncodeForTX(pf) + "&userip=" + Crypt::UrlEncodeForTX(m_userip);
+	osig += Crypt::UrlEncodeForTX(qsig);
+	string key = m_appKey + "&";
+	string bsig = Crypt::HmacSha1(osig, key);
+	string sig;
+	Crypt::Base64Encode(sig, bsig);
+	url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
+
+	string response;
+	if (!Network::HttpGetRequest(response, url) || response.empty())
+	{
+		m_errorMessage = response;
+		error_log("[http request fail][openid=%s,openkey=%s,errmsg=%s]",
+				openid.c_str(), openkey.c_str(), m_errorMessage.c_str());
+		error_log("responce = %s",response.c_str());
+		error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+		return -1;
+	}
+	Json::Value value;
+	if(!Json::Reader().parse(response, value))
+	{
+		m_errorMessage = "json_parse_fail";
+		error_log("[json parse fail][openid=%s,openkey=%s,response=%s]",
+				openid.c_str(), openkey.c_str(), response.c_str());
+		error_log("responce = %s",response.c_str());
+		error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+		return -1;
+	}
+	int ret;
+	if (!Json::GetInt(value, "ret", ret) || ret != 0)
+	{
+		Json::GetString(value, "msg", m_errorMessage);
+		error_log("[get_info fail][openid=%s,openkey=%s,msg=%s]",
+				openid.c_str(), openkey.c_str(), m_errorMessage.c_str());
+		error_log("responce = %s",response.c_str());
+		error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+		return -1;
+	}
+
+	if (!Json::GetUInt(value, "customflag", customflag))
+	{
+		m_errorMessage = "customflag is empty";
+		error_log("[get_info fail][openid=%s,openkey=%s,response=%s]",
+				openid.c_str(), openkey.c_str(), response.c_str());
+		return -1;
+	}
+	//error_log("responce = %s",response.c_str());
+	return 0;
+}
+int CTencentPlatform::Del_app_flag(const string &openid, const string &openkey,const string &pf, unsigned customflag)
+{
+	string strflag = CTrans::ITOS(customflag);
+
+	m_errorMessage.clear();
+	string url = "http://" + m_config["v3domain"] + "/v3/user/del_app_flag?";
+	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/del_app_flag") + "&";
+	string qsig = "acttype=1&appid=" + m_appId + "&format=json&openid=" + openid + "&openkey=" + openkey
+			+ "&pf=" + pf + "&usergroupid=" + strflag + "&userip=" + m_userip;
+	string qstr = "acttype=1&appid=" + Crypt::UrlEncodeForTX(m_appId) + "&format=json&openid="
+			+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey)
+			+ "&pf=" + Crypt::UrlEncodeForTX(pf) + "&usergroupid=" + Crypt::UrlEncodeForTX(strflag)
+			+ "&userip=" + Crypt::UrlEncodeForTX(m_userip);
+	osig += Crypt::UrlEncodeForTX(qsig);
+	string key = m_appKey + "&";
+	string bsig = Crypt::HmacSha1(osig, key);
+	string sig;
+	Crypt::Base64Encode(sig, bsig);
+	url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
+
+	string response;
+	if (!Network::HttpGetRequest(response, url) || response.empty())
+	{
+		m_errorMessage = response;
+		error_log("[http request fail][openid=%s,openkey=%s,errmsg=%s]",
+				openid.c_str(), openkey.c_str(), m_errorMessage.c_str());
+		error_log("responce = %s",response.c_str());
+		error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+		return -1;
+	}
+	Json::Value value;
+	if(!Json::Reader().parse(response, value))
+	{
+		m_errorMessage = "json_parse_fail";
+		error_log("[json parse fail][openid=%s,openkey=%s,response=%s]",
+				openid.c_str(), openkey.c_str(), response.c_str());
+		error_log("responce = %s",response.c_str());
+		error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+		return -1;
+	}
+	int ret;
+	if (!Json::GetInt(value, "ret", ret) || ret != 0)
+	{
+		Json::GetString(value, "msg", m_errorMessage);
+		error_log("[get_info fail][openid=%s,openkey=%s,msg=%s]",
+				openid.c_str(), openkey.c_str(), m_errorMessage.c_str());
+		error_log("responce = %s",response.c_str());
+		error_log("url = %s, qsig=%s",url.c_str(),qsig.c_str());
+		return -1;
+	}
+	//error_log("responce = %s",response.c_str());
+	return 0;
 }

@@ -1,0 +1,29 @@
+package ConfigTokenUpgrade;
+
+import "RewardConfig.proto";
+
+message ChargeReceive
+{
+	required uint32 point	= 1;  //充值积分
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+message TurnTable
+{
+	required uint32 weight	= 1;   //权重
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+message ChargeLottery
+{
+	required uint32 cost	= 1;  //消耗的积分
+	required uint32 limit	= 2;   //抽奖上限
+	repeated TurnTable turntable	= 3;   //转盘
+}
+
+message TokenUpgrade
+{
+	repeated ChargeReceive charge_receive = 1;   //积分奖励领取
+	required ChargeLottery  charge_lottery = 2;   //抽奖相关
+}
+

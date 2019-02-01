@@ -17,7 +17,7 @@ CLogicWorld::~CLogicWorld() {
 
 CDataWorld *CLogicWorld::GetDataWorld()
 {
-	GET_MEM_DATA_SEM(CDataWorld, CONFIG_WORLD_DATA, sem_world)
+	GET_MEM_DATA_SEM(CDataWorld, CONFIG_WORLD_DATA, sem_world,false)
 	/*static CDataWorld *pData = NULL;
 
 	if(pData == NULL)
@@ -218,7 +218,7 @@ int CLogicWorld::AddUser(const WorldPoint &worldpoint, int x, int y)
 	dataBaseExtra.worldpos = (x + 1) * 1000 + y + 1;
 	dataBaseExtra.occupy_time = Time::GetGlobalTime();
 	ret = baseExtra.AddBaseExtra(worldpoint.uid,dataBaseExtra);
-	info_log("add user success uid = %d,x = %d;",worldpoint.uid, x,y);
+	//info_log("add user success uid = %d,x = %d;",worldpoint.uid, x,y);
 
 	return ret;
 }
@@ -262,7 +262,9 @@ int CLogicWorld::MoveCity(unsigned uid,unsigned oldWorldpos,unsigned toWorldpos)
 		logicUser.GetMainpos(uid,oldWorldpos);
 	}
 	ret = pdata->MoveCity(uid,oldWorldpos,toWorldpos);
-	if(0  != ret)
+	if(ret == -1)
+		toWorldpos = 0;
+	else if(0  != ret)
 	{
 		return ret;
 	}

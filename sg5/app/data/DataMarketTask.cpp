@@ -44,15 +44,16 @@ int CDataMarketTask::GetTask(DataMarketTask &data)
 	DBCREQ_SET_CONDITION(EQ, contractid, data.contractid.c_str());
 
 	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(uid);
 	DBCREQ_NEED(flag);
 	DBCREQ_NEED(taskid);
-	DBCREQ_NEED(contractid);
 
 	DBCREQ_EXEC;
 	DBCREQ_IFNULLROW;
 	DBCREQ_IFFETCHROW;
 
 	DBCREQ_GET_BEGIN();
+	DBCREQ_GET_INT(data, uid);
 	DBCREQ_GET_INT(data, flag);
 	DBCREQ_GET_INT(data, taskid);
 	return 0;
@@ -74,7 +75,6 @@ int CDataMarketTask::SetTask(DataMarketTask &data)
 	DBCREQ_SET_KEY(data.openid.c_str());
 	DBCREQ_SET_CONDITION(EQ, contractid, data.contractid.c_str());
 
-	DBCREQ_SET_STR(data, taskid);
 	DBCREQ_SET_INT(data, flag);
 
 	DBCREQ_EXEC;

@@ -13,6 +13,7 @@ public:
 	int SetTributeList(unsigned uid, const Json::Value &data);
 	int SetNpcattack(unsigned uid, const Json::Value &data);
 	int SetGift(unsigned uid, const Json::Value &data);
+	int GetGift(unsigned uid, Json::Value &data);
 	int SetLadder(unsigned uid, const Json::Value &data);
 	int SetDailyQuest(unsigned uid, const Json::Value &data);
 	int SetWorldposCollect(unsigned uid,const Json::Value &data);

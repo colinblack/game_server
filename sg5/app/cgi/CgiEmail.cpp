@@ -15,6 +15,7 @@ public:
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
 		SetFeature(CF_CHECK_SESSION);
+		SetFeature(CF_CHECK_TIME);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
 		SetFeature(CF_CHECK_VERSION);
@@ -142,7 +143,7 @@ public:
 		data.post_ts = Time::GetGlobalTime();
 		data.read_ts = 0;
 		data.uid=m_uid;
-		ret = clogicemail.AddEmail(data,vto_uid,OpenPlatform::GetType());
+		ret = clogicemail.AddEmail(data,vto_uid);
 		if(0 != ret)
 		{
 			return ret;

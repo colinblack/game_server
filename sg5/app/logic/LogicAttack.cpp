@@ -1,6 +1,6 @@
 #include "LogicAttack.h"
 
-int CLogicAttack::AddAttack(DataAttack &attack, unsigned db)
+int CLogicAttack::AddAttack(DataAttack &attack, unsigned db, bool isMain)
 {
 	if (attack.attack_uid == attack.defence_uid)
 	{
@@ -12,6 +12,9 @@ int CLogicAttack::AddAttack(DataAttack &attack, unsigned db)
 	{
 		return ret;
 	}
+
+	//debug_log("[AddAttack][uid=%u,toUid=%u,atkid=%llu]",attack.attack_uid,attack.defence_uid,attack.attack_id);
+
 	attack.start_time = Time::GetGlobalTime();
 	attack.end_time = Time::GetGlobalTime();
 
@@ -20,8 +23,8 @@ int CLogicAttack::AddAttack(DataAttack &attack, unsigned db)
 	ret = attackDB.AddAttack(attack);
 	if (ret != 0)
 	{
-		error_log("[AddAttack fail][ret=%d,attack_uid=%d,defence_uid=%d]",
-				ret,attack.attack_uid,attack.defence_uid);
+		error_log("[AddAttack fail][ret=%d,attack_uid=%d,defence_uid=%d,attack_id=%llu]",
+				ret,attack.attack_uid,attack.defence_uid,attack.attack_id);
 		DB_ERROR_RETURN_MSG("add_attack_fail");
 	}
 
@@ -60,7 +63,8 @@ int CLogicAttack::AddAttack(DataAttack &attack, unsigned db)
 		DB_ERROR_RETURN_MSG("add_user_attack_fail");
 	}
 
-	logicUserInteract.AddAttack(attack.attack_uid, attack.defence_uid);
+	if(isMain)
+		logicUserInteract.AddAttack(attack.attack_uid, attack.defence_uid);
 
 	//记录联盟仇恨
 	if(attack.attack_alliance_id != attack.defence_alliance_id)
@@ -401,7 +405,7 @@ int CLogicAttack::GetConBeAttackedCount(unsigned uid, int &count)
 
 int CLogicAttack::SetVedio(uint64_t attackId, const string &vedio)
 {
-	string path = Config::GetValue(CONFIG_VEDIO_DIR);
+	string path = Config::GetPath(CONFIG_VEDIO_DIR);
 	if (path.empty())
 	{
 		error_log("[vedio config err][attackId=%llu]", attackId);
@@ -437,7 +441,7 @@ int CLogicAttack::SetVedio(uint64_t attackId, const string &vedio)
 
 int CLogicAttack::GetVedio(uint64_t attackId, string &vedio)
 {
-	string path = Config::GetValue(CONFIG_VEDIO_DIR);
+	string path = Config::GetPath(CONFIG_VEDIO_DIR);
 	if (path.empty())
 	{
 		error_log("[vedio config err][attackId=%llu]", attackId);

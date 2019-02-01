@@ -37,18 +37,34 @@ public:
 	CGI_SET_ACTION_MAP("refreshladder", RefreshLadder)
 	CGI_SET_ACTION_MAP("reportladder", ReportLadder)
 	CGI_SET_ACTION_MAP("viewtop1", ViewTopOne)
+	CGI_SET_ACTION_MAP("getalliancerecharge", GetAllianceRecharge)
+	CGI_SET_ACTION_MAP("reportalliancerecharge", ReportAllianceRecharge)
+	CGI_SET_ACTION_MAP("getbarbariankingrank", GetBarbarianKingRank)
+	CGI_SET_ACTION_MAP("barbarianingpoint", BarbarianingPoint)
+	CGI_SET_ACTION_MAP("getconsumeranklist", GetConsumeRankList)
+	CGI_SET_ACTION_MAP("setconsumeuser", SetConsumeUser)
+	CGI_SET_ACTION_MAP("getAllServerNewWorldBattlelist", GetAllServerNewWorldBattlelist)
+	CGI_SET_ACTION_MAP("setAllServerNewWorldBattleAttack", SetAllServerNewWorldBattleAttack)
+	CGI_SET_ACTION_MAP("setAllServerNewWorldBattleArmy", SetAllServerNewWorldBattleArmy)
+	CGI_SET_ACTION_MAP("setAllServerNewWorldBattleResult", SetAllServerNewWorldBattleResult)
+	CGI_SET_ACTION_MAP("getRechargeRanklist", GetRechargeRankList)
+	CGI_SET_ACTION_MAP("setRechargeUser", SetRechargeUser)
+	CGI_SET_ACTION_MAP("getPointsRanklist", GetPointsRanklist)
+	CGI_SET_ACTION_MAP("setPointsUser", SetPointsUser)
+	CGI_SET_ACTION_MAP("RotaryTableDraw", RotaryTableDraw)
+	CGI_SET_ACTION_MAP("GetRotaryTableRewardInfo", GetRotaryTableRewardInfo)
 	CGI_ACTION_MAP_END
 
 	int ViewBaseMatch()
 	{
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		unsigned aid = CCGIIn::GetCGIInt("aid");
 		unsigned uid = CCGIIn::GetCGIInt("uid");
 		if (!IsValidUid(uid))
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");
 		}
-		int ret = logicBaseMatch.GetBaseMatchInfo(aid, uid, m_jsonResult,true);
+		int ret = logicBaseMatch.GetBaseMatchInfo(aid, uid, m_jsonResult);
 		if (ret != 0)
 			return ret;
 		CGI_SEND_LOG("action=viewbasematch&uid=%u&aid=%u", uid, aid);
@@ -62,8 +78,8 @@ public:
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");
 		}
-		CLogicBaseMatch logicBaseMatch;
-		int ret = logicBaseMatch.Apply(uid,true);
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.Apply(uid);
 		if (ret != 0)
 			return ret;
 		CGI_SEND_LOG("action=applybasematch&uid=%u", uid);
@@ -77,10 +93,10 @@ public:
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");
 		}
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int order = CCGIIn::GetCGIInt("order");
 		int result = CCGIIn::GetCGIInt("result");
-		int ret = logicBaseMatch.ReportResult(uid, order, result,true);
+		int ret = logicBaseMatch.ReportResult(uid, order, result);
 		if (ret != 0)
 			return ret;
 		CGI_SEND_LOG("action=reportbasematch&uid=%u&order=%d&result=%d", uid, order, result);
@@ -94,8 +110,8 @@ public:
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");
 		}
-		CLogicBaseMatch logicBaseMatch;
-		int ret = logicBaseMatch.GetApplyPlayers(aid, m_jsonResult, true);
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.GetApplyPlayers(aid, m_jsonResult);
 		if (ret != 0)
 			return ret;
 		CGI_SEND_LOG("action=viewbaseapplyers&aid=%u", aid);
@@ -109,8 +125,8 @@ public:
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");
 		}
-		CLogicBaseMatch logicBaseMatch;
-		int ret = logicBaseMatch.GetRegularScore(aid, m_jsonResult, true);
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.GetRegularScore(aid, m_jsonResult);
 		if (ret != 0)
 			return ret;
 		CGI_SEND_LOG("action=viewbaseregular&aid=%u", aid);
@@ -141,8 +157,8 @@ public:
 		}
 		else if(type == 1)
 		{
-			CLogicBaseMatch match;
-			if(match.GetStage(stage, true) != 0){
+			CLogicAllServerBaseMatch match;
+			if(match.GetStage(stage) != 0){
 				error_log("get stage failed");
 				return R_ERR_LOGIC;
 			}
@@ -161,6 +177,7 @@ public:
 			return R_ERR_LOGIC;
 		}
 
+		/*
 		CLogicPay logicPay;
 		DataPay data_pay;
 		if(logicPay.GetPay(uid,data_pay) != 0)
@@ -173,16 +190,25 @@ public:
 			error_log("user %u's coins not enough[%u,%u]",m_uid,data_pay.coins,coins * PER_BET_COINS);
 			return R_ERR_LOGIC;
 		}
+		*/
 
-		CLogicAllServerGuess logicAllServerGuess;
-		int ret = logicAllServerGuess.ApplyGuess(uid,gid,coins,type,lev);
-		if (0 != ret)
+		CLogicUser logicUser;
+		int ret = logicUser.ChangeBet(uid,coins*-1*PER_BET_COINS, true);
+		if(ret == 0)
 		{
-			error_log("user %u apply guess failed [%u %u]", m_uid, gid, coins);
-			return R_ERR_LOGIC;
+			CLogicAllServerGuess logicAllServerGuess;
+			int ret = logicAllServerGuess.ApplyGuess(uid,gid,coins,type,lev);
+			if (0 != ret)
+			{
+				error_log("user %u apply guess failed [%u %u]", m_uid, gid, coins);
+				logicUser.ChangeBet(uid,coins*PER_BET_COINS, true);
+				return R_ERR_LOGIC;
+			}
 		}
+		else
+			return ret;
 
-		logicPay.ChangePay(uid,0,coins*-1*PER_BET_COINS,"MATCHGUESSAPPLY",1);
+		//logicPay.ChangePay(uid,0,coins*-1*PER_BET_COINS,"MATCHGUESSAPPLY",1);
 		return R_SUCCESS;
 	}
 
@@ -234,7 +260,7 @@ public:
 
 		CLogicAllServerPersonMatch logicPersonMatch;
 		int ret = logicPersonMatch.Apply(uid,level);
-		error_log("[Apply ret=%d]",ret);
+		//error_log("[Apply ret=%d]",ret);
 		if (ret != 0)
 		{
 			return ret;
@@ -271,13 +297,13 @@ public:
 		{
 			return R_ERR_PARAM;
 		}
-		CLogicBaseMatch logicBaseMatch;
-		int ret = logicBaseMatch.Load(uid, userid, m_jsonResult,true);
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.Load(uid, userid, m_jsonResult);
 		if (0 != ret)
 		{
 			return ret;
 		}
-		CGI_SEND_LOG("action=loadbasemtach&uid=%u&userid=%u", uid, userid);
+		CGI_SEND_LOG("action=loadbasemtach&operated=%u&operator=%u", uid, userid);
 		return 0;
 	}
 
@@ -295,7 +321,7 @@ public:
 		{
 			return ret;
 		}
-		CGI_SEND_LOG("action=loadpersonmtach&uid=%u&userid=%u", uid, userid);
+		CGI_SEND_LOG("action=loadpersonmtach&operated=%u&operator=%u", uid, userid);
 		return 0;
 	}
 
@@ -348,6 +374,275 @@ public:
 		{
 			return ret;
 		}
+		return 0;
+	}
+
+	int GetAllianceRecharge()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		CLogicRechargeAlliance logicAllianceRecharge;
+		int ret = logicAllianceRecharge.ReplyRechargeAllianceData(jsonData,m_jsonResult);
+		return ret;
+	}
+
+	int ReportAllianceRecharge()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		CLogicRechargeAlliance logicAllianceRecharge;
+		return logicAllianceRecharge.ReceiveRechargeAllianceData(jsonData);
+	}
+
+	int GetBarbarianKingRank()
+	{
+		unsigned group = CCGIIn::GetCGIInt("group");
+		CLogicBarbarianKing logicBarbarianKing;
+		return logicBarbarianKing.ReplyBKList(group,m_jsonResult["barbariankingrank"]);
+	}
+	int BarbarianingPoint()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned uid;
+		Json::GetUInt(jsonData, "uid", uid);
+
+		CLogicBarbarianKing logicBarbarianKing;
+		CGI_SEND_LOG("action=barbarianingpoint&uid=%u", uid);
+		return logicBarbarianKing.ReplyBKChallenger(jsonData);
+	}
+
+	int GetConsumeRankList()
+	{
+		CLogicConsumeRank logicConsumeRank;
+		return logicConsumeRank.ReplyList(m_jsonResult["getconsumeranklist"]);
+	}
+	int SetConsumeUser()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned uid = 0, cashDay = 0, cashAll = 0;
+		Json::GetUInt(jsonData, "uid", uid);
+		Json::GetUInt(jsonData, "cashDay", cashDay);
+		Json::GetUInt(jsonData, "cashAll", cashAll);
+		string name;
+		Json::GetString(jsonData, "name", name);
+
+		CLogicConsumeRank logicConsumeRank;
+		CGI_SEND_LOG("action=setconsumeuser&uid=%u", uid);
+		return logicConsumeRank.ReplyUser(uid, cashDay, cashAll, name, m_jsonResult["setconsumeuser"]);
+	}
+
+	int GetAllServerNewWorldBattlelist()
+	{
+		CLogicAllServerNewWorldBattle logicAllServerNewWorldBattle;
+		return logicAllServerNewWorldBattle.ReplyList(m_jsonResult["getAllServerNewWorldBattlelist"]);
+	}
+	int SetAllServerNewWorldBattleAttack()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned attack = 0, kingdom = 0, defend = 0;
+		Json::GetUInt(jsonData, "attack", attack);
+		Json::GetUInt(jsonData, "kingdom", kingdom);
+		Json::GetUInt(jsonData, "defend", defend);
+
+		CLogicAllServerNewWorldBattle logicAllServerNewWorldBattle;
+		CGI_SEND_LOG("action=setAllServerNewWorldBattleAttack&attack=%u&kingdom=%u&defend=%u", attack,kingdom,defend);
+		return logicAllServerNewWorldBattle.ReplyAttack(attack, kingdom, defend, m_jsonResult["setAllServerNewWorldBattleAttack"]);
+	}
+	int SetAllServerNewWorldBattleArmy()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned serverid = 0, domain = 0;
+		Json::GetUInt(jsonData, "serverid", serverid);
+		Json::GetUInt(jsonData, "domain", domain);
+		unsigned army[3];
+		army[0] = jsonData["army"][0u].asUInt();
+		army[1] = jsonData["army"][1u].asUInt();
+		army[2] = jsonData["army"][2u].asUInt();
+		string host;
+		Json::GetString(jsonData, "host", host);
+
+		CLogicAllServerNewWorldBattle logicAllServerNewWorldBattle;
+		CGI_SEND_LOG("action=setAllServerNewWorldBattleArmy");
+		return logicAllServerNewWorldBattle.ReplyArmy(serverid, domain, army, host);
+	}
+	int SetAllServerNewWorldBattleResult()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned defend = 0, result = 0;
+		Json::GetUInt(jsonData, "defend", defend);
+		Json::GetUInt(jsonData, "result", result);
+
+		CLogicAllServerNewWorldBattle logicAllServerNewWorldBattle;
+		CGI_SEND_LOG("action=setAllServerNewWorldBattleResult");
+		return logicAllServerNewWorldBattle.ReplyResult(defend, result);
+	}
+
+	int GetRechargeRankList()
+	{
+		unsigned uid = CCGIIn::GetCGIInt("uid");
+		if (!IsValidUid(uid))
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		CLogicRechargeRank logicRechargeRank;
+		return logicRechargeRank.ReplyList(uid, m_jsonResult["getRechargeRanklist"]);
+	}
+	int SetRechargeUser()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned uid = 0, cashDay = 0, cashAll = 0;
+		Json::GetUInt(jsonData, "uid", uid);
+		Json::GetUInt(jsonData, "cashDay", cashDay);
+		Json::GetUInt(jsonData, "cashAll", cashAll);
+		string name;
+		Json::GetString(jsonData, "name", name);
+
+		CLogicRechargeRank logicRechargeRank;
+		CGI_SEND_LOG("action=setRechargeUser&uid=%u", uid);
+		return logicRechargeRank.ReplyUser(uid, cashDay, cashAll, name, m_jsonResult["setRechargeUser"]);
+	}
+
+	int GetPointsRanklist()
+	{
+		unsigned uid = CCGIIn::GetCGIInt("uid");
+		if (!IsValidUid(uid))
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		CLogicPointsRank logicPointsRank;
+		return logicPointsRank.ReplyList(uid, m_jsonResult["getPointsRanklist"]);
+	}
+
+	int SetPointsUser()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+
+		unsigned uid = 0, pointsDay = 0, pointsAll = 0;
+		Json::GetUInt(jsonData, "uid", uid);
+		Json::GetUInt(jsonData, "pointsDay", pointsDay);
+		Json::GetUInt(jsonData, "pointsAll", pointsAll);
+		string name;
+		Json::GetString(jsonData, "name", name);
+
+		CLogicPointsRank logicPointsRank;
+		CGI_SEND_LOG("action=setPointsUser&uid=%u", uid);
+		return logicPointsRank.ReplyUser(uid, pointsDay, pointsAll, name, m_jsonResult["setPointsUser"]);
+	}
+
+	int RotaryTableDraw()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+		unsigned uid = 0,version = 0,itemud = 0;
+		Json::GetUInt(jsonData, "uid", uid);
+		Json::GetUInt(jsonData,"version",version);
+		Json::GetUInt(jsonData,"costItemUd",itemud);
+
+		CDataRotaryTableDraw draw;
+		draw.Draw(uid,itemud,version,m_jsonResult["list"]);
+		return 0;
+	}
+	int GetRotaryTableRewardInfo()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+		unsigned version = 0;
+		Json::GetUInt(jsonData,"version",version);
+
+		CDataRotaryTableDraw draw;
+		draw.GetDrawInfo(version,m_jsonResult["list"]);
 		return 0;
 	}
 };

@@ -18,7 +18,7 @@ CLogicPayRank::~CLogicPayRank() {
 
 CDataPayRank* CLogicPayRank::GetPayRankData()
 {
-	GET_MEM_DATA_SEM(CDataPayRank, CONFIG_PAYRANK, sem_payrank)
+	GET_MEM_DATA_SEM(CDataPayRank, CONFIG_PAYRANK, sem_payrank,false)
 	/*static CDataPayRank *pdata = NULL;
 	if(pdata == NULL)
 	{

@@ -4,27 +4,73 @@
 
 #include "LogicInc.h"
 
+#define NPC_RES_MAX 7400000
+#ifdef SG_16_VER
+const int user_lvl_exp[120] = {0,14,48,109,203,337,517,751,1044,1403,1835,2346,2944,3634,4423,5319,6327,7455,8708,10092,11616,13285,15107,17087,19327,21866,24723,27918,31472,35406,39982,45241,51225,58025,65725,74325,83925,94525,106225,119025,133025,148325,164925,182925,202325,223925,247925,274425,303525,353525,393205,440245,495157,592837,710037,851549,1010469,1197301,1414205,1641613,1879765,2128901,2389261,2661085,2944613,3240085,3547741,3877821,4220565,4576213,4945005,5327181,5722981,6132645,6556413,6994525,7463021,7962541,8493725,9057213,9653645,10313661,11007901,11717005,12481613,13282365,14119901,14994861,15907885,16859613,17850685,18913061,20042941,21241525,22510013,23849605,25261501,26746901,28307005,29943013,31680453,33513453,35447268,37487443,39639827,41910592,44306249,46833668,49500095,52313175,55280975,58412004,61715239,65200152,68876735,72755531,76847660,81164856,85719498,90719498};
+#else
+const int user_lvl_exp[120] = {0,32,92,188,328,520,772,1092,1488,1968,2540,3212,3992,4888,5908,7060,8884,11444,14804,19028,24180,30324,37524,45844,55348,66100,78164,91604,106484,122868,140820,161492,185012,211508,241108,273940,310132,349812,393108,440148,491060,545972,605012,668308,735988,808180,887756,974956,1070020,1173188,1284700,1404796,1533716,1671700,1818988,1975820,2142436,2319076,2505980,2703388,2911540,3130676,3361036,3602860,3856388,4121860,4399516,4689596,4992340,5307988,5636780,5978956,6334756,6704420,7088188,7486300,7914796,8374316,8865500,9388988,9945420,10535436,11159676,11818780,12513388,13244140,14011676,14816636,15659660,16541388,17462460,18449836,19504716,20628300,21821788,23086380,24423276,25833676,27318780,28879788,30526651,32264091,34097091,36030906,38071081,40223465,42494230,44889887,47417306,50083733,52896813,55864613,58995642,62298877,65783790,69460373,73339169,77431298,81748494,86303136};
+#endif
+const int hero_lvl_exp[120] = {0,32,92,188,328,520,772,1092,1488,1968,2540,3212,3992,4888,5908,7060,8884,11444,14804,19028,24180,31408,39879,49667,60848,73498,87691,103502,121008,140284,161404,185724,213394,244566,279389,318015,360594,407276,458213,513554,573451,638053,707512,781978,861601,946533,1040152,1142740,1254580,1375954,1507145,1648434,1800105,1962439,2135719,2320227,2516246,2724058,2943945,3176189,3421074,3678881,3949893,4234392,4532660,4844980,5171634,5512905,5869074,6240425,6627239,7029799,7448387,7883286,8334778,8803145,9307258,9847869,10425733,11041601,11696227,12390364,13124764,13900180,14717366,15577074,16480058,17427069,18418862,19456189,20539804,21701422,22942458,24264321,25668425,27156180,28728999,30388293,32135474,33971954,35936987,38039572,40289337,42696585,45272340,48028397,50977377,54132785,57509071,61121697,64987206,69123300,73548920,78284333,83351224,88772797,94573880,100781038,107422697,114529272};
+const int zhu_hun_lvl_exp[100] = {100,220,330,495,792,1188,1901,2851,3992,5988,7185,9341,11209,13450,16140,17754,19530,23436,28123,33748,37122,40835,44918,49410,54351,59786,65765,72341,79575,89920,98912,108803,119684,131652,157983,189579,227495,250244,275269,302796,333075,366383,403021,443323,487655,536421,590063,649069,681523,749675,787159,826517,867843,911235,956796,1004636,1105100,1204559,1325015,1457516,1603268,1683431,1784437,1873659,1967342,2065709,2168994,2277444,2414091,2486513,2585974,2715273,2851036,2993588,3173203,3363596,3565411,3743682,3893429,4127035,4333387,4550056,4777559,5016437,5267259,5477949,5669677,5896464,6179495,6426674,6683741,6951091,7229135,7518300,7819032,8209984,8702583,9076794,9621401,10006257};
+
+const int bMaxLv_exp[30] = {2192155,4550914,7088939,9819854,9868953,9918297,9967888,10017727,10067815,10118154,10512762,10922759,11348746,11791347,12251209,12729006,13225437,13741229,14277136,14833944,16220917,17737572,19396034,21209563,23192657,25361170,27732439,30325422,33160848,36261387};
+const int sMaxLv_exp[30] = {1096077,2275456,3544468,4909925,4934476,4959148,4983944,5008863,5033907,5059077,5256381,5461379,5674373,5895673,6125604,6364503,6612718,6870614,7138568,7416972,8110458,8868786,9698017,10604781,11596328,12680585,13866219,15162711,16580424,18130693};
+const int hAddLv_exp[30] = {2192155,4550914,7088939,9819854,9868953,9918297,9967888,10017727,10067815,10118154,10512762,10922759,11348746,11791347,12251209,12729006,13225437,13741229,14277136,14833944,16220917,17737572,19396034,21209563,23192657,25361170,27732439,30325422,33160848,36261387};
+
 class CLogicArchive
 {
 public:
-	int Load(unsigned uid, unsigned uidBy, const string &type, const Json::Value &data, Json::Value &result);
+	int Load(unsigned uid, unsigned uidBy, const string &type, const Json::Value &data, Json::Value &result, unsigned lasttime=0, unsigned gmFlag=0);
 	int Save(unsigned uid, unsigned uidBy, const string &type, Json::Value &data, Json::Value &result);
-	//int UpdateSave(unsigned uid, unsigned uidBy, Json::Value &result);
-	int UpdateSave(unsigned uid, unsigned uidBy, unsigned world_pos,Json::Value &result);
+	int UpdateSave(unsigned uid, unsigned uidBy, const string &type, unsigned world_pos,Json::Value &result);
 	int Updates(unsigned uid, unsigned uidBy, Json::Value &data, Json::Value &result);
 
-	int ProcessOrders(unsigned uid, const Json::Value data, DataPay &payData, bool addable);
-	//int UpdateAttack(unsigned uid, unsigned uidDefence, Json::Value &data);
-	int UpdateAttack(const DataUser &user, const DataUser &userDefence, Json::Value &data);
-	int ProcessAttackInfo(unsigned uid, Json::Value &attackinfo);
-	int ProcessUpdateInfo(unsigned uid, Json::Value &updateinfo);
-	int SaveRefresh(unsigned uid, const string ipStr, Json::Value &refreshinfo);
-	int is_Login( string &openid, string &openkey);
+	int ProcessOrders(unsigned uid, const Json::Value data, DataPay &payData, bool addable, Json::Value &user_flag, bool &bsave);
+	int UpdateAttack(const DataUser &user, const DataUser &userDefence, Json::Value &data, int* rchg);
+	int ProcessAttackInfo(unsigned uid, Json::Value &attackinfo, Json::Value &result, unsigned attackuid, LoadType type, bool res = true, int* rchg = NULL);
+	int ProcessUpdateInfo(unsigned uid, Json::Value &updateinfo, Json::Value &result);
 	int GetActivityTime(Json::Value &data);
 	static int GetInitArchive(const Json::Value *&pArchive);
 
-	int checkUserStats(const Json::Value &old, const Json::Value &now);
-	int checkUserTech(const Json::Value &old, const Json::Value &now);
+	int checkUserStats(Json::Value &old, Json::Value &now);
+	int checkUserTech(Json::Value &old, Json::Value &now);
+
+	//------------------------------------------------------------------------
+	//检查主线任务奖励领取是否合法
+	int CheckQuestRewardValid(unsigned uid, const DataUser& user,const Json::Value& data, int &gate_reward);
+	//将领取过的主线任务id放入map表
+	int GetMainQuestFinishMap(unsigned uid, std::map<unsigned, int>& result);
+	//解析客户端提交的quest字段
+	int ParseMainQuestSubmitMap(unsigned uid, const Json::Value jsonQuest, std::map<unsigned, int>& result);
+	//获取传记挑战的次数
+	int GetOlgateCnt(unsigned uid, const DataUser& user, int& result);
+	//@end
+
+
+	LoadType GetLoadType(const string &type);
+	static inline bool IsSelfType(LoadType type)
+	{
+		return type == LT_LOGIN || type == LT_BUILD || type == LT_SUBBASE || type == LT_DEFEND;
+	}
+	static inline bool IsOtherType(LoadType type)
+	{
+		return type == LT_VIEW || type == LT_ATTACK || type == LT_RANK || type == LT_CHALLENGE || type == LT_SPORTS || type == LT_DRAGON || type == LT_BNW || type == LT_MVP;
+	}
+	static inline bool IsBattleType(LoadType type)
+	{
+		return type == LT_DEFEND || type == LT_ATTACK || type == LT_SPORTS || type == LT_RANK || type == LT_CHALLENGE || type == LT_DRAGON || type == LT_BNW || type == LT_MVP;
+	}
+	static inline bool IsVision(LoadType type)
+	{
+		return type == LT_RANK || type == LT_CHALLENGE || type == LT_DRAGON || type == LT_BNW || type == LT_MVP;
+	}
+
+	int getMaxAddExp(unsigned level);
+	int getAttMaxAddExp(unsigned level);
+	int getResCostAddExp(int level, int r1, int r2, int r3, int r4);
+	int getResGetAddExp(int level, int r1, int r2, int r3, int r4);
+	int getLevel(unsigned exp);
+	unsigned getExp(unsigned level);
 };
 
 #endif /* LOGICARCHIVE_H_ */

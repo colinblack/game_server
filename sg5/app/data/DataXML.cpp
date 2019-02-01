@@ -1,0 +1,147 @@
+/*
+ * DataXML.cpp
+ *
+ *  Created on: 2014-4-24
+ *      Author: ralf
+ */
+
+#include "DataInc.h"
+#include <math.h>
+#include "OpenPlatform.h"
+#include "IOpenPlatform.h"
+#include "DataXmlUnit.h"
+#include <stdexcept>
+
+
+CDataXML* CDataXML::m_pData = NULL;
+
+const Payrank CDataXML::level_1[PAYRANK_COUNT] = {
+		PAYRANK_LEVEL_1_1,
+		PAYRANK_LEVEL_1_2,
+		PAYRANK_LEVEL_1_3,
+		PAYRANK_LEVEL_1_4,
+		PAYRANK_LEVEL_1_5,
+		PAYRANK_LEVEL_1_6,
+		PAYRANK_LEVEL_1_7
+};
+const Payrank CDataXML::level_2[PAYRANK_COUNT] = {
+		PAYRANK_LEVEL_2_1,
+		PAYRANK_LEVEL_2_2,
+		PAYRANK_LEVEL_2_3,
+		PAYRANK_LEVEL_2_4,
+		PAYRANK_LEVEL_2_5,
+		PAYRANK_LEVEL_2_6,
+		PAYRANK_LEVEL_2_7
+};
+const Payrank CDataXML::level_3[PAYRANK_COUNT] = {
+		PAYRANK_LEVEL_3_1,
+		PAYRANK_LEVEL_3_2,
+		PAYRANK_LEVEL_3_3,
+		PAYRANK_LEVEL_3_4,
+		PAYRANK_LEVEL_3_5,
+		PAYRANK_LEVEL_3_6,
+		PAYRANK_LEVEL_3_7
+};
+const Payrank CDataXML::level_4_1[PAYRANK_COUNT] = {
+		PAYRANK_LEVEL_4_1_1,
+		PAYRANK_LEVEL_4_1_2,
+		PAYRANK_LEVEL_4_1_3,
+		PAYRANK_LEVEL_4_1_4,
+		PAYRANK_LEVEL_4_1_5,
+		PAYRANK_LEVEL_4_1_6,
+		PAYRANK_LEVEL_4_1_7
+};
+const Payrank CDataXML::level_4_2[PAYRANK_COUNT] = {
+		PAYRANK_LEVEL_4_2_1,
+		PAYRANK_LEVEL_4_2_2,
+		PAYRANK_LEVEL_4_2_3,
+		PAYRANK_LEVEL_4_2_4,
+		PAYRANK_LEVEL_4_2_5,
+		PAYRANK_LEVEL_4_2_6,
+		PAYRANK_LEVEL_4_2_7
+};
+const Payrank CDataXML::level_4_3[PAYRANK_COUNT] = {
+		PAYRANK_LEVEL_4_3_1,
+		PAYRANK_LEVEL_4_3_2,
+		PAYRANK_LEVEL_4_3_3,
+		PAYRANK_LEVEL_4_3_4,
+		PAYRANK_LEVEL_4_3_5,
+		PAYRANK_LEVEL_4_3_6,
+		PAYRANK_LEVEL_4_3_7
+};
+
+const unsigned CDataXML::juexue_cost[XML_JUEXUE_NPC_NUM] = {
+		800, 1200, 2000, 4000, 8000
+};
+const unsigned CDataXML::juexue_chance[XML_JUEXUE_NPC_NUM] = {
+		3000, 3000, 3000, 5000, 10000
+};
+const unsigned CDataXML::juexue_fall[XML_JUEXUE_NPC_NUM + 1][e_juexue_type_max] = {
+		{3500,	500,	0,		0,		0,		6000},
+		{5000,	1000,	0,		0,		0,		4000},
+		{5000,	2900,	100,	0,		0,		2000},
+		{1500,	7000,	1500,	0,		0,		0},
+		{0,		5000,	4000,	1000,	0,		0},
+		{0,		3000,	3500,	300,	3200,	0}
+};
+const unsigned CDataXML::juexue_level[XML_JUEXUE_LEVEL_NUM] = {
+		50, 80, 120
+};
+const unsigned CDataXML::juexue_type[XML_JUEXUE_LEVEL_NUM][XML_JUEXUE_TYPE_NUM][e_juexue_max] = {
+		{
+			{2500,2500,2500,0,0,0,0,2500,0,0,0,0},
+			{2500,2500,2500,0,0,0,0,2500,0,0,0,0},
+			{2500,2500,2500,0,0,0,0,2500,0,0,0,0},
+			{2500,2500,2500,0,0,0,0,2500,0,0,0,0}
+		},
+		{
+			{1400,1300,1300,500,500,1300,0,1300,1300,1200,0,0},
+			{1400,1300,1300,500,500,1300,0,1300,1300,1200,0,0},
+			{1400,1300,1300,500,500,1300,0,1300,1300,1200,0,0},
+			{1400,1300,1300,500,500,1300,0,1300,1300,1200,0,0}
+		},
+		{
+			{1000,1000,1000,500,500,1000,1000,1000,1000,1000,1000,0},
+			{1000,1000,1000,500,500,1000,1000,1000,1000,1000,1000,0},
+			{1000,1000,1000,500,500,1000,1000,1000,1000,1000,1000,0},
+			{1000,1000,1000,500,500,1000,1000,1000,1000,1000,990,10}
+		}
+};
+const unsigned CDataXML::juexue_id[XML_JUEXUE_TYPE_NUM][e_juexue_max] = {
+		{1000,	2000,	3000,	4000,	5000,	6000,	7000,	8000,	9000,	10000,	11000,	12010},
+		{1001,	2001,	3001,	4001,	5001,	6001,	7001,	8001,	9001,	10001,	11001,	12001},
+		{1002,	2002,	3002,	4002,	5002,	6002,	7002,	8002,	9002,	10002,	11002,	12002},
+		{1003,	2003,	3003,	4003,	5003,	6003,	7003,	8003,	9003,	10003,	11003,	12003}
+};
+
+
+const unsigned CDataXML::chengzhang[JIANGLING_CHENGZHANG_L][JIANGLING_CHENGZHANG_L] = {
+		{600,	3,	6001,	0},
+		{780,	4,	6002,	0},
+		{1516,	5,	6003,	0},
+		{8231,	0,	   0,	0}
+};
+
+const unsigned CDataXML::jiang_ling_rate[JIANGLING_CHENGZHANG_L - 1][JIANGLING_CHENGZHANG_L + 1][JIANGLING_CHENGZHANG_L - 2] = {
+		{
+			{1,	1000},
+			{2,	2000},
+			{3,	3000},
+			{4, 4000},
+			{0, 0}
+		},
+		{
+			{2,	1500},
+			{3,	2000},
+			{4,	3000},
+			{5, 2000},
+			{6, 1500}
+		},
+		{
+			{3,	1500},
+			{4,	2000},
+			{5,	3000},
+			{6, 2000},
+			{7, 1500}
+		}
+};

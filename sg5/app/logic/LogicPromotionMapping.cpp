@@ -19,12 +19,12 @@ int CLogicPromotionMapping::GetPromotionMapping(DataPromotionMapping &data)
 {
 	CDataPromotionMapping dataPromotionMapping;
 	int ret = dataPromotionMapping.GetPromotionMapping(data);
-	if(ret != 0)
+	if(ret != 0 && ret != R_ERR_NO_DATA)
 	{
 		error_log("get exchangecode failed,uid = %u",data.uid);
 		return ret;
 	}
-	return 0;
+	return ret;
 
 }
 int CLogicPromotionMapping::AddPromotionMapping(const DataPromotionMapping &data)

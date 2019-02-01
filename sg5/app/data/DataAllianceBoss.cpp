@@ -67,11 +67,7 @@ int CDataAllianceBoss::LoadAllianceBossOpener(unsigned uid, unsigned bossId, uns
 	if (!IsValidAllianceBossId(bossId))
 	return R_ERR_NO_DATA;
 	unsigned now = Time::GetGlobalTime();
-	unsigned ts1 = now;
-	unsigned totalStandTs = 0;
-	unsigned arvStandTs = 0;
-	int fullBloodLevel = 1;
-	int index =0;
+	int index = 0;
 	bool flag = false;
 
 	AllianceAttackNumber *pdata = (AllianceAttackNumber *)m_sh.GetAddress();
@@ -91,90 +87,36 @@ int CDataAllianceBoss::LoadAllianceBossOpener(unsigned uid, unsigned bossId, uns
 		{
 			index = i;
 			flag = true;
-			debug_log("allianceboss_already_opener : | last_blood=%u | curr_open=%u | alliance_id=%u | %d"
-								,pdata->Alliancebossdata[i].fullBlood,now,pdata->Alliancebossdata[i].alliance_id,i);
+			//debug_log("allianceboss_already_opener : | last_blood=%u | curr_open=%u | alliance_id=%u | %d",pdata->Alliancebossdata[i].fullBlood,now,pdata->Alliancebossdata[i].alliance_id,i);
 			break;
 		}
 	    else if( (pdata->Alliancebossdata[i].alliance_id == 0))
 	    {
 			index = i;
 			flag = true;
-			debug_log("allianceboss_first_opener : | last_blood=%u | curr_open=%u | alliance_id=%u | %d"
-								,pdata->Alliancebossdata[i].fullBlood,now,pdata->Alliancebossdata[i].alliance_id,i);
+			//debug_log("allianceboss_first_opener : | last_blood=%u | curr_open=%u | alliance_id=%u | %d",pdata->Alliancebossdata[i].fullBlood,now,pdata->Alliancebossdata[i].alliance_id,i);
 			break;
 	    }
 	}
 
 	if(flag == true )
 	{
-		CDataAlliancePay alliance_coins;                                   //开启活动需减帮会30金币
-		DataAlliancePay alliancecoin;
-		int ret = alliance_coins.GetPay(alliance_id,alliancecoin);
-		if(ret != 0 )
-		{
-			return ret;
-		}
-		if(alliancecoin.coins >= 30)
-		{
-			alliancecoin.coins = alliancecoin.coins - 30;
-			ret = alliance_coins.SetPay(alliance_id,alliancecoin);
-			if(ret != 0)
-			{
-				return ret;
-			}
-		}
-		else
-		{
-			DB_ERROR_RETURN_MSG("Alliance_coin_lacking");
-//			return R_ERR_REFUSE;
-		}
-
 		pdata->Alliancebossdata[index].alliance_id = alliance_id;
 		pdata->Alliancebossdata[index].ts_start = now;
 		pdata->Alliancebossdata[index].vip_grade = vip_grade;
 
-		if (CTime::GetDayInterval(pdata->Alliancebossdata[index].ts,now) != 0)
+		if(CTime::GetDayInterval(pdata->Alliancebossdata[index].ts, now) != 0)
 		{
-			totalStandTs +=pdata->Alliancebossdata[index].standts;
-			ts1= pdata->Alliancebossdata[index].ts;
-		}
-		if(CTime::GetDayInterval(ts1, now) != 0)
-		{
-			arvStandTs = totalStandTs / 4;
-			if(arvStandTs < 180 && arvStandTs > 0)
-			{
-				fullBloodLevel = STAND_TIME_LEVEL_1;
-			}
-			else if(arvStandTs >= 180 && arvStandTs < 300)
-			{
-				fullBloodLevel = STAND_TIME_LEVEL_2;
-			}
+			if(pdata->Alliancebossdata[index].blood == 0)
+				pdata->Alliancebossdata[index].fullBlood *= 2;
 			else
-			{
-				fullBloodLevel = STAND_TIME_LEVEL_3;
-			}
-			switch(fullBloodLevel)
-			{
-			case STAND_TIME_LEVEL_1:
-				pdata->Alliancebossdata[index].fullBlood = pdata->Alliancebossdata[index].fullBlood * 2;
-				break;
-			case STAND_TIME_LEVEL_2:
-				pdata->Alliancebossdata[index].fullBlood =pdata->Alliancebossdata[index].fullBlood * 1.5;
-				break;
-			case STAND_TIME_LEVEL_3:
-				pdata->Alliancebossdata[index].fullBlood = pdata->Alliancebossdata[index].fullBlood * 0.8;
-				break;
-			default:
-				break;
-			}
+				pdata->Alliancebossdata[index].fullBlood /= 2;
+
 			if(pdata->Alliancebossdata[index].fullBlood < m_minWorldbossBlood[0] )
-			{
 				pdata->Alliancebossdata[index].fullBlood = m_minWorldbossBlood[0];
-			}
 			else if(pdata->Alliancebossdata[index].fullBlood > m_maxWorldbossBlood[0] )
-			{
 				pdata->Alliancebossdata[index].fullBlood = m_maxWorldbossBlood[0];
-			}
+
 			pdata->Alliancebossdata[index].blood = pdata->Alliancebossdata[index].fullBlood;
 			memset(&(pdata->Alliancebossdata[index].challengers), 0, sizeof(pdata->Alliancebossdata[0].challengers));
 			pdata->Alliancebossdata[index].challNum = 0;
@@ -184,25 +126,24 @@ int CDataAllianceBoss::LoadAllianceBossOpener(unsigned uid, unsigned bossId, uns
 
 			fullBlood = pdata->Alliancebossdata[index].fullBlood;
 			blood = pdata->Alliancebossdata[index].blood;
-			debug_log("Allianceboss_blood :fullBlood=%u |  alliance_id=%u | %d"
-					,pdata->Alliancebossdata[index].fullBlood,pdata->Alliancebossdata[index].alliance_id,index);
+			//debug_log("Allianceboss_blood :fullBlood=%u |  alliance_id=%u | %d"	,pdata->Alliancebossdata[index].fullBlood,pdata->Alliancebossdata[index].alliance_id,index);
 		}
 	}
 	else                             //空间已经满了
 	{
-		debug_log("opener : %s  |open_uid= %u ","no place to allianceboss opener!!",uid);
+		error_log("opener : %s  |open_uid= %u ","no place to allianceboss opener!!",uid);
 		return R_ERR_DATA_LIMIT;
 	}
 	return 0;
 }
 
 int CDataAllianceBoss::LoadAllianceBoss(unsigned uid, unsigned bossId, unsigned &blood, unsigned &number, int &selfRank, AllianceBossChallenger &self,
-		vector<AllianceBossChallenger> &top, AllianceBossChallenger &last,unsigned &fullBlood,unsigned &alliance_id)
+		vector<AllianceBossChallenger> &top, AllianceBossChallenger &last,unsigned &fullBlood,unsigned &alliance_id, unsigned &startts)
 {
 
 	if (!IsValidAllianceBossId(bossId))
 	return R_ERR_NO_DATA;
-	int index = 999;
+	int index = 0;
 	bool flag = false;
 	unsigned now = Time::GetGlobalTime();
 	AllianceAttackNumber *pdata = (AllianceAttackNumber *)m_sh.GetAddress();
@@ -216,19 +157,19 @@ int CDataAllianceBoss::LoadAllianceBoss(unsigned uid, unsigned bossId, unsigned 
 	{
 		if((pdata->Alliancebossdata[i].alliance_id == alliance_id)&&(CTime::GetDayInterval(pdata->Alliancebossdata[i].ts_start, now) == 0))
 		{
-			debug_log("jimmyloadsuccess : ts_start=%u |alliance_id=%u  | blood=%u | full_blood=%u",
-					pdata->Alliancebossdata[i].ts_start,pdata->Alliancebossdata[i].alliance_id,pdata->Alliancebossdata[i].blood,pdata->Alliancebossdata[i].fullBlood);
+			//debug_log("jimmyloadsuccess : ts_start=%u |alliance_id=%u  | blood=%u | full_blood=%u",	pdata->Alliancebossdata[i].ts_start,pdata->Alliancebossdata[i].alliance_id,pdata->Alliancebossdata[i].blood,pdata->Alliancebossdata[i].fullBlood);
 			index = i;
 			flag = true;
 			break;
 		}
+		else if(pdata->Alliancebossdata[i].alliance_id == 0)
+			break;
 	}
 
 	if(flag == true)
 	{
-		debug_log("jimmyload_flag=ture : ts_start=%u |alliance_id=%u  | blood=%u | full_blood=%u",
-				pdata->Alliancebossdata[index].ts_start,pdata->Alliancebossdata[index].alliance_id
-				,pdata->Alliancebossdata[index].blood,pdata->Alliancebossdata[index].fullBlood);
+		//debug_log("jimmyload_flag=ture : ts_start=%u |alliance_id=%u  | blood=%u | full_blood=%u",pdata->Alliancebossdata[index].ts_start,pdata->Alliancebossdata[index].alliance_id,pdata->Alliancebossdata[index].blood,pdata->Alliancebossdata[index].fullBlood);
+		startts = pdata->Alliancebossdata[index].ts_start;
 		selfRank = 0;
 		fullBlood = pdata->Alliancebossdata[index].fullBlood;
 		blood = pdata->Alliancebossdata[index].blood;
@@ -253,6 +194,7 @@ int CDataAllianceBoss::LoadAllianceBoss(unsigned uid, unsigned bossId, unsigned 
 	}
 	else
 	{
+		startts = 0;
 		selfRank = 0;
 		fullBlood = 0;
 		blood = 0;
@@ -260,10 +202,14 @@ int CDataAllianceBoss::LoadAllianceBoss(unsigned uid, unsigned bossId, unsigned 
 		memset(&self, 0, sizeof(AllianceBossChallenger));
 		memset(&last, 0, sizeof(AllianceBossChallenger));
 		top.clear();
-		debug_log("load_allianceboss  uid =%u",uid);
+		//debug_log("load_allianceboss  uid =%u",uid);
 //		return R_ERR_NO_DATA;
 	}
 	return 0;
+}
+
+int sortAlliance(const AllianceBossChallenger& left,const AllianceBossChallenger& right){
+	return left.damage > right.damage;
 }
 
 int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigned damage, const string &name,
@@ -273,25 +219,30 @@ int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigne
 {
 	if (!IsValidAllianceBossId(bossId))
 		return R_ERR_NO_DATA;
-	AllianceAttackNumber *pdata = NULL;
-	unsigned now = time(0);
-	pdata = (AllianceAttackNumber *)m_sh.GetAddress();
+	unsigned now = Time::GetGlobalTime();
 	int index;
+	AllianceAttackNumber *pdata = NULL;
+	pdata = (AllianceAttackNumber *)m_sh.GetAddress();
 	if(pdata == NULL)
 	{
 		return R_ERR_DB;
 	}
+
+	bool flag = false;
 	CAutoLock lock(&(m_sh), true);
 	int i = 0;
 	for(; i < ALLIANCEBOSS_ALLIANCE_MAX; i++)
 	{
-		if((pdata->Alliancebossdata[i].alliance_id == alliance_id))
+		if(pdata->Alliancebossdata[i].alliance_id == alliance_id)
 		{
 			index = i;
+			flag = true;
 			break;
 		}
+		else if(pdata->Alliancebossdata[i].alliance_id == 0)
+			break;
 	}
-	if(i == ALLIANCEBOSS_ALLIANCE_MAX)
+	if(!flag)
 		return R_ERR_LOGIC;
 
 	dying = false;
@@ -356,25 +307,38 @@ int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigne
 		if (pos < (int)pdata->Alliancebossdata[index].challNum)
 			 newDamage += (pdata->Alliancebossdata[index].challengers[pos]).damage;
 		int newpos = pos - 1;
+
 		for (; newpos >= 0; newpos--)
 		{
 			if ((pdata->Alliancebossdata[index].challengers[newpos]).damage >= newDamage)
 				break;
 		}
 		newpos++;
-		for (int i = pos - 1; i >= newpos; i--)
+		//前10名才按顺序排序
+		if(newpos < 10)
 		{
-			pdata->Alliancebossdata[index].challengers[i+1] = pdata->Alliancebossdata[index].challengers[i];
+			for (int i = pos - 1; i >= newpos; i--)
+			{
+				pdata->Alliancebossdata[index].challengers[i+1] = pdata->Alliancebossdata[index].challengers[i];
+			}
+
+			(pdata->Alliancebossdata[index].challengers[newpos]).uid = uid;
+			(pdata->Alliancebossdata[index].challengers[newpos]).damage = newDamage;
+			snprintf((pdata->Alliancebossdata[index].challengers[newpos]).name, sizeof((pdata->Alliancebossdata[index].challengers[newpos]).name), "%s", name.c_str());
 		}
-		(pdata->Alliancebossdata[index].challengers[newpos]).uid = uid;
-		(pdata->Alliancebossdata[index].challengers[newpos]).damage = newDamage;
-		snprintf((pdata->Alliancebossdata[index].challengers[newpos]).name, sizeof((pdata->Alliancebossdata[index].challengers[newpos]).name), "%s", name.c_str());
+		else
+		{
+			(pdata->Alliancebossdata[index].challengers[pos]).uid = uid;
+			(pdata->Alliancebossdata[index].challengers[pos]).damage = newDamage;
+			snprintf((pdata->Alliancebossdata[index].challengers[pos]).name, sizeof((pdata->Alliancebossdata[index].challengers[pos]).name), "%s", name.c_str());
+		}
+
 		if (pos >= (int)pdata->Alliancebossdata[index].challNum)
 		{
 			pdata->Alliancebossdata[index].challNum++;
 			if(pdata->Alliancebossdata[index].challNum >= 10)
 			{
-				int r = rand() % 2;
+				int r = Math::GetRandomInt(2);
 				switch(r)
 				{
 				case 0:
@@ -392,7 +356,14 @@ int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigne
 			}
 
 		}
-		memcpy(&self, &(pdata->Alliancebossdata[index].challengers[newpos]), sizeof(AllianceBossChallenger));
+		if(newpos < 10)
+		{
+			memcpy(&self, &(pdata->Alliancebossdata[index].challengers[newpos]), sizeof(AllianceBossChallenger));
+		}
+		else
+		{
+			memcpy(&self, &(pdata->Alliancebossdata[index].challengers[pos]), sizeof(AllianceBossChallenger));
+		}
 		selfRank = newpos + 1;
 		if (pdata->Alliancebossdata[index].blood == 0)
 		{
@@ -415,6 +386,13 @@ int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigne
 	if (pdata->Alliancebossdata[index].blood == 0)
 	{
 		dying = true;
+		vector<AllianceBossChallenger> sortend;
+		int i;
+		for(i = 0 ;i < ALLIANCEBOSS_LAST_ATTACK_INDEX; i++)
+			sortend.push_back(pdata->Alliancebossdata[index].challengers[i]);
+		sort(sortend.begin(),sortend.end(),sortAlliance);
+		for(i = 0 ;i < ALLIANCEBOSS_LAST_ATTACK_INDEX; i++)
+			pdata->Alliancebossdata[index].challengers[i] = sortend[i];
 	}
 
 	unsigned size = pdata->Alliancebossdata[index].challNum >= 10?10 : pdata->Alliancebossdata[index].challNum;
@@ -434,7 +412,7 @@ int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigne
 	{
 		for (unsigned j = 0; j < pdata->Alliancebossdata[index].challNum; j++)
 		{
-			if((pdata->Alliancebossdata[index].challengers)[j].damage * 100 >= pdata->Alliancebossdata[index].fullBlood)
+			if((pdata->Alliancebossdata[index].challengers)[j].damage >= pdata->Alliancebossdata[index].fullBlood / 100)
 				dam.push_back((pdata->Alliancebossdata[index].challengers)[j]);
 		}
 	}
@@ -445,25 +423,29 @@ int CDataAllianceBoss::ViewAllianceBoss(unsigned uid, unsigned bossId, unsigned 
 		vector<AllianceBossChallenger> &top, AllianceBossChallenger &last,unsigned &alliance_id)
 {
 	AllianceAttackNumber *pdata = NULL;
-	unsigned now = time(0);
-	pdata = (AllianceAttackNumber *)m_sh.GetAddress();
+	unsigned now = Time::GetGlobalTime();
 	int index;
 	bool flag = false;
-	for(int i = 0; i < ALLIANCEBOSS_ALLIANCE_MAX; i++)
-	{
-		if((pdata->Alliancebossdata[i].alliance_id == alliance_id))
-		{
-			index = i;
-			flag = true;
-			break;
-		}
-	}
+	pdata = (AllianceAttackNumber *)m_sh.GetAddress();
 	if(pdata == NULL)
 	{
 		error_log("[GetAddress_fail][]");
 		return R_ERR_DB;
 	}
+
 	CAutoLock lock(&(m_sh), true);
+	for(int i = 0; i < ALLIANCEBOSS_ALLIANCE_MAX; i++)
+	{
+		if(pdata->Alliancebossdata[i].alliance_id == alliance_id)
+		{
+			index = i;
+			flag = true;
+			break;
+		}
+		else if(pdata->Alliancebossdata[i].alliance_id == 0)
+			break;
+	}
+
 	if(flag == true)
 	{
 		selfRank = 0;
@@ -515,11 +497,11 @@ int CDataAllianceBoss::LoadLastAllianceBoss(unsigned uid, unsigned bossId, unsig
 		error_log("[GetAddress fail]");
 		return R_ERR_DB;
 	}
-	CAutoLock lock(&(m_sh), true);
-
 	int index;
 	bool flag = false;
-	unsigned now = time(0);
+	unsigned now = Time::GetGlobalTime();
+
+	CAutoLock lock(&(m_sh), true);
 	for(int i = 0; i < ALLIANCEBOSS_ALLIANCE_MAX; i++)
 	{
 		if(((pdata->Alliancebossdata[i].alliance_id == alliance_id)&&(pdata->Alliancebossdata[i].blood == 0))
@@ -527,9 +509,11 @@ int CDataAllianceBoss::LoadLastAllianceBoss(unsigned uid, unsigned bossId, unsig
 		{
 			index = i;
 			flag = true;
-			debug_log("jimmy_last %u | %u",pdata->Alliancebossdata[index].ts_start,now);
+			//debug_log("jimmy_last %u | %u",pdata->Alliancebossdata[index].ts_start,now);
 			break;
 		}
+		else if(pdata->Alliancebossdata[i].alliance_id == 0)
+			break;
 	}
 	//add by aaron 20121220
 	if(flag == true)
@@ -557,7 +541,7 @@ int CDataAllianceBoss::LoadLastAllianceBoss(unsigned uid, unsigned bossId, unsig
 		}
 		last = pdata->Alliancebossdata[index].challengers[ALLIANCEBOSS_LAST_ATTACK_INDEX];
 	}
-	else                             //空间已经满了
+	else
 	{
 		selfRank = 0;
 		fullBlood = 0;

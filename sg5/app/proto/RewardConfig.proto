@@ -1,0 +1,28 @@
+package RewardConfig;
+
+message EquipItem
+{
+	required uint32 eqid	= 1;
+	required uint32 c		= 2;  //数量
+	optional uint32 ch		= 3;  //品质
+	optional uint32 q		= 4;  //强化等级
+	optional uint32 ltime	= 5;  //是否限时
+}
+
+message HeroItem
+{
+	required bytes id	= 1;
+	required uint32 c	= 2;
+}
+
+message RewardItemCfg
+{
+	repeated EquipItem equips = 1;   //装备
+	repeated HeroItem 	heros	= 2;  //英雄
+	repeated uint32 	res		= 3;  //资源
+	optional uint32 	gold 	= 4;   //金币
+	optional uint32 diamond		= 5;   //钻石
+	optional uint32 energy		= 6;   //能量
+	optional uint32 prosper		= 7;  //战魂
+	optional uint32 exp			= 8; //经验
+}

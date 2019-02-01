@@ -35,8 +35,8 @@ public:
 	virtual string GetErrorMessage();
 
 	int GetOtherUserInfo(OPUserInfo userInfo, const string &queryOpenId, const string &openid, const string &openkey);
-	int GetLikes(vector<string> &appIds, const string &openid, const string &openkey);
-	int SendFeed(const string &openid, const string &openkey, const FacebookFeed &feed);
+	//int GetLikes(vector<string> &appIds, const string &openid, const string &openkey);
+	//int SendFeed(const string &openid, const string &openkey, const FacebookFeed &feed);
 
 private:
 	string m_errorMessage;

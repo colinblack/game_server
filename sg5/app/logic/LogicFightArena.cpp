@@ -2,7 +2,7 @@
 
 CDataFightArena* CLogicFightArena::GetCDataFightArena()
 {
-	GET_MEM_DATA_SEM(CDataFightArena, CONFIG_ARENA_DIR,sem_fightarena)
+	GET_MEM_DATA_SEM(CDataFightArena, CONFIG_ARENA_DIR,sem_fightarena,false)
 	/*static CDataFightArena* pFightArena = NULL;
 	if (!pFightArena)
 	{
@@ -131,7 +131,7 @@ int CLogicFightArena::GetFightArenaJson(Json::Value &arena)
 	return 0;
 }
 
-int CLogicFightArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, int regfee, Json::Value &result)
+int CLogicFightArena::Load(unsigned arenaid, unsigned uidBy, unsigned level, LoadType loadType, int regfee, Json::Value &result)
 {
 	if (!IsValidFightArenaId(arenaid))
 	{
@@ -176,6 +176,10 @@ int CLogicFightArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, 
 			}
 			if (userFlag["fit"][(unsigned)0].asString() == today)
 			{
+				if (level < 40 && userFlag["fit"][(unsigned)1].asInt() >= 1)
+				{
+					LOGIC_ERROR_RETURN_MSG("challenge_count_limit");
+				}
 				if (userFlag["fit"][(unsigned)1].asInt() >= 10)
 				{
 					LOGIC_ERROR_RETURN_MSG("challenge_count_limit");
@@ -199,11 +203,11 @@ int CLogicFightArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, 
 		}
 
 		int hostfee = 0, prize = 0;
-		if (regfee > 0)
+		/*if (regfee > 0)
 		{
 			hostfee = regfee * 4 / 10;
 			prize = regfee * 5 / 10;
-		}
+		}*/
 		DataFightArenaLimit dataArena;
 		if (!EnableChallenge(arenaid, uidBy, prize, dataArena))
 		{
@@ -251,13 +255,20 @@ int CLogicFightArena::Load(unsigned arenaid, unsigned uidBy, LoadType loadType, 
 	return 0;
 }
 
-int CLogicFightArena::Save(unsigned arenaid, DataUser &userBy, const Json::Value &data, Json::Value &result)
+int CLogicFightArena::Save(unsigned arenaid, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
 	if (!IsValidFightArenaId(arenaid))
 	{
 		PARAM_ERROR_RETURN_MSG("param_error");
 	}
 
+	if (Json::IsObject(data, "attackinfo"))
+	{
+		CLogicArchive logicArchive;
+		int ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], arenaid, loadtype);
+		if (ret != 0)
+			return ret;
+	}
 	return 0;
 }
 
@@ -302,8 +313,8 @@ int CLogicFightArena::FightOver(unsigned arenaid, unsigned challenger, bool isWi
 		archive["resources"][(unsigned)2]["m"] = user.r3_max;
 		archive["resources"][(unsigned)3]["c"] = user.r4;
 		archive["resources"][(unsigned)3]["m"] = user.r4_max;
-		archive["resources"][(unsigned)4]["c"] = user.r5;
-		archive["resources"][(unsigned)4]["m"] = user.r5_max;
+		archive["resources"][(unsigned)4]["c"] = 0;
+		archive["resources"][(unsigned)4]["m"] = 0;
 		archive["lasttime"] = user.last_save_time;
 		archive["gcbase"] = user.gcbase;
 		archive["newgcbase"] = user.newgcbase;
@@ -318,7 +329,7 @@ int CLogicFightArena::FightOver(unsigned arenaid, unsigned challenger, bool isWi
 		user.skillQ.empty() || reader.parse(user.skillQ, archive["skillQ"]);
 		user.trainQ.empty() || reader.parse(user.trainQ, archive["trainQ"]);
 		CLogicBuilding logicBuiding;
-		ret = logicBuiding.GetBuilding(challenger, archive["baseop"]);
+		ret = logicBuiding.GetBuilding(challenger,0, archive["baseop"],true);
 		if (ret != 0)
 			return ret;
 		CLogicHero logicHero;

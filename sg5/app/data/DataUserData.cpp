@@ -94,6 +94,13 @@ int CDataUserData::SetGift(unsigned uid, const string &gift)
 	DBCREQ_SET_STR_V(gift);
 	return 0;
 }
+int CDataUserData::GetGift(unsigned uid, string &gift)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_GET_STR_V(gift);
+	return 0;
+}
 
 int CDataUserData::SetLadder(unsigned uid, const string &ladder)
 {
@@ -125,6 +132,14 @@ int CDataUserData::SetDailyQuest(unsigned uid, const string &dailyquest)
 	DBCREQ_SET_KEY(uid);
 	DBCREQ_SET_STR_V(dailyquest);
 	return 0;
+}
+
+int CDataUserData::GetDailyQuest(unsigned uid, string &dailyquest)
+{
+    DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_GET_STR_V(dailyquest);
+    return 0;
 }
 
 int CDataUserData::GetWorldposCollect(unsigned uid,string &worldpos_collect)

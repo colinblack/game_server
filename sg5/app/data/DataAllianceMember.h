@@ -34,6 +34,7 @@ public:
 	int SetMember(const DataAllianceMember &member);
 	int GetMember(unsigned alliance_id, unsigned uid, DataAllianceMember &member);
 	int GetMembers(unsigned alliance_id, vector<DataAllianceMember> &members);
+	int GetMembers(unsigned alliance_id, vector<unsigned> &members);
 	int RemoveMember(unsigned alliance_id, unsigned uid);
 	int RemoveMembers(unsigned alliance_id);
 

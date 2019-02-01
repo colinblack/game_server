@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	}
 	int ret = 0;
 	CDataMysticalShop MysticalShop;
-	ret = MysticalShop.Init(Config::GetValue(CONFIG_MYSTICALSHOP_PATH));
+	ret = MysticalShop.Init(Config::GetPath(CONFIG_MYSTICALSHOP_PATH),sem_mysticalshop);
 	if (ret != 0)
 	{
 		cout << "init mysticalshop fail,ret:" << ret << endl;

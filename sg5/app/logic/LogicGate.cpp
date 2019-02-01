@@ -58,7 +58,9 @@ int CLogicGate::UpdateGate(unsigned uid, const Json::Value &data)
 			error_log("[gate data error][uid=%u,index=%u]",uid,i);
 			DATA_ERROR_RETURN_MSG("data_gate_error");
 		}
-		if (w == 0)
+
+		//屏蔽闯关失败关不存档
+		/*if (w == 0)
 		{
 			unsigned j = 0;
 			for (; j < ids.size(); j++)
@@ -66,8 +68,49 @@ int CLogicGate::UpdateGate(unsigned uid, const Json::Value &data)
 				if (id == ids[j]) break;
 			}
 			if (j < ids.size()) continue;
-		}
+		}*/
 		ret = gateDB.ReplaceGate(uid, id, writer.write(data[i]));
+		if (ret != 0)
+		{
+			error_log("[ReplaceGate fail][uid=%u,id=%u,ret=%d]",uid,id,ret);
+			DB_ERROR_RETURN_MSG("db_set_gate_fail");
+		}
+	}
+	return 0;
+}
+
+
+int CLogicGate::TH_UpdateGate(unsigned uid, int gate_end)
+{
+
+	int ret = 0;
+	Json::FastWriter writer;
+	Json::Reader reader;
+	CDataGate gateDB;
+
+	for (unsigned id = 1; id <= gate_end; id++)
+	{
+		Json::Value Data;
+		Data["s"] = 100;
+		Data["id"] = id;
+		Data["w"] = 1;
+		Data["f"] = 1;
+		Data["c"] = 1;
+
+		if(id == gate_end)
+		{
+			Data["s"] = 0;
+			Data["w"] = 0;
+
+			ret = gateDB.ReplaceGate(uid, id, writer.write(Data));
+			if (ret != 0)
+			{
+				error_log("[ReplaceGate fail][uid=%u,id=%u,ret=%d]",uid,id,ret);
+				DB_ERROR_RETURN_MSG("db_set_gate_fail");
+			}
+		}
+
+		ret = gateDB.ReplaceGate(uid, id, writer.write(Data));
 		if (ret != 0)
 		{
 			error_log("[ReplaceGate fail][uid=%u,id=%u,ret=%d]",uid,id,ret);

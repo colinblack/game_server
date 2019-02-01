@@ -15,9 +15,17 @@
 
 enum GMEnum
 {
-	gm_none = 0,
-	gm_admin = 1,
-	gm_th = 2,
+	gm_none 	= 0,
+
+	gm_admin 	= 1,
+	gm_th 		= 2,
+	gm_forbid 	= 3,
+	gm_white 	= 4,
+	gm_gift		= 5,
+	gm_ip		= 6,
+	gm_s_gift	= 7,
+
+	gm_max,
 };
 
 struct GM

@@ -41,6 +41,23 @@ public:
 			if (ret != 0)
 				return ret;
 		}
+		else if(action == "setachievement")
+		{
+			const string openkey = CCGIIn::GetCGIStr("openkey");
+			const string pf = CCGIIn::GetCGIStr("pf");
+			const string level = CCGIIn::GetCGIStr("level");
+			const string serverid = CCGIIn::GetCGIStr("serverid");
+			if(openkey.empty() || pf.empty() || level.empty() || serverid.empty())
+			{
+				error_log("[qq setachievement][openkey=%s,pf=%s,level=%s,serverid=%s]", openkey.c_str(),pf.c_str(),level.c_str(),serverid.c_str());
+				PARAM_ERROR_RETURN_MSG("param_error");
+			}
+
+			CLogicQQReport logicReport;
+			int ret = logicReport.SetAchievement(openid,openkey,pf,level,serverid);
+			if (ret != 0)
+				return ret;
+		}
 		else
 		{
 			report = CCGIIn::GetCGIInt("report");

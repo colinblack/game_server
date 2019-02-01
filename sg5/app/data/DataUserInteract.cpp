@@ -198,3 +198,12 @@ int CDataUserInteract::RemoveInteracts(unsigned uid, unsigned opposite_uid)
 	DBCREQ_EXEC;
 	return 0;
 }
+
+int CDataUserInteract::DelUserInteractsBeforeTS(unsigned uid, unsigned last_attack_time)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(LE, last_attack_time, last_attack_time);
+	DBCREQ_EXEC;
+	return 0;
+}

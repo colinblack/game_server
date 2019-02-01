@@ -2,7 +2,7 @@
 
 CDataMatch* CLogicMatch::GetCDataMatch()
 {
-	GET_MEM_DATA_SEM(CDataMatch, CONFIG_MATCH_DAT_PATH, sem_match)
+	GET_MEM_DATA_SEM(CDataMatch, CONFIG_MATCH_DAT_PATH, sem_match,false)
 	/*static CDataMatch* pMatch = NULL;
 	if (!pMatch)
 	{

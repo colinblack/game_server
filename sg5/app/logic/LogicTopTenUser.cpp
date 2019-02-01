@@ -13,7 +13,7 @@ CLogicTopTenUser::~CLogicTopTenUser() {}
 
 CDataTopTenUser* CLogicTopTenUser::GetCDataTopTenUser()
 {
-	GET_MEM_DATA_SEM(CDataTopTenUser, CONFIG_TOP_TEN_USER_PATH, sem_toptenuser)
+	GET_MEM_DATA_SEM(CDataTopTenUser, CONFIG_TOP_TEN_USER_PATH, sem_toptenuser,false)
 	/*static CDataTopTenUser* pdata = NULL;
 	if (NULL == pdata)
 	{
@@ -45,12 +45,16 @@ int CLogicTopTenUser::GetInfo(DataTopTenUser &data)
 	return 0;
 }
 
-int CLogicTopTenUser::SetUserLevel(unsigned uid, int level)
+int CLogicTopTenUser::SetUserLevel(unsigned uid, int level,int leveltemp)
 {
-	if(!CheckTime(USER_LEVEL_RANK))
+	if(!CheckTime(uid, USER_LEVEL_RANK))
 	{
 		return R_ERR_DATA;
 	}
+
+	if(leveltemp == level)
+		return 0;
+
 	CDataTopTenUser* pData = GetCDataTopTenUser();
 	if (NULL == pData)
 	{
@@ -59,24 +63,23 @@ int CLogicTopTenUser::SetUserLevel(unsigned uid, int level)
 	}
 	DataUserLevel data;
 	data.uid = uid;
-	data.level = level;
+	data.level = leveltemp;
 	return pData->SetUserLevel(data);
 }
 
-int CLogicTopTenUser::SetHeroPower(unsigned uid, int power, string& stat)
+int CLogicTopTenUser::SetHeroPower(unsigned uid, unsigned power, bool &error)
 {
-	if(!CheckTime(HERO_POWER_RANK))
+	error = false;
+	if(!CheckTime(uid, HERO_POWER_RANK))
 	{
 		return R_ERR_DATA;
 	}
 
-	Json::Value OldUserStat;
-	Json::Reader tempReader;
-	tempReader.parse(stat, OldUserStat);
-	int dehp = 0;
-	Json::GetInt(OldUserStat, "dehp", dehp);
-	if(power == dehp)
-		return 0;
+	if(power > 4000000 && OpenPlatform::GetType() != PT_TEST)
+	{
+		error = true;
+		return R_ERR_LOGIC;
+	}
 
 	CDataTopTenUser* pData = GetCDataTopTenUser();
 	if (NULL == pData)
@@ -90,9 +93,9 @@ int CLogicTopTenUser::SetHeroPower(unsigned uid, int power, string& stat)
 	return pData->SetHeroPower(data);
 }
 
-int CLogicTopTenUser::SetUserPlunder(unsigned uid)
+int CLogicTopTenUser::SetUserPlunder(unsigned uid, unsigned uidLock)
 {
-	if(!CheckTime(USER_LOOT_RANK))
+	if(!CheckTime(uidLock, USER_LOOT_RANK))
 	{
 		return R_ERR_DATA;
 	}
@@ -124,7 +127,7 @@ int CLogicTopTenUser::SetUserPlunder(unsigned uid)
 	return pData->SetUserPlunder(data);
 }
 
-bool CLogicTopTenUser::CheckTime(int type)
+bool CLogicTopTenUser::CheckTime(unsigned uid,int type)
 {
 	unsigned openTs = 0;
 	if (!Config::GetUIntValue(openTs, CONFIG_OPEN_TS))
@@ -155,14 +158,14 @@ bool CLogicTopTenUser::CheckTime(int type)
 	{
 		if (activityTs + one_data > Time::GetGlobalTime())
 		{
-			Reward(type);
+			Reward(uid, type);
 		}
 		return false;
 	}
 	return true;
 }
 
-int CLogicTopTenUser::Reward(int type)
+int CLogicTopTenUser::Reward(unsigned uid, int type)
 {
 	int ret = 0;
 	DataTopTenUser data;
@@ -206,6 +209,7 @@ int CLogicTopTenUser::Reward(int type)
 	updates.resize(1);
 	updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
 
+	UNLOCK_LOCK_USER(uid)
 	switch(type)
 	{
 	case USER_LEVEL_RANK:
@@ -224,13 +228,15 @@ int CLogicTopTenUser::Reward(int type)
 		}
 		break;
 	case HERO_POWER_RANK:
-		if (IsValidUid(data.heroPower[0].uid))
-		{
-			updates[(unsigned)0]["s"] = "activityherotop";
-			ret = logicUpdates.AddUpdates(data.heroPower[0].uid, updates);
-			if (0 != ret)
-			{
-				error_log("[add updates faile][uid=%u,ret=%d]", data.heroPower[0].uid, ret);
+		for (int i = 0; i < 10; i++) {
+			if (IsValidUid(data.heroPower[i].uid)) {
+				updates[(unsigned)0]["s"] = "activityherotop";
+				updates[(unsigned)0]["rank"] = i + 1;
+				ret = logicUpdates.AddUpdates(data.heroPower[i].uid, updates);
+				if (0 != ret)
+				{
+					error_log("[add updates faile][uid=%u,ret=%d]", data.heroPower[i].uid, ret);
+				}
 			}
 		}
 		break;

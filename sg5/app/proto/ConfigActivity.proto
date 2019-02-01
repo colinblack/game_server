@@ -1,0 +1,406 @@
+package ConfigActivity;
+import "RewardConfig.proto";
+
+message BuildSuitItem
+{
+	required uint32 diamond	= 1;
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+//祝福积分
+message ExchangeItem
+{
+	repeated uint32 condition	= 1;  //条件
+	required uint32 first		= 2; //首次兑换积分
+	required uint32 accumulate	= 3;  //累加
+	required RewardConfig.RewardItemCfg reward	= 4;  //奖励
+}
+
+message BlessPoint
+{
+	repeated ExchangeItem exchange	= 1;
+}
+
+//双倍福利
+message CostCoefficient
+{
+	required uint32 cost 		= 1;  //消耗钻石的起始
+	required double coefficient	= 2; //倍数系数
+}
+
+message DiamondReward
+{
+	required uint32 diamond	= 1;
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+message DiamondRewardLimit
+{
+	required uint32 diamond	= 1;
+	required uint32 limit   = 2;
+	required RewardConfig.RewardItemCfg reward	= 3;  //奖励
+}
+
+message DoubleWelfare
+{
+	required uint32 maximum						= 1; //代金券上限
+	repeated CostCoefficient cost_coefficient	= 2;  //消费额度系数
+	repeated DiamondReward 	extra_reward		= 3;  //充值的额外奖励
+}
+
+//灵珠进阶
+message PearlAdvance
+{
+	required uint32 cost						= 1;  //兑换积分
+	required uint32 maximum 					= 2;  //兑换上限
+	repeated uint32 cond_eqid					= 3;  //条件
+	required RewardConfig.RewardItemCfg reward	= 4;  //奖励
+}
+
+//绝学转盘
+message UniqueKnowledgeDial
+{
+	required uint32 id							= 1;
+	required uint32 weight 						= 2;
+	required RewardConfig.RewardItemCfg item	= 3;  //物品
+}
+
+//精元礼包
+message SpriteVitalityItem
+{
+	required uint32 diamond						= 1; //钻石
+	required RewardConfig.RewardItemCfg reward	= 2;  //物品
+}
+
+//熔炉
+message SmeltItem
+{
+	required uint32 eqid	= 1;   //物品id
+	required uint32 cost	= 2;  //消耗个数
+	required uint32 get		= 3;  //获取的熔炉值
+}
+
+message ShopItem
+{
+	required uint32 diamond						= 1;  //消耗的钻石
+	required uint32 forgecost					= 2;  //消耗的熔炉值
+	required RewardConfig.RewardItemCfg item	= 3;  //物品
+}
+
+message ForgeSmelt
+{
+	required uint32 daily_limit	= 1;
+	required uint32 forge_limit	= 2;
+	repeated SmeltItem smelt	= 3;
+	repeated ShopItem shop		= 4;
+}
+
+//紫将转盘
+message HeroItem
+{
+	required uint32 id							= 1;
+	required uint32	weight						= 2;
+	required RewardConfig.RewardItemCfg reward	= 3;  //物品
+}
+
+message HeroDial
+{
+	required uint32 per			= 1;
+	repeated HeroItem heroes	= 2;  
+	required uint32 limit		= 3;
+}
+
+//黑金强化
+message BlackGoldEnhance
+{
+	required uint32 first						= 1;  //起始消耗
+	required uint32 limit						= 2;  //兑换上限，不存在时设置0
+	required uint32 start						= 3;  //开始累加消耗的次数，如果不累加，则设置0
+	required uint32 accumulate					= 4;  //累加积分
+	repeated uint32 condition					= 5;
+	required RewardConfig.RewardItemCfg reward	= 6;  //奖励
+}
+
+//三国争霸
+message KingdomWar
+{
+	required uint32 diamond						= 1;
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+//一钻福利
+message RewardItem
+{
+	required uint32 price						= 1;
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+message OneDiamondWelfare
+{
+	required uint32 diamond		= 1;  //解锁的钻石
+	repeated RewardItem items	= 2;  //物品集合
+}
+
+//好运礼包
+message FortunePacks
+{
+	required RewardConfig.RewardItemCfg extra_reward	= 1;  //额外奖励
+	repeated RewardItem goods							= 2;  //物品
+}
+
+//七天好礼
+message SevenDayPacks
+{
+	required RewardConfig.RewardItemCfg reward	= 1;  //奖励
+}
+
+//密钥豪礼
+message ChargeKey
+{
+	required uint32 diamond	= 1;
+	required uint32 keynum	= 2;
+}
+
+message StuffItem
+{
+	required uint32 costkey						= 1;  //消耗密钥数
+	required uint32 limit						= 2; //兑换上限
+	required RewardConfig.RewardItemCfg reward	= 3;  //奖励
+}
+
+message KeyLuxuryGift
+{
+	repeated ChargeKey charge_key	= 1;  //充值额度与密钥
+	repeated StuffItem stuff_items	= 2; //物品库
+}
+
+//畅享小礼
+//消费额度礼包
+message ConsumeGiftItem
+{
+	required uint32 consume	= 1;  //消费额度
+	required RewardConfig.RewardItemCfg reward	= 2;  //奖励
+}
+
+message EnjoySmallGiftReward
+{
+	repeated DiamondReward charge_gift	= 1;  //充值额度奖励
+	repeated ConsumeGiftItem consume_gift	= 2;  //消费额度奖励
+}
+
+//幸运好礼
+//抽奖类活动的通用结构
+message TurnTableItem
+{
+	required uint32 id							= 1;
+	required uint32 weight 						= 2;
+	required RewardConfig.RewardItemCfg reward	= 3;  //物品
+}
+
+message LuckyGiftItem
+{
+	repeated TurnTableItem items = 1;  //子库
+}
+
+message LuckyGift
+{
+	required uint32 keycost				= 1;  //密钥数目
+	required uint32 pointcost			= 2;  //充值积分数目
+	repeated LuckyGiftItem stuff_items	= 3; //物品库
+}
+
+message NewYearActivity
+{
+	repeated DiamondReward 	charge_reward		        = 1;  //累计充值奖励
+	repeated DiamondRewardLimit buy_items	                = 2;  //组合商店购买
+	required RewardConfig.RewardItemCfg online_reward	= 3;  //在线奖励
+}
+
+message MsgSoulLevel  
+{
+	required uint32 lv  = 1;
+	required RewardConfig.RewardItemCfg reward = 2;
+}
+
+message MsgSoulGrowth
+{
+	required uint32 growth  = 1;
+	required RewardConfig.RewardItemCfg reward = 2;
+}
+
+
+message MsgWuhun
+{
+	required uint32 partcount  = 1;
+	required uint32 partlv     = 2;
+	required RewardConfig.RewardItemCfg reward = 3;
+}
+
+message MsgJuexue
+{
+	required uint32 quality  = 1;
+	required uint32 count    = 2;
+	required RewardConfig.RewardItemCfg reward = 3;
+}
+
+
+message MsgStar
+{
+	required uint32 star  = 1;
+	required uint32 type  = 2;
+	required RewardConfig.RewardItemCfg reward = 3;
+}
+
+message MsgHeaven
+{
+	required uint32 jie  = 1;
+	required uint32 ceng  = 2;
+	required RewardConfig.RewardItemCfg reward = 3;
+}
+
+message MsgDaoist
+{
+	required uint32 jie  = 1;
+	required uint32 ceng  = 2;
+	required RewardConfig.RewardItemCfg reward = 3;
+}
+
+message KaifuAchievement
+{
+	repeated MsgSoulLevel soul_lv         = 1;
+	repeated MsgSoulGrowth soul_growth = 2;
+	repeated MsgWuhun wuhun             = 3;
+	repeated MsgJuexue juexue           = 4;
+	repeated MsgStar star               = 5;
+	repeated MsgHeaven heaven           = 6;
+	repeated MsgDaoist daoist           = 7;
+	
+}
+
+message KaifuDiscountShop
+{
+	required uint32 o_price = 1;
+	required uint32 p_price = 2;
+	required RewardConfig.RewardItemCfg item = 3;
+}
+
+message KaiFuGift
+{
+	required KaifuAchievement achievement   = 1; //开服成就奖励
+	repeated KaifuDiscountShop shop         = 2; //开服折扣商店
+}
+
+message StarStoneChange
+{
+	repeated uint32 src		= 1;
+	repeated uint32 dst		= 2;
+	required uint32 limit	= 3;
+}
+
+// 红人榜
+message HongBaoItem
+{
+	required uint32 id = 1;
+	required uint32 rate_free = 2;
+	required uint32 rate_buy = 3;
+	required RewardConfig.RewardItemCfg reward = 4;
+}
+message HongBao
+{
+	required uint32 count = 1;
+	required uint32 refresh_free = 2;
+	required uint32 refresh_cost = 3;
+	repeated HongBaoItem item = 4;
+}
+
+message TaskGift
+{
+	required uint32 id 		= 1;
+	required uint32 count 	= 2;
+	required RewardConfig.RewardItemCfg reward = 3;
+}
+
+message RotaryTableCfg
+{
+	required uint32 id     = 1;
+	required uint32 count  = 2;
+	required uint32 type    = 3;//1:装备,2:英雄
+	required RewardConfig.RewardItemCfg reward = 4;
+}
+message RotaryTableCrazyReward
+{
+	repeated DiamondReward chargeReward   = 1;
+	required RewardConfig.RewardItemCfg rotaryTableCost = 2;
+	repeated RotaryTableCfg randomReward = 3;
+	required RewardConfig.RewardItemCfg fixedReward = 4;
+}
+
+//小兵宝物
+message BatmanTreasureDraw
+{
+	required RewardConfig.RewardItemCfg item	= 1;  //奖励
+	required uint32 weight   = 2;//物品权重
+}
+
+message BatmanTreasureCfg
+{
+	repeated DiamondReward xiaobing_chargeReward    = 1;//充值奖励
+	repeated BatmanTreasureDraw unique_xiaobing_dial = 2;//抽奖
+	required uint32 draw_cnt_max                     = 3;//最大抽奖次数
+	required uint32 draw_cost_integral               = 4;//抽奖消耗的积分
+}
+
+message SummerChargeRewardCfg
+{
+	repeated DiamondReward daily_chargeReward    = 1;//每日充值奖励
+	repeated DiamondReward acc_chargeReward      = 2;//累积充值奖励
+}
+
+message SummerHolidaysTicketCfg
+{
+	required uint32 need_cost_ticket           = 1;//需要消耗的兑换券
+	required uint32 exchange_count_max         = 2;//兑换次数上线
+	required RewardConfig.RewardItemCfg reward = 3;//兑换的物品	
+}
+
+message SummerHolidaysRewardCfg
+{
+	required uint32 exchange_ticket_max                     = 1;//兑换券数量上线
+	required uint32 per_ticket_need_diamond                 = 2;//每张兑换券需要的充值钻石
+	repeated SummerHolidaysTicketCfg summer_holidays_ticket = 3;//兑换信息
+	repeated DiamondReward chargeReward                     = 4;//累积充值奖励
+}
+//活动配置
+message Activities
+{
+	repeated BuildSuitItem buildsuit					= 1;  //打造套装
+	required BlessPoint 	blesspoint					= 2;   //祝福积分
+	required DoubleWelfare double_welfare				= 3;  //双倍福利
+	repeated PearlAdvance pearl_advance					= 4;  //灵珠进阶
+	repeated UniqueKnowledgeDial unique_knowledge_dial  = 5;  //绝学转盘
+	repeated SpriteVitalityItem	spiritvitality			= 6;   //精元礼包
+	required ForgeSmelt forge							= 7;  //熔炉
+	required HeroDial herodial							= 8; //紫将转盘
+	repeated KingdomWar kingdomwar						= 9;  //三国争霸
+	repeated OneDiamondWelfare onediamondwelfare 		= 10;  //一钻福利
+	required FortunePacks fortune_packs					= 11;  //好运礼包
+	repeated SevenDayPacks sevenday_packs				= 12;  //七天好礼
+	repeated DiamondReward icephoenix					= 13;  //冰凰来袭.配置复用
+	repeated DiamondReward autumn_feedback				= 14;  //秋日回馈
+	repeated DiamondReward protectflag					= 15;  //保护旗帜
+	required KeyLuxuryGift	keyluxurygift				= 16;  //密钥豪礼
+	required EnjoySmallGiftReward enjoy_smallgift		= 17;  //畅享小礼
+	required LuckyGift lucky_gift						= 18; //幸运好礼
+	repeated DiamondReward	year_endgift				= 19; //年末好礼
+	required NewYearActivity	newyearactivity			= 20; //元旦庆典
+	required KaiFuGift	        kaifu	                = 21; //开服有礼
+	required StarStoneChange starstone					= 22;//星石置换
+	required HongBao newyearactive						= 23;//红人榜
+	repeated TaskGift HebdomadReward					= 24;//任务好礼
+	required RotaryTableCrazyReward rotary_table        = 25;//转盘狂惠
+	required BatmanTreasureCfg batmantreasure           = 26;//小兵宝物
+	required SummerChargeRewardCfg summer_charge        = 27;//暑期精选
+	required SummerHolidaysRewardCfg summer_holidays    = 28;//暑期回馈
+}
+
+

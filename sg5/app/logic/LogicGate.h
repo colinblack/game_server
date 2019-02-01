@@ -20,6 +20,7 @@ class CLogicGate
 public:
 	int GetGate(unsigned uid, Json::Value &data);
 	int UpdateGate(unsigned uid, const Json::Value &data);
+	int TH_UpdateGate(unsigned uid, int gate_end);
 
 	int GetGateRank(unsigned uid, int gateId, Json::Value &json);
 	int Load(unsigned uid, unsigned start, unsigned end, Json::Value &json);

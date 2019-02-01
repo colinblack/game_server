@@ -55,7 +55,8 @@ int CDataLadder::GetRank(unsigned uid, int &rank)
 }
 
 int CDataLadder::GetFivePlayers(int rank1, int rank2, int rank3, int rank4, int rank5,
-		LadderItem &player1, LadderItem &player2, LadderItem &player3, LadderItem &player4, LadderItem &player5)
+		LadderItem &player1, LadderItem &player2, LadderItem &player3, LadderItem &player4, LadderItem &player5,
+		LadderItem top[3])
 {
 	LadderData *pdata = (LadderData *)m_sh.GetAddress();
 	if(pdata == NULL)
@@ -79,6 +80,11 @@ int CDataLadder::GetFivePlayers(int rank1, int rank2, int rank3, int rank4, int 
 		player4 = pdata->ladder[LadderRankToIndex(rank4)];
 	if (IsValidLadderRank(rank5))
 		player5 = pdata->ladder[LadderRankToIndex(rank5)];
+
+	memset(top, 0, sizeof(top));
+	for(unsigned i=0;i<3;++i)
+		top[i] = pdata->ladder[i];
+
 	return 0;
 }
 
@@ -95,8 +101,7 @@ int CDataLadder::Win(int &rank1, unsigned uid1, int level1, const string &name1,
 		return R_ERR_DB;
 	}
 	CAutoLock lock(&m_sh, true);
-	if ((rank1 != -1 && !IsValidLadderRank(rank1))
-			|| rank2 != -1 && !IsValidLadderRank(rank2))
+	if ((rank1 != -1 && !IsValidLadderRank(rank1)) || (rank2 != -1 && !IsValidLadderRank(rank2)))
 	{
 		error = LE_PARAM_ERROR;
 		return R_ERR_DB;

@@ -257,7 +257,7 @@ int CDataMatch::StartRegular()
 		int rest = (pdata->teams[i]).number > 60 ? 60 : (pdata->teams[i]).number;
         for (int k = 0; k < 5; k++,rest--)
         {
-			int r = ((unsigned)rand()) % rest + 1;
+			int r = Math::GetRandomInt(rest) + 1;
 			int j = 0;
 			while (r > 0 && j < 60)
 			{
@@ -314,16 +314,16 @@ int CDataMatch::StartRegular()
 		{
 			for (unsigned j = 0; j < 5; j++)
 			{
-				r = ((unsigned)rand()) % (rnum - 1) + 1;
-				r2 = ((unsigned)rand()) % 2;
+				r = Math::GetRandomInt(rnum - 1) + 1;
+				r2 = Math::GetRandomInt(2);
 				an = (i + r) % rnum;
 				(pdata->rteams[i]).rivals[j].rplayers[0] = (pdata->rteams[an]).rivals[r2].player;
-				r = ((unsigned)rand()) % (rnum - 1) + 1;
-				r2 = ((unsigned)rand()) % 2 + 1;
+				r = Math::GetRandomInt(rnum - 1) + 1;
+				r2 = Math::GetRandomInt(2) + 1;
 				an = (i + r) % rnum;
 				(pdata->rteams[i]).rivals[j].rplayers[1] = (pdata->rteams[an]).rivals[r2].player;
-				r = ((unsigned)rand()) % (rnum - 1) + 1;
-				r2 = ((unsigned)rand()) % 2 + 2;
+				r = Math::GetRandomInt(rnum - 1) + 1;
+				r2 = Math::GetRandomInt(2) + 2;
 				an = (i + r) % rnum;
 				(pdata->rteams[i]).rivals[j].rplayers[2] = (pdata->rteams[an]).rivals[r2].player;
 			}
@@ -457,7 +457,7 @@ int CDataMatch::StartGuess()
 	}
 
 	CGuessData guessData;
-	if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),0) != 0){
+	if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),0) != 0){
 		error_log("guess data init fail");
 		return R_ERR_LOGIC;
 	}
@@ -623,7 +623,7 @@ int CDataMatch::StartPlayoff4()
 		}
 		else{
 			CGuessData guessData;
-			if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),0) == 0){
+			if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),0) == 0){
 				unsigned s1=0,s2=0;
 				guessData.GetSupportCount(pdata->top8[2*i].aid,s1);
 				guessData.GetSupportCount(pdata->top8[2*i+1].aid,s2);
@@ -691,7 +691,7 @@ int CDataMatch::StartPlayoff2()
 			itemp = 2*i;
 		else{
 				CGuessData guessData;
-				if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),0) == 0){
+				if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),0) == 0){
 					unsigned s1=0,s2=0;
 					guessData.GetSupportCount(pdata->top4[2*i].aid,s1);
 					guessData.GetSupportCount(pdata->top4[2*i+1].aid,s2);
@@ -759,7 +759,7 @@ int CDataMatch::FinishMatch(const MatchData **p)
 	}
 	else{
 		CGuessData guessData;
-		if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),0) != 0){
+		if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),0) != 0){
 			error_log("guess data init fail");
 			return R_ERR_LOGIC;
 		}

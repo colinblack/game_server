@@ -199,3 +199,11 @@ int CDataAllianceInteract::RemoveAllianceInteracts(unsigned uid, unsigned opposi
 	return 0;
 }
 
+int CDataAllianceInteract::DelAllianceInteractsBeforeTS(unsigned uid, unsigned last_attack_time)
+{
+	DBCREQ_DECLARE(DBC::DeleteRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(LE, last_attack_time, last_attack_time);
+	DBCREQ_EXEC;
+	return 0;
+}

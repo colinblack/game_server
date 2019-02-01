@@ -26,7 +26,7 @@ int CLogicWorldBoss::GetWorldBossArchive(unsigned bossId, Json::Value &data)
 	map<unsigned, WorldBoss_Archive>::iterator it = bossMap.find(bossId);
 	if (it == bossMap.end() || Time::GetGlobalTime() - (it->second).updateTime > 1800)
 	{
-		string path = Config::GetValue(CONFIG_WORLDBOSS_MAP);
+		string path = MainConfig::GetAllServerPath(CONFIG_NPC_DATA);
 		if (path.empty())
 		{
 			error_log("[config error][bossId=%u]",bossId);
@@ -95,7 +95,7 @@ CDataWorldBoss* CLogicWorldBoss::GetCDataWorldBoss()
 	CBasic::StringSplit(minBloodStr, ",", vminBloods);
 	CBasic::StringSplit(maxBloodStr, ",", vmaxBloods);
 	CDataWorldBoss *pdata = new CDataWorldBoss();
-	if (pdata->Init(Config::GetValue(CONFIG_WORLDBOSS_DIR), vminBloods,vmaxBloods) != 0)
+	if (pdata->Init(Config::GetPath(CONFIG_WORLDBOSS_DIR), vminBloods,vmaxBloods) != 0)
 	{
 		delete pdata;
 		pdata = NULL;
@@ -137,6 +137,7 @@ int CLogicWorldBoss::GetWorldBossInfo(unsigned uid, Json::Value &data)
 		data[temp]["number"] = number;
 		data[temp]["top"].resize(top.size());
 		data[temp]["fullblood"] = fullBlood;
+		data[temp]["last"] = last.name;
 		for (unsigned i = 0; i < top.size(); i++)
 		{
 			data[temp]["top"][i]["uid"] = top[i].uid;
@@ -203,7 +204,7 @@ int CLogicWorldBoss::Load(unsigned bossId, unsigned uidBy, Json::Value &result)
 	return 0;
 }
 
-int CLogicWorldBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, Json::Value &result)
+int CLogicWorldBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype)
 {
 	if (!IsValidWorldBossId(bossId))
 	{
@@ -232,7 +233,16 @@ int CLogicWorldBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, 
 	vector<WorldBossChallenger> top;
 	vector<WorldBossChallenger> lucks;
 	vector<WorldBossChallenger> dam;
-	ret = pBoss->AttackWorldBoss(userBy.uid, bossId, damage, name, dying, blood, number, selfRank, self, top, last, lucks, dam);
+	bool bAll = false;
+	int db = 1;
+	vector<WorldBossChallenger> all;
+	unsigned now = Time::GetGlobalTime();
+	if(now >= Config::GetIntValue(CONFIG_ACTIVITY_TUMO_DOUBLE_B_TS) && now <= Config::GetIntValue(CONFIG_ACTIVITY_TUMO_DOUBLE_E_TS))
+	{
+		bAll = true;
+		db = 2;
+	}
+	ret = pBoss->AttackWorldBoss(userBy.uid, bossId, damage, name, dying, blood, number, selfRank, self, top, last, lucks, dam, bAll, all);
 	if (ret != 0)
 	{
 		DB_ERROR_RETURN_MSG("update_worldboss_fail");
@@ -243,78 +253,75 @@ int CLogicWorldBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, 
 		CLogicPay logicPay;
 		unsigned prosper[10] = {5000,4500,4000,3500,3000,2500,2000,1500,1200,1000};
 		map<unsigned, Json::Value> updatesmap;
+		//1%伤害奖励10金币
 		for (unsigned i = 0; i < dam.size(); i++)
 		{
 			Json::Value updates;
-			updates.resize(1);
-			updates[(unsigned)0]["s"] = "WORLDBOSSTOP";
-			updates[(unsigned)0]["bossid"] = bossId;
-			updates[(unsigned)0]["damage"] = dam[i].damage;
-			updates[(unsigned)0]["coins"] = 10;
-			updates[(unsigned)0]["r"] = i + 1;
-			updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
+			updates["s"] = "WORLDBOSSTOP";
+			updates["bossid"] = bossId;
+			updates["damage"] = dam[i].damage;
+			updates["r"] = i + 1;
+			updates["ts"] = Time::GetGlobalTime();
+			updates["coins"] = 10;
 			updatesmap[dam[i].uid] = updates;
 		}
+		//前十奖励威望
 		for (unsigned i = 0; i < top.size(); i++)
 		{
 			if (i >= 10) break;
 			if(updatesmap.count(top[i].uid))
-			{
-				Json::Value& updates = updatesmap[top[i].uid];
-				updates[(unsigned)0]["prosper1"] = prosper[i];
-			}
+				updatesmap[top[i].uid]["prosper1"] = prosper[i] * db;
 			else
 			{
 				Json::Value updates;
-				updates.resize(1);
-				updates[(unsigned)0]["s"] = "WORLDBOSSTOP";
-				updates[(unsigned)0]["bossid"] = bossId;
-				updates[(unsigned)0]["damage"] = top[i].damage;
-				updates[(unsigned)0]["prosper1"] = prosper[i];
-				updates[(unsigned)0]["r"] = i+1;
-				updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
+				updates["s"] = "WORLDBOSSTOP";
+				updates["bossid"] = bossId;
+				updates["damage"] = top[i].damage;
+				updates["r"] = i+1;
+				updates["ts"] = Time::GetGlobalTime();
+				updates["prosper1"] = prosper[i] * db;
 				updatesmap[top[i].uid] = updates;
 			}
 		}
+		//整十奖励威望
 		for (unsigned i = 0; i < lucks.size(); i++)
 		{
 			if(updatesmap.count(lucks[i].uid))
-			{
-				Json::Value& updates = updatesmap[lucks[i].uid];
-				updates[(unsigned)0]["prosper3"] = 800;
-			}
+				updatesmap[lucks[i].uid]["prosper3"] = 800 * db;
 			else
 			{
 				Json::Value updates;
-				updates.resize(1);
-				updates[(unsigned)0]["s"] = "WORLDBOSSTOP";
-				updates[(unsigned)0]["bossid"] = bossId;
-				updates[(unsigned)0]["damage"] = lucks[i].damage;
-				updates[(unsigned)0]["prosper3"] = 800;
-				updates[(unsigned)0]["r"] = 20 + i*10;
-				updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
+				updates["s"] = "WORLDBOSSTOP";
+				updates["bossid"] = bossId;
+				updates["damage"] = lucks[i].damage;
+				updates["r"] = 20 + i*10;
+				updates["ts"] = Time::GetGlobalTime();
+				updates["prosper3"] = 800 * db;
 				updatesmap[lucks[i].uid] = updates;
 			}
 		}
-		if(updatesmap.count(userBy.uid))
-		{
-			Json::Value& updates = updatesmap[userBy.uid];
-			updates[(unsigned)0]["prosper2"] = 1500;
-		}
+		//最后一击奖励威望
+		if(updatesmap.count(last.uid))
+			updatesmap[last.uid]["prosper2"] = 1500 * db;
 		else
 		{
 			Json::Value updates;
-			updates.resize(1);
-			updates[(unsigned)0]["s"] = "WORLDBOSSTOP";
-			updates[(unsigned)0]["bossid"] = bossId;
-			updates[(unsigned)0]["damage"] = damage;
-			updates[(unsigned)0]["prosper2"] = 1500;
-			updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
-			//logicUpdates.AddUpdates(userBy.uid, updates);
+			updates["s"] = "WORLDBOSSTOP";
+			updates["bossid"] = bossId;
+			updates["damage"] = damage;
+			updates["ts"] = Time::GetGlobalTime();
+			updates["prosper2"] = 1500 * db;
 			updatesmap[userBy.uid] = updates;
 		}
+
 		for(map<unsigned, Json::Value>::iterator it=updatesmap.begin();it!=updatesmap.end();++it)
 			logicUpdates.AddUpdates(it->first, it->second);
+
+		if(bAll)
+		{
+			for(int i=0;i<all.size();++i)
+				logicPay.ChangePay(all[i].uid, 0, 10, "world_boss_double");
+		}
 	}
 	result["worldboss"]["blood"] = blood;
 	result["worldboss"]["number"] = number;
@@ -335,7 +342,7 @@ int CLogicWorldBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &data, 
 	if (Json::IsObject(data, "attackinfo"))
 	{
 		CLogicArchive logicArchive;
-		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
+		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], bossId, loadtype);
 		if (ret != 0)
 			return ret;
 	}
@@ -412,7 +419,7 @@ int CLogicWorldBoss::ExportWorldBossData(unsigned uid, unsigned bossId, const st
 	result["resources"][(unsigned)3]["c"] = 0;
 	result["resources"][(unsigned)3]["m"] = user.r4_max;
 	result["resources"][(unsigned)4]["c"] = 0;
-	result["resources"][(unsigned)4]["m"] = user.r5_max;
+	result["resources"][(unsigned)4]["m"] = 0;
 	result["lasttime"] = Time::GetGlobalTime();
 	if (!user.barrackQ.empty() && !reader.parse(user.barrackQ, result["barrackQ"]))
 	{
@@ -444,7 +451,7 @@ int CLogicWorldBoss::ExportWorldBossData(unsigned uid, unsigned bossId, const st
 	}
 
 	CLogicBuilding logicBuiding;
-	ret = logicBuiding.GetBuilding(uid, result["baseop"]);
+	ret = logicBuiding.GetBuilding(uid,0, result["baseop"],true);
 	if (ret != 0)
 		return ret;
 

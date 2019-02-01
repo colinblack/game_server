@@ -72,9 +72,9 @@ int CDataUser::AddUser(DataUser &user)
 	return 0;
 }
 
-int CDataUser::SetUser(unsigned uid, DataUser &user)
+int CDataUser::SetUser(unsigned uid, DataUser &user, unsigned flag)
 {
-	_check_user_stat(user);
+	//_check_user_stat(user);
 
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
@@ -90,9 +90,9 @@ int CDataUser::SetUser(unsigned uid, DataUser &user)
 	DBCREQ_SET_INT(user, login_days);
 	DBCREQ_SET_INT(user, invite_count);
 	DBCREQ_SET_INT(user, today_invite_count);
-	DBCREQ_SET_INT(user, status);
+	//DBCREQ_SET_INT(user, status); Ralf 20141203 change to job
 	DBCREQ_SET_INT(user, sstate);
-	DBCREQ_SET_INT(user, type);
+	DBCREQ_SET_INT(user, type);//Ralf 20170220 change to money of brave new world
 	DBCREQ_SET_INT(user, level);
 	DBCREQ_SET_INT(user, point);
 	DBCREQ_SET_INT(user, tutorial_stage);
@@ -109,13 +109,16 @@ int CDataUser::SetUser(unsigned uid, DataUser &user)
 	DBCREQ_SET_INT(user, last_save_time);
 	DBCREQ_SET_INT(user, tribute_time);
 	DBCREQ_SET_INT(user, protected_time);
-	DBCREQ_SET_INT(user, last_save_uid);
-	DBCREQ_SET_INT(user, last_breath_time);
+	if(flag & DATA_USER_LSUID)
+		DBCREQ_SET_INT(user, last_save_uid);
+	if(flag & DATA_USER_LBT)
+		DBCREQ_SET_INT(user, last_breath_time);
 	DBCREQ_SET_INT(user, gcbase);
 	DBCREQ_SET_INT(user, mainpos);
 	DBCREQ_SET_INT(user, newgcbase);
 	DBCREQ_SET_INT(user, gcbuy);
-	//DBCREQ_SET_INT(user, bit_info);		//修改这个变量用另一个单独的方法
+	if(flag & DATA_USER_BI)
+		DBCREQ_SET_INT(user, bit_info);		//修改这个变量用另一个单独的方法 //又改回来了 Ralf20140225
 	DBCREQ_SET_INT(user, alliance_id);
 	DBCREQ_SET_INT(user, damage);
 	DBCREQ_SET_INT(user, prosper);
@@ -288,18 +291,22 @@ int CDataUser::GetUser(unsigned uid, DataUser &user)
 	DBCREQ_GET_INT(user, memory);
 	DBCREQ_GET_STR(user, alliance_tech);
 
+	/*
 	int ret = _check_user_stat(user);
 	if(ret == 0)
 		return SetUser(uid,user);
+	*/
+
 	return 0;
 }
 
 int CDataUser::_check_user_stat(DataUser &user)
 {
-	if(!user.user_tech.empty())
-		return 1;
 	Json::Reader reader;
 	Json::Value stat, tech;
+
+	if(!user.user_tech.empty() && !reader.parse(user.user_tech, tech))
+		return 1;
 	if(user.user_stat.empty())
 		return 2;
 	if(!reader.parse(user.user_stat, stat))
@@ -375,7 +382,7 @@ int CDataUser::RemoveUser(unsigned uid)
 	return 0;
 }
 
-int CDataUser::SetUserLimit(unsigned uid, const DataUser &user)
+int CDataUser::SetUserLimit(unsigned uid, const DataUser &user, unsigned flag)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
@@ -391,9 +398,9 @@ int CDataUser::SetUserLimit(unsigned uid, const DataUser &user)
 	DBCREQ_SET_INT(user, login_days);
 	DBCREQ_SET_INT(user, invite_count);
 	DBCREQ_SET_INT(user, today_invite_count);
-	DBCREQ_SET_INT(user, status);
+	//DBCREQ_SET_INT(user, status);Ralf 20141203 change to job
 	DBCREQ_SET_INT(user, sstate);
-	DBCREQ_SET_INT(user, type);
+	DBCREQ_SET_INT(user, type);//Ralf 20170220 change to money of brave new world
 	DBCREQ_SET_INT(user, level);
 	DBCREQ_SET_INT(user, point);
 	DBCREQ_SET_INT(user, tutorial_stage);
@@ -410,13 +417,16 @@ int CDataUser::SetUserLimit(unsigned uid, const DataUser &user)
 	DBCREQ_SET_INT(user, last_save_time);
 	DBCREQ_SET_INT(user, tribute_time);
 	DBCREQ_SET_INT(user, protected_time);
-	DBCREQ_SET_INT(user, last_save_uid);
-	DBCREQ_SET_INT(user, last_breath_time);
+	if(flag & DATA_USER_LSUID)
+		DBCREQ_SET_INT(user, last_save_uid);
+	if(flag & DATA_USER_LBT)
+		DBCREQ_SET_INT(user, last_breath_time);
 	DBCREQ_SET_INT(user, gcbase);
 	DBCREQ_SET_INT(user, mainpos);
 	DBCREQ_SET_INT(user, newgcbase);
 	DBCREQ_SET_INT(user, gcbuy);
-	//DBCREQ_SET_INT(user, bit_info);
+	if(flag & DATA_USER_BI)
+		DBCREQ_SET_INT(user, bit_info);
 	DBCREQ_SET_INT(user, alliance_id);
 	DBCREQ_SET_INT(user, damage);
 	DBCREQ_SET_INT(user, prosper);
@@ -589,6 +599,16 @@ int CDataUser::SetBitInfo(unsigned uid, unsigned bit_info)
 	return 0;
 }
 
+int CDataUser::SetBitInfoLastSaveUid(unsigned uid, unsigned bit_info, unsigned last_save_uid)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_S(bit_info);
+	DBCREQ_SET_INT_S(last_save_uid);
+	DBCREQ_EXEC;
+	return 0;
+}
+
 int CDataUser::SetBreathTime(unsigned uid, unsigned last_breath_time)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
@@ -609,11 +629,15 @@ int CDataUser::SetActiveExtBreathTime(unsigned uid, unsigned last_active_time, i
 	return 0;
 }
 
-int CDataUser::SetAllianceId(unsigned uid, unsigned alliance_id)
+int CDataUser::SetAllianceId(unsigned uid, unsigned alliance_id, unsigned r5, unsigned r5_max, unsigned cdn)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_INT_V(alliance_id);
+	DBCREQ_SET_INT_S(alliance_id);
+	DBCREQ_SET_INT_S(r5);
+	DBCREQ_SET_INT_S(r5_max);
+	DBCREQ_SET_INT_S(cdn);
+	DBCREQ_EXEC;
 	return 0;
 }
 
@@ -667,6 +691,38 @@ int CDataUser::SetUserFlag(unsigned uid, const string &user_flag)
 	return 0;
 }
 
+int CDataUser::GetUserTech(unsigned uid, string &user_tech)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_GET_STR_V(user_tech);
+	return 0;
+}
+
+int CDataUser::SetUserTech(unsigned uid, const string &user_tech)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_STR_V(user_tech);
+	return 0;
+}
+
+int CDataUser::GetUserStat(unsigned uid, string &user_stat)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_GET_STR_V(user_stat);
+	return 0;
+}
+
+int CDataUser::SetUserStat(unsigned uid, const string &user_stat)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_STR_V(user_stat);
+	return 0;
+}
+
 int CDataUser::SetActiveTimeAndExt(unsigned uid, unsigned last_active_time, int ext)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
@@ -702,5 +758,92 @@ int CDataUser::SetMainPos(unsigned uid, const unsigned mainpos)
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
 	DBCREQ_SET_INT_V(mainpos);
+	return 0;
+}
+
+int CDataUser::SetStatus(unsigned uid, int status)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_V(status);
+	return 0;
+}
+
+int CDataUser::SetCDN(unsigned uid, unsigned cdn)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_V(cdn);
+	return 0;
+}
+
+int CDataUser::SetType(unsigned uid, int type)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_V(type);
+	return 0;
+}
+
+int CDataUser::SetR5(unsigned uid, unsigned r5, unsigned r5_max, unsigned cdn)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_S(r5);
+	DBCREQ_SET_INT_S(r5_max);
+	DBCREQ_SET_INT_S(cdn);
+	DBCREQ_EXEC;
+	return 0;
+}
+
+int CDataUser::SetTime(unsigned uid, unsigned ts)
+{
+	int register_time = ts, last_active_time = ts, last_login_time = ts;
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_S(register_time);
+	DBCREQ_SET_INT_S(last_active_time);
+	DBCREQ_SET_INT_S(last_login_time);
+	DBCREQ_EXEC;
+	return 0;
+}
+int CDataUser::SetLastLogin(unsigned uid, unsigned last_login_time, unsigned last_active_time)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_S(last_login_time);
+	DBCREQ_SET_INT_S(last_active_time);
+	DBCREQ_EXEC;
+	return 0;
+}
+int CDataUser::SetAddUser(unsigned uid, unsigned last_login_time, int level, uint64_t point, int tutorial_stage)
+{
+	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_INT_S(last_login_time);
+	DBCREQ_SET_INT_S(level);
+	DBCREQ_SET_INT_S(point);
+	DBCREQ_SET_INT_S(tutorial_stage);
+	DBCREQ_EXEC;
+	return 0;
+}
+
+int CDataUser::GetExt(unsigned uid, unsigned &last_active_time, unsigned &ext)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(last_active_time);
+	DBCREQ_NEED(ext);
+
+	DBCREQ_EXEC;
+	DBCREQ_IFNULLROW;
+	DBCREQ_IFFETCHROW;
+
+	DBCREQ_GET_BEGIN();
+	DBCREQ_GET_INT_S(last_active_time);
+	DBCREQ_GET_INT_S(ext);
+
 	return 0;
 }

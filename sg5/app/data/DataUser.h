@@ -3,6 +3,10 @@
 
 #include "Kernel.h"
 
+#define DATA_USER_LSUID 0x01
+#define DATA_USER_LBT 	0x02
+#define DATA_USER_BI 	0x04
+
 struct DataUser
 {
 	unsigned uid;
@@ -17,9 +21,9 @@ struct DataUser
 	unsigned login_days;
 	int      invite_count;
 	int      today_invite_count;
-	int      status;
-	unsigned sstate;
-	int      type;
+	int      status;//Ralf 20141203 change to job
+	unsigned sstate;//bit flag for has been watered or tributed
+	int      type;//Ralf 20170220 change to money of brave new world
 	int      level;
 	uint64_t point;
 	int      tutorial_stage;
@@ -31,8 +35,8 @@ struct DataUser
 	unsigned r3_max;
 	unsigned r4;
 	unsigned r4_max;
-	unsigned r5;
-	unsigned r5_max;
+	unsigned r5;	//勋章(联盟夺宝)  eddard 2015/08/18
+	unsigned r5_max;	//勋章类型(联盟夺宝)  eddard 2015/08/18
 	unsigned last_save_time;
 	unsigned tribute_time;	//封号到到期时间
 	unsigned protected_time;
@@ -42,7 +46,7 @@ struct DataUser
 	unsigned mainpos;
 	unsigned newgcbase;
 	unsigned gcbuy;
-	unsigned bit_info;
+	unsigned bit_info;//废除作为保存是否能被进攻的bit标记，改为开始进行pve活动需要保护的ts Ralf20140225   20140416 change to the time start pvp or pve by ralf
 	unsigned alliance_id;
 	int	     damage;
 	unsigned prosper;
@@ -51,9 +55,9 @@ struct DataUser
 	int      viplevel;
 	unsigned lastseq;
 	unsigned battle_spirits;
-	unsigned cdn;
-	unsigned refresh;
-	unsigned memory;
+	unsigned cdn;			//勋章ts(联盟夺宝)	eddard 2015/08/18
+	unsigned refresh;		//禁言结束时间
+	unsigned memory;		//保卫女神历史最高分
 	string	 close_reason;	//封號原因
 	string   user_stat;
 	string   user_flag;
@@ -66,7 +70,7 @@ struct DataUser
 	string   skillQ;
 	string   trainQ;
 	string   glory;    // 存放玩家荣誉等信息
-	string   worldres;
+	string   worldres; //other info: heroid 20140828 Ralf
 	string   vipstat;
 	string   alliance_tech; //个人的联盟科技
 	// add by aaron
@@ -207,14 +211,14 @@ public:
 
 public:
 	int AddUser(DataUser &user);
-	int SetUser(unsigned uid, DataUser &user);
+	int SetUser(unsigned uid, DataUser &user, unsigned flag = 0);
 	int GetUser(unsigned uid, DataUser &user);
 	int _check_user_stat(DataUser &user);
 	int _un_check_user_stat(DataUser &user);
 	int RemoveUser(unsigned uid);
 
 	//no include: user_stat
-	int SetUserLimit(unsigned uid, const DataUser &user);
+	int SetUserLimit(unsigned uid, const DataUser &user, unsigned flag = 0);
 	int GetUserLimit(unsigned uid, DataUser &user);
 
 	//int SetActiveTime(unsigned uid, unsigned last_active_time);
@@ -222,9 +226,10 @@ public:
 	int SetProtectedTime(unsigned uid, unsigned protected_time);
 	int SetLastSaveUid(unsigned uid, unsigned last_save_uid);
 	int SetBitInfo(unsigned uid, unsigned bit_info);
+	int SetBitInfoLastSaveUid(unsigned uid, unsigned bit_info, unsigned last_save_uid);
 	int SetBreathTime(unsigned uid, unsigned last_breath_time);
 	int SetActiveExtBreathTime(unsigned uid, unsigned last_active_time, int ext, unsigned last_breath_time);
-	int SetAllianceId(unsigned uid, unsigned alliance_id);
+	int SetAllianceId(unsigned uid, unsigned alliance_id, unsigned r5, unsigned r5_max, unsigned cdn);
 	int GetAllianceId(unsigned uid, unsigned &alliance_id);
 
 	int AddProsper(unsigned uid, int prosper);
@@ -233,12 +238,30 @@ public:
 	int GetUserFlag(unsigned uid, string &user_flag);
 	int SetUserFlag(unsigned uid, const string &user_flag);
 
+	int GetUserTech(unsigned uid, string &user_tech);
+	int SetUserTech(unsigned uid, const string &user_tech);
+
+	int GetUserStat(unsigned uid, string &user_stat);
+	int SetUserStat(unsigned uid, const string &user_stat);
+
 	//设置最后活跃时间和在线登录时长
 	int SetActiveTimeAndExt(unsigned uid, unsigned last_active_time, int ext);
 
 	int AddBattleSpirits(unsigned uid, int battle_spirits);
 	int GetMainPos(unsigned uid, unsigned &mainPos);
 	int SetMainPos(unsigned uid, const unsigned mainpos);
+
+	int SetStatus(unsigned uid, int status);
+	int SetCDN(unsigned uid, unsigned cdn);
+	int SetType(unsigned uid, int type);
+
+	int SetR5(unsigned uid, unsigned r5, unsigned r5_max, unsigned cdn);
+
+	int SetTime(unsigned uid, unsigned ts);
+	int SetLastLogin(unsigned uid, unsigned last_login_time, unsigned last_active_time);
+	int SetAddUser(unsigned uid, unsigned last_login_time, int level, uint64_t point, int tutorial_stage);
+
+	int GetExt(unsigned uid, unsigned &last_active_time, unsigned &ext);
 };
 
 #endif /* DATAUSER_H_ */

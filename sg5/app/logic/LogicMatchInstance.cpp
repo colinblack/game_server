@@ -84,7 +84,7 @@ int CLogicMatchInstance::GetLocalMatchInstance(unsigned instid,Json::Value &data
 	{
 		error_log("[isn't local match instance id][instanceid=%u]",instid);
 	}
-	string path = Config::GetValue(CONFIG_MATCH_INSTANCE_PATH);
+	string path = Config::GetPath(CONFIG_MATCH_INSTANCE_PATH);
 	return Load(instid,path,data);
 }
 
@@ -94,18 +94,18 @@ int CLogicMatchInstance::SetLocalMatchInstance(unsigned instid,const Json::Value
 	{
 		error_log("[isn't local match instance id][instanceid=%u]",instid);
 	}
-	string path = Config::GetValue(CONFIG_MATCH_INSTANCE_PATH);
+	string path = Config::GetPath(CONFIG_MATCH_INSTANCE_PATH);
 	return Save(instid,path,data);
 }
 
 int CLogicMatchInstance::GetAllServerMatchInstance(unsigned instid,Json::Value &data)
 {
-	string path = Config::GetValue(CONFIG_ALLS_MATCH_INST_PATH);
+	string path = MainConfig::GetAllServerPath(CONFIG_ALLS_MATCH_INST_PATH);
 	return Load(instid,path,data);
 }
 
 int CLogicMatchInstance::SetAllServerMatchInstance(unsigned instid,const Json::Value &data)
 {
-	string path = Config::GetValue(CONFIG_ALLS_MATCH_INST_PATH);
+	string path = MainConfig::GetAllServerPath(CONFIG_ALLS_MATCH_INST_PATH);
 	return Save(instid,path,data);
 }

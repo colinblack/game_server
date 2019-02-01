@@ -6,6 +6,10 @@
  */
 
 #include "LogicEmail.h"
+#include "AdAnalize.h"
+
+#define EMAIL_MAX_NUM 100
+
 CLogicEmail::CLogicEmail() {
 	// TODO Auto-generated constructor stub
 
@@ -30,6 +34,14 @@ int CLogicEmail::GetInboxEmailList(unsigned uid, vector<DataEmail> &vEmail)
 		error_log("[GetEmailList fail][ret=%d,uid=%u]", ret, uid);
 		DB_ERROR_RETURN_MSG("get_email_list_fail");
 	}
+	vector<uint64_t> vEmail_Id;
+	while(vEmail.size() > EMAIL_MAX_NUM)
+	{
+		vEmail_Id.push_back(vEmail[0].email_id);
+		vEmail.erase(vEmail.begin());
+	}
+	if(!vEmail_Id.empty())
+		dbEmail.DeleteEmails(uid, vEmail_Id);
 	return 0;
 
 }
@@ -48,6 +60,14 @@ int CLogicEmail::GetOutboxEmailList(unsigned uid, vector<DataEmail> &vEmail)
 		error_log("[GetEmailList fail][ret=%d,uid=%u]", ret, uid);
 		DB_ERROR_RETURN_MSG("get_email_list_fail");
 	}
+	vector<uint64_t> vEmail_Id;
+	while(vEmail.size() > EMAIL_MAX_NUM)
+	{
+		vEmail_Id.push_back(vEmail[0].email_id);
+		vEmail.erase(vEmail.begin());
+	}
+	if(!vEmail_Id.empty())
+		dbEmail.DeleteEmails(uid, vEmail_Id);
 	return 0;
 
 }
@@ -145,6 +165,8 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,Json::Value 
 {
 
 	int ret = 0;
+	CLogicUser logicUser;
+	DataUser user;
 	CLogicUserBasic logicUserBasic;
 	DataUserBasic userBasic;
 	vector<uint64_t>::const_iterator end_it = vto_uid.end();
@@ -156,23 +178,28 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,Json::Value 
 	if(data.uid == ADMIN_UID)
 	{
 		userBasic.name="系统管理员";
+		user.viplevel = 0;
 	}else
 	{
-		ret = logicUserBasic.GetUserBasicLimit(data.uid,platform,userBasic);
-		if(0 != ret)
-		{
-			error_log("get userbasic limit failed uid=%u",data.uid);
-			return ret;
-		}
+		logicUserBasic.GetUserBasicLimit(data.uid,platform,userBasic);
+		logicUser.GetUserLimit(data.uid,user);
+
+		if(user.level < 15 && user.viplevel < 3)
+			return 0;
 	}
 	data.from_name = userBasic.name;
 	data2.from_name = userBasic.name;
 	data.post_flag = 2;   //发件
 	data2.post_flag = 1;  //收件
-	string temptext = "{\"text\":\"" + data.text + "\",\"vt\":" + CTrans::ITOS(userBasic.vip_type) + ",\"vl\":" + CTrans::ITOS(userBasic.vip_level) + "}";
-	data.text = data2.text = temptext;
-	info_log("[add email][temptext=%s]", temptext.c_str());
-
+	Json::Value temp;
+	Json::FastWriter writer;
+	temp["text"] = data.text;
+	temp["vt"] = userBasic.vip_type;
+	temp["vl"] = userBasic.vip_level;
+	temp["vip"] = user.viplevel;
+	data.text = data2.text = writer.write(temp);
+	//info_log("[add email][temptext=%s]", temptext.c_str());
+	/*		装备和英雄，资源都改为后台直接发
 	Json::Value vvipRewardEq;  //装备update
 	vvipRewardEq[0u]["s"]="vvipRewardEq";
 	vvipRewardEq[0u]["reward"] = attachments["equipment"];
@@ -187,7 +214,7 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,Json::Value 
 	vvipRewardRes[0u]["s"] = "vvipRewardRes";
 	vvipRewardRes[0u]["reward"] = attachments["resource"];
 	vvipRewardRes[0u]["ts"] = now + 3;
-
+	*/
 
 
 	Json::Value updates;
@@ -222,6 +249,7 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,Json::Value 
 		CLogicUpdates logicUpdates;
 		ret = logicUpdates.AddUpdates(data.opposite_uid,updates);
 
+		/*装备和英雄，资源都改为后台直接发
 		if(attachments["equipment"].size()!=0)
 		{
 			logicUpdates.AddUpdates(data.opposite_uid,vvipRewardEq);
@@ -234,6 +262,7 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,Json::Value 
 		{
 			logicUpdates.AddUpdates(data.opposite_uid,vvipRewardRes);
 		}
+		*/
 
 		if(0 != ret)
 		{
@@ -244,9 +273,11 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,Json::Value 
 	return 0;
 }
 
-int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,PlatformType platform)
+int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid, bool bUpdates,PlatformType platform)
 {
 	int ret = 0;
+	CLogicUser logicUser;
+	DataUser user;
 	CLogicUserBasic logicUserBasic;
 	DataUserBasic userBasic;
 	vector<uint64_t>::const_iterator end_it = vto_uid.end();
@@ -259,28 +290,55 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,PlatformType
 	if(data.uid == ADMIN_UID)
 	{
 		userBasic.name="系统管理员";
-	}else
+		user.viplevel = 0;
+	}
+	else
 	{
-		ret = logicUserBasic.GetUserBasicLimit(data.uid,platform,userBasic);
-		if(0 != ret)
-		{
-			error_log("get userbasic limit failed uid=%u",data.uid);
-			return ret;
-		}
+		logicUserBasic.GetUserBasicLimitWithoutPlatform(data.uid,userBasic);
+		logicUser.GetUserLimit(data.uid,user);
+
+		if(user.level < 15 && user.viplevel < 3)
+			return 0;
+
+		string con = data.from_name + data.title + data.text;
+		OnAdAnalize(data.uid, user.viplevel, user.level, con);
 	}
 	data.from_name = userBasic.name;
 	data2.from_name = userBasic.name;
 	data.post_flag = 2;   //发件
 	data2.post_flag = 1;  //收件
-	string temptext = "{\"text\":\"" + data.text + "\",\"vt\":" + CTrans::ITOS(userBasic.vip_type) + ",\"vl\":" + CTrans::ITOS(userBasic.vip_level) + "}";
-	data.text = data2.text = temptext;
-	info_log("[add email][temptext=%s]", temptext.c_str());
+	if(bUpdates)
+		data2.text = data.text;
+	else
+	{
+		Json::Value temp;
+		Json::FastWriter writer;
+		temp["text"] = data.text;
+		temp["vt"] = userBasic.vip_type;
+		temp["vl"] = userBasic.vip_level;
+		temp["vip"] = user.viplevel;
+		data.text = data2.text = writer.write(temp);
+	}
+	//info_log("[add email][temptext=%s]", temptext.c_str());
 
+	string poster = CTrans::UTOS(data.uid);
 	for(vector<uint64_t>::const_iterator it = vto_uid.begin(); it != end_it; it++)
 	{
+		if(!IsValidUid(*it))
+			continue;
+
+		if(data.uid != ADMIN_UID)
+		{
+			string black_list;
+			CLogicUserNomenate logicUserNomenate;
+			logicUserNomenate.getFriendBlackList(*it, black_list);
+			if(black_list.find(poster) != string::npos)
+				continue;
+		}
+
 		data.opposite_uid = *it;
 		data2.uid =  *it;
-		ret = logicUserBasic.GetUserBasicLimit(data2.uid,platform,userBasic);
+		ret = logicUserBasic.GetUserBasicLimitWithoutPlatform(data2.uid,userBasic);
 		if(0 != ret)
 		{
 			error_log("get userbasic limit failed uid=%u",data.uid);
@@ -301,15 +359,18 @@ int CLogicEmail::AddEmail(DataEmail &data,vector<uint64_t> &vto_uid,PlatformType
 			continue;
 //			return ret;
 		}
-		Json::Value updates;
-		CLogicUpdates logicUpdates;
-		updates[0u]["s"] = "NEWEMAIL";
-		updates[0u]["ts"] = now;
-		updates[0u]["name"] = data.from_name;
-		ret = logicUpdates.AddUpdates(data.opposite_uid,updates);
-		if(0 != ret)
+		if(!bUpdates)
 		{
-			error_log("add updates failed ,uid=%u",data.opposite_uid);
+			Json::Value updates;
+			CLogicUpdates logicUpdates;
+			updates[0u]["s"] = "NEWEMAIL";
+			updates[0u]["ts"] = now;
+			updates[0u]["name"] = data.from_name;
+			ret = logicUpdates.AddUpdates(data.opposite_uid,updates);
+			if(0 != ret)
+			{
+				error_log("add updates failed ,uid=%u",data.opposite_uid);
+			}
 		}
 	}
 
@@ -374,13 +435,21 @@ int CLogicEmail::ReadEmail(unsigned uid,const uint64_t email_Id,DataEmail &data)
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
+void CLogicEmail::OnAdAnalize(unsigned uid, unsigned vip, unsigned lvl, string& msg)
+{
+	if(!AdAnalize::getFlag())
+	{
+		//debug_log("ad_error");
+		return;
+	}
+	ChatMsg c;
+	c.uid = uid;
+	c.vip = CTrans::UTOS(vip);
+	c.lvl = CTrans::UTOS(lvl);
+	c.msg = msg;
+	c.type = "mail";
+	int serverid = 0;
+	Config::GetDomain(serverid);
+	c.srvListen = CTrans::UTOS(serverid);
+	AdAnalize::getInstance()->sendData(c);
+}

@@ -169,7 +169,7 @@ int CLogicNeighbour::RemoveNeighbour(unsigned uid, unsigned nid)
 	String::Format(sFind, "|%u|", nid);
 	if(sNeighbours.find(sFind) == string::npos)
 	{
-		error_log("[ASSERT(neighbour_not_pair)][error=RemoveNeighbour,uid=%u,nid=%u]", uid, nid);
+		//error_log("[ASSERT(neighbour_not_pair)][error=RemoveNeighbour,uid=%u,nid=%u]", uid, nid);
 		return 0;
 	}
 
@@ -185,6 +185,9 @@ int CLogicNeighbour::RemoveNeighbour(unsigned uid, unsigned nid)
 
 int CLogicNeighbour::GetUserInfoJson(const Json::Value &uidList, Json::Value &result)
 {
+	unsigned uid = 0;
+	//TIME_COUNT_RESTART("[GetInfo start]");
+
 	if (uidList.isNull() || !uidList.isArray() || uidList.empty())
 	{
 		PARAM_ERROR_RETURN_MSG("param_error");
@@ -207,6 +210,8 @@ int CLogicNeighbour::GetUserInfoJson(const Json::Value &uidList, Json::Value &re
 		result[i]["name"] = userBasic.name;
 		result[i]["pic"] = userBasic.figure_url;
 	}
+
+	//TIME_COUNT_LOG("[GetInfo over]");
 
 	return 0;
 }

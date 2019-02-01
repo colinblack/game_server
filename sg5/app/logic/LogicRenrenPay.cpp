@@ -57,7 +57,7 @@ int CLogicRenrenPay::PrePay(const string &openid, const string &openkey, int typ
 
 	string apiUrl = OpenPlatform::GetPlatform()->GetConfig("apiurl");
 
-	info_log("[renrenpay][uid=%d,qstr=%s]", uid,qstr.c_str());
+	//info_log("[renrenpay][uid=%d,qstr=%s]", uid,qstr.c_str());
 
 	string response;
 	if(!Network::HttpPostRequest(response, apiUrl, qstr))

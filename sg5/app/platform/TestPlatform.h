@@ -20,6 +20,7 @@ public:
 	virtual int GetAppFriendList(OPFriendList &friendList, const string &openid, const string &openkey);
 	virtual string GetErrorMessage() { return m_errMsg; };
 	virtual int Is_Login(const string &openid, const string &openkey);
+	virtual void ReplyCharge();
 private:
 	string m_userData;
 	string m_errMsg;

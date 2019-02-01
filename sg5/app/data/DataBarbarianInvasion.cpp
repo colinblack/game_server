@@ -58,6 +58,7 @@ int sortPlayers(const DataPlayerItem& left,const DataPlayerItem& right){
 int sortTeam(const DataTeamItem& left,const DataTeamItem& right){
 	return left.teamPoints > right.teamPoints;
 }
+/*
 int CDataBarbarianInvasion::RewardCashCaculate(DataBarbarianInvasionRank *pdata)
 {
 	int i = 0,j = 0, m = 0;
@@ -110,15 +111,17 @@ int CDataBarbarianInvasion::RewardCashCaculate(DataBarbarianInvasionRank *pdata)
 	}
 	return 0;
 }
-int CDataBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigned aid)
+*/
+int CDataBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigned aid, int max)
 {
 	int i= 0, j = 0;
 	int addPoints = 0;
-	int teamIndex = -1;
-	int playerIndex = -1;
+	//int teamIndex = -1;
+	//int playerIndex = -1;
 	bool playerInFlag =false;
-	vector<DataPlayerItem> vPlayersRank;
-	vector<DataTeamItem> vTeamRank;
+	bool teamInFlag =false;
+	//vector<DataPlayerItem> vPlayersRank;
+	//vector<DataTeamItem> vTeamRank;
 	DataBarbarianInvasionRank *pdata = (DataBarbarianInvasionRank *)m_sh.GetAddress();
 	if(pdata == NULL)
 	{
@@ -137,23 +140,25 @@ int CDataBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigne
 		// 联盟成员数据更新
 		if(pdata->playerRank[i].aid == aid  )
 		{
-			playerIndex = i;
+			//playerIndex = i;
 			for(j = 0; j < pdata->playerRank[i].playerNum; j++)
 			{
 				if(pdata->playerRank[i].players[j].uid == playerItem.uid)
 				{
 					addPoints = playerItem.points - pdata->playerRank[i].players[j].points;
 					pdata->playerRank[i].players[j] = playerItem;
-					vPlayersRank.push_back(pdata->playerRank[i].players[j]);
+					//vPlayersRank.push_back(pdata->playerRank[i].players[j]);
 					playerInFlag = true;
-					//break;
-				}else{
+					break;
+				}/*else{
 					vPlayersRank.push_back(pdata->playerRank[i].players[j]);
-				}
+				}*/
 			}
 			// 新成员参加活动
 			if(!playerInFlag)
 			{
+				if(pdata->playerRank[i].playerNum == max)
+					return 0;
 				if(pdata->playerRank[i].playerNum == MAX_PONITS_NUM)
 				{
 					DB_ERROR_RETURN_MSG("players_full");
@@ -162,22 +167,22 @@ int CDataBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigne
 				pdata->playerRank[i].players[pdata->playerRank[i].playerNum] = playerItem;
 				addPoints = playerItem.points;
 				pdata->playerRank[i].playerNum++;
-				vPlayersRank.push_back(playerItem);
+				//vPlayersRank.push_back(playerItem);
 				// playerIndex = pdata->playerRank[i].playerNum - 1;
 			}
-
 		}
 
 		if(pdata->teamRank[i].aid == aid)
 		{
-			teamIndex = i;
+			//teamIndex = i;
+			teamInFlag = true;
+			break;
 		}
-		vTeamRank.push_back(pdata->teamRank[i]);
+		//vTeamRank.push_back(pdata->teamRank[i]);
 	}
 	// 新联盟参加活动
-	if(i >= pdata->teamNum && teamIndex == -1)
+	if(!teamInFlag)
 	{
-		// pdata->teamNum++;
 		if(pdata->teamNum >= MAX_TEAM_NUM)
 		{
 			DB_ERROR_RETURN_MSG("teams_full");
@@ -190,22 +195,24 @@ int CDataBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigne
 			return ret;
 		}
 		pdata->teamRank[pdata->teamNum].aid = aid;
+		pdata->teamRank[pdata->teamNum].kingdom = alliance.kingdom;
 		memcpy(pdata->teamRank[pdata->teamNum].aname,alliance.name.c_str(),sizeof(pdata->teamRank[pdata->teamNum].aname) - 1);
 		pdata->teamRank[pdata->teamNum].teamPoints = playerItem.points;
-		vTeamRank.push_back(pdata->teamRank[pdata->teamNum]);
+		//vTeamRank.push_back(pdata->teamRank[pdata->teamNum]);
 
 		pdata->playerRank[pdata->teamNum].aid = aid;
 		pdata->playerRank[pdata->teamNum].players[0] = playerItem;
 		pdata->playerRank[pdata->teamNum].playerNum++;
-		playerIndex = pdata->teamNum ;
+		//playerIndex = pdata->teamNum ;
 		pdata->teamNum++;
-		vPlayersRank.push_back(playerItem);
+		//vPlayersRank.push_back(playerItem);
 	}else{
 		// 联盟总积分增加
-		pdata->teamRank[teamIndex].teamPoints += addPoints;
-		vTeamRank[teamIndex].teamPoints = pdata->teamRank[teamIndex].teamPoints;
+		pdata->teamRank[i].teamPoints += addPoints;
+		//vTeamRank[teamIndex].teamPoints = pdata->teamRank[teamIndex].teamPoints;
 	}
-	// 排序
+	// 排序   //改为发奖时才排序，其他时候前台排序 ralf 20140402
+	/*
 	sort(vTeamRank.begin(),vTeamRank.end(),sortTeam);
 	sort(vPlayersRank.begin(),vPlayersRank.end(),sortPlayers);
 	for(i = 0 ;i < pdata->teamNum; i++)
@@ -219,7 +226,7 @@ int CDataBarbarianInvasion::UpdateRank(DataPlayerItem const &playerItem, unsigne
 			}
 		}
 	}
-
+	*/
 	return 0;
 }
 int CDataBarbarianInvasion::GetTeamPlayersRank(DataPlayersPoints &playerRank, unsigned aid)
@@ -252,5 +259,67 @@ int CDataBarbarianInvasion::GetTeamRank(DataTeamItem teamRank[MAX_TEAM_NUM],int 
 	CAutoLock lock(&m_sh, true);
 	memcpy(teamRank,pdata->teamRank,sizeof(DataTeamItem) * (pdata->teamNum));
 	teamsNum = pdata->teamNum;
+	return 0;
+}
+int CDataBarbarianInvasion::GetTeamPlayersRankSorted(DataPlayersPoints &playerRank, unsigned aid)
+{
+	int i = 0, j = 0;
+	DataBarbarianInvasionRank *pdata = (DataBarbarianInvasionRank *)m_sh.GetAddress();
+	if(pdata == NULL)
+	{
+		DB_ERROR_RETURN_MSG("init_pointsrank_fail");
+	}
+	vector<DataPlayerItem> vPlayersRank;
+	{
+		CAutoLock lock(&m_sh, true);
+		for(i = 0; i < pdata->teamNum; i++)
+		{
+			if(pdata->playerRank[i].aid == aid)
+			{
+				playerRank = pdata->playerRank[i];
+				break;
+			}
+		}
+	}
+	for(j = 0; j < pdata->playerRank[i].playerNum; j++)
+		vPlayersRank.push_back(playerRank.players[j]);
+	sort(vPlayersRank.begin(),vPlayersRank.end(),sortPlayers);
+	for(j = 0; j < pdata->playerRank[i].playerNum; j++)
+		playerRank.players[j] = vPlayersRank[j];
+	return 0;
+}
+int CDataBarbarianInvasion::GetTeamRankSorted(unsigned kingdom,DataTeamItem teamRank[MAX_TEAM_NUM],int &teamsNum)
+{
+	DataBarbarianInvasionRank *pdata = (DataBarbarianInvasionRank *)m_sh.GetAddress();
+	if(pdata == NULL)
+	{
+		DB_ERROR_RETURN_MSG("init_pointsrank_fail");
+	}
+
+	vector<DataTeamItem> vTeamRank;
+	{
+		CAutoLock lock(&m_sh, true);
+		memcpy(teamRank,pdata->teamRank,sizeof(DataTeamItem) * (pdata->teamNum));
+		teamsNum = pdata->teamNum;
+	}
+
+	int i;
+	unsigned Num = 0;
+	for(i = 0 ;i < teamsNum; i++)
+	{
+		if(!kingdom || kingdom == teamRank[i].kingdom)
+		{
+			++Num;
+			vTeamRank.push_back(teamRank[i]);
+		}
+	}
+
+	sort(vTeamRank.begin(),vTeamRank.end(),sortTeam);
+
+	memset(teamRank,0,sizeof(teamRank));
+	for(i = 0 ;i < Num; i++)
+		teamRank[i] = vTeamRank[i];
+	teamsNum = Num;
+
 	return 0;
 }

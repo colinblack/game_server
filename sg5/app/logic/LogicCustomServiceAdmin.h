@@ -26,9 +26,8 @@ class CLogicCustomServiceAdmin
 public:
 	int Login(const string &name, const string &pwd, string &sky);
 	int ChangePwd(const string &name, const string &OldPwd,const string &NewPwd);
-	int CheckSession(const string &name, const string &skey);
+	int CheckSession(const string &name, const string &skey, const string& openid, const unsigned& uid);
 	int CopyArchive(unsigned fromUid, unsigned toUid);
-	int CheckTH(unsigned uid, bool &isTH);
 private:
 	static map<string, UserInfo> userList;
 	static map<string, UserSession> userSession;

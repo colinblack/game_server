@@ -1,0 +1,66 @@
+package BraveNewWorldConfig;
+
+message Point {
+		required uint32 x 		= 1;//0-199
+		required uint32 y 		= 2;//0-199
+		required uint32 type	= 3;//0装饰 1空地 2资源 3州府
+		required uint32 level	= 4;//空地资源1-10 州府1-4
+		required uint32 npc		= 5;//0-4
+}
+
+message Property {
+		required uint32 type	= 1;//0装饰 1空地 2资源 3州府
+		required uint32 level	= 2;//空地资源1-10 州府1-4
+		required uint32 occupy	= 3;//占领获得
+		required uint32 product	= 4;//生产获得
+		repeated uint32 npc		= 5;//0-4对应的npcid
+}
+
+message Zone {
+		required uint32 level	= 1;//1-4
+		required uint32 product	= 2;//生产获得
+}
+
+message City {
+		required uint32 level	= 1;//等级1-9
+		required uint32 need	= 2;//升下一级消耗
+		required uint32 time	= 3;//升下一级时间
+}
+
+message Tech {		
+		required uint32 cost	= 1;
+		required uint32 cd		= 2;
+		repeated uint32 value	= 3;
+}
+
+message ZoneArea {
+		repeated uint32 lu		= 1;
+		repeated uint32 rd		= 2;
+}
+
+message RewardConfig {
+		repeated uint32 all		= 1;
+		repeated uint32 one		= 2;
+		required uint32 user	= 3;
+}
+
+message Mission {
+		repeated uint32 alliance	= 1;//联盟任务完成1个、2个、3个的奖励
+		required uint32 user2		= 2;//铜钱任务的要求
+		required uint32 m1			= 3;//迁城任务的奖励
+		required uint32 m2			= 4;//铜钱任务的奖励
+		required uint32 m3			= 5;//占领任务的奖励
+}
+
+message BraveNewWorldConfig {
+		repeated Point land			= 1;//200*200	
+		repeated Property config 	= 2;	
+		repeated Zone zone 			= 3;//4	
+		repeated City city 			= 4;//9	
+		repeated uint32 p_limit		= 5;//10 据点上限
+		repeated uint32 m_limit		= 6;//10 铜钱上限		
+		repeated Tech tech			= 7;//科技数值 (弓[血,攻,防],战[血,攻,防],法[血,攻,防])*100
+		repeated ZoneArea area		= 8;//30+9+3+1 州府范围
+		required RewardConfig reward= 9;//2029刷新配置
+		required Mission mission	= 10;//任务配置
+}

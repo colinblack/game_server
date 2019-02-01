@@ -14,6 +14,7 @@ public:
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
 		SetFeature(CF_CHECK_SESSION);
+		SetFeature(CF_CHECK_TIME);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
 		SetFeature(CF_CHECK_VERSION);
@@ -34,6 +35,7 @@ public:
 	CGI_SET_ACTION_MAP("addcollect", AddCollect)
 	CGI_SET_ACTION_MAP("delcollect", DelCollect)
 	CGI_SET_ACTION_MAP("getworldnpc", GetWorldNpc)
+	CGI_SET_ACTION_MAP("GetOneNpc", GetOneNPC)
 	CGI_SET_ACTION_MAP("querywnpcdrwd", QueryWorldNpcReward)
 
 	CGI_ACTION_MAP_END
@@ -250,7 +252,6 @@ public:
 		int unsigned uid;
 		int unsigned world_pos;
 		unsigned occupy;
-		unsigned bNPC;
 		string figure_url;
 		Json::Value userFlag;
 		Json::Reader reader;
@@ -291,45 +292,7 @@ public:
 			error_log("miss occupy uid = %u",uid);
 			return R_ERR_PARAM;
 		}
-		if (!Json::GetUInt(m_data, "bNPC", bNPC))
-		{
-			error_log("miss bNPC uid = %u",uid);
-			return R_ERR_PARAM;
-		}
 
-		NpcItem defendnpc;
-		memset(&defendnpc,0x00,sizeof(defendnpc));
-		defendnpc.worldpos = world_pos;
-		ret = logicWorldNpc.GetNpc(defendnpc);
-		if(ret != 0)
-			return ret;
-		if((bNPC && !IsWorldNPCUid(defendnpc.uid)) || ((!bNPC && IsWorldNPCUid(defendnpc.uid))))
-		{
-			LOGIC_ERROR_RETURN_MSG("had been occupied");
-		}
-
-		//删除失守玩家的数据
-		if(!IsWorldNPCUid(defenduid))
-		{
-			// 删除原有分基地信息
-			ret = logicBaseExtra.GetBaseExtra(defenduid,world_pos,defendBaseExtra);
-			{
-				if(0 != ret )
-				{
-					error_log("get_defend_user_sub_base_failed uid = %u, worldpos =%u",uid,world_pos);
-					DB_ERROR_RETURN_MSG("get_defend_user_sub_base_failed");
-				}
-			}
-			ret = logicBuilding.RemoveBuilding(defenduid,world_pos);
-			if(ret != 0)
-				return ret;
-
-			ret = logicBaseExtra.RemoveSubBase(defenduid,world_pos);
-			if(0 != ret )
-				return ret;
-		}
-
-		ret = logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),userBasic);
 		int npcId = 0;
 		switch(world_type)
 		{
@@ -346,6 +309,81 @@ public:
 			error_log("occupy city type error uid = %u, world_type =%u",uid,world_type);
 			return R_ERR_LOGIC;
 		}
+
+		//合区攻城拔寨活动
+		if((Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_HEQU_ACTIVITY_BEGIN_TS))
+			&& (Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_HEQU_ACTIVITY_END_TS)))
+		{
+			int num = 0;
+			if(70001 == npcId)
+			{
+				num = 1;
+			}
+			else if(70002 == npcId)
+			{
+				num = 2;
+			}
+			else if(70003 == npcId)
+			{
+				num = 3;
+			}
+			CLogicHequActivity worldAttack;
+			HequWorldAttack Attack;
+			CLogicUserBasic logicUserBasic;
+			DataUserBasic dataUserBasic;
+			Attack.attack_num = num;
+			Attack.uid = uid;
+			logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),dataUserBasic);
+			memcpy(Attack.name,dataUserBasic.name.c_str(),sizeof(Attack.name) - 1);
+			worldAttack.UpdateHequWorldAttackRank(uid,Attack);
+		}
+
+		NpcItem defendnpc;
+		memset(&defendnpc,0x00,sizeof(defendnpc));
+		defendnpc.worldpos = world_pos;
+		ret = logicWorldNpc.GetNpc(defendnpc);
+		if(ret != 0)
+		{
+			error_log("get_defend_user_npc_item_failed uid = %u, worldpos =%u",uid,world_pos);
+			return ret;
+		}
+
+		if(IsWorldNPCUid(defenduid) &&IsValidUid(defendnpc.uid))
+		{
+			LOGIC_ERROR_RETURN_MSG("had been occupied");
+		}
+		else if(IsValidUid(defenduid) && IsValidUid(defendnpc.uid) && defenduid != defendnpc.uid)
+			return R_ERR_LOGIC;
+		else if(IsValidUid(defenduid) && IsWorldNPCUid(defendnpc.uid))
+		{
+			if(occupy)
+				defenduid = defendnpc.uid;
+			else
+				return 0;
+		}
+		else if(IsWorldNPCUid(defenduid) && IsWorldNPCUid(defendnpc.uid) && !occupy)
+			return 0;
+
+		//删除失守玩家的数据
+		if(IsValidUid(defenduid))
+		{
+			// 删除原有分基地信息
+			ret = logicBaseExtra.GetBaseExtra(defenduid,world_pos,defendBaseExtra);
+			if(0 != ret )
+			{
+				error_log("get_defend_user_sub_base_failed uid = %u, worldpos =%u",uid,world_pos);
+				DB_ERROR_RETURN_MSG("get_defend_user_sub_base_failed");
+			}
+			ret = logicBuilding.RemoveBuilding(defenduid,world_pos);
+			if(ret != 0)
+				return ret;
+
+			ret = logicBaseExtra.RemoveSubBase(defenduid,world_pos);
+			if(0 != ret )
+				return ret;
+		}
+
+		ret = logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),userBasic);
 		//处理占领玩家数据
 		if(occupy)//占领新城，放弃已有
 		{
@@ -356,35 +394,59 @@ public:
 			{
 				// world map
 				WorldPoint temp;
-				temp.uid = npcId;
-				temp.map_flag = world_type;
-				temp.protect_time = 0;
-				temp.state = 0;
-				temp.last_collect_ts = (*it).last_collect_ts;
-				ret = logicWorld.ReplaceUser(temp,(*it).worldpos);
-				if(ret != 0)
+				ret = logicWorld.GetUserInfo((*it).worldpos,temp);
+				if(ret)
+				{
+					error_log("get_attack_user_world_point_failed uid = %u, worldpos =%u",uid,world_pos);
 					return ret;
+				}
+				if(temp.uid == uid)
+				{
+					temp.uid = npcId;
+					temp.map_flag = world_type;
+					temp.protect_time = 0;
+					temp.state = 0;
+					temp.last_collect_ts = (*it).last_collect_ts;
+					ret = logicWorld.ReplaceUser(temp,(*it).worldpos);
+					if(ret != 0)
+					{
+						error_log("set_attack_user_world_point_failed uid = %u, worldpos =%u",uid,world_pos);
+						return ret;
+					}
+				}
 
 				//world npc
 				NpcItem npc;
 				memset(&npc,0x00,sizeof(npc));
-				npc.uid = npcId;
-				npc.SetType(world_type);
 				npc.worldpos = (*it).worldpos;
-				memcpy(npc.cityName,temp.cityname,sizeof(npc.cityName) - 1);
-				memset(npc.name,0,sizeof(npc.name) - 1);
-				ret = logicWorldNpc.ReplaceNpc(npc);
-				if(ret != 0)
+				ret = logicWorldNpc.GetNpc(npc);
+				if(ret)
+				{
+					error_log("get_attack_user_npc_item_failed uid = %u, worldpos =%u",uid,world_pos);
 					return ret;
+				}
+				if(npc.uid == uid)
+				{
+					npc.uid = npcId;
+					npc.SetType(world_type);
+					memcpy(npc.cityName,temp.cityname,sizeof(npc.cityName) - 1);
+					memset(npc.name,0,sizeof(npc.name) - 1);
+					ret = logicWorldNpc.ReplaceNpc(npc);
+					if(ret != 0)
+					{
+						error_log("set_attack_user_npc_item_failed uid = %u, worldpos =%u",uid,world_pos);
+						return ret;
+					}
+				}
 
 				//building
 				ret = logicBuilding.RemoveBuilding(uid,(*it).worldpos);
-				if(ret != 0)
+				if(ret != 0 && ret != R_ERR_NO_DATA)
 					return ret;
 
 				//base extra
 				ret = logicBaseExtra.RemoveSubBase(uid,(*it).worldpos);
-				if(0 != ret )
+				if(ret != 0 && ret != R_ERR_NO_DATA)
 					return ret;
 			}
 
@@ -393,7 +455,8 @@ public:
 			CLogicNpc logicNpc;
 			Json::Value result;
 			logicNpc.Load(npcId,uid,result);
-			ret = logicBuilding.UpdateBuilding(uid, world_pos,result["baseop"],false);
+			Json::Value res;
+			ret = logicBuilding.UpdateBuilding(uid, world_pos,result["baseop"],res,false);
 			if (ret != 0)
 				return ret;
 
@@ -427,7 +490,10 @@ public:
 			worldpoint.last_collect_ts = 0;
 			ret = logicWorld.ReplaceUser(worldpoint,world_pos);
 			if(ret != 0)
+			{
+				error_log("set_defend_user_world_point_failed uid = %u, worldpos =%u",uid,world_pos);
 				return ret;
+			}
 
 			//world npc
 			NpcItem npc;
@@ -439,7 +505,10 @@ public:
 			memcpy(npc.name,userBasic.name.c_str(),sizeof(npc.name) - 1);
 			ret = logicWorldNpc.ReplaceNpc(npc);
 			if(ret != 0)
+			{
+				error_log("set_defend_user_npc_item_failed uid = %u, worldpos =%u",uid,world_pos);
 				return ret;
+			}
 		}
 		else//放弃占领
 		{
@@ -453,7 +522,10 @@ public:
 			worldpoint.last_collect_ts = defendBaseExtra.last_collect_ts;
 			ret = logicWorld.ReplaceUser(worldpoint,world_pos);
 			if(ret != 0)
+			{
+				error_log("set_defend_user_world_point_failed uid = %u, worldpos =%u",uid,world_pos);
 				return ret;
+			}
 
 			//world npc
 			NpcItem npc;
@@ -465,17 +537,23 @@ public:
 			memset(npc.name,0,sizeof(npc.name) - 1);
 			ret = logicWorldNpc.ReplaceNpc(npc);
 			if(ret != 0)
+			{
+				error_log("set_defend_user_npc_item_failed uid = %u, worldpos =%u",uid,world_pos);
 				return ret;
+			}
 		}
 
-		//通知失守玩家
-		updates.resize(1);
-		updates[(unsigned)0]["s"] = "SUBBASELOSS";
-		updates[(unsigned)0]["name"] = userBasic.name;
-		updates[(unsigned)0]["uid"] = uid;
-		updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
-		updates[(unsigned)0]["world_pos"] = world_pos;
-		logicUpdates.AddUpdates(defenduid,updates);
+		if(IsValidUid(defenduid))
+		{
+			//通知失守玩家
+			updates.resize(1);
+			updates[(unsigned)0]["s"] = "SUBBASELOSS";
+			updates[(unsigned)0]["name"] = userBasic.name;
+			updates[(unsigned)0]["uid"] = uid;
+			updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
+			updates[(unsigned)0]["world_pos"] = world_pos;
+			logicUpdates.AddUpdates(defenduid,updates);
+		}
 
 		if(m_data["world_blocks"].isArray())
 		{
@@ -508,7 +586,9 @@ public:
 		}
 		CLogicWorld logicWorld;
 		ret = logicWorld.MoveCity(m_uid,oldmainpos,world_pos);
-		if(ret != 0)
+		if(ret == -1)
+			world_pos = 0;
+		else if(ret != 0)
 		{
 			error_log("move city failed uid=%d",m_uid);
 			return ret;
@@ -556,6 +636,17 @@ public:
 	{
 		CLogicWorldNpc logicWorldNpc;
 		int ret = logicWorldNpc.GetAllNpc(m_jsonResult);
+		return ret;
+	}
+	int GetOneNPC()
+	{
+		if(!m_data.isMember("world_pos"))
+		{
+			return R_ERR_PARAM;
+		}
+		unsigned world_pos = m_data["world_pos"].asUInt();
+		CLogicWorldNpc logicWorldNpc;
+		int ret = logicWorldNpc.GetOneNPC(world_pos, m_jsonResult["GetOneNpc"]);
 		return ret;
 	}
 	int QueryWorldNpcReward()

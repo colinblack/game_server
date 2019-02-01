@@ -29,16 +29,16 @@ struct EveryoneFormation
 	int state;               //1为运动状态 .2为据点状态
 	int position;            //玩家所处的据点id
 	int target;              //玩家要去的据点id
-	int role;              //1为观看状态， 2为在战场状态
-	unsigned ts;           //进出据点的时间
+	int role;              	//1为观看状态， 2为在战场状态
+	unsigned ts;             //进出据点的时间
 	int camp;                //阵营  1为offensive  2为defence
 	struct WarProperties personalWarData;
 };
 
 struct AllCombatData{
 	int Map_id;                         //地图id
-	int FortifiedNum;                   //地图对应的据点数
-	unsigned Data_id;					//数据序列号
+	int holdsNum;                   //地图对应的据点数
+	unsigned seq_id;					//数据序列号
 	unsigned Senduid;					//改变数据的uid
 	struct EveryoneFormation All_people[MAXNUM_OF_PEOPLE];
 };
@@ -49,8 +49,9 @@ public:
 	CDataGroupsFigthing();
 	virtual ~CDataGroupsFigthing();
 	int Init(const std::string &path,int cityid, semdat sem=sem_groupsfighting);
-	int GetAllCombatData(vector <EveryoneFormation> &All_data,int cityindex,unsigned &Data_id,unsigned &Senduid,vector <EveryoneFormation> &Self_data);
-	int UpdatasFightingData(vector <EveryoneFormation> &All_data,int cityindex,unsigned &Data_id,unsigned &Senduid,int &map_id);
+	int GetAllCombatData(vector <EveryoneFormation> &All_data,int cityindex,int &map_id,unsigned &Data_id
+						,unsigned &Senduid,struct EveryoneFormation Self_data,int &num_flag,int holdsNum);
+	int UpdatesFightingData(vector <EveryoneFormation> &All_data,int cityindex,unsigned &Data_id,unsigned &Senduid,int &map_id,int holdsNum,int &flag);
 
 	int AddFullmorale(int cityindex,unsigned uid);
 	int CleanGroupsfigthingData(int cityindex);

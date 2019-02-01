@@ -27,6 +27,8 @@ public:
 	int GetOutboxEmailList(unsigned int uid, vector<DataEmail> &vdata);
 	int AddEmail(const DataEmail &data);
 	int DeleteEmails(unsigned uid, const vector<uint64_t> &vEmail_Id);
+	int DeleteEmailBeforeTs(unsigned uid, unsigned ts);
+	int DeleteEmailFrom(unsigned uid, unsigned opposite_uid);
 	int GetAttachments(unsigned uid, const vector<uint64_t> &vEmail_Id,vector<string> &vattchments);
 	int SetAttach_Flag(unsigned uid, const vector<uint64_t> &vEmail_Id);
 	int ReadEmail(unsigned uid, const uint64_t email_Id,DataEmail &data);

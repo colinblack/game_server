@@ -19,12 +19,22 @@ struct Dragonball
 	unsigned ts;
 	char     name[64];
 	char	 aname[64];
+	Dragonball()
+	{
+		holderUid = allianceId = ts = 0;
+		memset(name,0,sizeof(name));
+		memset(aname,0,sizeof(aname));
+	}
 };
 
 struct AllianceBall{
 	unsigned allianceId;
 	unsigned count;
 	unsigned ts;
+	AllianceBall()
+	{
+		allianceId = count = ts = 0;
+	}
 };
 
 struct DragonballData
@@ -38,19 +48,24 @@ class CDataDragonball
 public:
 	CDataDragonball();
 	int Init(const string &path, semdat sem=sem_dragonball);
-	int SetDragonball(int ballId, unsigned uid, const string &name, unsigned now,
+	int SetDragonball(int ballId, unsigned uid, string &name, unsigned now,
 			unsigned &preUid, unsigned &preTs, string &preName);
-	int ViewAllDragonball(DragonballData &balls);
-	int WhichDragonballHold(unsigned uid, unsigned &ballId, unsigned &ts);
-	int GetAllianceDragons(map<unsigned,AllianceBall>& allianceBalls);
-	int GetAllianceWithBalls(AllianceBall& aBall);
+
+	int ViewAllDragonball(DragonballData &balls,bool real = true);
+	int WhichDragonballHold(unsigned uid, unsigned &ballId, unsigned &ts,bool real = true);
+	int GetAllianceDragons(map<unsigned,AllianceBall>& allianceBalls,bool real = true);
+	int GetAllianceWithBalls(AllianceBall& aBall,bool real = true);
+
 	int SetAlliance(AllianceBall& aBall);
 	int SetAlliance2(AllianceBall& aBall);
 	int ResetAlliance();
-	int GetDragonballStatus(int ballId,Dragonball &ballData);
+
+	int GetDragonballStatus(int ballId,Dragonball &ballData,bool real = true);
 protected:
 	CShareMemory m_sh;
 	bool m_init;
+	DragonballData m_tempData;
+	void _clear_temp();
 };
 
 #endif

@@ -40,6 +40,7 @@ public:
 	int GetUserAttacksCount(unsigned uid, unsigned time, int type, int &count);
 	int GetUserAttacksCount(unsigned uid, unsigned worldpos, unsigned time, int type, int &count);
 
+	int DelUserAttacksBeforeTS(unsigned uid, unsigned ts);
 };
 
 #endif

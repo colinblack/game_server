@@ -2,7 +2,7 @@
 
 CDataNominateAlliance* CLogicNominateAlliance::GetCDataNominateAlliance()
 {
-	GET_MEM_DATA_SEM(CDataNominateAlliance, CONFIG_NOMINATE_ALLIANCE_PATH, sem_nominatealliance)
+	GET_MEM_DATA_SEM(CDataNominateAlliance, CONFIG_NOMINATE_ALLIANCE_PATH, sem_nominatealliance,false)
 	/*static CDataNominateAlliance* pData = NULL;
 	if (!pData)
 	{
@@ -51,7 +51,7 @@ int CLogicNominateAlliance::GetAlliance(unsigned kingdom, Json::Value &data)
 			continue;
 		}
 
-		int membercount = logicAlliance.GetMemberMaxCount(alliance.level);
+		int membercount = CLogicAlliance::GetMemberMaxCount(alliance.level);
 		if (alliance.member_count >= membercount)
 		{
 			ret = pData->RemoveData(itr->alliance_id);

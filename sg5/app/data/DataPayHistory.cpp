@@ -59,7 +59,7 @@ int CDataPayHistory::GetPayHistory(unsigned uid, int channel, const string &chan
 {
 	DBCREQ_DECLARE(DBC::GetRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, channel, channel);
+	//DBCREQ_SET_CONDITION(EQ, channel, channel);
 	DBCREQ_SET_CONDITION(EQ, channel_pay_id, channel_pay_id.c_str());
 
 	DBCREQ_NEED_BEGIN();
@@ -93,6 +93,49 @@ int CDataPayHistory::GetPayHistory(unsigned uid, int channel, const string &chan
 	return 0;
 }
 
+int CDataPayHistory::GetPayHistory(unsigned uid, vector<DataPayHistory> &datas)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(uid);
+	DBCREQ_NEED(pay_id);
+	DBCREQ_NEED(type);
+	DBCREQ_NEED(channel);
+	DBCREQ_NEED(channel_pay_id);
+	DBCREQ_NEED(credit);
+	DBCREQ_NEED(count);
+	DBCREQ_NEED(status);
+	DBCREQ_NEED(time);
+	DBCREQ_NEED(open_id);
+
+	DBCREQ_EXEC;
+	datas.clear();
+	int count = m_dbcret.TotalRows();
+	for(int i = 0; i < count; i++)
+	{
+		DBCREQ_IFFETCHROW;
+		DataPayHistory data;
+
+		DBCREQ_GET_BEGIN();
+		DBCREQ_GET_INT(data, uid);
+		DBCREQ_GET_INT(data, pay_id);
+		DBCREQ_GET_INT(data, type);
+		DBCREQ_GET_INT(data, channel);
+		DBCREQ_GET_STR(data, channel_pay_id);
+		DBCREQ_GET_INT(data, credit);
+		DBCREQ_GET_INT(data, count);
+		DBCREQ_GET_INT(data, status);
+		DBCREQ_GET_INT(data, time);
+		DBCREQ_GET_STR(data, open_id);
+
+		datas.push_back(data);
+	}
+
+	return 0;
+}
+
 int CDataPayHistory::SetPayHistoryStatus(unsigned uid, unsigned long long pay_id, char status)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
@@ -107,7 +150,7 @@ int CDataPayHistory::SetPayHistoryStatus(unsigned uid, int channel, const string
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, channel, channel);
+	//DBCREQ_SET_CONDITION(EQ, channel, channel);
 	DBCREQ_SET_CONDITION(EQ, channel_pay_id, channel_pay_id.c_str());
 
 	DBCREQ_SET_INT_V(status);
@@ -136,7 +179,7 @@ int CDataPayHistory::SetPayHistory(unsigned uid, int channel, const string &chan
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);
 	DBCREQ_SET_KEY(uid);
-	DBCREQ_SET_CONDITION(EQ, channel, channel);
+	//DBCREQ_SET_CONDITION(EQ, channel, channel);
 	DBCREQ_SET_CONDITION(EQ, channel_pay_id, channel_pay_id.c_str());
 
 	DBCREQ_SET_INT(data, pay_id);

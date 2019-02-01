@@ -206,7 +206,6 @@ int CDataWorldNpc::MakeReward()
 		error_log("get_world_npc failed");
 		return R_ERR_DB;
 	}
-	srand(time(NULL));
 	CAutoLock lock(&m_sh, true);
 	int i;
 	for(i = 0; i < pdata->count;i++)

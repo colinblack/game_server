@@ -112,6 +112,20 @@ int CLogicUserData::SetGift(unsigned uid, const Json::Value &data)
 	return 0;
 }
 
+int CLogicUserData::GetGift(unsigned uid, Json::Value& data)
+{
+	CDataUserData userDataDB;
+	std::string szGift;
+	int ret = userDataDB.GetGift(uid, szGift);
+	if (ret != 0)
+	{
+		error_log("[GetGift fail][uid=%u,ret=%d]", uid, ret);
+		DB_ERROR_RETURN_MSG("get_user_data_fail");
+	}
+	Json::Reader().parse(szGift, data);
+	return 0;
+}
+
 int CLogicUserData::SetLadder(unsigned uid, const Json::Value &data)
 {
 	if (data.isNull())

@@ -22,43 +22,21 @@ int main(int argc, char *argv[]) {
 	for(int i=serverfrom-1;i<serverto;++i)
 	{
 		uint64_t uidEnd;
-		unsigned userid = 10000000 + 500000*i;
+		unsigned userid = Config::GetUIDStart(i+1);
 		CLogicIdCtrl logicIdCtrl;
 		ret = logicIdCtrl.GetCurrentId(KEY_UID_CTRL, uidEnd,i+1);
 		if(ret != 0)
 		{
-			error_log("get current user id fail! from ClearUserWorldmainpos ---start!");
+			error_log("get current user id fail! from RepairArchive ---start!");
 			return ret;
 		}
 		for(;userid <= (unsigned)uidEnd;++userid)
 		{
-			Json::Reader reader;
-			Json::FastWriter writer;
-			Json::Value stat;
-			Json::Value gift;
-			CLogicUser logicUser;
+			CDataUser dbUser;
 			DataUser user;
-			ret = logicUser.GetUser(userid, user);
-			if (!user.user_stat.empty() && !reader.parse(user.user_stat, stat))
-			{
-				cout<<userid<<" stat error!"<<endl;
-				cout<<user.user_stat<<endl;
-				user.user_stat = writer.write(stat);
-				cout<<user.user_stat<<endl;
-				logicUser.SetUser(userid,user);
-			}
-
-			DataUserData userData;
-			CLogicUserData logicUserData;
-			ret = logicUserData.GetUserData(userid, userData);
-			if (!userData.gift.empty() && !reader.parse(userData.gift, gift))
-			{
-				cout<<userid<<" gift error!"<<endl;
-				cout<<userData.gift<<endl;
-				userData.gift = writer.write(gift);
-				cout<<userData.gift<<endl;
-				logicUserData.SetUserData(userid, userData);
-			}
+			ret = dbUser.GetUser(userid, user);
+			if(ret == 0 && dbUser._check_user_stat(user) == 0)
+				dbUser.SetUser(userid,user);
 		}
 	}
 	cout<<"ok"<<endl;

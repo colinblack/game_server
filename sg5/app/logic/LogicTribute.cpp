@@ -1,3 +1,4 @@
+#include<math.h>
 #include "LogicTribute.h"
 
 #define TRIBUTE_AMOUNT_MAX 8
@@ -89,9 +90,42 @@ int CLogicTribute::GetTribute(unsigned uid, Json::Value &tributes)
 	}
 	return 0;
 }
-
-int CLogicTribute::Tribute(unsigned uid, unsigned tributeUid, const Json::Value &tribute)
+int CLogicTribute::GetTributeRes(unsigned uid, Json::Value & triJson)
 {
+	int r = Math::GetRandomInt(10);
+	triJson["coins"] = 0;
+	triJson["c"] = 0;
+	triJson["t"] = 0;
+	switch(r)
+	{
+	case 0:
+		triJson["coins"] = 2;
+		break;
+	case 1:
+		triJson["coins"] = 5;
+		break;
+	default:
+		{
+			int mainBdLvl = 1;
+			Json::Value mainBd;
+			CLogicBuilding logicBd;
+			int ret = logicBd.Get(uid, 1,0,true, mainBd);
+			if (ret == 0)
+			{
+				if (mainBd.isMember("l") && mainBd["l"].isIntegral())
+				{
+					mainBdLvl = mainBd["l"].asInt();
+				}
+			}
+			triJson["c"] = 10000 * (int)pow(1.05, (mainBdLvl - 1)) * (r>5?1:2);
+			triJson["t"] = r % 4;
+		}
+	}
+	return 0;
+}
+int CLogicTribute::Tribute(unsigned uid, unsigned tributeUid, const Json::Value &tribute,bool &bfull)
+{
+	bfull = false;
 	int level = 0;
 	int tributeLevel = 0;
 	if (!Json::GetInt(tribute, "level", level) || !Json::GetInt(tribute, "tribute_level", tributeLevel))
@@ -99,9 +133,26 @@ int CLogicTribute::Tribute(unsigned uid, unsigned tributeUid, const Json::Value 
 		error_log("[tribute data error][uid=%u,tributeUid=%u]",uid,tributeUid);
 		PARAM_ERROR_RETURN_MSG("tribute_data_error");
 	}
+
+	Json::Value triList;
+	int ret = GetTributeList(uid, triList);
+	if(ret)
+		return ret;
+	if (triList.size() >= triList[1u].asUInt() + 2)
+	{
+		bfull = true;
+		//error_log("[tribute full][uid=%u,tributeUid=%u]",uid,tributeUid);
+		return 0;
+	}
+	triList.append(tributeUid);
+	CLogicUserData logicUserData;
+	logicUserData.SetTributeList(uid, triList);
+	if(ret)
+		return ret;
+
 	DataUserBasic triUserBasic;
 	CLogicUserBasic logicUserBasic;
-	int ret = logicUserBasic.GetUserBasicLimit(tributeUid, OpenPlatform::GetType(), triUserBasic);
+	ret = logicUserBasic.GetUserBasicLimit(tributeUid, OpenPlatform::GetType(), triUserBasic);
 	if (ret != 0)
 		return ret;
 
@@ -124,17 +175,7 @@ int CLogicTribute::Tribute(unsigned uid, unsigned tributeUid, const Json::Value 
 	tributeData.id = maxid + 1;
 	Json::Value triJson;
 	triJson["id"] = tributeData.id;
-	int r = Math::GetRandomInt(100);
-	triJson["coins"] = 0;
-	triJson["c"] = 0;
-	switch(r/20)
-	{
-	case 0: triJson["c"] = 50;break;
-	case 1: triJson["c"] = 100;break;
-	case 2: triJson["coins"] = 1;break;
-	case 3: triJson["coins"] = 2;break;
-	default: triJson["coins"] = 4;break;
-	}
+	GetTributeRes(uid, triJson);
 	triJson["uid"] = triUserBasic.uid;
 	triJson["name"] = triUserBasic.name;
 	triJson["pic"] = triUserBasic.figure_url;
@@ -147,14 +188,6 @@ int CLogicTribute::Tribute(unsigned uid, unsigned tributeUid, const Json::Value 
 		DB_ERROR_RETURN_MSG("add_tribute_fail");
 	}
 
-	Json::Value triList;
-	ret = GetTributeList(uid, triList);
-	if (ret == 0 && triList.size() <= 100)
-	{
-		triList.append(tributeUid);
-		CLogicUserData logicUserData;
-		logicUserData.SetTributeList(uid, triList);
-	}
 	return 0;
 }
 
@@ -183,17 +216,17 @@ int CLogicTribute::IsEnableTribute(const DataUser &user, unsigned tributeUid, bo
 		return 0;
 	}
 	Json::Value triList;
-	ret = GetTributeList(uid, triList);
+	ret = GetTributeList(uid, triList, maxTribute);
 	if (ret != 0)
 		return ret;
-	if (triList.size() >= (unsigned)(maxTribute + 4 + 1))
+	if (triList.size() >= (unsigned)(maxTribute + 2))
 	{
 		enable = false;
 		return 0;
 	}
-	if (triList.size() > 1)
+	if (triList.size() > 2)
 	{
-		for (unsigned i = 1; i < triList.size(); i++)
+		for (unsigned i = 2; i < triList.size(); i++)
 		{
 			if (triList[i].asUInt() == tributeUid)
 			{
@@ -232,8 +265,7 @@ int CLogicTribute::DaliyTribute(unsigned uid, int invite_count)
 	tributeData.id = maxid + 1;
 	Json::Value triJson;
 	triJson["id"] = tributeData.id;
-	triJson["coins"] = 2;
-	triJson["c"] = 0;
+	GetTributeRes(uid,triJson);
 	Json::FastWriter writer;
 	tributeData.data = writer.write(triJson);
 	ret = tributeDB.AddTribute(uid, tributeData.id, tributeData.data);
@@ -247,8 +279,7 @@ int CLogicTribute::DaliyTribute(unsigned uid, int invite_count)
 		tributeData.id = maxid + 2;
 		Json::Value triJson2;
 		triJson2["id"] = tributeData.id;
-		triJson2["coins"] = 0;
-		triJson2["c"] = 100;
+		GetTributeRes(uid,triJson2);
 		tributeData.data = writer.write(triJson2);
 		ret = tributeDB.AddTribute(uid, tributeData.id, tributeData.data);
 		if (ret != 0)
@@ -262,10 +293,10 @@ int CLogicTribute::DaliyTribute(unsigned uid, int invite_count)
 
 int CLogicTribute::GetTributeLimit(unsigned uid, int invite_count)
 {
-	int mainBdLvl = 0;
+	int mainBdLvl = 1;
 	Json::Value mainBd;
 	CLogicBuilding logicBd;
-	int ret = logicBd.GetBuilding(uid, 1, mainBd);
+	int ret = logicBd.Get(uid, 1,0,true, mainBd);
 	if (ret == 0)
 	{
 		if (mainBd.isMember("l") && mainBd["l"].isIntegral())
@@ -273,15 +304,10 @@ int CLogicTribute::GetTributeLimit(unsigned uid, int invite_count)
 			mainBdLvl = mainBd["l"].asInt();
 		}
 	}
-	int maxTribute = invite_count + 2;
-	if (maxTribute > mainBdLvl)
-		maxTribute = mainBdLvl;
-	if (maxTribute < 2)
-		maxTribute = 2;
-	return maxTribute;
+	return  mainBdLvl/10 + 2 + (invite_count < 30 ? invite_count : 30);
 }
 
-int CLogicTribute::GetTributeList(unsigned uid, Json::Value &tributeList)
+int CLogicTribute::GetTributeList(unsigned uid, Json::Value &tributeList, unsigned max)
 {
 	DataUserData userData;
 	CLogicUserData logicUserData;
@@ -292,18 +318,21 @@ int CLogicTribute::GetTributeList(unsigned uid, Json::Value &tributeList)
 		userData.tribute_list = "[]";
 	Json::Reader reader;
 	reader.parse(userData.tribute_list, tributeList);
-	if (tributeList.empty())
+	if (tributeList.size() < 2)
 	{
-		tributeList[(unsigned)0] = Time::GetGlobalTime();
+		tributeList[0u] = Time::GetGlobalTime();
+		tributeList[1u] = max?max:2;
 		logicUserData.SetTributeList(uid, tributeList);
 	}
 	else
 	{
-		unsigned ts = tributeList[(unsigned)0].asUInt();
+		unsigned ts = tributeList[0u].asUInt();
+		unsigned old = tributeList[1u].asUInt();
 		if (CTime::GetDayInterval(ts, Time::GetGlobalTime()) != 0)
 		{
-			tributeList.resize(1);
-			tributeList[(unsigned)0] = Time::GetGlobalTime();
+			tributeList.resize(2);
+			tributeList[0u] = Time::GetGlobalTime();
+			tributeList[1u] = max?max:(old?old:2);
 			logicUserData.SetTributeList(uid, tributeList);
 		}
 	}

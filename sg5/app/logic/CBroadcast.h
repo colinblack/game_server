@@ -30,7 +30,6 @@
 			byte platform;
 			string name;
 			IMPLEMENT_PACKET_ENCODE_BEGIN
-			writer.SetSwapByte(false);
 				PACKET_ENCODE(Byte, platform);
 				PACKET_ENCODE(String,name);
 			IMPLEMENT_PACKET_ENCODE_END
@@ -44,7 +43,6 @@ DEFINE_SEND_PACKET_BEGIN(CChatRequest)
 	uint32_t ToId;
 	string Message;
 	IMPLEMENT_PACKET_ENCODE_BEGIN
-	writer.SetSwapByte(false);
 		PACKET_ENCODE(Byte, ToType);
 		PACKET_ENCODE(UInt32, ToId);
 		PACKET_ENCODE(String, Message);
@@ -67,7 +65,6 @@ DEFINE_SEND_PACKET_BEGIN(CForbidChatRequest)
 	uint32_t ForbidUid;
 	uint32_t ForbidTs;
 	IMPLEMENT_PACKET_ENCODE_BEGIN
-	//writer.SetSwapByte(false);
 	PACKET_ENCODE(UInt32, ForbidUid);
 	PACKET_ENCODE(UInt32, ForbidTs);
 	IMPLEMENT_PACKET_ENCODE_END
@@ -83,5 +80,66 @@ DEFINE_RECEIVE_PACKET_BEGIN(CForbidChatReply)
 	IMPLEMENT_PACKET_DECODE_END
 	IMPLEMENT_TO_STRING("Message=%s,Result = %u", Message.c_str(),Result)
 DEFINE_RECEIVE_PACKET_END
+
+
+//NewWorld
+//9-1 battle
+#define PROTOCOL_TYPE_NEW_WORLD_BATTLE COMBINE_PROTOCOL_TYPE(9, 1)
+DEFINE_RECEIVE_PACKET_BEGIN(CNewWorldBattleRequestProtocol)
+	DEFINE_PROTOCOL_TYPE(9, 1)
+	byte cid;
+	byte kingdom;
+	byte battle;
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cid);
+		PACKET_DECODE(Byte, kingdom);
+		PACKET_DECODE(Byte, battle);
+	IMPLEMENT_PACKET_DECODE_END
+	IMPLEMENT_TO_STRING("cid=%u&kingdom=%u&battle=%d",
+			cid, kingdom, battle)
+DEFINE_RECEIVE_PACKET_END
+
+
+DEFINE_SEND_PACKET_BEGIN(CNewWorldBattleReplyProtocol)
+		DEFINE_PROTOCOL_TYPE(9, 1)
+		byte cid;
+		byte kingdom;
+		byte battle;
+		IMPLEMENT_PACKET_ENCODE_BEGIN
+			PACKET_ENCODE(Byte, cid);
+			PACKET_ENCODE(Byte, kingdom);
+			PACKET_ENCODE(Byte, battle);
+		IMPLEMENT_PACKET_ENCODE_END
+DEFINE_SEND_PACKET_END
+
+//NewWorldBattle
+//10-1 battle
+#define PROTOCOL_TYPE_NEW_WORLD_BATTLE_BATTLE COMBINE_PROTOCOL_TYPE(10, 1)
+DEFINE_RECEIVE_PACKET_BEGIN(CNewWorldBattleBattleRequestProtocol)
+	DEFINE_PROTOCOL_TYPE(10, 1)
+	byte cid;
+	byte kingdom;
+	byte battle;
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cid);
+		PACKET_DECODE(Byte, kingdom);
+		PACKET_DECODE(Byte, battle);
+	IMPLEMENT_PACKET_DECODE_END
+	IMPLEMENT_TO_STRING("cid=%u&kingdom=%u&battle=%d",
+			cid, kingdom, battle)
+DEFINE_RECEIVE_PACKET_END
+
+
+DEFINE_SEND_PACKET_BEGIN(CNewWorldBattleBattleReplyProtocol)
+		DEFINE_PROTOCOL_TYPE(10, 1)
+		byte cid;
+		byte kingdom;
+		byte battle;
+		IMPLEMENT_PACKET_ENCODE_BEGIN
+			PACKET_ENCODE(Byte, cid);
+			PACKET_ENCODE(Byte, kingdom);
+			PACKET_ENCODE(Byte, battle);
+		IMPLEMENT_PACKET_ENCODE_END
+DEFINE_SEND_PACKET_END
 
 #endif /* CBROADCAST_H_ */

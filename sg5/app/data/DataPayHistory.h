@@ -26,6 +26,7 @@ public:
 
 	int GetPayHistory(unsigned uid, unsigned long long pay_id, DataPayHistory &data);
 	int GetPayHistory(unsigned uid, int channel, const string &channel_pay_id, DataPayHistory &data);
+	int GetPayHistory(unsigned uid, vector<DataPayHistory> &datas);
 
 	int SetPayHistoryStatus(unsigned uid, unsigned long long pay_id, char status);
 	int SetPayHistoryStatus(unsigned uid, int channel, const string &channel_pay_id, char status);

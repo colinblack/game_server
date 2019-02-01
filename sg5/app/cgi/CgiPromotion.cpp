@@ -43,11 +43,6 @@ public:
 					ret,openid.c_str(),openkey.c_str());
 			PT_ERROR_RETURN_MSG("get_user_info_fail");
 		}
-		if (userinfo.Name.empty())
-		{
-			error_log("[GetUserInfo name empty][openid=%s,openkey=%s,name=%s,pic=%s]",
-					openid.c_str(), openkey.c_str(), userinfo.Name.c_str(), userinfo.FigureUrl.c_str());
-		}
 
 		OPFriendList friendList;
 		ret = OpenPlatform::GetPlatform()->GetAppFriendList(friendList, openid, openkey);
@@ -59,7 +54,8 @@ public:
 
 		CLogicUserBasic logicUserBasic;
 		bool isNewUser=false;
-		ret = logicUserBasic.LoginPlatformUser(OpenPlatform::GetType(), userinfo, friendList, iopenid, uid, isNewUser);
+		string via;
+		ret = logicUserBasic.LoginPlatformUser(OpenPlatform::GetPlatform()->GetPlatformByPF(), userinfo, friendList, iopenid, uid, isNewUser,via,gm_none);
 		if(ret != 0)
 			return ret;
 
@@ -69,7 +65,7 @@ public:
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
 
 		CGI_SEND_LOG("action=login&uid=%u&platform=%d&openid=%s&openkey=%s&iopenid=%s",
-				uid, OpenPlatform::GetType(), openid.c_str(), openkey.c_str(), iopenid.c_str());
+				uid, OpenPlatform::GetPlatform()->GetPlatformByPF(), openid.c_str(), openkey.c_str(), iopenid.c_str());
 		return R_SUCCESS;
 	}
 

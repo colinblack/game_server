@@ -1,0 +1,22 @@
+package AllServerGroupBuy;
+
+//参加团购的用户
+message GroupBuyingUser
+{
+	required uint32 uid	= 1;
+	required uint32 join_stage	= 2;  //参团的阶段
+	required uint32 back_stage	= 3;  //返还阶段
+}
+
+//团购的类型
+message GroupBuyingItem
+{
+	required uint32 id	= 1;   //礼包id,用来区分不同的团购类型
+	repeated GroupBuyingUser customers = 2; 	//参加该类型团购的消费者
+}
+
+message GroupBuing
+{
+	required uint32 version			= 1;  //活动版本号
+	repeated GroupBuyingItem items	= 2;   //团购项
+}

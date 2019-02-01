@@ -4,6 +4,9 @@
  *  Created on: 2013-08-06
  *      Author: Administrator
  */
+/*
+ * 国战报名
+ */
 
 #include "DataNationalWarRgt.h"
 

@@ -127,7 +127,7 @@ int CLogicQQReport::Report(unsigned report, string openid, unsigned uid, unsigne
 	}
 	if (!Json::GetInt(value, "ret", ret) || ret != 0)
 	{
-		error_log("[report fail][url=%s,response=%s]", url.c_str(),response.c_str());
+		//error_log("[report fail][url=%s,response=%s]", url.c_str(),response.c_str());
 		return 7;
 	}
 	//info_log("[qq report][url=%s, respons=%s]", url.c_str(), response.c_str());
@@ -191,11 +191,65 @@ int CLogicQQReport::SetFeed(const string &openid, const string &openkey, const s
 	int ret;
 	if (!Json::GetInt(value, "ret", ret) || ret != 0)
 	{
-		error_log("[json ret fail][openid=%s,data=%s,response=%s]",
-						openid.c_str(), data.c_str(), response.c_str());
+		//error_log("[json ret fail][openid=%s,data=%s,response=%s]",	openid.c_str(), data.c_str(), response.c_str());
 		return -1;
 	}
 	//info_log("[qq set feed][data=%s, respons=%s]", data.c_str(), response.c_str());
+
+	return 0;
+}
+
+int CLogicQQReport::SetAchievement(const string &openid, const string &openkey, const string &pf,string level, string zoneid)
+{
+	string attr = "{\"level\":" + level + ",\"area_name\":\"" + zoneid + "\"}";
+
+	string url = "http://" + OpenPlatform::GetPlatform()->GetConfig("v3domain") + "/v3/user/set_achievement";
+
+	string osig = "POST&" + Crypt::UrlEncodeForTX("/v3/user/set_achievement") + "&";
+
+	string qsig = "appid=" + OpenPlatform::GetPlatform()->GetAppId()
+			+ "&openid=" + openid
+			+ "&openkey=" + openkey
+			+ "&pf=" + pf
+			+ "&user_attr=" + attr;
+
+	osig += Crypt::UrlEncodeForTX(qsig);
+	//error_log("[qq setachievement sig][sig=%s]", osig.c_str());
+	string key = OpenPlatform::GetPlatform()->GetAppKey() + "&";
+	string bsig = Crypt::HmacSha1(osig, key);
+	string sig;
+	Crypt::Base64Encode(sig, bsig);
+
+	string data;
+	data.append("appid=").append(Crypt::UrlEncodeForTX(OpenPlatform::GetPlatform()->GetAppId()));
+	data.append("&openid=").append(Crypt::UrlEncodeForTX(openid));
+	data.append("&openkey=").append(Crypt::UrlEncodeForTX(openkey));
+	data.append("&pf=").append(Crypt::UrlEncodeForTX(pf));
+	data.append("&user_attr=").append(Crypt::UrlEncodeForTX(attr));
+	data.append("&sig=").append(Crypt::UrlEncodeForTX(sig));
+
+	string response;
+	if (!Network::HttpPostRequest(response, url, data) || response.empty())
+	{
+		error_log("[http request fail][openid=%s,url=%s,response=%s]",
+				openid.c_str(), url.c_str(), response.c_str());
+		return -1;
+	}
+
+	Json::Value value;
+	if(!Json::Reader().parse(response, value))
+	{
+		error_log("[json parse fail][openid=%s,data=%s,response=%s]",
+				openid.c_str(), data.c_str(), response.c_str());
+		return -1;
+	}
+	int ret;
+	if (!Json::GetInt(value, "ret", ret) || ret != 0)
+	{
+		//error_log("[json ret fail][openid=%s,data=%s,response=%s]",	openid.c_str(), data.c_str(), response.c_str());
+		return -1;
+	}
+	//info_log("[qq setachievement][data=%s, respons=%s]", data.c_str(), response.c_str());
 
 	return 0;
 }

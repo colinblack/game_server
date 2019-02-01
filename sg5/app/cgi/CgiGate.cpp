@@ -11,6 +11,7 @@ public:
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
 		SetFeature(CF_CHECK_SESSION);
+		SetFeature(CF_CHECK_TIME);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
 		SetFeature(CF_CHECK_VERSION);
@@ -48,7 +49,7 @@ public:
 
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
 
-		CGI_SEND_LOG("action=getrank&uid=%u&gateid=%u&userid=%u", m_uid, gateid, uid);
+		CGI_SEND_LOG("action=getrank&operator=%u&gateid=%u&operated=%u", m_uid, gateid, uid);
 		return R_SUCCESS;
 	}
 */
@@ -72,7 +73,7 @@ public:
 
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
 
-		CGI_SEND_LOG("action=load&uid=%u&userid=%u&start=%u&end=%u", m_uid, uid, start, end);
+		CGI_SEND_LOG("action=load&operator=%u&operated=%u&start=%u&end=%u", m_uid, uid, start, end);
 		return R_SUCCESS;
 	}
 
@@ -127,7 +128,7 @@ public:
 		if (ret != 0)
 			return ret;
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
-		CGI_SEND_LOG("action=updatefight&uid=%u&userid=%u&win=%d",m_uid,userid,win);
+		CGI_SEND_LOG("action=updatefight&operator=%u&operated=%u&win=%d",m_uid,userid,win);
 		return R_SUCCESS;
 	}
 };

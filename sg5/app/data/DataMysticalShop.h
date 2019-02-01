@@ -22,6 +22,18 @@ struct DataEquipItem
 	unsigned ratioRank;
 	unsigned min;
 	unsigned max;
+
+	DataEquipItem():
+		eid(0),
+		ratio(0),
+		nums(0),
+		price(0),
+		ratioRank(0),
+		min(0),
+		max(0)
+	{
+	}
+
 	DataEquipItem &operator= (DataEquipItem const& other)
 	{
 		eid = other.eid;
@@ -69,7 +81,13 @@ public:
 	int InitMysticalShop();
 	int UpdateEquipRank();
 	int GetTopEquipNum(DataEquipItem dataEquipItem[],  int &equipNum);
-	int PayMysticalEquip(unsigned uid, string name, unsigned eid, unsigned& cost);
+
+	//记录黑市
+	int RecordMysticalEquip(unsigned uid, string name, unsigned eid, unsigned index);
+
+	DataEquipItem & GetEquipItemByIndex(unsigned index);
+
+	int PayMysticalEquip(unsigned uid, unsigned eid, unsigned& index);
 	DataEquipShop* GetMysticalShopPdata();
 	int GetInfobuys(DataEquipSells dataEquipSells[], int &buyNums);
 	int AddEquip(const unsigned eid, const unsigned nums, const unsigned min, const unsigned max, const unsigned ratio);

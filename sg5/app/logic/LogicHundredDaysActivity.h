@@ -17,6 +17,5 @@ public:
 	int GetHundredDaysActivityRankJson(unsigned uid, Json::Value &result);
 	int UpdateHundredDaysActivityRank(int unsigned uid, const DataHDaysAcvitityPay &points);
 //	int RewardHundredDaysActivityRank(void);
-	int CleanRankList(void);
 };
 #endif /* LOGICPOINTRANK_H_ */

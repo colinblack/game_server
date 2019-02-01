@@ -40,9 +40,9 @@ void CheckUserLevel(unsigned uid, int level, bool &needChang)
 	}
 	const int levelMap[3][2] =
 	{
-		{1,70},
-		{71,90},
-		{91,1000}
+		{70,89},
+		{90,109},
+		{110,1000}
 	};
 	CLogicUser logicUser;
 	DataUser user;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 	int semserver = 0;
 	Config::GetDB(semserver);
 
-	string dataPath = Config::GetValue(CONFIG_ALL_SERVER_LADDER_PATH);
+	string dataPath = MainConfig::GetAllServerPath(CONFIG_ALL_SERVER_LADDER_PATH);
 	const semdat sem[3] = {sem_ladderallserver_1, sem_ladderallserver_2, sem_ladderallserver_3};
 	const double multiple[3] = {1.0,1.5,2.0};
 
@@ -97,9 +97,32 @@ int main(int argc, char *argv[])
 		int ret;
 		CDataUser logicUser;
 		CLogicUpdates logicUpdates;
+		set<int> uid_flag;
 		for (int i = 0; i < LADDER_ITEM_NUMBER; i++)
 		{
 			unsigned uid = pdata->ladder[i].uid;
+
+			if(0 == uid)
+			{
+				pdata->ladder[i].uid = 401;
+				pdata->ladder[i].level = 13;
+			}
+
+			if(IsValidUid(uid))
+			{
+				if(!uid_flag.count(uid))
+				{
+					uid_flag.insert(uid);
+				}
+				else
+				{
+					memset(&(pdata->ladder[i]),0,sizeof(LadderItem));
+					pdata->ladder[i].uid = 401;
+					pdata->ladder[i].level = 13;
+					uid = 401;
+				}
+			}
+
 			if (!IsValidUid(uid) || pdata->ladder[i].level < 10)
 				continue;
 

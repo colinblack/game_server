@@ -20,6 +20,7 @@ enum semdat {
 	sem_payrank,
 	sem_personmatch,
 	sem_pointsrank,
+	sem_pointsrankallserver,
 	sem_river,
 	sem_toptenuser,
 	sem_world,
@@ -45,10 +46,34 @@ enum semdat {
 	sem_groupsfighting,
 	sem_gm,
 	sem_noise,
+	sem_recharge_alliance,
+	sem_alliance_battle,
+	sem_barbarian_king,
+	sem_xml,
+	sem_kingdom,
+	sem_allserver_rank,
+	sem_viprebates,
+	sem_alliance_point,
+	sem_world_attack,
+	sem_openarea_activity,
+	sem_new_world,
+	sem_new_lottery,
+	sem_consume_rank,
+	sem_new_world_battle,
+	sem_all_server_new_world_battle,
+	sem_restriction,
+	sem_dragon_scale_gift_bag,
+	sem_recharge_rank,
+	sem_all_server_double11,
+	sem_allserver_map_buffer,
+	sem_token_intensify,
+	sem_king_treasure,
+	sem_fortune_pack,
+	sem_rotaty_table_draw,
 };
 
-#define SEM_START 1000000000
-#define SEM_ID(semdat,semgroup,semserver) (SEM_START+semserver*1000000+semdat*1000+(semgroup++))
+#define SEM_START 2000000000
+#define SEM_ID(semdat,semgroup,semserver) (SEM_START+semserver%10000*10000+semdat%100*100+(semgroup++)%100)
 
 union semun {
 	int val;
@@ -61,15 +86,13 @@ public:
 	CVsem();
 	~CVsem();
 
-	bool CreateOrOpen(const char *name, int sem = 0);
-	bool Close() {
-		return true;
-	}
-	bool Create(const char *name, int sem = 0);
+	bool CreateOrOpen(const char *name, int sem = 0, unsigned vnum = 1);
+	bool Close() { return true; }
+	bool Create(const char *name, int sem = 0, unsigned vnum = 1);
 	bool Open(const char *name, int sem = 0);
 
-	bool Lock();
-	bool Unlock();
+	bool Lock(int vnum = 1);
+	bool Unlock(int vnum = 1);
 
 private:
 

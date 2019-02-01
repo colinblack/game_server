@@ -14,6 +14,10 @@
 #define SPREAD_LOG(fmt, args...) CBusinessLogHelper::GetInstance("spread")->Log(fmt,##args)
 #define REGISTER_LOG(fmt, args...) CBusinessLogHelper::GetInstance("register")->Log(fmt,##args)
 #define WORLD_ATTACK_LOG(fmt, args...) CBusinessLogHelper::GetInstance("worldattack")->Log(fmt,##args)
+#define HERO_LEVEL_LOG(fmt, args...) CBusinessLogHelper::GetInstance("herolevel")->Log(fmt,##args)
+#define USER_LEVEL_LOG(fmt, args...) CBusinessLogHelper::GetInstance("userlevel")->Log(fmt,##args)
+#define BUILDING_LEVEL_LOG(fmt, args...) CBusinessLogHelper::GetInstance("buildinglevel")->Log(fmt,##args)
+#define BATTLE_LOG(fmt, args...) CBusinessLogHelper::GetInstance("battle")->Log(fmt,##args)
 
 class CBusinessLog
 {

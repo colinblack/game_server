@@ -7,7 +7,7 @@ class CLogicFighting
 {
 public:
 	int Load(unsigned fightingId, unsigned uidBy, Json::Value &result);
-	int Save(unsigned fightingId, DataUser &userBy, const Json::Value &data, Json::Value &result);
+	int Save(unsigned fightingId, DataUser &userBy, Json::Value &data, Json::Value &result, LoadType loadtype);
 
 	int ExportFightingData(unsigned uid, unsigned fightingId, const string &dir);
 

@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
 	DataEmail data;
 	string operatorName;
 	string operatorIP;
-	int tpt = atoi(argv[2]); //获取用户昵称 需要平台信息
 
 	//Json读取日志文件
 	Json::Reader reader;
@@ -134,7 +133,11 @@ int main(int argc, char *argv[])
 	// cout << "input userid start!" << endl;
 	if (levelType != 2)
 	{
-		for( userid = Config::GetIntValue(CONFIG_UID_MIN); userid <= (unsigned)u64Id; ++userid)
+		string serverid;
+		unsigned zone;
+		Config::GetValue(serverid, CONFIG_SERVER_ID);
+		Convert::StringToUInt(zone, serverid);
+		for( userid = Config::GetUIDStart(zone); userid <= (unsigned)u64Id; ++userid)
 		{
 			ret = logicUser.GetUser(userid, user);
 			if(ret == 0)
@@ -174,8 +177,7 @@ int main(int argc, char *argv[])
 	data.uid = ADMIN_UID;
 	data.attach_flag = 1;
 
-	PlatformType pt = static_cast<PlatformType>(tpt);
-	ret = presentSendEmail.AddEmail(data,vecUsersUid,attachments,pt);
+	ret = presentSendEmail.AddEmail(data,vecUsersUid,attachments);
 	cout << "ret :" << ret << endl;
 
 	if(0 != ret)

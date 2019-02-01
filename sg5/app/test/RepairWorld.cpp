@@ -60,13 +60,38 @@ int main(int argc, char *argv[]) {
 			ret = dbBaseExtra.RemoveSubBase(it->second.uid, it->second.worldpos);
 			if (ret != 0)
 				cout << "del base error! uid=" << it->second.uid << " ret="<< ret << endl;
-			else
-				cout << "del base ok! uid=" << it->second.uid << endl;
 
 			ret = logicBuilding.RemoveBuilding(it->second.uid,it->second.worldpos);
 			if(ret != 0)
-			{
 				cout << "del base building error! uid=" << it->second.uid << " ret="<< ret << endl;
+		}
+	}
+
+	short int x = 0, y = 0;
+	for(;x < WORLD_LENGTH_OF_SIDE; x++)
+	{
+		for(y = 0;y < WORLD_LENGTH_OF_SIDE; y++)
+		{
+			WorldPoint worldpoint;
+			unsigned worldpos = (x + 1) * 1000 + y + 1;
+			ret = logicWorld.GetUserInfo(worldpos,worldpoint);
+			if(ret == 0
+				&& ((worldpoint.map_flag == JUN_CITY || worldpoint.map_flag == ZHOU_CITY || worldpoint.map_flag == DU_CITY)
+				&& !npcmap.count(point(worldpoint.uid,worldpos)))
+				|| ((worldpoint.map_flag == USER_MAIN_CITY || worldpoint.map_flag == USER_BRANCH_CITY)
+				&& !IsValidUid(worldpoint.uid)))
+			{
+				cout << "try del world uid=" << worldpoint.uid << endl;
+
+				WorldPoint temp;
+				temp.uid = 0;
+				temp.map_flag = 0;
+				temp.protect_time = 0;
+				temp.state = 0;
+				temp.last_collect_ts = 0;
+				ret = logicWorld.ReplaceUser(temp,worldpos);
+				if(ret != 0)
+					cout << "del world error uid=" << worldpoint.uid << endl;
 			}
 		}
 	}
@@ -85,16 +110,14 @@ int main(int argc, char *argv[]) {
 			dataBaseExtra.being_attack_flag = NO_ATTACK;
 			dataBaseExtra.protected_time = 0;
 			dataBaseExtra.last_collect_ts = Time::GetGlobalTime();
-			dataBaseExtra.type = iter->second.type;
+			dataBaseExtra.type = iter->second.GetType();
 
 			ret = dbBaseExtra.AddBaseExtra(iter->second.uid, dataBaseExtra);
 			if (ret != 0)
 				cout << "add base error! uid=" << iter->second.uid << " ret="<< ret << endl;
-			else
-				cout << "add base ok! uid=" << iter->second.uid << endl;
 
 			int npcId = 0;
-			switch(iter->second.type)
+			switch(iter->second.GetType())
 			{
 			case JUN_CITY:
 				npcId = 70001;
@@ -112,22 +135,23 @@ int main(int argc, char *argv[]) {
 			CLogicNpc logicNpc;
 			Json::Value result;
 			logicNpc.Load(npcId,iter->second.uid,result);
-			ret = logicBuilding.UpdateBuilding(iter->second.uid, iter->second.worldpos,result["baseop"],false);
+			Json::Value res;
+			ret = logicBuilding.UpdateBuilding(iter->second.uid, iter->second.worldpos,result["baseop"],res,false);
 			if (ret != 0)
 				cout<<"add city building error uid="<<iter->second.uid<<endl;
 		}
 
 		WorldPoint worldpoint;
 		ret = logicWorld.GetUserInfo(iter->second.worldpos,worldpoint);
-		if(ret == 0 && worldpoint.uid != iter->second.uid)
+		if(ret == 0 && (worldpoint.uid != iter->second.uid || worldpoint.map_flag != iter->second.GetType()))
 		{
+			cout<<"try add world uid="<<worldpoint.uid<<" map_flag="<<worldpoint.map_flag<<" npctype="<<iter->second.GetType()<<endl;
 			worldpoint.uid = iter->second.uid;
+			worldpoint.map_flag = iter->second.GetType();
 			worldpoint.state = 0;
 			ret = logicWorld.ReplaceUser(worldpoint,iter->second.worldpos);
 			if(ret != 0)
-			{
-				return ret;
-			}
+				cout << "add world error uid=" << worldpoint.uid << endl;
 		}
 	}
 

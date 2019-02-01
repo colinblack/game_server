@@ -2,12 +2,40 @@
 
 #define WORLDBOSS_ATTACKERS_MAX (WORLDBOSS_CHALLENGERS_MAX-1)
 #define WORLDBOSS_LAST_ATTACK_INDEX (WORLDBOSS_CHALLENGERS_MAX-1)
-#define STAND_TIME_LEVEL_1 1
-#define STAND_TIME_LEVEL_2 2
-#define STAND_TIME_LEVEL_3 3
-#define STAND_TIME_LEVEL_4 4
-#define STAND_TIME_LEVEL_5 5
-#define STAND_TIME_LEVEL_6 6
+
+
+#define STAND_TIME_LEVEL_1 1.3f
+#define STAND_TIME_LEVEL_2 1.2f
+#define STAND_TIME_LEVEL_3 1.1f
+#define STAND_TIME_LEVEL_4 1.0f
+#define STAND_TIME_LEVEL_5 0.95f
+#define STAND_TIME_LEVEL_6 0.9f
+#define STAND_TIME_LEVEL_7 0.85f
+#define STAND_TIME_LEVEL_8 0.8f
+
+#define STAND_TIME_ADD_1 10000000
+#define STAND_TIME_ADD_2 100000
+#define STAND_TIME_ADD_3 0
+#define STAND_TIME_ADD_4 -10000000
+#define STAND_TIME_ADD_5 -100000
+
+#define STAND_TIME_1 350000000
+#define STAND_TIME_2 480000000
+
+#define STAND_TIME_11 5600000
+#define STAND_TIME_12 3300000
+#define STAND_TIME_13 4100000
+#define STAND_TIME_14 5500000
+#define STAND_TIME_21 14000000
+#define STAND_TIME_22 12000000
+#define STAND_TIME_23 9020000
+#define STAND_TIME_24 12100000
+#define STAND_TIME_31 19600000
+#define STAND_TIME_32 15600000
+#define STAND_TIME_33 14432000
+#define STAND_TIME_34 18150000
+
+
 CDataWorldBoss::CDataWorldBoss()
 {
 	m_init = false;
@@ -60,105 +88,8 @@ int CDataWorldBoss::Init(const string &path, const vector<int> &vMinBloods,const
 int CDataWorldBoss::LoadWorldBoss(unsigned uid, unsigned bossId, unsigned &blood, unsigned &number, int &selfRank, WorldBossChallenger &self,
 		vector<WorldBossChallenger> &top, WorldBossChallenger &last,unsigned &fullBlood)
 {
-	//add by aaron 20121220
-	unsigned now = time(0);
-	unsigned totalStandTs = 0;
-	unsigned arvStandTs = 0;
-	int fullBloodLevel = 1;
 	int index = bossId - WORLD_BOSS_ID_MIN;
-	unsigned ts = now;
-	WorldBossData *pdata = NULL;
-	int i = 0;
-
-	for(i = 0; i < 4; i++)
-	{
-		pdata = (WorldBossData *)m_sh[i].GetAddress();
-		if(pdata == NULL)
-		{
-			error_log("[GetAddress fail]");
-			return R_ERR_DB;
-		}
-		CAutoLock lock(&(m_sh[i]), true);
-		if (CTime::GetDayInterval(pdata->ts, now) != 0)
-		{
-			totalStandTs += pdata->standts;
-			if(index == i)
-			{
-				ts = pdata->ts;
-			}
-		}
-	}
-	if(CTime::GetDayInterval(ts, now) != 0)
-	{
-		arvStandTs = totalStandTs / 4;
-		if(arvStandTs < 180 && arvStandTs > 0)
-		{
-			fullBloodLevel = STAND_TIME_LEVEL_1;
-		}else if(arvStandTs >= 180 && arvStandTs < 300) {
-			fullBloodLevel = STAND_TIME_LEVEL_2;
-		}else if(arvStandTs >= 300 && arvStandTs < 600 ){
-			fullBloodLevel = STAND_TIME_LEVEL_3;
-		}else if(arvStandTs >= 600 && arvStandTs < 900 ){
-			fullBloodLevel = STAND_TIME_LEVEL_4;
-		}else if(arvStandTs >= 1800){
-			fullBloodLevel = STAND_TIME_LEVEL_5;
-		}else{
-			fullBloodLevel = STAND_TIME_LEVEL_6;
-		}
-
-		for(i = 0; i < 4; i++)
-		{
-			pdata = (WorldBossData *)m_sh[i].GetAddress();
-			if(pdata == NULL)
-			{
-				error_log("[GetAddress fail]");
-				return R_ERR_DB;
-			}
-			CAutoLock lock(&(m_sh[i]), true);
-			switch(fullBloodLevel)
-			{
-			case STAND_TIME_LEVEL_1:
-				pdata->fullBlood = pdata->fullBlood * 6;
-				break;
-			case STAND_TIME_LEVEL_2:
-				pdata->fullBlood = pdata->fullBlood * 4;
-				break;
-			case STAND_TIME_LEVEL_3:
-				pdata->fullBlood = pdata->fullBlood * 2;
-				break;
-			case STAND_TIME_LEVEL_4:
-				pdata->fullBlood = pdata->fullBlood * 1.5;
-				break;
-			case STAND_TIME_LEVEL_5:
-				pdata->fullBlood = pdata->fullBlood * 0.9;
-				break;
-			default:
-				break;
-			}
-			if(pdata->fullBlood < m_minWorldbossBlood[i] )
-			{
-				pdata->fullBlood = m_minWorldbossBlood[i];
-			}else if(pdata->fullBlood > m_maxWorldbossBlood[i] )
-			{
-				pdata->fullBlood = m_maxWorldbossBlood[i];
-			}else
-			{
-				;
-			}
-			pdata->blood = pdata->fullBlood ;
-			memset(pdata->challengers, 0, sizeof(pdata->challengers));
-			pdata->challNum = 0;
-			pdata->showNum = 0;
-			pdata->ts = now;
-			pdata->standts = 0;
-		}
-	}
-
-	//add by aaron 20121220
-	if (!IsValidWorldBossId(bossId))
-		return R_ERR_NO_DATA;
-
-	pdata = (WorldBossData *)m_sh[index].GetAddress();
+	WorldBossData *pdata = (WorldBossData *)m_sh[index].GetAddress();
 	if(pdata == NULL)
 	{
 		error_log("[GetAddress fail][]");
@@ -166,10 +97,137 @@ int CDataWorldBoss::LoadWorldBoss(unsigned uid, unsigned bossId, unsigned &blood
 	}
 	CAutoLock lock(&(m_sh[index]), true);
 
+	if(!Time::IsToday(pdata->ts))
+	{
+		if(CTime::GetDayInterval(Config::GetIntValue(CONFIG_OPEN_TS), Time::GetGlobalTime()) == 0)
+		{
+			switch(index)
+			{
+			case 1:
+				pdata->fullBlood = STAND_TIME_11;
+				break;
+			case 2:
+				pdata->fullBlood = STAND_TIME_12;
+				break;
+			case 3:
+				pdata->fullBlood = STAND_TIME_13;
+				break;
+			case 4:
+				pdata->fullBlood = STAND_TIME_14;
+				break;
+			}
+		}
+		else if(CTime::GetDayInterval(Config::GetIntValue(CONFIG_OPEN_TS), Time::GetGlobalTime()) == 1)
+		{
+			switch(index)
+			{
+			case 1:
+				pdata->fullBlood = STAND_TIME_21;
+				break;
+			case 2:
+				pdata->fullBlood = STAND_TIME_22;
+				break;
+			case 3:
+				pdata->fullBlood = STAND_TIME_23;
+				break;
+			case 4:
+				pdata->fullBlood = STAND_TIME_24;
+				break;
+			}
+		}
+		else if(CTime::GetDayInterval(Config::GetIntValue(CONFIG_OPEN_TS), Time::GetGlobalTime()) == 2)
+		{
+			switch(index)
+			{
+			case 1:
+				pdata->fullBlood = STAND_TIME_31;
+				break;
+			case 2:
+				pdata->fullBlood = STAND_TIME_32;
+				break;
+			case 3:
+				pdata->fullBlood = STAND_TIME_33;
+				break;
+			case 4:
+				pdata->fullBlood = STAND_TIME_34;
+				break;
+			}
+		}
+		else if(pdata->fullBlood < STAND_TIME_1)
+		{
+			float fullBloodLevel;
+
+			if(pdata->blood)
+				fullBloodLevel = STAND_TIME_LEVEL_8;
+			else if(pdata->standts < 240)
+				fullBloodLevel = STAND_TIME_LEVEL_1;
+			else if(pdata->standts < 400 )
+				fullBloodLevel = STAND_TIME_LEVEL_2;
+			else if(pdata->standts < 600 )
+				fullBloodLevel = STAND_TIME_LEVEL_3;
+			else if(pdata->standts < 900 )
+				fullBloodLevel = STAND_TIME_LEVEL_4;
+			else if(pdata->standts < 1000)
+				fullBloodLevel = STAND_TIME_LEVEL_5;
+			else if (pdata->standts < 1200)
+				fullBloodLevel = STAND_TIME_LEVEL_6;
+			else if (pdata->standts < 1400)
+				fullBloodLevel = STAND_TIME_LEVEL_7;
+			else
+				fullBloodLevel = STAND_TIME_LEVEL_8;
+
+			pdata->fullBlood = pdata->fullBlood * fullBloodLevel;
+			if(pdata->fullBlood > STAND_TIME_1)
+				pdata->fullBlood = STAND_TIME_1;
+		}
+		else if(pdata->fullBlood < STAND_TIME_2)
+		{
+			unsigned fullBloodLevel;
+
+			if(pdata->blood)
+				fullBloodLevel = STAND_TIME_ADD_4;
+			else if(pdata->standts < 600 )
+				fullBloodLevel = STAND_TIME_ADD_1;
+			else if(pdata->standts < 900 )
+				fullBloodLevel = STAND_TIME_ADD_3;
+			else
+				fullBloodLevel = STAND_TIME_ADD_4;
+
+			pdata->fullBlood = pdata->fullBlood + fullBloodLevel;
+			if(pdata->fullBlood > STAND_TIME_2)
+				pdata->fullBlood = STAND_TIME_2;
+		}
+		else
+		{
+			unsigned fullBloodLevel;
+
+			if(pdata->blood)
+				fullBloodLevel = STAND_TIME_ADD_5;
+			else if(pdata->standts < 600 )
+				fullBloodLevel = STAND_TIME_ADD_2;
+			else if(pdata->standts < 900 )
+				fullBloodLevel = STAND_TIME_ADD_3;
+			else
+				fullBloodLevel = STAND_TIME_ADD_5;
+
+			pdata->fullBlood = pdata->fullBlood + fullBloodLevel;
+		}
+
+		if(pdata->fullBlood < m_minWorldbossBlood[index])
+			pdata->fullBlood = m_minWorldbossBlood[index];
+		else if(pdata->fullBlood > m_maxWorldbossBlood[index])
+			pdata->fullBlood = m_maxWorldbossBlood[index];
+		pdata->blood = pdata->fullBlood ;
+		memset(pdata->challengers, 0, sizeof(pdata->challengers));
+		pdata->challNum = 0;
+		pdata->showNum = 0;
+		pdata->ts = Time::GetGlobalTime();
+		pdata->standts = 0;
+	}
+
 	selfRank = 0;
 	fullBlood = pdata->fullBlood;
 	blood = pdata->blood;
-	//number = pdata->challNum;
 	number = pdata->showNum;
 	memset(&self, 0, sizeof(WorldBossChallenger));
 	for (unsigned i = 0; i < pdata->challNum; i++)
@@ -190,10 +248,14 @@ int CDataWorldBoss::LoadWorldBoss(unsigned uid, unsigned bossId, unsigned &blood
 	return 0;
 }
 
+int sortWordboss(const WorldBossChallenger& left,const WorldBossChallenger& right){
+	return left.damage > right.damage;
+}
+
 int CDataWorldBoss::AttackWorldBoss(unsigned uid, unsigned bossId, unsigned damage, const string &name,
 		bool &dying, unsigned &blood, unsigned &number, int &selfRank, WorldBossChallenger &self,
 		vector<WorldBossChallenger> &top, WorldBossChallenger &last, vector<WorldBossChallenger> &lucks
-		, vector<WorldBossChallenger> &dam)
+		, vector<WorldBossChallenger> &dam, bool bAll, vector<WorldBossChallenger> &all)
 {
 	if (!IsValidWorldBossId(bossId))
 		return R_ERR_NO_DATA;
@@ -231,7 +293,7 @@ int CDataWorldBoss::AttackWorldBoss(unsigned uid, unsigned bossId, unsigned dama
 		return 0;
 	}
 	//add by aaron 20121221
-	unsigned now =time(0);
+	unsigned now = Time::GetGlobalTime();
 	if(pdata->fullBlood == pdata->blood)
 	{
 
@@ -270,19 +332,30 @@ int CDataWorldBoss::AttackWorldBoss(unsigned uid, unsigned bossId, unsigned dama
 				break;
 		}
 		newpos++;
-		for (int i = pos - 1; i >= newpos; i--)
+		//前10名才按顺序排序
+		if(newpos < 10)
 		{
-			pdata->challengers[i+1] = pdata->challengers[i];
+			for (int i = pos - 1; i >= newpos; i--)
+			{
+				pdata->challengers[i+1] = pdata->challengers[i];
+			}
+			(pdata->challengers[newpos]).uid = uid;
+			(pdata->challengers[newpos]).damage = newDamage;
+			snprintf((pdata->challengers[newpos]).name, sizeof((pdata->challengers[newpos]).name), "%s", name.c_str());
 		}
-		(pdata->challengers[newpos]).uid = uid;
-		(pdata->challengers[newpos]).damage = newDamage;
-		snprintf((pdata->challengers[newpos]).name, sizeof((pdata->challengers[newpos]).name), "%s", name.c_str());
+		else
+		{
+			(pdata->challengers[pos]).uid = uid;
+			(pdata->challengers[pos]).damage = newDamage;
+			snprintf((pdata->challengers[pos]).name, sizeof((pdata->challengers[pos]).name), "%s", name.c_str());
+		}
+
 		if (pos >= (int)pdata->challNum)
 		{
 			pdata->challNum++;
 			if(pdata-> challNum >= 10)
 			{
-				int r = rand() % 2;
+				int r = Math::GetRandomInt(2);
 				switch(r)
 				{
 				case 0:
@@ -300,7 +373,14 @@ int CDataWorldBoss::AttackWorldBoss(unsigned uid, unsigned bossId, unsigned dama
 			}
 
 		}
-		memcpy(&self, &(pdata->challengers[newpos]), sizeof(WorldBossChallenger));
+		if(newpos < 10)
+		{
+			memcpy(&self, &(pdata->challengers[newpos]), sizeof(WorldBossChallenger));
+		}
+		else
+		{
+			memcpy(&self, &(pdata->challengers[pos]), sizeof(WorldBossChallenger));
+		}
 		selfRank = newpos + 1;
 		if (pdata->blood == 0)
 		{
@@ -331,7 +411,17 @@ int CDataWorldBoss::AttackWorldBoss(unsigned uid, unsigned bossId, unsigned dama
 //		pdata->showNum = pdata->challNum;
 //	}
 	number = pdata->showNum;
-	if (pdata->blood == 0) dying = true;
+	if (pdata->blood == 0)
+	{
+		dying = true;
+		vector<WorldBossChallenger> sortend;
+		int i;
+		for(i = 0 ;i < WORLDBOSS_LAST_ATTACK_INDEX; i++)
+			sortend.push_back(pdata->challengers[i]);
+		sort(sortend.begin(),sortend.end(),sortWordboss);
+		for(i = 0 ;i < WORLDBOSS_LAST_ATTACK_INDEX; i++)
+			pdata->challengers[i] = sortend[i];
+	}
 
 	unsigned size = pdata->challNum >= 10?10 : pdata->challNum;
 	for (unsigned i = 0; i < size; i++)
@@ -350,8 +440,10 @@ int CDataWorldBoss::AttackWorldBoss(unsigned uid, unsigned bossId, unsigned dama
 	{
 		for (unsigned j = 0; j < pdata->challNum; j++)
 		{
-			if((pdata->challengers)[j].damage * 100 >= pdata->fullBlood)
+			if((pdata->challengers)[j].damage >= pdata->fullBlood / 100)
 				dam.push_back((pdata->challengers)[j]);
+			if(bAll)
+				all.push_back((pdata->challengers)[j]);
 		}
 	}
 	return 0;

@@ -3,10 +3,13 @@
 #include <iostream>
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
+	if (argc < 2) {
 		cout << "usage: " << argv[0] << "file" << endl;
 		return 1;
 	}
+	string reason;
+	if(argc > 2)
+		reason = argv[2];
 
 	if (!Kernel::Init(APP_CONFIG_PATH)) {
 		cout << "init kernel fail" << endl;
@@ -22,7 +25,6 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	CLogicPay logicPay;
-	DataPay pay;
 	CLogicUpdates logicUpdates;
 	while (!fin.eof() && fin.good()) {
 		unsigned uid = 0;
@@ -37,20 +39,19 @@ int main(int argc, char *argv[]) {
 	//	else
 	//		cout << "add,uid=" << uid << ",value=" << value << endl;
 
-		ret = logicPay.ChangePay(uid, 0, value, pay, type, 1);
-		if (0 == ret) {
+		ret = logicPay.ChangePay(uid, 0, value, "ADMINOP");
+		if (0 == ret && !reason.empty()) {
 			Json::Value updatesData = Json::Value(Json::arrayValue);
 			updatesData.resize(1);
 			updatesData[0u]["ts"] = Time::GetGlobalTime();
 			updatesData[0u]["s"] = "paybackmessage";
+			updatesData[0u]["r"] = reason;
 			updatesData[0u]["coins"] = value;
 			ret = logicUpdates.AddUpdates(uid, updatesData);
-			if (0 != ret) {
+			if (0 != ret)
 				cout << "AddUpdates fail,ret=" << ret << ",uid=" << uid << endl;
-			}
-		} else {
+		} else
 			cout << "fail,uid=" << uid << endl;
-		}
 	}
 
 	cout << "ok" << endl;

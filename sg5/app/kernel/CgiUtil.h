@@ -21,6 +21,7 @@ namespace CgiUtil
 	void GetRequestParams(map<string, string> &params);
 	void GetPostData(string &data);
 	bool PrintText(const string &text);
+	bool PrintText(const string &text,const vector<string>& headers);
 	bool PrintFormat(const char *format, ...);
 	bool PrintJson(const Json::Value &json);
 	bool CompressPrint(const string &text);

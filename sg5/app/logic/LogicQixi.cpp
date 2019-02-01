@@ -7,6 +7,7 @@
  */
 
 #include "LogicQixi.h"
+#include "LogicCMD.h"
 
 
 CLogicQixijie::CLogicQixijie() {
@@ -20,18 +21,20 @@ CLogicQixijie::~CLogicQixijie() {
 
 CDataQixijie* CLogicQixijie::GetQixijieData()
 {
-	GET_MEM_DATA_SEM(CDataQixijie, QIXIJIE_PAY_RANK, sem_qixijie)
+	GET_MEM_DATA_SEM(CDataQixijie, QIXIJIE_PAY_RANK, sem_qixijie,false)
 
 }
 
-int CLogicQixijie::GetQixiActivityRank(unsigned uid, DataQixiRank vecPoints[])
+int CLogicQixijie::GetQixiActivityRank(unsigned uid, vector <DataQixiRank> &vecPoints)
 {
 	CDataQixijie *pdata= GetQixijieData();
 	if(pdata == NULL)
 	{
 		DB_ERROR_RETURN_MSG("init_hundreddaysactivityrank_fail");
 	}
-	int ret = pdata->GetRankList(vecPoints);
+	int version = Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_VERSION);
+
+	int ret = pdata->GetRankList(vecPoints,version);
 	if(ret != 0)
 	{
 		return ret;
@@ -45,37 +48,21 @@ int CLogicQixijie::GetQixiActivityRankJson(unsigned uid, Json::Value &result)
 	if( Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_BEGIN_TS)
 	&& Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS) + 48*60*60)
 	{
-
-		DataQixiRank vecPoints[RANK_SIZE];
-		DataGetWinners vecPrize[4];
-
+		vector <DataQixiRank> vecPoints;
 		int ret = GetQixiActivityRank(uid,vecPoints);
 		if(ret != 0)
 		{
 				return ret;
 		}
+		DataGetWinners vecPrize[4];
 		int Lotterynumber;
-		ret = pdata->GetRecordLotterynumber(Lotterynumber);
-		if(ret != 0)
-		{
-				return ret;
-		}
 		int markreward;
-		ret = pdata->GetMarkreward(markreward);
+		vector <int> prizenum;
+		ret = pdata->GetReturnData(vecPrize,Lotterynumber,markreward,prizenum);
 		if(ret != 0)
 		{
-				return ret;
-		}
-		ret = pdata->GetPrizeNum(vecPrize);
-		if(ret != 0)
-		{
-				return ret;
-		}
-		int prizenum[4];
-		ret = pdata->GetPrizeNum11(prizenum);
-		if(ret != 0)
-		{
-				return ret;
+			error_log("qixi_GetReturnData_fail!!!");
+			return ret;
 		}
 
 		int iCount = RANK_SIZE;
@@ -83,20 +70,21 @@ int CLogicQixijie::GetQixiActivityRankJson(unsigned uid, Json::Value &result)
 		//前十名积分
 		for(int i = 0; i < iCount; i++)
 		{
-
 			result[i]["uid"] = vecPoints[i].uid;
 			result[i]["pay"] = vecPoints[i].pay;
 			result[i]["name"] = string(vecPoints[i].name);
 		}
-		result[iCount]["number"] = Lotterynumber;
-		for(int i = iCount+1; i < iCount +5 ; i++)              //大奖
+
+		int open_second = Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_OPEN_SECOND);
+		result[iCount]["open_second"] = open_second;           //开启第二层条件
+		result[iCount +1]["number"] = Lotterynumber;            //全区总共抽了多少次
+
+		for(int i = iCount+2; i < iCount +6 ; i++)              //大奖
 		{
-//			result[i]["mark"] = "Prizes issued";
-			result[i]["uid"] = vecPrize[i- iCount-1].uid;
-			result[i]["rewards"] = vecPrize[i-iCount-1].reward;
-			result[i]["name"] = string(vecPrize[i-iCount-1].name);
+			result[i]["uid"] = vecPrize[i- iCount-2].uid;
+			result[i]["rewards"] = vecPrize[i-iCount-2].reward;
+			result[i]["name"] = string(vecPrize[i-iCount-2].name);
 		}
-		result[iCount +5]["PrizesResults"] = markreward;
 
 		result[iCount +6]["Prizesnum_1"] = prizenum[0];
 		result[iCount +7]["Prizesnum_2"] = prizenum[1];
@@ -104,63 +92,96 @@ int CLogicQixijie::GetQixiActivityRankJson(unsigned uid, Json::Value &result)
 		result[iCount +9]["Prizesnum_4"] = prizenum[3];
 
 		//个人积分
-		DataUser user;
-		CLogicUser logicUser;
-		ret = logicUser.GetUser(uid,user);
-		if(ret != 0)
+		CLogicSecinc Secinc;
+		Json::Value SecincData;
+		ret = Secinc.GetSecinc(uid, NAT_CHOUJIANG, SecincData);
+		if(ret!=0 && ret!=R_ERR_NO_DATA)
+		{
 			return ret;
-		int payTotal = 0;
-		string user_stat = user.user_stat;
-		Json::Reader reader;
-		Json::Value userStat;
-		if (!reader.parse(user_stat, userStat))
-		{
-			error_log("[paser user_flag fail][uid=%u]", uid);
-			DB_ERROR_RETURN_MSG("user_flag_error");
-		}
-		if(!userStat.isMember("choujiangNum"))
-		{
-			payTotal = 0;
-
-		}
-		else
-		{
-			payTotal = (userStat["choujiangNum"].asUInt()+1) * 10;
 		}
 
-		result[iCount +10]["Self"] = payTotal;
+		if(!SecincData.isMember("ver") || SecincData["ver"].asInt() != Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_VERSION))
+		{
+			SecincData["id"] = NAT_CHOUJIANG;
+			SecincData["ver"] = Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_VERSION);
+			SecincData["count"] = 0;
+			SecincData["fc"] = NAT_CHOUJIANG_FREE_NUM;
+			SecincData["fts"] = Time::GetGlobalTime();
 
+			ret = Secinc.SetOneSecinc(uid, SecincData);
+			if(ret)
+				return ret;
+		}
+		if(!SecincData.isMember("fts") || !SecincData.isMember("fc") || !Time::IsToday(SecincData["fts"].asUInt()))
+		{
+			SecincData["fc"] = NAT_CHOUJIANG_FREE_NUM;
+			SecincData["fts"] = Time::GetGlobalTime();
+
+			ret = Secinc.SetOneSecinc(uid, SecincData);
+			if(ret)
+				return ret;
+		}
+
+		result[iCount +10]["Self"] = SecincData["count"].asUInt() * 10;
+		result[iCount +10]["fc"] = SecincData["fc"].asUInt();
+		result[iCount +10]["fts"] = SecincData["fts"].asUInt();
+
+		//发奖
 		if( Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS)
-		&& Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS) + 48*60*60)
+			&& Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS) + 48*60*60)
 		{
-			int flag = 0;
-			ret = pdata->Setrewardflag();
+			vector <DataQixiRank> reward_vec;
+			Json::Value updateJson;
+			updateJson.resize(1);
+			CLogicUpdates logiceUpdates;
+
+			ret = pdata->GetRewardData(reward_vec);
 			if(ret != 0)
 			{
-					return ret;
+				return ret;
 			}
-			int ret = pdata->Getrewardflag(flag);
-			if(1 == flag)
+
+			if(reward_vec.size() > 0)
 			{
-				RewardQixiActivityRank();
-				ret = pdata->SetRecordLotterynumber();    //最后一天消费统计数据
-				if(ret != 0)
+				for (int i=0; i<5; i++)
 				{
-						return ret;
+					if(reward_vec[i].pay >= 2000)
+					{
+						if (!IsValidUid(reward_vec[i].uid))
+						{
+							continue;
+						}
+
+						updateJson[(unsigned)0]["uid"] = reward_vec[i].uid;
+						updateJson[(unsigned)0]["s"] = "QixiJieRank";
+						updateJson[(unsigned)0]["rank"] = i+1;
+						updateJson[(unsigned)0]["ts"] = Time::GetGlobalTime();
+						updateJson[(unsigned)0]["pay"] = reward_vec[i].pay;
+
+						ret = logiceUpdates.AddUpdates(reward_vec[i].uid, updateJson,true);
+						if (0 != ret)
+						{
+							error_log("[qixijie_Add_updates_fail][ret=%d,uid=%u]", ret, reward_vec[i].uid);
+						}
+						Json::FastWriter writer;
+						info_log("qixijie_reward,updates=%s", writer.write(updateJson).c_str());
+					}
 				}
-//				CleanRankList();
-				error_log("rewadrs----------------");
 			}
 		}
 	}
 	return 0;
 }
 
-int CLogicQixijie::UpdateQixiActivityRank(int unsigned uid, Json::Value &input)
+/*
+int CLogicQixijie::UpdateQixiActivityRank(int unsigned uid, Json::Value &input,Json::Value &result)
 {
 	if( Time::GetGlobalTime() >=Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_BEGIN_TS)
 	&& Time::GetGlobalTime() <= Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_END_TS))
 	{
+		int lotteryNum = 1;
+		Json::GetInt(input,"lotteryNum",lotteryNum);
+
 		unsigned now = Time::GetGlobalTime();
 		CDataQixijie *pdata= GetQixijieData();
 		if(pdata == NULL)
@@ -173,26 +194,42 @@ int CLogicQixijie::UpdateQixiActivityRank(int unsigned uid, Json::Value &input)
 		ret = logicUser.GetUser(uid,user);
 		if(ret != 0)
 			return ret;
-		unsigned lastpay_ts = 0;
+
 		int payTotal = 0;
-		string user_stat = user.user_stat;
 		Json::Reader reader;
 		Json::Value userStat;
-		if (!reader.parse(user_stat, userStat))
+		if (!reader.parse(user.user_stat, userStat))
 		{
 			error_log("[paser user_flag fail][uid=%u]", uid);
 			DB_ERROR_RETURN_MSG("user_flag_error");
 		}
-		if(!userStat.isMember("choujiangNum"))
+		if(!userStat.isMember("cjn"))
 		{
-			return R_ERR_NO_DATA;
-
+			payTotal = 0;
 		}
 		else
 		{
-			payTotal = (userStat["choujiangNum"].asUInt()+1) * 10;
+			payTotal = (userStat["cjn"].asUInt()+lotteryNum) * 10;  //抽奖积分
 		}
 
+		CLogicSecinc Secinc;
+		Json::Value SecincData;
+		ret = Secinc.GetSecinc(uid, NAT_CHOUJIANG, SecincData);
+		if(ret == 0 || ret == R_ERR_NO_DATA)
+		{
+			if(!SecincData.isMember("id"))
+			{
+				SecincData["id"] = NAT_CHOUJIANG;
+				SecincData["count"] = payTotal/10;
+				SecincData["ver"] = Config::GetIntValue(CONFIG_PAY_OF_QIXIJIE_VERSION);
+			}
+			else
+			{
+				SecincData["count"] = payTotal/10;
+			}
+
+			Secinc.SetOneSecinc(uid, SecincData);
+		}
 
 		DataQixiRank points;
 		CLogicUserBasic logicUserBasic;
@@ -202,7 +239,7 @@ int CLogicQixijie::UpdateQixiActivityRank(int unsigned uid, Json::Value &input)
 		points.pay = payTotal;
 		memcpy(points.name,dataUserBasic.name.c_str(),sizeof(points.name) - 1);
 
-		ret = pdata->SetRecordLotterynumber();
+		ret = pdata->SetRecordLotterynumber(lotteryNum);      //设置全区抽奖次数
 		if(ret != 0)
 		{
 			return ret;
@@ -211,6 +248,7 @@ int CLogicQixijie::UpdateQixiActivityRank(int unsigned uid, Json::Value &input)
 ///////////////////////////////////随机数产生
 		int s1 = 0;
 		int s2 = 0;
+
 		for(int i = 0; i < 10; i++)
 		{
 			s1 = s1 +  input["qixifirstlayer"]["rate"][i].asInt();
@@ -220,123 +258,35 @@ int CLogicQixijie::UpdateQixiActivityRank(int unsigned uid, Json::Value &input)
 			s2 = s2 +  input["qixisecondlayer"]["rate"][i].asInt();
 		}
 		int Platform = OpenPlatform::GetType();
-		ret = pdata->LotteryResults(uid,input,s1,s2,Platform);
-		error_log("ssssssssssss: %d | %d",s1,s2);
+		vector<int> reward;
+		for (int i = 0; i < lotteryNum; ++i) {
+			int mark_reward = 0;
+			ret = pdata->LotteryResults(uid,input,s1,s2,Platform,mark_reward);
+			if(ret != 0)
+			{
+				return ret;
+			}
+			reward.push_back(mark_reward);
+		}
+///////////////////////////////////
+		ret = pdata->UpdateRankList(points);        //更新玩家抽奖积分排行榜
 		if(ret != 0)
 		{
 			return ret;
 		}
-
-
-		ret = pdata->UpdateRankList(points);
-		if(ret != 0)
-		{
-			return ret;
+		result["reward_uid"] = uid;
+//		result["mark_reward"] = mark_reward;
+		if (lotteryNum == 1) {
+			result["mark_reward"] = reward[0];;
 		}
-	}
-	else
-	{
-		return R_ERR_REFUSE;
-	}
-//给当前服所有在线人员发updates
-//	if(num > 200)
-//	{
-//		int flag;
-//		int serverId = 0;
-//		Config::GetDomain(serverId);
-//		if (0 == serverId)
-//			return NULL;
-//		uint64_t uidEnd;
-//		unsigned userid = UID_MIN + 500000 * (serverId - 1);
-//		CLogicIdCtrl logicIdCtrl;
-//		ret = logicIdCtrl.GetCurrentId(KEY_UID_CTRL, uidEnd, serverId);
-//		if (ret != 0) {
-//			error_log(
-//					"get current user id fail! from AllChangeCash ---start!");
-//			return ret;
-//		}
-//		for(int i = userid; i <= uidEnd; i++)
-//		{
-//			DataUser user;
-//			CLogicUser logicUser;
-//			int ret = logicUser.GetUser(i, user);
-//			if(0 != ret)
-//			{
-//				continue;
-//			}
-//			flag = (Time::GetGlobalTime() - ONLINE_TIMEOUT < user.last_active_time) ? 1 : 0;
-//			if(1 == flag)
-//			{
-//				Json::Value updateJson;
-//				updateJson.resize(1);
-//				CLogicUpdates logiceUpdates;
-//				updateJson[(unsigned)0]["s"] = "OnthesecondLayer";
-//				updateJson[(unsigned)0]["uid"] = i;
-//				updateJson[(unsigned)0]["ts"] = Time::GetGlobalTime();
-//				ret = logiceUpdates.AddUpdates(i, updateJson);
-//				if (0 != ret)
-//				{
-//					error_log("[Add updates fail][ret=%d,uid=%u]", ret, i);
-//				}
-//				Json::FastWriter writer;
-//				debug_log("hundreddays reward,updates=%s", writer.write(updateJson).c_str());
-//			}
-//		}
-//	}
-	return 0;
-}
-
-int CLogicQixijie::RewardQixiActivityRank(void)
-{
-	int ret = 0;
-	DataQixiRank pointList[RANK_SIZE];
-	CDataQixijie *pdata= GetQixijieData();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("init_qixijie_avtivityrank_fail");
-	}
-
-	ret = pdata->GetRankList(pointList);
-	if(ret != 0)
-	{
-		return ret;
-	}
-	Json::Value updateJson;
-	updateJson.resize(1);
-	CLogicUpdates logiceUpdates;
-	for (int i=0; i<5; i++)
-	{
-		if(pointList[i].pay >= 2000)
-		{
-			if (!IsValidUid(pointList[i].uid))
-			{
-				continue;
+		else {
+			for (int i = 0; i < lotteryNum; ++i) {
+				result["mark_reward"][(unsigned)i] = reward[i];
 			}
-
-			updateJson[(unsigned)0]["uid"] = pointList[i].uid;
-			updateJson[(unsigned)0]["s"] = "QixiJieRank";
-			updateJson[(unsigned)0]["rank"] = i+1;
-			updateJson[(unsigned)0]["ts"] = Time::GetGlobalTime();
-			updateJson[(unsigned)0]["pay"] = pointList[i].pay;
-
-			ret = logiceUpdates.AddUpdates(pointList[i].uid, updateJson);
-			if (0 != ret)
-			{
-				error_log("[Add updates fail][ret=%d,uid=%u]", ret, pointList[i].uid);
-			}
-			Json::FastWriter writer;
-			//debug_log("qixijie_reward,updates=%s", writer.write(updateJson).c_str());
 		}
 	}
 	return 0;
 }
+*/
 
-int CLogicQixijie::CleanRankList(void)
-{
-	CDataQixijie *pdata= GetQixijieData();
-	if(pdata == NULL)
-	{
-		DB_ERROR_RETURN_MSG("clean_qixiactivity_fail");
-	}
-	return pdata->CleanRankList();
-}
+

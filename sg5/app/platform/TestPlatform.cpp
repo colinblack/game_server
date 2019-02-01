@@ -90,8 +90,8 @@ int CTestPlatform::GetAppFriendList(OPFriendList &friendList, const string &open
 	}
 	if(index < 0)
 	{
-		error_log("[user data find fail][openid=%s]", openid.c_str());
-		return -1;
+		//error_log("[user data find fail][openid=%s]", openid.c_str());
+		return 0;
 	}
 	int startIndex = index - 5;
 	if(startIndex < 0)
@@ -165,4 +165,9 @@ int CTestPlatform::Is_Login(const string &openid, const string &openkey)
 	}
 	error_log("responce = %s",response.c_str());
 	return 0;
+}
+
+void CTestPlatform::ReplyCharge()
+{
+	CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
 }

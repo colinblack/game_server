@@ -16,14 +16,14 @@ typedef map<DBC::Server *, int, less<DBC::Server *> > DBCConnectMap;
 //记录信息
 struct UIN_DBC
 {
-	int iBeg_uin;
-	int iEnd_uin;
+	unsigned long long iBeg_uin;
+	unsigned long long iEnd_uin;
 	int iTableId;
 
 	char sIP[18];
 	char sPort[10];
 	char sTable[30];
-        char sProt[10];
+    char sProt[10];
 	int  iTimeOut;
     int iMTimeOut;
 	DBC::Server *pServer;
@@ -31,18 +31,18 @@ struct UIN_DBC
 //内存头信息
 struct HEARD_INFO
 {
-	int MIN_UIN;
-	int MAX_UIN;
-	int iMod;
-	int iDiv;
-	int iMaxnum;
+	unsigned long long MIN_UIN;
+	unsigned long long MAX_UIN;
+	unsigned long long iMod;
+	unsigned long long iDiv;
+	unsigned long long iMaxnum;
 	char sTable[30];
 	int iTableId;
 };
 //批量接口记录信息
 struct BATCH_DBC
 {
-	std::vector<int>  iUins;
+	std::vector<unsigned long long>  iUins;
 	DBC::Server **pServer;
 };
 
@@ -63,22 +63,22 @@ public:
 	static CDBCRouteTable * _pInstance;      //0 没有初始化
 
 	int load_rout(const std::string  & sPath);
-	int get_route(char *sTable,unsigned iUin,DBC::Server ** m_stServer);
-	int get_route(int iTableId,unsigned iUin,DBC::Server ** m_stServer,
-            bool isUseConf=false,  unsigned int  pn_MaxNum=100, char** ip = NULL);;
+	int get_route(char *sTable,unsigned long long iUin,DBC::Server ** m_stServer);
+	int get_route(int iTableId,unsigned long long iUin,DBC::Server ** m_stServer,
+            bool isUseConf=false,  unsigned pn_MaxNum=100, char** ip = NULL);;
 	//debug
-	char * get_address(int iTableId,int iUin);
+	char * get_address(int iTableId,unsigned long long iUin);
 	//debug
-	int get_route(int iTableId,unsigned iUin, char ** ip, unsigned& port);
+	int get_route(int iTableId,unsigned long long iUin, char ** ip, unsigned& port);
 	//批量接口
-	int get_route_batch( char *sTable,std::vector<int>  iUin, std::vector<BATCH_DBC> vBatchTtc);
+	int get_route_batch( char *sTable,std::vector<unsigned long long>  iUin, std::vector<BATCH_DBC> vBatchTtc);
 	string get_msg();
-	int CheckConnectCount(int iTableId, int iUin, DBC::Server * mp_stServer,  unsigned int  pn_MaxNum);
+	int CheckConnectCount(int iTableId, unsigned long long iUin, DBC::Server * mp_stServer,  unsigned pn_MaxNum);
 	// 取 IP
-	int get_ip(int iTableId,int iUin, string & ps_IP, unsigned int & pn_Port);
+	int get_ip(int iTableId,unsigned long long iUin, string & ps_IP, unsigned & pn_Port);
 public:
-	int MIN_UIN;
-	int MAX_UIN;
+	unsigned long long MIN_UIN;
+	unsigned long long MAX_UIN;
 
 	HEARD_INFO * m_pInfo;
 	UIN_DBC    * m_pUinTtc ;

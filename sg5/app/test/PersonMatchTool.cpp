@@ -4,7 +4,7 @@
 
 typedef pair<unsigned, int> U_L_MAP;
 typedef pair<unsigned, unsigned> U_U_MAP;
-
+/*
 static int extractItem(const string &configPath, map<string, string>& config)
 {
 	//load config
@@ -28,7 +28,7 @@ static int extractItem(const string &configPath, map<string, string>& config)
 	}
 	return 0;
 }
-
+*/
 void usage()
 {
 	cout << "usage: MatchTool regular PlatformType" << endl
@@ -39,9 +39,40 @@ void usage()
 		 << "                 next PlatformType" << endl;
 }
 
+int AddEmail(unsigned uid, int rank, int cash)
+{
+	Json::Value temp;
+	temp["s"] = "personmatch";
+	temp["rank"] = rank;
+	temp["cash"] = cash;
+	temp["ts"] = Time::GetGlobalTime();
+	DataEmail data;
+	CLogicEmail matchSendEmail;
+	data.title = "personmatch";
+	data.text = Json::ToString(temp);
+	data.post_ts = Time::GetGlobalTime();
+	data.read_ts = 0;
+	data.from_name = "";
+	data.attach_flag = 0;
+	data.uid = ADMIN_UID;
+	vector<uint64_t> vecUsersUid;
+	vecUsersUid.push_back(uid);
+	int ret = matchSendEmail.AddEmail(data, vecUsersUid,true);
+	if(0 == ret)
+	{
+		cout<<rank<<" "<<cash<<" 发送成功" << ret << endl;
+	}
+	else
+	{
+		error_log("champion leader prize send mail fail!");
+	}
+
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
-	if (argc != 3)
+	if (argc < 2)
 	{
 		usage();
 		return 0;
@@ -53,8 +84,6 @@ int main(int argc, char *argv[])
 	}
 	Config::SetDomain(0);
 
-	int tpt = atoi(argv[2]); //获取用户昵称 需要平台信息
-	PlatformType pt = static_cast<PlatformType>(tpt);
 	CLogicEmail matchSendEmail;
 	DataEmail data;
 	vector <U_L_MAP> vecTeams;
@@ -62,7 +91,7 @@ int main(int argc, char *argv[])
 	string action = argv[1];
 	int ret = 0;
 	CPersonBaseMatch match;
-	ret = match.Init(Config::GetValue(CONFIG_PERSON_MATCH_PATH));
+	ret = match.Init(Config::GetPath(CONFIG_PERSON_MATCH_PATH),sem_personmatch);
 	if (ret != 0)
 	{
 		cout << "init match fail,ret:" << ret << endl;
@@ -120,7 +149,7 @@ int main(int argc, char *argv[])
 	}
 	else if (action == "finish")
 	{
-
+		/*
 		// 获取邮件文字信息
 		map<string, string> config;
 		map<string, string> mapLanguageConfig;
@@ -167,7 +196,7 @@ int main(int argc, char *argv[])
 		{
 			error_log("load mail info text fail!");
 		}
-
+		*/
 		const PersonMatchData *pdata = NULL;
 		ret = match.FinishMatch(&pdata);
 		if (ret != 0)
@@ -182,18 +211,18 @@ int main(int argc, char *argv[])
 
 		for(unsigned i = 0; i < pdata->numOfApply;++i){
 			if(pdata->mems[i].flag[0] == 1 && pdata->mems[i].flag[1] == 1 && pdata->mems[i].flag[2] == 1){
-				logicPay.ChangePay(pdata->mems[i].uid,0,10,"PERSONMATCH_REGULAR",1);
+				logicPay.ChangePay(pdata->mems[i].uid,0,10,"PERSONMATCH_REGULAR");
 				vecRMailUid.push_back(pdata->mems[i].uid);
 			}
 		}
 
 		for(unsigned i = 0; i < 8; ++i){
-			logicPay.ChangePay(pdata->top8[i].uid,0,90,"PERSONMATCH_REGULAR",1);
+			logicPay.ChangePay(pdata->top8[i].uid,0,90,"PERSONMATCH_REGULAR");
 			vecTeams.push_back(make_pair(pdata->top8[i].uid, 8));
 		}
 
 		for(unsigned i = 0; i < 4; ++i){
-			logicPay.ChangePay(pdata->top4[i].uid,0,100,"PERSONMATCH_REGULAR",1);
+			logicPay.ChangePay(pdata->top4[i].uid,0,100,"PERSONMATCH_REGULAR");
 			for(vector<U_L_MAP>::iterator itr=vecTeams.begin(); itr != vecTeams.end(); itr++)
 			{
 				if (itr->first == pdata->top4[i].uid)
@@ -204,7 +233,7 @@ int main(int argc, char *argv[])
 		}
 
 		for(unsigned i = 0; i < 2; ++i){
-			logicPay.ChangePay(pdata->top2[i].uid,0,100,"PERSONMATCH_REGULAR",1);
+			logicPay.ChangePay(pdata->top2[i].uid,0,100,"PERSONMATCH_REGULAR");
 			for(vector<U_L_MAP>::iterator itr=vecTeams.begin(); itr != vecTeams.end(); itr++)
 			{
 				if (itr->first == pdata->top2[i].uid)
@@ -214,7 +243,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		logicPay.ChangePay(pdata->champion.uid,0,200,"PERSONMATCH_REGULAR",1);
+		logicPay.ChangePay(pdata->champion.uid,0,200,"PERSONMATCH_REGULAR");
 		for(vector<U_L_MAP>::iterator itr=vecTeams.begin(); itr != vecTeams.end(); itr++)
 		{
 			if (itr->first == pdata->champion.uid)
@@ -224,12 +253,12 @@ int main(int argc, char *argv[])
 		}
 
 		CLogicGuess logicGuess;
-		vector<U_U_MAP> vecGuessors;
+		//vector<U_U_MAP> vecGuessors;
 		logicGuess.GuessorsPay(pdata->champion.uid,2);
 
 		// 获取投中竞猜者的uid和获奖金币
+		/*
 		logicGuess.GuessorsUidCoins(pdata->champion.uid, vecGuessors, 0);
-
 		for(vector<U_U_MAP>::iterator myItr = vecGuessors.begin(); myItr != vecGuessors.end(); myItr++)
 		{
 			//int tmpUid = myItr->first;
@@ -249,7 +278,7 @@ int main(int argc, char *argv[])
 			data.uid = ADMIN_UID;
 			vector<uint64_t> vecUsersUid;
 			vecUsersUid.push_back(myItr->first);
-			ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
+			ret = matchSendEmail.AddEmail(data, vecUsersUid);
 			if(0 == ret)
 			{
 				cout << "竞猜金币发送成功" << ret << endl;
@@ -259,105 +288,17 @@ int main(int argc, char *argv[])
 				error_log("champion leader prize send mail fail!");
 			}
 		}
-
+		*/
 		for(vector<U_L_MAP>::iterator myItr=vecTeams.begin(); myItr != vecTeams.end(); myItr++)
 		{
 			if (myItr->second == 1)
-			{
-				data.title = config["mailTitle"];
-				char str[200];
-				snprintf(str,sizeof(str),config["templetNormalContent2"].c_str(), "冠军", "500");
-				string tempString(str);
-				data.text = tempString;
-				data.post_ts = Time::GetGlobalTime();
-				data.read_ts = 0;
-				data.from_name = "系统管理员";
-				data.attach_flag = 0;
-				data.uid = ADMIN_UID;
-				vector<uint64_t> vecUsersUid;
-				vecUsersUid.push_back(myItr->first);
-				ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-				if(0 == ret)
-				{
-					cout << "冠军邮件发送成功" << endl;
-				}
-				else
-				{
-					error_log("champion team prize send mail fail!");
-				}
-			}
+				AddEmail(myItr->first,1,500);
 			else if (myItr->second == 2)
-			{
-				data.title = config["mailTitle"];
-				char str[200];
-				snprintf(str,sizeof(str),config["templetNormalContent2"].c_str(), "亚军", "300");
-				string tempString(str);
-				data.text = tempString;
-				data.post_ts = Time::GetGlobalTime();
-				data.read_ts = 0;
-				data.from_name = "系统管理员";
-				data.attach_flag = 0;
-				data.uid = ADMIN_UID;
-				vector<uint64_t> vecUsersUid;
-				vecUsersUid.push_back(myItr->first);
-				ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-				if(0 == ret)
-				{
-					cout << "亚军邮件发送成功" << endl;
-				}
-				else
-				{
-					error_log("top2 team prize send mail fail!");
-				}
-			}
+				AddEmail(myItr->first,2,300);
 			else if (myItr->second == 4)
-			{
-				data.title = config["mailTitle"];
-				char str[200];
-				snprintf(str,sizeof(str),config["templetNormalContent2"].c_str(), "四强", "200");
-				string tempString(str);
-				data.text = tempString;
-				data.post_ts = Time::GetGlobalTime();
-				data.read_ts = 0;
-				data.from_name = "系统管理员";
-				data.attach_flag = 0;
-				data.uid = ADMIN_UID;
-				vector<uint64_t> vecUsersUid;
-				vecUsersUid.push_back(myItr->first);
-				ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-				if(0 == ret)
-				{
-					cout << "四强邮件发送成功" << endl;
-				}
-				else
-				{
-					error_log("top4 team prize send mail fail!");
-				}
-			}
-			else // if (myItr->second == 8)
-			{
-				data.title = config["mailTitle"];
-				char str[200];
-				snprintf(str,sizeof(str),config["templetNormalContent2"].c_str(), "八强", "100");
-				string tempString(str);
-				data.text = tempString;
-				data.post_ts = Time::GetGlobalTime();
-				data.read_ts = 0;
-				data.from_name = "系统管理员";
-				data.attach_flag = 0;
-				data.uid = ADMIN_UID;
-				vector<uint64_t> vecUsersUid;
-				vecUsersUid.push_back(myItr->first);
-				ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-				if(0 == ret)
-				{
-					cout << "八强邮件发送成功" << endl;
-				}
-				else
-				{
-					error_log("top8 team prize send mail fail!");
-				}
-			}
+				AddEmail(myItr->first,3,200);
+			else
+				AddEmail(myItr->first,4,100);
 		}
 
 		//预赛邮件通知
@@ -374,30 +315,7 @@ int main(int argc, char *argv[])
 		}
 
 		for(vector<uint64_t>::iterator itr=vecRMailUid.begin(); itr != vecRMailUid.end(); itr++)
-		{
-
-			data.title = config["mailTitle"];
-			char str[200];
-			snprintf(str,sizeof(str),config["templetRegularContent2"].c_str(), "10");
-			string tempString(str);
-			data.text = tempString;
-			data.post_ts = Time::GetGlobalTime();
-			data.read_ts = 0;
-			data.from_name = "系统管理员";
-			data.attach_flag = 0;
-			data.uid = ADMIN_UID;
-			vector<uint64_t> vecUsersUid;
-			vecUsersUid.push_back(*itr);
-			ret = matchSendEmail.AddEmail(data, vecUsersUid, pt);
-			if(0 == ret)
-			{
-				cout << "常规赛金币邮件发送成功" << endl;
-			}
-			else
-			{
-				error_log("regular prize mail send fail!");
-			}
-		}
+			AddEmail(*itr,5,10);
 	}
 	else if (action == "next")
 	{
@@ -780,7 +698,7 @@ int CPersonBaseMatch::StartGuess(){
 	SET_TOP8_POS(7,5)
 
 	CGuessData guessData;
-	if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),2) != 0){
+	if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),2) != 0){
 		cerr << "guess data init fail" << endl;
 		return R_ERR_LOGIC;
 	}
@@ -852,7 +770,7 @@ int CPersonBaseMatch::StartPlayoff8()
 	SET_TOP8_POS(7,5)
 
 	CGuessData guessData;
-	if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),2) != 0){
+	if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),2) != 0){
 		cerr << "guess data init fail" << endl;
 		return R_ERR_LOGIC;
 	}

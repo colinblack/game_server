@@ -251,7 +251,7 @@ public:
 				return ret;
 			if(oldlist.empty())
 			{
-				error_log("friend_add list is empty!!\n");
+				//error_log("friend_add list is empty!!\n");
 				addlist.append("|").append(templist);
 			}else{
 				if(oldlist.find(templist)==string::npos)
@@ -575,20 +575,29 @@ public:
 		count = blklist.size();
 		for(int i=0;i<count;i++)
 		{
-			CDataNoise *pData = GetDataNoise();
-			if (pData)
+			unsigned uidforbid = 0;
+			Json::GetUInt(blklist, i, uidforbid);
+			CLogicUserBasic logicUserBasic;
+			DataUserBasic userBasic;
+			logicUserBasic.GetUserBasicLimit(uidforbid, PT_TEST, userBasic);
+			CLogicAdmin logicAdmin;
+			unsigned gmFlag = 0;
+			logicAdmin.CheckGM(userBasic.open_id, gmFlag);
+			if(gmFlag != gm_admin)
 			{
-				unsigned uidforbid = 0;
-				Json::GetUInt(blklist, i, uidforbid);
-				ret = pData->Add(uidforbid, uid);
-				if(ret == 0)
+				CDataNoise *pData = GetDataNoise();
+				if (pData)
 				{
-					CLogicAdmin logicAdmin;
-					logicAdmin.AddForbidUser(uidforbid,Time::GetGlobalTime()+NOISE_SHUT);
+					ret = pData->Add(uidforbid, uid);
+					if(ret == 0)
+					{
+						CLogicAdmin logicAdmin;
+						logicAdmin.AddForbidUser(uidforbid,Time::GetGlobalTime()+NOISE_SHUT);
+					}
 				}
+				else
+					error_log("[get data noise fail]");
 			}
-			else
-				error_log("[get data noise fail]");
 
 			string delTemp(""), delTemp1("|");
 			Json::GetString(blklist, i, delStr);
@@ -628,7 +637,7 @@ public:
 		}
 		data = new CDataNoise();
 
-		int ret = data->Init(CONFIG_NOISE_SHM,sem_noise);
+		int ret = data->Init(MainConfig::GetAllServerPath(CONFIG_NOISE_SHM),sem_noise);
 		if (0 != ret)
 		{
 			error_log("Init data fail!");

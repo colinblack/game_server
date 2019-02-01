@@ -20,10 +20,21 @@ namespace Config
 	int GetIntValue(const string &name);
 	bool GetUIntValue(unsigned &value, const string &name);
 	bool UpdateDomain(string &host);
+	void SelectDomain(int serverid, int db);
 	void GetDomain(int &param);
 	void GetDB(int &param);
 	void SetDomain(int param);
 	bool GetAppConfigFilePath(unsigned serverid, string &path);
+
+	string GetPath(string path, int server = 0);
+	string GetAllServerUrl(string path);
+
+	unsigned GetUIDStart(unsigned serverid);
+	unsigned GetAIDStart(unsigned serverid);
+	unsigned GetUIDStart();
+	unsigned GetAIDStart();
+	unsigned GetZoneByUID(unsigned uid);
+	unsigned GetZoneByAID(unsigned aid);
 }
 
 #endif /* CONFIG_H_ */

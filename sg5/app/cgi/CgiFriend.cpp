@@ -132,10 +132,10 @@ public:
 			allyId = (*itr).uid;
 			ret = data.GetUserLimit(allyId, userDB);
 			if(ret!=0)
-				return ret;
+				continue;
 			ret = userBasic.GetUserBasicLimit(allyId, OpenPlatform::GetType(), userBasicDB);
 			if(ret!=0)
-				return ret;
+				continue;
 
 			allydata["userid"] = allyId;
 			allydata["name"] = userBasicDB.name;

@@ -204,3 +204,11 @@ int CDataAlliance::AddCurrPoint(unsigned alliance_id, int curr_point)
 	DBCREQ_ADD_INT_V(curr_point);
 	return 0;
 }
+
+int CDataAlliance::GetName(unsigned alliance_id, string& name)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, alliance_id);
+	DBCREQ_SET_KEY(alliance_id);
+	DBCREQ_GET_STR_V(name);
+	return 0;
+}

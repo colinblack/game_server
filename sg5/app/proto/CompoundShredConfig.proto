@@ -1,0 +1,14 @@
+package CompoundShredConfig;
+
+message ShredItem
+{
+	required uint32 shredId 	= 1;  //碎片id
+    required uint32 count 		= 2;  //数量
+    required uint32 compoundId 	= 3; //产物id
+    required uint32 ishero 		= 4;   //是否英雄
+}
+
+message ShredCompounds
+{
+	repeated ShredItem shred_compounds	= 1;
+}

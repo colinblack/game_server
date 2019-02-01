@@ -73,6 +73,7 @@ public:
 
 	int SetUserBasicLimit(unsigned uid, int platform, const DataUserBasic &user);
 	int GetUserBasicLimit(unsigned uid, int platform, DataUserBasic &user);	//不返回friends
+	int GetUserBasicLimitWithoutPlatform(unsigned uid, DataUserBasic &user);	//不返回friends
 
 	int GetUserBasicRegisterLimit(unsigned uid, DataUserBasic &user);
 	int GetOpenidList(unsigned uid, vector<DataOpenidPlatform> &openids);
@@ -92,6 +93,8 @@ public:
 	int GetUserName(unsigned uid, int platform, string &name);
 	int GetWorldUserInfo(int unsigned uid,int platform,string &signature,string &figure_url,string &name);
 	int SetWorldUserInfo(int unsigned uid,int platform, const string &signature);
+	int GetNameFig(unsigned uid, string &name, string &figure_url);
+
 };
 
 #endif /* DATAUSERBASIC_H_ */

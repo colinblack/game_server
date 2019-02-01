@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	unsigned host = data.host;
-	unsigned prize = data.prizePool;
+	unsigned prize = ARENA_REWARD;//data.prizePool;
 	data.host = 0;
 	data.level = 1;
 	data.winCount = 0;

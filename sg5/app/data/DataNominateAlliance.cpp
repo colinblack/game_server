@@ -98,8 +98,7 @@ int CDataNominateAlliance::SetNominateAlliance(const DataNominateAlliance &data)
 
 	if (-1 == insertPoit)
 	{
-		error_log("alliance list is full!");
-		return R_ERR_DATA;
+		insertPoit = Math::GetRandomInt(MAX_NOMINATE_ALLIANCE_NUM);
 	}
 
 	pdata->alliance_list[insertPoit].alliance_id = data.alliance_id;

@@ -18,6 +18,7 @@ public:
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
 		SetFeature(CF_CHECK_SESSION);
+		SetFeature(CF_CHECK_TIME);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
 		SetFeature(CF_CHECK_VERSION);
@@ -32,6 +33,7 @@ public:
 	CGI_SET_ACTION_MAP("AddAlliance", AddAlliance)
 	CGI_SET_ACTION_MAP("SetAlliance", SetAlliance)
 	CGI_SET_ACTION_MAP("GetAlliance", GetAlliance)
+	CGI_SET_ACTION_MAP("GetAllianceLimit", GetAllianceLimit)
 	CGI_SET_ACTION_MAP("SearchAlliance", SearchAlliance)
 	CGI_SET_ACTION_MAP("GetAlliances", GetAlliances)
 	CGI_SET_ACTION_MAP("GetAllianceEnemys", GetAllianceEnemys)
@@ -77,8 +79,21 @@ public:
 	CGI_SET_ACTION_MAP("getgroupsfightingjsondata", GetGroupsFightingData)
 	CGI_SET_ACTION_MAP("updatasgroupsfightingdata", UpdatasGroupsFightingData)
 	CGI_SET_ACTION_MAP("addfullmorale", AddFullmorale)
-
-
+	CGI_SET_ACTION_MAP("getalliancebattleallcity", GetAllCityLimit)
+	CGI_SET_ACTION_MAP("getalliancebattlecityprice", GetCityPrice)
+	CGI_SET_ACTION_MAP("payalliancebattlecityprice", PayCityPrice)
+	CGI_SET_ACTION_MAP("getalliancebattleallpoint", GetAllBattlePointLimit)
+	CGI_SET_ACTION_MAP("setalliancebattledefence", SetDefence)
+	CGI_SET_ACTION_MAP("delalliancebattledefence", DelDefence)
+	CGI_SET_ACTION_MAP("setalliancebattleoccupy", ChooseOccupy)
+	CGI_SET_ACTION_MAP("setalliancehufu", SetHuFu)
+	CGI_SET_ACTION_MAP("GetHuFu", GetHuFu)
+	CGI_SET_ACTION_MAP("LoadKingdom", LoadKingdom)
+	CGI_SET_ACTION_MAP("LoadKingdomJobs", LoadKingdomJobs)
+	CGI_SET_ACTION_MAP("KingdomChangeJob", KingdomChangeJob)
+	CGI_SET_ACTION_MAP("KingdomForbidTalk", KingdomForbidTalk)
+	CGI_SET_ACTION_MAP("KingdomChangeNotice", KingdomChangeNotice)
+	CGI_SET_ACTION_MAP("KingdomCleanProtect", KingdomCleanProtect)
 
 	CGI_ACTION_MAP_END
 
@@ -395,11 +410,10 @@ public:
 		{
 			return R_ERR_PARAM;
 		}
-		unsigned r1;
-		unsigned r2;
-		unsigned r3;
-		unsigned r4;
-		unsigned r5 = 0;
+		unsigned r1 = 0;
+		unsigned r2 = 0;
+		unsigned r3 = 0;
+		unsigned r4 = 0;
 		if( !Json::GetUInt(m_data, "r1", r1) ||
 			!Json::GetUInt(m_data, "r2", r2) ||
 			!Json::GetUInt(m_data, "r3", r3) ||
@@ -421,19 +435,19 @@ public:
 		CLogicAlliance logicAlliance;
 		if (bCoins)
 		{
-			ret = logicAlliance.Donate(m_uid, allianceId, r1, r2, r3, r4, r5, coins);
+			ret = logicAlliance.Donate(m_uid, allianceId, r1, r2, r3, r4, coins);
 		}
 		else
 		{
-			ret = logicAlliance.Donate(m_uid, allianceId, r1, r2, r3, r4, r5, cash, false);
+			ret = logicAlliance.Donate(m_uid, allianceId, r1, r2, r3, r4, cash, false);
 		}
 
 		if(ret != 0)
 		{
 			return ret;
 		}
-		CGI_SEND_LOG("action=Donate&uid=%u&aid=%u&r1=%u&r2=%u&r3=%u&r4=%u&r5=%u&coin=%u",
-				m_uid, allianceId, r1, r2, r3, r4, r5, bCoins?coins:cash);
+		CGI_SEND_LOG("action=Donate&uid=%u&aid=%u&r1=%u&r2=%u&r3=%u&r4=%u&coin=%u",
+				m_uid, allianceId, r1, r2, r3, r4, bCoins?coins:cash);
 		return R_SUCCESS;
 	}
 
@@ -511,7 +525,6 @@ public:
 
 	int SetAllianceBoss()
 	{
-
 		if(Json::IsObject(m_data, "alliancedata"))
 		{
 			unsigned allianceId;
@@ -541,7 +554,6 @@ public:
 		}
 
 		return R_SUCCESS;
-
 	}
 
 	int SetMemberData()
@@ -611,7 +623,6 @@ public:
 		{
 			return R_ERR_PARAM;
 		}
-		data.text = "{\"text\":\"" + data.text + "\",\"vt\":0,\"vl\":0}";
 		data.attach_flag = 0;
 		data.post_ts = Time::GetGlobalTime();
 		data.read_ts = 0;
@@ -802,7 +813,7 @@ public:
 		url += uid;
 
 		Json::Value Result;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		ret = logicBaseMatch.RequestBaseMatch(url, Result);
 		if (0 != ret)
 		{
@@ -840,7 +851,7 @@ public:
 		url += uid;
 
 		Json::Value result;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url,result);
 		if (ret != 0)
 			return ret;
@@ -866,7 +877,7 @@ public:
 
 	int ReportAllServerBaseMatch()
 	{
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		string order;
 		string result;
 		if (!Json::GetString(m_data, "order", order) || !Json::GetString(m_data, "result", result))
@@ -920,7 +931,7 @@ public:
 		url += aid;
 
 		Json::Value Response;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url,Response);
 		if (0 != ret)
 		{
@@ -958,7 +969,7 @@ public:
 		url += aid;
 
 		Json::Value Response;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url,Response);
 		if (0 != ret)
 		{
@@ -994,7 +1005,7 @@ public:
 		String::Format(uid, "%u", m_uid);
 		url.append("&uid=").append(uid);
 		url.append("&level=").append(level);
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url, m_jsonResult);
 		if (0 != ret)
 		{
@@ -1030,7 +1041,7 @@ public:
 		url.append("&level=").append(level);
 
 		Json::Value Response;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url, Response);
 		if (0 != ret)
 		{
@@ -1078,7 +1089,7 @@ public:
 		url.append("&level=").append(level);
 
 		Json::Value Response;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url, Response);
 		if (0 != ret)
 		{
@@ -1126,6 +1137,7 @@ public:
 			return R_ERR_LOGIC;
 		}
 
+		/*
 		CLogicPay logicPay;
 		//unsigned cash;
 		DataPay data_pay;
@@ -1137,19 +1149,28 @@ public:
 			error_log("user %u's coins not enough[%u,%u]",m_uid,data_pay.coins,coins * PER_BET_COINS);
 			return R_ERR_LOGIC;
 		}
+		*/
 
-		CGuessData guessData;
-		if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),type) != 0){
-			error_log("GuessApply init guess data failed");
-			return R_ERR_LOGIC;
+		CLogicUser logicUser;
+		int ret = logicUser.ChangeBet(m_uid,coins*-1*PER_BET_COINS);
+		if(ret == 0)
+		{
+			CGuessData guessData;
+			if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),type) != 0){
+				error_log("GuessApply init guess data failed");
+				logicUser.ChangeBet(m_uid,coins*PER_BET_COINS);
+				return R_ERR_LOGIC;
+			}
+			if(guessData.Apply(m_uid,gid,coins) != 0){
+				error_log("user %u apply guess failed [%u %u]", m_uid, gid, coins);
+				logicUser.ChangeBet(m_uid,coins*PER_BET_COINS);
+				return R_ERR_LOGIC;
+			}
 		}
-		if(guessData.Apply(m_uid,gid,coins) != 0){
-			error_log("user %u apply guess failed [%u %u]", m_uid, gid, coins);
-			return R_ERR_LOGIC;
-		}
+		else
+			return ret;
 
-
-		logicPay.ChangePay(m_uid,0,coins*-1*PER_BET_COINS,"MATCHGUESSAPPLY",1);
+		//logicPay.ChangePay(m_uid,0,coins*-1*PER_BET_COINS,"MATCHGUESSAPPLY",1);
 		return R_SUCCESS;
 	}
 
@@ -1182,7 +1203,7 @@ public:
 			url.append("&level=").append(level);
 		}
 		Json::Value Request;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url, Request);
 		if (0 != ret)
 		{
@@ -1199,7 +1220,7 @@ public:
 		}
 
 		CGuessData guessData;
-		if(guessData.Init(Config::GetValue(GUESS_DATA_PATH),type) != 0){
+		if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),type) != 0){
 			error_log("GuessView init guess data failed");
 			return R_ERR_LOGIC;
 		}
@@ -1243,7 +1264,7 @@ public:
 			url.append("&level=").append(level);
 		}
 		Json::Value Request;
-		CLogicBaseMatch logicBaseMatch;
+		CLogicAllServerBaseMatch logicBaseMatch;
 		int ret = logicBaseMatch.RequestBaseMatch(url, Request);
 		if (0 != ret)
 		{
@@ -1316,7 +1337,7 @@ public:
 		{
 			return R_ERR_PARAM;
 		}
-		int ret = Alliancefight.GetGroupsFightingJsonData(cityid,m_jsonResult["groupfightingdata"],m_data);
+		int ret = Alliancefight.GetGroupsFightingJsonData(cityid,m_jsonResult["groupfightingdata"],m_data,m_uid);
 		if(0 != ret)
 		{
 			return ret;
@@ -1332,7 +1353,7 @@ public:
 		{
 			return R_ERR_PARAM;
 		}
-		int ret = Alliancefight.LogicUpdatasFightingData(cityid,m_data,m_uid);
+		int ret = Alliancefight.LogicUpdatesFightingData(cityid,m_data,m_uid,m_jsonResult);
 		if(0 != ret)
 		{
 			return ret;
@@ -1354,6 +1375,384 @@ public:
 			return ret;
 		}
 		return 0;
+	}
+
+	int GetAllCityLimit()
+	{
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.GetAllCityLimit(m_jsonResult["alliancebattleallcity"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=getalliancebattleallcity&uid=%u", m_uid);
+		return 0 ;
+	}
+
+	int GetCityPrice()
+	{
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.GetAllCityPrice(m_jsonResult["alliancebattlecityprice"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=getalliancebattlecityprice");
+		return 0 ;
+	}
+
+	int PayCityPrice()
+	{
+		unsigned aid;
+		if(!Json::GetUInt(m_data, "aid", aid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned cid;
+		if(!Json::GetUInt(m_data, "cid", cid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string name;
+		if(!Json::GetString(m_data, "name", name))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.PayCityPrice(cid, aid, name);
+		if(ret)
+			return ret;
+		ret = logicAllianceBattle.GetAllCityPrice(m_jsonResult["alliancebattlecityprice"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=payalliancebattlecityprice&cid=%u&aid=%u", cid, aid);
+		return 0 ;
+	}
+
+	int GetAllBattlePointLimit()
+	{
+		unsigned cid;
+		if(!Json::GetUInt(m_data, "cid", cid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.GetAllBattlePointLimit(cid, m_jsonResult["alliancebattleallpoint"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=getalliancebattleallpoint&cid=%u", cid);
+		return 0 ;
+	}
+
+	int SetDefence()
+	{
+		unsigned bid;
+		if(!Json::GetUInt(m_data, "bid", bid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string name;
+		if(!Json::GetString(m_data, "name", name))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.SetDefence(bid, m_uid, name);
+		if(ret)
+			return ret;
+		ret = logicAllianceBattle.GetAllBattlePointLimit(bid/100%100, m_jsonResult["alliancebattleallpoint"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=setalliancebattledefence&bid=%u&uid=%u", bid, m_uid);
+		return 0 ;
+	}
+
+	int DelDefence()
+	{
+		unsigned bid;
+		if(!Json::GetUInt(m_data, "bid", bid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.SetDefence(bid, 0, "");
+		if(ret)
+			return ret;
+		ret = logicAllianceBattle.GetAllBattlePointLimit(bid/100%100, m_jsonResult["alliancebattleallpoint"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=delalliancebattledefence&bid=%u", bid);
+		return 0 ;
+	}
+
+	int ChooseOccupy()
+	{
+		unsigned cid;
+		if(!Json::GetUInt(m_data, "cid", cid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned aid;
+		if(!Json::GetUInt(m_data, "aid", aid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned flag = 0;
+		Json::GetUInt(m_data, "flag", flag);
+		unsigned kingdom = 0;
+		Json::GetUInt(m_data, "kingdom", kingdom);
+
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.ChooseOccupy(cid, aid,flag, kingdom);
+		if(ret)
+			return ret;
+		ret = logicAllianceBattle.GetAllCityLimit(m_jsonResult["alliancebattleallcity"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=setalliancebattleoccupy&cid=%u&aid=%u", cid , aid);
+		return 0 ;
+	}
+
+	int SetHuFu()
+	{
+		unsigned aid;
+		if(!Json::GetUInt(m_data, "aid", aid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		if(!m_data.isMember("data") || !m_data["data"].isArray())
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.SetHufu(aid, m_data["data"]);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=setalliancehufu&aid=%u", aid);
+		return 0 ;
+	}
+
+	int GetHuFu()
+	{
+		CLogicAllianceBattle logicAllianceBattle;
+		int ret = logicAllianceBattle.GetHufu(m_uid, m_jsonResult);
+		if(ret)
+			return ret;
+		CGI_SEND_LOG("action=GetHuFu&uid=%u", m_uid);
+		return 0 ;
+	}
+
+	int KingdomChangeJob()
+	{
+		unsigned kingdom;
+		if(!Json::GetUInt(m_data, "kingdom", kingdom))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned kingdomjob;
+		if(!Json::GetUInt(m_data, "kingdomjob", kingdomjob))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string name;
+		if(!Json::GetString(m_data, "name", name))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned touid;
+		if(!Json::GetUInt(m_data, "touid", touid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string toname;
+		if(!Json::GetString(m_data, "toname", toname))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned aid;
+		if(!Json::GetUInt(m_data, "aid", aid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string aname;
+		if(!Json::GetString(m_data, "aname", aname))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicKingdom logicKingdom;
+		int ret = logicKingdom.ChangeJob(kingdom, (KingdomJob)kingdomjob, m_uid ,name, touid, toname, aid, aname);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=KingdomChangeJob&uid=%u&touid=%u&kingdomjob=%u", m_uid, touid, kingdomjob);
+		return 0 ;
+	}
+
+	int KingdomForbidTalk()
+	{
+		unsigned kingdom;
+		if(!Json::GetUInt(m_data, "kingdom", kingdom))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string name;
+		if(!Json::GetString(m_data, "name", name))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned forbiduid;
+		if(!Json::GetUInt(m_data, "forbiduid", forbiduid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string forbidname;
+		if(!Json::GetString(m_data, "forbidname", forbidname))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicKingdom logicKingdom;
+		int ret = logicKingdom.ForbidTalk(kingdom, m_uid ,name, forbiduid, forbidname);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=KingdomForbidTalk&uid=%u&forbiduid=%u", m_uid, forbiduid);
+		return 0 ;
+	}
+
+	int KingdomCleanProtect()
+	{
+		unsigned kingdom;
+		if(!Json::GetUInt(m_data, "kingdom", kingdom))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string name;
+		if(!Json::GetString(m_data, "name", name))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned cleanuid;
+		if(!Json::GetUInt(m_data, "cleanuid", cleanuid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string cleanname;
+		if(!Json::GetString(m_data, "cleanname", cleanname))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicKingdom logicKingdom;
+		int ret = logicKingdom.CleanProtect(kingdom, m_uid ,name, cleanuid, cleanname);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=KingdomCleanProtect&uid=%u&cleanuid=%u", m_uid, cleanuid);
+		return 0 ;
+	}
+
+	int KingdomChangeNotice()
+	{
+		unsigned kingdom;
+		if(!Json::GetUInt(m_data, "kingdom", kingdom))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		string notice;
+		if(!Json::GetString(m_data, "notice", notice))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicKingdom logicKingdom;
+		int ret = logicKingdom.SetNotice(kingdom, m_uid ,notice);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=KingdomChangeNotice&uid=%u", m_uid);
+		return 0 ;
+	}
+
+	int LoadKingdom()
+	{
+		unsigned kingdom;
+		if(!Json::GetUInt(m_data, "kingdom", kingdom))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicKingdom logicKingdom;
+		int ret = logicKingdom.GetKingdom(kingdom,m_jsonResult["LoadKingdom"]);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=LoadKingdom&uid=%u", m_uid);
+		return 0 ;
+	}
+
+	int LoadKingdomJobs()
+	{
+		unsigned kingdom;
+		if(!Json::GetUInt(m_data, "kingdom", kingdom))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		CLogicKingdom logicKingdom;
+		int ret = logicKingdom.GetJobs(kingdom,m_jsonResult["LoadKingdomJobs"]);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=LoadKingdomJobs&uid=%u", m_uid);
+		return 0 ;
+	}
+
+	int GetAllianceLimit()
+	{
+		int ret;
+		unsigned allianceId = 0;
+		Json::GetUInt(m_data, "aid", allianceId);
+		if (!IsAllianceId(allianceId))
+		{
+			ERROR_RETURN_MSG(R_ERR_NO_DATA, "alliance_not_exist");
+		}
+		CLogicAlliance logicAlliance;
+		ret = logicAlliance.GetAllianceJsonLimit( allianceId, m_jsonResult);
+		if(ret != 0)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=GetAllianceLimit&uid=%u&aid=%u", m_uid, allianceId);
+		return R_SUCCESS;
 	}
 
 };

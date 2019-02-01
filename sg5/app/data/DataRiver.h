@@ -11,6 +11,8 @@
 #include "Kernel.h"
 #include "DataInc.h"
 
+#define SHIP_USER_COUNT 10000
+
 struct DataShip
 {
 	unsigned uid;
@@ -24,24 +26,18 @@ struct DataShip
 	char alliance_name[32];
 };
 
-struct userNode {
-	DataShip ship;
-	int last;
-	int next;
-};
 
 struct DataRiver {
-	userNode Ships[SHIP_USER_COUNT];
-	int head;
+	DataShip Ships[SHIP_USER_COUNT];
+	unsigned count;
 };
 
 class CDataRiver {
 public:
 	CDataRiver();
 	int Init(const string &path, semdat sem=sem_river);
-	int AddShip(DataShip &ship);
-	int RemoveShip(unsigned uid);
-	int GetShips(vector<DataShip> &ships);
+	int AddShip(DataShip &ship, bool set);
+	int GetShips(vector<DataShip> &ships, vector<DataShip> &over);
 	int GetOneShip(unsigned uid,DataShip &ship);
 
 protected:

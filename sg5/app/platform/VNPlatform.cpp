@@ -8,8 +8,7 @@ CVNPlatform::CVNPlatform()
 int CVNPlatform::Initialize(const string &appid, const string &appkey, map<string, string> &params)
 {
 	IOpenPlatform::Initialize(appid, appkey, params);
-	info_log("[init ok][appid=%s,appkey=%s,v3domain=%s]",
-			appid.c_str(), appkey.c_str(), params["v3domain"].c_str());
+	//info_log("[init ok][appid=%s,appkey=%s,v3domain=%s]",	appid.c_str(), appkey.c_str(), params["v3domain"].c_str());
 	return 0;
 }
 
@@ -29,18 +28,27 @@ int CVNPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, const s
 {
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/user/get_info?";
-	string osig = "GET&" + Crypt::UrlEncodeForTX("/user/get_info") + "&";
+	int server = 0;
+	Config::GetDB(server);
+	string serverid = CTrans::ITOS(server);
 
+	string url = "http://" + m_config["v3domain"] + "/default/get_info.php?";
+	string osig = "GET&" + Crypt::UrlEncodeForTX("/default/get_info.php") + "&";
 
-	string qsig = "openid=" + openid + "&openkey=" + openkey + "&userip=" + m_userip;
-	string qstr = "openid="	+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey)
-			 + "&userip=" + Crypt::UrlEncodeForTX(m_userip);
+	string qsig = "openid=" + openid
+				+ "&openkey=" + openkey
+				+ "&serverid=" + serverid
+				+ "&userip=" + m_userip;
+	string qstr = "openid="	+ Crypt::UrlEncodeForTX(openid)
+				+ "&openkey=" + Crypt::UrlEncodeForTX(openkey)
+				+ "&serverid=" + Crypt::UrlEncodeForTX(serverid)
+			 	+ "&userip=" + Crypt::UrlEncodeForTX(m_userip);
 	osig += Crypt::UrlEncodeForTX(qsig);
 	string key = m_appKey + "&";
-	string bsig = Crypt::HmacSha1(osig, key);
-	string sig;
-	Crypt::Base64Encode(sig, bsig);
+	string sig = Crypt::Md5Encode(osig.append(key));//fix20140621
+	//string bsig = Crypt::HmacSha1(osig, key);
+	//string sig;
+	//Crypt::Base64Encode(sig, bsig);
 	url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
 	string response;
 
@@ -93,6 +101,8 @@ int CVNPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, const s
 
 int CVNPlatform::GetAppFriendList(OPFriendList &friendList, const string &openid, const string &openkey)
 {
+	return 0;
+
 	m_errorMessage.clear();
 
 	string url = "http://" + m_config["v3domain"] + "/relation/get_app_friends?";
@@ -102,9 +112,10 @@ int CVNPlatform::GetAppFriendList(OPFriendList &friendList, const string &openid
 	string qstr = "openid=" + openid + "&openkey=" + openkey + "&userip=" + m_userip;
 	osig += Crypt::UrlEncodeForTX(qsig);
 	string key = m_appKey + "&";
-	string bsig = Crypt::HmacSha1(osig, key);
-	string sig;
-	Crypt::Base64Encode(sig, bsig);
+	string sig = Crypt::Md5Encode(osig.append(key));//fix20140621
+	//string bsig = Crypt::HmacSha1(osig, key);
+	//string sig;
+	//Crypt::Base64Encode(sig, bsig);
 	url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
 	string response;
 
@@ -149,16 +160,17 @@ int CVNPlatform::GetAppFriendList(OPFriendList &friendList, const string &openid
 int CVNPlatform::Is_Login(const string &openid, const string &openkey,const string &pf)
 {
 	m_errorMessage.clear();
-	string url = "http://" + m_config["v3domain"] + "/user/is_login?";
-	string osig = "GET&" + Crypt::UrlEncodeForTX("/user/is_login") + "&";
+	string url = "http://" + m_config["v3domain"] + "/default/is_login.php?";
+	string osig = "GET&" + Crypt::UrlEncodeForTX("/default/is_login.php") + "&";
 	string qsig = "openid=" + openid + "&openkey=" + openkey + "&userip=" + m_userip;
 	string qstr = "openid="	+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey)
 			 + "&userip=" + Crypt::UrlEncodeForTX(m_userip);
 	osig += Crypt::UrlEncodeForTX(qsig);
 	string key = m_appKey + "&";
-	string bsig = Crypt::HmacSha1(osig, key);
-	string sig;
-	Crypt::Base64Encode(sig, bsig);
+	string sig = Crypt::Md5Encode(osig.append(key));//fix20140621
+	//string bsig = Crypt::HmacSha1(osig, key);
+	//string sig;
+	//Crypt::Base64Encode(sig, bsig);
 	url += qstr + "&sig=" + Crypt::UrlEncodeForTX(sig);
 	string response;
 
@@ -201,4 +213,9 @@ int CVNPlatform::Is_Login(const string &openid, const string &openkey,const stri
 string CVNPlatform::GetErrorMessage()
 {
 	return m_errorMessage;
+}
+
+void CVNPlatform::ReplyCharge()
+{
+	CgiUtil::PrintText("{\"ret\":0,\"msg\":\"OK\"}");
 }

@@ -16,7 +16,7 @@ int CLogicUserMessage::AddUserMessage(const DataUserMessage &data)
 		ret = userMsgDB.AddUserMessage(data);
 		if (0 != ret)
 		{
-			error_log("[AddUserMessage fail][uid=%u,massId=%ul,ret=%d]", data.uid,data.message_id,ret);
+			error_log("[AddUserMessage fail][uid=%u,massId=%llu,ret=%d]", data.uid,data.message_id,ret);
 		}
 		return ret;
 	}
@@ -26,7 +26,7 @@ int CLogicUserMessage::AddUserMessage(const DataUserMessage &data)
 		ret = AllianceMsgDB.AddAllianceMessage(data);
 		if (0 != ret)
 		{
-			error_log("[AddAllianceMessage fail][aid=%u,massId=%ul,ret=%d]", data.uid,data.message_id,ret);
+			error_log("[AddAllianceMessage fail][aid=%u,massId=%llu,ret=%d]", data.uid,data.message_id,ret);
 		}
 		return ret;
 	}
@@ -43,7 +43,7 @@ int CLogicUserMessage::SetUserMessage(const DataUserMessage &data)
 		ret = userMsgDB.SetUserMessage(data);
 		if (0 != ret)
 		{
-			error_log("[SetUserMessage fail][uid=%u,massId=%ul,ret=%d]", data.uid,data.message_id,ret);
+			error_log("[SetUserMessage fail][uid=%u,massId=%llu,ret=%d]", data.uid,data.message_id,ret);
 		}
 		return ret;
 	}
@@ -53,7 +53,7 @@ int CLogicUserMessage::SetUserMessage(const DataUserMessage &data)
 		ret = AllianceMsgDB.SetAllianceMessage(data);
 		if (0 != ret)
 		{
-			error_log("[SetAllianceMessage fail][aid=%u,massId=%ul,ret=%d]", data.uid,data.message_id,ret);
+			error_log("[SetAllianceMessage fail][aid=%u,massId=%llu,ret=%d]", data.uid,data.message_id,ret);
 		}
 		return ret;
 	}
@@ -69,7 +69,7 @@ int CLogicUserMessage::SetUserMessageStatus(unsigned uid, uint64_t message_id, i
 		ret = userMsgDB.SetUserMessageStatus(uid, message_id, status);
 		if (0 != ret)
 		{
-			error_log("[SetUserMessageStatus fail][uid=%u,massId=%ul,status=%d,ret=%d]",uid,message_id,status,ret);
+			error_log("[SetUserMessageStatus fail][uid=%u,massId=%llu,status=%d,ret=%d]",uid,message_id,status,ret);
 		}
 		return ret;
 	}
@@ -79,7 +79,7 @@ int CLogicUserMessage::SetUserMessageStatus(unsigned uid, uint64_t message_id, i
 		ret = AllianceMsgDB.SetAllianceMessageStatus(uid, message_id, status);
 		if (0 != ret)
 		{
-			error_log("[SetAllianceMessageStatus fail][aid=%u,massId=%ul,status=%d,ret=%d]",uid,message_id,status,ret);
+			error_log("[SetAllianceMessageStatus fail][aid=%u,massId=%llu,status=%d,ret=%d]",uid,message_id,status,ret);
 		}
 		return ret;
 	}
@@ -95,7 +95,7 @@ int CLogicUserMessage::GetUserMessage(unsigned uid, uint64_t message_id, DataUse
 		ret = userMsgDB.GetUserMessage(uid,message_id,data);
 		if (0 != ret)
 		{
-			error_log("[GetUserMessage fail][uid=%u,massId=%ul,ret=%d]", uid, message_id,ret);
+			error_log("[GetUserMessage fail][uid=%u,massId=%llu,ret=%d]", uid, message_id,ret);
 		}
 		return ret;
 	}
@@ -105,7 +105,7 @@ int CLogicUserMessage::GetUserMessage(unsigned uid, uint64_t message_id, DataUse
 		ret = AllianceMsgDB.GetAllianceMessage(uid, message_id, data);
 		if (0 != ret)
 		{
-			error_log("[GetAllianceMessage fail][uid=%u,massId=%ul,ret=%d]", uid, message_id,ret);
+			error_log("[GetAllianceMessage fail][uid=%u,massId=%llu,ret=%d]", uid, message_id,ret);
 		}
 		return ret;
 	}

@@ -2,10 +2,17 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2)
+	if (argc < 2)
 	{
-		cout << "usage: " << argv[0] << " path" << endl;
+		cout << "usage: " << argv[0] << " path [full [para]]" << endl;
 		return 1;
+	}
+	unsigned full = 0;
+	bool set = false;
+	if (argc > 3)
+	{
+		full = atoi(argv[3]);
+		set = true;
 	}
 
 	Config::SetDomain(0);
@@ -25,6 +32,13 @@ int main(int argc, char *argv[])
 		cout << "null addr" << endl;
 		return 1;
 	}
+
+	if(set)
+	{
+		pdata->blood = pdata->fullBlood = full;
+		cout<<"change fullBlood!"<<endl;
+	}
+
 	cout<<"fullBlood="<<pdata->fullBlood<<endl;
 	cout<<"blood="<<pdata->blood<<endl;
 	cout<<"ts="<<pdata->ts<<endl;
@@ -34,7 +48,11 @@ int main(int argc, char *argv[])
 
 	for (int i = 0; i < WORLDBOSS_CHALLENGERS_MAX; i++)
 	{
-		cout<<(i+1)<<":\t"<<pdata->challengers[i].uid<<" "<<pdata->challengers[i].name<<" "<<pdata->challengers[i].damage<<endl;
+		if(pdata->challengers[i].uid != 0)
+		{
+			cout<<(i+1)<<":\t"<<pdata->challengers[i].uid<<" "<<pdata->challengers[i].name<<" "<<pdata->challengers[i].damage<<endl;
+
+		}
 	}
 	return 0;
 }

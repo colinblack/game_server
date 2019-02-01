@@ -1,6 +1,5 @@
 #include "LogicMap.h"
 
-#define MAX_MAP_NUMBER 10
 #define MAP_GROUP_RANGE 10
 #define LEVEL_2_GROUP(x) (x)
 
@@ -57,6 +56,8 @@ static int typeMap2[MAP_ROW][MAP_COLUMN] =
 
 int CLogicMap::GetMapUsersJson(unsigned uid, PlatformType platform, Json::Value &data, bool reset)
 {
+	//TIME_COUNT_RESTART("[GetNeighbour start]");
+
 	if (uid == ADMIN_UID)
 	{
 		data.resize(0);
@@ -64,7 +65,7 @@ int CLogicMap::GetMapUsersJson(unsigned uid, PlatformType platform, Json::Value 
 	}
 
 	vector<MapUserData> userList;
-	int ret = GetMapUsers(uid, platform, userList, reset);
+	int ret = OpenPlatform::IsLY_ALL_Platform()?LY_GetMapUsers(uid, platform, userList, reset):GetMapUsers(uid, platform, userList, reset);
 	if(ret != 0)
 		return ret;
 
@@ -80,6 +81,13 @@ int CLogicMap::GetMapUsersJson(unsigned uid, PlatformType platform, Json::Value 
 		data[i]["vl"]				= userList[i].vip_level;
 		data[i]["level"]			= userList[i].level;
 		data[i]["online"]			= IsOnlineUser(userList[i].last_active_time)?1:0;
+		data[i]["resources"][(unsigned) 0]["c"] = userList[i].r1;
+		data[i]["resources"][(unsigned) 1]["c"] = userList[i].r2;
+		data[i]["resources"][(unsigned) 2]["c"] = userList[i].r3;
+		data[i]["resources"][(unsigned) 3]["c"] = userList[i].r4;
+		data[i]["resources"][(unsigned) 4]["c"] = 0;
+		data[i]["r5"]				= userList[i].r5;
+		data[i]["r5_max"] 			= userList[i].r5_max;
 		data[i]["attacksfrom"]		= userList[i].attacksfrom;
 		data[i]["attacksto"]		= userList[i].attacksto;
 		data[i]["helpsfrom"]		= userList[i].helpsfrom;
@@ -89,6 +97,9 @@ int CLogicMap::GetMapUsersJson(unsigned uid, PlatformType platform, Json::Value 
 		data[i]["coalition"]		= userList[i].alliance_name;
 		data[i]["retaliate"]		= (userList[i].attacksfrom-userList[i].attacksto>0?userList[i].attacksfrom-userList[i].attacksto:0);
 	}
+
+	//TIME_COUNT_LOG("[GetNeighbour over]");
+
 	return 0;
 }
 
@@ -263,9 +274,9 @@ int CLogicMap::GetMapUsers(unsigned uid, PlatformType platform, vector<MapUserDa
 			&& OpenPlatform::GetPlatform()->GetConfig(CONFIG_INDEPEND) == "1")
 		{
 			string mapDataFile;
-			String::Format(mapDataFile, "%s.%d", Config::GetValue(CONFIG_MAP_DATA).c_str(), platform);
+			String::Format(mapDataFile, "%s.%d", Config::GetPath(CONFIG_MAP_DATA).c_str(), platform);
 			pDbMap = new CDataMap;
-			ret = pDbMap->Init(mapDataFile);
+			ret = pDbMap->Init(mapDataFile,sem_map);
 			if(ret != 0)
 			{
 				delete pDbMap;
@@ -284,7 +295,7 @@ int CLogicMap::GetMapUsers(unsigned uid, PlatformType platform, vector<MapUserDa
 			else
 			{
 				pDbMap = new CDataMap;
-				ret = pDbMap->Init(Config::GetValue(CONFIG_MAP_DATA));
+				ret = pDbMap->Init(Config::GetPath(CONFIG_MAP_DATA),sem_map);
 				if(ret != 0)
 				{
 					delete pDbMap;
@@ -374,6 +385,137 @@ int CLogicMap::GetMapUsers(unsigned uid, PlatformType platform, vector<MapUserDa
 	return ret;
 }
 
+int CLogicMap::LY_GetMapUsers(unsigned uid, PlatformType platform, vector<MapUserData> &userList, bool reset)
+{
+	//get neighbour
+	int ret = 0;
+
+	UidList neighbours;
+	CLogicNeighbour logicNeighbour;
+	if (!reset)
+	{
+		ret = logicNeighbour.GetNeighbours(uid, neighbours);
+		if(ret != 0)
+			return ret;
+	}
+
+	DataUser user;
+	CLogicUser logicUser;
+	ret = logicUser.GetUserLimit(uid, user);
+	if(ret != 0)
+		return ret;
+
+	int mainBdLvl = user.level;
+	Json::Value mainBd;
+	CLogicBuilding logicBd;
+	ret = logicBd.Get(uid, 1,0,true, mainBd);
+	if (ret == 0)
+	{
+		if (mainBd.isMember("l") && mainBd["l"].isIntegral())
+		{
+			mainBdLvl = mainBd["l"].asInt();
+		}
+	}
+
+	CLogicAlliance logicAlliance;
+	vector<DataAllianceMember> amembers;
+	UidList membersUid;
+	amembers.clear();
+	membersUid.clear();
+	if (IsAllianceId(user.alliance_id))
+	{
+		ret = logicAlliance.GetMembers(user.alliance_id, amembers);
+		if (0 == ret)
+		{
+			//remove alliance member from neighbours
+			for (vector<DataAllianceMember>::iterator itr=amembers.begin(); itr!=amembers.end(); ++itr)
+			{
+				membersUid.push_back(itr->uid);
+				UidList::iterator itrFind = find(neighbours.begin(), neighbours.end(), itr->uid);
+				if(itrFind != neighbours.end())
+				{
+					neighbours.erase(itrFind);
+				}
+			}
+		}
+	}
+
+	userList.clear();
+
+	int playTime = Time::GetGlobalTime() - user.register_time;
+	int timeCount = playTime / (3 * 24 * 60 * 60);
+	if(timeCount > 15)
+	{
+		timeCount = 15;
+	}
+	int count = 5 + user.level + timeCount;
+	if(count > 30)
+	{
+		count = 30;
+	}
+
+	//refresh neighbour
+	for(UidList::iterator itr = neighbours.begin();itr != neighbours.end() && count > 0;)
+	{
+		MapUserData userData;
+		ret = GetUserData(*itr, platform, user, false, userData);
+		if(ret == 0)
+		{
+			if((mainBdLvl <= ALL_SERVER_MAP_LEVEL_1 && (userData.level < mainBdLvl - ALL_SERVER_MAP_SEG_1 || userData.level > mainBdLvl + ALL_SERVER_MAP_SEG_1 + ALL_SERVER_MAP_SEG_1))
+			|| (mainBdLvl > ALL_SERVER_MAP_LEVEL_1 && (userData.level < mainBdLvl - ALL_SERVER_MAP_SEG_2 || userData.level > mainBdLvl + ALL_SERVER_MAP_SEG_2 + ALL_SERVER_MAP_SEG_1)))
+				itr = neighbours.erase(itr);
+			else
+			{
+				userList.push_back(userData);
+				++itr;
+				--count;
+			}
+		}
+		else
+			++itr;
+	}
+
+
+	if(count == 0)
+		return 0;
+
+	//add neighbour
+	//get new user
+	vector<unsigned> uidNew;
+	CLogicAllServerMap logicAllServerMap;
+	ret = logicAllServerMap.Get(mainBdLvl, count, uidNew);
+	if(ret)
+		return ret;
+	for(vector<unsigned>::iterator it = uidNew.begin();it!=uidNew.end();++it)
+	{
+		if(*it != uid
+		&& IsValidUid(*it)
+		&& find(neighbours.begin(), neighbours.end(), *it) == neighbours.end()
+		&& find(membersUid.begin(), membersUid.end(), *it) == membersUid.end())
+		{
+			MapUserData userData;
+			ret = GetUserData(*it, platform, user, false, userData);
+			if(ret == 0)
+			{
+				userList.push_back(userData);
+				neighbours.push_back(*it);
+				--count;
+				if(count == 0)
+					break;
+			}
+		}
+	}
+
+	//update neighbour
+	ret = logicNeighbour.SetNeighbours(uid, neighbours);
+	if(ret != 0)
+	{
+		return ret;
+	}
+
+	return ret;
+}
+
 int CLogicMap::GetUserData(unsigned uid, PlatformType platform, const DataUser& userQuery, bool isFriend, MapUserData &userData)
 {
 	int ret = 0;
@@ -392,6 +534,8 @@ int CLogicMap::GetUserData(unsigned uid, PlatformType platform, const DataUser& 
 	{
 		return ret;
 	}
+
+	logicUser.CheckR5(user);
 
 	if (IsOnlineUser(user.last_active_time))
 	{
@@ -414,6 +558,13 @@ int CLogicMap::GetUserData(unsigned uid, PlatformType platform, const DataUser& 
 	GetAttackPermit(user, userQuery, permit);
 	userData.attack_permit = permit;
 	userData.attackable_in = 0;
+
+	userData.r1 = user.r1;
+	userData.r2 = user.r2;
+	userData.r3 = user.r3;
+	userData.r4 = user.r4;
+	userData.r5 = user.r5;
+	userData.r5_max = user.r5_max;
 
 	userData.attacksfrom = 0;
 	userData.attacksto = 0;
@@ -462,25 +613,85 @@ int CLogicMap::GetAttackPermit(const DataUser &user, const DataUser& userQuery, 
 		permit = APT_BAN_SELF;
 		return 0;
 	}
+	//20131107 Ralf last_save_uid -> last_load_save_uid : fix for bugs, can save only last load archieve
+	//20131107 Ralf last_breath_time -> last_attacked_time : fix for online attacking bugs
+	if(IsBeingAttacked(user.last_breath_time))
+	{
+		//debug_log("[load attack be attacked,operated=%u,operator=%u,last_breath_time=%u]",user.uid,userQuery.uid,user.last_breath_time);
+		permit = APT_BAN_BEING_ATTACK;
+		return 0;
+	}
+
+	//Ralf20140225  后台增加pve或pvp保护  20140416 change to the time start pvp or pve by ralf
+	if(IsOnlineUser(user.last_active_time)
+	&& !IsDefendFinished(user.bit_info))
+	{
+		permit = APT_BAN_BATTLE;
+		return 0;
+	}
 	if(IsAllianceId(user.alliance_id) && user.alliance_id == userQuery.alliance_id)
 	{
 		permit = APT_BAN_ALLIANCE;
 		return 0;
 	}
-	if(CLogicUser::GetFlag(user.bit_info, UF_BE_ATTACKED)
-	//20131107 Ralf last_save_uid -> last_load_save_uid : fix for bugs, can save only last load archieve
-			//&& user.last_save_uid != userQuery.uid
-	//20131107 Ralf last_breath_time -> last_attacked_time : fix for online attacking bugs
-			&& Time::GetGlobalTime() < IsBeingAttacked(user.last_breath_time))
+	if (userQuery.level > user.level + 10)
 	{
-		//debug_log("[load attack be attacked,uid=%u,userid=%u,last_breath_time=%u]",user.uid,userQuery.uid,user.last_breath_time);
-		permit = APT_BAN_BEING_ATTACK;
-		return 0;
+		if (userQuery.level<50 || user.level<50)
+		{
+			permit = APT_BAN_LEVEL_LOW;
+			/*
+			if (IsAllianceId(userQuery.alliance_id))
+			{
+				DataUserInteract allianceInteract;
+				ret = logicInteract.GetInteract(userQuery.alliance_id, user.uid, allianceInteract);
+				if(ret == 0)
+				{
+					if(allianceInteract.retaliate_count > 0)
+					{
+						permit = APT_ALLOW_ALLIANCE_REVENGE;
+					}
+				}
+			}
+			*/
+			return 0;
+		}
 	}
+	else if(userQuery.level + 10 < user.level)
+	{
+		if (userQuery.level<50 || user.level<50)
+		{
+			permit = APT_ALLOW_LEVEL_HIGH;
+			/*
+			if (IsAllianceId(userQuery.alliance_id))
+			{
+				DataUserInteract allianceInteract;
+				ret = logicInteract.GetInteract(userQuery.alliance_id, user.uid, allianceInteract);
+				if(ret == 0)
+				{
+					if(allianceInteract.retaliate_count > 0)
+					{
+						permit = APT_ALLOW_ALLIANCE_REVENGE;
+					}
+				}
+			}
+			*/
+			return 0;
+		}
+	}
+	/*20141225 ralf
 	if(IsOnlineUser(user.last_active_time) && Time::GetGlobalTime() < ATTACK_PRO_TIME + user.last_breath_time)
 	{
-		//debug_log("[load attack be protected,uid=%u,userid=%u,last_breath_time=%u]",user.uid,userQuery.uid,user.last_breath_time);
+		//debug_log("[load attack be protected,operated=%u,operator=%u,last_breath_time=%u]",user.uid,userQuery.uid,user.last_breath_time);
 		permit = APT_BAN_DAMAGE_PROTECT;
+		return 0;
+	}
+	*/
+	if(IsInProtect(user.protected_time))
+	{
+		if(Time::GetGlobalTime() < NEW_USER_PROTECT + user.register_time)
+			permit = APT_BAN_NEW_PROTECT;
+		else
+			permit = APT_BAN_DAMAGE_PROTECT;
 		return 0;
 	}
 	CLogicUserInteract logicInteract;
@@ -492,76 +703,32 @@ int CLogicMap::GetAttackPermit(const DataUser &user, const DataUser& userQuery, 
 		permit = APT_BAN_OTHER;
 		return ret;
 	}
+	logicInteract.ResetAttackNumByWeek(interact);
+	/*
 	if (Time::GetGlobalTime() < interact.truce_time)
 	{
 		permit = APT_BAN_TRUCE;
 		return 0;
 	}
+	*/
 	if (interact.attack_to >= 10 + interact.attack_from)
 	{
 		permit = APT_BAN_TOO_MANY_ATTACK;
 		return 0;
 	}
-	permit = APT_ALLOW;
-	if(IsInProtect(user.protected_time))
-	{
-		if(Time::GetGlobalTime() < NEW_USER_PROTECT + user.register_time)
-			permit = APT_BAN_NEW_PROTECT;
-		else
-			permit = APT_BAN_DAMAGE_PROTECT;
-	}
-	else if (userQuery.level > user.level + 10)
-	{
-		if (userQuery.level<50 || user.level<50)
-		{
-			permit = APT_BAN_LEVEL_LOW;
-			if (IsAllianceId(userQuery.alliance_id))
-			{
-				DataUserInteract allianceInteract;
-				ret = logicInteract.GetInteract(userQuery.alliance_id, user.uid, allianceInteract);
-				if(ret == 0)
-				{
-					if(allianceInteract.retaliate_count > 0)
-					{
-						permit = APT_ALLOW_ALLIANCE_REVENGE;
-					}
-				}
-			}
-		}
-	}
-	else if(userQuery.level + 10 < user.level)
-	{
-		if (userQuery.level<50 || user.level<50)
-		{
-			permit = APT_ALLOW_LEVEL_HIGH;
-			if (IsAllianceId(userQuery.alliance_id))
-			{
-				DataUserInteract allianceInteract;
-				ret = logicInteract.GetInteract(userQuery.alliance_id, user.uid, allianceInteract);
-				if(ret == 0)
-				{
-					if(allianceInteract.retaliate_count > 0)
-					{
-						permit = APT_ALLOW_ALLIANCE_REVENGE;
-					}
-				}
-			}
-		}
-	}
-	if (!IsAllowAttack(permit))
+	/*
+	if(!IsAllowAttack(permit))
 	{
 		if (interact.attack_from > interact.attack_to)
 		{
 			permit = APT_ALLOW_REVENGE;
 		}
 	}
-	if (IsAllowAttack(permit))
-	{
-		if(IsOnlineUser(user.last_active_time))
-		{
-			permit = APT_BAN_ONLINE;
-		}
-	}
+	*/
+	if(IsOnlineUser(user.last_active_time))
+		permit = APT_BAN_ONLINE;
+	else
+		permit = APT_ALLOW;
 	return 0;
 }
 
@@ -608,7 +775,7 @@ int CLogicMap::GetChallenger(unsigned uid, unsigned &challenger, PlatformType pl
 {
 	CLogicUser logicUser;
 	DataUser user;
-	int ret = logicUser.GetUser(uid, user);
+	int ret = logicUser.GetUserLimit(uid, user);
 	if (0 != ret)
 	{
 		return ret;

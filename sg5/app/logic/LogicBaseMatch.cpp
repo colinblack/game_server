@@ -1,7 +1,7 @@
 #include "LogicBaseMatch.h"
 
 CDataBaseMatch* CLogicBaseMatch::GetCDataBaseMatch() {
-	GET_MEM_DATA_SEM(CDataBaseMatch, CONFIG_BASE_MATCH_PATH, sem_basematch)
+	GET_MEM_DATA_SEM(CDataBaseMatch, CONFIG_BASE_MATCH_PATH, sem_basematch,false)
 
 	/*static CDataBaseMatch* pBaseMatch = NULL;
 	 if (!pBaseMatch)
@@ -16,19 +16,10 @@ CDataBaseMatch* CLogicBaseMatch::GetCDataBaseMatch() {
 	 return pBaseMatch;*/
 }
 
-CDataBaseMatch* CLogicBaseMatch::GetAllServerCDataBaseMatch() {
-	GET_MEM_DATA_SEM(CDataBaseMatch, CONFIG_ALL_SERVER_BASE_MATCH_PATH,
-			sem_basematchallserver)
-}
 
 int CLogicBaseMatch::GetBaseMatchInfo(unsigned aid, unsigned uid,
-		Json::Value &data, bool allserver) {
-	CDataBaseMatch *pmatch = NULL;
-	if (allserver) {
-		pmatch = GetAllServerCDataBaseMatch();
-	} else {
-		pmatch = GetCDataBaseMatch();
-	}
+		Json::Value &data) {
+	CDataBaseMatch *pmatch = GetCDataBaseMatch();
 
 	if (!pmatch) {
 		DB_ERROR_RETURN_MSG("init_basematch_fail");
@@ -262,7 +253,7 @@ int CLogicBaseMatch::GetBaseMatchInfo(unsigned aid, unsigned uid,
 	return 0;
 }
 
-int CLogicBaseMatch::Apply(unsigned uid, bool allserver) {
+int CLogicBaseMatch::Apply(unsigned uid) {
 	DataUser user;
 	CLogicUser logicUser;
 	int ret = logicUser.GetUserLimit(uid, user);
@@ -290,50 +281,26 @@ int CLogicBaseMatch::Apply(unsigned uid, bool allserver) {
 	json["name"] = userBasic.name;
 	json["pic"] = userBasic.figure_url;
 	//CDataBaseMatch *pbasematch = GetCDataBaseMatch();
-	CDataBaseMatch *pbasematch = NULL;
-	if (allserver) {
-		pbasematch = GetAllServerCDataBaseMatch();
-	} else {
-		pbasematch = GetCDataBaseMatch();
-	}
+	CDataBaseMatch *pbasematch = GetCDataBaseMatch();
 	if (!pbasematch) {
 		DB_ERROR_RETURN_MSG("init_basematch_fail");
 	}
 	unsigned instanceId = 0;
-	if (allserver) {
-		int serverid = (int) (user.alliance_id - ALLIANCE_ID_START) / 500000
-				+ 1;
-		string allianceName;
-		String::Format(allianceName, "%d区_%s", serverid, alliance.name.c_str());
-		ret = pbasematch->Apply(user.alliance_id, allianceName, alliance.flag,
-				uid, userBasic.name, instanceId, true);
-		if (ret != 0 || !IsValidAllServerBMatchInstId(instanceId)) {
-			DB_ERROR_RETURN_MSG("basematch_apply_fail");
-		}
-	}
-	else
+	ret = pbasematch->Apply(user.alliance_id, alliance.name, alliance.flag, uid, userBasic.name, instanceId);
+	if (ret != 0 || !IsValidBMatchInstId(instanceId))
 	{
-		ret = pbasematch->Apply(user.alliance_id, alliance.name, alliance.flag, uid, userBasic.name, instanceId);
-		if (ret != 0 || !IsValidBMatchInstId(instanceId))
-		{
-			DB_ERROR_RETURN_MSG("basematch_apply_fail");
-		}
+		DB_ERROR_RETURN_MSG("basematch_apply_fail");
 	}
 	json["userid"] = instanceId;
 	CLogicMatchInstance logicMatchInstance;
-	if (allserver) {
-		ret = logicMatchInstance.SetAllServerMatchInstance(instanceId, json);
-	} else {
-		ret = logicMatchInstance.SetLocalMatchInstance(instanceId, json);
-	}
+	ret = logicMatchInstance.SetLocalMatchInstance(instanceId, json);
 	if (0 != ret) {
 		return ret;
 	}
 	return 0;
 }
 
-int CLogicBaseMatch::ReportResult(unsigned uid, int order, int damage,
-		bool allserver) {
+int CLogicBaseMatch::ReportResult(unsigned uid, int order, int damage) {
 	if (order < 1 || order > 6 || damage < 0 || damage > 100) {
 		LOGIC_ERROR_RETURN_MSG("param_error");
 	}
@@ -342,15 +309,7 @@ int CLogicBaseMatch::ReportResult(unsigned uid, int order, int damage,
 	int ret = logicUser.GetUserLimit(uid, user);
 	if (ret != 0)
 	return ret;
-	CDataBaseMatch *pmatch = NULL;
-	if (allserver)
-	{
-		pmatch = GetAllServerCDataBaseMatch();
-	}
-	else
-	{
-		pmatch = GetCDataBaseMatch();
-	}
+	CDataBaseMatch *pmatch = GetCDataBaseMatch();
 	if (!pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_basematch_fail");
@@ -382,14 +341,8 @@ int CLogicBaseMatch::ReportResult(unsigned uid, int order, int damage,
 	return 0;
 }
 
-bool CLogicBaseMatch::IsBaseMatchProtect(unsigned aid, unsigned uid,
-		bool allserver) {
-	CDataBaseMatch *pmatch = NULL;
-	if (allserver) {
-		pmatch = GetAllServerCDataBaseMatch();
-	} else {
-		pmatch = GetCDataBaseMatch();
-	}
+bool CLogicBaseMatch::IsBaseMatchProtect(unsigned aid, unsigned uid) {
+	CDataBaseMatch *pmatch = GetCDataBaseMatch();
 	if (!pmatch)
 		return false;
 	bool prot = false;
@@ -397,20 +350,11 @@ bool CLogicBaseMatch::IsBaseMatchProtect(unsigned aid, unsigned uid,
 	return prot;
 }
 
-int CLogicBaseMatch::GetApplyPlayers(unsigned aid, Json::Value &result,
-		bool allserver) {
+int CLogicBaseMatch::GetApplyPlayers(unsigned aid, Json::Value &result) {
 	if (!IsAllianceId(aid)) {
 		PARAM_ERROR_RETURN_MSG("alliance_id_error");
 	}
-	CDataBaseMatch *pmatch = NULL;
-	if (allserver)
-	{
-		pmatch = GetAllServerCDataBaseMatch();
-	}
-	else
-	{
-		pmatch = GetCDataBaseMatch();
-	}
+	CDataBaseMatch *pmatch = GetCDataBaseMatch();
 	if (!pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_basematch_fail");
@@ -430,21 +374,12 @@ int CLogicBaseMatch::GetApplyPlayers(unsigned aid, Json::Value &result,
 	return 0;
 }
 
-int CLogicBaseMatch::GetRegularScore(unsigned aid, Json::Value &result,
-		bool allserver) {
+int CLogicBaseMatch::GetRegularScore(unsigned aid, Json::Value &result) {
 	if (!IsAllianceId(aid)) {
 		PARAM_ERROR_RETURN_MSG("alliance_id_error");
 	}
 	//CDataBaseMatch *pmatch = GetCDataBaseMatch();
-	CDataBaseMatch *pmatch = NULL;
-	if (allserver)
-	{
-		pmatch = GetAllServerCDataBaseMatch();
-	}
-	else
-	{
-		pmatch = GetCDataBaseMatch();
-	}
+	CDataBaseMatch *pmatch = GetCDataBaseMatch();
 	if (!pmatch)
 	{
 		DB_ERROR_RETURN_MSG("init_basematch_fail");
@@ -475,15 +410,10 @@ int CLogicBaseMatch::GetRegularScore(unsigned aid, Json::Value &result,
 	return 0;
 }
 
-int CLogicBaseMatch::Load(unsigned instid, unsigned uidBy, Json::Value &result,
-		bool allserver) {
+int CLogicBaseMatch::Load(unsigned instid, unsigned uidBy, Json::Value &result) {
 	int ret = 0;
 	CLogicMatchInstance logicMatchInstance;
-	if (allserver) {
-		ret = logicMatchInstance.GetAllServerMatchInstance(instid, result);
-	} else {
-		ret = logicMatchInstance.GetLocalMatchInstance(instid, result);
-	}
+	ret = logicMatchInstance.GetLocalMatchInstance(instid, result);
 	if (ret != 0) {
 		error_log("[GetInstance fail][uid=%u,instid=%u]", uidBy, instid);
 		DB_ERROR_RETURN_MSG("get_matchinst_fail");
@@ -493,25 +423,20 @@ int CLogicBaseMatch::Load(unsigned instid, unsigned uidBy, Json::Value &result,
 }
 
 int CLogicBaseMatch::Save(unsigned instid, DataUser &userBy,
-		Json::Value &data, Json::Value &result, bool allserver) {
+		Json::Value &data, Json::Value &result, LoadType loadtype) {
 	int ret = 0;
 	if (Json::IsObject(data, "attackinfo")) {
 		CLogicArchive logicArchive;
-		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"]);
+		ret = logicArchive.ProcessAttackInfo(userBy.uid, data["attackinfo"], result["attackinfo"], BASEMATCH_INST_UID, loadtype);
 		if (ret != 0)
 			return ret;
 	}
 	return 0;
 }
 
-int CLogicBaseMatch::GetStage(int& stage, bool allserver) {
+int CLogicBaseMatch::GetStage(int& stage) {
 	//CDataBaseMatch *pmatch = GetCDataBaseMatch();
-	CDataBaseMatch *pmatch = NULL;
-	if (allserver) {
-		pmatch = GetAllServerCDataBaseMatch();
-	} else {
-		pmatch = GetCDataBaseMatch();
-	}
+	CDataBaseMatch *pmatch = GetCDataBaseMatch();
 	if (!pmatch) {
 		DB_ERROR_RETURN_MSG("init_basematch_fail");
 	}
@@ -519,51 +444,3 @@ int CLogicBaseMatch::GetStage(int& stage, bool allserver) {
 	return pmatch->GetStage(stage);
 }
 
-int CLogicBaseMatch::RequestBaseMatch(const string &url, Json::Value &data) {
-	string serverUrl;
-	if (!Config::GetValue(serverUrl, CONFIG_ALLS_MATCH_SERVER_PATH)) {
-		error_log("[get config fail][path=]");
-		return R_ERR_DATA;
-	}
-	//serverUrl.append("?");
-	string posturl=serverUrl;
-	//serverUrl += url;
-	string response;
-/*	if (!Network::HttpGetRequest(response, serverUrl)) {
-		error_log("[HttpGetRequest fail][url=%s]", serverUrl.c_str());
-		return R_ERR_REFUSE;
-	}
-*/
-//	if (!Json::FromString(data, response))
-	{
-//		error_log("[parse response error!][response=%s]", response.c_str());
-//		response.clear();
-		if (!Network::HttpPostRequest(response,posturl,url))
-		{
-			error_log("[HttpPostRequest fail][url=%s,data=%s]",posturl.c_str(), url.c_str());
-		}
-		if(!Json::FromString(data,response))
-		{
-			error_log("[parse post response error!][response=%s,url=%s,data=%s]",response.c_str(),posturl.c_str(), url.c_str());
-			return R_ERR_DATA;
-		}
-	}
-
-	string errorCode;
-	if (Json::GetString(data, "error", errorCode) && "0" != errorCode) {
-		error_log("[Request error][errorCode=%s,url=%s,data=%s]", errorCode.c_str(),posturl.c_str(), url.c_str());
-		return R_ERR_DATA;
-	}
-	return 0;
-}
-
-bool CLogicBaseMatch::IsAllServerBaseMatch(void) {
-	time_t now;
-	time(&now);
-	int tempNow = now;
-	struct tm *pTm = localtime(&now);
-	if (pTm->tm_wday == 2) {
-		return true;
-	}
-	return false;
-}

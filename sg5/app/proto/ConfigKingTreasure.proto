@@ -1,0 +1,18 @@
+package ConfigKingTreasure;
+
+import "RewardConfig.proto";
+
+message TreasureBox
+{
+	required uint32 id	= 1;   //宝箱id
+	required uint32 weight	= 2;  //权重
+	required uint32 collect	= 3;  //回收的数目
+	required uint32 limit	= 4;
+	required RewardConfig.RewardItemCfg reward = 5;
+}
+
+message KingTreasure
+{
+	repeated TreasureBox king_treasures	= 1;
+	required uint32 cost				= 2;
+}

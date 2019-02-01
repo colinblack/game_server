@@ -1,0 +1,36 @@
+import "RewardConfig.proto";
+package TwoHolidayConfig;
+message EveryDayRechargeItem{
+	repeated RewardConfig.RewardItemCfg	reward_one     =  1;  //每日充值奖励	
+	repeated RewardConfig.RewardItemCfg	reward_seven   =  2;  //7日充值奖励	
+	repeated RewardConfig.RewardItemCfg	reward_twelve  =  3;  //12日充值奖励		
+	required uint32						charge         =  4;  //每日充值金额
+}
+	
+message EveryDayOnlineItem{	
+	repeated RewardConfig.RewardItemCfg	reward   = 1;   //每日在线奖励	
+	required uint32						ts_limit = 2;   //每日需在线时长
+}
+
+message cheapItem{	
+	required uint32                    price_discount              = 1;  //优惠价	
+	required RewardConfig.RewardItemCfg	reward                     = 2; //购买的物品
+}
+
+message BuyItem{	
+	required uint32                     recharge_limit              = 1;  //充值额度	
+	repeated cheapItem                  cheap_buy                   = 2;  //可购买的物品
+}
+
+message VipItem{	
+	repeated RewardConfig.RewardItemCfg	reward_one    =  1;  //vip1~3奖励	
+	repeated RewardConfig.RewardItemCfg	reward_two    =  2;  //vip4~6奖励	
+	repeated RewardConfig.RewardItemCfg	reward_three  =  3;  //vip7~10奖励	
+}
+
+message TwoHolidayItmCfg{	
+	required EveryDayRechargeItem everyday_recharge   = 1;  // 每日充值	
+	required EveryDayOnlineItem   eveyday_online      = 2;  // 每日在线	
+	repeated BuyItem              recharge_buy        = 3;  // 充值购买优惠	
+	required VipItem              vip_reward          = 4;  // vip奖励
+}

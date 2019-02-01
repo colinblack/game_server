@@ -23,6 +23,7 @@ public:
 	int GetAllianceMessage(unsigned uid, int type, int status,unsigned startTime, vector<DataUserMessage> &datas);
 	int GetAllianceMessageForTime(unsigned uid, int type, unsigned startTime, vector<DataUserMessage> &datas);
 	int GetAllianceMessageForTime(unsigned uid, int type, int toward, unsigned startTime, vector<DataUserMessage> &datas);
+	int DelAllianceMessageBeforeTS(unsigned uid, unsigned ts);
 };
 
 #endif /* DATAALLIANCEMESSAGE_H_ */

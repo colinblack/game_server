@@ -11,6 +11,7 @@
 #define CHANGE_AMOUNT 10000
 
 int main(int argc, char *argv[]) {
+/*****************************************************
 	if (!Kernel::Init(APP_CONFIG_PATH))
 	{
 		cout << "Init kernel fail!" << endl;
@@ -39,8 +40,8 @@ int main(int argc, char *argv[]) {
 		{
 			uint64_t uidEnd;
 			uint64_t Alliance_idEnd;
-			unsigned userid = UID_MIN + 500000 * (i - 1) + 1;
-			unsigned alliance_id = ALLIANCE_ID_START + 500000 * (i - 1) + 1;
+			unsigned userid = Config::GetUIDStart(i) + 1;
+			unsigned alliance_id = Config::GetAIDStart(i) + 1;
 
 			CLogicIdCtrl logicIdCtrl;
 			ret = logicIdCtrl.GetCurrentId(KEY_UID_CTRL, uidEnd, i);
@@ -191,8 +192,8 @@ int main(int argc, char *argv[]) {
 		}
 		uint64_t uidEnd;
 		uint64_t Alliance_idEnd;
-		unsigned userid = UID_MIN + 500000 * (serverid - 1) + 1;
-		unsigned alliance_id = ALLIANCE_ID_START + 500000 * (serverid - 1) + 1;
+		unsigned userid = Config::GetUIDStart(serverid) + 1;
+		unsigned alliance_id = Config::GetAIDStart(serverid) + 1;
 
 		CLogicIdCtrl logicIdCtrl;
 		ret = logicIdCtrl.GetCurrentId(KEY_UID_CTRL, uidEnd, serverid);
@@ -334,6 +335,29 @@ int main(int argc, char *argv[]) {
 		cout << "j=" << j << endl;
 		cout << "take out:" << j - i << "s" << endl;
 	}
+*****************************************************/
+	if (!Kernel::Init(APP_CONFIG_PATH))
+	{
+		cout << "Init kernel fail!" << endl;
+		return -1;
+	}
+	Config::SetDomain(0);
+	if (argc != 5)
+	{
+		cout << "usage: " << argv[0] << "aid res gold hufu" << endl;
+		return 1;
+	}
+	int ret;
+	unsigned aid 	= atol(argv[1]);
+	unsigned res 	= atoi(argv[2]);
+	unsigned gold 	= atoi(argv[3]);
+	unsigned hufu 	= atoi(argv[4]);
+	CLogicAlliance logicAlliance;
+	ret = logicAlliance.ChangeResource(aid, res, res, res, res, hufu, gold, "ADMINOP");
+	if(ret)
+		cout<<"error ret="<<ret<<endl;
+	else
+		cout<<"ok"<<endl;
 	return 0;
 }
 
