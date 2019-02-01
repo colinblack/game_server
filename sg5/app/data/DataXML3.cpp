@@ -5997,7 +5997,7 @@ int CDataXML::GetInvestmentRate(vector<unsigned> &r, bool last) {
 	if (pdata == NULL) {
 		return R_ERR_DATA;
 	}
-	CAutoLock lock(&(m_shInvestment), true, LOCK_MAX);
+	CAutoLock lock(&(m_shInvestment), true);
 	if (last) {
 		for (int i = 0; i < XML_INVESTMENT_RATE_NUM; ++i) {
 			r.push_back(pdata->rate1[i] * XML_INVESTMENT_RATE_MULTIPLE);
@@ -6014,7 +6014,7 @@ int CDataXML::GetInvestmentReward(unsigned id, XMLInvestmentReward &item) {
 	if (pdata == NULL) {
 		return R_ERR_DATA;
 	}
-	CAutoLock lock(&(m_shInvestment), true, LOCK_MAX);
+	CAutoLock lock(&(m_shInvestment), true);
 	for (int i = 0; i < XML_INVESTMENT_REWARD_NUM; ++i) {
 		if (pdata->item[i].id == id) {
 			memcpy(&item, &(pdata->item[i]), sizeof(XMLInvestmentReward));
@@ -6037,7 +6037,7 @@ int CDataXML::GetBirdBridgeItem(unsigned type, unsigned id, XMLBirdBridgeItem &i
 	if (pdata == NULL) {
 		return R_ERR_DATA;
 	}
-	CAutoLock lock(&(m_shBirdBridge), true, LOCK_MAX);
+	CAutoLock lock(&(m_shBirdBridge), true);
 	if (type == 0) {
 		for (int i = 0; i < XML_BIRD_BRIDGE_ITEM_NUM; ++i) {
 			if (id == pdata->left[i].id) {
@@ -6072,7 +6072,7 @@ int CDataXML::GetUnionTechItem(unsigned id, XMLUnionTechItem &item) {
 	if (pdata == NULL) {
 		return R_ERR_DATA;
 	}
-	CAutoLock lock(&(m_shUnionTech), true, LOCK_MAX);
+	CAutoLock lock(&(m_shUnionTech), true);
 	for (int i = 0; i < XML_MAX_UNIONTECH_NUM; ++i) {
 		if (id == pdata->tech[i].id) {
 			memcpy(&item, &(pdata->tech[i]), sizeof(XMLUnionTechItem));
@@ -6086,7 +6086,7 @@ void CDataXML::ViewUnionTech() {
 	if (pdata == NULL) {
 		return;
 	}
-	CAutoLock lock(&(m_shUnionTech), true, LOCK_MAX);
+	CAutoLock lock(&(m_shUnionTech), true);
 	for (int i=0; i<XML_MAX_UNIONTECH_NUM; i++)
 	{
 		cout << "tech " << pdata->tech[i].id << ": " << endl;
@@ -6114,7 +6114,7 @@ void CDataXML::ViewShengDan() {
 	if (pdata == NULL) {
 		return;
 	}
-	CAutoLock lock(&(m_shShengDan), true, LOCK_MAX);
+	CAutoLock lock(&(m_shShengDan), true);
 	std::cout << "day :" << (pdata->day).m_nId<< " " << (pdata->day).m_nCnt << " " << std::endl;
 
 }
@@ -6124,7 +6124,7 @@ int CDataXML::GetShengDanItem(DataXMLShengDan &item) {
 	if (pdata == NULL) {
 		return R_ERR_DATA;
 	}
-	CAutoLock lock(&(m_shShengDan), true, LOCK_MAX);
+	CAutoLock lock(&(m_shShengDan), true);
 	memcpy(&item, pdata, sizeof(DataXMLShengDan));
 	return 0;
 }

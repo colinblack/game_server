@@ -74,6 +74,9 @@
 
 #define ALL_SERVER_ZONE_A					391
 #define ALL_SERVER_ZONE_B					704
+
+#define LOCK_MAX 999
+
 //config
 #define CONFIG_INDEPEND			"independ"
 #define CONFIG_CLIENT_DOMAIN	"client_domain"

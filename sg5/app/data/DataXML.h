@@ -12,8 +12,6 @@
 #include <stdexcept>
 #include "DataJsonConfig.h"
 
-#define LOCK_MAX 999
-
 /****************Base*********************/
 struct GiftEquipment
 {

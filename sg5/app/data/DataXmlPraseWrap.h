@@ -11,9 +11,6 @@
 #include <stdexcept>
 #include "Kernel.h"
 
-
-#define LOCK_MAX 999
-
 template<class T>
 class DataXmlParseWrap
 {
