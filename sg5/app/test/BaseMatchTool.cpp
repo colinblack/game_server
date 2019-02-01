@@ -204,13 +204,16 @@ int main(int argc, char *argv[])
 		}
 		cout << "start finish ok" << endl;
 		CLogicPay logicPay;
+		CLogicEquipment logicEquipment;
+		Json::Value res;
 		vector<uint64_t> vecRMailAid;	// 存储预赛联盟aid用于发送预赛奖励邮件
 		for (unsigned i = 0; i < pdata->numOfReg; i++)
 		{
 			vecRMailAid.push_back((pdata->rteams[i]).aid);
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->rteams[i]).rivals[j].player.uid, 0, 10, "BASEMATCH_REGULAR");
+				//logicPay.ChangePay((pdata->rteams[i]).rivals[j].player.uid, 0, 10, "BASEMATCH_REGULAR");
+				logicEquipment.AddOneItem((pdata->rteams[i]).rivals[j].player.uid, 10234, 1, "BASEMATCH_REGULAR", res, false);
 			}
 		}
 		CDataAllianceMember dbMember;
@@ -222,7 +225,8 @@ int main(int argc, char *argv[])
 			vecAlliances.push_back(make_pair((pdata->top8[i]).aid,8));
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->top8[i]).players[j].uid, 0, 40, "BASEMATCH_TOP8");
+				//logicPay.ChangePay((pdata->top8[i]).players[j].uid, 0, 40, "BASEMATCH_TOP8");
+				logicEquipment.AddOneItem((pdata->top8[i]).players[j].uid, 10234, 4, "BASEMATCH_TOP8", res, false);
 			}
 		}
 		for (unsigned i = 0; i < 4; i++)
@@ -238,7 +242,8 @@ int main(int argc, char *argv[])
 			}
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->top4[i]).players[j].uid, 0, 50, "BASEMATCH_TOP4");
+				//logicPay.ChangePay((pdata->top4[i]).players[j].uid, 0, 50, "BASEMATCH_TOP4");
+				logicEquipment.AddOneItem((pdata->top4[i]).players[j].uid, 10234, 5, "BASEMATCH_TOP4", res, false);
 			}
 		}
 		for (unsigned i = 0; i < 2; i++)
@@ -254,7 +259,8 @@ int main(int argc, char *argv[])
 			}
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->top2[i]).players[j].uid, 0, 50, "BASEMATCH_TOP2");
+				//logicPay.ChangePay((pdata->top2[i]).players[j].uid, 0, 50, "BASEMATCH_TOP2");
+				logicEquipment.AddOneItem((pdata->top2[i]).players[j].uid, 10234, 5, "BASEMATCH_TOP2", res, false);
 			}
 		}
 		if ((pdata->champion).aid != 0)
@@ -268,7 +274,8 @@ int main(int argc, char *argv[])
 			}
 			for (unsigned j = 0; j < 5; j++)
 			{
-				logicPay.ChangePay((pdata->champion).players[j].uid, 0, 50, "BASEMATCH_CHAMPION");
+				//logicPay.ChangePay((pdata->champion).players[j].uid, 0, 50, "BASEMATCH_CHAMPION");
+				logicEquipment.AddOneItem((pdata->champion).players[j].uid, 10234, 5, "BASEMATCH_CHAMPION", res, false);
 			}
 		}
 
@@ -322,15 +329,17 @@ int main(int argc, char *argv[])
 					//myMember = *itr;
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 200, "BASEMATCH_CHAMPION_LEADER");
+						//logicPay.ChangePay((*itr).uid, 0, 200, "BASEMATCH_CHAMPION_LEADER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 20, "BASEMATCH_CHAMPION_LEADER", res, false);
 						// 发送邮件
-						AddEmail((*itr).uid,1,200);
+						AddEmail((*itr).uid,1,20);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 100, "BASEMATCH_CHAMPION_MANAGER");
+						//logicPay.ChangePay((*itr).uid, 0, 100, "BASEMATCH_CHAMPION_MANAGER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 10, "BASEMATCH_CHAMPION_MANAGER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,1,100);
+						AddEmail((*itr).uid,1,10);
 					}
 					else // 非比赛成员邮件奖励通知
 					{
@@ -345,14 +354,15 @@ int main(int argc, char *argv[])
 						}
 						if (flag)
 						{
-							logicPay.ChangePay(itr->uid, 0, 20, "BASEMATCH_CHAMPION_MEMBER");
-							AddEmail((*itr).uid,1,20);
+							//logicPay.ChangePay(itr->uid, 0, 20, "BASEMATCH_CHAMPION_MEMBER");
+							logicEquipment.AddOneItem(itr->uid, 10234, 2, "BASEMATCH_CHAMPION_MEMBER", res, false);
+							AddEmail((*itr).uid,1,2);
 						}
 					}
 				}
 				//比赛队伍邮件通知
 				for (unsigned j = 0; j < 5; j++)
-					AddEmail((pdata->champion).players[j].uid,1,200);
+					AddEmail((pdata->champion).players[j].uid,1,20);
 
 				CLogicAlliance logicAlliance;
 				ret = logicAlliance.ChangeResource(myItr->first, 150,150,150,150,0,150,"BASEMATCH_CHAMPION");
@@ -369,15 +379,17 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 150, "BASEMATCH_TOP2_LEADER");
+						//logicPay.ChangePay((*itr).uid, 0, 150, "BASEMATCH_TOP2_LEADER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 15, "BASEMATCH_TOP2_LEADER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,2,150);
+						AddEmail((*itr).uid,2,15);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 75, "BASEMATCH_TOP2_MANAGER");
+						//logicPay.ChangePay((*itr).uid, 0, 75, "BASEMATCH_TOP2_MANAGER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 8, "BASEMATCH_TOP2_MANAGER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,2,75);
+						AddEmail((*itr).uid,2,8);
 					}
 					else // 非比赛成员邮件奖励通知
 					{
@@ -401,8 +413,9 @@ int main(int argc, char *argv[])
 						}
 						if (flag)
 						{
-							logicPay.ChangePay(itr->uid, 0, 15, "BASEMATCH_TOP2_MEMBER");
-							AddEmail((*itr).uid,2,15);
+							//logicPay.ChangePay(itr->uid, 0, 15, "BASEMATCH_TOP2_MEMBER");
+							logicEquipment.AddOneItem(itr->uid, 10234, 2, "BASEMATCH_TOP2_MEMBER", res, false);
+							AddEmail((*itr).uid,2,2);
 						}
 					}
 				}
@@ -417,7 +430,7 @@ int main(int argc, char *argv[])
 					}
 				}
 				for (unsigned j = 0; j < 5; j++)
-					AddEmail((pdata->top2[tempI]).players[j].uid,2,150);
+					AddEmail((pdata->top2[tempI]).players[j].uid,2,15);
 
 				CLogicAlliance logicAlliance;
 				ret = logicAlliance.ChangeResource(myItr->first, 130,130,130,130,0,130,"BASEMATCH_TOP2");
@@ -434,15 +447,17 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 100, "BASEMATCH_TOP4_LEADER");
+						//logicPay.ChangePay((*itr).uid, 0, 100, "BASEMATCH_TOP4_LEADER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 10, "BASEMATCH_TOP4_LEADER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,3,100);
+						AddEmail((*itr).uid,3,10);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 50, "BASEMATCH_TOP4_MANAGER");
+						//logicPay.ChangePay((*itr).uid, 0, 50, "BASEMATCH_TOP4_MANAGER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 5, "BASEMATCH_TOP4_MANAGER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,3,50);
+						AddEmail((*itr).uid,3,5);
 					}
 					else
 					{
@@ -463,8 +478,9 @@ int main(int argc, char *argv[])
 								}
 								if (flag)
 								{
-									logicPay.ChangePay(itr->uid, 0, 10, "BASEMATCH_TOP4_MEMBER");
-									AddEmail((*itr).uid,3,10);
+									//logicPay.ChangePay(itr->uid, 0, 10, "BASEMATCH_TOP4_MEMBER");
+									logicEquipment.AddOneItem(itr->uid, 10234, 1, "BASEMATCH_TOP4_MEMBER", res, false);
+									AddEmail((*itr).uid,3,1);
 								}
 							}
 						}
@@ -478,7 +494,7 @@ int main(int argc, char *argv[])
 					if ((pdata->top4[i]).aid == myItr->first)
 					{
 						for (unsigned j = 0; j < 5; j++)
-							AddEmail((pdata->top4[i]).players[j].uid,3,100);
+							AddEmail((pdata->top4[i]).players[j].uid,3,10);
 					}
 				}
 				CLogicAlliance logicAlliance;
@@ -496,15 +512,17 @@ int main(int argc, char *argv[])
 				{
 					if ((*itr).type == AMT_LEADER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 50, "BASEMATCH_TOP8_LEADER");
+						//logicPay.ChangePay((*itr).uid, 0, 50, "BASEMATCH_TOP8_LEADER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 5, "BASEMATCH_TOP8_LEADER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,4,50);
+						AddEmail((*itr).uid,4,5);
 					}
 					else if ((*itr).type == AMT_MANAGER)
 					{
-						logicPay.ChangePay((*itr).uid, 0, 25, "BASEMATCH_TOP8_MANAGER");
+						//logicPay.ChangePay((*itr).uid, 0, 25, "BASEMATCH_TOP8_MANAGER");
+						logicEquipment.AddOneItem((*itr).uid, 10234, 3, "BASEMATCH_TOP8_MANAGER", res, false);
 						// 增加发送邮件
-						AddEmail((*itr).uid,4,25);
+						AddEmail((*itr).uid,4,3);
 					}
 					else
 					{
@@ -525,8 +543,9 @@ int main(int argc, char *argv[])
 								}
 								if (flag)
 								{
-									logicPay.ChangePay(itr->uid, 0, 5, "BASEMATCH_TOP8_MEMBER");
-									AddEmail((*itr).uid,4,5);
+									//logicPay.ChangePay(itr->uid, 0, 5, "BASEMATCH_TOP8_MEMBER");
+									logicEquipment.AddOneItem(itr->uid, 10234, 1, "BASEMATCH_TOP8_MEMBER", res, false);
+									AddEmail((*itr).uid,4,1);
 								}
 							}
 						}
@@ -540,7 +559,7 @@ int main(int argc, char *argv[])
 					if ((pdata->top8[i]).aid == myItr->first)
 					{
 						for (unsigned j = 0; j < 5; j++)
-							AddEmail((pdata->top8[i]).players[j].uid,4,50);
+							AddEmail((pdata->top8[i]).players[j].uid,4,5);
 					}
 				}
 				CLogicAlliance logicAlliance;
@@ -575,7 +594,7 @@ int main(int argc, char *argv[])
 				{
 					//cout << "*itr12" << *itr << endl;
 					for (unsigned j = 0; j < 5; j++)
-						AddEmail((pdata->rteams[i]).rivals[j].player.uid,5,10);
+						AddEmail((pdata->rteams[i]).rivals[j].player.uid,5,1);
 
 					vecRMailAid.erase(itr);
 					break;

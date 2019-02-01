@@ -77,6 +77,9 @@ public:
 	//处理奖励配置
 	int ProvideCommonReward(const RewardConfig::RewardItemCfg & rewardcfg, const string & reason, Json::Value & result, unsigned endts = 0, unsigned count = 1);
 
+	//通过ID获取装备信息
+	int GetEquipById(unsigned eqid, Json::Value &equipment);
+
 protected:
 	///生成套装
 	void HandleOneSuitEquip(const ItemAdd& item, Json::Value& newEquip);
@@ -224,7 +227,7 @@ public:
 		int eq_index_;
 	};
 
-	BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id);
+	BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id, bool all = false);
 
 	//领取奖励
 	virtual int DrawImpl(UserWrap& user, const DrawParams& params, Json::Value& result);
@@ -236,6 +239,8 @@ protected:
 	virtual const JsonFeedbackItem& GetFeedbackItem(int index) const = 0;
 	//操作码
 	virtual const char* DrawOp() const = 0;
+
+	bool m_all;
 };
 
 

@@ -9,8 +9,8 @@
 #define DATARECHARGERANK_H_
 #include "Kernel.h"
 
-#define RR_ALL 100
-#define RR_DAY 200
+#define RR_ALL 50
+#define RR_DAY 100
 #define RR_ZONE_NUM 3
 
 struct RRUser

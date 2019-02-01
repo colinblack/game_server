@@ -361,6 +361,8 @@ enum NewWorldMissonStatus
 	NewWorldMissonStatus_attack_win  		= 5,
 	NewWorldMissonStatus_attacking			= 6,
 	NewWorldMissonStatus_attack_over		= 7,
+	NewWorldMissonStatus_attack_fast_over		= 8,
+	NewWorldMissonStatus_attack_fast_win		= 9,
 
 	NewWorldMissonStatus_max
 };
@@ -514,6 +516,26 @@ public:
 	int KillReward();
 	int change();
 
+	static unsigned getFastMissionStartTime()
+	{
+	    time_t t = time(NULL);
+	    struct tm * tm= localtime(&t);
+	    tm->tm_hour = 20;
+	    tm->tm_min = 0;
+	    tm->tm_sec = 0;
+	    return  mktime(tm);
+	}
+
+	static unsigned getFastMissionEndTime()
+	{
+	    time_t t = time(NULL);
+	    struct tm * tm= localtime(&t);
+	    tm->tm_hour = 20;
+	    tm->tm_min = 30;
+	    tm->tm_sec = 0;
+	    return  mktime(tm);
+	}
+
 	static inline bool IsInCity(unsigned status)
 	{
 		return status != NewWorldHeroStatus_wait_move && status != NewWorldHeroStatus_move;
@@ -596,7 +618,7 @@ public:
 	}
 	static inline bool isMissionOn(unsigned status)
 	{
-		return status == NewWorldMissonStatus_defending || status == NewWorldMissonStatus_defend_over || status == NewWorldMissonStatus_attacking || status == NewWorldMissonStatus_attack_over;
+		return status == NewWorldMissonStatus_defending || status == NewWorldMissonStatus_defend_over || status == NewWorldMissonStatus_attacking || status == NewWorldMissonStatus_attack_over || status == NewWorldMissonStatus_attack_fast_over;
 	}
 	static inline bool isMissionIng(unsigned status)
 	{
@@ -604,7 +626,7 @@ public:
 	}
 	static inline bool isMissionWin(unsigned status)
 	{
-		return status == NewWorldMissonStatus_defend_win || status == NewWorldMissonStatus_attack_win || status == NewWorldMissonStatus_attack_over;
+		return status == NewWorldMissonStatus_defend_win || status == NewWorldMissonStatus_attack_win || status == NewWorldMissonStatus_attack_over || status == NewWorldMissonStatus_attack_fast_over;
 	}
 	static inline bool isMissionLose(unsigned status)
 	{

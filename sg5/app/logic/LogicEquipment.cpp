@@ -526,7 +526,7 @@ int CLogicEquipment::GetEquipmentUsed(unsigned uid, Json::Value &data)
 	return 0;
 }
 
-int CLogicEquipment::UseEquipment(unsigned uid, unsigned eqid, unsigned ud, unsigned count, string reason)
+int CLogicEquipment::UseEquipmentEx(unsigned uid, unsigned eqid, unsigned ud, unsigned count, string reason, int &newcount)
 {
 	if (IS_UN_OVERLAY_ID(eqid) && count > 1)
 		return R_ERR_LOGIC;
@@ -552,7 +552,6 @@ int CLogicEquipment::UseEquipment(unsigned uid, unsigned eqid, unsigned ud, unsi
 	}
 
 	string logtype;
-	int newcount;
 	if (IS_UN_OVERLAY_ID(eqid) || data["count"].asInt() == count)
 	{
 		ret = Del(uid,ud);
@@ -561,7 +560,7 @@ int CLogicEquipment::UseEquipment(unsigned uid, unsigned eqid, unsigned ud, unsi
 	}
 	else if(data["count"].asInt() < count)
 	{
-		error_log("use equip not enough id=%u", id);
+		error_log("use equip not enough id=%u,now_count=%d,count=%u", id, data["count"].asInt(), count);
 		return R_ERR_LOGIC;
 	}
 	else
@@ -577,6 +576,11 @@ int CLogicEquipment::UseEquipment(unsigned uid, unsigned eqid, unsigned ud, unsi
 						logtype.c_str(),-count,newcount,reason.c_str(),equipData.c_str());
 	}
 	return ret;
+}
+int CLogicEquipment::UseEquipment(unsigned uid, unsigned eqid, unsigned ud, unsigned count, string reason)
+{
+	int newcount;
+	return UseEquipmentEx(uid, eqid, ud, count, reason, newcount);
 }
 
 // 添加单件装备

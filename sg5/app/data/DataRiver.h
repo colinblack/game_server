@@ -16,6 +16,7 @@
 struct DataShip
 {
 	unsigned uid;
+	int classType;
 	int type;
 	unsigned start_time;
 	unsigned end_time;

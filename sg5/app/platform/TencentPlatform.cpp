@@ -141,8 +141,8 @@ int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, co
 	if (!Json::GetInt(value, "ret", ret) || ret != 0)
 	{
 		Json::GetString(value, "msg", m_errorMessage);
-		error_log("[get_info fail][openid=%s,openkey=%s,msg=%s]",
-				openid.c_str(), openkey.c_str(), m_errorMessage.c_str());
+		error_log("[get_info fail][openid=%s,openkey=%s,response=%s]",
+				openid.c_str(), openkey.c_str(), response.c_str());
 		return -1;
 	}
 	userInfo.Clear();

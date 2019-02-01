@@ -1423,12 +1423,8 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 	}
 
 	vector<ItemAdd> equip_items;
-	vector<string> hero_id;
-	vector<string> hero_code;
+	vector<HeroAdd> hero;
 	vector<pair<unsigned,unsigned> > juexue_id;
-	equip_items.clear();
-	hero_id.clear();
-	hero_code.clear();
 
 	unsigned coins = 0;
 	unsigned prosper = 0;
@@ -1438,6 +1434,7 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 	unsigned rs4 = 0;
 	unsigned longlin = 0;
 	unsigned qihun = 0;
+	unsigned tongqian = 0;
 
 	for(int i = 0;i < data.size();++i)
 	{
@@ -1478,8 +1475,11 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 			{
 				string code = "from_useGiftbag_";
 				code.append(CTrans::UTOS(giftbagId));
-				hero_id.push_back(CDataXML::Hero2Str(data[i][type]["id"].asUInt()));
-				hero_code.push_back(code);
+				string id = CDataXML::Hero2Str(data[i][type]["id"].asUInt());
+				unsigned star = 1, l = 1;
+				Json::GetUInt(data[i][type], "star", star);
+				Json::GetUInt(data[i][type], "l", l);
+				hero.push_back(HeroAdd(id, code, star, l));
 			}
 			else if(type.find("prosper") != string::npos)		//威望
 			{
@@ -1530,6 +1530,10 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 			{
 				qihun += data[i][type].asUInt();
 			}
+			else if(type.find("tongqian") != string::npos)  //铜钱
+			{
+				tongqian += data[i][type].asUInt();
+			}
 		}
 	}
 
@@ -1544,10 +1548,10 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 		}
 	}
 
-	if(hero_id.size() > 0)
+	if(hero.size() > 0)
 	{
 		CLogicHero Hero;
-		ret = Hero.AddHeros(uid,hero_id,hero_code,result["hero"]);
+		ret = Hero.AddHeros(uid,hero,result["hero"]);
 		if(ret)
 		{
 			error_log("Add_hero_error uid=%u | giftbagId=%u", uid , giftbagId);
@@ -1616,7 +1620,7 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 		result["longlin"] = user_tech["yinliang"].asUInt();
 	}
 
-	if(prosper > 0 || rs1 > 0 || rs2 > 0 || rs3 > 0 || rs4 > 0)
+	if(prosper > 0 || rs1 > 0 || rs2 > 0 || rs3 > 0 || rs4 > 0 || tongqian > 0)
 	{
 		dataUser.prosper += prosper;
 		dataUser.r1 += rs1;
@@ -1631,6 +1635,7 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 			dataUser.r3 = dataUser.r3_max;
 		if(dataUser.r4 > dataUser.r4_max)
 			dataUser.r4 = dataUser.r4_max;
+		dataUser.type += tongqian;
 	}
 
 	unsigned total_qihun = 0;
@@ -1654,10 +1659,10 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 	if(ret)
 		return ret;
 
-	if(prosper > 0 || longlin > 0 || rs1 > 0 || rs2 > 0 || rs3 > 0 || rs4 > 0 || qihun > 0)
+	if(prosper > 0 || longlin > 0 || rs1 > 0 || rs2 > 0 || rs3 > 0 || rs4 > 0 || qihun > 0 || tongqian > 0)
 	{
-		RESOURCE_LOG("[useGiftbag][uid=%u,chgprosper=%u,prosper=%u,chglonglin=%u,longlin=%u,chgqle=%u,qle=%u,chgr1=%u,r1=%u,chgr2=%u,r2=%u,chgr3=%u,r3=%u,chgr4=%u,r4=%u]"
-				,uid,prosper,dataUser.prosper,longlin,total_longlin,qihun,total_qihun,rs1,dataUser.r1,rs2,dataUser.r2,rs3,dataUser.r3,rs4,dataUser.r4);
+		RESOURCE_LOG("[useGiftbag][uid=%u,chgprosper=%u,prosper=%u,chglonglin=%u,longlin=%u,chgqle=%u,qle=%u,chgr1=%u,r1=%u,chgr2=%u,r2=%u,chgr3=%u,r3=%u,chgr4=%u,r4=%u,chgtongqian=%u,tongqian=%u]"
+				,uid,prosper,dataUser.prosper,longlin,total_longlin,qihun,total_qihun,rs1,dataUser.r1,rs2,dataUser.r2,rs3,dataUser.r3,rs4,dataUser.r4,tongqian,dataUser.type);
 	}
 
 	return R_SUCCESS;
@@ -4158,7 +4163,7 @@ int CLogicCMD::HammerHitAllServer(unsigned uid, unsigned equd, int hitCount, Jso
 	return R_SUCCESS;
 }
 
-int CLogicCMD::UseShip(unsigned uid, unsigned torch, Json::Value &result, unsigned &lasttime,unsigned &seqid)
+int CLogicCMD::UseShip(unsigned uid, unsigned torch, unsigned classType, Json::Value &result, unsigned &lasttime,unsigned &seqid)
 {
 	int ret = 0;
 	CDataXML *dataXML = CDataXML::GetCDataXML();
@@ -4223,6 +4228,9 @@ int CLogicCMD::UseShip(unsigned uid, unsigned torch, Json::Value &result, unsign
 	param["endts"] = Time::GetGlobalTime() + newboat.time*60;
 	param["uid"] = uid;
 	param["yellow_torch_burning"] = torch;
+	if (classType<1 || classType > 3)
+		return R_ERR_PARAM;
+	param["classType"] = classType;
 	CLogicRiver logicRiver;
 	ret = logicRiver.SetShip(uid, param);
 	if(ret)

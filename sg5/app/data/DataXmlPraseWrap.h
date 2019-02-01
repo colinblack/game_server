@@ -103,9 +103,10 @@ protected:
 	{
 		std::string data = xmlConf.GetData();
 		Json::Value jsonData;
-		if (! Json::FromString(jsonData, data))
+		Json::Reader reader;
+		if (!reader.parse(data, jsonData))
 		{
-			error_log("prayconfig.xml => data error.1");
+			error_log("parse json error data=%s msg=%s", data.c_str(), reader.getFormatedErrorMessages().c_str());
 			throw std::runtime_error("prayconfig.xml => data error.1");
 		}
 

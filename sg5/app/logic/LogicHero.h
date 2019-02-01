@@ -3,6 +3,19 @@
 
 #include "LogicInc.h"
 
+struct HeroAdd
+{
+	string id, code;
+	unsigned star, l;
+	HeroAdd(string& i, string& c, unsigned s, unsigned lv)
+	{
+		id = i;
+		code = c;
+		star = s;
+		l = lv;
+	}
+};
+
 class CLogicHero
 {
 public:
@@ -21,12 +34,13 @@ public:
 
 	int AddOneHero(unsigned uid, string id,string code,Json::Value &result, string icon="", string name="");
 	int AddHeros(unsigned uid, vector<string> &id, vector<string> &code,Json::Value &result);
+	int AddHeros(unsigned uid, vector<HeroAdd> &hero, Json::Value &result);
 
 	bool IsGodHero(string &id);
 
 	int AddHeroExp(unsigned uid, unsigned ud, int exp, int& expnow);
 
-	Json::Value genHero(string &id,string &code, string icon="", string name="");
+	Json::Value genHero(string &id,string &code, string icon="", string name="", unsigned star = 1, unsigned l = 1);
 };
 
 #endif

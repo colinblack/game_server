@@ -119,6 +119,7 @@
 #include "DataMVP.h"
 #include "DataIdcard.h"
 #include "DataRotaryTableDraw.h"
+#include "DataChick.h"
 
 #endif /* DATAINC_H_ */
 

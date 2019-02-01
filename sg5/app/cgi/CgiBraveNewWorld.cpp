@@ -16,7 +16,7 @@ public:
 		SetFeature(CF_PRINT_JSON);
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_GET_UID);
-		SetFeature(CF_CHECK_SESSION);
+//		SetFeature(CF_CHECK_SESSION);
 		SetFeature(CF_CHECK_TIME);
 		SetFeature(CF_CHECK_PLATFORM);
 		SetFeature(CF_CHECK_HASH);
@@ -59,6 +59,9 @@ public:
 	CGI_SET_ACTION_MAP("CollectOne", CollectOne)
 	CGI_SET_ACTION_MAP("AttackSelf", AttackSelf)
 	CGI_SET_ACTION_MAP("GetMission", GetMission)
+	CGI_SET_ACTION_MAP("newWorldAwards",newWorldAwards)
+	CGI_SET_ACTION_MAP("GetTarget", GetTarget)
+	CGI_SET_ACTION_MAP("getNewWorldBoss",getNewWorldBoss)
 	CGI_ACTION_MAP_END
 
 	~CCgiBraveNewWorld()
@@ -681,6 +684,70 @@ public:
 			return ret;
 
 		CGI_SEND_LOG("action=GetMission&uid=%u", m_uid);
+		return ret;
+	}
+
+	int newWorldAwards()
+	{
+		int ret = 0;
+
+		unsigned index;
+		if (!Json::GetUInt(m_data, "eq_idx", index))
+		{
+			error_log("[index_error][uid=%u]",m_uid);
+			return R_ERR_PARAM;
+		}
+
+		unsigned seq;
+		if (!Json::GetUInt(m_data, "seq", seq))
+		{
+			error_log("[seq_error][uid=%u]",m_uid);
+			return R_ERR_PARAM;
+		}
+
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+		{
+			error_log("[nts_error][uid=%u]",m_uid);
+			return R_ERR_PARAM;
+		}
+
+		CLogicBraveNewWorld logicBraveNewWorld;
+		ret = logicBraveNewWorld.newWorldAwards(m_uid, index, id, seq, m_jsonResult);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=newWorldAwards&uid=%u&seq_send=%u&seq_recv=%u", m_uid, seq, m_jsonResult["seq"].asUInt());
+		return ret;
+	}
+
+	int GetTarget()
+	{
+		int ret = 0;
+
+		unsigned userid;
+		if (!Json::GetUInt(m_data, "userid", userid))
+			return R_ERR_PARAM;
+
+		CLogicBraveNewWorld logicBraveNewWorld;
+		ret = logicBraveNewWorld.GetTarget(m_uid, userid, m_jsonResult);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=GetTarget&uid=%u", m_uid);
+		return ret;
+	}
+
+	int getNewWorldBoss()
+	{
+		int ret = 0;
+
+		CLogicBraveNewWorld logicBraveNewWorld;
+		ret = logicBraveNewWorld.getNewWorldBoss(m_jsonResult);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=getNewWorldBoss&uid=%u", m_uid);
 		return ret;
 	}
 };

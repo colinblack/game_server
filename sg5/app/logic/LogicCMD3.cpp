@@ -1622,6 +1622,319 @@ int CLogicCMD::Catapult(unsigned uid, unsigned count, const Json::Value &equd, i
 	return R_SUCCESS;
 }
 
+int CLogicCMD::EightFormation(unsigned uid, unsigned formation_id, unsigned count, const Json::Value &equd, unsigned cash, unsigned r, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	int ret = logicUser.GetUser(uid, dataUser);
+	if (ret)
+	{
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+	{
+		return ret;
+	}
+
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	Json::Value tech;
+	Json::Reader reader;
+	Json::FastWriter writer;
+	unsigned exp = 0;
+	unsigned lv = 0;
+
+	reader.parse(dataUser.user_tech, tech);
+
+	if(!tech.isMember("formation"))
+	{
+		tech["formation"] = Json::Value(Json::arrayValue);
+		for(int i = 0; i < 8; ++i)
+		{
+			Json::Value tmp =  Json::Value(Json::arrayValue);
+			tmp.append(0);
+			tmp.append(0);
+			tech["formation"][i] = tmp;
+		}
+	}
+
+	Json::Value &formation = tech["formation"];
+	unsigned &resource =  dataUser.r1;
+	unsigned maxlv      = EIGHT_FORMATION_MAXLV;
+
+	unsigned idx = formation_id-1;
+	Json::GetUInt(formation[idx], 1, exp);
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	unsigned max_exp = dataXML->GetMaxExp(formation_id, EIGHT_FORMATION_MAXLV);
+	XMLEightFormation xmlEightFormation;
+	if (exp)
+	{
+		// 档中 lv 不可靠因此
+		// 根据exp获得lv
+		ret = dataXML->GetEightFormationLv(formation_id, maxlv, exp, lv);
+		if (ret)
+		{
+			error_log("GetEightFormationLv failed. uid = %u, ret = %d", uid, ret);
+			return ret;
+		}
+	}
+	unsigned jie_index = (lv % 10 == 0 ? lv/10 : lv/10+1);
+
+	if (jie_index > 10)
+	{
+		LOGIC_ERROR_RETURN_MSG("jie number is too high");
+	}
+
+	unsigned need_cash = 0;
+	ret = dataXML->GetCostEightFormation(jie_index, need_cash);
+	if (ret)
+	{
+		error_log("EightFormation cost failed. uid = %u, ret = %d", uid, ret);
+		return ret;
+	}
+
+	ret = dataXML->GetEightFormationItem(formation_id, lv, xmlEightFormation) ;
+	if (ret)
+	{
+		error_log("GetHeavenItem failed. uid = %u, ret = %d", uid, ret);
+		return ret;
+	}
+
+	unsigned curexp = exp;
+	unsigned curper = xmlEightFormation.per;
+	unsigned curres = xmlEightFormation.res;
+	unsigned curneedeq = xmlEightFormation.needeq;
+	unsigned curcnt = 0;
+	unsigned nextexp = 0;
+
+	unsigned sumres = 0;
+	unsigned sumneedeq = 0;
+
+	CLogicEquipment logicEquip;
+	Json::Value equip_data;
+	unsigned ecnt = 0;
+	unsigned i = 0;
+	unsigned ud = 0;
+	unsigned id = 0;
+	unsigned len = equd.size();
+	unsigned sumecnt = 0;
+	Json::Value eqid(Json::arrayValue);
+	Json::Value eqcount(Json::arrayValue);
+
+	eqid.resize(len);
+	eqcount.resize(len);
+	for (i = 0; i < len; ++i)
+	{
+		ud = equd[i].asUInt();
+		ecnt = 0;
+		id = 0;
+		if (ud)
+		{
+			ret = logicEquip.Get(uid, ud, equip_data);
+			if (ret)
+			{
+				debug_log("Get failed. uid = %u, equd = %u", uid, ud);
+			}
+
+			if (!Json::GetUInt(equip_data, "id", id) || (0 == id)
+					|| !Json::GetUInt(equip_data, "count", ecnt) || (0 == ecnt))
+			{
+				debug_log("id or count is empty");
+				return R_ERR_DB;
+			}
+		}
+
+		sumecnt += ecnt;
+		eqid[i] = id;
+		eqcount[i] = ecnt;
+	}
+	while (count > 0)
+	{
+		++lv;
+		ret = dataXML->GetEightFormationItem(formation_id, lv, xmlEightFormation);
+		if (ret)
+		{
+			error_log("GetEightFormationItem failed. uid = %u, ret = %d", uid, ret);
+			return ret;
+		}
+
+		nextexp = xmlEightFormation.exp;
+
+		// 当前需要次数
+		curcnt = (unsigned)ceil((nextexp - curexp)/(float)curper);
+		unsigned next_lv_cnt = curcnt;
+		if(1 == oneclick)
+		{
+			unsigned c3 = sumecnt / curneedeq;
+			unsigned min_cnt = curcnt;
+			if(1 == cash)
+			{
+				CLogicPay logic_pay;
+				DataPay pay;
+				int ret = logic_pay.GetPay(uid, pay);
+				if (ret != 0)
+					return ret;
+				unsigned c2 = pay.cash /need_cash;
+				min_cnt = min(c2, c3);
+			}
+			else if(0 == cash)
+			{
+				//不需要消耗资源
+				if(0 == r)
+				{
+					min_cnt = c3;
+				}
+				else
+				{
+					unsigned c1 = resource /curres;
+					min_cnt = min(c1, c3);
+				}
+
+			}
+
+			curcnt = min_cnt > curcnt ? curcnt: min_cnt;
+			if(curcnt >0)
+			{
+				need_cash *= curcnt;
+			}
+			if(curcnt < next_lv_cnt)
+			{
+				--lv;
+			}
+			count = curcnt;
+		}
+		else
+		{
+			// 次数不够
+			if (curcnt > count)
+			{
+				--lv;
+				curcnt = count;
+			}
+		}
+
+		count -= curcnt;
+		curexp += curper * curcnt;
+		// 总共消耗的资源
+		sumres += curres * curcnt;
+		// 总共消耗道具
+		sumneedeq += curneedeq * curcnt;
+		exp = curexp;
+		if (exp >= max_exp)
+		{
+			break;
+		}
+
+		curper = xmlEightFormation.per;
+		curneedeq = xmlEightFormation.needeq;
+		curres = xmlEightFormation.res;
+	}
+
+	if (0 == cash && 1 == r && sumres > resource)
+	{
+		LOGIC_ERROR_RETURN_MSG("resource is not enough");
+	}
+	if (0 == cash && 1 == r)
+	{
+		resource -= sumres;
+	}
+
+	if (sumneedeq > sumecnt)
+	{
+		LOGIC_ERROR_RETURN_MSG("equipment count is not enough");
+	}
+
+	unsigned usecount = 0;
+	for (i = 0; (i < len) && sumneedeq; ++i)
+	{
+		ud = equd[i].asUInt();
+		if (ud)
+		{
+			ecnt = eqcount[i].asUInt();
+			id = eqid[i].asUInt();
+			if (sumneedeq > ecnt)
+			{
+				usecount = ecnt;
+				sumneedeq -= ecnt;
+			}
+			else
+			{
+				usecount = sumneedeq;
+				sumneedeq = 0;
+			}
+
+			ret = logicEquip.UseEquipment(uid, id, ud, usecount, "Heaven_" + CTrans::UTOS(i));
+			if (ret)
+			{
+				error_log("UseEquipment failed. uid = %u, eqid = %u, equd = %u", uid, id, ud);
+				return ret;
+			}
+		}
+		// 每个道具使用数量
+		result["usecount"][i] = usecount;
+	}
+
+	// 已使用完剩余使用0
+	while (i < len)
+	{
+		result["usecount"][i++] = 0;
+	}
+
+	if (1 == cash)
+	{
+		Json::Value user_flag;
+		bool bsave = false;
+		reader.parse(dataUser.user_flag, user_flag);
+		CLogicPay logicPay;
+		DataPay payData;
+		const string reason = "EIGHT_FORMATION_CASH";
+		ret = logicPay.ProcessOrderForBackend(uid, -need_cash, 0, payData, reason, user_flag, bsave);
+		if(ret)
+			return ret;
+		result["pointpay"].resize(0);
+		if(bsave)
+		{
+			result["pointpay"] = user_flag["user_pay"];
+			dataUser.user_flag = writer.write(user_flag);
+		}
+		result["coins"] = payData.coins;
+		result["coins2"] = payData.cash;
+	}
+
+	Json::Value resArray(Json::arrayValue);
+	resArray.append(lv);
+	resArray.append(exp);
+
+	formation[idx]= resArray;
+	result["formation"] = tech["formation"];
+	result["r1"] = dataUser.r1;
+
+	dataUser.user_tech = writer.write(tech);
+	string res = writer.write(result);
+	EQUIPMENT_LOG("EightFormation: res %s", res.c_str());
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+	return R_SUCCESS;
+}
+
+
 int CLogicCMD::MergeEquipment(unsigned uid, const vector< vector<unsigned> > &uds, Json::Value &result, unsigned lasttime, unsigned seqid)
 {
 	if (!IsValidUid(uid))
@@ -2296,8 +2609,8 @@ int CLogicCMD::UpgradeTenWeapon(unsigned uid, unsigned id, unsigned equd, unsign
 		ret = logicEquip.UseEquipment(uid, cost_eqid, equd, count, "tenWeaponCost");
 		if (ret)
 			return ret;
-		EQUIPMENT_LOG("uid=%u,id=%u,times=%u,count=%u,exp=%u,eqid=%d,equd=%u,act=%s,count=%d,code=%s",
-				uid,id,times,count,exp,cost_eqid,equd,"UpgradeTenWeapon",count,"UpgradeTenWeapon");
+		EQUIPMENT_LOG("uid=%u,id=%u,times=%u,count=%u,eqid=%d,equd=%u,act=%s,count=%d,code=%s",
+				uid,id,times,count,cost_eqid,equd,"UpgradeTenWeapon",count,"UpgradeTenWeapon");
 	}
 
 	unsigned exp = tech["tw"][id][0u].asUInt();
@@ -2339,27 +2652,62 @@ int CLogicCMD::GetZhuhunClass(unsigned exp)
 	return ceil(level / static_cast<double>(10));
 }
 
-int CLogicCMD::initDouble11NewAct(Json::Value &newAct)
+int CLogicCMD::initDouble11NewAct(Json::Value &newAct, bool allserver)
 {
-	for (unsigned i = 0; i < XMLDOUBLE_TYPE_NUM * XMLDOUBLE_PROP_NUM; ++i)
+	for (unsigned i = 0; i < XMLDOUBLE_TYPE_NUM_2018 * XMLDOUBLE_PROP_NUM; ++i)
 	{
 		newAct["a"][i] = 0;
 	}
 
 	newAct["b"] = Time::GetGlobalTime();
-	newAct["id"] = NAT_DOUBLE11;
-	newAct["v"] = Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_VER);
+	newAct["id"] = allserver ? NAT_DOUBLE11_2018 : NAT_DOUBLE11;
+	newAct["v"] = Config::GetIntValue(allserver ? CONFIG_DOUBLE11_2018_VER : CONFIG_DOUBLE11_ALLSERVER_VER);
 
 	return R_SUCCESS;
 }
 
+int CLogicCMD::initShengdanNewAct(Json::Value &newAct,unsigned non_zero,bool day)
+{
+	ActInfoConfig actconfig(CONFIG_SHENGDAN_2018);
 
-int CLogicCMD::deterDouble11TS(unsigned type)
+	newAct["id"] = NAT_SHENGDAN_2018;
+	newAct["t"] = Time::GetGlobalTime();//
+	newAct["t2"] = 0;//每日奖励领取时间戳
+
+	if (!day)//不是每日重置
+	{
+		//	for (unsigned i = 0; i < XML_SHENGDAN_CHARGE_DANGCI_NUM; ++i)//充值每档
+			//{
+				newAct["a"] = 0;
+			//}
+			//for (unsigned i = 0; i < XML_SHENGDAN_CONSUME_DANGCI_NUM; ++i)//消费每档
+			//{
+				newAct["b"] = 0;
+			//}
+			//for (unsigned i = 0; i < XML_SHENGDAN_XUYUAN_DANGCI_NUM; ++i)//许愿每档
+			//{
+				newAct["c"] = 0;
+			//}
+		newAct["d"] = Json::Value(Json::arrayValue);
+		for (unsigned i = 0; i < non_zero; ++i)//兑换每档已经兑换的次数
+		{
+			newAct["d"][i] = 0;
+		}
+		newAct["j"] = 0;//累计积分
+		newAct["x"] = 0;//累计许愿次数
+		newAct["k"] = 0;//剩余礼盒数量
+	}
+	newAct["v"] = actconfig.Version();
+	return R_SUCCESS;
+}
+
+
+int CLogicCMD::deterDouble11TS(unsigned type, bool allserver)
 {
 	unsigned now = Time::GetGlobalTime();
 	unsigned bts = CTime::GetDayBeginTime(now);
 
-	static const unsigned startts[XMLDOUBLE_TYPE_NUM + 1] = {
+	static const unsigned startts[XMLDOUBLE_TYPE_NUM_2018 + 1] = {
 			9 * 3600 + 1800 - 60,			// 9:30
 			11 * 3600 + 1800 - 60,			// 11:30
 			14 * 3600 + 1800 - 60,			// 14:30
@@ -2369,10 +2717,10 @@ int CLogicCMD::deterDouble11TS(unsigned type)
 			22 * 3600 + 1800 - 60,			// 22:30	endts
 	};
 
-	if (now < Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_BEGIN_TS)
-	|| now > Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_END_TS)
+	if (now < Config::GetIntValue(allserver ? CONFIG_DOUBLE11_2018_BEGIN_TS : CONFIG_DOUBLE11_ALLSERVER_BEGIN_TS)
+	|| now > Config::GetIntValue(allserver ? CONFIG_DOUBLE11_2018_END_TS : CONFIG_DOUBLE11_ALLSERVER_END_TS)
 	|| (now < (bts + startts[type]))
-	|| (now > (bts + startts[XMLDOUBLE_TYPE_NUM])))
+	|| (now > (bts + startts[XMLDOUBLE_TYPE_NUM_2018])))
 	{
 		LOGIC_ERROR_RETURN_MSG("time_is_error");
 	}
@@ -2380,17 +2728,15 @@ int CLogicCMD::deterDouble11TS(unsigned type)
 	return R_SUCCESS;
 }
 
-
-int CLogicCMD::Double11(unsigned uid, unsigned type, unsigned id, Json::Value &result, unsigned lasttime, unsigned seqid)
+int CLogicCMD::Double11(unsigned uid, unsigned type, unsigned id, bool allserver, Json::Value &result, unsigned lasttime, unsigned seqid)
 {
-
-	if (type >= XMLDOUBLE_TYPE_NUM || id >= XMLDOUBLE_PROP_NUM)
+	if (type >= XMLDOUBLE_TYPE_NUM_2018 || id >= XMLDOUBLE_PROP_NUM)
 	{
 		error_log("type or id error. uid = %u, type = %u, id = %u", uid, type, id);
 		LOGIC_ERROR_RETURN_MSG("type or id error");
 	}
 
-	int ret = deterDouble11TS(type);
+	int ret = deterDouble11TS(type, allserver);
 	if (ret)
 	{
 		return ret;
@@ -2425,62 +2771,68 @@ int CLogicCMD::Double11(unsigned uid, unsigned type, unsigned id, Json::Value &r
 	CLogicSecinc logicSec;
 	Json::Value newAct;
 
-	ret = logicSec.GetSecinc(uid, NAT_DOUBLE11, newAct);
+	ret = logicSec.GetSecinc(uid, allserver ? NAT_DOUBLE11_2018 : NAT_DOUBLE11, newAct);
 	if (R_ERR_NO_DATA == ret)
 	{
-		initDouble11NewAct(newAct);
+		initDouble11NewAct(newAct, allserver);
 	}
 	else if (ret)
 	{
 		return ret;
 	}
 
-	if (newAct["v"].asInt() != Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_VER)
+	if (newAct["v"].asInt() != Config::GetIntValue(allserver ? CONFIG_DOUBLE11_2018_VER : CONFIG_DOUBLE11_ALLSERVER_VER)
 	|| CTime::IsDiffDay(newAct["b"].asUInt(), Time::GetGlobalTime()))
 	{
 		newAct.clear();
-		initDouble11NewAct(newAct);
+		initDouble11NewAct(newAct, allserver);
 	}
 
-	CLogicDouble11 logicDouble;
+	unsigned index = type * XMLDOUBLE_TYPE_NUM_2018 + id;
+	unsigned count = newAct["a"][index].asUInt();
+	// 每人每个物品只能购买一次
+	static const unsigned limit = 1;
+	if (count >= limit)
+	{
+		LOGIC_ERROR_RETURN_MSG("over limit");
+	}
+
 	XMLDouble11Prop prop;
 	bool nocnt;
-
-	ret = logicDouble.BuyOneProp(type, id, prop, nocnt);
-	if (ret)
-	{
-		return ret;
-	}
-
 	Json::Value rcnt(Json::arrayValue);
-	ret = logicDouble.GetRemainCount(rcnt);
-	if (ret)
-	{
-		return ret;
-	}
 
-	if (false == nocnt)
+	if(allserver)
 	{
-		unsigned index = type * XMLDOUBLE_TYPE_NUM + id;
-		unsigned count = newAct["a"][index].asUInt();
-		// 每人每个物品只能购买一次
-		static const unsigned limit = 1;
-
-		if (count >= limit)
+		string url = "action=Double11";
+		url.append("&type=").append(CTrans::UTOS(type)).append("&id=").append(CTrans::UTOS(id));
+		Json::Value t;
+		ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t);
+		if (0 != ret)
 		{
-			LOGIC_ERROR_RETURN_MSG("over limit");
+			return ret;
 		}
 
-		++count;
-		newAct["a"][index] = count;
-
-		CLogicEquipment logicEquip;
-
-		ret = logicEquip.AddOneItem(uid, prop.eqid, prop.eqcnt, "Double11", result["equip"], true);
+		nocnt = t["nocnt"].asBool();
+		rcnt = t["rcnt"];
+		prop.eqid = t["prop"]["eqid"].asUInt();
+		prop.price = t["prop"]["price"].asUInt();
+		prop.eqcnt = t["prop"]["eqcnt"].asUInt();
+		prop.total = t["prop"]["total"].asUInt();
+	}
+	else
+	{
+		CLogicDouble11 logicDouble;
+		ret = logicDouble.BuyOneProp(type, id, prop, nocnt, rcnt, allserver);
 		if (ret)
 		{
 			return ret;
 		}
+	}
+
+	if (false == nocnt)
+	{
+		++count;
+		newAct["a"][index] = count;
 
 		Json::Value user_flag;
 		Json::Reader reader;
@@ -2507,6 +2859,13 @@ int CLogicCMD::Double11(unsigned uid, unsigned type, unsigned id, Json::Value &r
 
 		result["coins"] = dataPay.coins;
 		result["coins2"] = dataPay.cash;
+
+		CLogicEquipment logicEquip;
+		ret = logicEquip.AddOneItem(uid, prop.eqid, prop.eqcnt, "Double11", result["equip"], true);
+		if (ret)
+		{
+			return ret;
+		}
 	}
 
 	result["newAct"] = newAct;
@@ -2528,13 +2887,245 @@ int CLogicCMD::Double11(unsigned uid, unsigned type, unsigned id, Json::Value &r
 	return R_SUCCESS;
 }
 
-
-int CLogicCMD::GetDouble11Rcnt(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid)
+int CLogicCMD::ShengDan2018(unsigned uid, const Json::Value & input, Json::Value &result, unsigned lasttime, unsigned seqid)
 {
+	enum shengdantype {
+		denglu = 1,
+		chongzhi = 2,
+		xiaofei = 3,
+		xuyuan = 4,
+		duihuan = 5,
+		lihe = 6,
+		shengdan_type_max
+	};
+	unsigned type;
+	Json::GetUInt(input,"type",type);
+	if (!type || type >= shengdan_type_max) {
+		PARAM_ERROR_RETURN_MSG("type");
+	}
+	unsigned id;
+	Json::GetUInt(input,"id",id);
+	if (type!=denglu && type!=lihe && !id) {
+		PARAM_ERROR_RETURN_MSG("id");
+	}
 
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	int ret = logicUser.GetUser(uid, dataUser);
+	if (ret)
+	{
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+	{
+		return ret;
+	}
+
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	ActInfoConfig actconfig(CONFIG_SHENGDAN_2018);
+
+	CLogicSecinc logicSec;
+	Json::Value newAct;
+
+	if (!actconfig.IsActive())
+	{
+		LOGIC_ERROR_RETURN_MSG("time_is_error");
+	}
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	DataXMLShengDan config;
+	ret = dataXML->GetShengDanItem(config);
+	if (ret)
+	{
+		return ret;
+	}
+
+	int non_zero = 0;
+	for (int i=0;i<XML_SHENGDAN_EXANGE_DANGCI_NUM;i++)
+		if (config.exchange[i].count)
+			non_zero++;
+
+	ret = logicSec.GetSecinc(uid, NAT_SHENGDAN_2018,newAct);
+	if (R_ERR_NO_DATA == ret)
+	{
+		initShengdanNewAct(newAct,non_zero);
+	}
+	else if (ret)
+	{
+		return ret;
+	}
+
+	if (newAct["v"].asInt() != actconfig.Version())
+	{
+		initShengdanNewAct(newAct,non_zero);
+	}
+	else if (CTime::IsDiffDay(newAct["t"].asUInt(), Time::GetGlobalTime()))
+	{
+		initShengdanNewAct(newAct,non_zero,true);
+	}
+
+	vector<GiftEquipItem> reward;
+	string code = "ShengDan2018";
+	BaseCmdUnit basecmdUnit(uid);
+	UserWrap user(uid, false);
+
+	if (type == denglu) {
+		if (!CTime::IsDiffDay(newAct["t2"].asUInt(), Time::GetGlobalTime())) {
+			LOGIC_ERROR_RETURN_MSG("denglu");
+		}
+	//	reward.push_back(config.day);
+		newAct["t2"] = Time::GetGlobalTime();
+		//basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+		newAct["k"] = newAct["k"].asUInt() + config.day.m_nCnt;
+	}
+	else if (type == chongzhi) {
+		if (id > XML_SHENGDAN_CHARGE_DANGCI_NUM) {
+			PARAM_ERROR_RETURN_MSG("id");
+		}
+		if (user.GetRechargePoint(actconfig.StartTS(),Time::GetGlobalTime()) < config.change[id-1].require)
+		{
+			LOGIC_ERROR_RETURN_MSG("chongzhi_lack");
+		}
+		if (newAct["a"].asUInt() & (1 << (id-1))) {
+			LOGIC_ERROR_RETURN_MSG("chongzhi_has_reward");
+		}
+		newAct["a"] = newAct["a"].asUInt() | (1 << (id-1));
+		//for (int i=0;i<XML_SHENGDAN_REWARD_NUM;i++)
+			//reward.push_back(config.change[id-1].reward[i]);
+		newAct["k"] = newAct["k"].asUInt() + config.change[id-1].reward[0].m_nCnt;
+	//	basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+	}
+	else if (type == xiaofei) {
+		if (id > XML_SHENGDAN_CONSUME_DANGCI_NUM) {
+			PARAM_ERROR_RETURN_MSG("id");
+		}
+		if (user.GetRechargePoint(actconfig.StartTS(),Time::GetGlobalTime()) < config.change[id-1].require ||
+			user.GetConsumePoint(actconfig.StartTS(),Time::GetGlobalTime()) < config.consume[id-1].require)
+		{
+			LOGIC_ERROR_RETURN_MSG("xiaofei_lack");
+		}
+		if (newAct["b"].asUInt() & (1 << (id-1))) {
+			LOGIC_ERROR_RETURN_MSG("xiaofei_has_reward");
+		}
+		newAct["b"] = newAct["b"].asUInt() | (1 << (id-1));
+		//for (int i=0;i<XML_SHENGDAN_REWARD_NUM;i++)
+		//	reward.push_back(config.consume[id-1].reward[i]);
+		newAct["k"] = newAct["k"].asUInt() + config.consume[id-1].reward[0].m_nCnt;
+		//basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+	}
+	else if (type == xuyuan) {
+		if (id > XML_SHENGDAN_XUYUAN_DANGCI_NUM) {
+			PARAM_ERROR_RETURN_MSG("id");
+		}
+		if (newAct["c"].asUInt() & (1 << (id-1))) {
+			LOGIC_ERROR_RETURN_MSG("xuyuan_has_reward");
+		}
+		newAct["c"] = newAct["c"].asUInt() | (1 << (id-1));
+		if (newAct["x"].asUInt() < config.vow[id-1].require)
+		{
+			LOGIC_ERROR_RETURN_MSG("xuyuan_limit");
+		}
+		for (int i=0;i<XML_SHENGDAN_REWARD_NUM;i++)
+			reward.push_back(config.vow[id-1].reward[i]);
+		basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+	}
+	else if (type == duihuan) {
+		if (id > XML_SHENGDAN_EXANGE_DANGCI_NUM) {
+			PARAM_ERROR_RETURN_MSG("id");
+		}
+		debug_log("id=%u,config_count=%u,non_zero=%d",id,config.exchange[id-1].count,non_zero);
+		if (config.exchange[id-1].count && newAct["d"][id-1].asUInt() >= config.exchange[id-1].count)
+		{
+			LOGIC_ERROR_RETURN_MSG("duihuan_count_limit");
+		}
+		if ( newAct["j"].asUInt() <  config.exchange[id-1].require )
+		{
+			LOGIC_ERROR_RETURN_MSG("jf_lack");
+		}
+		if (id <= non_zero)
+			newAct["d"][id-1] = newAct["d"][id-1].asUInt() + 1;
+		newAct["j"] = newAct["j"].asUInt() - config.exchange[id-1].require;
+		for (int i=0;i<XML_SHENGDAN_REWARD_NUM;i++)
+			reward.push_back(config.exchange[id-1].reward[i]);
+		basecmdUnit.AddGiftEquips(reward, code, result["equipment"]);
+	}
+	else if (type == lihe) {
+		unsigned n,ud;
+		Json::GetUInt(input,"n",n);
+		Json::GetUInt(input,"ud",ud);
+		if (newAct["k"].asUInt() < n)
+		{
+			LOGIC_ERROR_RETURN_MSG("not enough");
+		}
+		newAct["x"] = newAct["x"].asUInt() + n;
+		newAct["k"] = newAct["k"].asUInt() - n;
+		/*
+		CLogicEquipment LogicEquipment;
+		ret = LogicEquipment.UseEquipment(uid,40996,ud,n,code);
+		if (ret) {
+			return ret;
+		}
+		*/
+		for (unsigned i=0;i<n;i++)
+		{
+			unsigned oo = Math::GetRandomInt(100);
+			unsigned jifen;
+			if (oo < 40)
+				jifen = 88;
+			else if (oo < 40 + 28)
+				jifen = 168;
+			else if (oo < 40 + 28 + 20)
+				jifen = 288;
+			else if (oo < 40 + 28 + 20 + 9)
+				jifen = 688;
+			else
+				jifen = 1688;
+			debug_log("uid=%u,jifen=%u",uid,jifen);
+			result["xuyuan"].append(jifen);
+			newAct["j"] = newAct["j"].asUInt() + jifen;
+		}
+	}
+
+	result["newAct"] = newAct;
+
+	ret = logicSec.SetOneSecinc(uid, newAct);
+	if (ret)
+	{
+		return ret;
+	}
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::GetDouble11Rcnt(unsigned uid, bool allserver, Json::Value &result, unsigned lasttime, unsigned seqid)
+{
 	unsigned now = Time::GetGlobalTime();
-	if (now < Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_BEGIN_TS)
-	|| now > Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_END_TS))
+	if (now < Config::GetIntValue(allserver ? CONFIG_DOUBLE11_2018_BEGIN_TS : CONFIG_DOUBLE11_ALLSERVER_BEGIN_TS)
+	|| now > Config::GetIntValue(allserver ? CONFIG_DOUBLE11_2018_END_TS : CONFIG_DOUBLE11_ALLSERVER_END_TS))
 	{
 		LOGIC_ERROR_RETURN_MSG("time_is_error");
 	}
@@ -2566,12 +3157,26 @@ int CLogicCMD::GetDouble11Rcnt(unsigned uid, Json::Value &result, unsigned lastt
 	result["saveuserid"] = uid;
 
 	Json::Value rcnt(Json::arrayValue);
-	CLogicDouble11 logicDouble;
 
-	ret = logicDouble.GetRemainCount(rcnt);
-	if (ret)
+	if(allserver)
 	{
-		return ret;
+		string url = "action=GetDouble11Rcnt";
+		Json::Value t;
+		ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, t);
+		if (0 != ret)
+		{
+			return ret;
+		}
+		rcnt = t["rcnt"];
+	}
+	else
+	{
+		CLogicDouble11 logicDouble;
+		ret = logicDouble.GetRemainCount(rcnt, allserver);
+		if (ret)
+		{
+			return ret;
+		}
 	}
 
 	result["rcnt"] = rcnt;

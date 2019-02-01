@@ -215,7 +215,7 @@ int sortAlliance(const AllianceBossChallenger& left,const AllianceBossChallenger
 int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigned damage, const string &name,
 			bool &dying, unsigned &blood, unsigned &number, int &selfRank, AllianceBossChallenger &self,
 			vector<AllianceBossChallenger> &top, AllianceBossChallenger &last, vector<AllianceBossChallenger> &lucks
-			, vector<AllianceBossChallenger> &dam,unsigned &alliance_id,unsigned &vip)
+			, vector<AllianceBossChallenger> &dam,unsigned &alliance_id,unsigned &vip, vector<AllianceBossChallenger> &all)
 {
 	if (!IsValidAllianceBossId(bossId))
 		return R_ERR_NO_DATA;
@@ -414,6 +414,7 @@ int CDataAllianceBoss::AttackAllianceBoss(unsigned uid, unsigned bossId, unsigne
 		{
 			if((pdata->Alliancebossdata[index].challengers)[j].damage >= pdata->Alliancebossdata[index].fullBlood / 100)
 				dam.push_back((pdata->Alliancebossdata[index].challengers)[j]);
+			all.push_back((pdata->Alliancebossdata[index].challengers)[j]);
 		}
 	}
 	return 0;

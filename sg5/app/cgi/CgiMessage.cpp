@@ -57,6 +57,8 @@ public:
 	CGI_SET_ACTION_MAP("idcard_time", idcard_time)
 	CGI_SET_ACTION_MAP("NewWorldFight", NewWorldFight)
 	CGI_SET_ACTION_MAP("EndAllServerNewWorldFightMVP", EndAllServerNewWorldFightMVP)
+	CGI_SET_ACTION_MAP("GetChickReg", GetChickReg)
+	CGI_SET_ACTION_MAP("ChickReg", ChickReg)
 	CGI_ACTION_MAP_END
 
 	int SendMessage()
@@ -778,7 +780,7 @@ public:
 			bool bsave = false;
 			Json::Reader().parse(dataUser.user_flag, user_flag);
 			DataPay payData;
-			ret = CLogicPay().ProcessOrderForBackend(m_uid, -100, 0, payData, "StartAllServerMVP", user_flag, bsave);
+			ret = CLogicPay().ProcessOrderForBackend(m_uid, -20, 0, payData, "StartAllServerMVP", user_flag, bsave);
 			if(ret)
 			{
 				cash = false;
@@ -842,6 +844,10 @@ public:
 	{
 		string sign;
 		Json::GetString(m_data, "sign", sign);
+		if(!StringFilter::Check(sign))
+		{
+			ERROR_RETURN_MSG(R_ERR_DATA_LIMIT, "forbidden_sign");
+		}
 
 		string url = "action=SetAllServerMVP&uid=" + CTrans::UTOS(m_uid) + "&sign=" + sign;
 		Json::Value t;
@@ -882,7 +888,7 @@ public:
 			bool bsave = false;
 			Json::Reader().parse(dataUser.user_flag, user_flag);
 			DataPay payData;
-			ret = CLogicPay().ProcessOrderForBackend(m_uid, -100, 0, payData, "StartAllServerBattleMVP", user_flag, bsave);
+			ret = CLogicPay().ProcessOrderForBackend(m_uid, -20, 0, payData, "StartAllServerBattleMVP", user_flag, bsave);
 			if(ret)
 			{
 				cash = false;
@@ -1100,7 +1106,7 @@ public:
 		bool bsave = false;
 		Json::Reader().parse(dataUser.user_flag, user_flag);
 		DataPay payData;
-		ret = CLogicPay().ProcessOrderForBackend(m_uid, -100, 0, payData, "EndAllServerNewWorldFightMVP", user_flag, bsave);
+		ret = CLogicPay().ProcessOrderForBackend(m_uid, -20, 0, payData, "EndAllServerNewWorldFightMVP", user_flag, bsave);
 		if(ret)
 			return ret;
 		if(bsave)
@@ -1137,6 +1143,61 @@ public:
 		CGI_SEND_LOG("action=EndAllServerNewWorldFightMVP&uid=%u",m_uid);
 		return R_SUCCESS;
 	}
+
+	int GetChickReg()
+	{
+		string url = "action=GetChickReg&uid=" + CTrans::UTOS(m_uid);
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, m_jsonResult["GetChickReg"], CONFIG_CHICK_PATH, true);
+		if (ret)
+			return ret;
+
+		CGI_SEND_LOG("action=GetChickReg&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+	int ChickReg()
+	{
+		if(!m_data.isMember("fighter") || !m_data["fighter"].isArray() || m_data["fighter"].size() != CHICK_HERO)
+			return R_ERR_PARAM;
+
+		unsigned l = 0, p[NewWorldProperty_max] = {0};
+		for(unsigned i=0;i<CHICK_HERO;++i)
+		{
+			l += m_data["fighter"][i]["level"].asUInt();
+			if(m_data["fighter"][i].isMember("property") && m_data["fighter"][i]["property"].isArray() && m_data["fighter"][i]["property"].size()<=NewWorldProperty_max)
+			{
+				for(unsigned k=0;k<m_data["fighter"][i]["property"].size();++k)
+					p[k] += m_data["fighter"][i]["property"][k].asUInt();
+			}
+		}
+		l = l / CHICK_HERO;
+		for(int i=0;i<NewWorldProperty_max;++i)
+			p[i] = p[i] / CHICK_HERO;
+
+		string name, fig;
+		unsigned level;
+		Json::GetString(m_data, "name", name);
+		Json::GetString(m_data, "fig", fig);
+		Json::GetUInt(m_data, "level", level);
+
+		Json::Value t;
+		t["level"] = level;
+		t["fig"] = fig;
+		t["name"] = name;
+		t["hero"]["level"] = l;
+		t["hero"]["property"].resize(0);
+		for(int i=0;i<NewWorldProperty_max;++i)
+			t["hero"]["property"].append(p[i]);
+		string data = Json::FastWriter().write(t);
+
+		string url = "action=ChickReg&uid=" + CTrans::UTOS(m_uid) + "&data=" + data;
+		int ret = CLogicAllServerBaseMatch().RequestBaseMatch(url, m_jsonResult["ChickReg"], CONFIG_CHICK_PATH, true);
+		if (ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ChickReg&uid=%u",m_uid);
+		return R_SUCCESS;
+	}
+
 };
 
 CGI_MAIN(CCgiMessage)

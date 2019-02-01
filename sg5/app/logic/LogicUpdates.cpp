@@ -191,7 +191,7 @@ int CLogicUpdates::sendWorldBossAward(unsigned uid, const Json::Value &data){
 }
 
 // 草船借箭
-int CLogicUpdates::sendEndofShipReward(unsigned uid, const Json::Value &data){
+int CLogicUpdates::sendEndofShipReward(unsigned uid, const Json::Value &data, unsigned uidby, bool win, Json::Value * result){
 	// 60 * cfg.reward.value * Math.exp(0.0553 * (level - 24)) * (1 - data.attacktimes.value * 0.2)
 	CLogicUser logicUser;
 	DataUser dataUser;
@@ -209,6 +209,8 @@ int CLogicUpdates::sendEndofShipReward(unsigned uid, const Json::Value &data){
 	}
 
 	uint32_t id = data["type"].asUInt();
+	if (uidby && !win)
+		id = 1;
 	bool yellow_torch_burning = bool(data["torch"].asUInt());
 	int attacktimes = data["attacktimes"].asInt();
 	XMLBoat boat;
@@ -217,14 +219,54 @@ int CLogicUpdates::sendEndofShipReward(unsigned uid, const Json::Value &data){
 		error_log(" get boat reward  failed,uid = %u",uid);
 		return ret;
 	}
-	int res = 60.0f * (float)boat.reward * exp(0.0553f * (float)(dataUser.level - 24)) * (1.0f - (float)attacktimes * 0.2f) ;
+	double xishu = 0.0553f;
+	unsigned classType =  data["classType"].asUInt();
+	if (classType == 2)
+		xishu = 0.0023f;
+	if (classType == 3)
+		xishu = 0.0053f;
+	double by = 1;
+	if (uidby)
+		by*=0.2;
+	if (!win)
+		by*=0.8;
+	int res;
+	if (!uidby)
+		res = 60.0f * (float)boat.reward[classType-1] * exp(xishu * (float)(dataUser.level - 24)) * (1.0f - (float)attacktimes * 0.2f) ;
+	else
+		res = int(60.0f * (float)boat.reward[classType-1] * exp(xishu * (float)(dataUser.level - 24))) * by;
 	if (yellow_torch_burning)
 	{
 		res *= 1.2;
 	}
 	CLogicAdmin logicAdmin;
+	string code = "activity_boatfinish_get";
+	if (uidby)
+	{
+		uid = uidby;
+		code = "activity_boatrob_get";
+	}
 	AUTO_LOCK_USER(uid)
-	logicAdmin.AddR(uid, "activity_boatfinish_get", res, res, res, res);
+	if (classType == 1)
+		logicAdmin.AddR(uid, code, res, res, res, res);
+	else if (classType == 2)//威望
+	{
+		unsigned balance = 0;
+		ret = logicAdmin.ChangeProsper(uid, res, balance);
+		if (ret != 0)
+			return ret;
+		RESOURCE_LOG("[Prosper][%s][uid=%u,chg=%d,Prosper=%u]",code.c_str(),uid,res,balance);
+	}
+	else//铜钱
+	{
+		Json::Value equip;
+		int ret = CLogicEquipment().AddOneItem(uid, 656, res, code, result!=NULL?(*result)["equipment"]:equip, uidby>0);
+		if(ret)
+		{
+			error_log(" set  user info failed,uid = %u",uid);
+			return ret;
+		}
+	}
 	return 0;
 }
 
@@ -362,6 +404,16 @@ int CLogicUpdates::sendProsperAndCoins(unsigned uid, const Json::Value &update, 
 			}
 		}
 	}
+
+	if(update.isMember("c")) {
+		unsigned c = update["c"].asUInt();
+		if(c > 0)
+		{
+			Json::Value t;
+			CLogicEquipment().AddOneItem(uid, 2034, c, reason, t);
+		}
+	}
+
 	return 0;
 }
 

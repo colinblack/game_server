@@ -3433,6 +3433,9 @@ int CDataNewWorld::EndMission()
 		case NewWorldMissonStatus_attack_over:
 			pdata->mission[i].attackStatus = NewWorldMissonStatus_attack_win;
 			break;
+		case NewWorldMissonStatus_attack_fast_over:
+			pdata->mission[i].attackStatus = NewWorldMissonStatus_attack_fast_win;
+			break;
 		case NewWorldMissonStatus_defending:
 			pdata->mission[i].attackStatus = NewWorldMissonStatus_defend_win;
 			break;
@@ -3447,6 +3450,9 @@ int CDataNewWorld::EndMission()
 			break;
 		case NewWorldMissonStatus_attack_over:
 			pdata->mission[i].defendStatus = NewWorldMissonStatus_attack_win;
+			break;
+		case NewWorldMissonStatus_attack_fast_over:
+			pdata->mission[i].defendStatus = NewWorldMissonStatus_attack_fast_win;
 			break;
 		case NewWorldMissonStatus_defending:
 			pdata->mission[i].defendStatus = NewWorldMissonStatus_defend_win;
@@ -3843,11 +3849,33 @@ int CDataNewWorld::checkTick()
 						if(pdata->mission[m].defend == pdata->city[i].cid && pdata->mission[m].defendStatus == NewWorldMissonStatus_defending)
 							pdata->mission[m].defendStatus = NewWorldMissonStatus_defend_over;
 						if(pdata->mission[m].defend == pdata->city[i].cid && pdata->mission[m].defendStatus == NewWorldMissonStatus_attacking)
-							pdata->mission[m].defendStatus = NewWorldMissonStatus_attack_over;
+						{
+							if (now >= getFastMissionStartTime() && now <= getFastMissionEndTime())
+							{
+								debug_log("m=%u",m);
+								pdata->mission[m].defendStatus = NewWorldMissonStatus_attack_fast_over;
+							}
+							else
+							{
+								debug_log("m=%u",m);
+								pdata->mission[m].defendStatus = NewWorldMissonStatus_attack_over;
+							}
+						}
 						if(pdata->mission[m].attack == pdata->city[i].cid && pdata->mission[m].attackStatus == NewWorldMissonStatus_defending)
 							pdata->mission[m].attackStatus = NewWorldMissonStatus_defend_over;
 						if(pdata->mission[m].attack == pdata->city[i].cid && pdata->mission[m].attackStatus == NewWorldMissonStatus_attacking)
-							pdata->mission[m].attackStatus = NewWorldMissonStatus_attack_over;
+						{
+							if (now >= getFastMissionStartTime() && now <= getFastMissionEndTime())
+							{
+								debug_log("m=%u",m);
+								pdata->mission[m].attackStatus = NewWorldMissonStatus_attack_fast_over;
+							}
+							else
+							{
+								debug_log("m=%u",m);
+								pdata->mission[m].attackStatus = NewWorldMissonStatus_attack_over;
+							}
+						}
 					}
 				}
 				else if(pdata->city[i].defender.uid && !pdata->city[i].attacker.uid)

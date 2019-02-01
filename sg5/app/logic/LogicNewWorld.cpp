@@ -1371,7 +1371,7 @@ int CLogicNewWorld::KillReward()
 		{
 			Json::Value result, update;
 			vector<ItemAdd> vecEqs;
-			for(unsigned i=0;i<=reward_inc.size();++i)
+			for(unsigned i=0;i<reward_inc.size();++i)
 			{
 				if(it->second < reward_inc[i]["kill"].asUInt())
 					break;

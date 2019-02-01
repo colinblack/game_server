@@ -580,7 +580,7 @@ public:
 			CLogicUserBasic logicUserBasic;
 			DataUserBasic userBasic;
 			logicUserBasic.GetUserBasicLimit(uidforbid, PT_TEST, userBasic);
-			CLogicAdmin logicAdmin;
+			/*CLogicAdmin logicAdmin;
 			unsigned gmFlag = 0;
 			logicAdmin.CheckGM(userBasic.open_id, gmFlag);
 			if(gmFlag != gm_admin)
@@ -597,7 +597,7 @@ public:
 				}
 				else
 					error_log("[get data noise fail]");
-			}
+			}*/
 
 			string delTemp(""), delTemp1("|");
 			Json::GetString(blklist, i, delStr);

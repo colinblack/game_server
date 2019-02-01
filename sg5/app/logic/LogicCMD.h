@@ -183,6 +183,7 @@ enum TouchGoldType
 #define HEAVEN_PREFIX		1000
 #define DAOIST_PREFIX		8000
 #define MAXEXP_CATAPULT  	93431626
+#define EIGHT_FORMATION_MAXLV 100
 
 
 enum HitEggType
@@ -568,6 +569,7 @@ const unsigned HERO_POWER_2_UP_COST[HERO_POWER_2_MAX][3] = {
 };
 const unsigned HERO_POWER_3_UP_MAX[13] = {0,0,5,10,15,20,30,40,50,50,50,50,50};
 
+
 //倍数转盘
 enum MultipleWheelType
 {
@@ -745,12 +747,16 @@ public:
 	int HammerHit(unsigned uid, unsigned equd, int hitCount, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 	int HammerHitAllServer(unsigned uid, unsigned equd, int hitCount, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 
-	int UseShip(unsigned uid, unsigned torch, Json::Value &result, unsigned &lasttime,unsigned &seqid);
+	int UseShip(unsigned uid, unsigned torch, unsigned classType, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 	int RefreshShip(unsigned uid, unsigned refreshType, unsigned equd, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 
 	int HeroPowerUp(unsigned uid, unsigned heroud, unsigned equd, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 	int HeroPower2Up(unsigned uid, unsigned heroud, unsigned equd, unsigned specialud, unsigned equd1, unsigned equd2, unsigned equd3, unsigned equd4, unsigned type, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 	int HeroPower3Up(unsigned uid, unsigned heroud, unsigned equd, Json::Value &result, unsigned &lasttime,unsigned &seqid);
+	int liandan(unsigned uid, const Json::Value &data, Json::Value &result, unsigned lasttime,unsigned seqid);
+	int keyao(unsigned uid, unsigned eqid, unsigned equd, unsigned heroud, Json::Value &result, unsigned lasttime,unsigned seqid);
+
+	int godh(unsigned uid, unsigned equd, unsigned index1, unsigned index2, Json::Value &result, unsigned lasttime,unsigned seqid);
 
 	int HeroLearnHorse(unsigned uid, unsigned heroud, unsigned equd1, unsigned equd2, Json::Value &result, unsigned lasttime,unsigned seqid, unsigned once);
 	//升级
@@ -805,6 +811,9 @@ public:
 	int GrowthFund(unsigned uid, bool is_buy, unsigned count, Json::Value &result, unsigned lasttime, unsigned seqid); //成长基金
 	int DeDaoZhenRenVisit(unsigned uid, Json::Value &result, unsigned seqid, unsigned lasttime); //得道真人拜访
 	int DeDaoZhenRenDrawPicture(unsigned uid, unsigned person, unsigned equd, Json::Value &result, unsigned seqid, unsigned lasttime); //得道真人绘符
+
+	int HeroFm(unsigned uid,unsigned index,unsigned index1,unsigned hud,unsigned eq_ud,Json::Value &result,unsigned &lasttime,unsigned &seqid);
+
 	//领取签到奖励
 	int SignInReward(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int ProvideSignInReward(unsigned uid, int dayLevel, DataUser& dataUser, Json::Value &result); //发放登录奖励
@@ -892,7 +901,7 @@ public:
 
 	/*----------------消费自选-begin------------------*/
     int CheckPayOptionVersion(unsigned uid, Json::Value & result, unsigned lasttime, unsigned seqid);
-	int GetPayOptionalReward(unsigned uid, Json::Value &data, Json::Value & result, unsigned lasttime, unsigned seqid);
+	int GetPayOptionalReward(unsigned uid, unsigned rewardcnt,Json::Value &data, Json::Value & result, unsigned lasttime, unsigned seqid);
 	/*----------------消费自选-end------------------*/
 
     //充值送星级
@@ -919,6 +928,9 @@ public:
     int EndSkillTrain(unsigned uid, unsigned sindex, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid);
     int UpgradeHevenDaoSkill(unsigned uid, unsigned index, unsigned type, unsigned equd, Json::Value & result, unsigned lasttime, unsigned seqid);
     int UpgradeCatapultSkill(unsigned uid, unsigned index, unsigned equd, Json::Value & result, unsigned lasttime, unsigned seqid);
+    int CommderSkilLearn(unsigned uid, unsigned heroud,unsigned equd,  Json::Value & result, unsigned lasttime, unsigned seqid);
+    int PotianSkilLearn(unsigned uid, unsigned heroud,string skid,Json::Value &m_data, Json::Value & result, unsigned lasttime, unsigned seqid);
+
     //福禄金袋
     int CalcuteFairyBag(unsigned uid, Json::Value & result, unsigned lasttime, unsigned seqid);
     int GetFairyBagReward(unsigned uid, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid);
@@ -969,6 +981,8 @@ public:
 	int GetHequChargeReward(unsigned uid, unsigned index, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int GetHequVIPeward(unsigned uid, unsigned vindex, unsigned subindex, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int GetHequRecompenseReward(unsigned uid, unsigned index, Json::Value &result, unsigned lasttime, unsigned seqid);
+	int GetHequBuzhuReward(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid);
+	int GetHequbuchangLevel(unsigned uid);
 	/*----------------合区活动end------------------*/
 
     //@end
@@ -1021,9 +1035,11 @@ public:
 	int HeavenDaoist(unsigned uid, unsigned type, unsigned count, const Json::Value &equd, bool is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick);
 	int Catapult(unsigned uid, unsigned count, const Json::Value &equd, int is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick);
 	int MergeEquipment(unsigned uid, const vector< vector<unsigned> > &uds, Json::Value &result, unsigned lasttime, unsigned seqid);//将同样ud的装备合并到一起
+	int EightFormation(unsigned uid, unsigned formation_id, unsigned count, const Json::Value &equd, unsigned cash, unsigned r, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick);
 
-	int Double11(unsigned uid, unsigned type, unsigned id, Json::Value &result, unsigned lasttime, unsigned seqid);
-	int GetDouble11Rcnt(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid);
+	int Double11(unsigned uid, unsigned type, unsigned id, bool allserver, Json::Value &result, unsigned lasttime, unsigned seqid);
+	int ShengDan2018(unsigned uid, const Json::Value & input, Json::Value &result, unsigned lasttime, unsigned seqid);
+	int GetDouble11Rcnt(unsigned uid, bool allserver, Json::Value &result, unsigned lasttime, unsigned seqid);
 
 	int Sell(unsigned uid, const Json::Value &data, Json::Value &result, unsigned lasttime, unsigned seqid);
 
@@ -1087,7 +1103,7 @@ public:
 
     int UpGradeBNW(unsigned uid, Json::Value & result, unsigned lasttime, unsigned seqid);
     int FastUpGradeBNW(unsigned uid, Json::Value & result, unsigned lasttime, unsigned seqid);
-    int UpGradeBNWTech(unsigned uid, unsigned job, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid);
+    int UpGradeBNWTech(unsigned uid, unsigned ud, unsigned job, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid);
     int FastUpGradeBNWTech(unsigned uid, unsigned job, Json::Value & result, unsigned lasttime, unsigned seqid);
     int Learjyt(unsigned uid, unsigned ud, Json::Value & result, unsigned lasttime, unsigned seqid);
     int LearnJM(unsigned uid, unsigned ud, unsigned id, Json::Value & result, unsigned lasttime, unsigned seqid);
@@ -1116,6 +1132,14 @@ public:
     int ReceiveSevenDayAwaken(unsigned uid, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid);
 
     int HeroExtraStone(unsigned uid, unsigned heroud, unsigned equd, unsigned index, Json::Value &result, unsigned lasttime,unsigned seqid);
+
+    int FashionStar(unsigned uid, unsigned id, unsigned ud, unsigned id1, unsigned ud1, unsigned id2, unsigned ud2, Json::Value &result, unsigned lasttime,unsigned seqid);
+
+    int JihuoChenghao(unsigned uid, unsigned id, unsigned ud, unsigned heroud, Json::Value &result, unsigned lasttime,unsigned seqid);
+
+    int PeidaiChenghao(unsigned uid, unsigned heroud, unsigned chenghao, Json::Value &result, unsigned lasttime,unsigned seqid);
+
+    int ZhuanyiChenghao(unsigned uid, unsigned heroud1, unsigned heroud2, Json::Value &result, unsigned lasttime,unsigned seqid);
 
 private:
 	int deductSource(unsigned uid, int viplvl, unsigned refreshType, unsigned sourceType, Json::Value &result, Json::Value &stats, unsigned zmlud, Json::Value &user_flag, bool &bsave);
@@ -1146,8 +1170,9 @@ private:
 	int getDragonlist(Json::Value &dragonlist, const unsigned id);
 	int getUselist(Json::Value &uselist, const Json::Value &draglist, unsigned &dragScale);
 	int resetTouch(Json::Value &dragonlist, Json::Value &uselist, const unsigned id);
-	int initDouble11NewAct(Json::Value &newAct);
-	int deterDouble11TS(unsigned type);
+	int initDouble11NewAct(Json::Value &newAct, bool allserver);
+	int initShengdanNewAct(Json::Value &newAct, unsigned non_zero, bool day=false);
+	int deterDouble11TS(unsigned type, bool allserver);
 	int adjustJuexueList(Json::Value &xllist, unsigned &zcount);
 	int isJsonNameArrSize(const Json::Value &data, const string &name, const unsigned size);
 	int initHitEggNewAct(Json::Value &newAct, unsigned reset = 0);

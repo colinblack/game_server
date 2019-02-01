@@ -637,6 +637,35 @@ int BaseCmdUnit::ProvideCommonReward(const RewardConfig::RewardItemCfg & rewardc
 	return 0;
 }
 
+int BaseCmdUnit::GetEquipById(unsigned eqid, Json::Value &equipment)
+{
+	int ret = 0;
+	CDataEquipment dbEquipment;
+	map<unsigned, string> all_equipment;
+	ret = dbEquipment.GetEquipment(m_nUid, all_equipment);
+	if (ret)
+	{
+		return ret;
+	}
+	map<unsigned, string>::iterator itr = all_equipment.begin();
+	string str_eqid = "\"id\":" + CTrans::ITOS(eqid);
+	Json::Reader reader;
+	for (; itr!=all_equipment.end(); ++itr)
+	{
+		int pos = itr->second.find(str_eqid);
+		if (pos != string::npos)
+		{
+			char end = itr->second.at(pos+str_eqid.size());
+			if (end == ',' || end == '}')
+			{
+				reader.parse(itr->second, equipment);
+				return 0;
+			}
+		}
+	}
+	return R_ERR_NO_DATA;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 BaseActivityUnit::BaseActivityUnit(unsigned uid, const std::string& name, unsigned sid)
 	: BaseCmdUnit(uid)
@@ -839,12 +868,9 @@ UnitUdCmdParams::UnitUdCmdParams(const Json::Value& jsonData)
 
 
 //////////////////////////////////////////////////////////////////////////////////////
-BaseFeedbackActUnit::BaseFeedbackActUnit(
-		unsigned uid, const std::string& name, int nat_id)
-		: SecincActivityUnit(uid, name, nat_id)
-{
-
-}
+BaseFeedbackActUnit::BaseFeedbackActUnit(unsigned uid, const std::string& name, int nat_id, bool all)
+		: SecincActivityUnit(uid, name, nat_id), m_all(all)
+{}
 
 void BaseFeedbackActUnit::Reset()
 {
@@ -878,10 +904,20 @@ int BaseFeedbackActUnit::DrawImpl(UserWrap& user, const BaseFeedbackActUnit::Dra
 
 	Save();
 
-	int eqid = item_cfg.EquipId(eqIdx);
-	int eqcnt = item_cfg.EquipCnt(eqIdx);
+	if(m_all)
+	{
+		std::vector<ItemAdd> equips;
+		for(int i=0;i<item_cfg.Size();++i)
+			equips.push_back(ItemAdd(item_cfg.EquipId(i), item_cfg.EquipCnt(i), DrawOp()));
+		this->AddEquips(equips, result);
+	}
+	else
+	{
+		int eqid = item_cfg.EquipId(eqIdx);
+		int eqcnt = item_cfg.EquipCnt(eqIdx);
 
-	this->AddEquips(eqid, eqcnt, DrawOp(), result);
+		this->AddEquips(eqid, eqcnt, DrawOp(), result);
+	}
 
 	result["info"] = m_jsonData;
 

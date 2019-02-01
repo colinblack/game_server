@@ -22,6 +22,7 @@ public:
 	int SetAttachFlag(unsigned uid,const vector<uint64_t> &vEmail_Id);
 	int DeleteEmails(unsigned uid,const vector<uint64_t> &vEmail_Id);
 	int ReadEmail(unsigned uid,const uint64_t email_Id,DataEmail &data);
+	int SystemEmail(const string &title, const string content, vector<uint64_t> &uids);
 
 	void OnAdAnalize(unsigned uid, unsigned vip, unsigned lvl, string& msg);
 };

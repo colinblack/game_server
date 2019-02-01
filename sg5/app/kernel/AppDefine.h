@@ -66,13 +66,14 @@
 #define EVN_NEW_WORLD_ALLIANCE_ROOM_NUM			"NEW_WORLD_ALLIANCE_ROOM_NUM"
 #define CONFIG_MVP_DATA 					"data/mvp.dat"
 #define CONFIG_ROTATYTABLEDRAW_DATA 		"data/rotatytabledraw.dat"
+#define CONFIG_CHICK_DATA 					"data/chick.dat"
 
 //共享内存文件
 #define DATA_KING_TREASURE	"data/kingtreasure.dat"
 #define DATA_SEQUENCE_CHARGE "data/sequencecharge.dat"
 
 #define ALL_SERVER_ZONE_A					391
-#define ALL_SERVER_ZONE_B					595
+#define ALL_SERVER_ZONE_B					704
 //config
 #define CONFIG_INDEPEND			"independ"
 #define CONFIG_CLIENT_DOMAIN	"client_domain"
@@ -192,6 +193,7 @@
 #define CONFIG_BRAVE_NEW_WORLD_DATA    	"data/bravenewworld.dat"
 #define CONFIG_ALLIANCE_CONSUME_DATA    	"data/allianceconsume.dat"
 #define CONFIG_NEWYEAR_ACTIVNE_DATA    	"data/newyearactive.dat"
+#define CONFIG_DOUBLE11_2018_PATH			"data/double11_2018.dat"			// 双11活动
 
 //百服团购
 #define CONFIG_ALLSERVER_GROUPBUYING_PATH "data/allservergroupbuy.dat"
@@ -233,6 +235,7 @@
 #define CONFIG_CROWD_FUNDING_PATH "cgi/crowdfunding"
 #define CONFIG_ALLSERVER_GROUPBUY_PATH  "cgi/groupbuying"
 #define CONFIG_MVP_PATH "cgi/mvp"
+#define CONFIG_CHICK_PATH "cgi/chick"
 
 //Lords 尊主
 //#define CONFIG_ALLSSERVERLORDS_PATH "all_server_lords_path"
@@ -680,6 +683,10 @@
 #define CONFIG_PRE_SUMMER2_BEGIN_TS				"activity_pre_summer2_begin_ts"
 #define CONFIG_PRE_SUMMER2_END_TS				"activity_pre_summer2_end_ts"
 #define CONFIG_PRE_SUMMER2_VERSION				"activity_pre_summer2_version"
+//暑假前奏3
+#define CONFIG_PRE_SUMMER3_BEGIN_TS				"activity_pre_summer3_begin_ts"
+#define CONFIG_PRE_SUMMER3_END_TS				"activity_pre_summer3_end_ts"
+#define CONFIG_PRE_SUMMER3_VERSION				"activity_pre_summer3_ver"
 
 //新绝世无双
 #define CONFIG_NEWJUESHIWS_BEGIN_TS 			"activity_new_jueshiws_begin_ts"
@@ -915,6 +922,18 @@
 //充值投资
 #define CONFIG_INVESTMENT "chongzhitouzi"
 
+//鹊桥相会
+#define CONFIG_BIRDBRIDGE "birdbridge"
+
+//喜迎国庆
+#define CONFIG_CHINADAY_WELCOME    "chinaday_welcome"
+
+#define CONFIG_GUO_QING_KUANG_HUAN  "guoqingkuanghuan"
+
+#define CONFIG_OPTIONAL_PAY          "optional_pay"
+
+
+
 /********************************************************************/
 /*  活动太多  先是抽象成模板  最后只能搞宏
  * 定义配置字段的宏，例如 #define CONFIG_NAME "some_act_name"
@@ -929,11 +948,29 @@
  */
 /********************************************************************/
 //autolable1
+#define CONFIG_yuandan2018 "yuandan2018"
+#define CONFIG_yearend2018 "yearend2018"
+#define CONFIG_winter2018 "winter2018"
+#define CONFIG_double11_2018 "double11_2018"
+#define CONFIG_SHENGDAN_2018 "shengdan_2018"
+#define CONFIG_mid_aug_hao "mid_aug_hao"
+#define CONFIG_mid_aug_reu "mid_aug_reu"
+#define CONFIG_water_taotie "water_taotie"
+#define CONFIG_water_qilin "water_qilin"
+#define CONFIG_water_pheonix "water_pheonix"
+#define CONFIG_vicky_nnom "vicky_nnom"
 //vicky没想好名字的活动
 #define CONFIG_VICKY_NO_NAME "vicky_no_name"
 #define CONFIG_VICKY_BINGSHU "vicky_bingshu"
 #define CONFIG_VICKY_QIANFU  "vicky_qianfu"
 #define CONFIG_VICKY_NNA 	 "vicky_nna"
+
+#define CONFIG_FREE_EXCHG          "free_exchg"//兑换自选
+
+#define CONFIG_DOUBLE11_2018_BEGIN_TS	"activity_double11_2018_begin_ts"
+#define CONFIG_DOUBLE11_2018_END_TS		"activity_double11_2018_end_ts"
+#define CONFIG_DOUBLE11_2018_VER		"activity_double11_2018_ver"
+
 ///////////////////////////////////////////////////////////////
 
 //DB
@@ -1377,7 +1414,28 @@ enum NewActType
 	NAT_BEAUTY_REWARD           = 172, //美人献计奖励
 	NAT_INVESTMENT              = 173, //充值投资
 	NAT_CONFIG_VICKY_NNA        = 174, //vicky懒得给我说名字的活动
-	NAT_MAX
+	NAT_ACTIVITY_BIRDBRIDGE     = 175, //鹊桥相会
+	NAT_CONFIG_vicky_nnom		= 176,
+	NAT_BRAVENEWWORLD_HUOYUE_NEW_NEW_ACT_NUM 	= 177,
+	NAT_BRAVENEWWORLD_TASK_NEW_NEW_ACT_NUM 		= 178,
+    NAT_CONFIG_water_pheonix	= 179,
+	NAT_CONFIG_water_qilin		= 180,
+	NAT_CONFIG_water_taotie		= 181,
+	NAT_CONFIG_mid_aug_reu		= 182,
+	NAT_CONFIG_mid_aug_hao		= 183,
+	NAT_PRE_SUMMER3				= 184, //暑假前奏3
+	NAT_CHINADAY_WELCOME	    = 187,  //喜迎国庆活动
+	NAT_PATIONAL_PAY            = 188,  //充值自选活动
+	NAT_GUO_QING_KUANG_HUAN 	= 189,//国庆狂欢
+	NAT_FREE_EXCHG				= 190, //兑换自选
+
+	NAT_CONFIG_double11_2018	= 191,
+	NAT_DOUBLE11_2018			= 192,//双11
+	NAT_SHENGDAN_2018			= 193,
+NAT_CONFIG_winter2018			= 194,
+NAT_CONFIG_yearend2018			= 195,
+NAT_CONFIG_yuandan2018			= 196,
+NAT_MAX
 };
 
 #endif	//__APPDEFINE_H__

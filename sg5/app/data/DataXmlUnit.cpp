@@ -1068,3 +1068,221 @@ int DataXMLInvestmentUnit::Parse(const std::string& fullCfg, DataXMLInvestment* 
 	}
 	return 0;
 }
+
+int DataXMLBirdBridgeUnit::Parse(const std::string& fullCfg, DataXMLBirdBridge* pData) {
+	CMarkupSTL xmlConf;
+	PreHandleXmlCfg(xmlConf, fullCfg);
+	IntoXmlNode(xmlConf, "birdBridge");
+	IntoXmlNode(xmlConf, "left");
+	int num = 0;
+	while (xmlConf.FindElem("item")) {
+		pData->left[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pData->left[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_BIRD_BRIDGE_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pData->left[num].reward[reward++] = GiftEquipItem(json_reward[key], false);
+			}
+		}
+		if (++num >= XML_BIRD_BRIDGE_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+	IntoXmlNode(xmlConf, "rigth");
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		pData->right[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pData->right[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_BIRD_BRIDGE_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pData->right[num].reward[reward++] = GiftEquipItem(json_reward[key], false);
+			}
+		}
+		if (++num >= XML_BIRD_BRIDGE_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+	if (!xmlConf.FindElem("center")) {
+		return R_ERR_DATA;
+	}
+	pData->center.id = CTrans::STOI(xmlConf.GetAttrib("id"));
+	pData->center.require = CTrans::STOI(xmlConf.GetAttrib("require"));
+	Json::Value json_data = XmlDataToJson(xmlConf);
+	Json::Value json_reward = json_data["reward"];
+	int reward = 0;
+	for (int i = 0; i < XML_BIRD_BRIDGE_REWARD_NUM; ++i) {
+		std::string key = "equip" + CTrans::ITOS(i + 1);
+		if (json_reward.isMember(key)) {
+			pData->center.reward[reward++] = GiftEquipItem(json_reward[key], false);
+		}
+	}
+	return 0;
+}
+
+int DataXMLUnionTechUnit::Parse(const std::string& fullCfg, DataXMLUnionTech* pData) {
+	CMarkupSTL xmlConf;
+	PreHandleXmlCfg(xmlConf, fullCfg);
+	IntoXmlNode(xmlConf, "techs");
+	int num = 0;
+	while (xmlConf.FindElem("tech")) {
+		pData->tech[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_studypoint = json_data["studypoint"];
+		for (int i=0;i<json_studypoint.size();i++)
+			pData->tech[num].studypoint[i] = json_studypoint[i].asUInt();
+		Json::Value json_gold = json_data["gold"];
+		for (int i=0;i<json_gold.size();i++)
+			pData->tech[num].gold[i] = json_gold[i].asUInt();
+		Json::Value json_wood = json_data["wood"];
+		for (int i=0;i<json_wood.size();i++)
+			pData->tech[num].wood[i] = json_wood[i].asUInt();
+		Json::Value json_eqpoint = json_data["eqpoint"];
+		for (int i=0;i<json_eqpoint.size();i++)
+			pData->tech[num].eqpoint[i] = json_eqpoint[i].asUInt();
+		if (++num >= XML_MAX_UNIONTECH_NUM) {
+			break;
+		}
+	}
+	return 0;
+}
+
+int DataXMLShengDanUnit::Parse(const std::string& fullCfg, DataXMLShengDan* pData) {
+	CMarkupSTL xmlConf;
+	PreHandleXmlCfg(xmlConf, fullCfg);
+	IntoXmlNode(xmlConf, "christmas");
+	if (!xmlConf.FindElem("day")) {
+		throw std::runtime_error("day not exists");
+	}
+	Json::Value json_data = XmlDataToJson(xmlConf);
+	Json::Value json_reward = json_data["reward"];
+	int reward = 0;
+	//	std::string key = "equip" + CTrans::ITOS(i + 1);
+		std::string key = "equip1";
+		if (json_reward.isMember(key)) {
+			pData->day = GiftEquipItem(json_reward[key], false);
+		}
+	//vow
+	if (!xmlConf.FindElem("vow")) {
+		throw std::runtime_error("vow not exists");
+	}
+	string ratestring = xmlConf.GetAttrib("rate");
+	vector<string> vecrate;
+	CBasic::StringSplitTrim(ratestring, ",", vecrate);
+	for (int i=0;i<XML_SHENGDAN_CHOUJIANG_RATE_NUM;i++)
+		pData->rate[i] = CTrans::STOI(vecrate[i].c_str());
+	xmlConf.IntoElem();
+	int num = 0;
+	while (xmlConf.FindElem("item")) {
+		std::string id = xmlConf.GetAttrib("id");
+		std::string require = xmlConf.GetAttrib("require");
+		pData->vow[num].id = CTrans::STOI(id);
+		pData->vow[num].require = CTrans::STOI(require);
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		bool first = true;
+		for (int i = 0; i < XML_SHENGDAN_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pData->vow[num].reward[i] = GiftEquipItem(json_reward[key], false);
+			}
+			else {
+				if (first)
+				{
+					std::string hero = "hero";
+					if (json_reward.isMember(hero)) {
+						pData->vow[num].reward[i] = GiftEquipItem(json_reward[hero], true);
+					}
+				}
+				first = false;
+			}
+		}
+		if (++num >= XML_SHENGDAN_XUYUAN_DANGCI_NUM)
+			break;
+	}
+	xmlConf.OutOfElem();
+	//change
+	if (!xmlConf.FindElem("change")) {
+		throw std::runtime_error("change not exists");
+	}
+	xmlConf.IntoElem();
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		std::string id = xmlConf.GetAttrib("id");
+		std::string require = xmlConf.GetAttrib("require");
+		pData->change[num].id = CTrans::STOI(id);
+		pData->change[num].require = CTrans::STOI(require);
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_SHENGDAN_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pData->change[num].reward[i] = GiftEquipItem(json_reward[key], false);
+			}
+		}
+		if (++num >= XML_SHENGDAN_CHARGE_DANGCI_NUM)
+			break;
+	}
+	xmlConf.OutOfElem();
+	//consume
+	if (!xmlConf.FindElem("consume")) {
+		throw std::runtime_error("consume not exists");
+	}
+	xmlConf.IntoElem();
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		std::string id = xmlConf.GetAttrib("id");
+		std::string require = xmlConf.GetAttrib("require");
+		pData->consume[num].id = CTrans::STOI(id);
+		pData->consume[num].require = CTrans::STOI(require);
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_SHENGDAN_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pData->consume[num].reward[i] = GiftEquipItem(json_reward[key], false);
+			}
+		}
+		if (++num >= XML_SHENGDAN_CONSUME_DANGCI_NUM)
+			break;
+	}
+	xmlConf.OutOfElem();
+	//exchange
+	if (!xmlConf.FindElem("exchange")) {
+		throw std::runtime_error("exchange not exists");
+	}
+	xmlConf.IntoElem();
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		std::string id = xmlConf.GetAttrib("id");
+		std::string count = xmlConf.GetAttrib("count");
+		std::string require = xmlConf.GetAttrib("require");
+		pData->exchange[num].id = CTrans::STOI(id);
+		pData->exchange[num].require = CTrans::STOI(require);
+		pData->exchange[num].count = CTrans::STOI(count);
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_SHENGDAN_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pData->exchange[num].reward[i] = GiftEquipItem(json_reward[key], false);
+			}
+		}
+		if (++num >= XML_SHENGDAN_EXANGE_DANGCI_NUM)
+			break;
+	}
+	xmlConf.OutOfElem();
+	return 0;
+}

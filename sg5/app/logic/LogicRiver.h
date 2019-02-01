@@ -15,6 +15,7 @@ public:
 	CLogicRiver();
 	static CDataRiver* GetDataRiver(void);
 	int SetShip(unsigned uid,const Json::Value &param);
+	int HitShip(unsigned uid,const Json::Value &param, Json::Value &result);
 	int GetAllShipJson(Json::Value &result);
 	int GetShipJson(unsigned uid, Json::Value &result);
 	int GetShipJson(DataShip ship, Json::Value &result);

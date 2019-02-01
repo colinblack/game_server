@@ -1,0 +1,20 @@
+package Chick;
+
+message ChickHero {
+		required uint32 level		= 1;
+		repeated uint32 property	= 2;
+}
+
+message ChickUser {
+		required uint32 uid		= 1;
+		required bytes name		= 2;
+		required bytes fig		= 3;
+		required uint32 level	= 4;
+		required ChickHero hero	= 5;
+		required uint32 zone	= 6;
+}
+
+message Chick {
+		repeated ChickUser user	= 1;	
+		required bool reg		= 2;
+}

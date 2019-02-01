@@ -34,7 +34,9 @@ public:
 
 	int checkUserStats(Json::Value &old, Json::Value &now);
 	int checkUserTech(Json::Value &old, Json::Value &now);
-
+	void checksoldier(string &olds, Json::Value &now);
+	void checksoldierlevel(string &olds, Json::Value &now);
+	int checkskillQ(string &olds, Json::Value &now);
 	//------------------------------------------------------------------------
 	//检查主线任务奖励领取是否合法
 	int CheckQuestRewardValid(unsigned uid, const DataUser& user,const Json::Value& data, int &gate_reward);

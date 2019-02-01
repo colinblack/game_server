@@ -435,6 +435,22 @@ int CLogicEmail::ReadEmail(unsigned uid,const uint64_t email_Id,DataEmail &data)
 	return 0;
 }
 
+int CLogicEmail::SystemEmail(const string &title, const string content, vector<uint64_t> &uids)
+{
+	DataEmail email;
+	email.attach_flag = 0;
+	email.attachments = "";
+	email.uid = ADMIN_UID;
+	email.post_ts = Time::GetGlobalTime();
+	email.title = title;
+	email.text = content;
+	email.read_ts = 0;
+	email.from_name = "系统管理员";
+	email.attach_flag = 0;
+	email.uid = ADMIN_UID;
+	return AddEmail(email,uids,PT_QZONE);
+}
+
 void CLogicEmail::OnAdAnalize(unsigned uid, unsigned vip, unsigned lvl, string& msg)
 {
 	if(!AdAnalize::getFlag())

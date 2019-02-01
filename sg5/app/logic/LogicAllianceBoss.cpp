@@ -375,7 +375,8 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 	vector<AllianceBossChallenger> top;
 	vector<AllianceBossChallenger> lucks;
 	vector<AllianceBossChallenger> dam;
-	ret = pBoss->AttackAllianceBoss(userBy.uid, bossId, damage, name, dying, blood, number, selfRank, self, top, last, lucks, dam, alliance_id, vip);
+	vector<AllianceBossChallenger> all;
+	ret = pBoss->AttackAllianceBoss(userBy.uid, bossId, damage, name, dying, blood, number, selfRank, self, top, last, lucks, dam, alliance_id, vip, all);
 	if (ret != 0)
 	{
 		DB_ERROR_RETURN_MSG("update_Allianceboss_fail_save");
@@ -384,6 +385,7 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 	{
 		CLogicUpdates logicUpdates;
 		unsigned prosper[10] = {3000,2000,1000,500,500,500,500,500,500,500};
+		unsigned item[10] = {60,55,50,45,40,35,30,25,20,15};
 		map<unsigned, Json::Value> updatesmap;
 		for (unsigned i = 0; i < dam.size(); i++)
 		{
@@ -393,6 +395,7 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 			updates[(unsigned)0]["bossid"] = bossId;
 			updates[(unsigned)0]["damage"] = dam[i].damage;
 			updates[(unsigned)0]["coins"] = 5;
+			updates[(unsigned)0]["c"] = 10;
 			updates[(unsigned)0]["r"] = i + 1;
 			updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
 			updatesmap[dam[i].uid] = updates;
@@ -404,6 +407,10 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 			{
 				Json::Value& updates = updatesmap[top[i].uid];
 				updates[(unsigned)0]["prosper1"] = prosper[i];
+
+				unsigned c = 0;
+				Json::GetUInt(updates[(unsigned)0], "c", c);
+				updates[(unsigned)0]["c"] = c + item[i];
 			}
 			else
 			{
@@ -413,6 +420,7 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 				updates[(unsigned)0]["bossid"] = bossId;
 				updates[(unsigned)0]["damage"] = top[i].damage;
 				updates[(unsigned)0]["prosper1"] = prosper[i];
+				updates[(unsigned)0]["c"] = item[i];
 				updates[(unsigned)0]["r"] = i+1;
 				updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
 				updatesmap[top[i].uid] = updates;
@@ -424,6 +432,10 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 			{
 				Json::Value& updates = updatesmap[lucks[i].uid];
 				updates[(unsigned)0]["prosper3"] = 400;
+
+				unsigned c = 0;
+				Json::GetUInt(updates[(unsigned)0], "c", c);
+				updates[(unsigned)0]["c"] = c + 5;
 			}
 			else
 			{
@@ -433,6 +445,7 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 				updates[(unsigned)0]["bossid"] = bossId;
 				updates[(unsigned)0]["damage"] = lucks[i].damage;
 				updates[(unsigned)0]["prosper3"] = 400;
+				updates[(unsigned)0]["c"] = 5;
 				updates[(unsigned)0]["r"] = 20 + i*10;
 				updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
 				updatesmap[lucks[i].uid] = updates;
@@ -442,6 +455,10 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 		{
 			Json::Value& updates = updatesmap[userBy.uid];
 			updates[(unsigned)0]["prosper2"] = 800;
+
+			unsigned c = 0;
+			Json::GetUInt(updates[(unsigned)0], "c", c);
+			updates[(unsigned)0]["c"] = c + 20;
 		}
 		else
 		{
@@ -451,9 +468,32 @@ int CLogicAllianceBoss::Save(unsigned bossId, DataUser &userBy, Json::Value &dat
 			updates[(unsigned)0]["bossid"] = bossId;
 			updates[(unsigned)0]["damage"] = damage;
 			updates[(unsigned)0]["prosper2"] = 800;
+			updates[(unsigned)0]["c"] = 20;
 			updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
 			//logicUpdates.AddUpdates(userBy.uid, updates);
 			updatesmap[userBy.uid] = updates;
+		}
+		for (unsigned i = 0; i < all.size(); i++)
+		{
+			if(updatesmap.count(all[i].uid))
+			{
+				Json::Value& updates = updatesmap[all[i].uid];
+				unsigned c = 0;
+				Json::GetUInt(updates[(unsigned)0], "c", c);
+				updates[(unsigned)0]["c"] = c + 30;
+			}
+			else
+			{
+				Json::Value updates;
+				updates.resize(1);
+				updates[(unsigned)0]["s"] = "ALLIANCEBOSSTOP";
+				updates[(unsigned)0]["bossid"] = bossId;
+				updates[(unsigned)0]["damage"] = all[i].damage;
+				updates[(unsigned)0]["c"] = 30;
+				updates[(unsigned)0]["r"] = i+1;
+				updates[(unsigned)0]["ts"] = Time::GetGlobalTime();
+				updatesmap[all[i].uid] = updates;
+			}
 		}
 		for(map<unsigned, Json::Value>::iterator it=updatesmap.begin();it!=updatesmap.end();++it)
 			logicUpdates.AddUpdates(it->first, it->second);

@@ -44,7 +44,7 @@ public:
 	int AttackAllianceBoss(unsigned uid, unsigned bossId, unsigned damage, const string &name,
 			bool &dying, unsigned &blood, unsigned &number, int &selfRank, AllianceBossChallenger &self,
 			vector<AllianceBossChallenger> &top, AllianceBossChallenger &last, vector<AllianceBossChallenger> &lucks
-			, vector<AllianceBossChallenger> &dam,unsigned &alliance_id,unsigned &vip);
+			, vector<AllianceBossChallenger> &dam,unsigned &alliance_id,unsigned &vip, vector<AllianceBossChallenger> &all);
 	int ViewAllianceBoss(unsigned uid, unsigned bossId, unsigned &blood, unsigned &fullBlood,unsigned &number, int &selfRank, AllianceBossChallenger &self,
 			vector<AllianceBossChallenger> &top, AllianceBossChallenger &last,unsigned &alliance_id);
 	int LoadLastAllianceBoss(unsigned uid, unsigned bossId, unsigned &blood, unsigned &number, int &selfRank, AllianceBossChallenger &self,

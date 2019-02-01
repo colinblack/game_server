@@ -227,6 +227,18 @@ public:
 			m_jsonResult["uids"][i]["kingdom"] = user.kingdom;
 			m_jsonResult["uids"][i]["aid"] = user.alliance_id;
 			m_jsonResult["uids"][i]["bnwm"] = user.type;
+			m_jsonResult["uids"][i]["resources"][(unsigned) 0]["c"] = user.r1;
+			m_jsonResult["uids"][i]["resources"][(unsigned) 1]["c"] = user.r2;
+			m_jsonResult["uids"][i]["resources"][(unsigned) 2]["c"] = user.r3;
+			m_jsonResult["uids"][i]["resources"][(unsigned) 3]["c"] = user.r4;
+			m_jsonResult["uids"][i]["resources"][(unsigned) 4]["c"] = 0;
+			m_jsonResult["uids"][i]["r5"] = user.r5;
+			m_jsonResult["uids"][i]["r5_max"] = user.r5_max;
+			m_jsonResult["uids"][i]["currencys"][(unsigned) 0] = user.gcbase;
+			m_jsonResult["uids"][i]["currencys"][(unsigned) 1] = user.gcbuy;
+			m_jsonResult["uids"][i]["currencys"][(unsigned) 2] = user.prosper;
+			m_jsonResult["uids"][i]["currencys"][(unsigned) 3] = user.battle_spirits;
+
 		}
 
 		CGI_SEND_LOG("action=UserLimit&operator=%u",m_uid);

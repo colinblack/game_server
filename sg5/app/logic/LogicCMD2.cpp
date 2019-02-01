@@ -1061,7 +1061,7 @@ int CLogicCMD::YellowDiamondNewUserGiftBag(unsigned uid, Json::Value& result, un
 
 int CLogicCMD::YellowDiamondDailyGiftBag(unsigned uid, unsigned yellow_level, bool is_year, Json::Value& result, unsigned lasttime, unsigned seqid)
 {
-	if (yellow_level < 1 || yellow_level > 8 || is_year > 1)
+	if (yellow_level < 1 || yellow_level > 9 || is_year > 1)
 	{
 		error_log("para error: yellow_level or is_year");
 		return R_ERR_PARAM;
@@ -2528,7 +2528,7 @@ int CLogicCMD::CheckPayOptionVersion(unsigned uid, Json::Value & result, unsigne
 	return R_SUCCESS;
 }
 
-int CLogicCMD::GetPayOptionalReward(unsigned uid, Json::Value &data, Json::Value & result, unsigned lasttime, unsigned seqid)
+int CLogicCMD::GetPayOptionalReward(unsigned uid, unsigned rewardcnt,Json::Value &data, Json::Value & result, unsigned lasttime, unsigned seqid)
 {
 	int now = Time::GetGlobalTime();
 	int start_time = 0, end_time = 0;
@@ -2556,7 +2556,7 @@ int CLogicCMD::GetPayOptionalReward(unsigned uid, Json::Value &data, Json::Value
 		}
 
 		PayOptionalUnit payunit(uid);
-		payunit.GetOptionalReward(userWrap, data, result);
+		payunit.GetOptionalReward(userWrap, rewardcnt,data, result);
 
 		userWrap.Save();
 	}
@@ -3102,6 +3102,65 @@ int CLogicCMD::UpgradeInnateSkill(unsigned uid, unsigned heroud, Json::Value & r
 	}
 
 	return R_SUCCESS;
+}
+
+int CLogicCMD::CommderSkilLearn(unsigned uid, unsigned heroud,unsigned equd,  Json::Value & result, unsigned lasttime, unsigned seqid)
+{
+	try
+		{
+			AUTO_LOCK_USER(uid);
+
+			UserWrap userWrap(uid, false);
+
+			int ret = userWrap.CheckSession(lasttime, seqid, result);
+
+			if (ret != R_SUCCESS)
+			{
+				return ret;
+			}
+
+			SkillUnit skillunit(uid);
+			skillunit.CommderSkilLearn(userWrap, heroud, equd,result);
+			userWrap.Save();
+		}
+		catch (const std::exception& e)
+		{
+			::SetError(R_ERROR, e.what());
+			return R_ERROR;
+		}
+
+		return R_SUCCESS;
+}
+
+int CLogicCMD::PotianSkilLearn(unsigned uid, unsigned heroud,string skid, Json::Value &m_data, Json::Value & result, unsigned lasttime, unsigned seqid)
+{
+	try
+	{
+		AUTO_LOCK_USER(uid);
+
+		UserWrap userWrap(uid, false);
+
+		int ret = userWrap.CheckSession(lasttime, seqid, result);
+
+		if (ret != R_SUCCESS)
+		{
+			return ret;
+		}
+
+		SkillUnit skillunit(uid);
+		skillunit.PotianSkilLearn(userWrap, heroud, skid, m_data,result);
+
+		userWrap.Save();
+	}
+	catch (const std::exception& e)
+	{
+		::SetError(R_ERROR, e.what());
+		return R_ERROR;
+	}
+
+	return R_SUCCESS;
+
+
 }
 
 

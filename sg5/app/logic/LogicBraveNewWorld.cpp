@@ -404,3 +404,77 @@ int CLogicBraveNewWorld::GetMission(unsigned uid, unsigned seq, unsigned type, J
 
 	return 0;
 }
+
+int CLogicBraveNewWorld::newWorldAwards(unsigned uid, unsigned index, unsigned id, unsigned seq, Json::Value &result)
+{
+	CDataBraveNewWorld *pData = GetData();
+	if (NULL == pData)
+	{
+		error_log("GetData fail");
+		return R_ERR_DATA;
+	}
+
+	int ret = pData->newWorldAwards(uid,index,id,seq,result);
+	if(ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicBraveNewWorld::GetTarget(unsigned uid, unsigned userid, Json::Value &result)
+{
+	CDataBraveNewWorld *pData = GetData();
+	if (NULL == pData)
+	{
+		error_log("GetData fail");
+		return R_ERR_DATA;
+	}
+
+	CLogicUser logicUser;
+	DataUser dataUser;
+	CLogicPay logicPay;
+	DataPay payData;
+	AUTO_LOCK_USER(uid)
+	int ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+		return ret;
+	Json::Reader reader;
+	Json::FastWriter writer;
+	Json::Value user_flag;
+	bool bsave = false;
+	reader.parse(dataUser.user_flag,user_flag);
+	ret = logicPay.ProcessOrderForBackend(uid, -20, 0, payData, "CLogicBraveNewWorld_GetTarget",user_flag,bsave);
+	if(ret)
+		return ret;
+	result["coins"] = payData.coins;
+	result["coins2"] = payData.cash;
+	result["pointpay"].resize(0);
+	result["pointpay"] = user_flag["user_pay"];
+	if(bsave)
+		dataUser.user_flag = writer.write(user_flag);
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	ret = pData->GetTarget(userid, result);
+	if(ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicBraveNewWorld::getNewWorldBoss(Json::Value &result)
+{
+	CDataBraveNewWorld *pData = GetData();
+	if (NULL == pData)
+	{
+		error_log("GetData fail");
+		return R_ERR_DATA;
+	}
+
+	int ret = pData->getNewWorldBoss(result["list"]);
+	if(ret)
+		return ret;
+
+	return 0;
+}

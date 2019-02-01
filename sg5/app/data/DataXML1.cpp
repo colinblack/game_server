@@ -3869,6 +3869,227 @@ int CDataXML::GetCostHeavenDaoist(bool is_heaven, unsigned jie_index, unsigned &
 	return R_SUCCESS;
 }
 
+int CDataXML::InitEightFormation()
+{
+	DataXMLEightFormation* pdata = (DataXMLEightFormation*)m_shEightFormation.GetAddress();
+	if (NULL == pdata)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shEightFormation), true, LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	string dataPath;
+	int ret = GetFile("bazhentu.xml", dataPath);
+	if (ret)
+	{
+		return ret;
+	}
+
+	CMarkupSTL xmlConf;
+
+	if (!xmlConf.Load(dataPath.c_str()))
+	{
+		cout << ("data path wrong") << endl;
+		return R_ERROR;
+	}
+
+	if (!xmlConf.FindElem("content"))
+	{
+		cout << ("content node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	while(xmlConf.FindElem("bazhentu"))
+	{
+		string r = xmlConf.GetAttrib("r");
+		unsigned r_index = CTrans::STOI(r.c_str())-1;
+		string ids = xmlConf.GetAttrib("ids");
+		std::size_t tail = 0;
+		string str = ids;
+		while(tail != string::npos)
+		{
+			tail = str.find_first_of(',');
+			unsigned idx = CTrans::STOI(str.substr(0, tail).c_str());
+			if(idx < 9)
+				(pdata->r)[idx] = r_index;
+			str = str.substr(tail+1);
+		}
+
+		xmlConf.IntoElem();
+		unsigned floor_index = 0;
+		while(xmlConf.FindElem("floor"))
+		{
+			string id =  xmlConf.GetAttrib("id");
+			string exp = xmlConf.GetAttrib("exp");
+			string res = xmlConf.GetAttrib("res");
+			string needeq = xmlConf.GetAttrib("needeq");
+			string per= xmlConf.GetAttrib("per");
+
+			if (id.empty() || exp.empty() || res.empty() || needeq.empty() || per.empty())
+			{
+				cout << ("bazhentu wrong") << endl;
+				return R_ERROR;
+			}
+			unsigned n = res.find_first_of(',');
+			(pdata->eightFormation)[r_index][floor_index].id =  CTrans::STOI(id.c_str());
+			(pdata->eightFormation)[r_index][floor_index].exp =  CTrans::STOI(exp.c_str());
+			(pdata->eightFormation)[r_index][floor_index].res =  CTrans::STOI(res.substr(0, n).c_str());
+			(pdata->eightFormation)[r_index][floor_index].needeq =  CTrans::STOI(needeq.c_str());
+			(pdata->eightFormation)[r_index][floor_index].per =  CTrans::STOI(per.c_str());
+			++floor_index;
+		}
+		xmlConf.OutOfElem();
+	}
+
+	m_shEightFormation.SetInitDone();
+
+	return R_SUCCESS;
+}
+
+int CDataXML::GetEightFormationItem(const unsigned id, const unsigned idx, XMLEightFormation &item)
+{
+	unsigned r = eight_formation[id];
+
+	if (!m_mapXMLEightFormation[r].count(idx))
+	{
+		return R_ERR_NO_DATA;
+	}
+
+	DataXMLEightFormation *pdata = (DataXMLEightFormation *)m_shEightFormation.GetAddress();
+	if (NULL == pdata)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(static_cast<CShareMemory *>(&(m_shEightFormation)), true);
+
+	item = (pdata->eightFormation)[r][m_mapXMLEightFormation[r][idx]];
+
+	return R_SUCCESS;
+}
+
+int CDataXML::GetEightFormationLv(unsigned id, unsigned idx, unsigned exp, unsigned &lv)
+{
+	unsigned r = eight_formation[id];
+
+	if (!m_mapXMLEightFormation[r].count(idx))
+	{
+		return R_ERR_NO_DATA;
+	}
+
+	DataXMLEightFormation *pdata = (DataXMLEightFormation *)m_shEightFormation.GetAddress();
+	if (NULL == pdata)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(static_cast<CShareMemory *>(&(m_shEightFormation)), true);
+
+	lv = m_mapXMLEightFormation[r][idx];
+
+	while (lv && ((pdata->eightFormation)[r][lv].exp > exp))
+	{
+		--lv;
+	}
+
+	return R_SUCCESS;
+}
+
+unsigned CDataXML::GetMaxExp(unsigned id, unsigned maxlv)
+{
+	DataXMLEightFormation *pdata = (DataXMLEightFormation *)m_shHeavenDaoist.GetAddress();
+	if (NULL == pdata)
+	{
+		return R_ERR_DB;
+	}
+	CAutoLock lock(static_cast<CShareMemory *>(&(m_shEightFormation)), true);
+	unsigned r = eight_formation[id];
+
+	return (pdata->eightFormation)[r][maxlv].exp;
+
+}
+
+
+int CDataXML::InitCostEightFormation()
+{
+	DataXMLCostEightFormation *pdata = (DataXMLCostEightFormation *)m_shCostEightFormation.GetAddress();
+	if (NULL == pdata)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shCostEightFormation), true, LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	string dataPath;
+	int ret = GetFile("bazhentu.xml", dataPath);
+	if (ret)
+	{
+		return ret;
+	}
+
+	CMarkupSTL xmlConf;
+
+	if (!xmlConf.Load(dataPath.c_str()))
+	{
+		cout << ("data path wrong") << endl;
+		return R_ERROR;
+	}
+
+	if (!xmlConf.FindElem("content"))
+	{
+		cout << ("content node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	if (!xmlConf.FindElem("cost"))
+	{
+		cout << ("cost node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	string jie = "";
+	string cash = "";
+	m_mapCostEightFormation.clear();
+	for(unsigned i = 0; i <= EIGHT_FORMATION_JIE_NUM; ++i)
+	{
+		xmlConf.FindElem("array");
+		jie = xmlConf.GetAttrib("jie");
+		cash = xmlConf.GetAttrib("cash");
+		if (jie.empty() || cash.empty())
+		{
+			cout << ("eightFormation cost wrong") << endl;
+			return R_ERROR;
+		}
+		m_mapCostEightFormation[i] = CTrans::STOI(cash.c_str());
+		pdata->eightFormationCost[i].id = i;
+		pdata->eightFormationCost[i].jie = CTrans::STOI(jie.c_str());
+		pdata->eightFormationCost[i].cash = CTrans::STOI(cash.c_str());
+	}
+
+	m_shCostEightFormation.SetInitDone();
+
+	return R_SUCCESS;
+}
+
+int CDataXML::GetCostEightFormation(unsigned jie_index, unsigned &cash)
+{
+	if (!m_mapCostEightFormation.count(jie_index))
+	{
+		return R_ERR_NO_DATA;
+	}
+
+	cash = m_mapCostEightFormation[jie_index];
+	return R_SUCCESS;
+}
+
 
 int CDataXML::InitDouble11()
 {

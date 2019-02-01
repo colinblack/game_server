@@ -10,7 +10,7 @@
 
 #include "LogicInc.h"
 
-#define ALLIANCE_TECH_NUM 17
+#define ALLIANCE_TECH_NUM (17+10)
 
 enum AllianceStatus
 {
@@ -63,7 +63,7 @@ public:
 	int SetMemberType(unsigned uid, unsigned allianceId, unsigned memberUid, int type);
 	int AddAllianceUpdates(unsigned uid, unsigned allianceId, Json::Value &updates);
 	int AddMemberDonate(unsigned uid, unsigned allianceId, int r1, int r2, int r3, int r4, int cash);
-	int SetAllianceMemberData(unsigned uid, unsigned allianceId, int point, const Json::Value &data);
+	int SetAllianceMemberData(unsigned uid, unsigned allianceId, int point, int ud,const Json::Value &data);
 	int RankMemberDonate(unsigned allianceId);
 	int AllianceEmail(unsigned allianceId, unsigned uid, DataEmail &data);
 	int AllianceUpdate(unsigned allianceId, Json::Value updates);

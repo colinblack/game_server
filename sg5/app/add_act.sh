@@ -1,11 +1,12 @@
 #!/bin/sh
 
-if [ -z $1 ]; then
-  echo "need act_name!"
+if [ -z $2 ]; then
+  echo "need act_name, true/false!"
   exit
 fi
 
 name=$1
+all=$2
 
 macro="CONFIG_$name"
 macroline="#define $macro \"$name\""
@@ -29,7 +30,7 @@ sed -i "s/autolable4/autolable4\n$getline/" data/DataXML.h
 initline="INIT_CHARGE_DRAW_ACT_CONFIG($macro)"
 sed -i "s/autolable5/autolable5\n$initline/" data/DataXML2.cpp
 
-drawline="CHARGE_DRAW_ACT($macro)"
+drawline="CHARGE_DRAW_ACT($macro, $all)"
 sed -i "s/autolable6/autolable6\n$drawline/" logic/LogicCmdUnits.h
 
 actline="CHARGE_DRAW_ACT_ACTION_MAP($macro)"

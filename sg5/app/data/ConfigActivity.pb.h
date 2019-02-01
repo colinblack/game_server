@@ -40,6 +40,7 @@ class BlessPoint;
 class CostCoefficient;
 class DiamondReward;
 class DiamondRewardLimit;
+class DiamondMoreReward;
 class DoubleWelfare;
 class PearlAdvance;
 class UniqueKnowledgeDial;
@@ -64,6 +65,8 @@ class TurnTableItem;
 class LuckyGiftItem;
 class LuckyGift;
 class NewYearActivity;
+class ChinaDayActivity;
+class PayOptionalActivity;
 class MsgSoulLevel;
 class MsgSoulGrowth;
 class MsgWuhun;
@@ -85,6 +88,8 @@ class BatmanTreasureCfg;
 class SummerChargeRewardCfg;
 class SummerHolidaysTicketCfg;
 class SummerHolidaysRewardCfg;
+class FreeExchangeItem;
+class FreeExchange;
 class Activities;
 
 // ===================================================================
@@ -654,6 +659,98 @@ class DiamondRewardLimit : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static DiamondRewardLimit* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class DiamondMoreReward : public ::google::protobuf::Message {
+ public:
+  DiamondMoreReward();
+  virtual ~DiamondMoreReward();
+
+  DiamondMoreReward(const DiamondMoreReward& from);
+
+  inline DiamondMoreReward& operator=(const DiamondMoreReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const DiamondMoreReward& default_instance();
+
+  void Swap(DiamondMoreReward* other);
+
+  // implements Message ----------------------------------------------
+
+  DiamondMoreReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const DiamondMoreReward& from);
+  void MergeFrom(const DiamondMoreReward& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 diamond = 1;
+  inline bool has_diamond() const;
+  inline void clear_diamond();
+  static const int kDiamondFieldNumber = 1;
+  inline ::google::protobuf::uint32 diamond() const;
+  inline void set_diamond(::google::protobuf::uint32 value);
+
+  // repeated .RewardConfig.RewardItemCfg reward = 2;
+  inline int reward_size() const;
+  inline void clear_reward();
+  static const int kRewardFieldNumber = 2;
+  inline const ::RewardConfig::RewardItemCfg& reward(int index) const;
+  inline ::RewardConfig::RewardItemCfg* mutable_reward(int index);
+  inline ::RewardConfig::RewardItemCfg* add_reward();
+  inline const ::google::protobuf::RepeatedPtrField< ::RewardConfig::RewardItemCfg >&
+      reward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::RewardConfig::RewardItemCfg >*
+      mutable_reward();
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.DiamondMoreReward)
+ private:
+  inline void set_has_diamond();
+  inline void clear_has_diamond();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::RewardConfig::RewardItemCfg > reward_;
+  ::google::protobuf::uint32 diamond_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static DiamondMoreReward* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -3032,6 +3129,194 @@ class NewYearActivity : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ChinaDayActivity : public ::google::protobuf::Message {
+ public:
+  ChinaDayActivity();
+  virtual ~ChinaDayActivity();
+
+  ChinaDayActivity(const ChinaDayActivity& from);
+
+  inline ChinaDayActivity& operator=(const ChinaDayActivity& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChinaDayActivity& default_instance();
+
+  void Swap(ChinaDayActivity* other);
+
+  // implements Message ----------------------------------------------
+
+  ChinaDayActivity* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChinaDayActivity& from);
+  void MergeFrom(const ChinaDayActivity& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .ConfigActivity.DiamondReward charge_reward = 1;
+  inline int charge_reward_size() const;
+  inline void clear_charge_reward();
+  static const int kChargeRewardFieldNumber = 1;
+  inline const ::ConfigActivity::DiamondReward& charge_reward(int index) const;
+  inline ::ConfigActivity::DiamondReward* mutable_charge_reward(int index);
+  inline ::ConfigActivity::DiamondReward* add_charge_reward();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >&
+      charge_reward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >*
+      mutable_charge_reward();
+
+  // required .RewardConfig.RewardItemCfg everyday_reward = 2;
+  inline bool has_everyday_reward() const;
+  inline void clear_everyday_reward();
+  static const int kEverydayRewardFieldNumber = 2;
+  inline const ::RewardConfig::RewardItemCfg& everyday_reward() const;
+  inline ::RewardConfig::RewardItemCfg* mutable_everyday_reward();
+  inline ::RewardConfig::RewardItemCfg* release_everyday_reward();
+  inline void set_allocated_everyday_reward(::RewardConfig::RewardItemCfg* everyday_reward);
+
+  // required .RewardConfig.RewardItemCfg online_reward = 3;
+  inline bool has_online_reward() const;
+  inline void clear_online_reward();
+  static const int kOnlineRewardFieldNumber = 3;
+  inline const ::RewardConfig::RewardItemCfg& online_reward() const;
+  inline ::RewardConfig::RewardItemCfg* mutable_online_reward();
+  inline ::RewardConfig::RewardItemCfg* release_online_reward();
+  inline void set_allocated_online_reward(::RewardConfig::RewardItemCfg* online_reward);
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.ChinaDayActivity)
+ private:
+  inline void set_has_everyday_reward();
+  inline void clear_has_everyday_reward();
+  inline void set_has_online_reward();
+  inline void clear_has_online_reward();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward > charge_reward_;
+  ::RewardConfig::RewardItemCfg* everyday_reward_;
+  ::RewardConfig::RewardItemCfg* online_reward_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static ChinaDayActivity* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PayOptionalActivity : public ::google::protobuf::Message {
+ public:
+  PayOptionalActivity();
+  virtual ~PayOptionalActivity();
+
+  PayOptionalActivity(const PayOptionalActivity& from);
+
+  inline PayOptionalActivity& operator=(const PayOptionalActivity& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PayOptionalActivity& default_instance();
+
+  void Swap(PayOptionalActivity* other);
+
+  // implements Message ----------------------------------------------
+
+  PayOptionalActivity* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PayOptionalActivity& from);
+  void MergeFrom(const PayOptionalActivity& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .ConfigActivity.DiamondMoreReward optional_reward = 1;
+  inline int optional_reward_size() const;
+  inline void clear_optional_reward();
+  static const int kOptionalRewardFieldNumber = 1;
+  inline const ::ConfigActivity::DiamondMoreReward& optional_reward(int index) const;
+  inline ::ConfigActivity::DiamondMoreReward* mutable_optional_reward(int index);
+  inline ::ConfigActivity::DiamondMoreReward* add_optional_reward();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondMoreReward >&
+      optional_reward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondMoreReward >*
+      mutable_optional_reward();
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.PayOptionalActivity)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondMoreReward > optional_reward_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static PayOptionalActivity* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class MsgSoulLevel : public ::google::protobuf::Message {
  public:
   MsgSoulLevel();
@@ -5250,6 +5535,177 @@ class SummerHolidaysRewardCfg : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class FreeExchangeItem : public ::google::protobuf::Message {
+ public:
+  FreeExchangeItem();
+  virtual ~FreeExchangeItem();
+
+  FreeExchangeItem(const FreeExchangeItem& from);
+
+  inline FreeExchangeItem& operator=(const FreeExchangeItem& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const FreeExchangeItem& default_instance();
+
+  void Swap(FreeExchangeItem* other);
+
+  // implements Message ----------------------------------------------
+
+  FreeExchangeItem* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const FreeExchangeItem& from);
+  void MergeFrom(const FreeExchangeItem& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required uint32 c = 2;
+  inline bool has_c() const;
+  inline void clear_c();
+  static const int kCFieldNumber = 2;
+  inline ::google::protobuf::uint32 c() const;
+  inline void set_c(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.FreeExchangeItem)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_c();
+  inline void clear_has_c();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 c_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static FreeExchangeItem* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class FreeExchange : public ::google::protobuf::Message {
+ public:
+  FreeExchange();
+  virtual ~FreeExchange();
+
+  FreeExchange(const FreeExchange& from);
+
+  inline FreeExchange& operator=(const FreeExchange& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const FreeExchange& default_instance();
+
+  void Swap(FreeExchange* other);
+
+  // implements Message ----------------------------------------------
+
+  FreeExchange* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const FreeExchange& from);
+  void MergeFrom(const FreeExchange& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .ConfigActivity.FreeExchangeItem item = 1;
+  inline int item_size() const;
+  inline void clear_item();
+  static const int kItemFieldNumber = 1;
+  inline const ::ConfigActivity::FreeExchangeItem& item(int index) const;
+  inline ::ConfigActivity::FreeExchangeItem* mutable_item(int index);
+  inline ::ConfigActivity::FreeExchangeItem* add_item();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchangeItem >&
+      item() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchangeItem >*
+      mutable_item();
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.FreeExchange)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchangeItem > item_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static FreeExchange* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class Activities : public ::google::protobuf::Message {
  public:
   Activities();
@@ -5591,6 +6047,36 @@ class Activities : public ::google::protobuf::Message {
   inline ::ConfigActivity::SummerHolidaysRewardCfg* release_summer_holidays();
   inline void set_allocated_summer_holidays(::ConfigActivity::SummerHolidaysRewardCfg* summer_holidays);
 
+  // required .ConfigActivity.ChinaDayActivity chinadayavtivity = 29;
+  inline bool has_chinadayavtivity() const;
+  inline void clear_chinadayavtivity();
+  static const int kChinadayavtivityFieldNumber = 29;
+  inline const ::ConfigActivity::ChinaDayActivity& chinadayavtivity() const;
+  inline ::ConfigActivity::ChinaDayActivity* mutable_chinadayavtivity();
+  inline ::ConfigActivity::ChinaDayActivity* release_chinadayavtivity();
+  inline void set_allocated_chinadayavtivity(::ConfigActivity::ChinaDayActivity* chinadayavtivity);
+
+  // required .ConfigActivity.PayOptionalActivity payoptionalactivity = 30;
+  inline bool has_payoptionalactivity() const;
+  inline void clear_payoptionalactivity();
+  static const int kPayoptionalactivityFieldNumber = 30;
+  inline const ::ConfigActivity::PayOptionalActivity& payoptionalactivity() const;
+  inline ::ConfigActivity::PayOptionalActivity* mutable_payoptionalactivity();
+  inline ::ConfigActivity::PayOptionalActivity* release_payoptionalactivity();
+  inline void set_allocated_payoptionalactivity(::ConfigActivity::PayOptionalActivity* payoptionalactivity);
+
+  // repeated .ConfigActivity.FreeExchange free_exchg = 31;
+  inline int free_exchg_size() const;
+  inline void clear_free_exchg();
+  static const int kFreeExchgFieldNumber = 31;
+  inline const ::ConfigActivity::FreeExchange& free_exchg(int index) const;
+  inline ::ConfigActivity::FreeExchange* mutable_free_exchg(int index);
+  inline ::ConfigActivity::FreeExchange* add_free_exchg();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange >&
+      free_exchg() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange >*
+      mutable_free_exchg();
+
   // @@protoc_insertion_point(class_scope:ConfigActivity.Activities)
  private:
   inline void set_has_blesspoint();
@@ -5625,6 +6111,10 @@ class Activities : public ::google::protobuf::Message {
   inline void clear_has_summer_charge();
   inline void set_has_summer_holidays();
   inline void clear_has_summer_holidays();
+  inline void set_has_chinadayavtivity();
+  inline void clear_has_chinadayavtivity();
+  inline void set_has_payoptionalactivity();
+  inline void clear_has_payoptionalactivity();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -5658,6 +6148,9 @@ class Activities : public ::google::protobuf::Message {
   ::ConfigActivity::BatmanTreasureCfg* batmantreasure_;
   ::ConfigActivity::SummerChargeRewardCfg* summer_charge_;
   ::ConfigActivity::SummerHolidaysRewardCfg* summer_holidays_;
+  ::ConfigActivity::ChinaDayActivity* chinadayavtivity_;
+  ::ConfigActivity::PayOptionalActivity* payoptionalactivity_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange > free_exchg_;
   friend void  protobuf_AddDesc_ConfigActivity_2eproto();
   friend void protobuf_AssignDesc_ConfigActivity_2eproto();
   friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
@@ -6106,6 +6599,64 @@ inline void DiamondRewardLimit::set_allocated_reward(::RewardConfig::RewardItemC
     clear_has_reward();
   }
   // @@protoc_insertion_point(field_set_allocated:ConfigActivity.DiamondRewardLimit.reward)
+}
+
+// -------------------------------------------------------------------
+
+// DiamondMoreReward
+
+// required uint32 diamond = 1;
+inline bool DiamondMoreReward::has_diamond() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void DiamondMoreReward::set_has_diamond() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void DiamondMoreReward::clear_has_diamond() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void DiamondMoreReward::clear_diamond() {
+  diamond_ = 0u;
+  clear_has_diamond();
+}
+inline ::google::protobuf::uint32 DiamondMoreReward::diamond() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.DiamondMoreReward.diamond)
+  return diamond_;
+}
+inline void DiamondMoreReward::set_diamond(::google::protobuf::uint32 value) {
+  set_has_diamond();
+  diamond_ = value;
+  // @@protoc_insertion_point(field_set:ConfigActivity.DiamondMoreReward.diamond)
+}
+
+// repeated .RewardConfig.RewardItemCfg reward = 2;
+inline int DiamondMoreReward::reward_size() const {
+  return reward_.size();
+}
+inline void DiamondMoreReward::clear_reward() {
+  reward_.Clear();
+}
+inline const ::RewardConfig::RewardItemCfg& DiamondMoreReward::reward(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.DiamondMoreReward.reward)
+  return reward_.Get(index);
+}
+inline ::RewardConfig::RewardItemCfg* DiamondMoreReward::mutable_reward(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.DiamondMoreReward.reward)
+  return reward_.Mutable(index);
+}
+inline ::RewardConfig::RewardItemCfg* DiamondMoreReward::add_reward() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.DiamondMoreReward.reward)
+  return reward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::RewardConfig::RewardItemCfg >&
+DiamondMoreReward::reward() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.DiamondMoreReward.reward)
+  return reward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::RewardConfig::RewardItemCfg >*
+DiamondMoreReward::mutable_reward() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.DiamondMoreReward.reward)
+  return &reward_;
 }
 
 // -------------------------------------------------------------------
@@ -8078,6 +8629,156 @@ inline void NewYearActivity::set_allocated_online_reward(::RewardConfig::RewardI
     clear_has_online_reward();
   }
   // @@protoc_insertion_point(field_set_allocated:ConfigActivity.NewYearActivity.online_reward)
+}
+
+// -------------------------------------------------------------------
+
+// ChinaDayActivity
+
+// repeated .ConfigActivity.DiamondReward charge_reward = 1;
+inline int ChinaDayActivity::charge_reward_size() const {
+  return charge_reward_.size();
+}
+inline void ChinaDayActivity::clear_charge_reward() {
+  charge_reward_.Clear();
+}
+inline const ::ConfigActivity::DiamondReward& ChinaDayActivity::charge_reward(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.ChinaDayActivity.charge_reward)
+  return charge_reward_.Get(index);
+}
+inline ::ConfigActivity::DiamondReward* ChinaDayActivity::mutable_charge_reward(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.ChinaDayActivity.charge_reward)
+  return charge_reward_.Mutable(index);
+}
+inline ::ConfigActivity::DiamondReward* ChinaDayActivity::add_charge_reward() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.ChinaDayActivity.charge_reward)
+  return charge_reward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >&
+ChinaDayActivity::charge_reward() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.ChinaDayActivity.charge_reward)
+  return charge_reward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >*
+ChinaDayActivity::mutable_charge_reward() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.ChinaDayActivity.charge_reward)
+  return &charge_reward_;
+}
+
+// required .RewardConfig.RewardItemCfg everyday_reward = 2;
+inline bool ChinaDayActivity::has_everyday_reward() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ChinaDayActivity::set_has_everyday_reward() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ChinaDayActivity::clear_has_everyday_reward() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ChinaDayActivity::clear_everyday_reward() {
+  if (everyday_reward_ != NULL) everyday_reward_->::RewardConfig::RewardItemCfg::Clear();
+  clear_has_everyday_reward();
+}
+inline const ::RewardConfig::RewardItemCfg& ChinaDayActivity::everyday_reward() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.ChinaDayActivity.everyday_reward)
+  return everyday_reward_ != NULL ? *everyday_reward_ : *default_instance_->everyday_reward_;
+}
+inline ::RewardConfig::RewardItemCfg* ChinaDayActivity::mutable_everyday_reward() {
+  set_has_everyday_reward();
+  if (everyday_reward_ == NULL) everyday_reward_ = new ::RewardConfig::RewardItemCfg;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.ChinaDayActivity.everyday_reward)
+  return everyday_reward_;
+}
+inline ::RewardConfig::RewardItemCfg* ChinaDayActivity::release_everyday_reward() {
+  clear_has_everyday_reward();
+  ::RewardConfig::RewardItemCfg* temp = everyday_reward_;
+  everyday_reward_ = NULL;
+  return temp;
+}
+inline void ChinaDayActivity::set_allocated_everyday_reward(::RewardConfig::RewardItemCfg* everyday_reward) {
+  delete everyday_reward_;
+  everyday_reward_ = everyday_reward;
+  if (everyday_reward) {
+    set_has_everyday_reward();
+  } else {
+    clear_has_everyday_reward();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.ChinaDayActivity.everyday_reward)
+}
+
+// required .RewardConfig.RewardItemCfg online_reward = 3;
+inline bool ChinaDayActivity::has_online_reward() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ChinaDayActivity::set_has_online_reward() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ChinaDayActivity::clear_has_online_reward() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ChinaDayActivity::clear_online_reward() {
+  if (online_reward_ != NULL) online_reward_->::RewardConfig::RewardItemCfg::Clear();
+  clear_has_online_reward();
+}
+inline const ::RewardConfig::RewardItemCfg& ChinaDayActivity::online_reward() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.ChinaDayActivity.online_reward)
+  return online_reward_ != NULL ? *online_reward_ : *default_instance_->online_reward_;
+}
+inline ::RewardConfig::RewardItemCfg* ChinaDayActivity::mutable_online_reward() {
+  set_has_online_reward();
+  if (online_reward_ == NULL) online_reward_ = new ::RewardConfig::RewardItemCfg;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.ChinaDayActivity.online_reward)
+  return online_reward_;
+}
+inline ::RewardConfig::RewardItemCfg* ChinaDayActivity::release_online_reward() {
+  clear_has_online_reward();
+  ::RewardConfig::RewardItemCfg* temp = online_reward_;
+  online_reward_ = NULL;
+  return temp;
+}
+inline void ChinaDayActivity::set_allocated_online_reward(::RewardConfig::RewardItemCfg* online_reward) {
+  delete online_reward_;
+  online_reward_ = online_reward;
+  if (online_reward) {
+    set_has_online_reward();
+  } else {
+    clear_has_online_reward();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.ChinaDayActivity.online_reward)
+}
+
+// -------------------------------------------------------------------
+
+// PayOptionalActivity
+
+// repeated .ConfigActivity.DiamondMoreReward optional_reward = 1;
+inline int PayOptionalActivity::optional_reward_size() const {
+  return optional_reward_.size();
+}
+inline void PayOptionalActivity::clear_optional_reward() {
+  optional_reward_.Clear();
+}
+inline const ::ConfigActivity::DiamondMoreReward& PayOptionalActivity::optional_reward(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.PayOptionalActivity.optional_reward)
+  return optional_reward_.Get(index);
+}
+inline ::ConfigActivity::DiamondMoreReward* PayOptionalActivity::mutable_optional_reward(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.PayOptionalActivity.optional_reward)
+  return optional_reward_.Mutable(index);
+}
+inline ::ConfigActivity::DiamondMoreReward* PayOptionalActivity::add_optional_reward() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.PayOptionalActivity.optional_reward)
+  return optional_reward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondMoreReward >&
+PayOptionalActivity::optional_reward() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.PayOptionalActivity.optional_reward)
+  return optional_reward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondMoreReward >*
+PayOptionalActivity::mutable_optional_reward() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.PayOptionalActivity.optional_reward)
+  return &optional_reward_;
 }
 
 // -------------------------------------------------------------------
@@ -10184,6 +10885,92 @@ SummerHolidaysRewardCfg::mutable_chargereward() {
 
 // -------------------------------------------------------------------
 
+// FreeExchangeItem
+
+// required uint32 id = 1;
+inline bool FreeExchangeItem::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void FreeExchangeItem::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void FreeExchangeItem::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void FreeExchangeItem::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 FreeExchangeItem::id() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.FreeExchangeItem.id)
+  return id_;
+}
+inline void FreeExchangeItem::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:ConfigActivity.FreeExchangeItem.id)
+}
+
+// required uint32 c = 2;
+inline bool FreeExchangeItem::has_c() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void FreeExchangeItem::set_has_c() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void FreeExchangeItem::clear_has_c() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void FreeExchangeItem::clear_c() {
+  c_ = 0u;
+  clear_has_c();
+}
+inline ::google::protobuf::uint32 FreeExchangeItem::c() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.FreeExchangeItem.c)
+  return c_;
+}
+inline void FreeExchangeItem::set_c(::google::protobuf::uint32 value) {
+  set_has_c();
+  c_ = value;
+  // @@protoc_insertion_point(field_set:ConfigActivity.FreeExchangeItem.c)
+}
+
+// -------------------------------------------------------------------
+
+// FreeExchange
+
+// repeated .ConfigActivity.FreeExchangeItem item = 1;
+inline int FreeExchange::item_size() const {
+  return item_.size();
+}
+inline void FreeExchange::clear_item() {
+  item_.Clear();
+}
+inline const ::ConfigActivity::FreeExchangeItem& FreeExchange::item(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.FreeExchange.item)
+  return item_.Get(index);
+}
+inline ::ConfigActivity::FreeExchangeItem* FreeExchange::mutable_item(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.FreeExchange.item)
+  return item_.Mutable(index);
+}
+inline ::ConfigActivity::FreeExchangeItem* FreeExchange::add_item() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.FreeExchange.item)
+  return item_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchangeItem >&
+FreeExchange::item() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.FreeExchange.item)
+  return item_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchangeItem >*
+FreeExchange::mutable_item() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.FreeExchange.item)
+  return &item_;
+}
+
+// -------------------------------------------------------------------
+
 // Activities
 
 // repeated .ConfigActivity.BuildSuitItem buildsuit = 1;
@@ -11200,6 +11987,118 @@ inline void Activities::set_allocated_summer_holidays(::ConfigActivity::SummerHo
     clear_has_summer_holidays();
   }
   // @@protoc_insertion_point(field_set_allocated:ConfigActivity.Activities.summer_holidays)
+}
+
+// required .ConfigActivity.ChinaDayActivity chinadayavtivity = 29;
+inline bool Activities::has_chinadayavtivity() const {
+  return (_has_bits_[0] & 0x10000000u) != 0;
+}
+inline void Activities::set_has_chinadayavtivity() {
+  _has_bits_[0] |= 0x10000000u;
+}
+inline void Activities::clear_has_chinadayavtivity() {
+  _has_bits_[0] &= ~0x10000000u;
+}
+inline void Activities::clear_chinadayavtivity() {
+  if (chinadayavtivity_ != NULL) chinadayavtivity_->::ConfigActivity::ChinaDayActivity::Clear();
+  clear_has_chinadayavtivity();
+}
+inline const ::ConfigActivity::ChinaDayActivity& Activities::chinadayavtivity() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.Activities.chinadayavtivity)
+  return chinadayavtivity_ != NULL ? *chinadayavtivity_ : *default_instance_->chinadayavtivity_;
+}
+inline ::ConfigActivity::ChinaDayActivity* Activities::mutable_chinadayavtivity() {
+  set_has_chinadayavtivity();
+  if (chinadayavtivity_ == NULL) chinadayavtivity_ = new ::ConfigActivity::ChinaDayActivity;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.Activities.chinadayavtivity)
+  return chinadayavtivity_;
+}
+inline ::ConfigActivity::ChinaDayActivity* Activities::release_chinadayavtivity() {
+  clear_has_chinadayavtivity();
+  ::ConfigActivity::ChinaDayActivity* temp = chinadayavtivity_;
+  chinadayavtivity_ = NULL;
+  return temp;
+}
+inline void Activities::set_allocated_chinadayavtivity(::ConfigActivity::ChinaDayActivity* chinadayavtivity) {
+  delete chinadayavtivity_;
+  chinadayavtivity_ = chinadayavtivity;
+  if (chinadayavtivity) {
+    set_has_chinadayavtivity();
+  } else {
+    clear_has_chinadayavtivity();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.Activities.chinadayavtivity)
+}
+
+// required .ConfigActivity.PayOptionalActivity payoptionalactivity = 30;
+inline bool Activities::has_payoptionalactivity() const {
+  return (_has_bits_[0] & 0x20000000u) != 0;
+}
+inline void Activities::set_has_payoptionalactivity() {
+  _has_bits_[0] |= 0x20000000u;
+}
+inline void Activities::clear_has_payoptionalactivity() {
+  _has_bits_[0] &= ~0x20000000u;
+}
+inline void Activities::clear_payoptionalactivity() {
+  if (payoptionalactivity_ != NULL) payoptionalactivity_->::ConfigActivity::PayOptionalActivity::Clear();
+  clear_has_payoptionalactivity();
+}
+inline const ::ConfigActivity::PayOptionalActivity& Activities::payoptionalactivity() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.Activities.payoptionalactivity)
+  return payoptionalactivity_ != NULL ? *payoptionalactivity_ : *default_instance_->payoptionalactivity_;
+}
+inline ::ConfigActivity::PayOptionalActivity* Activities::mutable_payoptionalactivity() {
+  set_has_payoptionalactivity();
+  if (payoptionalactivity_ == NULL) payoptionalactivity_ = new ::ConfigActivity::PayOptionalActivity;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.Activities.payoptionalactivity)
+  return payoptionalactivity_;
+}
+inline ::ConfigActivity::PayOptionalActivity* Activities::release_payoptionalactivity() {
+  clear_has_payoptionalactivity();
+  ::ConfigActivity::PayOptionalActivity* temp = payoptionalactivity_;
+  payoptionalactivity_ = NULL;
+  return temp;
+}
+inline void Activities::set_allocated_payoptionalactivity(::ConfigActivity::PayOptionalActivity* payoptionalactivity) {
+  delete payoptionalactivity_;
+  payoptionalactivity_ = payoptionalactivity;
+  if (payoptionalactivity) {
+    set_has_payoptionalactivity();
+  } else {
+    clear_has_payoptionalactivity();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.Activities.payoptionalactivity)
+}
+
+// repeated .ConfigActivity.FreeExchange free_exchg = 31;
+inline int Activities::free_exchg_size() const {
+  return free_exchg_.size();
+}
+inline void Activities::clear_free_exchg() {
+  free_exchg_.Clear();
+}
+inline const ::ConfigActivity::FreeExchange& Activities::free_exchg(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.Activities.free_exchg)
+  return free_exchg_.Get(index);
+}
+inline ::ConfigActivity::FreeExchange* Activities::mutable_free_exchg(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.Activities.free_exchg)
+  return free_exchg_.Mutable(index);
+}
+inline ::ConfigActivity::FreeExchange* Activities::add_free_exchg() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.Activities.free_exchg)
+  return free_exchg_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange >&
+Activities::free_exchg() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.Activities.free_exchg)
+  return free_exchg_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange >*
+Activities::mutable_free_exchg() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.Activities.free_exchg)
+  return &free_exchg_;
 }
 
 

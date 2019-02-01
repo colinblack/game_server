@@ -2367,15 +2367,18 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 				user.barrackQ = writer.write(data["barrackQ"]);
 			}
 			if (data.isMember("soldier")) {
+				//checksoldier(user.soldier, data["soldier"]);
 				user.soldier = writer.write(data["soldier"]);
 			}
 			if (data.isMember("soldierlevel")) {
+				checksoldierlevel(user.soldierlevel, data["soldierlevel"]);
 				user.soldierlevel = writer.write(data["soldierlevel"]);
 			}
 			if (data.isMember("buildQ")) {
 				user.buildQ = writer.write(data["buildQ"]);
 			}
 			if (data.isMember("skillQ")) {
+				checkskillQ(user.skillQ,data["skillQ"]);
 				user.skillQ = writer.write(data["skillQ"]);
 			}
 			if (data.isMember("trainQ")) {
@@ -4094,6 +4097,7 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 
 	if (attackinfo.isMember("soldier"))
 	{
+		//checksoldier(user.soldier, attackinfo["soldier"]);
 		user.soldier = writer.write(attackinfo["soldier"]);
 	}
 	if (attackinfo.isMember("stats"))
@@ -4404,6 +4408,7 @@ int CLogicArchive::ProcessUpdateInfo(unsigned uid,Json::Value &updateinfo, Json:
 	Json::FastWriter writer;
 	if (updateinfo.isMember("soldier"))
 	{
+		//checksoldier(user.soldier, updateinfo["soldier"]);
 		user.soldier = writer.write(updateinfo["soldier"]);
 	}
 	if (updateinfo.isMember("stats"))
@@ -5266,6 +5271,18 @@ int CLogicArchive::GetActivityTime(Json::Value &data)
 		activityTime[2u] = version;
 		data["pre_summer2"] = activityTime;
 	}
+	//暑假前奏3
+	if (Config::GetUIntValue(beginTime, CONFIG_PRE_SUMMER3_BEGIN_TS)
+		&& Config::GetUIntValue(endTime, CONFIG_PRE_SUMMER3_END_TS)
+		&& Config::GetUIntValue(version, CONFIG_PRE_SUMMER3_VERSION))
+	{
+		activityTime.clear();
+
+		activityTime[0u] = beginTime;
+		activityTime[1u] = endTime;
+		activityTime[2u] = version;
+		data["pre_summer3"] = activityTime;
+	}
 
 	//新绝世无双
 	if (Config::GetUIntValue(beginTime, CONFIG_NEWJUESHIWS_BEGIN_TS)
@@ -5766,6 +5783,10 @@ int CLogicArchive::checkUserTech(Json::Value &old, Json::Value &now)
 		now["catapult"] = old["catapult"];
 	if(old.isMember("cskill"))
 			now["cskill"] = old["cskill"];
+
+	if(old.isMember("godh"))
+		now["godh"] =  old["godh"];
+
 	if(!needJuexueLog && now.isMember("hecheng") && old.isMember("hecheng"))
 	{
 		if(now["hecheng"][0u] != old["hecheng"][0u]
@@ -5810,7 +5831,78 @@ int CLogicArchive::checkUserTech(Json::Value &old, Json::Value &now)
 
 	return 0;
 }
+void CLogicArchive::checksoldier(string &olds, Json::Value &now)
+{
+	Json::Value old;
+	Json::Reader().parse(olds, old);
+	map<string, int> o, n;
+	for(int i=0;i<old.size();++i)
+		o[old[i]["id"].asString()] = old[i]["amount"].asInt();
+	for(int i=0;i<now.size();++i)
+		n[now[i]["id"].asString()] = now[i]["amount"].asInt();
+	now.resize(0);
+	for(map<string, int>::iterator it=n.begin();it!=n.end();++it)
+	{
+		if(o.count(it->first))
+		{
+			Json::Value t;
+			t["id"] = it->first;
+			t["amount"] = min(it->second, o[it->first]);
+			now.append(t);
+		}
+	}
+}
 
+int CLogicArchive::checkskillQ(string &olds, Json::Value &now)
+{
+	Json::Value old;
+	Json::Reader().parse(olds, old);
+	Json::Value::Members n = now.getMemberNames();
+	for(Json::Value::Members::iterator it=n.begin();it!=n.end();++it)
+	{
+		if(now[*it].isObject())
+		{
+			if(old.isMember(*it))
+			{
+				if(now[*it].isMember("i"))
+				{
+					if(old[*it].isMember("i"))
+					{
+						now[*it]["i"]["hid"] = old[*it]["i"]["hid"];
+						now[*it]["i"]["hud"] = old[*it]["i"]["hud"];
+						now[*it]["i"]["sid"] = old[*it]["i"]["sid"];
+						now[*it]["i"]["l"] = old[*it]["i"]["l"];
+					}
+					else
+						now[*it].removeMember("i");
+				}
+			}
+			else
+				now.removeMember(*it);
+		}
+	}
+	return 0;
+}
+
+void CLogicArchive::checksoldierlevel(string &olds, Json::Value &now)
+{
+	Json::Value old;
+	Json::Reader().parse(olds, old);
+	Json::Value::Members n = now.getMemberNames();
+	for(Json::Value::Members::iterator it=n.begin();it!=n.end();++it)
+	{
+		if(now[*it].isObject())
+		{
+			if(old.isMember(*it))
+			{
+				now[*it]["l"] = old[*it]["l"];
+				now[*it]["lt"] = min(now[*it]["lt"].asUInt(), old[*it]["lt"].asUInt());
+			}
+			else
+				now.removeMember(*it);
+		}
+	}
+}
 
 LoadType CLogicArchive::GetLoadType(const string &type)
 {

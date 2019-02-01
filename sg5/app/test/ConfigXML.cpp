@@ -226,7 +226,22 @@ int main(int argc, char *argv[])
 		ret = dataXML->InitBeauty();
 	else if ("investment" == action)
 		ret = dataXML->InitInvestment();
-
+	else if("eightformation" == action)
+		ret = dataXML->InitEightFormation();
+	else if("costeightformation" == action)
+		ret = dataXML->InitCostEightFormation();
+	else if ("birdbridge" == action)
+		ret = dataXML->InitBirdBridge();
+	else if ("uniontech" == action)
+	{
+		ret = dataXML->InitUnionTech();
+		dataXML->ViewUnionTech();
+	}
+	else if ("shengdanhuodong" == action)
+	{
+		ret = dataXML->InitShengDan();
+		dataXML->ViewShengDan();
+	}
 	else
 	{
 		cout<<"para error!"<<endl;

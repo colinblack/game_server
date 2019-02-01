@@ -608,6 +608,48 @@ unsigned UserWrap::GetRechargePoint(unsigned nStartTime, unsigned nEndTime) cons
 	return chargeTotal;
 }
 
+unsigned UserWrap::GetConsumePoint(unsigned nStartTime, unsigned nEndTime) const
+{
+	if (m_bBase)
+	{
+		throw std::runtime_error("UserWrap::GetConsumePoint_Need_user_full_data");
+	}
+
+	if (nStartTime >= nEndTime)
+	{
+		throw std::runtime_error("UserWrap::GetConsumePoint_invalid_time_period");
+	}
+
+	Json::Reader reader;
+	Json::FastWriter write;
+	Json::Value user_flag;
+	reader.parse(m_dataUser.user_flag, user_flag);
+
+	if (!user_flag.isMember("user_pay"))
+	{
+		return 0;
+	}
+
+	if (!user_flag["user_pay"].isArray())
+	{
+		error_log("user_pay error");
+		throw std::runtime_error("user_pay_error");
+	}
+
+	unsigned size = user_flag["user_pay"].size();
+	unsigned consumeTotal = 0;
+	for (unsigned i = 0; i < size; ++i)
+	{
+		unsigned ts  = user_flag["user_pay"][i][0u].asUInt();
+		if(ts >= nStartTime && ts <= nEndTime)
+		{
+			consumeTotal += user_flag["user_pay"][i][1u].asUInt();
+		}
+	}
+
+	return consumeTotal;
+}
+
 bool UserWrap::IsHaveRechargeGoal(unsigned nStartTime, unsigned nEndTime, unsigned goal)
 {
 	if (m_bBase)

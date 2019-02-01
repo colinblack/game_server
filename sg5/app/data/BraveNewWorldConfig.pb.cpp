@@ -44,6 +44,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Mission_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Mission_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Task_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Task_reflection_ = NULL;
 const ::google::protobuf::Descriptor* BraveNewWorldConfig_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   BraveNewWorldConfig_reflection_ = NULL;
@@ -129,10 +132,11 @@ void protobuf_AssignDesc_BraveNewWorldConfig_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(City));
   Tech_descriptor_ = file->message_type(4);
-  static const int Tech_offsets_[3] = {
+  static const int Tech_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tech, cost_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tech, cd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tech, value_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Tech, ecost_),
   };
   Tech_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -197,8 +201,26 @@ void protobuf_AssignDesc_BraveNewWorldConfig_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Mission));
-  BraveNewWorldConfig_descriptor_ = file->message_type(8);
-  static const int BraveNewWorldConfig_offsets_[10] = {
+  Task_descriptor_ = file->message_type(8);
+  static const int Task_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Task, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Task, require_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Task, eqid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Task, count_),
+  };
+  Task_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Task_descriptor_,
+      Task::default_instance_,
+      Task_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Task, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Task, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Task));
+  BraveNewWorldConfig_descriptor_ = file->message_type(9);
+  static const int BraveNewWorldConfig_offsets_[12] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, land_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, config_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, zone_),
@@ -209,6 +231,8 @@ void protobuf_AssignDesc_BraveNewWorldConfig_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, area_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, reward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, mission_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, huoyue_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, task_),
   };
   BraveNewWorldConfig_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -250,6 +274,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Mission_descriptor_, &Mission::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Task_descriptor_, &Task::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     BraveNewWorldConfig_descriptor_, &BraveNewWorldConfig::default_instance());
 }
 
@@ -272,6 +298,8 @@ void protobuf_ShutdownFile_BraveNewWorldConfig_2eproto() {
   delete RewardConfig_reflection_;
   delete Mission::default_instance_;
   delete Mission_reflection_;
+  delete Task::default_instance_;
+  delete Task_reflection_;
   delete BraveNewWorldConfig::default_instance_;
   delete BraveNewWorldConfig_reflection_;
 }
@@ -290,23 +318,26 @@ void protobuf_AddDesc_BraveNewWorldConfig_2eproto() {
     "(\r\022\016\n\006occupy\030\003 \002(\r\022\017\n\007product\030\004 \002(\r\022\013\n\003n"
     "pc\030\005 \003(\r\"&\n\004Zone\022\r\n\005level\030\001 \002(\r\022\017\n\007produ"
     "ct\030\002 \002(\r\"1\n\004City\022\r\n\005level\030\001 \002(\r\022\014\n\004need\030"
-    "\002 \002(\r\022\014\n\004time\030\003 \002(\r\"/\n\004Tech\022\014\n\004cost\030\001 \002("
-    "\r\022\n\n\002cd\030\002 \002(\r\022\r\n\005value\030\003 \003(\r\"\"\n\010ZoneArea"
-    "\022\n\n\002lu\030\001 \003(\r\022\n\n\002rd\030\002 \003(\r\"6\n\014RewardConfig"
-    "\022\013\n\003all\030\001 \003(\r\022\013\n\003one\030\002 \003(\r\022\014\n\004user\030\003 \002(\r"
-    "\"N\n\007Mission\022\020\n\010alliance\030\001 \003(\r\022\r\n\005user2\030\002"
-    " \002(\r\022\n\n\002m1\030\003 \002(\r\022\n\n\002m2\030\004 \002(\r\022\n\n\002m3\030\005 \002(\r"
-    "\"\232\003\n\023BraveNewWorldConfig\022(\n\004land\030\001 \003(\0132\032"
-    ".BraveNewWorldConfig.Point\022-\n\006config\030\002 \003"
-    "(\0132\035.BraveNewWorldConfig.Property\022\'\n\004zon"
-    "e\030\003 \003(\0132\031.BraveNewWorldConfig.Zone\022\'\n\004ci"
-    "ty\030\004 \003(\0132\031.BraveNewWorldConfig.City\022\017\n\007p"
-    "_limit\030\005 \003(\r\022\017\n\007m_limit\030\006 \003(\r\022\'\n\004tech\030\007 "
-    "\003(\0132\031.BraveNewWorldConfig.Tech\022+\n\004area\030\010"
-    " \003(\0132\035.BraveNewWorldConfig.ZoneArea\0221\n\006r"
-    "eward\030\t \002(\0132!.BraveNewWorldConfig.Reward"
-    "Config\022-\n\007mission\030\n \002(\0132\034.BraveNewWorldC"
-    "onfig.Mission", 933);
+    "\002 \002(\r\022\014\n\004time\030\003 \002(\r\">\n\004Tech\022\014\n\004cost\030\001 \002("
+    "\r\022\n\n\002cd\030\002 \002(\r\022\r\n\005value\030\003 \003(\r\022\r\n\005ecost\030\004 "
+    "\001(\r\"\"\n\010ZoneArea\022\n\n\002lu\030\001 \003(\r\022\n\n\002rd\030\002 \003(\r\""
+    "6\n\014RewardConfig\022\013\n\003all\030\001 \003(\r\022\013\n\003one\030\002 \003("
+    "\r\022\014\n\004user\030\003 \002(\r\"N\n\007Mission\022\020\n\010alliance\030\001"
+    " \003(\r\022\r\n\005user2\030\002 \002(\r\022\n\n\002m1\030\003 \002(\r\022\n\n\002m2\030\004 "
+    "\002(\r\022\n\n\002m3\030\005 \002(\r\"@\n\004Task\022\n\n\002id\030\001 \002(\r\022\017\n\007r"
+    "equire\030\002 \002(\r\022\014\n\004eqid\030\003 \003(\r\022\r\n\005count\030\004 \003("
+    "\r\"\323\003\n\023BraveNewWorldConfig\022(\n\004land\030\001 \003(\0132"
+    "\032.BraveNewWorldConfig.Point\022-\n\006config\030\002 "
+    "\003(\0132\035.BraveNewWorldConfig.Property\022\'\n\004zo"
+    "ne\030\003 \003(\0132\031.BraveNewWorldConfig.Zone\022\'\n\004c"
+    "ity\030\004 \003(\0132\031.BraveNewWorldConfig.City\022\017\n\007"
+    "p_limit\030\005 \003(\r\022\017\n\007m_limit\030\006 \003(\r\022\'\n\004tech\030\007"
+    " \003(\0132\031.BraveNewWorldConfig.Tech\022+\n\004area\030"
+    "\010 \003(\0132\035.BraveNewWorldConfig.ZoneArea\0221\n\006"
+    "reward\030\t \002(\0132!.BraveNewWorldConfig.Rewar"
+    "dConfig\022-\n\007mission\030\n \002(\0132\034.BraveNewWorld"
+    "Config.Mission\022\016\n\006huoyue\030\013 \003(\r\022\'\n\004task\030\014"
+    " \003(\0132\031.BraveNewWorldConfig.Task", 1071);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "BraveNewWorldConfig.proto", &protobuf_RegisterTypes);
   Point::default_instance_ = new Point();
@@ -317,6 +348,7 @@ void protobuf_AddDesc_BraveNewWorldConfig_2eproto() {
   ZoneArea::default_instance_ = new ZoneArea();
   RewardConfig::default_instance_ = new RewardConfig();
   Mission::default_instance_ = new Mission();
+  Task::default_instance_ = new Task();
   BraveNewWorldConfig::default_instance_ = new BraveNewWorldConfig();
   Point::default_instance_->InitAsDefaultInstance();
   Property::default_instance_->InitAsDefaultInstance();
@@ -326,6 +358,7 @@ void protobuf_AddDesc_BraveNewWorldConfig_2eproto() {
   ZoneArea::default_instance_->InitAsDefaultInstance();
   RewardConfig::default_instance_->InitAsDefaultInstance();
   Mission::default_instance_->InitAsDefaultInstance();
+  Task::default_instance_->InitAsDefaultInstance();
   BraveNewWorldConfig::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_BraveNewWorldConfig_2eproto);
 }
@@ -1718,6 +1751,7 @@ void City::Swap(City* other) {
 const int Tech::kCostFieldNumber;
 const int Tech::kCdFieldNumber;
 const int Tech::kValueFieldNumber;
+const int Tech::kEcostFieldNumber;
 #endif  // !_MSC_VER
 
 Tech::Tech()
@@ -1740,6 +1774,7 @@ void Tech::SharedCtor() {
   _cached_size_ = 0;
   cost_ = 0u;
   cd_ = 0u;
+  ecost_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1785,7 +1820,10 @@ void Tech::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  ZR_(cost_, cd_);
+  if (_has_bits_[0 / 32] & 11) {
+    ZR_(cost_, cd_);
+    ecost_ = 0u;
+  }
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -1849,6 +1887,21 @@ bool Tech::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(24)) goto parse_value;
+        if (input->ExpectTag(32)) goto parse_ecost;
+        break;
+      }
+
+      // optional uint32 ecost = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_ecost:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &ecost_)));
+          set_has_ecost();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1894,6 +1947,11 @@ void Tech::SerializeWithCachedSizes(
       3, this->value(i), output);
   }
 
+  // optional uint32 ecost = 4;
+  if (has_ecost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->ecost(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1920,6 +1978,11 @@ void Tech::SerializeWithCachedSizes(
       WriteUInt32ToArray(3, this->value(i), target);
   }
 
+  // optional uint32 ecost = 4;
+  if (has_ecost()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->ecost(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -1944,6 +2007,13 @@ int Tech::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->cd());
+    }
+
+    // optional uint32 ecost = 4;
+    if (has_ecost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->ecost());
     }
 
   }
@@ -1990,6 +2060,9 @@ void Tech::MergeFrom(const Tech& from) {
     if (from.has_cd()) {
       set_cd(from.cd());
     }
+    if (from.has_ecost()) {
+      set_ecost(from.ecost());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2017,6 +2090,7 @@ void Tech::Swap(Tech* other) {
     std::swap(cost_, other->cost_);
     std::swap(cd_, other->cd_);
     value_.Swap(&other->value_);
+    std::swap(ecost_, other->ecost_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -3016,6 +3090,371 @@ void Mission::Swap(Mission* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int Task::kIdFieldNumber;
+const int Task::kRequireFieldNumber;
+const int Task::kEqidFieldNumber;
+const int Task::kCountFieldNumber;
+#endif  // !_MSC_VER
+
+Task::Task()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:BraveNewWorldConfig.Task)
+}
+
+void Task::InitAsDefaultInstance() {
+}
+
+Task::Task(const Task& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:BraveNewWorldConfig.Task)
+}
+
+void Task::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = 0u;
+  require_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Task::~Task() {
+  // @@protoc_insertion_point(destructor:BraveNewWorldConfig.Task)
+  SharedDtor();
+}
+
+void Task::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Task::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Task::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Task_descriptor_;
+}
+
+const Task& Task::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_BraveNewWorldConfig_2eproto();
+  return *default_instance_;
+}
+
+Task* Task::default_instance_ = NULL;
+
+Task* Task::New() const {
+  return new Task;
+}
+
+void Task::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<Task*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(id_, require_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  eqid_.Clear();
+  count_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Task::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:BraveNewWorldConfig.Task)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_require;
+        break;
+      }
+
+      // required uint32 require = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_require:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &require_)));
+          set_has_require();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_eqid;
+        break;
+      }
+
+      // repeated uint32 eqid = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_eqid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 24, input, this->mutable_eqid())));
+        } else if (tag == 26) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_eqid())));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_eqid;
+        if (input->ExpectTag(32)) goto parse_count;
+        break;
+      }
+
+      // repeated uint32 count = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 32, input, this->mutable_count())));
+        } else if (tag == 34) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_count())));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_count;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:BraveNewWorldConfig.Task)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:BraveNewWorldConfig.Task)
+  return false;
+#undef DO_
+}
+
+void Task::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:BraveNewWorldConfig.Task)
+  // required uint32 id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
+  }
+
+  // required uint32 require = 2;
+  if (has_require()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->require(), output);
+  }
+
+  // repeated uint32 eqid = 3;
+  for (int i = 0; i < this->eqid_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      3, this->eqid(i), output);
+  }
+
+  // repeated uint32 count = 4;
+  for (int i = 0; i < this->count_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      4, this->count(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:BraveNewWorldConfig.Task)
+}
+
+::google::protobuf::uint8* Task::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:BraveNewWorldConfig.Task)
+  // required uint32 id = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
+  }
+
+  // required uint32 require = 2;
+  if (has_require()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->require(), target);
+  }
+
+  // repeated uint32 eqid = 3;
+  for (int i = 0; i < this->eqid_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(3, this->eqid(i), target);
+  }
+
+  // repeated uint32 count = 4;
+  for (int i = 0; i < this->count_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(4, this->count(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:BraveNewWorldConfig.Task)
+  return target;
+}
+
+int Task::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 id = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->id());
+    }
+
+    // required uint32 require = 2;
+    if (has_require()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->require());
+    }
+
+  }
+  // repeated uint32 eqid = 3;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->eqid_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->eqid(i));
+    }
+    total_size += 1 * this->eqid_size() + data_size;
+  }
+
+  // repeated uint32 count = 4;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->count_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->count(i));
+    }
+    total_size += 1 * this->count_size() + data_size;
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Task::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Task* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Task*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Task::MergeFrom(const Task& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  eqid_.MergeFrom(from.eqid_);
+  count_.MergeFrom(from.count_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+    if (from.has_require()) {
+      set_require(from.require());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Task::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Task::CopyFrom(const Task& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Task::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void Task::Swap(Task* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(require_, other->require_);
+    eqid_.Swap(&other->eqid_);
+    count_.Swap(&other->count_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Task::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Task_descriptor_;
+  metadata.reflection = Task_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int BraveNewWorldConfig::kLandFieldNumber;
 const int BraveNewWorldConfig::kConfigFieldNumber;
 const int BraveNewWorldConfig::kZoneFieldNumber;
@@ -3026,6 +3465,8 @@ const int BraveNewWorldConfig::kTechFieldNumber;
 const int BraveNewWorldConfig::kAreaFieldNumber;
 const int BraveNewWorldConfig::kRewardFieldNumber;
 const int BraveNewWorldConfig::kMissionFieldNumber;
+const int BraveNewWorldConfig::kHuoyueFieldNumber;
+const int BraveNewWorldConfig::kTaskFieldNumber;
 #endif  // !_MSC_VER
 
 BraveNewWorldConfig::BraveNewWorldConfig()
@@ -3103,6 +3544,8 @@ void BraveNewWorldConfig::Clear() {
   m_limit_.Clear();
   tech_.Clear();
   area_.Clear();
+  huoyue_.Clear();
+  task_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -3261,6 +3704,39 @@ bool BraveNewWorldConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(88)) goto parse_huoyue;
+        break;
+      }
+
+      // repeated uint32 huoyue = 11;
+      case 11: {
+        if (tag == 88) {
+         parse_huoyue:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 88, input, this->mutable_huoyue())));
+        } else if (tag == 90) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_huoyue())));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(88)) goto parse_huoyue;
+        if (input->ExpectTag(98)) goto parse_task;
+        break;
+      }
+
+      // repeated .BraveNewWorldConfig.Task task = 12;
+      case 12: {
+        if (tag == 98) {
+         parse_task:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_task()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(98)) goto parse_task;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -3350,6 +3826,18 @@ void BraveNewWorldConfig::SerializeWithCachedSizes(
       10, this->mission(), output);
   }
 
+  // repeated uint32 huoyue = 11;
+  for (int i = 0; i < this->huoyue_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      11, this->huoyue(i), output);
+  }
+
+  // repeated .BraveNewWorldConfig.Task task = 12;
+  for (int i = 0; i < this->task_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      12, this->task(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3426,6 +3914,19 @@ void BraveNewWorldConfig::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         10, this->mission(), target);
+  }
+
+  // repeated uint32 huoyue = 11;
+  for (int i = 0; i < this->huoyue_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(11, this->huoyue(i), target);
+  }
+
+  // repeated .BraveNewWorldConfig.Task task = 12;
+  for (int i = 0; i < this->task_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        12, this->task(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -3523,6 +4024,24 @@ int BraveNewWorldConfig::ByteSize() const {
         this->area(i));
   }
 
+  // repeated uint32 huoyue = 11;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->huoyue_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->huoyue(i));
+    }
+    total_size += 1 * this->huoyue_size() + data_size;
+  }
+
+  // repeated .BraveNewWorldConfig.Task task = 12;
+  total_size += 1 * this->task_size();
+  for (int i = 0; i < this->task_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->task(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -3556,6 +4075,8 @@ void BraveNewWorldConfig::MergeFrom(const BraveNewWorldConfig& from) {
   m_limit_.MergeFrom(from.m_limit_);
   tech_.MergeFrom(from.tech_);
   area_.MergeFrom(from.area_);
+  huoyue_.MergeFrom(from.huoyue_);
+  task_.MergeFrom(from.task_);
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_reward()) {
       mutable_reward()->::BraveNewWorldConfig::RewardConfig::MergeFrom(from.reward());
@@ -3593,6 +4114,7 @@ bool BraveNewWorldConfig::IsInitialized() const {
   if (has_mission()) {
     if (!this->mission().IsInitialized()) return false;
   }
+  if (!::google::protobuf::internal::AllAreInitialized(this->task())) return false;
   return true;
 }
 
@@ -3608,6 +4130,8 @@ void BraveNewWorldConfig::Swap(BraveNewWorldConfig* other) {
     area_.Swap(&other->area_);
     std::swap(reward_, other->reward_);
     std::swap(mission_, other->mission_);
+    huoyue_.Swap(&other->huoyue_);
+    task_.Swap(&other->task_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

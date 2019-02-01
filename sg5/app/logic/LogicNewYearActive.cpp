@@ -104,15 +104,66 @@ int CLogicNewYearActive::Visit(unsigned uid, unsigned userid, Json::Value &resul
 	result["newAct"] = newAct;
 	result["can"] = 1;
 
+	Json::Value equipResult;
+	result["equipment"] = Json::Value(Json::arrayValue);
 	CLogicEquipment logicEquipment;
-	ret = logicEquipment.AddOneItem(uid, eqid, eqcount, "newyearactive_"+CTrans::ITOS(type), result["equipment"], true);
+	ret = logicEquipment.AddOneItem(uid, eqid, eqcount, "newyearactive_"+CTrans::ITOS(type), equipResult, true);
 	if (ret)
 	{
 		return ret;
 	}
+	if (!equipResult.isNull() && equipResult.isArray()) {
+		for (size_t i = 0; i < equipResult.size(); ++i) {
+			result["equipment"].append(equipResult[i]);
+		}
+	}
+
+	if (actconfig.Type() == "birdbridge") {
+		equipResult.clear();
+		unsigned ats = actconfig.EndTS() > Time::GetGlobalTime() ? actconfig.EndTS() - Time::GetGlobalTime() : 1;
+		BirdBridgeReward(uid, type, equipResult, ats);
+		if (!equipResult.isNull() && equipResult.isArray()) {
+			for (size_t i = 0; i < equipResult.size(); ++i) {
+				result["equipment"].append(equipResult[i]);
+			}
+		}
+	}
 	string code = "newyearactive_baifang_" + CTrans::ITOS(userid);
 	ORDERS_LOG("uid=%u&code=%s&price=1&amount=1&type=3", uid, code.c_str());
 	return 0;
+}
+
+int CLogicNewYearActive::BirdBridgeReward(unsigned uid, unsigned type, Json::Value &equip, unsigned ats) {
+	vector<ItemAdd> items;
+
+	ItemAdd item1;
+	item1.eqid = ACT_BIRD_BRIDGE_LEFT;
+	if (type == 0) {
+		item1.count = 4 + Math::GetRandomInt(3);
+	} else if (type == 1) {
+		item1.count = 4 + Math::GetRandomInt(3);
+	} else {
+		item1.count = 9 + Math::GetRandomInt(3);
+	}
+	item1.ats = ats;
+	item1.reason = "newyear_birdbridge";
+
+	items.push_back(item1);
+
+	ItemAdd item2;
+	item2.eqid = ACT_BIRD_BRIDGE_RIGHT;
+	if (type == 0) {
+		item2.count = 4 + Math::GetRandomInt(3);
+	} else {
+		item2.count = 9 + Math::GetRandomInt(3);
+	}
+	item2.ats = ats;
+	item2.reason = "newyear_birdbridge";
+
+	items.push_back(item2);
+
+	CLogicEquipment logicEquipment;
+	return logicEquipment.AddItems(uid, items, equip, true);
 }
 
 int CLogicNewYearActive::GetInfo(unsigned uid, unsigned userid, Json::Value &result)

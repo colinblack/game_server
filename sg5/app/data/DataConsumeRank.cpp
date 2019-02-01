@@ -86,16 +86,21 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 					break;
 
 				int p1 = 0, p2 = 0, pe = 0;
-				if (i + 1 == 1)
-					p1 = 1;
-				else if (i + 1 <= 3)
-					p1 = 2;
-				else if (i + 1 <= 20)
-					p1 = 3;
-				else if (i + 1 <= 100)
-					p1 = 4;
-				else
-					p1 = 5;
+
+				if (pTable->day.user[p].cash >= 500)
+				{
+					if (i + 1 == 1)
+						p1 = 1;
+					else if (i + 1 <= 3)
+						p1 = 2;
+					else if (i + 1 <= 20)
+						p1 = 3;
+					else if (i + 1 <= 100)
+						p1 = 4;
+					else
+						p1 = 5;
+				}
+
 				if (pTable->day.user[p].cash >= 148888)
 					p2 = 1;
 				else if (pTable->day.user[p].cash >= 88888)
@@ -108,58 +113,79 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 					p2 = 5;
 				pe = ((p1 && p2) ? max(p1, p2) : 0);
 
-				unsigned eqid;
+				unsigned eqid,eqid1;
 				if(serverid <= ALL_SERVER_ZONE_A)
 				{
 					if(pe == 1)
-						eqid = 766;
+						eqid = 44129;
 					else if(pe == 2)
-						eqid = 767;
+						eqid = 50146;
 					else if(pe == 3)
-						eqid = 768;
+						eqid = 44038;
 					else if(pe == 4)
-						eqid = 769;
+						eqid = 44037;
 					else if(pe == 5)
-						eqid = 770;
+						eqid = 44036;
 				}
 				else if(serverid <= ALL_SERVER_ZONE_B)
 				{
 					if(pe == 1)
-						eqid = 766;
+						eqid = 44129;
 					else if(pe == 2)
-						eqid = 767;
+						eqid = 50146;
 					else if(pe == 3)
-						eqid = 768;
+						eqid = 44038;
 					else if(pe == 4)
-						eqid = 769;
+						eqid = 44037;
 					else if(pe == 5)
-						eqid = 770;
+						eqid = 44036;
 				}
 				else
 				{
 					if(pe == 1)
-						eqid = 786;
+						eqid = 44129;
 					else if(pe == 2)
-						eqid = 787;
+						eqid = 50146;
 					else if(pe == 3)
-						eqid = 788;
+						eqid = 44038;
 					else if(pe == 4)
-						eqid = 789;
+						eqid = 44037;
 					else if(pe == 5)
-						eqid = 790;
+						eqid = 44036;
 				}
 
-				if(pe)
+				if(p1 == 1)
+					eqid1 = 50136;
+				else if(p1 == 2)
+					eqid1 = 50137;
+				else if(p1 == 3)
+					eqid1 = 50138;
+				else if(p1 == 4)
+					eqid1 = 50139;
+				else if(p1 == 5)
+					eqid1 = 50140;
+
+				if(pe || p1)
 				{
 					AUTO_LOCK_USER(pTable->day.user[p].uid)
-					if(logicEquipment.AddOneItem(pTable->day.user[p].uid, eqid, 1, "consumeRank", temp) == 0)
+					int ret = 0;
+					string code = "consumeRankDay_"+Convert::IntToString(p1)+"_"+Convert::IntToString(pe)+"_"+Convert::IntToString(pTable->day.user[p].cash);
+					if (pe)
+						ret += logicEquipment.AddOneItem(pTable->day.user[p].uid, eqid, 1, code, temp);
+					if (p1)
+						ret += logicEquipment.AddOneItem(pTable->day.user[p].uid, eqid1, 1, code, temp);
+					if(ret == 0)
 					{
 						Json::Value updates;
 						updates["s"] = "CONSUMERANKDAY";
 						updates["uid"] = pTable->day.user[p].uid;
 						updates["ts"] = now1;
 						updates["rank"] = i+1;
-						updates["eqid"] = eqid;
+						if (pe)
+							updates["eqid"] = eqid;
+						if (p1)
+							updates["eqid1"] = eqid1;
+						updates["cash"] = pTable->day.user[p].cash;
 						logicUpdates.AddUpdate(pTable->day.user[p].uid,updates,true);
 					}
 				}
@@ -178,16 +204,19 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 						break;
 
 					int p1 = 0, p2 = 0, pe = 0;
-					if (i + 1 == 1)
-						p1 = 1;
-					else if (i + 1 <= 3)
-						p1 = 2;
-					else if (i + 1 <= 10)
-						p1 = 3;
-					else if (i + 1 <= 50)
-						p1 = 4;
-					else
-						p1 = 5;
+					if (pTable->all.user[p].cash >= 500)
+					{
+						if (i + 1 == 1)
+							p1 = 1;
+						else if (i + 1 <= 3)
+							p1 = 2;
+						else if (i + 1 <= 10)
+							p1 = 3;
+						else if (i + 1 <= 50)
+							p1 = 4;
+						else
+							p1 = 5;
+					}
 					if (pTable->all.user[p].cash >= 488888)
 						p2 = 1;
 					else if (pTable->all.user[p].cash >= 288888)
@@ -200,58 +229,79 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 						p2 = 5;
 					pe = ((p1 && p2) ? max(p1, p2) : 0);
 
-					unsigned eqid;
+					unsigned eqid, eqid1;
 					if(serverid <= ALL_SERVER_ZONE_A)
 					{
 						if(pe == 1)
-							eqid = 771;
+							eqid = 994;
 						else if(pe == 2)
-							eqid = 772;
+							eqid = 44030;
 						else if(pe == 3)
-							eqid = 773;
+							eqid = 44029;
 						else if(pe == 4)
-							eqid = 774;
+							eqid = 44027;
 						else if(pe == 5)
-							eqid = 775;
+							eqid = 86036;
 					}
 					else if(serverid <= ALL_SERVER_ZONE_B)
 					{
 						if(pe == 1)
-							eqid = 771;
+							eqid = 994;
 						else if(pe == 2)
-							eqid = 772;
+							eqid = 44030;
 						else if(pe == 3)
-							eqid = 773;
+							eqid = 44029;
 						else if(pe == 4)
-							eqid = 774;
+							eqid = 44027;
 						else if(pe == 5)
-							eqid = 775;
+							eqid = 86036;
 					}
 					else
 					{
 						if(pe == 1)
-							eqid = 791;
+							eqid = 994;
 						else if(pe == 2)
-							eqid = 792;
+							eqid = 44030;
 						else if(pe == 3)
-							eqid = 793;
+							eqid = 44029;
 						else if(pe == 4)
-							eqid = 794;
+							eqid = 44027;
 						else if(pe == 5)
-							eqid = 795;
+							eqid = 86036;
 					}
 
-					if(pe)
+					if(p1 == 1)
+						eqid1 = 50141;
+					else if(p1 == 2)
+						eqid1 = 50142;
+					else if(p1 == 3)
+						eqid1 = 50143;
+					else if(p1 == 4)
+						eqid1 = 50144;
+					else if(p1 == 5)
+						eqid1 = 50145;
+
+					if(pe || p1)
 					{
 						AUTO_LOCK_USER(pTable->all.user[p].uid)
-						if(logicEquipment.AddOneItem(pTable->all.user[p].uid, eqid, 1, "consumeRank", temp) == 0)
+						int ret = 0;
+						string code = "consumeRankAll_"+Convert::IntToString(p1)+"_"+Convert::IntToString(pe)+"_"+Convert::IntToString(pTable->all.user[p].cash);
+						if (pe)
+							ret += logicEquipment.AddOneItem(pTable->all.user[p].uid, eqid, 1, code, temp);
+						if (p1)
+							ret += logicEquipment.AddOneItem(pTable->all.user[p].uid, eqid1, 1, code, temp);
+						if(ret == 0)
 						{
 							Json::Value updates;
 							updates["s"] = "CONSUMERANKALL";
 							updates["uid"] = pTable->all.user[p].uid;
 							updates["ts"] = now1+1;
 							updates["rank"] = i+1;
-							updates["eqid"] = eqid;
+							if (pe)
+								updates["eqid"] = eqid;
+							if (p1)
+								updates["eqid1"] = eqid1;
+							updates["cash"] = pTable->all.user[p].cash;
 							logicUpdates.AddUpdate(pTable->all.user[p].uid,updates,true);
 						}
 					}

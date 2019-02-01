@@ -1310,6 +1310,8 @@ int CLogicAlliance::SetAllianceData(unsigned uid, unsigned allianceId, Json::Val
 		error_log("[tech_wrong][aid=%u,uid=%u]", allianceId, uid);
 		ERROR_RETURN_MSG(R_ERR_PARAM, "tech_wrong");
 	}
+	while (extraData["cdata"]["techLv"].size() < ALLIANCE_TECH_NUM)
+		extraData["cdata"]["techLv"].append(0);
 	if(extraData["cdata"].isMember("techLv") && data["alliancedata"].isMember("techLv")
 	&& extraData["cdata"]["techLv"].size() == data["alliancedata"]["techLv"].size())
 	{
@@ -1370,7 +1372,7 @@ int CLogicAlliance::SetMemberData(unsigned uid, unsigned allianceId, const Json:
 	return 0;
 }
 
-int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int point, const Json::Value &data)
+int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int point, int ud, const Json::Value &data)
 {
 	if (point < 0)
 	{
@@ -1386,20 +1388,6 @@ int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int
 		return ret;
 	}
 
-	if ( member.curr_point < point  )
-	{
-		error_log("[No enough point!][uid=%u,aid=%u]",uid,allianceId);
-		PARAM_ERROR_RETURN();
-	}
-
-	if(point < 100)
-	{
-		error_log("[point less than 100][uid=%u,aid=%u]",uid,allianceId);
-		PARAM_ERROR_RETURN();
-	}
-
-	member.curr_point -= point;
-
 	CLogicUser logicUser;
 	DataUser user;
 	AUTO_LOCK_USER(uid)
@@ -1409,17 +1397,27 @@ int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int
 		error_log("[Get user failed!][uid=%u,ret=%d]",uid, ret);
 		return R_ERR_DATA;
 	}
+	if (data["techLv"].size() != ALLIANCE_TECH_NUM)
+	{
+		LOGIC_ERROR_RETURN_MSG("size error");
+	}
 
 	Json::Value oldtech;
 	Json::Reader reader;
+	unsigned ii = -1;
+	if (user.alliance_tech.empty()) {
+		user.alliance_tech = "{\"techLv\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}";
+	}
 	if(!user.alliance_tech.empty()
 	&& reader.parse(user.alliance_tech,oldtech)
 	&& oldtech.isMember("techLv")
 	&& oldtech["techLv"].isArray()
 	&& data.isMember("techLv")
 	&& data["techLv"].isArray()
-	&& oldtech["techLv"].size() == data["techLv"].size())
+	&& oldtech["techLv"].size() <= data["techLv"].size())
 	{
+		while (oldtech["techLv"].size() < ALLIANCE_TECH_NUM)
+			oldtech["techLv"].append(0);
 		bool one = false;
 		for(unsigned i=0;i<oldtech["techLv"].size();++i)
 		{
@@ -1438,7 +1436,53 @@ int CLogicAlliance::SetAllianceMemberData(unsigned uid, unsigned allianceId, int
 					PARAM_ERROR_RETURN();
 				}
 				one = true;
+				ii = i;
 			}
+		}
+	}
+
+	if (ii == -1)
+	{
+		LOGIC_ERROR_RETURN_MSG("tech error");
+	}
+
+	CDataXML *pdata = CDataXML::GetCDataXML();
+	if (pdata == NULL) {
+		throw std::runtime_error("xml_error");
+	}
+	XMLUnionTechItem cfg;
+	ret = pdata->GetUnionTechItem(ii+1, cfg);
+	if (0 != ret) {
+		error_log("GetUnionTechItem error uid=%u", uid);
+		return ret;
+	}
+
+	if (cfg.studypoint[oldtech["techLv"][ii].asUInt()] != point)
+	{
+		LOGIC_ERROR_RETURN_MSG("point error");
+	}
+
+	if ( member.curr_point < point  )
+	{
+		error_log("[No enough point!][uid=%u,aid=%u]",uid,allianceId);
+		PARAM_ERROR_RETURN();
+	}
+
+	if(point < 100)
+	{
+		error_log("[point less than 100][uid=%u,aid=%u]",uid,allianceId);
+		PARAM_ERROR_RETURN();
+	}
+
+	member.curr_point -= point;
+
+	if (cfg.eqpoint[oldtech["techLv"][ii].asUInt()])
+	{
+		CLogicEquipment equipment;
+		ret = equipment.UseEquipment(uid, 2034, ud, cfg.eqpoint[oldtech["techLv"][ii].asUInt()], "SetAllianceMemberData");
+		if (0 != ret) {
+			error_log("UseEquipment error uid=%u", uid);
+			return ret;
 		}
 	}
 

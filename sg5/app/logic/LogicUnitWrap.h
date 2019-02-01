@@ -35,6 +35,7 @@ public:
 	//获取指定时间段的充值积分
 	int GetRechargePoint(const ActInfoConfig& config) const;
 	unsigned GetRechargePoint(unsigned nStartTime, unsigned nEndTime) const;
+	unsigned GetConsumePoint(unsigned nStartTime, unsigned nEndTime) const;
 
 	//判断时间范围内是否存在充值数大于等于N的
 	bool IsHaveRechargeGoal(unsigned nStartTime, unsigned nEndTime, unsigned goal);

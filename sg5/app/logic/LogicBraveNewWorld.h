@@ -44,6 +44,9 @@ public:
 	int CollectOne(unsigned uid, unsigned seq, BraveNewWorldPoint& p, Json::Value &result);
 	int AttackSelf(unsigned uid, unsigned seq, BraveNewWorldPoint& p, Json::Value &result);
 	int GetMission(unsigned uid, unsigned seq, unsigned type, Json::Value &result);
+	int newWorldAwards(unsigned uid, unsigned index,  unsigned id, unsigned seq, Json::Value &result);
+	int GetTarget(unsigned uid, unsigned userid, Json::Value &result);
+	int getNewWorldBoss(Json::Value &result);
 };
 
 

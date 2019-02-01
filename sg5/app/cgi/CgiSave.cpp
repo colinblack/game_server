@@ -105,6 +105,9 @@ public:
 	CGI_SET_ACTION_DEFAULT_MAP("heropowerup", HeroPowerUp)
 	CGI_SET_ACTION_DEFAULT_MAP("heropower2up", HeroPower2Up)
 	CGI_SET_ACTION_DEFAULT_MAP("heropower3up", HeroPower3Up)
+	CGI_SET_ACTION_DEFAULT_MAP("liandan", liandan)
+	CGI_SET_ACTION_DEFAULT_MAP("keyao", keyao)
+	CGI_SET_ACTION_DEFAULT_MAP("godh", godh)
 	CGI_SET_ACTION_DEFAULT_MAP("herolearnhorse", HeroLearnHorse)
 	CGI_SET_ACTION_DEFAULT_MAP("upgradehorse", UpgradeHorse)
 	CGI_SET_ACTION_DEFAULT_MAP("elevatehorese", ElevateHorse)
@@ -141,6 +144,7 @@ public:
 	CGI_SET_ACTION_DEFAULT_MAP("HeavenDaoist", HeavenDaoist)
 	CGI_SET_ACTION_DEFAULT_MAP("Catapult", Catapult)
 	CGI_SET_ACTION_DEFAULT_MAP("CatapultSkill", CatapultSkillUp)
+	CGI_SET_ACTION_DEFAULT_MAP("EightFormation", EightFormation)
 	CGI_SET_ACTION_DEFAULT_MAP("R5", R5)
 	CGI_SET_ACTION_DEFAULT_MAP("MultipleWheel", MultipleWheel)
 	CGI_SET_ACTION_DEFAULT_MAP("UpgradeGem", UpgradeGem)
@@ -327,7 +331,8 @@ public:
     CGI_SET_ACTION_DEFAULT_MAP("FastUpGradeBNWTech", FastUpGradeBNWTech)
     CGI_SET_ACTION_DEFAULT_MAP("HequCharge", HequCharge)
     CGI_SET_ACTION_DEFAULT_MAP("HequVIP", HequVIP)
-    CGI_SET_ACTION_DEFAULT_MAP("HequBuchang", HequBuchang)
+    CGI_SET_ACTION_DEFAULT_MAP("HequBuchang", HequBuchang)//改为等级补偿
+	CGI_SET_ACTION_DEFAULT_MAP("HequBuzhu", HequBuzhu)
     CGI_SET_ACTION_DEFAULT_MAP("Learjyt", Learjyt)
     CGI_SET_ACTION_DEFAULT_MAP("LearnJM", LearnJM)
     CGI_SET_ACTION_DEFAULT_MAP("InjectScroll", InjectScroll)
@@ -415,12 +420,24 @@ public:
 	CGI_SET_ACTION_DEFAULT_MAP("InvestmentCount", InvestmentCount)
 	CGI_SET_ACTION_DEFAULT_MAP("InvestmentOption", InvestmentOption)
 	CGI_SET_ACTION_DEFAULT_MAP("InvestmentReward", InvestmentReward)
+	CGI_SET_ACTION_DEFAULT_MAP("BirdBridge", BirdBridge)
+	CGI_SET_ACTION_DEFAULT_MAP("ShengDan2018", ShengDan2018)
 	/********************************************************************/
 	/*  活动太多  先是抽象成模板  最后只能搞宏       */
 #define CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_NAME) \
 		CGI_SET_ACTION_DEFAULT_MAP(CONFIG_NAME, CONFIG_NAME##_ACT)
 	/********************************************************************/
 //autolable7
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yuandan2018)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yearend2018)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_winter2018)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
+	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_mid_aug_hao)
+	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_mid_aug_reu)
+	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_water_taotie)
+	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_water_qilin)
+	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_water_pheonix)
+	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_vicky_nnom)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_NO_NAME)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_BINGSHU)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_QIANFU)
@@ -432,7 +449,28 @@ public:
     CGI_SET_ACTION_DEFAULT_MAP("BatmanTreasureChargeReward", BatmanTreasureChargeReward)
     CGI_SET_ACTION_DEFAULT_MAP("BatmanTreasureDraw", BatmanTreasureDraw)
 	CGI_SET_ACTION_DEFAULT_MAP("HeroExtraStone", HeroExtraStone)
+	CGI_SET_ACTION_DEFAULT_MAP("FashionStar", FashionStar)
+	CGI_SET_ACTION_DEFAULT_MAP("JihuoChenghao", JihuoChenghao)
+	CGI_SET_ACTION_DEFAULT_MAP("PeidaiChenghao", PeidaiChenghao)
+	CGI_SET_ACTION_DEFAULT_MAP("ZhuanyiChenghao", ZhuanyiChenghao)
 
+	//争霸技能
+	CGI_SET_ACTION_DEFAULT_MAP("CommderSkilLearn", CommderSkilLearn)
+	//破天技升级
+	CGI_SET_ACTION_DEFAULT_MAP("PotianSkilLearn", PotianSkilLearn)
+	//喜迎国庆
+	CGI_SET_ACTION_DEFAULT_MAP("GuoQingChargeReward",  GuoQingChargeReward)
+	CGI_SET_ACTION_DEFAULT_MAP("ChinaDayEveryDayReward",  ChinaDayEveryDayReward)
+	CGI_SET_ACTION_DEFAULT_MAP("ChinaDayOnlineReward",  ChinaDayOnlineReward)
+	CGI_SET_ACTION_DEFAULT_MAP("ChinaDayInstanceZonesReward",  ChinaDayInstanceZonesReward)
+	CGI_SET_ACTION_DEFAULT_MAP("ChinaDayDeDuctChallengeNum",  ChinaDayDeDuctChallengeNum)
+
+	//每日充值自选活动
+	CGI_SET_ACTION_DEFAULT_MAP("EveryDayPayOptionalReward",  EveryDayPayOptionalReward)
+	//兑换自选
+	CGI_SET_ACTION_DEFAULT_MAP("free_exchg",  free_exchg)
+	//fm
+	CGI_SET_ACTION_DEFAULT_MAP("setherofm",SetHeroFm)
 
     CGI_ACTION_DEFAULT_MAP_END
 
@@ -1301,12 +1339,14 @@ public:
 		unsigned lasttime = 0;
 		unsigned seqid = 0;
 		unsigned torch = 0;
+		unsigned classType = 0;
 		Json::GetUInt(m_data, "seqid", seqid);
 		Json::GetUInt(m_data, "lastime", lasttime);
 		Json::GetUInt(m_data, "torch", torch);
+		Json::GetUInt(m_data, "classType", classType);
 
 		CLogicCMD logicCMD;
-		int ret = logicCMD.UseShip(m_uid, torch, m_jsonResult,lasttime,seqid);
+		int ret = logicCMD.UseShip(m_uid, torch, classType, m_jsonResult,lasttime,seqid);
 		if(ret)
 			return ret;
 
@@ -1445,6 +1485,91 @@ public:
 			return ret;
 
 		CGI_SEND_LOG("action=heropower3up&uid=%u&heroud=%u&equd=%u", m_uid, heroud, equd);
+		return R_SUCCESS;
+	}
+
+	int liandan()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.liandan(m_uid,m_data,m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=liandan&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+	int keyao()
+	{
+		unsigned eqid;
+		if (!Json::GetUInt(m_data, "eqid", eqid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned equd;
+		if (!Json::GetUInt(m_data, "equd", equd))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned heroud;
+		if (!Json::GetUInt(m_data, "heroud", heroud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.keyao(m_uid,eqid,equd,heroud,m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=keyao&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int godh()
+	{
+		unsigned equd;
+		if (!Json::GetUInt(m_data, "equd", equd))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned index1;
+		if (!Json::GetUInt(m_data, "index1", index1))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned index2;
+		if (!Json::GetUInt(m_data, "index2", index2))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.godh(m_uid,equd,index1,index2,m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=godh&uid=%u", m_uid);
 		return R_SUCCESS;
 	}
 
@@ -2327,6 +2452,44 @@ public:
 		return R_SUCCESS;
 	}
 
+	int EightFormation()
+	{
+		Json::Value equd;
+		unsigned count = 1;
+		unsigned oneclick = 0; //0 -- 修炼   1 -- 一键升层
+		unsigned id = 0;
+		if (!Json::GetArray(m_data, "equd", equd)
+			 || !Json::GetUInt(m_data, "id", id))
+		{
+			return R_ERR_PARAM;
+		}
+		if(!Json::GetUInt(m_data, "oneclick", oneclick))
+		{
+			return R_ERR_PARAM;
+		}
+		if(id <1 || id > 8)
+		{
+			return R_ERR_PARAM;
+		}
+
+		unsigned is_cash = 0;
+		Json::GetUInt(m_data, "isCash", is_cash);
+
+		unsigned lasttime;
+		unsigned seqid;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.EightFormation(m_uid, id, count, equd, is_cash, 0, m_jsonResult, lasttime, seqid, oneclick);
+		if(0 != ret)
+			return ret;
+
+		CGI_SEND_LOG("action=eightFormation&uid=%u", m_uid);
+		return R_SUCCESS;
+
+	}
+
 	//投石车
 	int Catapult()
 	{
@@ -2525,12 +2688,14 @@ public:
 	{
 		unsigned type = 0;
 		unsigned id = 0;
+		unsigned allserver = 0;
 
 		if (!Json::GetUInt(m_data, "type", type) || !Json::GetUInt(m_data, "id", id))
 		{
 			error_log("para error");
 			return R_ERR_PARAM;
 		}
+		Json::GetUInt(m_data, "allserver", allserver);
 
 		unsigned lasttime = 0;
 		unsigned seqid = 0;
@@ -2541,7 +2706,7 @@ public:
 		CLogicCMD logicCMD;
 		int ret = 0;
 
-		ret = logicCMD.Double11(m_uid, type, id, m_jsonResult, lasttime, seqid);
+		ret = logicCMD.Double11(m_uid, type, id, allserver, m_jsonResult, lasttime, seqid);
 		if (ret)
 		{
 			return ret;
@@ -2556,6 +2721,9 @@ public:
 	{
 		unsigned lasttime = 0;
 		unsigned seqid = 0;
+		unsigned allserver = 0;
+
+		Json::GetUInt(m_data, "allserver", allserver);
 
 		Json::GetUInt(m_data, "lastime", lasttime);
 		Json::GetUInt(m_data, "seqid", seqid);
@@ -2563,7 +2731,7 @@ public:
 		CLogicCMD logicCMD;
 		int ret = 0;
 
-		ret = logicCMD.GetDouble11Rcnt(m_uid, m_jsonResult, lasttime, seqid);
+		ret = logicCMD.GetDouble11Rcnt(m_uid, allserver, m_jsonResult, lasttime, seqid);
 		if (ret)
 		{
 			return ret;
@@ -3453,7 +3621,7 @@ public:
 		Json::GetUInt(m_data, "seqid", seqid);
 		if (!Json::GetUInt(m_data, "yellow_level", yellow_level) ||
 			!Json::GetUInt(m_data, "is_year", is_year) ||
-			 yellow_level < 1 || yellow_level > 8 ||
+			 yellow_level < 1 || yellow_level > 9 ||
 			 is_year > 1)
 		{
 			error_log("para error: yellow_level or is_year");
@@ -4151,6 +4319,16 @@ public:
 	CGI_ACTION_FUNCTION(CONFIG_NAME##_ACT, CONFIG_NAME##_Unit::DrawParams, CONFIG_NAME##_Unit, false, DrawImpl);
 	/********************************************************************/
 //autolable8
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yuandan2018)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yearend2018)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_winter2018)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
+	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_mid_aug_hao)
+	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_mid_aug_reu)
+	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_water_taotie)
+	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_water_qilin)
+	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_water_pheonix)
+	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_vicky_nnom)
 	//vicky没想好名字的活动
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_VICKY_NO_NAME)
 	//兵书突破活动
@@ -4159,6 +4337,9 @@ public:
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_VICKY_QIANFU)
 	//vicky懒得给我说名字的活动
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_VICKY_NNA)
+
+	//兑换自选
+	CGI_ACTION_FUNCTION(free_exchg, BaseCmdParams, FreeExchangeUnit, false, DrawImpl);
 	///////////////////////////////////////////////////////////////
 
 
@@ -4744,7 +4925,7 @@ public:
 		Json::GetUInt(m_data, "lastime", lasttime);
 		Json::GetUInt(m_data, "seqid", seqid);
 
-		unsigned heroud = 0, equd = 0, sectime = 0, costpro = 0;
+		unsigned heroud = 0, sectime = 0, costpro = 0;
 		string skid;
 
 		if (!Json::GetUInt(m_data, "hud", heroud) || !Json::GetString(m_data, "skid", skid) || !m_data.isMember("equds") || !m_data["equds"].isArray()
@@ -4756,7 +4937,7 @@ public:
 
 		CLogicCMD logicCMD;
 
-		int ret = logicCMD.StartSkillTrain(m_uid, heroud, skid, equd, sectime, costpro, m_jsonResult, lasttime, seqid);
+		int ret = logicCMD.StartSkillTrain(m_uid, heroud, skid, m_data, sectime, costpro, m_jsonResult, lasttime, seqid);
 
 		if (R_SUCCESS != ret)
 		{
@@ -6490,9 +6671,15 @@ public:
 			error_log("param error: choices");
 			return R_ERR_PARAM;
 		}
-
+		if (!m_data.isMember("rewardcnt"))
+		{
+			error_log("param error: rewardcnt");
+			return R_ERR_PARAM;
+		}
+		unsigned rewardcnt;
+		Json::GetUInt(m_data, "rewardcnt", rewardcnt);
 		CLogicCMD logicCMD;
-		int ret = logicCMD.GetPayOptionalReward(m_uid, m_data["choices"], m_jsonResult, lasttime, seqid);
+		int ret = logicCMD.GetPayOptionalReward(m_uid, rewardcnt,m_data["choices"], m_jsonResult, lasttime, seqid);
 
 		if(ret)
 			return ret;
@@ -6584,6 +6771,9 @@ public:
 
 	int UpGradeBNWTech()
 	{
+		unsigned ud = 0;
+		Json::GetUInt(m_data, "ud", ud);
+
 		unsigned job = 0;
 		if (!Json::GetUInt(m_data, "job", job))
 		{
@@ -6603,7 +6793,7 @@ public:
 		Json::GetUInt(m_data, "seqid", seqid);
 
 		CLogicCMD logicCMD;
-		int ret = logicCMD.UpGradeBNWTech(m_uid, job, type, m_jsonResult, lasttime, seqid);
+		int ret = logicCMD.UpGradeBNWTech(m_uid, ud, job, type, m_jsonResult, lasttime, seqid);
 
 		if(ret)
 			return ret;
@@ -6713,6 +6903,24 @@ public:
 			return ret;
 
 		CGI_SEND_LOG("action=HequBuchang&uid=%u", m_uid);
+
+		return R_SUCCESS;
+	}
+
+	int HequBuzhu()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.GetHequBuzhuReward(m_uid, m_jsonResult, lasttime, seqid);
+
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=HequBuzhu&uid=%u", m_uid);
 
 		return R_SUCCESS;
 	}
@@ -6991,6 +7199,253 @@ public:
 		return R_SUCCESS;
 	}
 
+	int FashionStar()
+	{
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned ud;
+		if (!Json::GetUInt(m_data, "ud", ud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned id1;
+		if (!Json::GetUInt(m_data, "id1", id1))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned ud1;
+		if (!Json::GetUInt(m_data, "ud1", ud1))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned id2;
+		if (!Json::GetUInt(m_data, "id2", id2))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned ud2;
+		if (!Json::GetUInt(m_data, "ud2", ud2))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.FashionStar(m_uid, id, ud, id1, ud1, id2, ud2, m_jsonResult, lasttime, seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=FashionStar&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int CommderSkilLearn()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		unsigned heroud = 0,equd = 0;
+
+		if (!Json::GetUInt(m_data, "hud", heroud) || !Json::GetUInt(m_data, "equd", equd) )
+		{
+			error_log("param error: lack of hud, sec, costpro");
+			return R_ERR_PARAM;
+		}
+		CLogicCMD logicCMD;
+
+		int ret = logicCMD.CommderSkilLearn(m_uid, heroud, equd, m_jsonResult, lasttime, seqid);
+
+		if (R_SUCCESS != ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=BraveNewWorldSkill&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int PotianSkilLearn()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		unsigned heroud = 0;
+		string skid;
+		if (!Json::GetUInt(m_data, "hud", heroud) || !Json::GetString(m_data, "skid", skid)|| !m_data.isMember("equds") || !m_data["equds"].isArray())
+		{
+			error_log("param error: lack of hud equd skid");
+			return R_ERR_PARAM;
+		}
+		CLogicCMD logicCMD;
+
+		int ret = logicCMD.PotianSkilLearn(m_uid, heroud, skid,m_data,m_jsonResult, lasttime, seqid);
+
+		if (R_SUCCESS != ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=PotianSkilLearn&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+
+	int JihuoChenghao()
+	{
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned ud;
+		if (!Json::GetUInt(m_data, "ud", ud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned heroud;
+		if (!Json::GetUInt(m_data, "heroud", heroud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.JihuoChenghao(m_uid, id, ud, heroud,  m_jsonResult, lasttime, seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=JihuoChenghao&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int PeidaiChenghao()
+	{
+		unsigned heroud;
+		if (!Json::GetUInt(m_data, "heroud", heroud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+		unsigned chenghao;
+		if (!Json::GetUInt(m_data, "chenghao", chenghao))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.PeidaiChenghao(m_uid, heroud, chenghao, m_jsonResult, lasttime, seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=PeidaiChenghao&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int ZhuanyiChenghao()
+	{
+		unsigned heroud1;
+		if (!Json::GetUInt(m_data, "heroud1", heroud1))
+		{
+			error_log("heroud1 error");
+			return R_ERR_PARAM;
+		}
+		unsigned heroud2;
+		if (!Json::GetUInt(m_data, "heroud2", heroud2))
+		{
+			error_log("heroud2 error");
+			return R_ERR_PARAM;
+		}
+
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ZhuanyiChenghao(m_uid, heroud1, heroud2, m_jsonResult, lasttime, seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ZhuanyiChenghao&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int ShengDan2018()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ShengDan2018(m_uid, m_data, m_jsonResult, lasttime, seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ShengDan2018&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int SetHeroFm(){
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		unsigned index = 0;
+		unsigned index1 = 0;
+		unsigned hud = 0;
+		unsigned equd = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "index", index);
+		Json::GetUInt(m_data, "index1", index1);
+		Json::GetUInt(m_data, "hud", hud);
+		Json::GetUInt(m_data, "equd", equd);
+		CLogicCMD logicCMD;
+		int ret = logicCMD.HeroFm(m_uid,index,index1,hud,equd,m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=SetHeroFm&uid=%u&index=%u&index1=%u&hud=%u&equd=%u",m_uid,index,index1,hud,equd);
+		return 0;
+	}
+
 	//古卷奇书
 	CGI_ACTION_FUNCTION(InjectScroll, AncientScrollUnit::AncientParam, AncientScrollUnit, false, InjectScroll);
 	//碎片合成
@@ -7108,7 +7563,21 @@ public:
 	CGI_ACTION_FUNCTION(InvestmentCount, BaseCmdParams, ActivityInvestment, false, SelectCount);
 	CGI_ACTION_FUNCTION(InvestmentOption, BaseCmdParams, ActivityInvestment, false, SelectOption);
 	CGI_ACTION_FUNCTION(InvestmentReward, BaseCmdParams, ActivityInvestment, false, Reward);
+	CGI_ACTION_FUNCTION(BirdBridge, BaseCmdParams, ActivityBirdBridge, false, DrawImpl);
 
+	//喜迎国庆 国庆狂欢 充值领奖励
+	CGI_ACTION_FUNCTION(GuoQingChargeReward, UnitIndexCmdParams, GuoQingKuangHuan, false, GetChargeReward);
+	//喜迎国庆 每日充值奖励
+	CGI_ACTION_FUNCTION(ChinaDayEveryDayReward, BaseCmdParams, ChinaDayActivityUnix, false, GetEveryDayReward);
+	//喜迎国庆 在线30分钟奖励
+	CGI_ACTION_FUNCTION(ChinaDayOnlineReward, BaseCmdParams, ChinaDayActivityUnix, false, GetOnlineReward);
+	//喜迎国庆 叛军来袭奖励
+	CGI_ACTION_FUNCTION(ChinaDayInstanceZonesReward, BaseCmdParams, ChinaDayActivityUnix, false, GetInstanceZonesReward);
+	//喜迎国庆 叛军来袭挑战次数扣除
+	CGI_ACTION_FUNCTION(ChinaDayDeDuctChallengeNum, BaseCmdParams, ChinaDayActivityUnix, false, DeDuctChallengeNum);
+
+	//自选充值活动
+	CGI_ACTION_FUNCTION(EveryDayPayOptionalReward,UnitIndexCmdParams,PayOptionalActivityUnix,false,GetEveryDayChargeReward);
 };
 
 CGI_MAIN(CCgiSave)

@@ -51,8 +51,34 @@ int CDataRechargeRank::Init(const string &path, semdat sem) {
 	return 0;
 }
 
+unsigned get_rr_day(unsigned i, unsigned c)
+{
+	const unsigned rr_day_cash[5] = {148888,98888,28888,5888,1000};
+	const unsigned rr_day_id[5] = {50124,10217,10222,44107,44106};
+	for(;i<5;++i)
+	{
+		if(c >= rr_day_cash[i])
+			return rr_day_id[i];
+	}
+	return 0;
+}
+unsigned get_rr_all(unsigned i, unsigned c)
+{
+	const unsigned rr_all_cash[5] = {488888,288888,98888,28888,8888};
+	const unsigned rr_all_id[5] = {50125,4500,44129,4497,44127};
+	for(;i<5;++i)
+	{
+		if(c >= rr_all_cash[i])
+			return rr_all_id[i];
+	}
+	return 0;
+}
+
 int CDataRechargeRank::GetList(unsigned uid, vector<RRUser> &day, vector<RRUser> &all)
 {
+	const unsigned rr_day_basic_id[5] = {50126,50127,50128,50129,50130};
+	const unsigned rr_all_basic_id[5] = {50131,50132,50133,50134,50135};
+
 	unsigned zoneId = 0;
 	int ret = getZoneId(uid, zoneId);
 	if (ret)
@@ -100,52 +126,56 @@ int CDataRechargeRank::GetList(unsigned uid, vector<RRUser> &day, vector<RRUser>
 				if(!IsValidUid(pTable->day.user[p].uid))
 					break;
 
-				int p1 = 0, p2 = 0, pe = 0;
+				vector<ItemAdd> equip_items;
 				if (i + 1 == 1)
-					p1 = 1;
+				{
+					equip_items.push_back(ItemAdd(rr_day_basic_id[0], 1, "RechargeRank"));
+					unsigned id = get_rr_day(0, pTable->day.user[p].cash);
+					if (id)
+						equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+				}
 				else if (i + 1 <= 3)
-					p1 = 2;
+				{
+					equip_items.push_back(ItemAdd(rr_day_basic_id[1], 1, "RechargeRank"));
+					unsigned id = get_rr_day(1, pTable->day.user[p].cash);
+					if (id)
+						equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+				}
 				else if (i + 1 <= 20)
-					p1 = 3;
-				else if (i + 1 <= 100)
-					p1 = 4;
+				{
+					equip_items.push_back(ItemAdd(rr_day_basic_id[2], 1, "RechargeRank"));
+					unsigned id = get_rr_day(2, pTable->day.user[p].cash);
+					if (id)
+						equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+				}
+				else if (i + 1 <= 50)
+				{
+					equip_items.push_back(ItemAdd(rr_day_basic_id[3], 1, "RechargeRank"));
+					unsigned id = get_rr_day(3, pTable->day.user[p].cash);
+					if (id)
+						equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+				}
 				else
-					p1 = 5;
-				if (pTable->day.user[p].cash >= 148888)
-					p2 = 1;
-				else if (pTable->day.user[p].cash >= 88888)
-					p2 = 2;
-				else if (pTable->day.user[p].cash >= 28888)
-					p2 = 3;
-				else if (pTable->day.user[p].cash >= 5888)
-					p2 = 4;
-				else if (pTable->day.user[p].cash >= 1000)
-					p2 = 5;
-				pe = ((p1 && p2) ? max(p1, p2) : 0);
-
-				unsigned eqid = 0;
-				if(pe == 1)
-					eqid = 942;
-				else if(pe == 2)
-					eqid = 943;
-				else if(pe == 3)
-					eqid = 944;
-				else if(pe == 4)
-					eqid = 945;
-				else if(pe == 5)
-					eqid = 946;
-
-				if(pe)
+				{
+					equip_items.push_back(ItemAdd(rr_day_basic_id[4], 1, "RechargeRank"));
+					unsigned id = get_rr_day(4, pTable->day.user[p].cash);
+					if (id)
+						equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+				}
+				if(!equip_items.empty())
 				{
 					AUTO_LOCK_USER(pTable->day.user[p].uid)
-					if(logicEquipment.AddOneItem(pTable->day.user[p].uid, eqid, 1, "RechargeRank", temp) == 0)
+					if(logicEquipment.AddItems(pTable->day.user[p].uid, equip_items, temp) == 0)
 					{
 						Json::Value updates;
 						updates["s"] = "RECHARGERANKDAY";
 						updates["uid"] = pTable->day.user[p].uid;
 						updates["ts"] = now1;
 						updates["rank"] = i+1;
-						updates["eqid"] = eqid;
+						updates["eqid"] = equip_items[0].eqid;
+						if(equip_items.size()>1)
+							updates["eqid1"] = equip_items[1].eqid;
+						updates["cash"] = pTable->day.user[p].cash;
 						logicUpdates.AddUpdate(pTable->day.user[p].uid,updates,true);
 					}
 				}
@@ -163,52 +193,56 @@ int CDataRechargeRank::GetList(unsigned uid, vector<RRUser> &day, vector<RRUser>
 					if(!IsValidUid(pTable->all.user[p].uid))
 						break;
 
-					int p1 = 0, p2 = 0, pe = 0;
+					vector<ItemAdd> equip_items;
 					if (i + 1 == 1)
-						p1 = 1;
+					{
+						equip_items.push_back(ItemAdd(rr_all_basic_id[0], 1, "RechargeRank"));
+						unsigned id = get_rr_all(0, pTable->all.user[p].cash);
+						if (id)
+							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+					}
 					else if (i + 1 <= 3)
-						p1 = 2;
+					{
+						equip_items.push_back(ItemAdd(rr_all_basic_id[1], 1, "RechargeRank"));
+						unsigned id = get_rr_all(1, pTable->all.user[p].cash);
+						if (id)
+							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+					}
 					else if (i + 1 <= 10)
-						p1 = 3;
-					else if (i + 1 <= 50)
-						p1 = 4;
+					{
+						equip_items.push_back(ItemAdd(rr_all_basic_id[2], 1, "RechargeRank"));
+						unsigned id = get_rr_all(2, pTable->all.user[p].cash);
+						if (id)
+							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+					}
+					else if (i + 1 <= 30)
+					{
+						equip_items.push_back(ItemAdd(rr_all_basic_id[3], 1, "RechargeRank"));
+						unsigned id = get_rr_all(3, pTable->all.user[p].cash);
+						if (id)
+							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+					}
 					else
-						p1 = 5;
-					if (pTable->all.user[p].cash >= 488888)
-						p2 = 1;
-					else if (pTable->all.user[p].cash >= 288888)
-						p2 = 2;
-					else if (pTable->all.user[p].cash >= 98888)
-						p2 = 3;
-					else if (pTable->all.user[p].cash >= 28888)
-						p2 = 4;
-					else if (pTable->all.user[p].cash >= 8888)
-						p2 = 5;
-					pe = ((p1 && p2) ? max(p1, p2) : 0);
-
-					unsigned eqid = 0;
-					if(pe == 1)
-						eqid = 947;
-					else if(pe == 2)
-						eqid = 948;
-					else if(pe == 3)
-						eqid = 949;
-					else if(pe == 4)
-						eqid = 950;
-					else if(pe == 5)
-						eqid = 951;
-
-					if(pe)
+					{
+						equip_items.push_back(ItemAdd(rr_all_basic_id[4], 1, "RechargeRank"));
+						unsigned id = get_rr_all(4, pTable->all.user[p].cash);
+						if (id)
+							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+					}
+					if(!equip_items.empty())
 					{
 						AUTO_LOCK_USER(pTable->all.user[p].uid)
-						if(logicEquipment.AddOneItem(pTable->all.user[p].uid, eqid, 1, "RechargeRank", temp) == 0)
+						if(logicEquipment.AddItems(pTable->all.user[p].uid, equip_items, temp) == 0)
 						{
 							Json::Value updates;
 							updates["s"] = "RECHARGERANKALL";
 							updates["uid"] = pTable->all.user[p].uid;
 							updates["ts"] = now1+1;
 							updates["rank"] = i+1;
-							updates["eqid"] = eqid;
+							updates["eqid"] = equip_items[0].eqid;
+							if(equip_items.size()>1)
+								updates["eqid1"] = equip_items[1].eqid;
+							updates["cash"] = pTable->all.user[p].cash;
 							logicUpdates.AddUpdate(pTable->all.user[p].uid,updates,true);
 						}
 					}

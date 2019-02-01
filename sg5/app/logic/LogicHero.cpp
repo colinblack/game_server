@@ -1,4 +1,5 @@
 #include "LogicHero.h"
+#include "LogicCmdUnits.h"
 
 int CLogicHero::InitializeHero(unsigned uid)
 {
@@ -203,6 +204,8 @@ int CLogicHero::UpdateHero(unsigned uid, Json::Value &data, Json::Value &result,
 		int hexp = 0, oldhexp = 0;
 		int star = 0, oldstar = 0;
 		unsigned exs = 0, oldexs = 0;
+		unsigned ky = 0, oldky = 0;
+		unsigned ch = 0, oldch = 0;
 		string code;
 		double oldpt = 0.0f, pt = 0.0f;
 		Json::GetString(data[i], "code", code);
@@ -213,6 +216,8 @@ int CLogicHero::UpdateHero(unsigned uid, Json::Value &data, Json::Value &result,
 		Json::GetInt(data[i], "hexp", hexp);
 		Json::GetInt(data[i], "star", star);
 		Json::GetUInt(data[i], "exs", exs);
+		Json::GetUInt(data[i], "ky", ky);
+		Json::GetUInt(data[i], "ch", ch);
 
 		bool needJuexueLog = false;
 		string act;
@@ -229,11 +234,11 @@ int CLogicHero::UpdateHero(unsigned uid, Json::Value &data, Json::Value &result,
 		if(newAdd)
 		{
 			act = "add";
-			if (l > 2)
-			{
-				error_log("[add hero level error][uid=%u,id=%u,l=%d]",uid,id,l);
-				DATA_ERROR_RETURN_MSG("add_hero_level_error");
-			}
+//			if (l > 2)
+//			{
+//				error_log("[add hero level error][uid=%u,id=%u,l=%d]",uid,id,l);
+//				DATA_ERROR_RETURN_MSG("add_hero_level_error");
+//			}
 
 			++maxid;
 			data[i]["ud"] = maxid;
@@ -315,8 +320,81 @@ int CLogicHero::UpdateHero(unsigned uid, Json::Value &data, Json::Value &result,
 
 					if (Json::GetUInt(oldHero, "exs", oldexs) && exs != oldexs)
 					{
-						error_log("[hero exs error][uid=%u,id=%u,exs=%d,oldhexp=%d]",uid,id,exs,oldexs);
+						error_log("[hero exs error][uid=%u,id=%u,exs=%d,oldexs=%d]",uid,id,exs,oldexs);
 						DATA_ERROR_RETURN_MSG("hero_exs_error");
+					}
+
+					if (Json::GetUInt(oldHero, "ky", oldky) && ky != oldky)
+					{
+						error_log("[hero ky error][uid=%u,id=%u,ky=%d,oldky=%d]",uid,id,ky,oldky);
+						DATA_ERROR_RETURN_MSG("hero_ky_error");
+					}
+
+					//skillcheck
+					if(data[i].isMember("tskill") && oldHero.isMember("tskill")){
+						ret = SkillUnit::CheakSkillVer(oldHero);
+						if(!ret)
+						{
+							error_log("[PotianSkillTrain] cheak_skill_error failed. uid=%u", uid);
+							DATA_ERROR_RETURN_MSG("cheak_skill_error");
+						}
+						if(data[i]["tskill"].isArray())
+						{
+							bool skill_falg = true;
+
+							if(data[i]["tskill"].size() == oldHero["tskill"].size())
+							{
+								unsigned j = 0;
+								for(unsigned j = 0;j<oldHero["tskill"].size();++j)
+								{
+									if(!(data[i]["tskill"][j][1u].asInt() == oldHero["tskill"][j][1u].asInt() && data[i]["tskill"][j][0u].asInt() == oldHero["tskill"][j][0u].asInt())){
+											error_log("skill_check : data[sid]=%d,level=%d,old[sid]=%d,level=%d",
+											data[i]["tskill"][j][0u].asInt(),
+											data[i]["tskill"][j][1u].asInt(),
+											oldHero["tskill"][j][0u].asInt(),
+											oldHero["tskill"][j][1u].asInt()
+											);
+											skill_falg = false;
+										}
+								}
+							}
+							else
+							{
+								Json::FastWriter writer;
+								string t1 = writer.write(data[i]["tskill"]);
+								string t2 = writer.write(oldHero["tskill"]);
+								error_log("data= %s,old= %s", t1.c_str(), t2.c_str());
+								skill_falg = false;
+							}
+							if(!skill_falg)
+							{
+								error_log("[hero tskill error][uid=%u,id=%u]",uid,id);
+								DATA_ERROR_RETURN_MSG(" skillcheck hero_tskill_error");
+							}
+						}
+					}
+
+					if (Json::GetUInt(oldHero, "ch", oldch) && ch != oldch)
+					{
+						error_log("[hero ch error][uid=%u,id=%u,ch=%d,oldch=%d]",uid,id,ch,oldch);
+						DATA_ERROR_RETURN_MSG("hero_ch_error");
+					}
+
+					if(data[i].isMember("fm") && oldHero.isMember("fm") && data[i]["fm"].isArray() && oldHero["fm"].isArray())
+					{
+						if(data[i]["fm"].size() != oldHero["fm"].size())
+						{
+							error_log("[hero fm error][uid=%u,id=%u]",uid,id);
+							DATA_ERROR_RETURN_MSG("hero_fm_error");
+						}
+						for(unsigned j=0;j<oldHero["fm"].size();++j)
+						{
+							if(data[i]["fm"][j].asUInt() != oldHero["fm"][j].asUInt())
+							{
+								error_log("[hero fm error][uid=%u,id=%u]",uid,id);
+								DATA_ERROR_RETURN_MSG("hero_fm_error");
+							}
+						}
 					}
 
 					if(data[i].isMember("juexue") && oldHero.isMember("juexue"))
@@ -353,13 +431,13 @@ int CLogicHero::UpdateHero(unsigned uid, Json::Value &data, Json::Value &result,
 				DATA_ERROR_RETURN_MSG("no_hero_id");
 #else
 				act = "add";
-				int l = 0;
-				Json::GetInt(data[i], "l", l);
-				if (l > 2)
-				{
-					error_log("[add hero level error][uid=%u,id=%u,l=%d]",uid,id,l);
-					DATA_ERROR_RETURN_MSG("add_hero_level_error");
-				}
+//				int l = 0;
+//				Json::GetInt(data[i], "l", l);
+//				if (l > 2)
+//				{
+//					error_log("[add hero level error][uid=%u,id=%u,l=%d]",uid,id,l);
+//					DATA_ERROR_RETURN_MSG("add_hero_level_error");
+//				}
 #endif
 			}
 		}
@@ -642,17 +720,30 @@ int CLogicHero::AddHeros(unsigned uid, vector<string> &id, vector<string> &code,
 		newHeroDatas[i] = genHero(id[i],code[i]);
 	return UpdateHero(uid, newHeroDatas, result);
 }
-Json::Value CLogicHero::genHero(string &id,string &code, string icon, string name)
+int CLogicHero::AddHeros(unsigned uid, vector<HeroAdd> &hero, Json::Value &result)
 {
+	if(hero.empty())
+		return 0;
+
+	Json::Value newHeroDatas = Json::Value(Json::arrayValue);
+	for(unsigned i=0;i<hero.size();++i)
+		newHeroDatas[i] = genHero(hero[i].id, hero[i].code, "", "", hero[i].star, hero[i].l);
+	return UpdateHero(uid, newHeroDatas, result);
+}
+Json::Value CLogicHero::genHero(string &id,string &code, string icon, string name, unsigned star, unsigned l)
+{
+	l = min(120u, max(1u, l));
+	star = min(10u, max(1u, star));
+
 	Json::Value res;
 	res["id"] = id;
 	res["newAdd"] = 1;
 	res["ud"] = 0;
 	res["code"] = code;
 	res["upts"] = Time::GetGlobalTime();
-	res["l"] = 1;
-	res["exp"] = 0;
-	res["star"] = 1;
+	res["l"] = l;
+	res["exp"] = hero_lvl_exp[l-1];
+	res["star"] = star;
 	res["hs"][0u] = 0;
 	res["hs"][1u] = 0;
 	res["hs"][2u] = 0;

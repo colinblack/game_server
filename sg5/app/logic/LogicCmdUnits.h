@@ -241,7 +241,7 @@ public:
 	//检查版本号的接口
 	int CheckVersion(Json::Value & result);
 
-	void GetOptionalReward(UserWrap& userWrap, Json::Value & data, Json::Value &result);
+	void GetOptionalReward(UserWrap& userWrap, unsigned rewardcnt,Json::Value & data, Json::Value &result);
 private:
 	void ResetNewact(unsigned version);
 	void Save();
@@ -1131,20 +1131,26 @@ public:
 	{
 		END_TRAIN_BY_CASH = 0X0,   //钻石结束
 		END_TRAIN_BY_COIN,   //金币结束
+		END_TRAIN_BY_TIME, //时间结束
 	};
 
 	SkillUnit(unsigned uid);
 
 	void UpgradeInnateSkill(UserWrap& userWrap, unsigned heroud, Json::Value &result);   //天生技
 
-	void StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid, Json::Value equds, unsigned sectime, unsigned costpro, Json::Value &result);    //混元技或普通技
+	void StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid, Json::Value m_data, unsigned sectime, unsigned costpro, Json::Value &result);    //混元技或普通技
 
 	void EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned type, Json::Value &result);    //混元技或普通技
+
+	void CommderSkilLearn(UserWrap& userWrap, unsigned heroud, unsigned equd,Json::Value &result);  //争霸技能
+
+	void PotianSkilLearn(UserWrap& userWrap, unsigned heroud,string skid,Json::Value &m_data,Json::Value &result);  //破天技能
 
 	void UpgradeHevenDaoSkill(UserWrap& userWrap, unsigned index, unsigned type, unsigned equd, Json::Value &result);  //兵书遁甲技能
 
 	void UpgradeCatapultSkill(UserWrap& userWrap, unsigned index, unsigned equd, Json::Value &result);  //投石机技能
 
+	static int CheakSkillVer(Json::Value &tskill);
 private:
 	double GetGradeMaxPoint(int point, int grade);
 
@@ -1417,8 +1423,11 @@ public:
 	//vip奖励
 	int GetVIPCelebrate(UserWrap& userWrap, unsigned vindex, unsigned sindex, Json::Value & result);
 
-	//合区补偿
+	//合区补偿（现改为等级补偿）
 	int GetCombineZoneRecompense(UserWrap& userWrap, unsigned index, Json::Value & result);
+
+	//合区补助
+	int GetCombineZoneBuZhu(UserWrap& userWrap, Json::Value & result);
 protected:
 	//检查user_stat中的数据是否包含所需字段，如果没有，则初始化
 	bool CheckUserstatComplete(Json::Value & user_stat);
@@ -2081,6 +2090,73 @@ private:
 };
 
 
+//兑换自选
+class FreeExchangeUnit : public SecincActivityUnit
+{
+public:
+	FreeExchangeUnit(const UserWrap& user);
+	int DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result);
+private:
+	void Reset();
+};
+
+//充值自选活动
+class PayOptionalActivityUnix : public SecincActivityUnit
+{
+public:
+	PayOptionalActivityUnix(const UserWrap& user);
+	//领取每日自选奖励
+	int GetEveryDayChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result);
+	int GetChargeByActivityToday(UserWrap& userWrap,unsigned end_ts);
+protected:
+	void Reset();
+private:
+	int itemsize_;//充值奖励项数
+};
+
+
+class ChinaDayActivityUnix : public SecincActivityUnit
+{
+	enum
+		{
+			reset_online_reward_tag = 1,            //重置"每天在线30分钟领取"标记
+			reset_everyday_reward_tag,            //充值每日充值奖励领取
+		};
+public:
+
+	ChinaDayActivityUnix(const UserWrap& user);
+
+	//获取每日充值奖励
+	int GetEveryDayReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result);
+	//获取在线奖励
+	int GetOnlineReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result);
+	//获取副本奖励
+	int GetInstanceZonesReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result);
+	//扣除挑战次数
+	int DeDuctChallengeNum(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result);
+
+	int GetChargeByActivityToday(UserWrap& userWrap,unsigned end_ts);
+protected:
+	int ResetAct(int reset_type);
+	void Reset();
+};
+
+class GuoQingKuangHuan : public SecincActivityUnit
+{
+
+public:
+	GuoQingKuangHuan(const UserWrap& user);
+
+	//获取国庆所有奖励
+	int GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result);
+
+protected:
+	void Reset();
+
+private:
+	int itemsize_;//充值奖励项数
+};
+
 
 //元旦庆典
 class NewYearActivityUnix : public BaseActivityUnit
@@ -2609,12 +2685,12 @@ public:
 
 /********************************************************************/
 /*  活动太多  先是抽象成模板  最后只能搞宏       */
-#define CHARGE_DRAW_ACT(CONFIG_NAME) \
+#define CHARGE_DRAW_ACT(CONFIG_NAME, CONFIG_ALL) \
 		class CONFIG_NAME##_Unit : public BaseFeedbackActUnit \
 		{ \
 		public: \
 			CONFIG_NAME##_Unit(const UserWrap& user) \
-			: BaseFeedbackActUnit(user.Id(), CONFIG_NAME, NAT_##CONFIG_NAME) \
+			: BaseFeedbackActUnit(user.Id(), CONFIG_NAME, NAT_##CONFIG_NAME, CONFIG_ALL) \
 			, cfg_(DataXmlPtr()->Get_##CONFIG_NAME()) {Init();} \
 		private: \
 			virtual int GetDrawItems() const {return cfg_.size();} \
@@ -2625,11 +2701,21 @@ public:
 		};
 /********************************************************************/
 //autolable6
+CHARGE_DRAW_ACT(CONFIG_yuandan2018, false)
+CHARGE_DRAW_ACT(CONFIG_yearend2018, false)
+CHARGE_DRAW_ACT(CONFIG_winter2018, false)
+CHARGE_DRAW_ACT(CONFIG_double11_2018, true)
+CHARGE_DRAW_ACT(CONFIG_mid_aug_hao, true)
+CHARGE_DRAW_ACT(CONFIG_mid_aug_reu, true)
+CHARGE_DRAW_ACT(CONFIG_water_taotie, true)
+CHARGE_DRAW_ACT(CONFIG_water_qilin, true)
+CHARGE_DRAW_ACT(CONFIG_water_pheonix, true)
+CHARGE_DRAW_ACT(CONFIG_vicky_nnom, false)
 //vicky没想好名字的活动
-CHARGE_DRAW_ACT(CONFIG_VICKY_NO_NAME)
-CHARGE_DRAW_ACT(CONFIG_VICKY_BINGSHU)
-CHARGE_DRAW_ACT(CONFIG_VICKY_QIANFU)
-CHARGE_DRAW_ACT(CONFIG_VICKY_NNA)
+CHARGE_DRAW_ACT(CONFIG_VICKY_NO_NAME, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_BINGSHU, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_QIANFU, false)
+CHARGE_DRAW_ACT(CONFIG_VICKY_NNA, false)
 ///////////////////////////////////////////////////////////////
 
 //任务好礼  活动
@@ -2696,9 +2782,29 @@ public:
 	int SelectOption(UserWrap& user, const BaseCmdParams& params, Json::Value& result);
 	int Reward(UserWrap& user, const BaseCmdParams& params, Json::Value& result);
 	int Get(Json::Value& result);
+	bool IsValidActTime();
 protected:
 	int AutoRate();
 private:
 	const UserWrap& user_;
+};
+
+//鹊桥相会
+class ActivityBirdBridge: public SecincActivityUnit {
+public:
+	enum {
+		ACT_BIRD_BRIDGE_REWARD_LEFT = 0,
+		ACT_BIRD_BRIDGE_REWARD_RIGHT = 1,
+		ACT_BIRD_BRIDGE_REWARD_CENTER = 2
+	};
+	ActivityBirdBridge(const UserWrap& user);
+	virtual void Reset();
+	int DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result);
+	int RewardCenter(unsigned pointLeft, unsigned pointRight, vector<GiftEquipItem> &reward);
+	int RewardEdge(Json::Value &act, unsigned type, unsigned id, unsigned point, vector<GiftEquipItem> &reward);
+private:
+	string _left_code;
+	string _right_code;
+	string _center_code;
 };
 #endif /* LOGICCMDUNIT_H_ */

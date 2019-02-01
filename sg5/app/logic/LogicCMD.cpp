@@ -500,7 +500,7 @@ int CLogicCMD::EquipSubAct2(unsigned uid, unsigned equip, unsigned all, unsigned
 
 int CLogicCMD::GetWorldReward(unsigned uid, unsigned index, unsigned eqid, Json::Value &result, unsigned lasttime, unsigned seqid)
 {
-	if(index > 3/* || ((index == 2 || index == 3) && (eqid < 51001 || eqid > 51004))*/)
+	if(index > 4/* || ((index == 2 || index == 3) && (eqid < 51001 || eqid > 51004))*/)
 		return R_ERR_PARAM;
 
 	int ret;
@@ -541,7 +541,14 @@ int CLogicCMD::GetWorldReward(unsigned uid, unsigned index, unsigned eqid, Json:
 		return ret;
 	result["newAct"] = newAct;
 
-	if(index == 2 || index == 3)
+	if(index == 4)
+	{
+		CLogicEquipment loigcEquipment;
+		ret = loigcEquipment.AddOneItem(uid, /*eqid*/4055, 10 * dt * 10, "GetWorldReward", result["equip"], true);
+		if(ret)
+			return ret;
+	}
+	else if(index == 2 || index == 3)
 	{
 		CLogicEquipment loigcEquipment;
 		ret = loigcEquipment.AddOneItem(uid, /*eqid*/4055, 15 * dt * 15, "GetWorldReward", result["equip"], true);
@@ -1325,7 +1332,7 @@ int CLogicCMD::FastUpGradeBNW(unsigned uid, Json::Value & result, unsigned lastt
 	return R_SUCCESS;
 }
 
-int CLogicCMD::UpGradeBNWTech(unsigned uid, unsigned job, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid)
+int CLogicCMD::UpGradeBNWTech(unsigned uid, unsigned ud, unsigned job, unsigned type, Json::Value & result, unsigned lasttime, unsigned seqid)
 {
 	if(job >= 3 || type >= 3)
 		return R_ERR_PARAM;
@@ -1371,11 +1378,18 @@ int CLogicCMD::UpGradeBNWTech(unsigned uid, unsigned job, unsigned type, Json::V
 	}
 	unsigned lv = tech["bnwt"][job]["t"][type].asUInt();
 	unsigned lts = tech["bnwt"][job]["ts"].asUInt();
-	if(lts > Time::GetGlobalTime() || lv == 100)
+	if(lts > Time::GetGlobalTime() || lv == 150)
 		return R_ERR_LOGIC;
 	BraveNewWorldConfig::Tech te = ConfigManager::Instance()->GetBraveNewWorldConfigTech(job, type, lv);
 	if(te.cost() > dataUser.type)
 		return R_ERR_LOGIC;
+	if(te.has_ecost() && te.ecost())
+	{
+		CLogicEquipment loigcEquipment;
+		ret = loigcEquipment.UseEquipment(uid, 2033, ud, te.ecost(), "UpGradeBNWTech");
+		if(ret)
+			return ret;
+	}
 	dataUser.type -= te.cost();
 	tech["bnwt"][job]["ts"] = Time::GetGlobalTime() + te.cd()*60;
 	tech["bnwt"][job]["t"][type] = lv + 1;
@@ -1520,6 +1534,105 @@ int CLogicCMD::GetHequVIPeward(unsigned uid, unsigned vindex, unsigned subindex,
 	}
 
 	return R_SUCCESS;
+}
+
+int CLogicCMD::GetHequBuzhuReward(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid)
+{
+	try
+	{
+		AUTO_LOCK_USER(uid);
+
+		UserWrap userWrap(uid, false);
+
+		int ret = userWrap.CheckSession(lasttime, seqid, result);
+
+		if (ret != R_SUCCESS)
+		{
+			return ret;
+		}
+
+		//todo 合区补偿
+		HeQuActivityUnit hequactivity(uid);
+
+		hequactivity.GetCombineZoneBuZhu(userWrap, result);
+
+		userWrap.Save();
+	}
+	catch (const std::exception& e)
+	{
+		::SetError(R_ERROR, e.what());
+		return R_ERROR;
+	}
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::GetHequbuchangLevel(unsigned uid)
+{
+	static map<unsigned, int> kaiquts;
+	int domain;
+	Config::GetDomain(domain);
+	set<int> domains;
+	MainConfig::GetIncludeDomains(domain, domains);
+	string appConfigPath(DEFAULT_APP_CONFIG_PATH);
+	for(set<int>::iterator it=domains.begin();it!=domains.end();++it)
+	{
+		if (kaiquts.count(*it))
+				continue;
+		string configPath;
+		string serverid;
+		String::Format(serverid, "s%d/", *it);
+		string serverPath;
+		if(!MainConfig::GetValue(serverPath, "server_path"))
+			serverPath = DEFAULT_APP_PATH;
+		if (serverPath[serverPath.length() - 1] != '/')
+			serverPath.append("/");
+		configPath=serverPath + serverid + appConfigPath;
+		cout << configPath << endl;
+		struct stat buf;
+		int ret = stat(configPath.c_str(), &buf);
+		cout <<"ret=" << ret << endl;
+		if (0 != ret)
+		{
+			continue;
+		}
+		CMarkupSTL xmlConf;
+		if(!xmlConf.Load(configPath.c_str()))
+		{
+			return false;
+		}
+		if(!xmlConf.FindElem("configs") )
+		{
+			return false;
+		}
+		xmlConf.IntoElem();
+		map<string, string> temp_cofig;
+		while(xmlConf.FindElem("config"))
+		{
+			string name = xmlConf.GetAttrib("name");
+			string value = xmlConf.GetAttrib("value");
+			if (name == "open_ts") {
+				kaiquts[*it] = CTrans::STOI(value);
+				break;
+			}
+		}
+	}
+	int start_ts = 0xFFFF,end_ts = 0,myserver_ts,serverid;
+	Config::GetDB(serverid);
+	for(set<int>::iterator it=domains.begin();it!=domains.end();++it)
+	{
+		start_ts = min(start_ts, kaiquts[*it]);
+		end_ts = max(end_ts, kaiquts[*it]);
+		if (serverid == *it)
+			myserver_ts = kaiquts[*it];
+	}
+	if (start_ts == myserver_ts)
+		return 1;
+	else if (end_ts == myserver_ts)
+		return 4;
+	else if (myserver_ts < (start_ts + end_ts)/2)
+		return 2;
+	else return 3;
 }
 
 int CLogicCMD::GetHequRecompenseReward(unsigned uid, unsigned index, Json::Value &result, unsigned lasttime, unsigned seqid)
@@ -2000,7 +2113,7 @@ int CLogicCMD::YingLingAdvance(unsigned uid, Json::Value &data, Json::Value &res
 		eqip.reason = "YingLingAdvance";
 		equip_items.push_back(eqip);
 	}
-	ret = logicEquip.AddItems(uid, equip_items, result["equip"]);
+	ret = logicEquip.AddItems(uid, equip_items, result["equip"], true);
 	if(ret)
 		return ret;
 
@@ -2325,6 +2438,8 @@ int CLogicCMD::GMUpgradeBuilding(unsigned uid, Json::Value& data, Json::Value &r
 		if(ret)
 			return ret;
 		result["build"].append(data["build"][i]);
+
+		BUILDING_LEVEL_LOG("uid=%u,l=%u,id=%u",uid,data["build"][i]["l"].asUInt(),data["build"][i]["t"].asUInt());
 	}
 
 	if(data.isMember("buildq") && data["buildq"].isObject())
@@ -2581,4 +2696,504 @@ int CLogicCMD::HeroExtraStone(unsigned uid, unsigned heroud, unsigned equd, unsi
 
 	userWrap.Save();
 	return R_SUCCESS;
+}
+
+int CLogicCMD::FashionStar(unsigned uid, unsigned id, unsigned ud, unsigned id1, unsigned ud1, unsigned id2, unsigned ud2, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	const unsigned mat_type = 5;
+	const unsigned mat_num = 3;
+	const unsigned mat[mat_type][mat_num+1] = {
+			{72101, 72105, 72109, 10},
+			{72102, 72106, 72110, 10},
+			{72103, 72107, 72111, 4},
+			{72104, 72108, 72112, 2},
+			{72113, 72114, 72115, 0},
+	};
+
+	unsigned type = mat_type, t1 = mat_type, t2 = mat_type;
+
+	for(unsigned i=0;i<mat_type;++i)
+	{
+		for(unsigned j=0;j<mat_num;++j)
+		{
+			if(id == mat[i][j])
+			{
+				type = i;
+				break;
+			}
+		}
+		if(type != mat_type)
+			break;
+	}
+	if(type == mat_type)
+		return R_ERR_PARAM;
+
+	for(unsigned j=0;j<mat_num;++j)
+	{
+		if(id1 == mat[type][j])
+		{
+			t1 = type;
+			break;
+		}
+	}
+	if(t1 == mat_type && type != 0)
+	{
+		for(unsigned j=0;j<mat_num;++j)
+		{
+			if(id1 == mat[type-1][j])
+			{
+				t1 = type-1;
+				break;
+			}
+		}
+	}
+	if(t1 == mat_type)
+		return R_ERR_PARAM;
+
+	for(unsigned j=0;j<mat_num;++j)
+	{
+		if(id2 == mat[type][j])
+		{
+			t2 = type;
+			break;
+		}
+	}
+	if(t2 == mat_type && type != 0)
+	{
+		for(unsigned j=0;j<mat_num;++j)
+		{
+			if(id2 == mat[type-1][j])
+			{
+				t2 = type-1;
+				break;
+			}
+		}
+	}
+	if(t2 == mat_type)
+		return R_ERR_PARAM;
+
+	if(t1 != type && t2 != type)
+		return R_ERR_PARAM;
+
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	CLogicEquipment logicEquip;
+	Json::Value eq;
+	ret = logicEquip.Get(uid, ud, eq);
+	if(ret)
+		return ret;
+	unsigned star = 0, eqid = 0;
+	Json::GetUInt(eq, "star", star);
+	Json::GetUInt(eq, "id", eqid);
+	if(star >= 10 || eqid != id)
+		return R_ERR_PARAM;
+
+	if(t1 != type)
+	{
+		Json::Value eq1;
+		ret = logicEquip.Get(uid, ud1, eq1);
+		if(ret)
+			return ret;
+		unsigned star1 = 0;
+		Json::GetUInt(eq1, "star", star1);
+		if(star1 < mat[t1][mat_num])
+			return R_ERR_PARAM;
+	}
+	if(t2 != type)
+	{
+		Json::Value eq2;
+		ret = logicEquip.Get(uid, ud2, eq2);
+		if(ret)
+			return ret;
+		unsigned star2 = 0;
+		Json::GetUInt(eq2, "star", star2);
+		if(star2 < mat[t2][mat_num])
+			return R_ERR_PARAM;
+	}
+
+	ret = logicEquip.UseEquipment(uid, id1, ud1, 1, "FashionStar");
+	if(ret)
+		return ret;
+	ret = logicEquip.UseEquipment(uid, id2, ud2, 1, "FashionStar");
+	if(ret)
+		return ret;
+
+	eq["star"] = star + 1;
+	ret = logicEquip.Chg(uid, ud, eq);
+	if(ret)
+		return ret;
+	result["equip"] = eq;
+
+	Json::FastWriter writer;
+	string equipstr = writer.write(eq);
+	EQUIPMENT_LOG("uid=%u,id=%u,eqid=%d,act=%s,chg=%d,count=%d,code=%s,data=%s",uid,ud,id,"star",0,0,"star",equipstr.c_str());
+
+	userWrap.Save();
+	return R_SUCCESS;
+}
+
+int CLogicCMD::JihuoChenghao(unsigned uid, unsigned id, unsigned ud, unsigned heroud, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	Json::Value hero;
+	CLogicHero logicHero;
+	ret = logicHero.Get(uid, heroud, hero);
+	if(ret)
+		return ret;
+
+	if (id < 50601 || id > 50609)
+		return R_ERR_LOGIC;
+	unsigned ch = 0;
+	Json::GetUInt(hero, "ch", ch);
+	if(ch & (0x0001 << (id - 50601)))
+		return R_ERR_LOGIC;
+
+	CLogicEquipment logicEquipment;
+	ret = logicEquipment.UseEquipment(uid, id, ud, 1, "JihuoChenghao");
+	if(ret)
+		return ret;
+
+	ch |= (0x0001 << (id - 50601));
+	hero["ch"] = ch;
+	ret = logicHero.Chg(uid, heroud, hero);
+	if(ret)
+		return ret;
+	result["ch"] = ch;
+
+	userWrap.Save();
+	return R_SUCCESS;
+}
+
+int CLogicCMD::PeidaiChenghao(unsigned uid, unsigned heroud, unsigned chenghao, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	Json::Value hero;
+	CLogicHero logicHero;
+	ret = logicHero.Get(uid, heroud, hero);
+	if(ret)
+		return ret;
+
+	hero["pdch"] = chenghao;
+	ret = logicHero.Chg(uid, heroud, hero);
+	if(ret)
+		return ret;
+	result["pdch"] = chenghao;
+
+	userWrap.Save();
+	return R_SUCCESS;
+}
+
+
+int CLogicCMD::ZhuanyiChenghao(unsigned uid, unsigned heroud1, unsigned heroud2, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	Json::Value hero1,hero2;
+	CLogicHero logicHero;
+	ret = logicHero.Get(uid, heroud1, hero1);
+	if(ret)
+		return ret;
+	ret = logicHero.Get(uid, heroud2, hero2);
+	if(ret)
+		return ret;
+
+	unsigned ch1 = 0, ch2 = 0;
+	Json::GetUInt(hero1, "ch", ch1);
+	Json::GetUInt(hero2, "ch", ch2);
+	if(!ch1 || ch2)
+		return R_ERR_LOGIC;
+
+	CLogicPay logicPay;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	DataPay payData;
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+		return ret;
+	Json::Reader reader;
+	Json::FastWriter writer;
+	Json::Value user_flag;
+	bool bsave = false;
+	reader.parse(dataUser.user_flag,user_flag);
+	ret = logicPay.ProcessOrderForBackend(uid, -1000, 0, payData, "ZhuanyiChenghao",user_flag,bsave);
+	if(ret)
+		return ret;
+	result["pointpay"].resize(0);
+	result["pointpay"] = user_flag["user_pay"];
+	if(bsave)
+		dataUser.user_flag = writer.write(user_flag);
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	hero1["ch"] = 0;
+	hero2["ch"] = ch1;
+	ret = logicHero.Chg(uid, heroud1, hero1);
+	if(ret)
+		return ret;
+	ret = logicHero.Chg(uid, heroud2, hero2);
+	if(ret)
+		return ret;
+	result["ch"] = ch1;
+
+	result["coins"] = payData.coins;
+	result["coins2"] = payData.cash;
+
+	userWrap.Save();
+	return R_SUCCESS;
+}
+
+const unsigned liandan_eq_id[11] = {23011, 23001, 23002, 23003, 23004, 23005, 23006, 23007, 23008, 23009, 23010};
+int CLogicCMD::liandan(unsigned uid, const Json::Value &data, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	if(!data.isMember("heroud") || !data["heroud"].isArray()
+	|| !data.isMember("eqid") || !data["eqid"].isArray()
+	|| !data.isMember("equd") || !data["equd"].isArray()
+	|| !data.isMember("eqc") || !data["eqc"].isArray()
+	|| data["eqid"].size() != data["equd"].size()
+	|| data["eqid"].size() != data["eqc"].size())
+		return R_ERR_PARAM;
+
+	CDataXML *pDataXML = CDataXML::GetCDataXML();
+	if(!pDataXML)
+		return R_ERR_DATA;
+
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	Json::FastWriter writer;
+	unsigned sum = 0;
+
+	CLogicHero logicHero;
+	const unsigned star_c[11] = {0, 0, 0, 50, 100, 300, 1000, 5000, 10000, 15000, 20000};
+	const unsigned ch_c[7] = {0, 0, 0, 0, 250, 1000, 2000};
+	const unsigned l_c[3] = {0, 100, 500};
+	for(unsigned i=0;i<data["heroud"].size();++i)
+	{
+		Json::Value t;
+		unsigned ud = data["heroud"][i].asInt();
+		ret = logicHero.Get(uid, ud, t); if(ret) return ret;
+		XMLHero hero;
+		string id = t["id"].asString();
+		pDataXML->GetHero(CDataXML::Str2Hero(id), hero);
+		unsigned star = 0, l = 0;
+		Json::GetUInt(t, "star", star);
+		Json::GetUInt(t, "l", l);
+		if(hero.type < 4 || star < 3 || l < 50) return R_ERR_LOGIC;
+		ret = logicHero.Del(uid, ud); if(ret) return ret;
+		sum += star_c[star] + ch_c[hero.type] + l_c[l/50];
+
+		string heroData = writer.write(t);
+		HERO_LOG("uid=%u,id=%u,heroid=%s,act=%s,code=%s,data=%s",uid,ud,t["id"].asString().c_str(),"del","liandan",heroData.c_str());
+	}
+
+	unsigned m = 0;
+	CLogicEquipment logicEquip;
+	const unsigned liandan_eq_c[11] = {10, 100, 200, 400, 800, 1600, 3200, 12800, 25600, 51200, 102400};
+	for(unsigned i=0;i<data["eqid"].size();++i)
+	{
+		unsigned id = data["eqid"][i].asUInt(), ud = data["equd"][i].asUInt(), c = data["eqc"][i].asUInt();
+		unsigned j = 0;
+		for(;j<11;++j)
+		{
+			m = max(m, j);
+			if(id == liandan_eq_id[j])
+				break;
+		}
+		if(j == 11) return R_ERR_LOGIC;
+		ret = logicEquip.UseEquipment(uid, id, ud, c, "liandan"); if(ret) return ret;
+		sum += liandan_eq_c[j] * c;
+	}
+
+	++m;
+	if(m > 10)
+		m = 0;
+	if(sum < liandan_eq_c[m]) m = 0;
+	unsigned c1 = sum / liandan_eq_c[m];
+	if(c1 == 0)
+		return R_ERR_NO_DATA;
+	unsigned c2 = sum % liandan_eq_c[m] / liandan_eq_c[0];
+	vector<ItemAdd> items;
+	ItemAdd item1;
+	item1.eqid = liandan_eq_id[m];
+	item1.count = c1;
+	item1.reason = "liandan";
+	items.push_back(item1);
+	if(c2)
+	{
+		ItemAdd item2;
+		item2.eqid = liandan_eq_id[0];
+		item2.count = c2;
+		item2.reason = "liandan";
+		items.push_back(item2);
+	}
+
+	ret = logicEquip.AddItems(uid, items, result["equipment"], true); if(ret) return ret;
+	userWrap.Save();
+	return R_SUCCESS;
+}
+int CLogicCMD::keyao(unsigned uid, unsigned eqid, unsigned equd, unsigned heroud, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	unsigned j = 0;
+	for(;j<11;++j)
+	{
+		if(eqid == liandan_eq_id[j])
+			break;
+	}
+	if(j == 11 || j == 0) return R_ERR_LOGIC;
+
+	CDataXML *pDataXML = CDataXML::GetCDataXML();
+	if(!pDataXML)
+		return R_ERR_DATA;
+
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	const unsigned liandan_ch_k[7] = {0, 0, 0, 0, 3, 4, 5};
+	Json::FastWriter writer;
+	CLogicHero logicHero;
+	Json::Value t;
+	ret = logicHero.Get(uid, heroud, t); if(ret) return ret;
+	XMLHero hero;
+	string id = t["id"].asString();
+	pDataXML->GetHero(CDataXML::Str2Hero(id), hero);
+	unsigned ky = 0;
+	Json::GetUInt(t, "ky", ky);
+	if(hero.type < 4 || ky / liandan_ch_k[hero.type] + 1 != j) return R_ERR_LOGIC;
+
+	ret = CLogicEquipment().UseEquipment(uid, eqid, equd, 1, "keyao"); if(ret) return ret;
+	t["ky"] = ky + 1;
+	ret = logicHero.Chg(uid, heroud, t); if(ret) return ret;
+
+	string heroData = writer.write(t);
+	HERO_LOG("uid=%u,id=%u,heroid=%s,act=%s,code=%s,data=%s",uid,heroud,t["id"].asString().c_str(),"ky","keyao",heroData.c_str());
+	result["ky"] = t["ky"];
+	userWrap.Save();
+	return R_SUCCESS;
+}
+
+int CLogicCMD::godh(unsigned uid, unsigned equd, unsigned index1, unsigned index2, Json::Value &result, unsigned lasttime,unsigned seqid)
+{
+	if(index2 < 0 || index1 > 9)
+		return R_ERR_PARAM;
+
+	int ret = 0;
+	AUTO_LOCK_USER(uid);
+	UserWrap userWrap(uid, true);
+	ret = userWrap.CheckSession(lasttime, seqid, result);
+	if(ret)
+		return ret;
+
+	Json::Value tech;
+	userWrap.GetUserTech(tech);
+	unsigned godh = 0;
+	Json::GetUInt(tech, "godh", godh);
+	if(godh & (0x01 << (index1 + index2*10)))
+		return R_ERR_LOGIC;
+
+	if(index2 == 0)
+		{ret = CLogicEquipment().UseEquipment(uid, 1992, equd, 100, "godh"); if(ret) return ret;}
+	else if(index2 == 1)
+		{ret = CLogicEquipment().UseEquipment(uid, 1992, equd, 500, "godh"); if(ret) return ret;}
+	else{return R_ERR_PARAM;}
+	godh |= (0x01 << (index1 + index2*10));
+	tech["godh"] = godh;
+	userWrap.SetUserTech(tech);
+
+	result["godh"] = godh;
+	userWrap.Save();
+	return R_SUCCESS;
+}
+
+int CLogicCMD::HeroFm(unsigned uid,unsigned index,unsigned index1,unsigned hud,unsigned eq_ud,Json::Value &result,unsigned &lasttime,unsigned &seqid)
+{
+	const unsigned  fm_cost[5][3] = {{2551,2552,2553},{2561,2562,2563},{2571,2572,2573},{2581,2582,2583},{2591,2592,2593}};
+	if(index >= 10 || index1 >= 5)
+		return R_ERR_PARAM;
+
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicHero logicHero;
+	Json::Value hero_data;
+	ret = logicHero.Get(uid, hud, hero_data);
+	if (ret)
+		return ret;
+	if(!hero_data.isMember("fm") || !hero_data["fm"].isArray() || hero_data["fm"].size() != 10)
+	{
+		hero_data["fm"] = Json::Value(Json::arrayValue);
+		hero_data["fm"].resize(0);
+		for(unsigned i=0;i<10;++i)
+			hero_data["fm"].append(0);
+	}
+	string old_fm = Json::ToString(hero_data["fm"]);
+	unsigned l = (hero_data["fm"][index].asUInt() >> (index1 * 2)) & 0x03;
+	if(l >= 3)
+		return R_ERR_LOGIC;
+
+	CLogicEquipment logicEquipment;
+	int eq_count = 0;
+	ret = logicEquipment.UseEquipmentEx(uid, fm_cost[index1][l], eq_ud, 1, "hero_fm", eq_count);
+	if(ret)
+		return ret;
+	result["eq_count"] = eq_count;
+
+	hero_data["fm"][index] = (hero_data["fm"][index].asUInt() & (~(0x03 << (index1 * 2)))) | ((l + 1) << (index1 * 2));
+	ret = logicHero.Chg(uid, hud, hero_data);
+	if (ret)
+		return ret;
+	string code = "fm_"+CTrans::ITOS(index)+"_"+CTrans::ITOS(index1);
+	HERO_LOG("uid=%u,id=%u,heroid=%s,act=%s,code=%s,data=%s,oldfm=%s",
+			uid,hud,hero_data["id"].asString().c_str(),"fm",code.c_str(),Json::ToString(hero_data).c_str(),old_fm.c_str());
+	result["hero"] = hero_data["fm"];
+
+	return 0;
 }

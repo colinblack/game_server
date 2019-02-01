@@ -571,8 +571,11 @@ public:
 			return R_ERR_PARAM;
 		}
 
+		int ud = 0;
+		Json::GetInt(m_data, "ud", ud);
+
 		CLogicAlliance logicAlliance;
-		ret = logicAlliance.SetAllianceMemberData(m_uid,allianceId,point,m_data["data"]);
+		ret = logicAlliance.SetAllianceMemberData(m_uid,allianceId,point,ud,m_data["data"]);
 		if (0 != ret)
 		{
 			return ret;

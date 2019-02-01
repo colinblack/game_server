@@ -571,7 +571,7 @@ int main(int argc, char *argv[]) {
 		*/
 
 
-/**********道具发放*********************************/
+/**********道具发放*********************************
 	if (argc < 4)
 	{
 		std::cout << "parsms error" << std::endl;
@@ -590,7 +590,7 @@ int main(int argc, char *argv[]) {
 		unsigned uid = 0;
 		fin >> uid;
 		lgEq.AddOneItem(uid, id, c, "test", result);
-	}
+	}*/
 
 /*************统计查询************************
 	if (argc < 2)
@@ -783,7 +783,58 @@ int main(int argc, char *argv[]) {
 		system(c.c_str());
 	}*/
 
+	/**************混元技*********************/
+	if (argc < 2)
+	{
+		std::cout << "parsms error" << std::endl;
+		exit(0);
+	}
+	fstream fin(argv[1]);
+	if (!fin.good()) {
+		cout << "open file fail" << endl;
+		return 1;
+	}
+	CLogicHero lgHr;
+	CLogicUser lgUr;
+	CLogicUserBasic lgUb;
+	while (!fin.eof() && fin.good()) {
+		unsigned uid = 0;
+		fin >> uid;
+		if(!IsValidUid(uid))
+			continue;
+		DataUser ur;
+		lgUr.GetUserLimit(uid, ur);
+		if(ur.level < 30)
+			continue;
+		Json::Value hr;
+		lgHr.GetHero(uid, hr);
+		map<unsigned, vector<unsigned> > skill;
+		for(unsigned i=0;i<hr.size();++i)
+		{
+			SkillUnit::CheakSkillVer(hr[i]);
+			if(hr[i].isMember("tskill") && hr[i]["tskill"].isArray())
+			{
+				for(unsigned j=0;j<hr[i]["tskill"].size();++j)
+				{
+					unsigned id = hr[i]["tskill"][j][0u].asUInt();
+					if((id >= 13051  && id <= 13053) || (id >= 12051  && id <= 12053) || (id >= 11051  && id <= 11053) || id == 53001)
+						skill[id].push_back(hr[i]["tskill"][j][1u].asUInt());
+				}
+			}
+		}
+		if(!skill.empty())
+		{
+			string name;
+			lgUb.GetName(uid, name);
+			for(map<unsigned, vector<unsigned> >::iterator it=skill.begin();it!=skill.end();++it)
+			{
+				cout<<it->first<<","<<ur.accCharge<<","<<ur.level<<","<<uid<<",\""<<name<<"\"";
+				for(vector<unsigned>::iterator iter=it->second.begin();iter!=it->second.end();++iter)
+					cout<<","<<*iter;
+				cout<<endl;
+			}
+		}
+	}
+
 	return R_SUCCESS;
 }
-
-

@@ -179,7 +179,7 @@ void protobuf_AssignDesc_BraveNewWorld_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BraveNewWorldUser));
   BraveNewWorldPoint_descriptor_ = file->message_type(6);
-  static const int BraveNewWorldPoint_offsets_[13] = {
+  static const int BraveNewWorldPoint_offsets_[14] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, x_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, y_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, uid_),
@@ -193,6 +193,7 @@ void protobuf_AssignDesc_BraveNewWorld_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, mtype_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, mcount_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, defts_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldPoint, sdef_),
   };
   BraveNewWorldPoint_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -322,19 +323,19 @@ void protobuf_AddDesc_BraveNewWorld_2eproto() {
     "NewWorldHistory\0222\n\003fav\030\017 \003(\0132%.BraveNewW"
     "orld.BraveNewWorldFavourate\022\n\n\002rl\030\020 \001(\r\022"
     "8\n\007mission\030\021 \001(\0132\'.BraveNewWorld.BraveNe"
-    "wWorldUserMission\"\277\001\n\022BraveNewWorldPoint"
+    "wWorldUserMission\"\315\001\n\022BraveNewWorldPoint"
     "\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\013\n\003uid\030\003 \002(\r\022\013\n\003d"
     "ef\030\004 \002(\010\022\014\n\004hero\030\005 \002(\r\022\n\n\002hp\030\006 \002(\r\022\013\n\003fi"
     "d\030\007 \002(\r\022\013\n\003fts\030\010 \002(\r\022\013\n\003rts\030\t \002(\r\022\n\n\002rc\030"
     "\n \001(\r\022\r\n\005mtype\030\013 \001(\r\022\016\n\006mcount\030\014 \001(\r\022\r\n\005"
-    "defts\030\r \001(\r\"8\n\021BraveNewWorldZone\022\n\n\002id\030\001"
-    " \002(\r\022\013\n\003aid\030\002 \002(\r\022\n\n\002ts\030\003 \002(\r\"\330\001\n\rBraveN"
-    "ewWorld\022/\n\004land\030\001 \003(\0132!.BraveNewWorld.Br"
-    "aveNewWorldPoint\022.\n\004user\030\002 \003(\0132 .BraveNe"
-    "wWorld.BraveNewWorldUser\022.\n\004zone\030\003 \003(\0132 "
-    ".BraveNewWorld.BraveNewWorldZone\0226\n\010alli"
-    "ance\030\004 \003(\0132$.BraveNewWorld.BraveNewWorld"
-    "Alliance", 1288);
+    "defts\030\r \001(\r\022\014\n\004sdef\030\016 \001(\r\"8\n\021BraveNewWor"
+    "ldZone\022\n\n\002id\030\001 \002(\r\022\013\n\003aid\030\002 \002(\r\022\n\n\002ts\030\003 "
+    "\002(\r\"\330\001\n\rBraveNewWorld\022/\n\004land\030\001 \003(\0132!.Br"
+    "aveNewWorld.BraveNewWorldPoint\022.\n\004user\030\002"
+    " \003(\0132 .BraveNewWorld.BraveNewWorldUser\022."
+    "\n\004zone\030\003 \003(\0132 .BraveNewWorld.BraveNewWor"
+    "ldZone\0226\n\010alliance\030\004 \003(\0132$.BraveNewWorld"
+    ".BraveNewWorldAlliance", 1302);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "BraveNewWorld.proto", &protobuf_RegisterTypes);
   BraveNewWorldHistory::default_instance_ = new BraveNewWorldHistory();
@@ -3010,6 +3011,7 @@ const int BraveNewWorldPoint::kRcFieldNumber;
 const int BraveNewWorldPoint::kMtypeFieldNumber;
 const int BraveNewWorldPoint::kMcountFieldNumber;
 const int BraveNewWorldPoint::kDeftsFieldNumber;
+const int BraveNewWorldPoint::kSdefFieldNumber;
 #endif  // !_MSC_VER
 
 BraveNewWorldPoint::BraveNewWorldPoint()
@@ -3043,6 +3045,7 @@ void BraveNewWorldPoint::SharedCtor() {
   mtype_ = 0u;
   mcount_ = 0u;
   defts_ = 0u;
+  sdef_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3091,8 +3094,8 @@ void BraveNewWorldPoint::Clear() {
   if (_has_bits_[0 / 32] & 255) {
     ZR_(x_, fts_);
   }
-  if (_has_bits_[8 / 32] & 7936) {
-    ZR_(rts_, defts_);
+  if (_has_bits_[8 / 32] & 16128) {
+    ZR_(rts_, sdef_);
   }
 
 #undef OFFSET_OF_FIELD_
@@ -3302,6 +3305,21 @@ bool BraveNewWorldPoint::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(112)) goto parse_sdef;
+        break;
+      }
+
+      // optional uint32 sdef = 14;
+      case 14: {
+        if (tag == 112) {
+         parse_sdef:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &sdef_)));
+          set_has_sdef();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -3396,6 +3414,11 @@ void BraveNewWorldPoint::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(13, this->defts(), output);
   }
 
+  // optional uint32 sdef = 14;
+  if (has_sdef()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(14, this->sdef(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3469,6 +3492,11 @@ void BraveNewWorldPoint::SerializeWithCachedSizes(
   // optional uint32 defts = 13;
   if (has_defts()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(13, this->defts(), target);
+  }
+
+  // optional uint32 sdef = 14;
+  if (has_sdef()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(14, this->sdef(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -3574,6 +3602,13 @@ int BraveNewWorldPoint::ByteSize() const {
           this->defts());
     }
 
+    // optional uint32 sdef = 14;
+    if (has_sdef()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->sdef());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -3642,6 +3677,9 @@ void BraveNewWorldPoint::MergeFrom(const BraveNewWorldPoint& from) {
     if (from.has_defts()) {
       set_defts(from.defts());
     }
+    if (from.has_sdef()) {
+      set_sdef(from.sdef());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3679,6 +3717,7 @@ void BraveNewWorldPoint::Swap(BraveNewWorldPoint* other) {
     std::swap(mtype_, other->mtype_);
     std::swap(mcount_, other->mcount_);
     std::swap(defts_, other->defts_);
+    std::swap(sdef_, other->sdef_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

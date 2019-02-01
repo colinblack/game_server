@@ -104,10 +104,11 @@ struct DataXMLMixHero
 struct XMLBoat{
 	uint32_t id;
 	uint32_t time;
-	uint32_t reward;
+	uint32_t reward[3];
 	uint32_t rate;
 	XMLBoat(){
-		id = time = reward = rate = 0;
+		id = time = rate = 0;
+		memset(reward,0,sizeof(reward));
 	}
 };
 struct DataXMLBoats{
@@ -771,8 +772,8 @@ struct XMLPreSummerItem
 
 struct DataXMLPreSummer
 {
-	unsigned cost[XML_DATA_PRESUMMER_ITEMS], cost2[XML_DATA_PRESUMMER_ITEMS];
-	XMLPreSummerItem items[XML_DATA_PRESUMMER_ITEMS], items2[XML_DATA_PRESUMMER_ITEMS];
+	unsigned cost[XML_DATA_PRESUMMER_ITEMS], cost2[XML_DATA_PRESUMMER_ITEMS], cost3[XML_DATA_PRESUMMER_ITEMS];
+	XMLPreSummerItem items[XML_DATA_PRESUMMER_ITEMS], items2[XML_DATA_PRESUMMER_ITEMS], items3[XML_DATA_PRESUMMER_ITEMS];
 };
 //@end
 
@@ -1274,10 +1275,8 @@ struct DataXMLYearFortune
 {
 	enum {
 		LIB_CNT = 3,
-		STAGE_CNT = 3,
+		STAGE_CNT = 7,
 	};
-
-	unsigned			  stages[STAGE_CNT];
 	DataXMLYearFortuneLib libs[LIB_CNT];
 };
 
@@ -1744,6 +1743,16 @@ public:
 #define INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_NAME) m_##CONFIG_NAME = CONFIG_NAME##_CONFIG(data);
 /********************************************************************/
 //autolable3
+CHARGE_DRAW_ACT_CONFIG(CONFIG_yuandan2018)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_yearend2018)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_winter2018)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_double11_2018)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_mid_aug_hao)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_mid_aug_reu)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_water_taotie)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_water_qilin)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_water_pheonix)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_nnom)
 //vicky没想好名字的活动
 CHARGE_DRAW_ACT_CONFIG(CONFIG_VICKY_NO_NAME)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_VICKY_BINGSHU)
@@ -1998,9 +2007,54 @@ struct DataXMLCostHeavenDaoist
 };
 
 
-#define XMLDOUBLE_PROP_NUM		6
-#define XMLDOUBLE_TYPE_NUM		6
+#define EIGHT_FORMATION_NUM 100
+#define EIGHT_FORMATION_R_NUM 3
+#define ID_INDX 9
+struct XMLEightFormation
+{
+	unsigned id;
+	unsigned exp;
+	unsigned res;
+	unsigned needeq;
+	unsigned per;
 
+	XMLEightFormation() : id(0), exp(0), res(0), needeq(0), per(0)
+	{
+
+	}
+
+};
+
+struct DataXMLEightFormation
+{
+	XMLEightFormation eightFormation[EIGHT_FORMATION_R_NUM][EIGHT_FORMATION_NUM+1];
+	unsigned r[ID_INDX];
+	DataXMLEightFormation()
+	{
+		memset(r, 0, sizeof(r));
+	}
+};
+
+#define EIGHT_FORMATION_JIE_NUM 10
+struct XMLCostEightFormation
+{
+	unsigned id;
+	unsigned jie;
+	unsigned cash;
+
+	XMLCostEightFormation():id(0), jie(0), cash(0)
+	{}
+};
+
+struct DataXMLCostEightFormation
+{
+	XMLCostEightFormation eightFormationCost[EIGHT_FORMATION_JIE_NUM+1];
+};
+
+
+
+#define XMLDOUBLE_PROP_NUM		6
+#define XMLDOUBLE_TYPE_NUM		24
 
 struct XMLDouble11Prop
 {
@@ -3404,7 +3458,7 @@ struct PayOptionalItem
 /***************消费自选-end**********************/
 
 /***************合区活动-begin**********************/
-#define EQUIP_ITEMS_MAX (3)
+#define EQUIP_ITEMS_MAX (5)
 #define MAX_CHARGE_ITEMS (4)
 #define MAX_VIP_ITEMS (5)
 #define MAX_VIP_SUBQUENT (3)
@@ -3682,6 +3736,73 @@ struct DataXMLInvestment {
 	XMLInvestmentReward item[XML_INVESTMENT_REWARD_NUM];
 };
 /*****************investment-end***************/
+/*****************birdbridge-begin*************/
+#define XML_BIRD_BRIDGE_REWARD_NUM 5
+#define XML_BIRD_BRIDGE_ITEM_NUM 4
+struct XMLBirdBridgeItem {
+	byte id;
+	uint32_t require;
+	GiftEquipItem reward[XML_BIRD_BRIDGE_REWARD_NUM];
+	XMLBirdBridgeItem(): id(0), require(0) {
+	}
+};
+struct DataXMLBirdBridge {
+	XMLBirdBridgeItem left[XML_BIRD_BRIDGE_ITEM_NUM];
+	XMLBirdBridgeItem right[XML_BIRD_BRIDGE_ITEM_NUM];
+	XMLBirdBridgeItem center;
+};;
+/*****************birdbridge-end***************/
+/*****************uniontech-begin*************/
+#define XML_MAX_UNIONTECH_NUM 27
+#define XML_MAX_UNIONTECH_LEVEL 10
+struct XMLUnionTechItem {
+	unsigned id;
+	unsigned studypoint[XML_MAX_UNIONTECH_LEVEL];
+	unsigned gold[XML_MAX_UNIONTECH_LEVEL];
+	unsigned wood[XML_MAX_UNIONTECH_LEVEL];
+	unsigned eqpoint[XML_MAX_UNIONTECH_LEVEL];
+	XMLUnionTechItem() : id(0) {
+		memset(studypoint,0,sizeof(studypoint));
+		memset(gold,0,sizeof(gold));
+		memset(wood,0,sizeof(wood));
+		memset(eqpoint,0,sizeof(eqpoint));
+	}
+};
+struct DataXMLUnionTech {
+	XMLUnionTechItem tech[XML_MAX_UNIONTECH_NUM];
+};
+/*****************uniontech-end***************/
+/*****************圣诞活动-begin*************/
+#define XML_SHENGDAN_REWARD_NUM 4
+#define XML_SHENGDAN_CHOUJIANG_RATE_NUM 5
+#define XML_SHENGDAN_XUYUAN_DANGCI_NUM 10
+#define XML_SHENGDAN_CHARGE_DANGCI_NUM 9
+#define XML_SHENGDAN_CONSUME_DANGCI_NUM 9
+#define XML_SHENGDAN_EXANGE_DANGCI_NUM 10
+struct XMLXuyuanDangciItem {
+	unsigned id;
+	unsigned require;
+	GiftEquipItem reward[XML_SHENGDAN_REWARD_NUM];
+	XMLXuyuanDangciItem(): id(0), require(0) {
+	}
+};
+struct XMLExangeItem {
+	unsigned id;
+	unsigned count;
+	unsigned require;
+	GiftEquipItem reward[XML_SHENGDAN_REWARD_NUM];
+	XMLExangeItem(): id(0), count(0), require(0) {
+	}
+};
+struct DataXMLShengDan {
+	GiftEquipItem day;
+	unsigned rate[XML_SHENGDAN_CHOUJIANG_RATE_NUM];
+	XMLXuyuanDangciItem vow[XML_SHENGDAN_XUYUAN_DANGCI_NUM];
+	XMLXuyuanDangciItem change[XML_SHENGDAN_CHARGE_DANGCI_NUM];
+	XMLXuyuanDangciItem consume[XML_SHENGDAN_CONSUME_DANGCI_NUM];
+	XMLExangeItem exchange[XML_SHENGDAN_EXANGE_DANGCI_NUM];
+};
+/*****************圣诞活动-end*************/
 
 class CDataXML
 {
@@ -3855,6 +3976,15 @@ public:
 	int InitCostHeavenDaoist();
 	int GetCostHeavenDaoist(bool is_heaven, unsigned jie_index, unsigned &cash);
 
+	//八阵图
+	int InitEightFormation();
+	int GetEightFormationItem(const unsigned id, const unsigned idx, XMLEightFormation &item);
+	int GetEightFormationLv(unsigned id, unsigned idx, unsigned exp, unsigned &lv);
+	unsigned GetMaxExp(unsigned id, unsigned maxlv);
+
+	int InitCostEightFormation();
+	int GetCostEightFormation(unsigned jie_index, unsigned &cash);
+
 	int InitDouble11();
 	int GetDouble11AllData(DataXMLDouble11 &dataDouble);
 
@@ -4004,6 +4134,16 @@ public:
 	//vicky的开服活动
 	const ConfigVickyNewOpen& GetVickyNewOpen() const;
 //autolable4
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yuandan2018)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yearend2018)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_winter2018)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_double11_2018)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_mid_aug_hao)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_mid_aug_reu)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_water_taotie)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_water_qilin)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_water_pheonix)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_nnom)
 	//vicky没想好名字的活动
 	GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_VICKY_NO_NAME)
 	//兵书突破
@@ -4278,6 +4418,20 @@ public:
 	int GetInvestmentRate(vector<unsigned> &r, bool last);
 	int GetInvestmentReward(unsigned id, XMLInvestmentReward &item);
 
+	/**************birdbridge***************************/
+	int InitBirdBridge();
+	int GetBirdBridgeItem(unsigned type, unsigned id, XMLBirdBridgeItem &item);
+
+	/**************UnionTech***************************/
+	int InitUnionTech();
+	int GetUnionTechItem(unsigned id, XMLUnionTechItem &item);
+	void ViewUnionTech();
+
+	/**************ShengDan2018***************************/
+	int InitShengDan();
+	void ViewShengDan();
+	int GetShengDanItem( DataXMLShengDan &item);
+
 	/*解析XML函数指针*/
 	typedef int (CDataXML::* ParseComplete)(void * , CMarkupSTL & xmlConf);
 
@@ -4516,6 +4670,14 @@ protected:
 	CShareMemory m_shCostHeavenDaoist;
 	map<unsigned, unsigned> m_mapCostHeavenDaoist;
 
+	CShareMemory m_shEightFormation;
+	map<unsigned, unsigned> m_mapXMLEightFormation[EIGHT_FORMATION_R_NUM];
+	//每个阵型对应的对应的R
+	unsigned eight_formation[ID_INDX];
+
+	CShareMemory m_shCostEightFormation;
+	map<unsigned, unsigned> m_mapCostEightFormation;
+
 	CShareMemory m_shDouble11;
 
 	vector<EggReward> m_eggrwd;
@@ -4703,6 +4865,15 @@ protected:
 
 	//充值投资
 	CShareMemory m_shInvestment;
+
+	//鹊起相会
+	CShareMemory m_shBirdBridge;
+
+	//联盟科技
+	CShareMemory m_shUnionTech;
+
+	//圣诞2018
+	CShareMemory m_shShengDan;
 private:
 	int genUsePool(unsigned opool, set<unsigned> &quforbid, unsigned &upool);
 	int addforbidPool(unsigned forbid, set<unsigned> &quforbid);

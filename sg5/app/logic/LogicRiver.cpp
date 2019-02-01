@@ -45,6 +45,11 @@ int CLogicRiver::SetShip(unsigned uid, const Json::Value &param)
 	{
 		PARAM_ERROR_RETURN_MSG("type");
 	}
+	int classType = 0;
+	if(!Json::GetInt(param, "classType", classType) || classType < 1 || classType > 3)
+	{
+		PARAM_ERROR_RETURN_MSG("classType");
+	}
 	unsigned startTs = 0;
 	if(!Json::GetUInt(param, "startts", startTs))
 	{
@@ -65,6 +70,7 @@ int CLogicRiver::SetShip(unsigned uid, const Json::Value &param)
 
 	DataShip data;
 	data.uid = userid;
+	data.classType = classType;
 	data.posy = posy;
 	data.attack_num = attactnum;
 	data.start_time = startTs;
@@ -92,6 +98,11 @@ int CLogicRiver::SetShip(unsigned uid, const Json::Value &param)
 		logicAlliance.GetAllianceLimit(user.alliance_id, alliance);
 	}
 
+	if ((classType == 3 && user.level < 80 )|| (classType == 2 && user.level < 30))
+	{
+		LOGIC_ERROR_RETURN_MSG("level");
+	}
+
 	data.user_level = user.level;
 	strcpy(data.user_name,userBasic.name.c_str());
 	strcpy(data.alliance_name,alliance.name.c_str());
@@ -109,6 +120,48 @@ int CLogicRiver::SetShip(unsigned uid, const Json::Value &param)
 		error_log("add ship to mem fail,ret=%d", ret);
 		return ret;
 	}
+
+	return 0;
+}
+
+int CLogicRiver::HitShip(unsigned uid, const Json::Value &param, Json::Value &result)
+{
+	int ret = 0;
+	DataUser dataUser;
+	CLogicUser logicUser;
+	CLogicAlliance logicAlliance;
+	DataAlliance alliance;
+
+	{
+		AUTO_LOCK_USER(uid)
+		ret = logicUser.GetUser(uid, dataUser);
+		if (0 != ret)
+		{
+			return ret;
+		}
+
+		Json::Value stats;
+		Json::Reader reader;
+		reader.parse(dataUser.user_stat,stats);
+		Json::FastWriter writer;
+
+		if (stats["boat"][1u].asUInt() >= 5)
+		{
+			LOGIC_ERROR_RETURN_MSG("time limit");
+		}
+
+		stats["boat"][1u] = stats["boat"][1u].asUInt() + 1;
+
+		dataUser.user_stat = writer.write(stats);
+		ret = logicUser.SetUser(uid, dataUser);
+		if(ret)
+			return ret;
+	}
+
+	CLogicUpdates logicUpdates;
+	ret = logicUpdates.sendEndofShipReward(param["uid"].asUInt(),param,uid,param["win"].asUInt(),&result);
+	if (ret)
+		return ret;
 
 	return 0;
 }
@@ -161,6 +214,7 @@ int CLogicRiver::GetShipJson(unsigned uid, Json::Value &result)
 		return ret;
 	}
 
+	result["classType"] = ship.classType;
 	result["type"] = ship.type % 10;
 	result["uid"] = ship.uid;
 	result["name"] = string(ship.user_name);
@@ -175,6 +229,7 @@ int CLogicRiver::GetShipJson(unsigned uid, Json::Value &result)
 }
 int CLogicRiver::GetShipJson(DataShip ship, Json::Value &result)
 {
+	result["classType"] = ship.classType;
 	result["type"] = ship.type % 10;
 	result["uid"] = ship.uid;
 	result["name"] = string(ship.user_name);
@@ -277,6 +332,7 @@ int CLogicRiver::UpdatesEndOfShipping(DataShip ship)
 	updates[(unsigned) 0]["type"] = ship.type % 10;
 	updates[(unsigned) 0]["torch"] = ship.type / 10;
 	updates[(unsigned) 0]["level"] = ship.user_level;
+	updates[(unsigned) 0]["classType"] = ship.classType;
 	CLogicUpdates logicUpdates;
 	ret = logicUpdates.AddUpdates(ship.uid, updates);
 	if (0 != ret)

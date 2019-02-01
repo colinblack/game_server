@@ -140,7 +140,7 @@ int main()
         send_html_start();
         
         int len;
-        char *lenstr, poststr[1000];
+        char *lenstr, poststr[10000];
         
         lenstr = getenv("CONTENT_LENGTH");
 
@@ -165,7 +165,7 @@ int main()
         stringsplit(poststr, "&", vctstr);
         string key;
         string val;
-        char dst[1000] = {0};
+        char dst[10000] = {0};
 
         //FCGI_printf("长度是:%d,内容是:%s<br/>", len, poststr);
         

@@ -98,6 +98,16 @@ public:
 
 	}
 
+	std::string Type() const
+	{
+		std::string value;
+		if (Config::GetValue(value, "activity_" + name_ + "_type"))
+		{
+			return value;
+		}
+		return "";
+	}
+
 	void full_act_info(Json::Value& result) const;
 private:
 	std::string name_;

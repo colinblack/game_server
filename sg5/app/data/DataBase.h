@@ -35,6 +35,7 @@ using google::protobuf::Reflection;
 #include "BraveNewWorld.pb.h"
 #include "AllianceConsume.pb.h"
 #include "MVP.pb.h"
+#include "Chick.pb.h"
 
 enum ProtoType
 {
@@ -132,6 +133,50 @@ protected:
 	int Serialize();
 	string m_path;
 	google::protobuf::Message* m_msg;
+};
+template<class T, class D>
+class DataBaseT : public DataBase
+{
+public:
+	DataBaseT(string path)
+		:DataBase(path)
+	{
+		m_msg = new T;
+	}
+	virtual ~DataBaseT(){}
+	virtual int OnInit(int ret)
+	{
+		return ret;
+	}
+	virtual int Init()
+	{
+		int ret = Parse();
+		if(ret && ret != R_ERR_NO_DATA)
+			return ret;
+
+		if(ret != R_ERR_NO_DATA)
+			m_data.Parse(*(T *)m_msg);
+
+		m_msg->Clear();
+
+		return OnInit(ret);
+	}
+	virtual int Save()
+	{
+		m_data.Serialize((T *)m_msg);
+
+		int ret = Serialize();
+
+		m_msg->Clear();
+
+		return ret;
+	}
+	virtual int Sig(int sig)
+	{
+		return 0;
+	}
+protected:
+	D m_data;
 };
 
 #endif /* DATABASE_H_ */

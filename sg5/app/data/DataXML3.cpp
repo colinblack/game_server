@@ -293,6 +293,11 @@ int CDataXML::Init(const std::string &path, semdat sem, bool initconfig)
 	INIT_XML_DAT(ChongZhiZiXuan)
 	INIT_XML_DAT(Beauty)
 	INIT_XML_DAT(Investment)
+	INIT_XML_DAT(EightFormation)
+	INIT_XML_DAT(CostEightFormation)
+	INIT_XML_DAT(BirdBridge)
+	INIT_XML_DAT(UnionTech)
+	INIT_XML_DAT(ShengDan)
 	if(!initconfig)
 	{
 		//building map
@@ -979,7 +984,43 @@ int CDataXML::Init(const std::string &path, semdat sem, bool initconfig)
 				m_mapCostHeavenDaoist[pdata->heavenDaoistCost[i].id] = pdata->heavenDaoistCost[i].cash;
 			}
 		}
+		{
+			DataXMLEightFormation *pdata = (DataXMLEightFormation *)m_shEightFormation.GetAddress();
+			if (NULL == pdata)
+			{
+				return R_ERR_DB;
+			}
 
+			CAutoLock lock(const_cast<CShareMemory *>(&(m_shEightFormation)), true);
+			memcpy(eight_formation, pdata->r, sizeof(eight_formation));
+			for(int i = 0; i < EIGHT_FORMATION_R_NUM; ++i)
+			{
+				m_mapXMLEightFormation[i].clear();
+			}
+			for(int i = 0; i < EIGHT_FORMATION_R_NUM; ++i)
+			{
+				for (unsigned j = 0; j <= EIGHT_FORMATION_NUM; ++j)
+				{
+					m_mapXMLEightFormation[i][(pdata->eightFormation)[i][j].id] = j;
+				}
+			}
+
+		}
+		{
+			DataXMLCostEightFormation *pdata = (DataXMLCostEightFormation *)m_shCostEightFormation.GetAddress();
+			if (NULL == pdata)
+			{
+				return R_ERR_DB;
+			}
+
+			CAutoLock lock(const_cast<CShareMemory *>(&(m_shCostEightFormation)), true);
+			m_mapCostEightFormation.clear();
+
+			for (unsigned i = 0; i <= EIGHT_FORMATION_JIE_NUM; ++i)
+			{
+				m_mapCostEightFormation[pdata->eightFormationCost[i].id] = pdata->eightFormationCost[i].cash;
+			}
+		}
 		{
 			DataXMLBetShop *pdata = (DataXMLBetShop *)m_shBetShop.GetAddress();
 			if (NULL == pdata)
@@ -2508,6 +2549,62 @@ int CDataXML::InitPreSummer()
 
 		xmlConf.OutOfElem();
 	}
+	xmlConf.ResetMainPos();
+	{
+		if (! xmlConf.FindElem("summer3"))
+		{
+			std::cout << "newActivity.xml => summer3 node error" << std::endl;
+			error_log("newActivity.xml => summer3 node error");
+			return R_ERROR;
+		}
+
+		string coststr = xmlConf.GetAttrib("cost");
+		vector<string> coststrs;
+		String::Split(coststr, ',', coststrs);
+		if(coststrs.size() != XML_DATA_PRESUMMER_ITEMS)
+		{
+			cout << "newActivity.xml => cost size error" << endl;
+			error_log("newActivity.xml => cost size error");
+			return R_ERROR;
+		}
+		for(int i=0;i<XML_DATA_PRESUMMER_ITEMS;++i)
+			pData->cost3[i] = CTrans::STOI(coststrs[i]);
+
+		xmlConf.IntoElem();
+
+		int index = 0;
+		while (xmlConf.FindElem("reward") && index < XML_DATA_PRESUMMER_ITEMS)
+		{
+			unsigned id = CTrans::STOI(xmlConf.GetAttrib("id"));
+
+			if (id == 0)
+			{
+				error_log("newActivity.xml => id node error");
+				continue;
+			}
+
+			std::string data = xmlConf.GetData();
+			Json::Value jsonData;
+			if (! Json::FromString(jsonData, data))
+			{
+				error_log("newActivity.xml => data error.1");
+				return R_ERROR;
+			}
+
+			XMLPreSummerItem item;
+			item.id = id;
+
+			if (! item.equip.CopyFromJson(jsonData["reward"]["equip"]))
+			{
+				error_log("newActivity.xml => data error.2");
+				return R_ERROR;
+			}
+
+			pData->items3[index++] = item;
+		}
+
+		xmlConf.OutOfElem();
+	}
 
 	m_shPreSummer.SetInitDone();
 	return R_SUCCESS;
@@ -2522,7 +2619,7 @@ XMLPreSummerItem& CDataXML::GetPreSummerItem(unsigned id, unsigned type)
 		throw std::runtime_error("Get_pre_summer_sh_memory_error");
 	}
 
-	XMLPreSummerItem *items = type?pdata->items2:pdata->items;
+	XMLPreSummerItem *items = type?(type==1?pdata->items2:pdata->items3):pdata->items;
 	for (int i = 0; i < XML_DATA_PRESUMMER_ITEMS; i++)
 	{
 		if (items[i].id == id)
@@ -2545,7 +2642,7 @@ unsigned CDataXML::GetPreSummerCost(unsigned index, unsigned type)
 		throw std::runtime_error("Get_pre_summer_sh_memory_error");
 	}
 
-	return type?pdata->cost2[index]:pdata->cost[index];
+	return type?(type==1?pdata->cost2[index]:pdata->cost3[index]):pdata->cost[index];
 }
 ////////////////////////////////////////////////////////////////////////
 int XMLTempleItem::GetRandomEquipIndex()
@@ -3214,7 +3311,7 @@ DataXMLYearFortuneLib CDataXML::GetYearFortuneLib(unsigned id)
 
 int  CDataXML::GetYearFortuneNeedPoint(unsigned index)
 {
-	const int point_talbe[DataXMLYearFortune::STAGE_CNT] = {40, 70, 100};
+	const int point_talbe[DataXMLYearFortune::STAGE_CNT] = {40, 70, 100, 150, 200, 260, 330};
 	if (index >= DataXMLYearFortune::STAGE_CNT)
 	{
 		throw std::runtime_error("get_year_fortune_need_point_index_error");
@@ -4256,8 +4353,10 @@ int CDataXML::InitBoats()
 	{
 		string id = xmlConf.GetAttrib("id");
 		string time = xmlConf.GetAttrib("time");
-		string reward = xmlConf.GetAttrib("reward");
-		if(id.empty() || time.empty() || reward.empty())
+		string reward1 = xmlConf.GetAttrib("reward1");
+		string reward2 = xmlConf.GetAttrib("reward2");
+		string reward3 = xmlConf.GetAttrib("reward3");
+		if(id.empty() || time.empty() || reward1.empty() || reward2.empty() || reward3.empty())
 		{
 			cout<<("boats config wrong 1 id:")<<id<<endl;
 			return 1;
@@ -4271,7 +4370,9 @@ int CDataXML::InitBoats()
 		}
 		pdata->boats[i].id = CTrans::STOI(id.c_str());
 		pdata->boats[i].time = CTrans::STOI(time.c_str());
-		pdata->boats[i].reward = CTrans::STOI(reward.c_str());
+		pdata->boats[i].reward[0] = CTrans::STOI(reward1.c_str());
+		pdata->boats[i].reward[1] = CTrans::STOI(reward2.c_str());
+		pdata->boats[i].reward[2] = CTrans::STOI(reward3.c_str());
 	}
 	xmlConf.OutOfElem();
 
@@ -5922,4 +6023,108 @@ int CDataXML::GetInvestmentReward(unsigned id, XMLInvestmentReward &item) {
 	}
 	return R_ERR_NO_DATA;
 }
+int CDataXML::InitBirdBridge() {
+	try {
+		return DataXMLBirdBridgeUnit(m_shBirdBridge, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitBirdBridge]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+int CDataXML::GetBirdBridgeItem(unsigned type, unsigned id, XMLBirdBridgeItem &item) {
+	DataXMLBirdBridge *pdata = (DataXMLBirdBridge*)m_shBirdBridge.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&(m_shBirdBridge), true, LOCK_MAX);
+	if (type == 0) {
+		for (int i = 0; i < XML_BIRD_BRIDGE_ITEM_NUM; ++i) {
+			if (id == pdata->left[i].id) {
+				memcpy(&item, &(pdata->left[i]), sizeof(XMLBirdBridgeItem));
+				return 0;
+			}
+		}
+	} else if (type == 1) {
+		for (int i = 0; i < XML_BIRD_BRIDGE_ITEM_NUM; ++i) {
+			if (id == pdata->right[i].id) {
+				memcpy(&item, &(pdata->right[i]), sizeof(XMLBirdBridgeItem));
+				return 0;
+			}
+		}
+	} else {
+		memcpy(&item, &(pdata->center), sizeof(XMLBirdBridgeItem));
+		return 0;
+	}
+	return R_ERR_NO_DATA;
+}
+int CDataXML::InitUnionTech() {
+	try {
+		return DataXMLUnionTechUnit(m_shUnionTech, "uniontechconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitUnionTech]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+int CDataXML::GetUnionTechItem(unsigned id, XMLUnionTechItem &item) {
+	DataXMLUnionTech *pdata = (DataXMLUnionTech*)m_shUnionTech.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&(m_shUnionTech), true, LOCK_MAX);
+	for (int i = 0; i < XML_MAX_UNIONTECH_NUM; ++i) {
+		if (id == pdata->tech[i].id) {
+			memcpy(&item, &(pdata->tech[i]), sizeof(XMLUnionTechItem));
+			return 0;
+		}
+	}
+	return R_ERR_NO_DATA;
+}
+void CDataXML::ViewUnionTech() {
+	DataXMLUnionTech *pdata = (DataXMLUnionTech*)m_shUnionTech.GetAddress();
+	if (pdata == NULL) {
+		return;
+	}
+	CAutoLock lock(&(m_shUnionTech), true, LOCK_MAX);
+	for (int i=0; i<XML_MAX_UNIONTECH_NUM; i++)
+	{
+		cout << "tech " << pdata->tech[i].id << ": " << endl;
+		for (int j=0; j<XML_MAX_UNIONTECH_LEVEL; j++)
+		{
+			cout << pdata->tech[i].studypoint[j] << " "  << pdata->tech[i].gold[j] << " " <<
+					pdata->tech[i].wood[j] << " " << pdata->tech[i].eqpoint[j] << endl;
+		}
 
+	}
+}
+
+int CDataXML::InitShengDan() {
+	try {
+		return DataXMLShengDanUnit(m_shShengDan, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitUnionTech]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+void CDataXML::ViewShengDan() {
+	DataXMLShengDan *pdata = (DataXMLShengDan*)m_shShengDan.GetAddress();
+	if (pdata == NULL) {
+		return;
+	}
+	CAutoLock lock(&(m_shShengDan), true, LOCK_MAX);
+	std::cout << "day :" << (pdata->day).m_nId<< " " << (pdata->day).m_nCnt << " " << std::endl;
+
+}
+
+int CDataXML::GetShengDanItem(DataXMLShengDan &item) {
+	DataXMLShengDan *pdata = (DataXMLShengDan*)m_shShengDan.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&(m_shShengDan), true, LOCK_MAX);
+	memcpy(&item, pdata, sizeof(DataXMLShengDan));
+	return 0;
+}

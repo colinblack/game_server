@@ -53,6 +53,8 @@ public:
 	CGI_SET_ACTION_MAP("setPointsUser", SetPointsUser)
 	CGI_SET_ACTION_MAP("RotaryTableDraw", RotaryTableDraw)
 	CGI_SET_ACTION_MAP("GetRotaryTableRewardInfo", GetRotaryTableRewardInfo)
+	CGI_SET_ACTION_MAP("Double11", Double11)
+	CGI_SET_ACTION_MAP("GetDouble11Rcnt", GetDouble11Rcnt)
 	CGI_ACTION_MAP_END
 
 	int ViewBaseMatch()
@@ -644,6 +646,39 @@ public:
 		CDataRotaryTableDraw draw;
 		draw.GetDrawInfo(version,m_jsonResult["list"]);
 		return 0;
+	}
+
+	int Double11()
+	{
+		unsigned type = CCGIIn::GetCGIInt("type");
+		unsigned id = CCGIIn::GetCGIInt("id");
+		XMLDouble11Prop prop;
+		bool nocnt;
+		Json::Value rcnt(Json::arrayValue);
+		int ret = CLogicDouble11().BuyOneProp(type, id, prop, nocnt, rcnt, true);
+		if (ret != 0)
+			return ret;
+
+		m_jsonResult["nocnt"] = nocnt;
+		m_jsonResult["rcnt"] = rcnt;
+		m_jsonResult["prop"]["eqid"] = prop.eqid;
+		m_jsonResult["prop"]["price"] = prop.price;
+		m_jsonResult["prop"]["eqcnt"] = prop.eqcnt;
+		m_jsonResult["prop"]["total"] = prop.total;
+
+		CGI_SEND_LOG("action=Double11");
+		return R_SUCCESS;
+	}
+
+	int GetDouble11Rcnt()
+	{
+		Json::Value rcnt(Json::arrayValue);
+		int ret = CLogicDouble11().GetRemainCount(rcnt, true);
+		if (ret != 0)
+			return ret;
+		m_jsonResult["rcnt"] = rcnt;
+		CGI_SEND_LOG("action=GetDouble11Rcnt");
+		return R_SUCCESS;
 	}
 };
 

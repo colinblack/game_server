@@ -38,7 +38,7 @@
 #define IS_SOULSTONE_EQID(eqid)  (eqid >= 4401 && eqid <= 4490)
 #define IS_BUILDSTONE_EQID(eqid)  (eqid >= 4301 && eqid <= 4360)
 #define IS_GEM_EQID(eqid) (IS_SOULSTONE_EQID(eqid) || IS_BUILDSTONE_EQID(eqid))
-#define IS_NEW_SOULSTONE_EQID(eqid)  (eqid >= 44011 && eqid <= 44120)
+#define IS_NEW_SOULSTONE_EQID(eqid)  (eqid >= 44011 && eqid <= 44140)
 //temp gem
 #define IS_TEMP_SOULSTONE_EQID(eqid)  (eqid >= 4904 && eqid <= 4909)
 #define IS_TEMP_BUILDSTONE_EQID(eqid)  (eqid >= 4804 && eqid <= 4809)
@@ -51,7 +51,7 @@
 //gem of gem
 #define IS_GEM_GEM_EQID(eqid) (eqid >= 9248 && eqid <= 9250)
 //建筑双属性宝石
-#define IS_DOUBLE_GEM(eqid) (eqid >=4361 && eqid <= 4380)
+#define IS_DOUBLE_GEM(eqid) (eqid >=4361 && eqid <= 4390)
 //five
 #define IS_FIVE_ATTACK_STONE_EQID(eqid)  ((eqid >= 75101 && eqid <= 75110) || (eqid >= 75201 && eqid <= 75210) || (eqid >= 75301 && eqid <= 75310) || (eqid >= 75401 && eqid <= 75410) || (eqid >= 75501 && eqid <= 75510))
 //限时万能灵珠
@@ -70,6 +70,8 @@
 #define IS_INTENSIFY_EQID(eqid)  (eqid >= 4201 && eqid <= 4210)
 #define IS_SUCCINCT_EQID(eqid)  (eqid >= 4011 && eqid <= 4014)
 
+#define ACT_BIRD_BRIDGE_LEFT 40991
+#define ACT_BIRD_BRIDGE_RIGHT 40992
 
 struct ItemAdd
 {
@@ -105,6 +107,7 @@ public:
 	int GetEquipmentUsed(unsigned uid, Json::Value &data);
 
 	int UseEquipment(unsigned uid, unsigned eqid, unsigned ud, unsigned count, string reason);
+	int UseEquipmentEx(unsigned uid, unsigned eqid, unsigned ud, unsigned count, string reason, int &newcount);
 	int AddOneItem(unsigned uid, unsigned eqid, unsigned count, string reason,Json::Value &result, bool merge=false, unsigned ch=0, unsigned q=0, unsigned a = 0);
 	int AddItems(unsigned uid, vector<ItemAdd> &items, Json::Value &result, bool merge=false);
 

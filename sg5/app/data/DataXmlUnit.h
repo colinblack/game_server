@@ -281,4 +281,34 @@ protected:
 	int Parse(const std::string& fullCfg, DataXMLInvestment* pData);
 };
 
+///////////////////////////////////////////////////////////////////////////
+class DataXMLBirdBridgeUnit : public DataXmlParseWrap<DataXMLBirdBridge>
+{
+public:
+	DataXMLBirdBridgeUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLBirdBridge>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLBirdBridge* pData);
+};
+///////////////////////////////////////////////////////////////////////////
+class DataXMLUnionTechUnit : public DataXmlParseWrap<DataXMLUnionTech>
+{
+public:
+	DataXMLUnionTechUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLUnionTech>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLUnionTech* pData);
+};
+///////////////////////////////////////////////////////////////////////////
+class DataXMLShengDanUnit : public DataXmlParseWrap<DataXMLShengDan>
+{
+public:
+	DataXMLShengDanUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLShengDan>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLShengDan* pData);
+};
 #endif /* DATAXMLUNIT_H_ */

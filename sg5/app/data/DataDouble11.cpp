@@ -10,10 +10,10 @@
 #include "DataDouble11.h"
 
 
-CDataDouble11::CDataDouble11() : m_init(false)
+CDataDouble11::CDataDouble11(bool allserver) : m_init(false), m_allserver(allserver)
 {
-	string path = Config::GetPath(CONFIG_DOUBLE11_PATH);
-	Init(path);
+	string path = Config::GetPath(m_allserver ? CONFIG_DOUBLE11_2018_PATH : CONFIG_DOUBLE11_PATH);
+	Init(path, m_allserver ? sem_all_server_double11_2018 : sem_all_server_double11);
 }
 
 
@@ -67,7 +67,7 @@ int CDataDouble11::ResetData()
 	}
 
 	unsigned now = Time::GetGlobalTime();
-	unsigned configver = Config::GetIntValue(CONFIG_DOUBLE11_ALLSERVER_VER);
+	unsigned configver = Config::GetIntValue(m_allserver ? CONFIG_DOUBLE11_2018_VER : CONFIG_DOUBLE11_ALLSERVER_VER);
 
 	if (CTime::IsDiffDay(now, pdata->lastts) || (configver != pdata->version))
 	{
@@ -78,12 +78,16 @@ int CDataDouble11::ResetData()
 			return R_ERR_DB;
 		}
 
-		ret = dataxml->GetDouble11AllData(pdata->dataDouble);
+		DataXMLDouble11 dataDouble;
+		ret = dataxml->GetDouble11AllData(dataDouble);
 		if (ret)
 		{
 			return ret;
 		}
 
+		unsigned s = GetAllServerNum(m_allserver);
+		for(int i=0;i<XMLDOUBLE_TYPE_NUM_2018;++i)
+			memcpy(pdata->dataDouble.prop[i], dataDouble.prop[i + s], sizeof(XMLDouble11Prop)*XMLDOUBLE_PROP_NUM);
 		pdata->lastts = now;
 		pdata->version = configver;
 	}
@@ -101,12 +105,12 @@ int CDataDouble11::cpRcnt(Json::Value &rcnt)
 		return R_ERR_DB;
 	}
 
-	rcnt.resize(XMLDOUBLE_TYPE_NUM * XMLDOUBLE_PROP_NUM);
-	for (unsigned i = 0; i < XMLDOUBLE_TYPE_NUM; ++i)
+	rcnt.resize(XMLDOUBLE_TYPE_NUM_2018 * XMLDOUBLE_PROP_NUM);
+	for (unsigned i = 0; i < XMLDOUBLE_TYPE_NUM_2018; ++i)
 	{
 		for (unsigned j = 0; j < XMLDOUBLE_PROP_NUM; ++j)
 		{
-			rcnt[i * XMLDOUBLE_TYPE_NUM + j] = pdata->dataDouble.prop[i][j].total;
+			rcnt[i * XMLDOUBLE_TYPE_NUM_2018 + j] = pdata->dataDouble.prop[i][j].total;
 		}
 	}
 
@@ -144,7 +148,7 @@ int CDataDouble11::GetRemainCount(Json::Value &rcnt)
 }
 
 
-int CDataDouble11::BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop, bool &nocnt)
+int CDataDouble11::BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop, bool &nocnt, Json::Value &rcnt)
 {
 	Double11Prop *pdata = (Double11Prop *)m_sh.GetAddress();
 
@@ -174,5 +178,27 @@ int CDataDouble11::BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop,
 		nocnt = true;
 	}
 
+	ret = cpRcnt(rcnt);
+	if (ret)
+	{
+		return ret;
+	}
+
 	return R_SUCCESS;
+}
+
+unsigned CDataDouble11::GetAllServerNum(bool allserver)
+{
+	if(allserver)
+	{
+		int server = 0;
+		Config::GetDomain(server);
+		if(server <= ALL_SERVER_ZONE_A)
+			return XMLDOUBLE_TYPE_NUM_2018;
+		else if(server <= ALL_SERVER_ZONE_B)
+			return XMLDOUBLE_TYPE_NUM_2018 * 2;
+		else
+			return XMLDOUBLE_TYPE_NUM_2018 * 3;
+	}
+	return 0;
 }

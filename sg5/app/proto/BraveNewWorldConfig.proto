@@ -31,6 +31,7 @@ message Tech {
 		required uint32 cost	= 1;
 		required uint32 cd		= 2;
 		repeated uint32 value	= 3;
+		optional uint32 ecost	= 4;
 }
 
 message ZoneArea {
@@ -52,6 +53,13 @@ message Mission {
 		required uint32 m3			= 5;//占领任务的奖励
 }
 
+message Task {
+		required uint32 id			= 1;//日常任务的id
+		required uint32 require		= 2;//日常任务的活跃值需求
+		repeated uint32 eqid		= 3;//道具id选项
+		repeated uint32 count		= 4;//道具数量选项
+}
+
 message BraveNewWorldConfig {
 		repeated Point land			= 1;//200*200	
 		repeated Property config 	= 2;	
@@ -63,4 +71,6 @@ message BraveNewWorldConfig {
 		repeated ZoneArea area		= 8;//30+9+3+1 州府范围
 		required RewardConfig reward= 9;//2029刷新配置
 		required Mission mission	= 10;//任务配置
+		repeated uint32 huoyue		= 11;//日常任务的活跃值
+		repeated Task task			= 12;//日常任务奖励
 }

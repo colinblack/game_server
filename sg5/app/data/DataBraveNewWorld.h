@@ -31,6 +31,8 @@
 #define BRAVE_NEW_WORLD_USER_MISSION		50
 #define BRAVE_NEW_WORLD_USER_REWARD			4055
 #define BRAVE_NEW_WORLD_ALLIANCE_MISSION	3
+#define BRAVE_NEW_WORLD_TASK_NUM       10
+#define BRAVE_NEW_WORLD_HUOYUE_NUM       5
 
 enum DataBraveNewWorldPointType
 {
@@ -71,6 +73,7 @@ public:
 	unsigned int mtype;
 	unsigned int mcount;
 	unsigned int defts;  //堡垒建立时间
+	unsigned int sdef;//特殊要塞类型（0表示非特殊要塞,250表示存在BOSS）
 
 	void Clear()
 	{
@@ -79,6 +82,7 @@ public:
 		hero = 0;
 		hp = 0;
 		rts = Time::GetGlobalTime();
+		sdef = 0;
 	}
 
 	DataBraveNewWorldPoint() {
@@ -95,6 +99,7 @@ public:
 		mtype = 0;
 		mcount = 0;
 		defts = 0;
+		sdef = 0;
 	}
 
 	~DataBraveNewWorldPoint() {
@@ -114,6 +119,7 @@ public:
 		p->set_mtype(mtype);
 		p->set_mcount(mcount);
 		p->set_defts(defts);
+		p->set_sdef(sdef);
 	}
 
 	void Parse(const BraveNewWorld::BraveNewWorldPoint &p) {
@@ -157,6 +163,14 @@ public:
 		{
 			defts = Time::GetGlobalTime();
 		}
+		if (p.has_sdef())
+		{
+			sdef = p.sdef();
+		}
+		else
+		{
+			sdef = 0;
+		}
 	}
 
 	void GetJsonLimit(Json::Value& res)
@@ -178,12 +192,12 @@ public:
 
 	void GetDefLimit(Json::Value& res)
 	{
-		if(def)
+		if(def || sdef)
 		{
 			//判断堡垒是否建立已超过50小时
 			unsigned now = Time::GetGlobalTime();
 
-			if (now >= (defts + 50*3600))
+			if (sdef != 250 && now >= (defts + 50*3600))
 			{
 				ClearDef();
 			}
@@ -191,18 +205,19 @@ public:
 			{
 				res["def"]["hp"] = hp;
 				res["def"]["defts"] = defts;
+				res["def"]["bt"] = sdef;
 			}
 		}
 	}
 
 	void GetDef(Json::Value& res)
 	{
-		if(def)
+		if(def || sdef)
 		{
 			//判断堡垒是否建立已超过50小时
 			unsigned now = Time::GetGlobalTime();
 
-			if (now >= (defts + 50*3600))
+			if (sdef != 250 && now >= (defts + 50*3600))
 			{
 				ClearDef();
 			}
@@ -211,6 +226,7 @@ public:
 				res["def"]["hp"] = hp;
 				res["def"]["hero"] = hero;
 				res["def"]["defts"] = defts;
+				res["def"]["bt"] = sdef;
 			}
 		}
 	}
@@ -221,6 +237,7 @@ public:
 		hero = 0;
 		hp = 0;
 		defts = 0;
+		sdef = 0;
 	}
 };
 class DataBraveNewWorldHistory {
@@ -715,10 +732,17 @@ public:
 	int CollectOne(unsigned uid, unsigned seq, BraveNewWorldPoint& p, Json::Value &result);
 	int AttackSelf(unsigned uid, unsigned seq, BraveNewWorldPoint& p, Json::Value &result);
 	int GetMission(unsigned uid, unsigned seq, unsigned type, Json::Value &result);
+	int newWorldAwards(unsigned uid, unsigned index, unsigned id, unsigned seq, Json::Value &result);
+	int GetTarget(unsigned uid, Json::Value &result);
+	int getNewWorldBoss(Json::Value &result);
 
 private:
+	//判断该州府内是否存在有该用户的地块
+	bool CheckZonePoint(unsigned zid, unsigned uid, BraveNewWorldPoint&p);
+
 	int getPointLevel(unsigned x, unsigned y);
 	BraveNewWorldPoint getRandPoint(unsigned level);
+	BraveNewWorldPoint getRandPoint(unsigned level1, unsigned level2);
 	BraveNewWorldPoint getRandPointEmpty(unsigned level);
 	int getPointLevel(BraveNewWorldPoint& p) { return getPointLevel(p.first, p.second);}
 	int getZoneID(unsigned x, unsigned y);
@@ -732,6 +756,7 @@ private:
 	unsigned getUserPoint(unsigned lv) {if(lv > BRAVE_NEW_WORLD_LEVEL || lv == 0) return 0; return m_user_point[lv-1];}
 	int getUserMoney(unsigned lv) {if(lv > BRAVE_NEW_WORLD_LEVEL || lv == 0) return 0; return m_user_money[lv-1];}
 	void getBesidePoints(BraveNewWorldPoint&p, set<BraveNewWorldPoint>& b);
+	bool existSpecialDef(unsigned uid,unsigned type,const BraveNewWorldPoint & p,int range,bool isfriend);
 
 	//材料的掉落
 	int GetMaterial(unsigned uid, DataBraveNewWorldPoint & point, Json::Value & result);
@@ -739,10 +764,17 @@ private:
 	//判断该州府内是否存在有该用户的地块
 	bool CheckZonePoint(unsigned zid, unsigned uid);
 
+	//获取收货时间(1到7点之间不收货)
+	unsigned Protect_time(unsigned now_time,unsigned last_time);
+
 	void CreateMap();
 	void OnDay();
 	void OnHour();
 	void OnHalfHour();
+	void OnDayFourHour();
+
+	void MakeBoss(int xbase,int ybase);
+	void MakeBoss(const BraveNewWorldPoint& p) {MakeBoss(p.first,p.second);};
 
 	DataBraveNewWorld m_data;
 

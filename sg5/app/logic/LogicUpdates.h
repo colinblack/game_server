@@ -20,7 +20,7 @@ public:
 
 	/** 以下函数为后台发放各种update的奖励 */
 	int sendAllianceBossAward(unsigned uid, const Json::Value &data);			    // 联盟屠魔
-	int sendEndofShipReward(unsigned uid, const Json::Value &data);					// 草船借箭
+	int sendEndofShipReward(unsigned uid, const Json::Value &data, unsigned uidby=0, bool win=false, Json::Value * result=NULL);					// 草船借箭
 	int sendWorldBossAward(unsigned uid, const Json::Value &data);					// 世界屠魔奖励
 	int sendBarbarianKingReward(unsigned uid, const Json::Value &data);				// 蛮王发排名奖励
 	int sendQixiRankReward(unsigned uid, const Json::Value &data);					// 幸运大转盘奖励

@@ -38,6 +38,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* DiamondRewardLimit_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   DiamondRewardLimit_reflection_ = NULL;
+const ::google::protobuf::Descriptor* DiamondMoreReward_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  DiamondMoreReward_reflection_ = NULL;
 const ::google::protobuf::Descriptor* DoubleWelfare_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   DoubleWelfare_reflection_ = NULL;
@@ -110,6 +113,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* NewYearActivity_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   NewYearActivity_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ChinaDayActivity_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ChinaDayActivity_reflection_ = NULL;
+const ::google::protobuf::Descriptor* PayOptionalActivity_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  PayOptionalActivity_reflection_ = NULL;
 const ::google::protobuf::Descriptor* MsgSoulLevel_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   MsgSoulLevel_reflection_ = NULL;
@@ -173,6 +182,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* SummerHolidaysRewardCfg_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   SummerHolidaysRewardCfg_reflection_ = NULL;
+const ::google::protobuf::Descriptor* FreeExchangeItem_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  FreeExchangeItem_reflection_ = NULL;
+const ::google::protobuf::Descriptor* FreeExchange_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  FreeExchange_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Activities_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Activities_reflection_ = NULL;
@@ -284,7 +299,23 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DiamondRewardLimit));
-  DoubleWelfare_descriptor_ = file->message_type(6);
+  DiamondMoreReward_descriptor_ = file->message_type(6);
+  static const int DiamondMoreReward_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DiamondMoreReward, diamond_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DiamondMoreReward, reward_),
+  };
+  DiamondMoreReward_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      DiamondMoreReward_descriptor_,
+      DiamondMoreReward::default_instance_,
+      DiamondMoreReward_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DiamondMoreReward, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DiamondMoreReward, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(DiamondMoreReward));
+  DoubleWelfare_descriptor_ = file->message_type(7);
   static const int DoubleWelfare_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DoubleWelfare, maximum_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DoubleWelfare, cost_coefficient_),
@@ -301,7 +332,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DoubleWelfare));
-  PearlAdvance_descriptor_ = file->message_type(7);
+  PearlAdvance_descriptor_ = file->message_type(8);
   static const int PearlAdvance_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PearlAdvance, cost_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PearlAdvance, maximum_),
@@ -319,7 +350,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PearlAdvance));
-  UniqueKnowledgeDial_descriptor_ = file->message_type(8);
+  UniqueKnowledgeDial_descriptor_ = file->message_type(9);
   static const int UniqueKnowledgeDial_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UniqueKnowledgeDial, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UniqueKnowledgeDial, weight_),
@@ -336,7 +367,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UniqueKnowledgeDial));
-  SpriteVitalityItem_descriptor_ = file->message_type(9);
+  SpriteVitalityItem_descriptor_ = file->message_type(10);
   static const int SpriteVitalityItem_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpriteVitalityItem, diamond_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SpriteVitalityItem, reward_),
@@ -352,7 +383,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SpriteVitalityItem));
-  SmeltItem_descriptor_ = file->message_type(10);
+  SmeltItem_descriptor_ = file->message_type(11);
   static const int SmeltItem_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SmeltItem, eqid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SmeltItem, cost_),
@@ -369,7 +400,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SmeltItem));
-  ShopItem_descriptor_ = file->message_type(11);
+  ShopItem_descriptor_ = file->message_type(12);
   static const int ShopItem_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ShopItem, diamond_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ShopItem, forgecost_),
@@ -386,7 +417,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ShopItem));
-  ForgeSmelt_descriptor_ = file->message_type(12);
+  ForgeSmelt_descriptor_ = file->message_type(13);
   static const int ForgeSmelt_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForgeSmelt, daily_limit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForgeSmelt, forge_limit_),
@@ -404,7 +435,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ForgeSmelt));
-  HeroItem_descriptor_ = file->message_type(13);
+  HeroItem_descriptor_ = file->message_type(14);
   static const int HeroItem_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeroItem, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeroItem, weight_),
@@ -421,7 +452,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HeroItem));
-  HeroDial_descriptor_ = file->message_type(14);
+  HeroDial_descriptor_ = file->message_type(15);
   static const int HeroDial_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeroDial, per_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HeroDial, heroes_),
@@ -438,7 +469,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HeroDial));
-  BlackGoldEnhance_descriptor_ = file->message_type(15);
+  BlackGoldEnhance_descriptor_ = file->message_type(16);
   static const int BlackGoldEnhance_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlackGoldEnhance, first_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BlackGoldEnhance, limit_),
@@ -458,7 +489,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BlackGoldEnhance));
-  KingdomWar_descriptor_ = file->message_type(16);
+  KingdomWar_descriptor_ = file->message_type(17);
   static const int KingdomWar_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KingdomWar, diamond_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KingdomWar, reward_),
@@ -474,7 +505,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(KingdomWar));
-  RewardItem_descriptor_ = file->message_type(17);
+  RewardItem_descriptor_ = file->message_type(18);
   static const int RewardItem_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RewardItem, price_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RewardItem, reward_),
@@ -490,7 +521,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RewardItem));
-  OneDiamondWelfare_descriptor_ = file->message_type(18);
+  OneDiamondWelfare_descriptor_ = file->message_type(19);
   static const int OneDiamondWelfare_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OneDiamondWelfare, diamond_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(OneDiamondWelfare, items_),
@@ -506,7 +537,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(OneDiamondWelfare));
-  FortunePacks_descriptor_ = file->message_type(19);
+  FortunePacks_descriptor_ = file->message_type(20);
   static const int FortunePacks_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortunePacks, extra_reward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortunePacks, goods_),
@@ -522,7 +553,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(FortunePacks));
-  SevenDayPacks_descriptor_ = file->message_type(20);
+  SevenDayPacks_descriptor_ = file->message_type(21);
   static const int SevenDayPacks_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SevenDayPacks, reward_),
   };
@@ -537,7 +568,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SevenDayPacks));
-  ChargeKey_descriptor_ = file->message_type(21);
+  ChargeKey_descriptor_ = file->message_type(22);
   static const int ChargeKey_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChargeKey, diamond_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChargeKey, keynum_),
@@ -553,7 +584,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ChargeKey));
-  StuffItem_descriptor_ = file->message_type(22);
+  StuffItem_descriptor_ = file->message_type(23);
   static const int StuffItem_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StuffItem, costkey_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StuffItem, limit_),
@@ -570,7 +601,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(StuffItem));
-  KeyLuxuryGift_descriptor_ = file->message_type(23);
+  KeyLuxuryGift_descriptor_ = file->message_type(24);
   static const int KeyLuxuryGift_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KeyLuxuryGift, charge_key_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KeyLuxuryGift, stuff_items_),
@@ -586,7 +617,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(KeyLuxuryGift));
-  ConsumeGiftItem_descriptor_ = file->message_type(24);
+  ConsumeGiftItem_descriptor_ = file->message_type(25);
   static const int ConsumeGiftItem_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ConsumeGiftItem, consume_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ConsumeGiftItem, reward_),
@@ -602,7 +633,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ConsumeGiftItem));
-  EnjoySmallGiftReward_descriptor_ = file->message_type(25);
+  EnjoySmallGiftReward_descriptor_ = file->message_type(26);
   static const int EnjoySmallGiftReward_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EnjoySmallGiftReward, charge_gift_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EnjoySmallGiftReward, consume_gift_),
@@ -618,7 +649,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(EnjoySmallGiftReward));
-  TurnTableItem_descriptor_ = file->message_type(26);
+  TurnTableItem_descriptor_ = file->message_type(27);
   static const int TurnTableItem_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TurnTableItem, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TurnTableItem, weight_),
@@ -635,7 +666,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TurnTableItem));
-  LuckyGiftItem_descriptor_ = file->message_type(27);
+  LuckyGiftItem_descriptor_ = file->message_type(28);
   static const int LuckyGiftItem_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LuckyGiftItem, items_),
   };
@@ -650,7 +681,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LuckyGiftItem));
-  LuckyGift_descriptor_ = file->message_type(28);
+  LuckyGift_descriptor_ = file->message_type(29);
   static const int LuckyGift_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LuckyGift, keycost_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LuckyGift, pointcost_),
@@ -667,7 +698,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LuckyGift));
-  NewYearActivity_descriptor_ = file->message_type(29);
+  NewYearActivity_descriptor_ = file->message_type(30);
   static const int NewYearActivity_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(NewYearActivity, charge_reward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(NewYearActivity, buy_items_),
@@ -684,7 +715,39 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(NewYearActivity));
-  MsgSoulLevel_descriptor_ = file->message_type(30);
+  ChinaDayActivity_descriptor_ = file->message_type(31);
+  static const int ChinaDayActivity_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChinaDayActivity, charge_reward_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChinaDayActivity, everyday_reward_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChinaDayActivity, online_reward_),
+  };
+  ChinaDayActivity_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      ChinaDayActivity_descriptor_,
+      ChinaDayActivity::default_instance_,
+      ChinaDayActivity_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChinaDayActivity, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChinaDayActivity, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(ChinaDayActivity));
+  PayOptionalActivity_descriptor_ = file->message_type(32);
+  static const int PayOptionalActivity_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PayOptionalActivity, optional_reward_),
+  };
+  PayOptionalActivity_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      PayOptionalActivity_descriptor_,
+      PayOptionalActivity::default_instance_,
+      PayOptionalActivity_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PayOptionalActivity, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PayOptionalActivity, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(PayOptionalActivity));
+  MsgSoulLevel_descriptor_ = file->message_type(33);
   static const int MsgSoulLevel_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgSoulLevel, lv_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgSoulLevel, reward_),
@@ -700,7 +763,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgSoulLevel));
-  MsgSoulGrowth_descriptor_ = file->message_type(31);
+  MsgSoulGrowth_descriptor_ = file->message_type(34);
   static const int MsgSoulGrowth_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgSoulGrowth, growth_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgSoulGrowth, reward_),
@@ -716,7 +779,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgSoulGrowth));
-  MsgWuhun_descriptor_ = file->message_type(32);
+  MsgWuhun_descriptor_ = file->message_type(35);
   static const int MsgWuhun_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgWuhun, partcount_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgWuhun, partlv_),
@@ -733,7 +796,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgWuhun));
-  MsgJuexue_descriptor_ = file->message_type(33);
+  MsgJuexue_descriptor_ = file->message_type(36);
   static const int MsgJuexue_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgJuexue, quality_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgJuexue, count_),
@@ -750,7 +813,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgJuexue));
-  MsgStar_descriptor_ = file->message_type(34);
+  MsgStar_descriptor_ = file->message_type(37);
   static const int MsgStar_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgStar, star_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgStar, type_),
@@ -767,7 +830,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgStar));
-  MsgHeaven_descriptor_ = file->message_type(35);
+  MsgHeaven_descriptor_ = file->message_type(38);
   static const int MsgHeaven_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgHeaven, jie_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgHeaven, ceng_),
@@ -784,7 +847,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgHeaven));
-  MsgDaoist_descriptor_ = file->message_type(36);
+  MsgDaoist_descriptor_ = file->message_type(39);
   static const int MsgDaoist_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgDaoist, jie_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgDaoist, ceng_),
@@ -801,7 +864,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MsgDaoist));
-  KaifuAchievement_descriptor_ = file->message_type(37);
+  KaifuAchievement_descriptor_ = file->message_type(40);
   static const int KaifuAchievement_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KaifuAchievement, soul_lv_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KaifuAchievement, soul_growth_),
@@ -822,7 +885,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(KaifuAchievement));
-  KaifuDiscountShop_descriptor_ = file->message_type(38);
+  KaifuDiscountShop_descriptor_ = file->message_type(41);
   static const int KaifuDiscountShop_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KaifuDiscountShop, o_price_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KaifuDiscountShop, p_price_),
@@ -839,7 +902,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(KaifuDiscountShop));
-  KaiFuGift_descriptor_ = file->message_type(39);
+  KaiFuGift_descriptor_ = file->message_type(42);
   static const int KaiFuGift_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KaiFuGift, achievement_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KaiFuGift, shop_),
@@ -855,7 +918,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(KaiFuGift));
-  StarStoneChange_descriptor_ = file->message_type(40);
+  StarStoneChange_descriptor_ = file->message_type(43);
   static const int StarStoneChange_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StarStoneChange, src_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StarStoneChange, dst_),
@@ -872,7 +935,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(StarStoneChange));
-  HongBaoItem_descriptor_ = file->message_type(41);
+  HongBaoItem_descriptor_ = file->message_type(44);
   static const int HongBaoItem_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HongBaoItem, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HongBaoItem, rate_free_),
@@ -890,7 +953,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HongBaoItem));
-  HongBao_descriptor_ = file->message_type(42);
+  HongBao_descriptor_ = file->message_type(45);
   static const int HongBao_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HongBao, count_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HongBao, refresh_free_),
@@ -908,7 +971,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HongBao));
-  TaskGift_descriptor_ = file->message_type(43);
+  TaskGift_descriptor_ = file->message_type(46);
   static const int TaskGift_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskGift, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskGift, count_),
@@ -925,7 +988,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TaskGift));
-  RotaryTableCfg_descriptor_ = file->message_type(44);
+  RotaryTableCfg_descriptor_ = file->message_type(47);
   static const int RotaryTableCfg_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableCfg, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableCfg, count_),
@@ -943,7 +1006,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RotaryTableCfg));
-  RotaryTableCrazyReward_descriptor_ = file->message_type(45);
+  RotaryTableCrazyReward_descriptor_ = file->message_type(48);
   static const int RotaryTableCrazyReward_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableCrazyReward, chargereward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableCrazyReward, rotarytablecost_),
@@ -961,7 +1024,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RotaryTableCrazyReward));
-  BatmanTreasureDraw_descriptor_ = file->message_type(46);
+  BatmanTreasureDraw_descriptor_ = file->message_type(49);
   static const int BatmanTreasureDraw_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureDraw, item_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureDraw, weight_),
@@ -977,7 +1040,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BatmanTreasureDraw));
-  BatmanTreasureCfg_descriptor_ = file->message_type(47);
+  BatmanTreasureCfg_descriptor_ = file->message_type(50);
   static const int BatmanTreasureCfg_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureCfg, xiaobing_chargereward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureCfg, unique_xiaobing_dial_),
@@ -995,7 +1058,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BatmanTreasureCfg));
-  SummerChargeRewardCfg_descriptor_ = file->message_type(48);
+  SummerChargeRewardCfg_descriptor_ = file->message_type(51);
   static const int SummerChargeRewardCfg_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerChargeRewardCfg, daily_chargereward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerChargeRewardCfg, acc_chargereward_),
@@ -1011,7 +1074,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SummerChargeRewardCfg));
-  SummerHolidaysTicketCfg_descriptor_ = file->message_type(49);
+  SummerHolidaysTicketCfg_descriptor_ = file->message_type(52);
   static const int SummerHolidaysTicketCfg_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysTicketCfg, need_cost_ticket_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysTicketCfg, exchange_count_max_),
@@ -1028,7 +1091,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SummerHolidaysTicketCfg));
-  SummerHolidaysRewardCfg_descriptor_ = file->message_type(50);
+  SummerHolidaysRewardCfg_descriptor_ = file->message_type(53);
   static const int SummerHolidaysRewardCfg_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysRewardCfg, exchange_ticket_max_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysRewardCfg, per_ticket_need_diamond_),
@@ -1046,8 +1109,39 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SummerHolidaysRewardCfg));
-  Activities_descriptor_ = file->message_type(51);
-  static const int Activities_offsets_[28] = {
+  FreeExchangeItem_descriptor_ = file->message_type(54);
+  static const int FreeExchangeItem_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchangeItem, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchangeItem, c_),
+  };
+  FreeExchangeItem_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      FreeExchangeItem_descriptor_,
+      FreeExchangeItem::default_instance_,
+      FreeExchangeItem_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchangeItem, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchangeItem, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(FreeExchangeItem));
+  FreeExchange_descriptor_ = file->message_type(55);
+  static const int FreeExchange_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchange, item_),
+  };
+  FreeExchange_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      FreeExchange_descriptor_,
+      FreeExchange::default_instance_,
+      FreeExchange_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchange, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchange, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(FreeExchange));
+  Activities_descriptor_ = file->message_type(56);
+  static const int Activities_offsets_[31] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, buildsuit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, blesspoint_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, double_welfare_),
@@ -1076,6 +1170,9 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, batmantreasure_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, summer_charge_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, summer_holidays_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, chinadayavtivity_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, payoptionalactivity_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, free_exchg_),
   };
   Activities_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -1112,6 +1209,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     DiamondReward_descriptor_, &DiamondReward::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     DiamondRewardLimit_descriptor_, &DiamondRewardLimit::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    DiamondMoreReward_descriptor_, &DiamondMoreReward::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     DoubleWelfare_descriptor_, &DoubleWelfare::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -1161,6 +1260,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     NewYearActivity_descriptor_, &NewYearActivity::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    ChinaDayActivity_descriptor_, &ChinaDayActivity::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    PayOptionalActivity_descriptor_, &PayOptionalActivity::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     MsgSoulLevel_descriptor_, &MsgSoulLevel::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     MsgSoulGrowth_descriptor_, &MsgSoulGrowth::default_instance());
@@ -1203,6 +1306,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     SummerHolidaysRewardCfg_descriptor_, &SummerHolidaysRewardCfg::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    FreeExchangeItem_descriptor_, &FreeExchangeItem::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    FreeExchange_descriptor_, &FreeExchange::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Activities_descriptor_, &Activities::default_instance());
 }
 
@@ -1221,6 +1328,8 @@ void protobuf_ShutdownFile_ConfigActivity_2eproto() {
   delete DiamondReward_reflection_;
   delete DiamondRewardLimit::default_instance_;
   delete DiamondRewardLimit_reflection_;
+  delete DiamondMoreReward::default_instance_;
+  delete DiamondMoreReward_reflection_;
   delete DoubleWelfare::default_instance_;
   delete DoubleWelfare_reflection_;
   delete PearlAdvance::default_instance_;
@@ -1269,6 +1378,10 @@ void protobuf_ShutdownFile_ConfigActivity_2eproto() {
   delete LuckyGift_reflection_;
   delete NewYearActivity::default_instance_;
   delete NewYearActivity_reflection_;
+  delete ChinaDayActivity::default_instance_;
+  delete ChinaDayActivity_reflection_;
+  delete PayOptionalActivity::default_instance_;
+  delete PayOptionalActivity_reflection_;
   delete MsgSoulLevel::default_instance_;
   delete MsgSoulLevel_reflection_;
   delete MsgSoulGrowth::default_instance_;
@@ -1311,6 +1424,10 @@ void protobuf_ShutdownFile_ConfigActivity_2eproto() {
   delete SummerHolidaysTicketCfg_reflection_;
   delete SummerHolidaysRewardCfg::default_instance_;
   delete SummerHolidaysRewardCfg_reflection_;
+  delete FreeExchangeItem::default_instance_;
+  delete FreeExchangeItem_reflection_;
+  delete FreeExchange::default_instance_;
+  delete FreeExchange_reflection_;
   delete Activities::default_instance_;
   delete Activities_reflection_;
 }
@@ -1336,169 +1453,185 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
     "(\r\022+\n\006reward\030\002 \002(\0132\033.RewardConfig.Reward"
     "ItemCfg\"a\n\022DiamondRewardLimit\022\017\n\007diamond"
     "\030\001 \002(\r\022\r\n\005limit\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033."
-    "RewardConfig.RewardItemCfg\"\220\001\n\rDoubleWel"
-    "fare\022\017\n\007maximum\030\001 \002(\r\0229\n\020cost_coefficien"
-    "t\030\002 \003(\0132\037.ConfigActivity.CostCoefficient"
-    "\0223\n\014extra_reward\030\003 \003(\0132\035.ConfigActivity."
-    "DiamondReward\"m\n\014PearlAdvance\022\014\n\004cost\030\001 "
-    "\002(\r\022\017\n\007maximum\030\002 \002(\r\022\021\n\tcond_eqid\030\003 \003(\r\022"
-    "+\n\006reward\030\004 \002(\0132\033.RewardConfig.RewardIte"
-    "mCfg\"\\\n\023UniqueKnowledgeDial\022\n\n\002id\030\001 \002(\r\022"
-    "\016\n\006weight\030\002 \002(\r\022)\n\004item\030\003 \002(\0132\033.RewardCo"
-    "nfig.RewardItemCfg\"R\n\022SpriteVitalityItem"
+    "RewardConfig.RewardItemCfg\"Q\n\021DiamondMor"
+    "eReward\022\017\n\007diamond\030\001 \002(\r\022+\n\006reward\030\002 \003(\013"
+    "2\033.RewardConfig.RewardItemCfg\"\220\001\n\rDouble"
+    "Welfare\022\017\n\007maximum\030\001 \002(\r\0229\n\020cost_coeffic"
+    "ient\030\002 \003(\0132\037.ConfigActivity.CostCoeffici"
+    "ent\0223\n\014extra_reward\030\003 \003(\0132\035.ConfigActivi"
+    "ty.DiamondReward\"m\n\014PearlAdvance\022\014\n\004cost"
+    "\030\001 \002(\r\022\017\n\007maximum\030\002 \002(\r\022\021\n\tcond_eqid\030\003 \003"
+    "(\r\022+\n\006reward\030\004 \002(\0132\033.RewardConfig.Reward"
+    "ItemCfg\"\\\n\023UniqueKnowledgeDial\022\n\n\002id\030\001 \002"
+    "(\r\022\016\n\006weight\030\002 \002(\r\022)\n\004item\030\003 \002(\0132\033.Rewar"
+    "dConfig.RewardItemCfg\"R\n\022SpriteVitalityI"
+    "tem\022\017\n\007diamond\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.R"
+    "ewardConfig.RewardItemCfg\"4\n\tSmeltItem\022\014"
+    "\n\004eqid\030\001 \002(\r\022\014\n\004cost\030\002 \002(\r\022\013\n\003get\030\003 \002(\r\""
+    "Y\n\010ShopItem\022\017\n\007diamond\030\001 \002(\r\022\021\n\tforgecos"
+    "t\030\002 \002(\r\022)\n\004item\030\003 \002(\0132\033.RewardConfig.Rew"
+    "ardItemCfg\"\210\001\n\nForgeSmelt\022\023\n\013daily_limit"
+    "\030\001 \002(\r\022\023\n\013forge_limit\030\002 \002(\r\022(\n\005smelt\030\003 \003"
+    "(\0132\031.ConfigActivity.SmeltItem\022&\n\004shop\030\004 "
+    "\003(\0132\030.ConfigActivity.ShopItem\"S\n\010HeroIte"
+    "m\022\n\n\002id\030\001 \002(\r\022\016\n\006weight\030\002 \002(\r\022+\n\006reward\030"
+    "\003 \002(\0132\033.RewardConfig.RewardItemCfg\"P\n\010He"
+    "roDial\022\013\n\003per\030\001 \002(\r\022(\n\006heroes\030\002 \003(\0132\030.Co"
+    "nfigActivity.HeroItem\022\r\n\005limit\030\003 \002(\r\"\223\001\n"
+    "\020BlackGoldEnhance\022\r\n\005first\030\001 \002(\r\022\r\n\005limi"
+    "t\030\002 \002(\r\022\r\n\005start\030\003 \002(\r\022\022\n\naccumulate\030\004 \002"
+    "(\r\022\021\n\tcondition\030\005 \003(\r\022+\n\006reward\030\006 \002(\0132\033."
+    "RewardConfig.RewardItemCfg\"J\n\nKingdomWar"
     "\022\017\n\007diamond\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.Rewa"
-    "rdConfig.RewardItemCfg\"4\n\tSmeltItem\022\014\n\004e"
-    "qid\030\001 \002(\r\022\014\n\004cost\030\002 \002(\r\022\013\n\003get\030\003 \002(\r\"Y\n\010"
-    "ShopItem\022\017\n\007diamond\030\001 \002(\r\022\021\n\tforgecost\030\002"
-    " \002(\r\022)\n\004item\030\003 \002(\0132\033.RewardConfig.Reward"
-    "ItemCfg\"\210\001\n\nForgeSmelt\022\023\n\013daily_limit\030\001 "
-    "\002(\r\022\023\n\013forge_limit\030\002 \002(\r\022(\n\005smelt\030\003 \003(\0132"
-    "\031.ConfigActivity.SmeltItem\022&\n\004shop\030\004 \003(\013"
-    "2\030.ConfigActivity.ShopItem\"S\n\010HeroItem\022\n"
-    "\n\002id\030\001 \002(\r\022\016\n\006weight\030\002 \002(\r\022+\n\006reward\030\003 \002"
-    "(\0132\033.RewardConfig.RewardItemCfg\"P\n\010HeroD"
-    "ial\022\013\n\003per\030\001 \002(\r\022(\n\006heroes\030\002 \003(\0132\030.Confi"
-    "gActivity.HeroItem\022\r\n\005limit\030\003 \002(\r\"\223\001\n\020Bl"
-    "ackGoldEnhance\022\r\n\005first\030\001 \002(\r\022\r\n\005limit\030\002"
-    " \002(\r\022\r\n\005start\030\003 \002(\r\022\022\n\naccumulate\030\004 \002(\r\022"
-    "\021\n\tcondition\030\005 \003(\r\022+\n\006reward\030\006 \002(\0132\033.Rew"
-    "ardConfig.RewardItemCfg\"J\n\nKingdomWar\022\017\n"
-    "\007diamond\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.RewardC"
-    "onfig.RewardItemCfg\"H\n\nRewardItem\022\r\n\005pri"
-    "ce\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.RewardConfig."
-    "RewardItemCfg\"O\n\021OneDiamondWelfare\022\017\n\007di"
-    "amond\030\001 \002(\r\022)\n\005items\030\002 \003(\0132\032.ConfigActiv"
-    "ity.RewardItem\"l\n\014FortunePacks\0221\n\014extra_"
-    "reward\030\001 \002(\0132\033.RewardConfig.RewardItemCf"
-    "g\022)\n\005goods\030\002 \003(\0132\032.ConfigActivity.Reward"
-    "Item\"<\n\rSevenDayPacks\022+\n\006reward\030\001 \002(\0132\033."
-    "RewardConfig.RewardItemCfg\",\n\tChargeKey\022"
-    "\017\n\007diamond\030\001 \002(\r\022\016\n\006keynum\030\002 \002(\r\"X\n\tStuf"
-    "fItem\022\017\n\007costkey\030\001 \002(\r\022\r\n\005limit\030\002 \002(\r\022+\n"
-    "\006reward\030\003 \002(\0132\033.RewardConfig.RewardItemC"
-    "fg\"n\n\rKeyLuxuryGift\022-\n\ncharge_key\030\001 \003(\0132"
-    "\031.ConfigActivity.ChargeKey\022.\n\013stuff_item"
-    "s\030\002 \003(\0132\031.ConfigActivity.StuffItem\"O\n\017Co"
-    "nsumeGiftItem\022\017\n\007consume\030\001 \002(\r\022+\n\006reward"
-    "\030\002 \002(\0132\033.RewardConfig.RewardItemCfg\"\201\001\n\024"
-    "EnjoySmallGiftReward\0222\n\013charge_gift\030\001 \003("
-    "\0132\035.ConfigActivity.DiamondReward\0225\n\014cons"
-    "ume_gift\030\002 \003(\0132\037.ConfigActivity.ConsumeG"
-    "iftItem\"X\n\rTurnTableItem\022\n\n\002id\030\001 \002(\r\022\016\n\006"
-    "weight\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardCon"
-    "fig.RewardItemCfg\"=\n\rLuckyGiftItem\022,\n\005it"
-    "ems\030\001 \003(\0132\035.ConfigActivity.TurnTableItem"
-    "\"c\n\tLuckyGift\022\017\n\007keycost\030\001 \002(\r\022\021\n\tpointc"
-    "ost\030\002 \002(\r\0222\n\013stuff_items\030\003 \003(\0132\035.ConfigA"
-    "ctivity.LuckyGiftItem\"\262\001\n\017NewYearActivit"
-    "y\0224\n\rcharge_reward\030\001 \003(\0132\035.ConfigActivit"
-    "y.DiamondReward\0225\n\tbuy_items\030\002 \003(\0132\".Con"
-    "figActivity.DiamondRewardLimit\0222\n\ronline"
-    "_reward\030\003 \002(\0132\033.RewardConfig.RewardItemC"
-    "fg\"G\n\014MsgSoulLevel\022\n\n\002lv\030\001 \002(\r\022+\n\006reward"
-    "\030\002 \002(\0132\033.RewardConfig.RewardItemCfg\"L\n\rM"
-    "sgSoulGrowth\022\016\n\006growth\030\001 \002(\r\022+\n\006reward\030\002"
-    " \002(\0132\033.RewardConfig.RewardItemCfg\"Z\n\010Msg"
-    "Wuhun\022\021\n\tpartcount\030\001 \002(\r\022\016\n\006partlv\030\002 \002(\r"
+    "rdConfig.RewardItemCfg\"H\n\nRewardItem\022\r\n\005"
+    "price\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.RewardConf"
+    "ig.RewardItemCfg\"O\n\021OneDiamondWelfare\022\017\n"
+    "\007diamond\030\001 \002(\r\022)\n\005items\030\002 \003(\0132\032.ConfigAc"
+    "tivity.RewardItem\"l\n\014FortunePacks\0221\n\014ext"
+    "ra_reward\030\001 \002(\0132\033.RewardConfig.RewardIte"
+    "mCfg\022)\n\005goods\030\002 \003(\0132\032.ConfigActivity.Rew"
+    "ardItem\"<\n\rSevenDayPacks\022+\n\006reward\030\001 \002(\013"
+    "2\033.RewardConfig.RewardItemCfg\",\n\tChargeK"
+    "ey\022\017\n\007diamond\030\001 \002(\r\022\016\n\006keynum\030\002 \002(\r\"X\n\tS"
+    "tuffItem\022\017\n\007costkey\030\001 \002(\r\022\r\n\005limit\030\002 \002(\r"
     "\022+\n\006reward\030\003 \002(\0132\033.RewardConfig.RewardIt"
-    "emCfg\"X\n\tMsgJuexue\022\017\n\007quality\030\001 \002(\r\022\r\n\005c"
-    "ount\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardConfi"
-    "g.RewardItemCfg\"R\n\007MsgStar\022\014\n\004star\030\001 \002(\r"
-    "\022\014\n\004type\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardC"
-    "onfig.RewardItemCfg\"S\n\tMsgHeaven\022\013\n\003jie\030"
-    "\001 \002(\r\022\014\n\004ceng\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.Re"
-    "wardConfig.RewardItemCfg\"S\n\tMsgDaoist\022\013\n"
-    "\003jie\030\001 \002(\r\022\014\n\004ceng\030\002 \002(\r\022+\n\006reward\030\003 \002(\013"
-    "2\033.RewardConfig.RewardItemCfg\"\306\002\n\020KaifuA"
-    "chievement\022-\n\007soul_lv\030\001 \003(\0132\034.ConfigActi"
-    "vity.MsgSoulLevel\0222\n\013soul_growth\030\002 \003(\0132\035"
-    ".ConfigActivity.MsgSoulGrowth\022\'\n\005wuhun\030\003"
-    " \003(\0132\030.ConfigActivity.MsgWuhun\022)\n\006juexue"
-    "\030\004 \003(\0132\031.ConfigActivity.MsgJuexue\022%\n\004sta"
-    "r\030\005 \003(\0132\027.ConfigActivity.MsgStar\022)\n\006heav"
-    "en\030\006 \003(\0132\031.ConfigActivity.MsgHeaven\022)\n\006d"
-    "aoist\030\007 \003(\0132\031.ConfigActivity.MsgDaoist\"`"
-    "\n\021KaifuDiscountShop\022\017\n\007o_price\030\001 \002(\r\022\017\n\007"
-    "p_price\030\002 \002(\r\022)\n\004item\030\003 \002(\0132\033.RewardConf"
-    "ig.RewardItemCfg\"s\n\tKaiFuGift\0225\n\013achieve"
-    "ment\030\001 \002(\0132 .ConfigActivity.KaifuAchieve"
-    "ment\022/\n\004shop\030\002 \003(\0132!.ConfigActivity.Kaif"
-    "uDiscountShop\":\n\017StarStoneChange\022\013\n\003src\030"
-    "\001 \003(\r\022\013\n\003dst\030\002 \003(\r\022\r\n\005limit\030\003 \002(\r\"k\n\013Hon"
-    "gBaoItem\022\n\n\002id\030\001 \002(\r\022\021\n\trate_free\030\002 \002(\r\022"
-    "\020\n\010rate_buy\030\003 \002(\r\022+\n\006reward\030\004 \002(\0132\033.Rewa"
-    "rdConfig.RewardItemCfg\"o\n\007HongBao\022\r\n\005cou"
-    "nt\030\001 \002(\r\022\024\n\014refresh_free\030\002 \002(\r\022\024\n\014refres"
-    "h_cost\030\003 \002(\r\022)\n\004item\030\004 \003(\0132\033.ConfigActiv"
-    "ity.HongBaoItem\"R\n\010TaskGift\022\n\n\002id\030\001 \002(\r\022"
-    "\r\n\005count\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardC"
-    "onfig.RewardItemCfg\"f\n\016RotaryTableCfg\022\n\n"
-    "\002id\030\001 \002(\r\022\r\n\005count\030\002 \002(\r\022\014\n\004type\030\003 \002(\r\022+"
-    "\n\006reward\030\004 \002(\0132\033.RewardConfig.RewardItem"
-    "Cfg\"\353\001\n\026RotaryTableCrazyReward\0223\n\014charge"
-    "Reward\030\001 \003(\0132\035.ConfigActivity.DiamondRew"
-    "ard\0224\n\017rotaryTableCost\030\002 \002(\0132\033.RewardCon"
-    "fig.RewardItemCfg\0224\n\014randomReward\030\003 \003(\0132"
-    "\036.ConfigActivity.RotaryTableCfg\0220\n\013fixed"
-    "Reward\030\004 \002(\0132\033.RewardConfig.RewardItemCf"
-    "g\"O\n\022BatmanTreasureDraw\022)\n\004item\030\001 \002(\0132\033."
-    "RewardConfig.RewardItemCfg\022\016\n\006weight\030\002 \002"
-    "(\r\"\305\001\n\021BatmanTreasureCfg\022<\n\025xiaobing_cha"
-    "rgeReward\030\001 \003(\0132\035.ConfigActivity.Diamond"
-    "Reward\022@\n\024unique_xiaobing_dial\030\002 \003(\0132\".C"
-    "onfigActivity.BatmanTreasureDraw\022\024\n\014draw"
-    "_cnt_max\030\003 \002(\r\022\032\n\022draw_cost_integral\030\004 \002"
-    "(\r\"\213\001\n\025SummerChargeRewardCfg\0229\n\022daily_ch"
-    "argeReward\030\001 \003(\0132\035.ConfigActivity.Diamon"
-    "dReward\0227\n\020acc_chargeReward\030\002 \003(\0132\035.Conf"
-    "igActivity.DiamondReward\"|\n\027SummerHolida"
-    "ysTicketCfg\022\030\n\020need_cost_ticket\030\001 \002(\r\022\032\n"
-    "\022exchange_count_max\030\002 \002(\r\022+\n\006reward\030\003 \002("
-    "\0132\033.RewardConfig.RewardItemCfg\"\325\001\n\027Summe"
-    "rHolidaysRewardCfg\022\033\n\023exchange_ticket_ma"
-    "x\030\001 \002(\r\022\037\n\027per_ticket_need_diamond\030\002 \002(\r"
-    "\022G\n\026summer_holidays_ticket\030\003 \003(\0132\'.Confi"
-    "gActivity.SummerHolidaysTicketCfg\0223\n\014cha"
-    "rgeReward\030\004 \003(\0132\035.ConfigActivity.Diamond"
-    "Reward\"\366\013\n\nActivities\0220\n\tbuildsuit\030\001 \003(\013"
-    "2\035.ConfigActivity.BuildSuitItem\022.\n\nbless"
-    "point\030\002 \002(\0132\032.ConfigActivity.BlessPoint\022"
-    "5\n\016double_welfare\030\003 \002(\0132\035.ConfigActivity"
-    ".DoubleWelfare\0223\n\rpearl_advance\030\004 \003(\0132\034."
-    "ConfigActivity.PearlAdvance\022B\n\025unique_kn"
-    "owledge_dial\030\005 \003(\0132#.ConfigActivity.Uniq"
-    "ueKnowledgeDial\022:\n\016spiritvitality\030\006 \003(\0132"
-    "\".ConfigActivity.SpriteVitalityItem\022)\n\005f"
-    "orge\030\007 \002(\0132\032.ConfigActivity.ForgeSmelt\022*"
-    "\n\010herodial\030\010 \002(\0132\030.ConfigActivity.HeroDi"
-    "al\022.\n\nkingdomwar\030\t \003(\0132\032.ConfigActivity."
-    "KingdomWar\022<\n\021onediamondwelfare\030\n \003(\0132!."
-    "ConfigActivity.OneDiamondWelfare\0223\n\rfort"
-    "une_packs\030\013 \002(\0132\034.ConfigActivity.Fortune"
-    "Packs\0225\n\016sevenday_packs\030\014 \003(\0132\035.ConfigAc"
-    "tivity.SevenDayPacks\0221\n\nicephoenix\030\r \003(\013"
-    "2\035.ConfigActivity.DiamondReward\0226\n\017autum"
-    "n_feedback\030\016 \003(\0132\035.ConfigActivity.Diamon"
-    "dReward\0222\n\013protectflag\030\017 \003(\0132\035.ConfigAct"
-    "ivity.DiamondReward\0224\n\rkeyluxurygift\030\020 \002"
-    "(\0132\035.ConfigActivity.KeyLuxuryGift\022=\n\017enj"
-    "oy_smallgift\030\021 \002(\0132$.ConfigActivity.Enjo"
-    "ySmallGiftReward\022-\n\nlucky_gift\030\022 \002(\0132\031.C"
-    "onfigActivity.LuckyGift\0223\n\014year_endgift\030"
-    "\023 \003(\0132\035.ConfigActivity.DiamondReward\0228\n\017"
-    "newyearactivity\030\024 \002(\0132\037.ConfigActivity.N"
-    "ewYearActivity\022(\n\005kaifu\030\025 \002(\0132\031.ConfigAc"
-    "tivity.KaiFuGift\0222\n\tstarstone\030\026 \002(\0132\037.Co"
-    "nfigActivity.StarStoneChange\022.\n\rnewyeara"
-    "ctive\030\027 \002(\0132\027.ConfigActivity.HongBao\0220\n\016"
-    "HebdomadReward\030\030 \003(\0132\030.ConfigActivity.Ta"
-    "skGift\022<\n\014rotary_table\030\031 \002(\0132&.ConfigAct"
-    "ivity.RotaryTableCrazyReward\0229\n\016batmantr"
-    "easure\030\032 \002(\0132!.ConfigActivity.BatmanTrea"
-    "sureCfg\022<\n\rsummer_charge\030\033 \002(\0132%.ConfigA"
-    "ctivity.SummerChargeRewardCfg\022@\n\017summer_"
-    "holidays\030\034 \002(\0132\'.ConfigActivity.SummerHo"
-    "lidaysRewardCfg", 7015);
+    "emCfg\"n\n\rKeyLuxuryGift\022-\n\ncharge_key\030\001 \003"
+    "(\0132\031.ConfigActivity.ChargeKey\022.\n\013stuff_i"
+    "tems\030\002 \003(\0132\031.ConfigActivity.StuffItem\"O\n"
+    "\017ConsumeGiftItem\022\017\n\007consume\030\001 \002(\r\022+\n\006rew"
+    "ard\030\002 \002(\0132\033.RewardConfig.RewardItemCfg\"\201"
+    "\001\n\024EnjoySmallGiftReward\0222\n\013charge_gift\030\001"
+    " \003(\0132\035.ConfigActivity.DiamondReward\0225\n\014c"
+    "onsume_gift\030\002 \003(\0132\037.ConfigActivity.Consu"
+    "meGiftItem\"X\n\rTurnTableItem\022\n\n\002id\030\001 \002(\r\022"
+    "\016\n\006weight\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.Reward"
+    "Config.RewardItemCfg\"=\n\rLuckyGiftItem\022,\n"
+    "\005items\030\001 \003(\0132\035.ConfigActivity.TurnTableI"
+    "tem\"c\n\tLuckyGift\022\017\n\007keycost\030\001 \002(\r\022\021\n\tpoi"
+    "ntcost\030\002 \002(\r\0222\n\013stuff_items\030\003 \003(\0132\035.Conf"
+    "igActivity.LuckyGiftItem\"\262\001\n\017NewYearActi"
+    "vity\0224\n\rcharge_reward\030\001 \003(\0132\035.ConfigActi"
+    "vity.DiamondReward\0225\n\tbuy_items\030\002 \003(\0132\"."
+    "ConfigActivity.DiamondRewardLimit\0222\n\ronl"
+    "ine_reward\030\003 \002(\0132\033.RewardConfig.RewardIt"
+    "emCfg\"\262\001\n\020ChinaDayActivity\0224\n\rcharge_rew"
+    "ard\030\001 \003(\0132\035.ConfigActivity.DiamondReward"
+    "\0224\n\017everyday_reward\030\002 \002(\0132\033.RewardConfig"
+    ".RewardItemCfg\0222\n\ronline_reward\030\003 \002(\0132\033."
+    "RewardConfig.RewardItemCfg\"Q\n\023PayOptiona"
+    "lActivity\022:\n\017optional_reward\030\001 \003(\0132!.Con"
+    "figActivity.DiamondMoreReward\"G\n\014MsgSoul"
+    "Level\022\n\n\002lv\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.Rewa"
+    "rdConfig.RewardItemCfg\"L\n\rMsgSoulGrowth\022"
+    "\016\n\006growth\030\001 \002(\r\022+\n\006reward\030\002 \002(\0132\033.Reward"
+    "Config.RewardItemCfg\"Z\n\010MsgWuhun\022\021\n\tpart"
+    "count\030\001 \002(\r\022\016\n\006partlv\030\002 \002(\r\022+\n\006reward\030\003 "
+    "\002(\0132\033.RewardConfig.RewardItemCfg\"X\n\tMsgJ"
+    "uexue\022\017\n\007quality\030\001 \002(\r\022\r\n\005count\030\002 \002(\r\022+\n"
+    "\006reward\030\003 \002(\0132\033.RewardConfig.RewardItemC"
+    "fg\"R\n\007MsgStar\022\014\n\004star\030\001 \002(\r\022\014\n\004type\030\002 \002("
+    "\r\022+\n\006reward\030\003 \002(\0132\033.RewardConfig.RewardI"
+    "temCfg\"S\n\tMsgHeaven\022\013\n\003jie\030\001 \002(\r\022\014\n\004ceng"
+    "\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardConfig.Re"
+    "wardItemCfg\"S\n\tMsgDaoist\022\013\n\003jie\030\001 \002(\r\022\014\n"
+    "\004ceng\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardConf"
+    "ig.RewardItemCfg\"\306\002\n\020KaifuAchievement\022-\n"
+    "\007soul_lv\030\001 \003(\0132\034.ConfigActivity.MsgSoulL"
+    "evel\0222\n\013soul_growth\030\002 \003(\0132\035.ConfigActivi"
+    "ty.MsgSoulGrowth\022\'\n\005wuhun\030\003 \003(\0132\030.Config"
+    "Activity.MsgWuhun\022)\n\006juexue\030\004 \003(\0132\031.Conf"
+    "igActivity.MsgJuexue\022%\n\004star\030\005 \003(\0132\027.Con"
+    "figActivity.MsgStar\022)\n\006heaven\030\006 \003(\0132\031.Co"
+    "nfigActivity.MsgHeaven\022)\n\006daoist\030\007 \003(\0132\031"
+    ".ConfigActivity.MsgDaoist\"`\n\021KaifuDiscou"
+    "ntShop\022\017\n\007o_price\030\001 \002(\r\022\017\n\007p_price\030\002 \002(\r"
+    "\022)\n\004item\030\003 \002(\0132\033.RewardConfig.RewardItem"
+    "Cfg\"s\n\tKaiFuGift\0225\n\013achievement\030\001 \002(\0132 ."
+    "ConfigActivity.KaifuAchievement\022/\n\004shop\030"
+    "\002 \003(\0132!.ConfigActivity.KaifuDiscountShop"
+    "\":\n\017StarStoneChange\022\013\n\003src\030\001 \003(\r\022\013\n\003dst\030"
+    "\002 \003(\r\022\r\n\005limit\030\003 \002(\r\"k\n\013HongBaoItem\022\n\n\002i"
+    "d\030\001 \002(\r\022\021\n\trate_free\030\002 \002(\r\022\020\n\010rate_buy\030\003"
+    " \002(\r\022+\n\006reward\030\004 \002(\0132\033.RewardConfig.Rewa"
+    "rdItemCfg\"o\n\007HongBao\022\r\n\005count\030\001 \002(\r\022\024\n\014r"
+    "efresh_free\030\002 \002(\r\022\024\n\014refresh_cost\030\003 \002(\r\022"
+    ")\n\004item\030\004 \003(\0132\033.ConfigActivity.HongBaoIt"
+    "em\"R\n\010TaskGift\022\n\n\002id\030\001 \002(\r\022\r\n\005count\030\002 \002("
+    "\r\022+\n\006reward\030\003 \002(\0132\033.RewardConfig.RewardI"
+    "temCfg\"f\n\016RotaryTableCfg\022\n\n\002id\030\001 \002(\r\022\r\n\005"
+    "count\030\002 \002(\r\022\014\n\004type\030\003 \002(\r\022+\n\006reward\030\004 \002("
+    "\0132\033.RewardConfig.RewardItemCfg\"\353\001\n\026Rotar"
+    "yTableCrazyReward\0223\n\014chargeReward\030\001 \003(\0132"
+    "\035.ConfigActivity.DiamondReward\0224\n\017rotary"
+    "TableCost\030\002 \002(\0132\033.RewardConfig.RewardIte"
+    "mCfg\0224\n\014randomReward\030\003 \003(\0132\036.ConfigActiv"
+    "ity.RotaryTableCfg\0220\n\013fixedReward\030\004 \002(\0132"
+    "\033.RewardConfig.RewardItemCfg\"O\n\022BatmanTr"
+    "easureDraw\022)\n\004item\030\001 \002(\0132\033.RewardConfig."
+    "RewardItemCfg\022\016\n\006weight\030\002 \002(\r\"\305\001\n\021Batman"
+    "TreasureCfg\022<\n\025xiaobing_chargeReward\030\001 \003"
+    "(\0132\035.ConfigActivity.DiamondReward\022@\n\024uni"
+    "que_xiaobing_dial\030\002 \003(\0132\".ConfigActivity"
+    ".BatmanTreasureDraw\022\024\n\014draw_cnt_max\030\003 \002("
+    "\r\022\032\n\022draw_cost_integral\030\004 \002(\r\"\213\001\n\025Summer"
+    "ChargeRewardCfg\0229\n\022daily_chargeReward\030\001 "
+    "\003(\0132\035.ConfigActivity.DiamondReward\0227\n\020ac"
+    "c_chargeReward\030\002 \003(\0132\035.ConfigActivity.Di"
+    "amondReward\"|\n\027SummerHolidaysTicketCfg\022\030"
+    "\n\020need_cost_ticket\030\001 \002(\r\022\032\n\022exchange_cou"
+    "nt_max\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardCon"
+    "fig.RewardItemCfg\"\325\001\n\027SummerHolidaysRewa"
+    "rdCfg\022\033\n\023exchange_ticket_max\030\001 \002(\r\022\037\n\027pe"
+    "r_ticket_need_diamond\030\002 \002(\r\022G\n\026summer_ho"
+    "lidays_ticket\030\003 \003(\0132\'.ConfigActivity.Sum"
+    "merHolidaysTicketCfg\0223\n\014chargeReward\030\004 \003"
+    "(\0132\035.ConfigActivity.DiamondReward\")\n\020Fre"
+    "eExchangeItem\022\n\n\002id\030\001 \002(\r\022\t\n\001c\030\002 \002(\r\">\n\014"
+    "FreeExchange\022.\n\004item\030\001 \003(\0132 .ConfigActiv"
+    "ity.FreeExchangeItem\"\246\r\n\nActivities\0220\n\tb"
+    "uildsuit\030\001 \003(\0132\035.ConfigActivity.BuildSui"
+    "tItem\022.\n\nblesspoint\030\002 \002(\0132\032.ConfigActivi"
+    "ty.BlessPoint\0225\n\016double_welfare\030\003 \002(\0132\035."
+    "ConfigActivity.DoubleWelfare\0223\n\rpearl_ad"
+    "vance\030\004 \003(\0132\034.ConfigActivity.PearlAdvanc"
+    "e\022B\n\025unique_knowledge_dial\030\005 \003(\0132#.Confi"
+    "gActivity.UniqueKnowledgeDial\022:\n\016spiritv"
+    "itality\030\006 \003(\0132\".ConfigActivity.SpriteVit"
+    "alityItem\022)\n\005forge\030\007 \002(\0132\032.ConfigActivit"
+    "y.ForgeSmelt\022*\n\010herodial\030\010 \002(\0132\030.ConfigA"
+    "ctivity.HeroDial\022.\n\nkingdomwar\030\t \003(\0132\032.C"
+    "onfigActivity.KingdomWar\022<\n\021onediamondwe"
+    "lfare\030\n \003(\0132!.ConfigActivity.OneDiamondW"
+    "elfare\0223\n\rfortune_packs\030\013 \002(\0132\034.ConfigAc"
+    "tivity.FortunePacks\0225\n\016sevenday_packs\030\014 "
+    "\003(\0132\035.ConfigActivity.SevenDayPacks\0221\n\nic"
+    "ephoenix\030\r \003(\0132\035.ConfigActivity.DiamondR"
+    "eward\0226\n\017autumn_feedback\030\016 \003(\0132\035.ConfigA"
+    "ctivity.DiamondReward\0222\n\013protectflag\030\017 \003"
+    "(\0132\035.ConfigActivity.DiamondReward\0224\n\rkey"
+    "luxurygift\030\020 \002(\0132\035.ConfigActivity.KeyLux"
+    "uryGift\022=\n\017enjoy_smallgift\030\021 \002(\0132$.Confi"
+    "gActivity.EnjoySmallGiftReward\022-\n\nlucky_"
+    "gift\030\022 \002(\0132\031.ConfigActivity.LuckyGift\0223\n"
+    "\014year_endgift\030\023 \003(\0132\035.ConfigActivity.Dia"
+    "mondReward\0228\n\017newyearactivity\030\024 \002(\0132\037.Co"
+    "nfigActivity.NewYearActivity\022(\n\005kaifu\030\025 "
+    "\002(\0132\031.ConfigActivity.KaiFuGift\0222\n\tstarst"
+    "one\030\026 \002(\0132\037.ConfigActivity.StarStoneChan"
+    "ge\022.\n\rnewyearactive\030\027 \002(\0132\027.ConfigActivi"
+    "ty.HongBao\0220\n\016HebdomadReward\030\030 \003(\0132\030.Con"
+    "figActivity.TaskGift\022<\n\014rotary_table\030\031 \002"
+    "(\0132&.ConfigActivity.RotaryTableCrazyRewa"
+    "rd\0229\n\016batmantreasure\030\032 \002(\0132!.ConfigActiv"
+    "ity.BatmanTreasureCfg\022<\n\rsummer_charge\030\033"
+    " \002(\0132%.ConfigActivity.SummerChargeReward"
+    "Cfg\022@\n\017summer_holidays\030\034 \002(\0132\'.ConfigAct"
+    "ivity.SummerHolidaysRewardCfg\022:\n\020chinada"
+    "yavtivity\030\035 \002(\0132 .ConfigActivity.ChinaDa"
+    "yActivity\022@\n\023payoptionalactivity\030\036 \002(\0132#"
+    ".ConfigActivity.PayOptionalActivity\0220\n\nf"
+    "ree_exchg\030\037 \003(\0132\034.ConfigActivity.FreeExc"
+    "hange", 7645);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ConfigActivity.proto", &protobuf_RegisterTypes);
   BuildSuitItem::default_instance_ = new BuildSuitItem();
@@ -1507,6 +1640,7 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   CostCoefficient::default_instance_ = new CostCoefficient();
   DiamondReward::default_instance_ = new DiamondReward();
   DiamondRewardLimit::default_instance_ = new DiamondRewardLimit();
+  DiamondMoreReward::default_instance_ = new DiamondMoreReward();
   DoubleWelfare::default_instance_ = new DoubleWelfare();
   PearlAdvance::default_instance_ = new PearlAdvance();
   UniqueKnowledgeDial::default_instance_ = new UniqueKnowledgeDial();
@@ -1531,6 +1665,8 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   LuckyGiftItem::default_instance_ = new LuckyGiftItem();
   LuckyGift::default_instance_ = new LuckyGift();
   NewYearActivity::default_instance_ = new NewYearActivity();
+  ChinaDayActivity::default_instance_ = new ChinaDayActivity();
+  PayOptionalActivity::default_instance_ = new PayOptionalActivity();
   MsgSoulLevel::default_instance_ = new MsgSoulLevel();
   MsgSoulGrowth::default_instance_ = new MsgSoulGrowth();
   MsgWuhun::default_instance_ = new MsgWuhun();
@@ -1552,6 +1688,8 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   SummerChargeRewardCfg::default_instance_ = new SummerChargeRewardCfg();
   SummerHolidaysTicketCfg::default_instance_ = new SummerHolidaysTicketCfg();
   SummerHolidaysRewardCfg::default_instance_ = new SummerHolidaysRewardCfg();
+  FreeExchangeItem::default_instance_ = new FreeExchangeItem();
+  FreeExchange::default_instance_ = new FreeExchange();
   Activities::default_instance_ = new Activities();
   BuildSuitItem::default_instance_->InitAsDefaultInstance();
   ExchangeItem::default_instance_->InitAsDefaultInstance();
@@ -1559,6 +1697,7 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   CostCoefficient::default_instance_->InitAsDefaultInstance();
   DiamondReward::default_instance_->InitAsDefaultInstance();
   DiamondRewardLimit::default_instance_->InitAsDefaultInstance();
+  DiamondMoreReward::default_instance_->InitAsDefaultInstance();
   DoubleWelfare::default_instance_->InitAsDefaultInstance();
   PearlAdvance::default_instance_->InitAsDefaultInstance();
   UniqueKnowledgeDial::default_instance_->InitAsDefaultInstance();
@@ -1583,6 +1722,8 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   LuckyGiftItem::default_instance_->InitAsDefaultInstance();
   LuckyGift::default_instance_->InitAsDefaultInstance();
   NewYearActivity::default_instance_->InitAsDefaultInstance();
+  ChinaDayActivity::default_instance_->InitAsDefaultInstance();
+  PayOptionalActivity::default_instance_->InitAsDefaultInstance();
   MsgSoulLevel::default_instance_->InitAsDefaultInstance();
   MsgSoulGrowth::default_instance_->InitAsDefaultInstance();
   MsgWuhun::default_instance_->InitAsDefaultInstance();
@@ -1604,6 +1745,8 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   SummerChargeRewardCfg::default_instance_->InitAsDefaultInstance();
   SummerHolidaysTicketCfg::default_instance_->InitAsDefaultInstance();
   SummerHolidaysRewardCfg::default_instance_->InitAsDefaultInstance();
+  FreeExchangeItem::default_instance_->InitAsDefaultInstance();
+  FreeExchange::default_instance_->InitAsDefaultInstance();
   Activities::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_ConfigActivity_2eproto);
 }
@@ -3342,6 +3485,269 @@ void DiamondRewardLimit::Swap(DiamondRewardLimit* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = DiamondRewardLimit_descriptor_;
   metadata.reflection = DiamondRewardLimit_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int DiamondMoreReward::kDiamondFieldNumber;
+const int DiamondMoreReward::kRewardFieldNumber;
+#endif  // !_MSC_VER
+
+DiamondMoreReward::DiamondMoreReward()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.DiamondMoreReward)
+}
+
+void DiamondMoreReward::InitAsDefaultInstance() {
+}
+
+DiamondMoreReward::DiamondMoreReward(const DiamondMoreReward& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.DiamondMoreReward)
+}
+
+void DiamondMoreReward::SharedCtor() {
+  _cached_size_ = 0;
+  diamond_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+DiamondMoreReward::~DiamondMoreReward() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.DiamondMoreReward)
+  SharedDtor();
+}
+
+void DiamondMoreReward::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void DiamondMoreReward::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* DiamondMoreReward::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return DiamondMoreReward_descriptor_;
+}
+
+const DiamondMoreReward& DiamondMoreReward::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+DiamondMoreReward* DiamondMoreReward::default_instance_ = NULL;
+
+DiamondMoreReward* DiamondMoreReward::New() const {
+  return new DiamondMoreReward;
+}
+
+void DiamondMoreReward::Clear() {
+  diamond_ = 0u;
+  reward_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool DiamondMoreReward::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.DiamondMoreReward)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 diamond = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &diamond_)));
+          set_has_diamond();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_reward;
+        break;
+      }
+
+      // repeated .RewardConfig.RewardItemCfg reward = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_reward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_reward;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.DiamondMoreReward)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.DiamondMoreReward)
+  return false;
+#undef DO_
+}
+
+void DiamondMoreReward::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.DiamondMoreReward)
+  // required uint32 diamond = 1;
+  if (has_diamond()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->diamond(), output);
+  }
+
+  // repeated .RewardConfig.RewardItemCfg reward = 2;
+  for (int i = 0; i < this->reward_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->reward(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.DiamondMoreReward)
+}
+
+::google::protobuf::uint8* DiamondMoreReward::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.DiamondMoreReward)
+  // required uint32 diamond = 1;
+  if (has_diamond()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->diamond(), target);
+  }
+
+  // repeated .RewardConfig.RewardItemCfg reward = 2;
+  for (int i = 0; i < this->reward_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->reward(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.DiamondMoreReward)
+  return target;
+}
+
+int DiamondMoreReward::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 diamond = 1;
+    if (has_diamond()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->diamond());
+    }
+
+  }
+  // repeated .RewardConfig.RewardItemCfg reward = 2;
+  total_size += 1 * this->reward_size();
+  for (int i = 0; i < this->reward_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->reward(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DiamondMoreReward::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const DiamondMoreReward* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DiamondMoreReward*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void DiamondMoreReward::MergeFrom(const DiamondMoreReward& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  reward_.MergeFrom(from.reward_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_diamond()) {
+      set_diamond(from.diamond());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void DiamondMoreReward::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void DiamondMoreReward::CopyFrom(const DiamondMoreReward& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DiamondMoreReward::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->reward())) return false;
+  return true;
+}
+
+void DiamondMoreReward::Swap(DiamondMoreReward* other) {
+  if (other != this) {
+    std::swap(diamond_, other->diamond_);
+    reward_.Swap(&other->reward_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata DiamondMoreReward::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = DiamondMoreReward_descriptor_;
+  metadata.reflection = DiamondMoreReward_reflection_;
   return metadata;
 }
 
@@ -10564,6 +10970,547 @@ void NewYearActivity::Swap(NewYearActivity* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int ChinaDayActivity::kChargeRewardFieldNumber;
+const int ChinaDayActivity::kEverydayRewardFieldNumber;
+const int ChinaDayActivity::kOnlineRewardFieldNumber;
+#endif  // !_MSC_VER
+
+ChinaDayActivity::ChinaDayActivity()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.ChinaDayActivity)
+}
+
+void ChinaDayActivity::InitAsDefaultInstance() {
+  everyday_reward_ = const_cast< ::RewardConfig::RewardItemCfg*>(&::RewardConfig::RewardItemCfg::default_instance());
+  online_reward_ = const_cast< ::RewardConfig::RewardItemCfg*>(&::RewardConfig::RewardItemCfg::default_instance());
+}
+
+ChinaDayActivity::ChinaDayActivity(const ChinaDayActivity& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.ChinaDayActivity)
+}
+
+void ChinaDayActivity::SharedCtor() {
+  _cached_size_ = 0;
+  everyday_reward_ = NULL;
+  online_reward_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+ChinaDayActivity::~ChinaDayActivity() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.ChinaDayActivity)
+  SharedDtor();
+}
+
+void ChinaDayActivity::SharedDtor() {
+  if (this != default_instance_) {
+    delete everyday_reward_;
+    delete online_reward_;
+  }
+}
+
+void ChinaDayActivity::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ChinaDayActivity::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ChinaDayActivity_descriptor_;
+}
+
+const ChinaDayActivity& ChinaDayActivity::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+ChinaDayActivity* ChinaDayActivity::default_instance_ = NULL;
+
+ChinaDayActivity* ChinaDayActivity::New() const {
+  return new ChinaDayActivity;
+}
+
+void ChinaDayActivity::Clear() {
+  if (_has_bits_[0 / 32] & 6) {
+    if (has_everyday_reward()) {
+      if (everyday_reward_ != NULL) everyday_reward_->::RewardConfig::RewardItemCfg::Clear();
+    }
+    if (has_online_reward()) {
+      if (online_reward_ != NULL) online_reward_->::RewardConfig::RewardItemCfg::Clear();
+    }
+  }
+  charge_reward_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool ChinaDayActivity::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.ChinaDayActivity)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .ConfigActivity.DiamondReward charge_reward = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_charge_reward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_charge_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_charge_reward;
+        if (input->ExpectTag(18)) goto parse_everyday_reward;
+        break;
+      }
+
+      // required .RewardConfig.RewardItemCfg everyday_reward = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_everyday_reward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_everyday_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_online_reward;
+        break;
+      }
+
+      // required .RewardConfig.RewardItemCfg online_reward = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_online_reward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_online_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.ChinaDayActivity)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.ChinaDayActivity)
+  return false;
+#undef DO_
+}
+
+void ChinaDayActivity::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.ChinaDayActivity)
+  // repeated .ConfigActivity.DiamondReward charge_reward = 1;
+  for (int i = 0; i < this->charge_reward_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->charge_reward(i), output);
+  }
+
+  // required .RewardConfig.RewardItemCfg everyday_reward = 2;
+  if (has_everyday_reward()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->everyday_reward(), output);
+  }
+
+  // required .RewardConfig.RewardItemCfg online_reward = 3;
+  if (has_online_reward()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->online_reward(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.ChinaDayActivity)
+}
+
+::google::protobuf::uint8* ChinaDayActivity::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.ChinaDayActivity)
+  // repeated .ConfigActivity.DiamondReward charge_reward = 1;
+  for (int i = 0; i < this->charge_reward_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->charge_reward(i), target);
+  }
+
+  // required .RewardConfig.RewardItemCfg everyday_reward = 2;
+  if (has_everyday_reward()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->everyday_reward(), target);
+  }
+
+  // required .RewardConfig.RewardItemCfg online_reward = 3;
+  if (has_online_reward()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->online_reward(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.ChinaDayActivity)
+  return target;
+}
+
+int ChinaDayActivity::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+    // required .RewardConfig.RewardItemCfg everyday_reward = 2;
+    if (has_everyday_reward()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->everyday_reward());
+    }
+
+    // required .RewardConfig.RewardItemCfg online_reward = 3;
+    if (has_online_reward()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->online_reward());
+    }
+
+  }
+  // repeated .ConfigActivity.DiamondReward charge_reward = 1;
+  total_size += 1 * this->charge_reward_size();
+  for (int i = 0; i < this->charge_reward_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->charge_reward(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ChinaDayActivity::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const ChinaDayActivity* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ChinaDayActivity*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ChinaDayActivity::MergeFrom(const ChinaDayActivity& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  charge_reward_.MergeFrom(from.charge_reward_);
+  if (from._has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+    if (from.has_everyday_reward()) {
+      mutable_everyday_reward()->::RewardConfig::RewardItemCfg::MergeFrom(from.everyday_reward());
+    }
+    if (from.has_online_reward()) {
+      mutable_online_reward()->::RewardConfig::RewardItemCfg::MergeFrom(from.online_reward());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void ChinaDayActivity::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ChinaDayActivity::CopyFrom(const ChinaDayActivity& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ChinaDayActivity::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000006) != 0x00000006) return false;
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->charge_reward())) return false;
+  if (has_everyday_reward()) {
+    if (!this->everyday_reward().IsInitialized()) return false;
+  }
+  if (has_online_reward()) {
+    if (!this->online_reward().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void ChinaDayActivity::Swap(ChinaDayActivity* other) {
+  if (other != this) {
+    charge_reward_.Swap(&other->charge_reward_);
+    std::swap(everyday_reward_, other->everyday_reward_);
+    std::swap(online_reward_, other->online_reward_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata ChinaDayActivity::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ChinaDayActivity_descriptor_;
+  metadata.reflection = ChinaDayActivity_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int PayOptionalActivity::kOptionalRewardFieldNumber;
+#endif  // !_MSC_VER
+
+PayOptionalActivity::PayOptionalActivity()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.PayOptionalActivity)
+}
+
+void PayOptionalActivity::InitAsDefaultInstance() {
+}
+
+PayOptionalActivity::PayOptionalActivity(const PayOptionalActivity& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.PayOptionalActivity)
+}
+
+void PayOptionalActivity::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+PayOptionalActivity::~PayOptionalActivity() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.PayOptionalActivity)
+  SharedDtor();
+}
+
+void PayOptionalActivity::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void PayOptionalActivity::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* PayOptionalActivity::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PayOptionalActivity_descriptor_;
+}
+
+const PayOptionalActivity& PayOptionalActivity::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+PayOptionalActivity* PayOptionalActivity::default_instance_ = NULL;
+
+PayOptionalActivity* PayOptionalActivity::New() const {
+  return new PayOptionalActivity;
+}
+
+void PayOptionalActivity::Clear() {
+  optional_reward_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool PayOptionalActivity::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.PayOptionalActivity)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .ConfigActivity.DiamondMoreReward optional_reward = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_optional_reward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_optional_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_optional_reward;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.PayOptionalActivity)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.PayOptionalActivity)
+  return false;
+#undef DO_
+}
+
+void PayOptionalActivity::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.PayOptionalActivity)
+  // repeated .ConfigActivity.DiamondMoreReward optional_reward = 1;
+  for (int i = 0; i < this->optional_reward_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->optional_reward(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.PayOptionalActivity)
+}
+
+::google::protobuf::uint8* PayOptionalActivity::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.PayOptionalActivity)
+  // repeated .ConfigActivity.DiamondMoreReward optional_reward = 1;
+  for (int i = 0; i < this->optional_reward_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->optional_reward(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.PayOptionalActivity)
+  return target;
+}
+
+int PayOptionalActivity::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .ConfigActivity.DiamondMoreReward optional_reward = 1;
+  total_size += 1 * this->optional_reward_size();
+  for (int i = 0; i < this->optional_reward_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->optional_reward(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void PayOptionalActivity::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const PayOptionalActivity* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PayOptionalActivity*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void PayOptionalActivity::MergeFrom(const PayOptionalActivity& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  optional_reward_.MergeFrom(from.optional_reward_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void PayOptionalActivity::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PayOptionalActivity::CopyFrom(const PayOptionalActivity& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PayOptionalActivity::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->optional_reward())) return false;
+  return true;
+}
+
+void PayOptionalActivity::Swap(PayOptionalActivity* other) {
+  if (other != this) {
+    optional_reward_.Swap(&other->optional_reward_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata PayOptionalActivity::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = PayOptionalActivity_descriptor_;
+  metadata.reflection = PayOptionalActivity_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int MsgSoulLevel::kLvFieldNumber;
 const int MsgSoulLevel::kRewardFieldNumber;
 #endif  // !_MSC_VER
@@ -17431,6 +18378,501 @@ void SummerHolidaysRewardCfg::Swap(SummerHolidaysRewardCfg* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int FreeExchangeItem::kIdFieldNumber;
+const int FreeExchangeItem::kCFieldNumber;
+#endif  // !_MSC_VER
+
+FreeExchangeItem::FreeExchangeItem()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.FreeExchangeItem)
+}
+
+void FreeExchangeItem::InitAsDefaultInstance() {
+}
+
+FreeExchangeItem::FreeExchangeItem(const FreeExchangeItem& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.FreeExchangeItem)
+}
+
+void FreeExchangeItem::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = 0u;
+  c_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+FreeExchangeItem::~FreeExchangeItem() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.FreeExchangeItem)
+  SharedDtor();
+}
+
+void FreeExchangeItem::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void FreeExchangeItem::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* FreeExchangeItem::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return FreeExchangeItem_descriptor_;
+}
+
+const FreeExchangeItem& FreeExchangeItem::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+FreeExchangeItem* FreeExchangeItem::default_instance_ = NULL;
+
+FreeExchangeItem* FreeExchangeItem::New() const {
+  return new FreeExchangeItem;
+}
+
+void FreeExchangeItem::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<FreeExchangeItem*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(id_, c_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool FreeExchangeItem::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.FreeExchangeItem)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_c;
+        break;
+      }
+
+      // required uint32 c = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_c:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &c_)));
+          set_has_c();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.FreeExchangeItem)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.FreeExchangeItem)
+  return false;
+#undef DO_
+}
+
+void FreeExchangeItem::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.FreeExchangeItem)
+  // required uint32 id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
+  }
+
+  // required uint32 c = 2;
+  if (has_c()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->c(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.FreeExchangeItem)
+}
+
+::google::protobuf::uint8* FreeExchangeItem::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.FreeExchangeItem)
+  // required uint32 id = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
+  }
+
+  // required uint32 c = 2;
+  if (has_c()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->c(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.FreeExchangeItem)
+  return target;
+}
+
+int FreeExchangeItem::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 id = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->id());
+    }
+
+    // required uint32 c = 2;
+    if (has_c()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->c());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FreeExchangeItem::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const FreeExchangeItem* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FreeExchangeItem*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void FreeExchangeItem::MergeFrom(const FreeExchangeItem& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+    if (from.has_c()) {
+      set_c(from.c());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void FreeExchangeItem::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void FreeExchangeItem::CopyFrom(const FreeExchangeItem& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FreeExchangeItem::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void FreeExchangeItem::Swap(FreeExchangeItem* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(c_, other->c_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata FreeExchangeItem::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = FreeExchangeItem_descriptor_;
+  metadata.reflection = FreeExchangeItem_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int FreeExchange::kItemFieldNumber;
+#endif  // !_MSC_VER
+
+FreeExchange::FreeExchange()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.FreeExchange)
+}
+
+void FreeExchange::InitAsDefaultInstance() {
+}
+
+FreeExchange::FreeExchange(const FreeExchange& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.FreeExchange)
+}
+
+void FreeExchange::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+FreeExchange::~FreeExchange() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.FreeExchange)
+  SharedDtor();
+}
+
+void FreeExchange::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void FreeExchange::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* FreeExchange::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return FreeExchange_descriptor_;
+}
+
+const FreeExchange& FreeExchange::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+FreeExchange* FreeExchange::default_instance_ = NULL;
+
+FreeExchange* FreeExchange::New() const {
+  return new FreeExchange;
+}
+
+void FreeExchange::Clear() {
+  item_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool FreeExchange::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.FreeExchange)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .ConfigActivity.FreeExchangeItem item = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_item:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_item()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_item;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.FreeExchange)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.FreeExchange)
+  return false;
+#undef DO_
+}
+
+void FreeExchange::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.FreeExchange)
+  // repeated .ConfigActivity.FreeExchangeItem item = 1;
+  for (int i = 0; i < this->item_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->item(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.FreeExchange)
+}
+
+::google::protobuf::uint8* FreeExchange::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.FreeExchange)
+  // repeated .ConfigActivity.FreeExchangeItem item = 1;
+  for (int i = 0; i < this->item_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->item(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.FreeExchange)
+  return target;
+}
+
+int FreeExchange::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .ConfigActivity.FreeExchangeItem item = 1;
+  total_size += 1 * this->item_size();
+  for (int i = 0; i < this->item_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->item(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FreeExchange::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const FreeExchange* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FreeExchange*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void FreeExchange::MergeFrom(const FreeExchange& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  item_.MergeFrom(from.item_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void FreeExchange::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void FreeExchange::CopyFrom(const FreeExchange& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FreeExchange::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->item())) return false;
+  return true;
+}
+
+void FreeExchange::Swap(FreeExchange* other) {
+  if (other != this) {
+    item_.Swap(&other->item_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata FreeExchange::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = FreeExchange_descriptor_;
+  metadata.reflection = FreeExchange_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int Activities::kBuildsuitFieldNumber;
 const int Activities::kBlesspointFieldNumber;
 const int Activities::kDoubleWelfareFieldNumber;
@@ -17459,6 +18901,9 @@ const int Activities::kRotaryTableFieldNumber;
 const int Activities::kBatmantreasureFieldNumber;
 const int Activities::kSummerChargeFieldNumber;
 const int Activities::kSummerHolidaysFieldNumber;
+const int Activities::kChinadayavtivityFieldNumber;
+const int Activities::kPayoptionalactivityFieldNumber;
+const int Activities::kFreeExchgFieldNumber;
 #endif  // !_MSC_VER
 
 Activities::Activities()
@@ -17484,6 +18929,8 @@ void Activities::InitAsDefaultInstance() {
   batmantreasure_ = const_cast< ::ConfigActivity::BatmanTreasureCfg*>(&::ConfigActivity::BatmanTreasureCfg::default_instance());
   summer_charge_ = const_cast< ::ConfigActivity::SummerChargeRewardCfg*>(&::ConfigActivity::SummerChargeRewardCfg::default_instance());
   summer_holidays_ = const_cast< ::ConfigActivity::SummerHolidaysRewardCfg*>(&::ConfigActivity::SummerHolidaysRewardCfg::default_instance());
+  chinadayavtivity_ = const_cast< ::ConfigActivity::ChinaDayActivity*>(&::ConfigActivity::ChinaDayActivity::default_instance());
+  payoptionalactivity_ = const_cast< ::ConfigActivity::PayOptionalActivity*>(&::ConfigActivity::PayOptionalActivity::default_instance());
 }
 
 Activities::Activities(const Activities& from)
@@ -17511,6 +18958,8 @@ void Activities::SharedCtor() {
   batmantreasure_ = NULL;
   summer_charge_ = NULL;
   summer_holidays_ = NULL;
+  chinadayavtivity_ = NULL;
+  payoptionalactivity_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -17537,6 +18986,8 @@ void Activities::SharedDtor() {
     delete batmantreasure_;
     delete summer_charge_;
     delete summer_holidays_;
+    delete chinadayavtivity_;
+    delete payoptionalactivity_;
   }
 }
 
@@ -17604,7 +19055,7 @@ void Activities::Clear() {
       if (newyearactive_ != NULL) newyearactive_->::ConfigActivity::HongBao::Clear();
     }
   }
-  if (_has_bits_[24 / 32] & 251658240) {
+  if (_has_bits_[24 / 32] & 1056964608) {
     if (has_rotary_table()) {
       if (rotary_table_ != NULL) rotary_table_->::ConfigActivity::RotaryTableCrazyReward::Clear();
     }
@@ -17616,6 +19067,12 @@ void Activities::Clear() {
     }
     if (has_summer_holidays()) {
       if (summer_holidays_ != NULL) summer_holidays_->::ConfigActivity::SummerHolidaysRewardCfg::Clear();
+    }
+    if (has_chinadayavtivity()) {
+      if (chinadayavtivity_ != NULL) chinadayavtivity_->::ConfigActivity::ChinaDayActivity::Clear();
+    }
+    if (has_payoptionalactivity()) {
+      if (payoptionalactivity_ != NULL) payoptionalactivity_->::ConfigActivity::PayOptionalActivity::Clear();
     }
   }
   buildsuit_.Clear();
@@ -17630,6 +19087,7 @@ void Activities::Clear() {
   protectflag_.Clear();
   year_endgift_.Clear();
   hebdomadreward_.Clear();
+  free_exchg_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -18016,6 +19474,46 @@ bool Activities::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(234)) goto parse_chinadayavtivity;
+        break;
+      }
+
+      // required .ConfigActivity.ChinaDayActivity chinadayavtivity = 29;
+      case 29: {
+        if (tag == 234) {
+         parse_chinadayavtivity:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_chinadayavtivity()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(242)) goto parse_payoptionalactivity;
+        break;
+      }
+
+      // required .ConfigActivity.PayOptionalActivity payoptionalactivity = 30;
+      case 30: {
+        if (tag == 242) {
+         parse_payoptionalactivity:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_payoptionalactivity()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(250)) goto parse_free_exchg;
+        break;
+      }
+
+      // repeated .ConfigActivity.FreeExchange free_exchg = 31;
+      case 31: {
+        if (tag == 250) {
+         parse_free_exchg:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_free_exchg()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(250)) goto parse_free_exchg;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -18211,6 +19709,24 @@ void Activities::SerializeWithCachedSizes(
   if (has_summer_holidays()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       28, this->summer_holidays(), output);
+  }
+
+  // required .ConfigActivity.ChinaDayActivity chinadayavtivity = 29;
+  if (has_chinadayavtivity()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      29, this->chinadayavtivity(), output);
+  }
+
+  // required .ConfigActivity.PayOptionalActivity payoptionalactivity = 30;
+  if (has_payoptionalactivity()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      30, this->payoptionalactivity(), output);
+  }
+
+  // repeated .ConfigActivity.FreeExchange free_exchg = 31;
+  for (int i = 0; i < this->free_exchg_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      31, this->free_exchg(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -18419,6 +19935,27 @@ void Activities::SerializeWithCachedSizes(
         28, this->summer_holidays(), target);
   }
 
+  // required .ConfigActivity.ChinaDayActivity chinadayavtivity = 29;
+  if (has_chinadayavtivity()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        29, this->chinadayavtivity(), target);
+  }
+
+  // required .ConfigActivity.PayOptionalActivity payoptionalactivity = 30;
+  if (has_payoptionalactivity()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        30, this->payoptionalactivity(), target);
+  }
+
+  // repeated .ConfigActivity.FreeExchange free_exchg = 31;
+  for (int i = 0; i < this->free_exchg_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        31, this->free_exchg(i), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -18549,6 +20086,20 @@ int Activities::ByteSize() const {
           this->summer_holidays());
     }
 
+    // required .ConfigActivity.ChinaDayActivity chinadayavtivity = 29;
+    if (has_chinadayavtivity()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->chinadayavtivity());
+    }
+
+    // required .ConfigActivity.PayOptionalActivity payoptionalactivity = 30;
+    if (has_payoptionalactivity()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->payoptionalactivity());
+    }
+
   }
   // repeated .ConfigActivity.BuildSuitItem buildsuit = 1;
   total_size += 1 * this->buildsuit_size();
@@ -18646,6 +20197,14 @@ int Activities::ByteSize() const {
         this->hebdomadreward(i));
   }
 
+  // repeated .ConfigActivity.FreeExchange free_exchg = 31;
+  total_size += 2 * this->free_exchg_size();
+  for (int i = 0; i < this->free_exchg_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->free_exchg(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -18683,6 +20242,7 @@ void Activities::MergeFrom(const Activities& from) {
   protectflag_.MergeFrom(from.protectflag_);
   year_endgift_.MergeFrom(from.year_endgift_);
   hebdomadreward_.MergeFrom(from.hebdomadreward_);
+  free_exchg_.MergeFrom(from.free_exchg_);
   if (from._has_bits_[1 / 32] & (0xffu << (1 % 32))) {
     if (from.has_blesspoint()) {
       mutable_blesspoint()->::ConfigActivity::BlessPoint::MergeFrom(from.blesspoint());
@@ -18738,6 +20298,12 @@ void Activities::MergeFrom(const Activities& from) {
     if (from.has_summer_holidays()) {
       mutable_summer_holidays()->::ConfigActivity::SummerHolidaysRewardCfg::MergeFrom(from.summer_holidays());
     }
+    if (from.has_chinadayavtivity()) {
+      mutable_chinadayavtivity()->::ConfigActivity::ChinaDayActivity::MergeFrom(from.chinadayavtivity());
+    }
+    if (from.has_payoptionalactivity()) {
+      mutable_payoptionalactivity()->::ConfigActivity::PayOptionalActivity::MergeFrom(from.payoptionalactivity());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -18755,7 +20321,7 @@ void Activities::CopyFrom(const Activities& from) {
 }
 
 bool Activities::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0f7b84c6) != 0x0f7b84c6) return false;
+  if ((_has_bits_[0] & 0x3f7b84c6) != 0x3f7b84c6) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->buildsuit())) return false;
   if (has_blesspoint()) {
@@ -18817,6 +20383,13 @@ bool Activities::IsInitialized() const {
   if (has_summer_holidays()) {
     if (!this->summer_holidays().IsInitialized()) return false;
   }
+  if (has_chinadayavtivity()) {
+    if (!this->chinadayavtivity().IsInitialized()) return false;
+  }
+  if (has_payoptionalactivity()) {
+    if (!this->payoptionalactivity().IsInitialized()) return false;
+  }
+  if (!::google::protobuf::internal::AllAreInitialized(this->free_exchg())) return false;
   return true;
 }
 
@@ -18850,6 +20423,9 @@ void Activities::Swap(Activities* other) {
     std::swap(batmantreasure_, other->batmantreasure_);
     std::swap(summer_charge_, other->summer_charge_);
     std::swap(summer_holidays_, other->summer_holidays_);
+    std::swap(chinadayavtivity_, other->chinadayavtivity_);
+    std::swap(payoptionalactivity_, other->payoptionalactivity_);
+    free_exchg_.Swap(&other->free_exchg_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

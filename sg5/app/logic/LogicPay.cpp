@@ -852,7 +852,7 @@ int CLogicPay::SetRechargeRank(unsigned uid, int cash, Json::Value &user_flag)
 			}
 		}
 		int oat = allTotal - cash;
-		unsigned check[8] = {998,5888,28888,48888,88888,118888,288888,588888};
+		unsigned check[8] = {988,5888,28888,48888,88888,118888,288888,588888};
 		unsigned gift[8] = {31119,31120,31121,31122,31123,31124,31125,31126};
 		for(int i=0;i<8;++i)
 		{

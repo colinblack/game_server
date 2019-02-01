@@ -23,13 +23,14 @@ int CDataMVP::Init()
 
 	if(ret != R_ERR_NO_DATA)
 		m_data.Parse(*(MVP::MVP *)m_msg);
-	else
+
+	for(unsigned i=1;i<=MVP_RANK;++i)
 	{
-		for(unsigned i=1;i<=MVP_RANK;++i)
+		if(!m_data.user.count(i))
 			m_data.user[i].rank = i;
-		for(unsigned i=1; i <= MVP_RANK; ++i)
+		if(!m_data.player.count(i))
 			m_data.player[i].rank = i;
-		for(unsigned i=1; i <= MVP_RANK; ++i)
+		if(!m_data.fight.count(i))
 			m_data.fight[i].rank = i;
 	}
 
@@ -66,7 +67,7 @@ int CDataMVP::Sig(int sig)
 
 void CDataMVP::Daily()
 {
-	const unsigned sc[MVP_RANK] = {100, 85, 71, 58, 46, 35, 25, 17, 10, 5};
+	const unsigned sc[MVP_RANK] = {500,470,441,413,386,360,335,311,288,266,245,225,206,188,171,155,140,126,113,101,90,80,71,63,56,50,45,41,38,36};
 
 	map<unsigned, DataMVPUser> temp;
 	for(multimap<unsigned int, DataMVPUser>::iterator it=m_data.all.begin();it!=m_data.all.end();++it)
@@ -123,21 +124,60 @@ void CDataMVP::Reward()
 	{
 		++i;
 
-		unsigned c = 0;
+		unsigned c = 0, id = 0;
 		if(i == 1)
+		{
+			id = 10177;
 			c = 50;
+		}
 		else if(i <= 3)
+		{
+			id = 10177;
 			c = 30;
-		else
+		}
+		else if(i <= 10)
+		{
+			id = 10177;
 			c = 15;
+		}
+		else if(i <= 11)
+		{
+			id = 10196;
+			c = 30;
+		}
+		else if(i <= 13)
+		{
+			id = 10196;
+			c = 20;
+		}
+		else if(i <= 20)
+		{
+			id = 10196;
+			c = 15;
+		}
+		else if(i <= 21)
+		{
+			id = 10197;
+			c = 30;
+		}
+		else if(i <= 23)
+		{
+			id = 10197;
+			c = 20;
+		}
+		else
+		{
+			id = 10197;
+			c = 15;
+		}
 
-		eq.AddOneItem(it->second.uid, 10177, c, "MVPReward", res);
+		eq.AddOneItem(it->second.uid, id, c, "MVPReward", res);
 
 		update["ts"] = Time::GetGlobalTime();
 		update["s"] = "MVPReward";
 		update["r"] = i;
 		update["sc"] = it->second.rank;
-		update["id"] = 10177;
+		update["id"] = id;
 		update["c"] = c;
 		logicUpdates.AddUpdates(it->second.uid, update, true);
 

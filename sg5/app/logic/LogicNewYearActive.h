@@ -18,6 +18,7 @@ public:
 	virtual ~CLogicNewYearActive();
 
 	int Visit(unsigned uid, unsigned userid, Json::Value &result);
+	int BirdBridgeReward(unsigned uid, unsigned type, Json::Value &equip, unsigned ats);
 	int GetInfo(unsigned uid, unsigned userid, Json::Value &result);
 	int Refresh(unsigned uid, Json::Value &result);
 private:

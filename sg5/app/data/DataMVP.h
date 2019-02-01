@@ -11,7 +11,7 @@
 #include "Kernel.h"
 #include "DataBase.h"
 
-#define MVP_RANK 10
+#define MVP_RANK 30
 #define IS_VALID_MVP_RANK(i) (i>=1 && i<=MVP_RANK)
 
 /**********************************************************/

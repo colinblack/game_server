@@ -62,7 +62,23 @@ const char* all_activity_table[] = {
 	   CONFIG_BEAUTY, //美人献计
 	   CONFIG_INVESTMENT, //充值投资
 	   CONFIG_VICKY_NNA, //vicky懒得给我说名字的活动
+	   CONFIG_BIRDBRIDGE, //七夕相会
 //autolable2
+CONFIG_yuandan2018,
+CONFIG_yearend2018,
+CONFIG_winter2018,
+CONFIG_double11_2018,
+	   CONFIG_mid_aug_hao,
+	   CONFIG_mid_aug_reu,
+	   CONFIG_water_taotie,
+	   CONFIG_water_qilin,
+	   CONFIG_water_pheonix,
+	   CONFIG_vicky_nnom,
+	   CONFIG_CHINADAY_WELCOME,
+	   CONFIG_GUO_QING_KUANG_HUAN,
+	   CONFIG_OPTIONAL_PAY,
+	   CONFIG_FREE_EXCHG,//兑换自选
+	   CONFIG_SHENGDAN_2018,
        NULL
 };
 

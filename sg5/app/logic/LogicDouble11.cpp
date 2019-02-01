@@ -9,10 +9,10 @@
 #include "LogicDouble11.h"
 
 
-int CLogicDouble11::GetRemainCount(Json::Value &rcnt)
+int CLogicDouble11::GetRemainCount(Json::Value &rcnt, bool allserver)
 {
 	int ret = 0;
-	CDataDouble11 *pdata = CDataDouble11::getCDataDouble11();
+	CDataDouble11 *pdata = CDataDouble11::getCDataDouble11(allserver);
 
 	if (NULL == pdata)
 	{
@@ -30,15 +30,15 @@ int CLogicDouble11::GetRemainCount(Json::Value &rcnt)
 }
 
 
-int CLogicDouble11::BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop, bool &nocnt)
+int CLogicDouble11::BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop, bool &nocnt, Json::Value &rcnt, bool allserver)
 {
-	if (type >= XMLDOUBLE_TYPE_NUM || id >= XMLDOUBLE_PROP_NUM)
+	if (type >= XMLDOUBLE_TYPE_NUM_2018 || id >= XMLDOUBLE_PROP_NUM)
 	{
 		return R_ERR_PARAM;
 	}
 
 	int ret = 0;
-	CDataDouble11 *pdata = CDataDouble11::getCDataDouble11();
+	CDataDouble11 *pdata = CDataDouble11::getCDataDouble11(allserver);
 
 	if (NULL == pdata)
 	{
@@ -46,7 +46,7 @@ int CLogicDouble11::BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop
 		return R_ERR_DB;
 	}
 
-	ret = pdata->BuyOneProp(type, id, prop, nocnt);
+	ret = pdata->BuyOneProp(type, id, prop, nocnt, rcnt);
 	if (ret)
 	{
 		return ret;

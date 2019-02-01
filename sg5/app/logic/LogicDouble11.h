@@ -16,8 +16,8 @@ class CLogicDouble11
 {
 public:
 
-	int GetRemainCount(Json::Value &rcnt);
-	int BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop, bool &nocnt);
+	int GetRemainCount(Json::Value &rcnt, bool allserver);
+	int BuyOneProp(unsigned type, unsigned id, XMLDouble11Prop &prop, bool &nocnt, Json::Value &rcnt, bool allserver);
 
 };
 

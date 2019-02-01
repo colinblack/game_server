@@ -238,6 +238,12 @@ public:
 	//获取幸运好礼配置
 	const ConfigActivity::LuckyGift & GetLuckyGiftCfg() const {return activity_cfg.lucky_gift();}
 
+	//获取每日充值自选
+	const ConfigActivity::PayOptionalActivity & GetPayOptionalActivityCfg() const {return activity_cfg.payoptionalactivity();}
+
+	//获取喜迎国庆配置
+	const ConfigActivity::ChinaDayActivity & GetChinaDayActivityCfg() const {return activity_cfg.chinadayavtivity();}
+
 	//获取元旦庆典配置
 	const ConfigActivity::NewYearActivity & GetNewYearActivityCfg() const {return activity_cfg.newyearactivity();}
 
@@ -265,7 +271,7 @@ public:
 	const ConfigActivity::HongBao & GetHongBao() const {return activity_cfg.newyearactive();}
 
 private:
-	const ConfigActivity::Activities & activity_cfg;
+	const ConfigActivity::Activities &activity_cfg;
 };
 
 //功能配置的整合

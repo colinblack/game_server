@@ -987,6 +987,13 @@ class BraveNewWorldPoint : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 defts() const;
   inline void set_defts(::google::protobuf::uint32 value);
 
+  // optional uint32 sdef = 14;
+  inline bool has_sdef() const;
+  inline void clear_sdef();
+  static const int kSdefFieldNumber = 14;
+  inline ::google::protobuf::uint32 sdef() const;
+  inline void set_sdef(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:BraveNewWorld.BraveNewWorldPoint)
  private:
   inline void set_has_x();
@@ -1015,6 +1022,8 @@ class BraveNewWorldPoint : public ::google::protobuf::Message {
   inline void clear_has_mcount();
   inline void set_has_defts();
   inline void clear_has_defts();
+  inline void set_has_sdef();
+  inline void clear_has_sdef();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1033,6 +1042,7 @@ class BraveNewWorldPoint : public ::google::protobuf::Message {
   ::google::protobuf::uint32 mtype_;
   ::google::protobuf::uint32 mcount_;
   ::google::protobuf::uint32 defts_;
+  ::google::protobuf::uint32 sdef_;
   friend void  protobuf_AddDesc_BraveNewWorld_2eproto();
   friend void protobuf_AssignDesc_BraveNewWorld_2eproto();
   friend void protobuf_ShutdownFile_BraveNewWorld_2eproto();
@@ -2530,6 +2540,30 @@ inline void BraveNewWorldPoint::set_defts(::google::protobuf::uint32 value) {
   set_has_defts();
   defts_ = value;
   // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldPoint.defts)
+}
+
+// optional uint32 sdef = 14;
+inline bool BraveNewWorldPoint::has_sdef() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void BraveNewWorldPoint::set_has_sdef() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void BraveNewWorldPoint::clear_has_sdef() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void BraveNewWorldPoint::clear_sdef() {
+  sdef_ = 0u;
+  clear_has_sdef();
+}
+inline ::google::protobuf::uint32 BraveNewWorldPoint::sdef() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldPoint.sdef)
+  return sdef_;
+}
+inline void BraveNewWorldPoint::set_sdef(::google::protobuf::uint32 value) {
+  set_has_sdef();
+  sdef_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldPoint.sdef)
 }
 
 // -------------------------------------------------------------------

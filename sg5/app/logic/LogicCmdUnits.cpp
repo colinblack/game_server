@@ -17,12 +17,19 @@ PreSummerUnit::PreSummerUnit(unsigned uid, unsigned type)
 	, m_bSave(false)
 {
 	m_type = type;
-	if(m_type)
+	if(m_type == 1)
 	{
 		m_bts = CONFIG_PRE_SUMMER2_BEGIN_TS;
 		m_ets = CONFIG_PRE_SUMMER2_END_TS;
 		m_ver = CONFIG_PRE_SUMMER2_VERSION;
 		m_nat = NAT_PRE_SUMMER2;
+	}
+	else if(m_type == 2)
+	{
+		m_bts = CONFIG_PRE_SUMMER3_BEGIN_TS;
+		m_ets = CONFIG_PRE_SUMMER3_END_TS;
+		m_ver = CONFIG_PRE_SUMMER3_VERSION;
+		m_nat = NAT_PRE_SUMMER3;
 	}
 	else
 	{
@@ -4883,7 +4890,7 @@ int PayOptionalUnit::CheckVersion(Json::Value & result)
 	return 0;
 }
 
-void PayOptionalUnit::GetOptionalReward(UserWrap& userWrap, Json::Value &data, Json::Value & result)
+void PayOptionalUnit::GetOptionalReward(UserWrap& userWrap, unsigned rewardcnt,Json::Value &data, Json::Value & result)
 {
 	//判断版本号是否发生改变
 	CheckVersion(result);
@@ -4941,7 +4948,7 @@ void PayOptionalUnit::GetOptionalReward(UserWrap& userWrap, Json::Value &data, J
 	{
 		ItemAdd item;
 		item.eqid = vctItems[i].equip.id;
-		item.count = vctItems[i].equip.cnt;
+		item.count = vctItems[i].equip.cnt * rewardcnt;
 		item.reason = "pay_optional";
 
 		vctEquips.push_back(item);
@@ -4958,7 +4965,7 @@ void PayOptionalUnit::GetOptionalReward(UserWrap& userWrap, Json::Value &data, J
 		throw std::runtime_error("add_equipitems_failed");
 	}
 
-	m_jsonData["a"] = m_jsonData["a"].asUInt() + 1;
+	m_jsonData["a"] = m_jsonData["a"].asUInt() + rewardcnt;
 	Save();
 
 	result["newAct"] = m_jsonData;
@@ -6078,9 +6085,23 @@ void SoldierUnit::StartResearch(UserWrap& userWrap, string sid, unsigned stype, 
 	}
 
 	//判断研究院等级是否足够
-	if (rlevel < soldieritem.locklevel)
+	Json::Value tech;
+	userWrap.GetUserTech(tech);
+	int sMaxLv = 0;
+	Json::GetInt(tech, "sMaxLv", sMaxLv);
+
+	Json::Value bd;
+	CLogicBuilding logicBd;
+	ret = logicBd.Get(userWrap.Id(), rlevel, 0, true, bd);
+	if(ret)
+		throw std::runtime_error("get_bd_error");
+	int l = 0, t = 0;
+	Json::GetInt(bd, "l", l);
+	Json::GetInt(bd, "t", t);
+
+	if (t != 22 || sMaxLv < soldieritem.locklevel || l < soldieritem.locklevel)
 	{
-		error_log("[StartResearch] research level not enough. now=%u, should=%hhu", rlevel, soldieritem.locklevel);
+		error_log("[StartResearch] research level not enough. now=%u, should=%hhu", min(l, sMaxLv), soldieritem.locklevel);
 		throw std::runtime_error("research_level_not_enough");
 	}
 
@@ -6217,7 +6238,7 @@ void SoldierUnit::EndResearch(UserWrap& userWrap, string sid, unsigned etype, Js
 
 	lefttime -= diff_time;
 
-	if (lefttime < 0)
+	if (lefttime <= 1)
 	{
 		lefttime = 0;
 	}
@@ -6394,7 +6415,233 @@ void SkillUnit::VerifyTrainQueue(Json::Value & skillq, unsigned sectime, int & q
 	}
 }
 
-void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid, Json::Value equds, unsigned sectime, unsigned costpro, Json::Value &result)
+void SkillUnit::CommderSkilLearn(UserWrap& userWrap, unsigned heroud, unsigned equd,Json::Value &result)
+{
+	int ret = R_SUCCESS;
+
+	//判断英雄等级是否足够。
+	CLogicHero logicHero;
+	Json::Value herodata;
+
+	ret = logicHero.Get(m_nUid, heroud, herodata);
+	if(ret)
+	{
+		throw std::runtime_error("get_hero_data_error");
+	}
+
+	if(herodata["l"].asInt() < 50 || herodata["l"].asInt() > 120)
+	{
+		throw std::runtime_error("hero_lv_error");
+	}
+
+	//判断技能书是否够
+	CLogicEquipment equipment;
+	Json::Value equipdata;
+
+	ret = equipment.Get(m_nUid, equd, equipdata);
+	if(ret)
+	{
+		throw std::runtime_error("get_equip_error");
+	}
+
+	if(equipdata["count"].asInt() < 1 || equipdata["status"] != 0)
+	{
+		throw std::runtime_error("equip_count_error");
+	}
+
+	//修改英雄的争霸技能。
+	if(herodata.isMember("zbskud"))
+	{
+		herodata["zbskud"] = equd;
+	}
+	else
+	{
+		Json::Value skill;
+		skill["zbskud"] = equd;
+		herodata.append(skill);
+	}
+	ret = logicHero.Chg(m_nUid, heroud, herodata);
+	if (ret)
+	{
+		error_log("[BraveSkillTrain] update hero failed. uid=%u, heroud=%u", m_nUid, heroud);
+		throw std::runtime_error("update_hero_error");
+	}
+
+	//修改技能书属性
+	equipdata["status"] = 1;
+	equipment.Chg(m_nUid,equd,equipdata);
+
+	result.append(herodata);
+	result.append(equipdata);
+}
+
+void SkillUnit::PotianSkilLearn(UserWrap& userWrap, unsigned heroud,string skid,Json::Value &m_data,Json::Value &result)
+{
+	int ret = R_SUCCESS;
+
+		CLogicHero logicHero;
+		Json::Value herodata;
+
+		ret = logicHero.Get(m_nUid, heroud, herodata);
+		if (ret)
+		{
+			throw std::runtime_error("get_hero_data_error");
+		}
+
+		//检查技能版本（优化）
+		ret = CheakSkillVer(herodata);
+		if(!ret)
+		{
+			error_log("[PotianSkillTrain] cheak_skill_error failed. uid=%u", m_nUid);
+			throw std::runtime_error("cheak_skill_error!");
+		}
+
+		//先扣道具
+		CLogicEquipment equipment;
+		Json::Value equipdata;
+
+		for(unsigned i = 0; i < m_data["equds"].size(); ++i)
+		{
+					unsigned equd = m_data["equds"][i][0u].asUInt();
+					unsigned count = m_data["equds"][i][1u].asUInt();
+
+					ret = equipment.Get(m_nUid, equd, equipdata);
+
+					if (ret)
+					{
+						throw std::runtime_error("get_equip_error");
+					}
+
+					//不做校验，只要消耗道具即可
+					UseEquips(equipdata["id"].asUInt(), equd, count, "SKILL_TRAIN");  //消耗的技能书=level+1
+		}
+
+		//递归查询当前技能所在的index
+		bool isLock = true;  //技能是否被锁]
+		int level = 0;
+		unsigned index = 0;
+
+		for (unsigned i = 0; i < herodata["tskill"].size(); ++i)
+		{
+			if (herodata["tskill"][i][0u].asInt() == atoi(skid.c_str()))  //技能存在，表示技能已经解锁
+			{
+				isLock = false;
+				index = i;
+				level = herodata["tskill"][i][1u].asInt();   //当前技能等级
+			}
+		}
+
+		if (isLock)   //被锁的，以前没有
+		{
+			Json::Value skill(Json::arrayValue);
+			skill[0u] = atoi(skid.c_str());
+			skill[1u] = 1;
+			herodata["tskill"].append(skill);
+			//herodata["upts"] = Time::GetGlobalTime();
+		}else{
+				if(level != 0){
+					herodata["tskill"][index][1u] = herodata["tskill"][index][1u].asInt()+1;
+				}
+				else{
+						error_log("[PotianSkillTrain]  find tskill failed. uid=%u, heroud=%u", m_nUid, heroud);
+						throw std::runtime_error("find tskill failed");
+				}
+		}
+		ret = logicHero.Chg(m_nUid, heroud, herodata);
+		if (ret)
+		{
+			error_log("[PotianSkillTrain] update hero failed. uid=%u, heroud=%u", m_nUid, heroud);
+			throw std::runtime_error("update_hero_error");
+		}
+		result["tskill"] = herodata["tskill"];
+		return ;
+}
+
+
+int SkillUnit::CheakSkillVer(Json::Value &herodata)
+{
+	if(!herodata.isMember("tskill"))
+		herodata["tskill"].resize(0);
+
+	if(!herodata["tskill"].isArray())
+		return 0;
+
+	if(herodata["tskill"].size() == 0)
+		return 1;
+
+	//判断第一个技能是否为数组。
+	if(herodata["tskill"][0u].isArray())
+	{
+		//遍历查询技能id是否有5006-50013中的，有的话移除。
+		bool flag = false;
+		for (int i = 0; i < herodata["tskill"].size(); i++) {
+			int tmp_id = herodata["tskill"][i][0u].asInt();
+			if (tmp_id >= 50006 && tmp_id <= 50013) {
+				flag = true;
+				break;
+			}
+		}
+		if(flag)	{
+			Json::Value t;
+			t.resize(0);
+			for (int i = 0; i < herodata["tskill"].size(); i++) {
+				int tmp_id = herodata["tskill"][i][0u].asInt();
+				if (tmp_id >= 50006 && tmp_id <= 50013)
+					continue;
+				t.append(herodata["tskill"][i]);
+			}
+			herodata["tskill"] = t;
+		}
+		return 1;
+	}
+	//判断第一个技能是否为对象
+	if(herodata["tskill"][0u].isObject())
+	{
+		Json::Value tskill(Json::arrayValue);
+		//重置及技能队列
+		for(int i = 0;i < herodata["tskill"].size();++i)
+		{
+			int id = 0,lv = 0;
+			Json::Value array(Json::arrayValue);
+			if(!herodata["tskill"][i].isMember("id"))
+				return 0;
+			id = CTrans::STOI(herodata["tskill"][i]["id"].asString());
+			if(!herodata["tskill"][i].isMember("l"))
+				return 0;
+			lv =  herodata["tskill"][i]["l"].asInt();
+			array[0u] = id;
+			array[1u] = lv;
+			tskill[i] = array;
+		}
+		herodata.removeMember("tskill");
+		herodata["tskill"] = tskill;
+
+		//遍历查询技能id是否有5006-50013中的，有的话移除。
+		bool flag = false;
+		for (int i = 0; i < herodata["tskill"].size(); i++) {
+			int tmp_id = herodata["tskill"][i][0u].asInt();
+			if (tmp_id >= 50006 && tmp_id <= 50013) {
+				flag = true;
+				break;
+			}
+		}
+		if(flag)	{
+			Json::Value t;
+			t.resize(0);
+			for (int i = 0; i < herodata["tskill"].size(); i++) {
+				int tmp_id = herodata["tskill"][i][0u].asInt();
+				if (tmp_id >= 50006 && tmp_id <= 50013)
+					continue;
+				t.append(herodata["tskill"][i]);
+			}
+			herodata["tskill"] = t;
+		}
+		return 1;
+	}
+	return 0;
+}
+
+void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid, Json::Value m_data, unsigned sectime, unsigned costpro, Json::Value &result)
 {
 	int ret = R_SUCCESS;
 
@@ -6408,6 +6655,14 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 		throw std::runtime_error("get_hero_data_error");
 	}
 
+	//检查技能版本（优化）
+	ret = CheakSkillVer(herodata);
+	if(!ret)
+	{
+		error_log("[StartSkillTrain] cheak_skill_error failed. uid=%u", m_nUid);
+		throw std::runtime_error("cheak_skill_error!");
+	}
+
 	//递归查询当前技能所在的index
 	bool isLock = true;  //技能是否被锁]
 	int level = 0;
@@ -6415,11 +6670,11 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 
 	for (unsigned i = 0; i < herodata["tskill"].size(); ++i)
 	{
-		if (herodata["tskill"][i]["id"].asString() == skid)  //技能存在，表示技能已经解锁
+		if (herodata["tskill"][i][0u].asInt() == atoi(skid.c_str()))  //技能存在，表示技能已经解锁
 		{
 			isLock = false;
 			index = i;
-			level = herodata["tskill"][i]["l"].asInt();   //当前技能等级
+			level = herodata["tskill"][i][1u].asInt();   //当前技能等级
 		}
 	}
 
@@ -6437,10 +6692,10 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 	CLogicEquipment equipment;
 	Json::Value equipdata;
 
-	for(unsigned i = 0; i < equds.size(); ++i)
+	for(unsigned i = 0; i < m_data["equds"].size(); ++i)
 	{
-		unsigned equd = equds[i][0u].asUInt();
-		unsigned count = equds[i][1u].asUInt();
+		unsigned equd = m_data["equds"][i][0u].asUInt();
+		unsigned count = m_data["equds"][i][1u].asUInt();
 
 		ret = equipment.Get(m_nUid, equd, equipdata);
 
@@ -6449,8 +6704,12 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 			throw std::runtime_error("get_equip_error");
 		}
 
+		char tmp_str[32] = {0};
+		snprintf(tmp_str, sizeof(tmp_str), "%d", heroud);
+		string hud_str = tmp_str;
+		string reasons = "START_SKILL_TRAIN:  /*hud = " +  hud_str + " sid = " + skid + "*/";
 		//不做校验，只要消耗道具即可
-		UseEquips(equipdata["id"].asUInt(), equd, count, "SKILL_TRAIN");  //消耗的技能书=level+1
+		UseEquips(equipdata["id"].asUInt(), equd, count, reasons);  //消耗的技能书=level+1
 	}
 
 	//消耗威望
@@ -6460,9 +6719,9 @@ void SkillUnit::StartSkillTrain(UserWrap& userWrap, unsigned heroud, string skid
 
 	if (isLock)   //被锁的，则是立即完成，不需要放入技能训练队列
 	{
-		Json::Value skill;
-		skill["id"] = skid;
-		skill["l"] = 1;
+		Json::Value skill(Json::arrayValue);
+		skill[0u] = atoi(skid.c_str());
+		skill[1u] = 1;
 
 		herodata["tskill"].append(skill);
 		//herodata["upts"] = Time::GetGlobalTime();
@@ -6531,7 +6790,7 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 {
 	int ret = R_SUCCESS;
 
-	if (END_TRAIN_BY_CASH != type && END_TRAIN_BY_COIN != type)
+	if (END_TRAIN_BY_CASH != type && END_TRAIN_BY_COIN != type &&END_TRAIN_BY_TIME !=type)
 	{
 		error_log("[EndSkillTrain] type's value error");
 		throw std::runtime_error("param_error");
@@ -6566,6 +6825,14 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 		throw std::runtime_error("get_hero_data_error");
 	}
 
+	//检查技能版本（优化）
+	ret = CheakSkillVer(herodata);
+	if(!ret)
+	{
+		error_log("[EndSkillTrain] cheak_skill_error failed. uid=%u", m_nUid);
+		throw std::runtime_error("cheak_skill_error!");
+	}
+
 	int lefttime = 0;
 	Json::GetInt(herodata, "scd", lefttime);
 
@@ -6586,9 +6853,9 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 	}
 
 	int pay = 0;
-	unsigned viplevel = userWrap.VipLevel();
-	pay = GetSkillTimeCost(lefttime, viplevel);
-
+	double p1 = pow(lefttime/static_cast<double>(60), 1.1);
+	double p2 = pow(lefttime/static_cast<double>(3600), 1.1);
+	pay =  ceil(p1 - p2);
 	int cash = 0;
 	int coin = 0;
 
@@ -6596,9 +6863,12 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 	{
 		cash = pay;
 	}
-	else
+	else if(END_TRAIN_BY_COIN == type)
 	{
 		coin = pay;
+	}
+	else{
+		pay = 0;
 	}
 
 	if (pay > 0)
@@ -6612,7 +6882,7 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 	//完成技能的升级
 	for (unsigned i = 0; i < herodata["tskill"].size(); ++i)
 	{
-		if (herodata["tskill"][i]["id"].asString() == skid)  //技能存在，表示技能已经解锁
+		if (herodata["tskill"][i][0u].asInt() == atoi(skid.c_str()))  //技能存在，表示技能已经解锁
 		{
 			index = i;
 			isLook = false;
@@ -6621,11 +6891,11 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 
 	if (isLook)
 	{
-		error_log("[EndSkillTrain] skill is locked. uid=%u, skid=%s", m_nUid, skid.c_str());
+		error_log("[EndSkillTrain] skill is locked. uid=%u, skid=%d", m_nUid, skid);
 		throw std::runtime_error("skill_is_locked");
 	}
 
-	herodata["tskill"][index]["l"] = herodata["tskill"][index]["l"].asInt() + 1;
+	herodata["tskill"][index][1u] = herodata["tskill"][index][1u].asInt() + 1;
 
 	ret = logicHero.Chg(m_nUid, heroud, herodata);
 
@@ -9049,7 +9319,7 @@ void ActivityInvestment::Reset() {
 }
 int ActivityInvestment::SelectCount(UserWrap& user, const BaseCmdParams& params, Json::Value& result) {
 	unsigned count = params.ValueAsUInt("count");
-	if (status_cfg_.IsLastDay()) {
+	if (!IsValidActTime()) {
 		throw std::runtime_error("select_count_over");
 	}
 	unsigned cash = user_.GetRechargePoint(status_cfg_);
@@ -9073,7 +9343,7 @@ int ActivityInvestment::SelectCount(UserWrap& user, const BaseCmdParams& params,
 	return 0;
 }
 int ActivityInvestment::SelectOption(UserWrap& user, const BaseCmdParams& params, Json::Value& result) {
-	if (status_cfg_.IsLastDay()) {
+	if (!IsValidActTime()) {
 		throw std::runtime_error("select_option_over");
 	}
 	if (m_jsonData["a"].asUInt() == 0) {
@@ -9119,7 +9389,7 @@ int ActivityInvestment::Reward(UserWrap& user, const BaseCmdParams& params, Json
 		error_log("GetInvestmentReward error uid=%u id=%u", user.Id(), id);
 		throw std::runtime_error("cfg_id_error");
 	}
-	unsigned cash = user.GetRechargePoint(status_cfg_.StartTS(), status_cfg_.EndTS() - 86400);
+	unsigned cash = user.GetRechargePoint(status_cfg_);
 	unsigned cost = m_jsonData["c"].asUInt() * e_ACT_INVESTMENT_PRICE;
 	//unsigned hold = cash > cost ? cash - cost : 0;
 	unsigned hold = m_jsonData["d"].asUInt() + cash;
@@ -9149,11 +9419,14 @@ int ActivityInvestment::Get(Json::Value& result) {
 	result["newAct"] = m_jsonData;
 	return 0;
 }
+bool ActivityInvestment::IsValidActTime() {
+	return Time::GetGlobalTime() + 14400 < status_cfg_.EndTS();
+}
 int ActivityInvestment::AutoRate() {
-	if (!status_cfg_.IsLastDay()) {
+	if (IsValidActTime()) {
 		return 0;
 	}
-	unsigned cash = user_.GetRechargePoint(status_cfg_.StartTS(), status_cfg_.EndTS() - 86400);
+	unsigned cash = user_.GetRechargePoint(status_cfg_);
 	unsigned cost = m_jsonData["c"].asUInt() * e_ACT_INVESTMENT_PRICE;
 	unsigned hold = cash > cost ? cash - cost : 0;
 	if (hold < e_ACT_INVESTMENT_PRICE) {
@@ -9176,3 +9449,237 @@ int ActivityInvestment::AutoRate() {
 	Save();
 	return 0;
 }
+ActivityBirdBridge::ActivityBirdBridge(const UserWrap& user)
+	: SecincActivityUnit(user.Id(), CONFIG_BIRDBRIDGE, NAT_ACTIVITY_BIRDBRIDGE) {
+	Init();
+	_left_code.clear();
+	_right_code.clear();
+	_center_code.clear();
+}
+void ActivityBirdBridge::Reset() {
+	m_jsonData["r"] = Json::Value(Json::arrayValue);
+	m_jsonData["l"] = Json::Value(Json::arrayValue);
+	for (int i = 0; i < XML_BIRD_BRIDGE_ITEM_NUM; ++i) {
+		m_jsonData["r"][i] = 0;
+		m_jsonData["l"][i] = 0;
+	}
+	m_jsonData["c"] = 0;
+}
+int ActivityBirdBridge::DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result) {
+	unsigned type = params.ValueAsUInt("type");
+	unsigned id = params.ValueAsUInt("id");
+	unsigned all = params.ValueAsUInt("yijian");
+
+	int ret = 0;
+	if (all == 0 && type > ACT_BIRD_BRIDGE_REWARD_CENTER) {
+		LOGIC_ERROR_RETURN_MSG("type_error");
+	}
+	unsigned totalCharge = user.GetRechargePoint(status_cfg_);
+	Json::Value equipLeft;
+	Json::Value equipRigth;
+	unsigned equipLeftCount = 0;
+	unsigned equipRigthCount = 0;
+	CLogicEquipment logicEquipment;
+	ret = GetEquipById(ACT_BIRD_BRIDGE_LEFT, equipLeft);
+	if (0 == ret) {
+		Json::GetUInt(equipLeft, "count", equipLeftCount);
+	}
+	ret = GetEquipById(ACT_BIRD_BRIDGE_RIGHT, equipRigth);
+	if (0 == ret) {
+		Json::GetUInt(equipRigth, "count", equipRigthCount);
+	}
+	vector<GiftEquipItem> reward;
+	if (all == 1) {
+		ret = RewardEdge(m_jsonData["l"], ACT_BIRD_BRIDGE_REWARD_LEFT, 0xFFFFFFFF, totalCharge + equipLeftCount, reward);
+		if (ret) {
+			return ret;
+		}
+		ret = RewardEdge(m_jsonData["r"], ACT_BIRD_BRIDGE_REWARD_RIGHT, 0xFFFFFFFF, totalCharge + equipRigthCount, reward);
+		if (ret) {
+			return ret;
+		}
+		ret = RewardCenter(totalCharge + equipLeftCount, totalCharge + equipRigthCount, reward);
+		if (ret) {
+			return ret;
+		}
+	} else {
+		switch (type) {
+		case ACT_BIRD_BRIDGE_REWARD_LEFT:
+			ret = RewardEdge(m_jsonData["l"], ACT_BIRD_BRIDGE_REWARD_LEFT, id, totalCharge + equipLeftCount, reward);
+			break;
+		case ACT_BIRD_BRIDGE_REWARD_RIGHT:
+			ret = RewardEdge(m_jsonData["r"], ACT_BIRD_BRIDGE_REWARD_RIGHT, id, totalCharge + equipRigthCount, reward);
+			break;
+		case ACT_BIRD_BRIDGE_REWARD_CENTER:
+			ret = RewardCenter(totalCharge + equipLeftCount, totalCharge + equipRigthCount, reward);
+			break;
+		}
+		if (ret != 0) {
+			error_log("uid=%u,type=%u,id=%u", user.Id(), type, id);
+			return ret;
+		}
+	}
+
+	result["newAct"] = m_jsonData;
+
+	string code = "birdbridge*" + _left_code + "*" + _right_code + "*" + _center_code;
+	if (reward.empty()) {
+		error_log("reward empty uid=%u, code=%s", user.Id(), code.c_str());
+		return 0;
+	}
+
+	Save();
+
+	AddGiftEquips(reward, code, result);
+
+	return 0;
+}
+int ActivityBirdBridge::RewardCenter(unsigned pointLeft, unsigned pointRight, vector<GiftEquipItem> &reward) {
+	int ret = 0;
+	int rewardFlag = 0;
+	Json::GetInt(m_jsonData, "c", rewardFlag);
+	if (rewardFlag != 0) {
+		error_log("reward flag error uid=%u", m_nUid);
+		return 0;
+	}
+	CDataXML *pdata = CDataXML::GetCDataXML();
+	if (pdata == NULL) {
+		throw std::runtime_error("xml_error");
+	}
+	XMLBirdBridgeItem cfg;
+	ret = pdata->GetBirdBridgeItem(ACT_BIRD_BRIDGE_REWARD_CENTER, 0, cfg);
+	if (0 != ret) {
+		error_log("GetBirdBridgeItem error uid=%u", m_nUid);
+		return 0;
+	}
+	if (pointLeft < cfg.require || pointRight < cfg.require) {
+		error_log("require error uid=%u left=%u rigth=%u need=%u", m_nUid, pointLeft, pointRight, cfg.require);
+		return 0;
+	}
+	m_jsonData["c"] = 1;
+
+	for (int j = 0; j < XML_BIRD_BRIDGE_REWARD_NUM; ++j) {
+		reward.push_back(cfg.reward[j]);
+	}
+
+	_center_code = "1";
+
+	return 0;
+}
+int ActivityBirdBridge::RewardEdge(Json::Value &act, unsigned type, unsigned id, unsigned point, vector<GiftEquipItem> &reward) {
+	int ret = 0;
+	vector<unsigned> ids;
+	ids.clear();
+	if (id == 0xFFFFFFFF) {
+		for (size_t i = 0; i < act.size(); ++i) {
+			if (act[i].asUInt() == 0) {
+				ids.push_back(i);
+			}
+		}
+	} else {
+		if (act[id].asUInt() == 0) {
+			ids.push_back(id);
+		}
+	}
+	string *code = &_left_code;
+	if (type == ACT_BIRD_BRIDGE_REWARD_RIGHT) {
+		code = &_right_code;
+	}
+	CDataXML *pdata = CDataXML::GetCDataXML();
+	if (pdata == NULL) {
+		throw std::runtime_error("xml_error");
+	}
+	for (vector<unsigned>::iterator itr = ids.begin(); itr != ids.end(); ++itr) {
+		XMLBirdBridgeItem cfg;
+		ret = pdata->GetBirdBridgeItem(type, *itr + 1, cfg);
+		if (0 != ret) {
+			error_log("GetBirdBridgeItem error uid=%u type=%u id=%u ret=%d", m_nUid, type, *itr, ret);
+			continue;
+		}
+		if (point < cfg.require) {
+			error_log("require error uid=%u type=%u id=%u hold=%u need=%u", m_nUid, type, *itr, point, cfg.require);
+			continue;
+		}
+		for (int j = 0; j < XML_BIRD_BRIDGE_REWARD_NUM; ++j) {
+			reward.push_back(cfg.reward[j]);
+		}
+		if (!code->empty()) {
+			code->append("_");
+		}
+		code->append(CTrans::ITOS(*itr + 1));
+		act[*itr] = 1;
+	}
+
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+FreeExchangeUnit::FreeExchangeUnit(const UserWrap& user)
+	: SecincActivityUnit(
+		  user.Id()
+		, CONFIG_FREE_EXCHG
+		, NAT_FREE_EXCHG)
+{
+	Init();
+}
+void FreeExchangeUnit::Reset()
+{
+	m_jsonData["u"] = 0;
+	m_jsonData["c"].resize(0);
+	for(int i=0;i<4;i++)
+		m_jsonData["c"].append(0);
+}
+int FreeExchangeUnit::DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result)
+{
+	unsigned const cost[] = {500, 30000, 60000, 100000};
+	unsigned const times[] = {40, 1, 1, 1};
+
+	unsigned index = params.ValueAsInt("index");
+	vector<unsigned> select_v;
+	params.ValueAsArray("select", select_v);
+	unsigned count = params.ValueAsInt("count");
+
+	if(index >= 4)
+		throw std::runtime_error("free_exchg_index");
+	if(count == 0)
+		throw std::runtime_error("free_exchg_count");
+	set<unsigned> select;
+	for(vector<unsigned>::iterator it=select_v.begin();it!=select_v.end();++it)
+		select.insert(*it);
+	if(index == 0)
+	{
+		if(select.size() != 4)
+			throw std::runtime_error("free_exchg_select");
+	}
+	else
+	{
+		if(select.size() != 5)
+			throw std::runtime_error("free_exchg_select");
+		set<unsigned>::iterator it=select.begin();
+		++it;
+		if(*it < 3)
+			throw std::runtime_error("free_exchg_select");
+	}
+
+	if(cost[index] * count + m_jsonData["u"].asUInt() > user.GetRechargePoint(status_cfg_))
+		throw std::runtime_error("free_exchg_cost");
+	m_jsonData["u"] = cost[index] * count + m_jsonData["u"].asUInt();
+
+	if(count + m_jsonData["c"][index].asUInt() > times[index])
+		throw std::runtime_error("free_exchg_times");
+	m_jsonData["c"][index] = count + m_jsonData["c"][index].asUInt();
+
+	const ConfigActivity::FreeExchange& cfg = ConfigManager::Instance()->m_activitycfg.m_config.free_exchg(index);
+	vector<ItemAdd> equips;
+	for(set<unsigned>::iterator it=select.begin();it!=select.end();++it)
+	{
+		ItemAdd item(cfg.item(*it).id(), cfg.item(*it).c() * count, "free_exchg");
+		equips.push_back(item);
+	}
+	AddEquips(equips, result);
+
+	Save();
+	result["newAct"] = m_jsonData;
+	return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////

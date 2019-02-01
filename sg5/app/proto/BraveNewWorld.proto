@@ -69,6 +69,7 @@ message BraveNewWorldPoint {
 		optional uint32 mtype 	= 11;  //占领可获得的材料类型
 		optional uint32 mcount	= 12; //占领可获得的材料数量
 		optional uint32 defts 	= 13;  //堡垒建立的时间
+		optional uint32 sdef	= 14;//特殊要塞类型（0表示非特殊要塞）
 }
 
 message BraveNewWorldZone {

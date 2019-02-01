@@ -392,9 +392,51 @@ int HeQuActivityUnit::GetCombineZoneRecompense(UserWrap& userWrap, unsigned inde
 	return 0;
 }
 
+int HeQuActivityUnit::GetCombineZoneBuZhu(UserWrap& userWrap, Json::Value & result)
+{
+	//判断活动是否开启
+	bool isopen = IsActivityOpen();
+
+	if (!isopen)
+	{
+		throw std::runtime_error("activity_not_open");
+	}
+
+
+	Json::Value user_stat;
+	userWrap.GetUserStats(user_stat);
+
+	//判断档里是否数据齐全
+	CheckUserstatComplete(user_stat);
+
+	//判断是否已经领取
+
+	if (user_stat["hqbz"].asUInt() > 0)
+	{
+		error_log("hequ buchang reward already been gotten. uid=%u", m_nUid);
+		throw runtime_error("reward_already_gotten");
+	}
+
+	int userlevel = userWrap.GetUserLevel();
+
+	CLogicEquipment logicEquipment;
+	CLogicCMD logicCMD;
+	unsigned uid = userWrap.Id();
+	logicEquipment.AddOneItem(uid, 50123, 2*logicCMD.GetHequbuchangLevel(uid), "HequBuZhu",result["equipment"]);
+
+	//设置奖励领取状态
+	user_stat["hqbz"] = 1;
+
+	userWrap.SetUserStats(user_stat);
+
+	result["hqbz"] = user_stat["hqbz"];
+
+	return 0;
+}
+
 bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
 {
-	//补偿
+	//补偿（现改为等级补偿）
 	if (!user_stat.isMember("hqbc") || !user_stat["hqbc"].isArray())
 	{
 		user_stat.removeMember("hqbc");
@@ -405,6 +447,14 @@ bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
 		{
 			user_stat["hqbc"][i] = 0;
 		}
+	}
+
+	//合区补助
+	if (!user_stat.isMember("hqbz"))
+	{
+		user_stat.removeMember("hqbz");
+		Json::Value array = Json::arrayValue;
+		user_stat["hqbz"] = 0;
 	}
 
 	//充值
@@ -2442,7 +2492,7 @@ int ForgeSmeltActivityUnit::BuyGoods(UserWrap& userWrap, const UnitIndexCmdParam
 	//判断该位置物品是否已购买
 	int pos = index - 1;
 
-	if (m_jsonData["a"][pos].asUInt() > 0)
+	if (m_jsonData["a"][pos].asUInt() > 1)
 	{
 		error_log("goods already bought. uid=%u,index=%u", m_nUid, index);
 		throw runtime_error("goods_already_bought");
@@ -2467,7 +2517,7 @@ int ForgeSmeltActivityUnit::BuyGoods(UserWrap& userWrap, const UnitIndexCmdParam
 	//发放奖励
 	ProvideCommonReward(forgeshopcfg.item(), "ForgeShop", result);
 
-	m_jsonData["a"][pos] = 1;
+	m_jsonData["a"][pos] = m_jsonData["a"][pos].asUInt()+1;
 
 	Save();
 
@@ -3540,6 +3590,311 @@ int ProtectFlagActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndex
 }
 
 
+PayOptionalActivityUnix::PayOptionalActivityUnix(const UserWrap& user):
+		SecincActivityUnit(user.Id(), CONFIG_OPTIONAL_PAY,NAT_PATIONAL_PAY)
+{
+	const ConfigActivity::PayOptionalActivity & cfg = ActivityConfigWrap().GetPayOptionalActivityCfg();
+	itemsize_ = cfg.optional_reward_size();
+	Init();
+}
+
+void PayOptionalActivityUnix::Reset()
+{
+	if (!m_jsonData.isMember("a"))
+	{
+		Json::Value array(Json::arrayValue);
+		m_jsonData["a"] = array;
+	}
+	for(int i = 0; i < itemsize_; ++i)
+	{
+		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+	}
+	m_jsonData["ts1"] = Time::GetGlobalTime();//每日领取时间戳
+	need_save = true;
+}
+
+int PayOptionalActivityUnix::GetChargeByActivityToday(UserWrap& userWrap,unsigned end_ts)
+{
+	return userWrap.GetRechargePoint(CTime::GetDayBeginTime((time_t)end_ts), end_ts);
+}
+
+int PayOptionalActivityUnix::GetEveryDayChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+{
+		if(!Time::IsToday(m_jsonData["ts1"].asInt()))
+		{
+			Reset();
+		}
+
+		//根据index，获取配置
+		unsigned index = param.ValueAsUInt("index");
+
+		if (index < 1 || index > itemsize_)
+		{
+			error_log("PayOptionalActivityUnix::GetEveryDayChargeReward index  error. index=%u", index);
+			throw runtime_error("param_error");
+		}
+
+		unsigned choose =  param.ValueAsUInt("choose");
+		const ConfigActivity::PayOptionalActivity & cfg = ActivityConfigWrap().GetPayOptionalActivityCfg();
+		const ConfigActivity::DiamondMoreReward &itemcfg = cfg.optional_reward(index - 1);
+
+		if(choose < 1 || choose > itemcfg.reward_size() )
+		{
+			error_log("PayOptionalActivityUnix::GetEveryDayChargeReward choose  error. index=%u", index);
+			throw runtime_error("param_error");
+		}
+
+		const RewardConfig::RewardItemCfg     &rewardcfg = itemcfg.reward(choose -1);
+
+		//获取活动期间内的充值数目
+		unsigned nowts = Time::GetGlobalTime();
+		unsigned charge = GetChargeByActivityToday(userWrap, nowts);
+
+		//根据配置，判断充值条件是否满足1钻=1积分
+		if (charge < itemcfg.diamond())
+		{
+			error_log("PayOptionalActivityUnix::GetEveryDayChargeReward  charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
+			throw runtime_error("charge_not_enough");
+		}
+
+		//是否已经领取该位置处的奖励
+		if (m_jsonData["a"][index - 1].asUInt() > 0)
+		{
+			error_log("reward already been received. uid=%u,index=%u", m_nUid, index);
+			throw runtime_error("reward_aleardy_received");
+		}
+
+		//发放奖励
+		string reason = "Optional_Pay";
+		ProvideCommonReward(rewardcfg, reason, result);
+		m_jsonData["a"][index - 1]= 1;   //设置奖励领取状态
+		Save();
+		result["NewAct"] = m_jsonData;
+		return 0;
+}
+
+
+GuoQingKuangHuan::GuoQingKuangHuan(const UserWrap& user):
+		SecincActivityUnit(user.Id(), CONFIG_GUO_QING_KUANG_HUAN,NAT_GUO_QING_KUANG_HUAN)
+{
+	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	itemsize_ = cfg.charge_reward_size();
+	Init();
+}
+
+
+void GuoQingKuangHuan::Reset()
+{
+	if (!m_jsonData.isMember("a"))
+	{
+		Json::Value array(Json::arrayValue);
+
+		m_jsonData["a"] = array;
+	}
+	for(int i = 0; i < itemsize_; ++i)
+	{
+		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+	}
+	m_jsonData["m"] = 0;      //勋章数
+	need_save = true;
+}
+
+int GuoQingKuangHuan::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+{
+	//根据index，获取配置
+	unsigned index = param.Index();
+	unsigned medal_num = 0;
+	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const ConfigActivity::DiamondReward & itemcfg = cfg.charge_reward(index - 1);
+
+	if (index < 1 || index > itemsize_)
+	{
+		error_log("param error. index=%u", index);
+		throw runtime_error("param_error");
+	}
+
+	Json::Value tmp_value;
+	int ret = CLogicSecinc().GetSecinc(userWrap.Id(), NAT_CHINADAY_WELCOME, tmp_value);
+	if (ret != R_SUCCESS && ret != R_ERR_NO_DATA)
+	{
+		throw std::runtime_error("get_new_active_data_error");
+	}
+
+	if(tmp_value.isMember("m"))
+	{
+		medal_num = tmp_value["m"].asInt();
+		m_jsonData["m"] = medal_num;
+	}
+
+	//获取活动期间内的充值数目
+	unsigned nowts = Time::GetGlobalTime();
+	unsigned charge = GetChargeByTime(userWrap, nowts);
+
+	//根据配置，判断充值条件是否满足,加上存储的勋章，1勋章=1钻=1积分
+	if ((charge+medal_num) < itemcfg.diamond())
+	{
+		error_log("charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
+		throw runtime_error("charge_not_enough");
+	}
+
+	//是否已经领取该位置处的奖励
+	if (m_jsonData["a"][index - 1].asUInt() > 0)
+	{
+		error_log("reward already been received. uid=%u,index=%u", m_nUid, index);
+		throw runtime_error("reward_aleardy_received");
+	}
+
+	//发放奖励
+	string reason = "ChinaDay_Gift";
+	ProvideCommonReward(itemcfg.reward(), reason, result);
+	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	RESOURCE_LOG("[activity : reward][uid:%u,reward_pos:%u,integral:%u]", userWrap.Id(),index,charge+medal_num);
+	Save();
+	result["NewAct"] = m_jsonData;
+	return 0;
+}
+
+
+ChinaDayActivityUnix::ChinaDayActivityUnix(const UserWrap& user):
+		SecincActivityUnit(user.Id(), CONFIG_CHINADAY_WELCOME,NAT_CHINADAY_WELCOME)
+{
+	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	Init();
+}
+
+
+void ChinaDayActivityUnix::Reset()
+{
+	m_jsonData["d"] = 0;       //重置每日任务
+	m_jsonData["c"] = 0;     //重置每日在线
+	m_jsonData["cf"] = 0;
+	m_jsonData["mf"] =  0;
+	m_jsonData["ts1"] = Time::GetGlobalTime();
+	m_jsonData["m"] = 0;
+
+	need_save = true;
+}
+
+int ChinaDayActivityUnix::ResetAct(int reset_type)
+{
+	m_jsonData["d"] = 0;       //重置每日任务
+	m_jsonData["c"] = 0;     //重置每日在线
+	m_jsonData["cf"] = 0;
+	m_jsonData["mf"] =  0;
+	m_jsonData["ts1"] = Time::GetGlobalTime();
+
+	need_save = true;
+	return 0;
+}
+
+int ChinaDayActivityUnix::DeDuctChallengeNum(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+{
+	//判断是否为今日在线挑战机会
+	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	{
+		throw std::runtime_error("not_today_challenge!");
+	}
+	if(m_jsonData["cf"].asInt() > 0 && m_jsonData["cf"].asInt() <= 2)
+		m_jsonData["cf"] = m_jsonData["cf"].asInt() -1;
+	else
+		throw std::runtime_error("chinaday_challenge_num_error!");
+	Save();
+	result["NewAct"] = m_jsonData;
+	return 0;
+}
+
+int ChinaDayActivityUnix::GetInstanceZonesReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+{
+	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	{
+		throw std::runtime_error("not_today_instanceZone!");
+	}
+
+	unsigned mf = 0;
+	Json::GetUInt(m_jsonData, "mf",  mf);
+	m_jsonData["mf"] = mf +1;
+
+	if(m_jsonData["mf"].asInt() <=2 )
+		m_jsonData["m"] = m_jsonData["m"].asInt()+50;
+
+	RESOURCE_LOG("[acticity : medal][uid:%u,m:%u,time:%u]", userWrap.Id(),m_jsonData["m"].asInt());
+	Save();
+	result["NewAct"] = m_jsonData;
+	return 0;
+}
+
+int ChinaDayActivityUnix::GetEveryDayReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+{
+	//判断今日充值金额是否足够
+	if(GetChargeByActivityToday(userWrap,Time::GetGlobalTime()) < 100)
+		throw std::runtime_error("recharge_not_enough!");
+
+	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	{
+		ResetAct(reset_everyday_reward_tag);//重置每日充值领取记录标记
+	}
+	else
+	{
+		if(1 == m_jsonData["d"].asUInt()) {
+			throw std::runtime_error("already_get_reward");
+		}
+	}
+
+	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const RewardConfig::RewardItemCfg & itemcfg = cfg.everyday_reward();
+
+	string reason = "ChinaDay_Gift";
+	//发放奖励
+	ProvideCommonReward(itemcfg, reason, result);
+
+	unsigned cf = 0;
+	Json::GetUInt(m_jsonData, "cf",  cf);
+	if(cf < 2)
+		m_jsonData["cf"] = cf +1;
+	m_jsonData["d"] = 1;   //设置领取状态
+	RESOURCE_LOG("[activity : everyday][uid:%u,cf:%u]", userWrap.Id(),m_jsonData["cf"].asInt());
+	Save();
+	result["NewAct"] = m_jsonData;
+	return 0;
+}
+
+int ChinaDayActivityUnix::GetChargeByActivityToday(UserWrap& userWrap,unsigned end_ts)
+{
+	return userWrap.GetRechargePoint(CTime::GetDayBeginTime((time_t)end_ts), end_ts);
+}
+
+int ChinaDayActivityUnix::GetOnlineReward(UserWrap& user, const BaseCmdParams& params,  Json::Value& result)
+{
+	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	{
+		ResetAct(reset_online_reward_tag);//重置在线奖励的领取记录标记
+	}
+	else
+	{
+		if(1 == m_jsonData["c"].asUInt()) {
+			throw std::runtime_error("already_get_reward");
+		}
+	}
+
+	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const RewardConfig::RewardItemCfg & itemcfg = cfg.online_reward();
+
+	string reason = "ChinaDay_Gift";
+	//发放奖励
+	ProvideCommonReward(itemcfg, reason, result);
+
+	unsigned cf = 0;
+	Json::GetUInt(m_jsonData, "cf",  cf);
+	if(cf < 2)
+		m_jsonData["cf"] = cf +1;
+	m_jsonData["c"] = 1;   //设置领取状态
+	RESOURCE_LOG("[activity : online][uid:%u,cf:%u]", user.Id(),m_jsonData["cf"].asInt());
+	Save();
+	result["NewAct"] = m_jsonData;
+	return 0;
+}
+
+
 NewYearActivityUnix::NewYearActivityUnix(const UserWrap& user):
 		BaseActivityUnit(user.Id(), CONFIG_NEWYEAR_GIFT)
 {
@@ -3597,9 +3952,7 @@ int NewYearActivityUnix::ResetAct()
 	m_jsonData["id"] = NAT_NEWYEARE_GIFT;  //id
 
 	need_save = true;
-
 	return 0;
-
 }
 
 int NewYearActivityUnix::ResetAct(int reset_type)
@@ -4864,6 +5217,9 @@ int OpenServerActivityUnix::GetDiscountShopGift(UserWrap& user, const UnitIndexC
 	}
 	return 0;
 }
+
+
+
 
 int NewYearActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
 {

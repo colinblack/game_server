@@ -101,6 +101,6 @@
 #include "LogicAllServerGroupBuying.h"
 #include "LogicMVP.h"
 #include "LogicUnitWrap.h"
-#include "DataRotaryTableDraw.h"//转盘狂惠处理
+#include "LogicChick.h"
 
 #endif /* LOGICINC_H_ */

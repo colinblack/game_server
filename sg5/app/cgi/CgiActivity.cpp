@@ -53,6 +53,7 @@ public:
 	CGI_SET_ACTION_MAP("viewboat", ViewBoat)
 	CGI_SET_ACTION_MAP("getboat", GetBoat)
 	CGI_SET_ACTION_MAP("setboat", SetBoat)
+	CGI_SET_ACTION_MAP("hitboat", HitBoat)
 	CGI_SET_ACTION_MAP("updateboatlog", UpdateBoatAttackLog)
 	CGI_SET_ACTION_MAP("qqpanel", ReqQQPanel)
 	CGI_SET_ACTION_MAP("getrechargealliancedata", GetRechargellianceData)
@@ -89,6 +90,7 @@ public:
 	CGI_SET_ACTION_MAP("getchongzhizixuan", getchongzhizixuan)
 	CGI_SET_ACTION_MAP("getbeautyinfo", GetBeautyInfo)
 	CGI_SET_ACTION_MAP("InvestmentInfo", InvestmentInfo)
+	CGI_SET_ACTION_MAP("GetHequbuchangLevel", GetHequbuchangLevel)
 	CGI_ACTION_MAP_END
 
 	int GetQixijieData()
@@ -607,6 +609,49 @@ public:
 		unsigned userid = 0;
 		Json::GetUInt(m_data["data"], "uid", userid);
 		CGI_SEND_LOG("action=SetBoat&operated=%u&operator=%u",userid,m_uid);
+		return 0;
+	}
+
+	int HitBoat()
+	{
+		unsigned uid;
+		if(!Json::GetUInt(m_data["data"], "uid", uid))
+		{
+			PARAM_ERROR_RETURN_MSG("uid");
+		}
+
+		unsigned type;
+		if(!Json::GetUInt(m_data["data"], "type", type))
+		{
+			PARAM_ERROR_RETURN_MSG("type");
+		}
+
+		unsigned torch;
+		if(!Json::GetUInt(m_data["data"], "torch", torch))
+		{
+			PARAM_ERROR_RETURN_MSG("torch");
+		}
+
+		unsigned classType;
+		if(!Json::GetUInt(m_data["data"], "classType", classType))
+		{
+			PARAM_ERROR_RETURN_MSG("classType");
+		}
+
+		unsigned win;
+		if(!Json::GetUInt(m_data["data"], "win", win))
+		{
+			PARAM_ERROR_RETURN_MSG("win");
+		}
+
+		CLogicRiver logicRiver;
+		int ret = logicRiver.HitShip(m_uid, m_data["data"],m_jsonResult["result"]);
+		if (0 != ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=HitBoat&operated=%u&operator=%u",uid,m_uid);
 		return 0;
 	}
 
@@ -1366,6 +1411,11 @@ public:
 		UserWrap user(m_uid, false);
 		ActivityInvestment act(user);
 		act.Get(m_jsonResult);
+		return 0;
+	}
+	int GetHequbuchangLevel() {
+		CLogicCMD logicCMD;
+		m_jsonResult["level"] = logicCMD.GetHequbuchangLevel(m_uid);
 		return 0;
 	}
 };

@@ -155,6 +155,8 @@ int CDataBraveNewWorld::Sig(int sig)
 		OnHour();
 	else if(sig == SIGRTMIN + 3)
 		OnHalfHour();
+	else if(sig == SIGRTMIN + 4)
+		OnDayFourHour();
 
 	return 0;
 }
@@ -200,6 +202,45 @@ BraveNewWorldPoint CDataBraveNewWorld::getRandPoint(unsigned level)
 	}
 	return BraveNewWorldPoint(x, y);
 }
+
+BraveNewWorldPoint CDataBraveNewWorld::getRandPoint(unsigned level1, unsigned level2)
+{
+	int x = 0, y = 0;
+	if(level1 == 0 || level1 > BRAVE_NEW_WORLD_LEVEL)
+		level1 = 1;
+	if(level2 == 0 || level2 > BRAVE_NEW_WORLD_LEVEL)
+		level2 = 1;
+	if (level1 > level2)
+		return BraveNewWorldPoint(x, y);
+	--level1;
+	--level2;
+	if(level2 == BRAVE_NEW_WORLD_LEVEL-1)
+	{
+		x = m_rect[level1][0][0] + Math::GetRandomInt(m_rect[level1][1][0] - m_rect[level1][0][0] + 1);
+		y = m_rect[level1][0][1] + Math::GetRandomInt(m_rect[level1][1][1] - m_rect[level1][0][1] + 1);
+	}
+	else
+	{
+		if(Math::GetRandomInt(2))
+		{
+			x = m_rect[level1][0][0] + Math::GetRandomInt(m_rect[level1][1][0] - m_rect[level1][0][0] + 1);
+			if(Math::GetRandomInt(2))
+				y = m_rect[level1][0][1] + Math::GetRandomInt(m_rect[level2 + 1][0][1] - m_rect[level1][0][1]);
+			else
+				y = m_rect[level2 + 1][1][1] + 1 + Math::GetRandomInt(m_rect[level1][1][1] - m_rect[level2 + 1][1][1]);
+		}
+		else
+		{
+			y = m_rect[level1][0][1] + Math::GetRandomInt(m_rect[level1][1][1] - m_rect[level1][0][1] + 1);
+			if(Math::GetRandomInt(2))
+				x = m_rect[level1][0][0] + Math::GetRandomInt(m_rect[level2 + 1][0][0] - m_rect[level1][0][0]);
+			else
+				x = m_rect[level2 + 1][1][0] + 1 + Math::GetRandomInt(m_rect[level1][1][0] - m_rect[level2 + 1][1][0]);
+		}
+	}
+	return BraveNewWorldPoint(x, y);
+}
+
 BraveNewWorldPoint CDataBraveNewWorld::getRandPointEmpty(unsigned level)
 {
 	BraveNewWorldPoint p;
@@ -286,6 +327,41 @@ void CDataBraveNewWorld::getBesidePoints(BraveNewWorldPoint&p, set<BraveNewWorld
 		}
 	}
 }
+
+bool CDataBraveNewWorld::existSpecialDef(unsigned uid,unsigned type,const BraveNewWorldPoint & p,int range,bool isfriend)
+{
+	unsigned aid = m_data.user[uid].aid;
+	int x = p.first;
+	int y = p.second;
+	for (int i = x-range; i<=x+range; i++)
+	{
+		for (int j=y-range; j<=y+range; j++)
+		{
+			BraveNewWorldPoint q(i,j);
+			if (!m_data.land.count(q))
+				continue;
+			if (!type || m_data.land[q].sdef==type)
+			{
+				unsigned uid2 = m_data.land[q].uid;
+				if (!type)
+				{
+					if (m_data.city.count(q)) uid2 = m_data.city[q];
+					if (!uid2 && isfriend) {
+						return true;
+					}
+				}
+				if (type == 250) //存在BOSS，减少收益
+					return true;
+				if (isfriend && !aid &&  uid2 == uid) return true;
+				if (isfriend && aid && m_data.user[uid2].aid == aid) return true;
+				if (!isfriend && !aid &&  uid2 != uid) return true;
+				if (!isfriend && aid &&  m_data.user[uid2].aid != aid) return true;
+			}
+		}
+	}
+	return false;
+}
+
 void CDataBraveNewWorld::CreateMap()
 {
 	Proto2Json p2j;
@@ -655,6 +731,15 @@ int CDataBraveNewWorld::GetPoints(vector<BraveNewWorldPoint>& p, Json::Value &re
 		Json::Value t;
 		m_data.land[*it].GetJson(t);
 		m_data.land[*it].GetDefLimit(t);
+		unsigned userid = m_data.land[*it].uid;
+		if (userid)
+		{
+			double xishu = 1;
+			if (existSpecialDef(userid,250,*it,5,false)) xishu -= 1;
+			if (xishu < 0)
+				xishu = 0;
+			t["xishu"] = xishu;
+		}
 		if(m_data.city.count(*it))
 			m_data.user[m_data.city[*it]].GetDefLimit(t);
 		result["lands"].append(t);
@@ -665,8 +750,17 @@ int CDataBraveNewWorld::GetOnePoint(BraveNewWorldPoint& p, Json::Value &result)
 {
 	m_data.land[p].GetJson(result);
 	m_data.land[p].GetDef(result);
+	unsigned userid = m_data.land[p].uid;
 	if(m_data.city.count(p))
 		m_data.user[m_data.city[p]].GetDef(result);
+	if (userid)
+	{
+		double xishu = 1;
+		if (existSpecialDef(userid,250,p,5,false)) xishu -= 1;
+		if (xishu < 0)
+			xishu = 0;
+		result["xishu"] = xishu;
+	}
 	return 0;
 }
 int CDataBraveNewWorld::GetPointsLimit(vector<BraveNewWorldPoint>& p, Json::Value &result)
@@ -677,6 +771,15 @@ int CDataBraveNewWorld::GetPointsLimit(vector<BraveNewWorldPoint>& p, Json::Valu
 		Json::Value t;
 		m_data.land[*it].GetJsonLimit(t);
 		m_data.land[*it].GetDefLimit(t);
+		unsigned userid = m_data.land[*it].uid;
+		if (userid)
+		{
+			double xishu = 1;
+			if (existSpecialDef(userid,250,*it,5,false)) xishu -= 1;
+			if (xishu < 0)
+				xishu = 0;
+			t["xishu"] = xishu;
+		}
 		if(m_data.city.count(*it))
 			m_data.user[m_data.city[*it]].GetDefLimit(t);
 		result["lands"].append(t);
@@ -760,7 +863,7 @@ int CDataBraveNewWorld::Collect(unsigned uid, unsigned seq, Json::Value &result)
 		}
 		if(ai && ats + 60 <= ts)
 		{
-			n += min(300u, (ts - max(ats, m_data.user[uid].rts)) / 60) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+			n += min(300u, Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
 			if(n >= m)
 			{
 				n = m;
@@ -782,7 +885,7 @@ int CDataBraveNewWorld::Collect(unsigned uid, unsigned seq, Json::Value &result)
 		}
 		if(ai && ats + 60 <= ts)
 		{
-			n += min(300u, (ts - max(ats, m_data.user[uid].rts)) / 60) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+			n += min(300u, Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
 			if(n >= m)
 			{
 				n = m;
@@ -804,7 +907,7 @@ int CDataBraveNewWorld::Collect(unsigned uid, unsigned seq, Json::Value &result)
 		}
 		if(ai && ats + 60 <= ts)
 		{
-			n += min(300u, (ts - max(ats, m_data.user[uid].rts)) / 60) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+			n += min(300u, Protect_time(ts , max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
 			if(n >= m)
 			{
 				n = m;
@@ -826,25 +929,34 @@ int CDataBraveNewWorld::Collect(unsigned uid, unsigned seq, Json::Value &result)
 		}
 		if(ai && ats + 60 <= ts)
 		{
-			n += min(300u, (ts - max(ats, m_data.user[uid].rts)) / 60) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+			n += min(300u,Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
 			if(n >= m)
 			{
 				n = m;
 				break;
 			}
 		}
-
+		int delta = 0;
 		for(set<BraveNewWorldPoint>::iterator it=m_data.user[uid].lands.begin();it!=m_data.user[uid].lands.end();++it)
 		{
+			double xishu = 1;
+			if (existSpecialDef(uid,250,*it,5,false)) xishu -= 1;
+			if (xishu < 0)
+				xishu = 0;
 			if(m_data.land[*it].rts + 60 > ts)
 				continue;
-			n += min(300u, (ts - m_data.land[*it].rts) / 60) * ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(*it).product();
+			int base = min(300u, Protect_time(ts ,m_data.land[*it].rts)) * ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(*it).product();
+			int d =  base * (xishu - 1);
+			delta += d;
+			n += base + d;
+			debug_log("[land][uid=%d,x=%d,y=%d,n=%d,m=%d,rts=%d,time=%dmin,jichuzhi=%d,delta=%d]",uid,it->first,it->second,n,m,m_data.land[*it].rts,min(300u, (ts - m_data.land[*it].rts) / 60),base,d);
 			m_data.land[*it].rts = ts;
 			if(n >= m)
 			{
 				n = m;
 				break;
 			}
+			result["delta"] = delta;
 		}
 	}while(0);
 	m_data.user[uid].rts = ts;
@@ -859,6 +971,7 @@ int CDataBraveNewWorld::Collect(unsigned uid, unsigned seq, Json::Value &result)
 	result["seq"] = ++m_data.user[uid].seq;
 	result["rts"] = ts;
 	result["bnwm"] = n;
+	result["on"] = on;
 	return 0;
 }
 int CDataBraveNewWorld::StartAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, bool cash, Json::Value &result)
@@ -902,7 +1015,7 @@ int CDataBraveNewWorld::StartAttack(unsigned uid, unsigned seq, BraveNewWorldPoi
 	//todo 增加同一块州府只能占领一块地的判断
 	bool check = CheckZonePoint(zid, uid);
 
-	if (check)
+	if (m_data.land[p].sdef!=250 && check)
 	{
 		LOGIC_ERROR_RETURN_MSG("zone_already_occupied");
 	}
@@ -980,6 +1093,33 @@ int CDataBraveNewWorld::StartAttack(unsigned uid, unsigned seq, BraveNewWorldPoi
 	result["seq"] = ++m_data.user[uid].seq;
 	return 0;
 }
+
+bool CDataBraveNewWorld::CheckZonePoint(unsigned zid, unsigned uid, BraveNewWorldPoint&p)
+{
+	if (0 == zid)
+	{
+		return false;
+	}
+
+	//遍历用户占有的地块
+	set<BraveNewWorldPoint>::iterator siter;
+	unsigned othzid = 0;
+
+	for(siter = m_data.user[uid].lands.begin(); siter != m_data.user[uid].lands.end(); ++siter)
+	{
+		othzid = getZoneID(siter->first, siter->second);
+
+		if (othzid == zid)
+		{
+			p.first = siter->first;
+			p.second = siter->second;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, vector<unsigned>& hp, Json::Value &result)
 {
 	if(!m_data.user.count(uid))
@@ -997,6 +1137,9 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_EndAttack_fid");
 	}
+	time_t ttt = time(NULL);
+		struct tm* stime=localtime(&ttt);
+		bool protecttime = (stime->tm_hour >= 1) &&	(stime->tm_hour < 7);
 
 	bool w = false;
 	double gd = 0;
@@ -1005,6 +1148,7 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 	{
 		if(hp.size() != BRAVE_NEW_WORLD_HP_USER)
 		{
+			error_log("hp.size() != BRAVE_NEW_WORLD_HP_USER");
 			LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_EndAttack_hp");
 		}
 
@@ -1025,7 +1169,7 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 			}
 			m_data.user[userid].hp[i] = hp[i];
 		}
-		if(gd > 0)
+		if(gd > 0&& !protecttime)
 		{
 			gd *= double(0.6);
 			CLogicUser logicUser;
@@ -1091,6 +1235,7 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		{
 			if(hp.size() != 2)
 			{
+				error_log("hp.size() != 2");
 				LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_EndAttack_hp");
 			}
 
@@ -1104,6 +1249,7 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		{
 			if(hp.size() != 1)
 			{
+				error_log("hp.size() != 1,hp.size()=%d",hp.size());
 				LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_EndAttack_hp");
 			}
 
@@ -1114,7 +1260,7 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		}
 		if(h == 0)
 			w = true;
-		if(BRAVE_NEW_WORLD_HP > h)
+		if(BRAVE_NEW_WORLD_HP > h && !protecttime)
 			g = int(ceil(double(ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).occupy()) * double(BRAVE_NEW_WORLD_HP - h) / double(BRAVE_NEW_WORLD_HP)));
 		lm = g;
 	}
@@ -1127,6 +1273,7 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		m_data.land[p].hero = 0;
 		m_data.land[p].hp = 0;
 		m_data.land[p].def = false;
+		m_data.land[p].sdef = 0;
 		unsigned zid = getZoneID(p);
 		if(zid && m_data.user[uid].aid && m_data.zone[zid].aid != m_data.user[uid].aid)
 		{
@@ -1155,6 +1302,17 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 					m_data.alliance[m_data.user[uid].aid].mission[zid].m = true;
 			}
 		}
+
+
+		BraveNewWorldPoint pzone;
+		bool check = CheckZonePoint(zid, uid, pzone);
+
+		if (check)
+		{
+			m_data.user[uid].lands.erase(pzone);
+			m_data.land[pzone].Clear();
+		}
+
 		m_data.user[uid].lands.insert(p);
 
 		unsigned mu = ConfigManager::Instance()->m_BraveNewWorldConfig.m_config.reward().user();
@@ -1244,7 +1402,7 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 	unsigned userid = ioc ? m_data.city[p] : m_data.land[p].uid;
 
 	//玩家
-	if(m_data.land[p].def || ioc)
+	if(userid || m_data.land[p].def || ioc || m_data.land[p].sdef)
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_FastAttack_def");
 	}
@@ -1290,6 +1448,10 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_FastAttack_zone");
 	}
+
+	time_t ttt = time(NULL);
+	struct tm* stime=localtime(&ttt);
+	bool protecttime = (stime->tm_hour >= 1) &&(stime->tm_hour < 7);
 	//位置
 	if(!isc)
 	{
@@ -1352,7 +1514,7 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 	m_data.user[uid].bts = Time::GetGlobalTime();
 
 	bool w = true;
-	int g = ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).occupy();
+	int g = protecttime?0:ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).occupy();
 	int t = 0, lm = g, nm = 0, lh = BRAVE_NEW_WORLD_HP, nh = 0;
 	if(w)
 	{
@@ -1490,6 +1652,62 @@ bool CDataBraveNewWorld::CheckZonePoint(unsigned zid, unsigned uid)
 	return false;
 }
 
+unsigned CDataBraveNewWorld::Protect_time(unsigned now_time,unsigned last_time)
+{
+	unsigned pro_time = 0;
+		int remander = 0;
+		unsigned day = 24*60*60;
+		time_t now = (time_t)now_time;
+		time_t last = (time_t)last_time;
+		struct tm tm_time = {0};
+		memcpy(&tm_time,localtime(&now),sizeof(struct tm));
+		struct tm* ntime = &tm_time;
+		struct tm* ltime=localtime(&last);
+		unsigned difftime = now_time - last_time;
+		if(difftime < 0)
+			return 0;
+		pro_time += (difftime/day)*6*60*60;
+		int lh = ltime->tm_hour == 0 ? 24 : ltime->tm_hour;
+		int nh = ntime->tm_hour == 0 ? 24 : ntime->tm_hour;
+		remander = (difftime%(day))/(60*60);
+		if(lh >= 7 && nh < 7 )
+			pro_time += (ntime->tm_hour -1)*60*60 + ntime->tm_min*60 + ntime->tm_sec;
+		else if(lh < 7 && nh < 7)
+		{
+			if(remander <= 12)
+				pro_time +=difftime%(day);
+			else
+				pro_time += (6*60*60)-(day-(difftime%(day)));
+		}
+		else if(lh  < 7 && nh >= 7)
+			pro_time += (7 - ltime->tm_hour -1 )*60*60 + (60 - ltime->tm_min -1)*60 + (60 - ltime->tm_sec);
+		else if(lh >= 7 && nh >= 7)
+		{
+			if(ntime->tm_yday == ltime->tm_yday)
+			{
+				if(ltime->tm_hour == 24)
+					pro_time += 6*60*60;
+				else
+					pro_time += 0;
+			}
+			else
+			{
+				if(remander - (25*60*60 - (ltime->tm_hour*60*60+ltime->tm_min*60+ltime->tm_sec))>=6*60*60)
+				{
+					pro_time += 6*60*60;
+				}
+				else
+					pro_time += 0;
+			}
+		}
+		else
+			return 0;
+		if(difftime - pro_time<= 0)
+			return 0;
+		return  (difftime - pro_time)/60;
+}
+
+
 int CDataBraveNewWorld::Move(unsigned uid, unsigned seq, BraveNewWorldPoint& p, unsigned ud, bool super, Json::Value &result)
 {
 	if(!m_data.user.count(uid))
@@ -1502,7 +1720,7 @@ int CDataBraveNewWorld::Move(unsigned uid, unsigned seq, BraveNewWorldPoint& p, 
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_Move_self");
 	}
-	if(m_data.city.count(p) || m_data.land[p].def)
+	if(m_data.city.count(p) || m_data.land[p].def || m_data.land[p].sdef)
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_Move_def");
 	}
@@ -1587,7 +1805,7 @@ int CDataBraveNewWorld::Build(unsigned uid, unsigned seq, bool cash, BraveNewWor
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_Build_uid");
 	}
-	if(m_data.city.count(p) || m_data.land[p].def)
+	if(m_data.city.count(p) || m_data.land[p].def|| m_data.land[p].sdef)
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_Build_def");
 	}
@@ -2041,8 +2259,18 @@ int CDataBraveNewWorld::CollectOne(unsigned uid, unsigned seq, BraveNewWorldPoin
 	if(ret)
 		return ret;
 
+	double xishu = 1;
+	int delta = 0;
+	if (existSpecialDef(uid,250,p,5,false)) xishu -= 1;
+	if (xishu < 0)
+		xishu = 0;
 	int m = getUserMoney(m_data.user[uid].lv), n = dataUser.type;
-	n += min(300u, (Time::GetGlobalTime() - m_data.land[p].rts) / 60) * ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).product();
+	int jichuzhi = min(300u, Protect_time(Time::GetGlobalTime() , m_data.land[p].rts)) * ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).product();
+	delta = jichuzhi * (xishu - 1);
+	n += jichuzhi + delta;
+	debug_log("[land][uid=%d,x=%d,y=%d,n=%d,m=%d,rts=%d,time=%dmin,jichuzhi=%d,delta=%d]",uid,p.first,p.second,n,m,m_data.land[p].rts,min(300u, (Time::GetGlobalTime() - m_data.land[p].rts) / 60),jichuzhi,delta);
+	result["xishu"] = xishu;
+
 	m_data.land[p].rts = Time::GetGlobalTime();
 	if(n >= m)
 		n = m;
@@ -2264,6 +2492,9 @@ void CDataBraveNewWorld::OnDay()
 	{
 		try
 		{
+			if (it->second.sdef == 250)
+				continue;
+
 			it->second.rc = 0;
 			unsigned type = ConfigManager::Instance()->GetBraveNewWorldConfigPoint(it->first).type();
 			if(type == e_DataBraveNewWorldPointType_empty)
@@ -2302,6 +2533,9 @@ void CDataBraveNewWorld::OnHour()
 		try
 		{
 			if(it->second.fid && it->second.fts + BNW_ATTACK_MAX_TIME > Time::GetGlobalTime())
+				continue;
+
+			if (it->second.sdef == 250)
 				continue;
 
 			unsigned l = ConfigManager::Instance()->GetBraveNewWorldConfigPoint(it->first).level();
@@ -2408,4 +2642,203 @@ void CDataBraveNewWorld::OnHalfHour()
 			m_data.land[it->second[i]].mcount = max_matrialnum;
 		}
 	}
+}
+
+void CDataBraveNewWorld::MakeBoss(int xbase,int ybase)
+{
+	CLogicEmail logicEmail;
+	string email_text;
+	string email_title;
+	vector<uint64_t> uids;
+	for (int x=xbase-1; x<=xbase+1; x++)
+		for (int y=ybase-1; y<=ybase+1; y++)
+		{
+			BraveNewWorldPoint p(x,y);
+			if (!m_data.land.count(p))
+				continue;
+			debug_log("x=%d,y=%d,level=%d",x,y,getPointLevel(x,y));
+			unsigned uid;
+			if (m_data.land[p].uid)
+			{
+				uid = m_data.land[p].uid;
+				m_data.user[uid].lands.erase(p);
+				email_title = "烽火大陆野外BOSS袭击了你的地块";
+				email_text = "您的地块"+CTrans::ITOS(x)+","+CTrans::ITOS(y)+"丢失，快去收复失地吧！";
+				uids.clear();
+				uids.push_back(uid);
+				logicEmail.SystemEmail(email_title, email_text, uids);
+				debug_log("x=%d,y=%d,m_data.land[p].uid=%d",x,y,uid);
+			}
+			if (m_data.city.count(p))
+			{
+				unsigned l = getPointLevel(p);
+				if(l)
+					--l;
+				BraveNewWorldPoint k = getRandPointEmpty(l);
+				uid = m_data.city[p];
+				m_data.city.erase(p);
+				m_data.city[k] = uid;
+				m_data.user[uid].x = k.first;
+				m_data.user[uid].y = k.second;
+				m_data.user[uid].pts = Time::GetGlobalTime();
+				for(int i=0;i<BRAVE_NEW_WORLD_HP_USER;++i)
+					m_data.user[uid].hp[i] = BRAVE_NEW_WORLD_HP;
+
+				email_title = "烽火大陆野外BOSS袭击了你的主城";
+				email_text = "您的主城"+CTrans::ITOS(x)+","+CTrans::ITOS(y)+"被野外强力BOSS攻破，快去重新战斗吧！";
+				uids.clear();
+				uids.push_back(uid);
+				logicEmail.SystemEmail(email_title, email_text, uids);
+				debug_log("x=%d,y=%d,m_data.city[p]=%d",x,y,uid);
+			}
+			m_data.land[p].Clear();
+			m_data.land[p].sdef = 250;
+			m_data.land[p].rc = 10;
+			m_data.land[p].hp = BRAVE_NEW_WORLD_HP;
+		}
+}
+
+
+void CDataBraveNewWorld::OnDayFourHour()
+{
+	for (int i=0;i<3;i++)
+	{
+		BraveNewWorldPoint p;
+		p = getRandPoint(9,10);
+		debug_log("x=%d,y=%d,level=%d",p.first,p.second,getPointLevel(p));
+		MakeBoss(p);
+	}
+	for (int i=0;i<5;i++)
+	{
+		BraveNewWorldPoint p;
+		p = getRandPoint(6,8);
+		debug_log("x=%d,y=%d,level=%d",p.first,p.second,getPointLevel(p));
+		MakeBoss(p);
+	}
+	for (int i=0;i<10;i++)
+	{
+		BraveNewWorldPoint p;
+		p = getRandPoint(2,5);
+		debug_log("x=%d,y=%d,level=%d",p.first,p.second,getPointLevel(p));
+		MakeBoss(p);
+	}
+
+	Save();
+}
+
+
+
+#define XML_BRAVENEWWORLD_HUOYUE_ITEM_COUNT 10
+#define XML_BRAVENEWWORLD_TASK_ITEM_COUNT 5
+int CDataBraveNewWorld::newWorldAwards(unsigned uid, unsigned index, unsigned id, unsigned seq, Json::Value &result)
+{
+	if(!m_data.user.count(uid))
+	{
+		error_log("[count_uid_error][uid=%u]",uid);
+		return R_ERR_PARAM;
+	}
+	if(seq != m_data.user[uid].seq)
+	{
+		error_log("[seq_error][uid=%u,seq=%d,m_data.user[uid].seq=%d]",uid,seq,m_data.user[uid].seq);
+		return R_ERR_PARAM;
+	}
+	if (id<1 || id>BRAVE_NEW_WORLD_HUOYUE_NUM) {
+		error_log("[id_error][uid=%u,id=%u]",uid,id);
+		return R_ERR_PARAM;
+	}
+
+	int ret = 0;
+	CLogicSecinc logicSecinc;
+	Json::Value newAct;
+	ret = logicSecinc.GetSecinc(uid, NAT_BRAVENEWWORLD_TASK_NEW_NEW_ACT_NUM, newAct);
+	if (ret != 0 && ret != R_ERR_NO_DATA){
+		return ret;
+	}
+
+	if (R_ERR_NO_DATA == ret || !Time::IsToday(newAct["ts"].asUInt()))
+	{
+		newAct["id"] = NAT_BRAVENEWWORLD_TASK_NEW_NEW_ACT_NUM;
+		newAct["a"] = Json::Value(Json::arrayValue);
+		newAct["a"].resize(BRAVE_NEW_WORLD_HUOYUE_NUM);
+		for(size_t i=0; i<BRAVE_NEW_WORLD_HUOYUE_NUM; ++i)
+			newAct["a"][i] = 0;
+	}
+
+	//判断是否已经领过
+	const BraveNewWorldConfig::Task& task = ConfigManager::Instance()->m_BraveNewWorldConfig.m_config.task(id-1);
+
+	if (newAct["a"][id-1].asUInt()) {
+		error_log("reward has got. uid=%u, id=%u",uid,id);
+		return R_ERR_LOGIC;
+	}
+
+	newAct["a"][id-1] = 1;
+
+	//判断活跃度是否够
+	Json::Value list;
+	ret = logicSecinc.GetSecinc(uid, NAT_BRAVENEWWORLD_HUOYUE_NEW_NEW_ACT_NUM, list);
+	if (ret != 0 && ret != R_ERR_NO_DATA){
+		return ret;
+	}
+	unsigned numcomplete = 0;
+	for (int i=0;i<BRAVE_NEW_WORLD_TASK_NUM;i++)
+		if  (ConfigManager::Instance()->m_BraveNewWorldConfig.m_config.huoyue(i) <= list["a"][i].asUInt())
+			numcomplete ++;
+	numcomplete*=10;
+	if (numcomplete < task.require()) {
+		error_log("huoyue not archive. uid=%u, id=%u, huoyue=%u, require=%u",uid,id,numcomplete,task.require());
+		return R_ERR_LOGIC;
+	}
+
+	vector<ItemAdd> items;
+	items.clear();
+	ItemAdd item;
+	item.eqid = task.eqid(index);
+	item.count = task.count(index);
+	item.reason = "bravenewworld_huoyue_reward_"+CTrans::ITOS(id);
+	items.push_back(item);
+
+	Json::Value tempjson;
+	if (items.size() > 0){
+		CLogicEquipment logicEquipment;
+		ret = logicEquipment.AddItems(uid, items, tempjson, true);
+	}
+
+	newAct["ts"] = Time::GetGlobalTime();
+
+	ret = logicSecinc.SetOneSecinc(uid, newAct);
+	if (ret){
+		return ret;
+	}
+
+	result["newAct"] = newAct;
+	result["equipment"] = tempjson;
+	result["seq"] = ++m_data.user[uid].seq;
+	result["rl"] = m_data.user[uid].rl;
+	return 0;
+}
+
+
+int CDataBraveNewWorld::GetTarget(unsigned uid, Json::Value &result)
+{
+	if(!m_data.user.count(uid))
+		return R_ERR_LOGIC;
+	result["uid"] = uid;
+	result["x"] = m_data.user[uid].x;
+	result["y"] = m_data.user[uid].y;
+	return 0;
+}
+
+int CDataBraveNewWorld::getNewWorldBoss(Json::Value &result)
+{
+	Json::Value t;
+	for (map<BraveNewWorldPoint, DataBraveNewWorldPoint>::iterator it = m_data.land.begin(); it!=m_data.land.end(); ++it)
+		if ((it->second).sdef == 250)
+		{
+			debug_log("x=%d,y=%d",(it->first).first,(it->first).second);
+			t["x"] = (it->first).first;
+			t["y"] = (it->first).second;
+			result.append(t);
+		}
+	return 0;
 }

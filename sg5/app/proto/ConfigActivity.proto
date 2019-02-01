@@ -41,6 +41,13 @@ message DiamondRewardLimit
 	required RewardConfig.RewardItemCfg reward	= 3;  //奖励
 }
 
+message DiamondMoreReward
+{
+	required uint32 diamond	= 1;    //等级限制
+	repeated RewardConfig.RewardItemCfg reward = 2;//多种奖励 
+}
+
+
 message DoubleWelfare
 {
 	required uint32 maximum						= 1; //代金券上限
@@ -216,6 +223,20 @@ message NewYearActivity
 	required RewardConfig.RewardItemCfg online_reward	= 3;  //在线奖励
 }
 
+//国庆活动
+message ChinaDayActivity
+{
+	repeated DiamondReward 	charge_reward		        = 1;  //累计充值奖励
+	required RewardConfig.RewardItemCfg everyday_reward     = 2;  //每日充值奖励
+	required RewardConfig.RewardItemCfg online_reward	= 3;  //在线奖励
+}
+
+//每日自选活动
+message PayOptionalActivity
+{
+	repeated DiamondMoreReward optional_reward	    = 1;  //每日自选充值奖励
+}
+
 message MsgSoulLevel  
 {
 	required uint32 lv  = 1;
@@ -370,6 +391,17 @@ message SummerHolidaysRewardCfg
 	repeated SummerHolidaysTicketCfg summer_holidays_ticket = 3;//兑换信息
 	repeated DiamondReward chargeReward                     = 4;//累积充值奖励
 }
+
+message FreeExchangeItem
+{
+	required uint32 id	= 1;
+	required uint32 c	= 2;
+}
+message FreeExchange
+{
+	repeated FreeExchangeItem item = 1;
+}
+
 //活动配置
 message Activities
 {
@@ -401,6 +433,9 @@ message Activities
 	required BatmanTreasureCfg batmantreasure           = 26;//小兵宝物
 	required SummerChargeRewardCfg summer_charge        = 27;//暑期精选
 	required SummerHolidaysRewardCfg summer_holidays    = 28;//暑期回馈
+	required ChinaDayActivity  chinadayavtivity         = 29;   //喜迎国庆
+	required PayOptionalActivity payoptionalactivity    = 30;   //充值自选
+	repeated FreeExchange free_exchg					= 31;//兑换自选
 }
 
 
