@@ -90,6 +90,9 @@ public:
 
 	//判断是否在两个时间范围内，跨越了指定的小时
 	static bool IsCrossTime(unsigned start, unsigned end, int hour);
+
+	//执行命令，并获取输出
+	static int ExecCommand(const char * cmd, string & errmsg, string & output);
 };
 
 #endif

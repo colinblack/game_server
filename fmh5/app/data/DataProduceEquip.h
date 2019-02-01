@@ -2,16 +2,20 @@
 
 #define DataProduceequip_queuedata_COUNT 36
 #define DataProduceequip_shelfdata_COUNT 36
+#define DataProduceequip_shelfsource_COUNT 36
 
-struct DataProduceequip {
+struct DataProduceequip
+{
 	uint32_t uid;
 	uint32_t finish_time;
 	uint16_t id;
 	uint8_t queuenum;
 	int8_t status;
+	int8_t produce_type;	// 0:手动生产,1:助手生产(不存档)
 
 	char queuedata[DataProduceequip_queuedata_COUNT];  //生产队列
 	char shelfdata[DataProduceequip_shelfdata_COUNT];  //展示架
+	char shelfsource[DataProduceequip_shelfsource_COUNT];//展示架来源
 
 	DataProduceequip()
 	{
@@ -20,17 +24,26 @@ struct DataProduceequip {
 		id = 0;
 		status = status_free;
 		queuenum = 0;
+		produce_type = PRODUCE_TYPE_MAN;
 		memset(queuedata, 0, sizeof(queuedata));
 		memset(shelfdata, 0, sizeof(shelfdata));
+		memset(shelfsource, 0, sizeof(shelfsource));
 	}
 
-	void SetMessage(ProtoProduce::ProduceEquipCPP *msg)
+	void SetPartMessage(User::OthProduceCPP * msg)
 	{
 		msg->set_ud(id);
 		msg->set_status(status);
-		msg->set_finish_time(finish_time);
-		msg->set_queuenum(queuenum);
+	}
 
+	template<class T>
+	void SetMessage(T *msg)
+	{
+		msg->set_ud(id);
+		msg->set_status(status);
+		msg->set_finishtime(finish_time);
+		msg->set_queuenum(queuenum);
+//		msg->set_keeper(PRODUCE_TYPE_MAN);
 		//队列数据
 		for(int i = 0; i < queuenum; ++i)
 		{
@@ -55,6 +68,45 @@ struct DataProduceequip {
 			}
 
 			msg->add_shelfdata(propsid);
+		}
+
+		//货架来源数据
+		for(int i = 0; i < queuenum; ++i)
+		{
+			int flag = *(reinterpret_cast<int*>(shelfsource + i * sizeof(int)));
+
+			msg->add_shelfsource(flag);
+		}
+	}
+
+	void FromMessage(const ProtoUser::ProduceEquipCPP * msg)
+	{
+		status = msg->status();
+		finish_time = msg->finishtime();
+		queuenum = msg->queuenum();
+
+		memset(queuedata, 0, sizeof(queuedata));
+
+		for(int i = 0; i < msg->queuedata_size(); ++i)
+		{
+			int * pprops = reinterpret_cast<int*>(queuedata + i*sizeof(int));
+			*pprops = msg->queuedata(i);
+		}
+
+		memset(shelfdata, 0, sizeof(shelfdata));
+
+		for(int i = 0; i < msg->shelfdata_size(); ++i)
+		{
+			int * pprops = reinterpret_cast<int*>(shelfdata + i*sizeof(int));
+			*pprops = msg->shelfdata(i);
+		}
+
+		memset(shelfsource, 0, sizeof(shelfsource));
+
+		for(int i = 0; i < msg->shelfsource_size(); ++i)
+		{
+			int * flag = reinterpret_cast<int*>(shelfsource + i*sizeof(int));
+			*flag = msg->shelfsource(i);
 		}
 	}
 
@@ -81,7 +133,25 @@ struct DataProduceequip {
 
 		return queuenum;
 	}
+	int IsWorkQueueEmpty()
+	{
+		int i = 0;
+		//获取工作队列的长度
+		for(; i < queuenum; ++i)
+		{
+			int propsid = *(reinterpret_cast<int*>(queuedata + i*sizeof(int) ));
 
+			if (0 == propsid)
+			{
+				break;
+			}
+		}
+		return i == 0;
+	}
+	int IsShelfQueueFull()
+	{
+		return GetWorkQueueNum(shelfdata) >= queuenum;
+	}
 	bool InsertQueue(char * pdata, int productid)
 	{
 		int num = GetWorkQueueNum(pdata);
@@ -155,7 +225,12 @@ struct DataProduceequip {
 		//1.将队列头部的数据取出，后续数据往前移动
 		int productid = PopArray(queuedata, 0);
 		//2.将取出的数据插入展示架.
-		InsertQueue(shelfdata, productid);
+		bool ret = InsertQueue(shelfdata, productid);
+		if(productid == 0 || ret == false)
+		{
+			error_log("queue_data_fetch_failed.productid=%d,ret=%d",productid,ret);
+			throw std::runtime_error("queue_data_fetch_failed");
+		}
 
 		//状态设置为空闲,结束时间重置为0
 		status = status_free;
@@ -178,6 +253,7 @@ public:
 		DBCREQ_NEED(queuenum);
 		DBCREQ_NEED(queuedata);
 		DBCREQ_NEED(shelfdata);
+		DBCREQ_NEED(shelfsource);
 		DBCREQ_NEED(finish_time);
 		DBCREQ_EXEC;
 		DBCREQ_IFNULLROW;
@@ -188,8 +264,9 @@ public:
 		DBCREQ_GET_INT(data, id);
 		DBCREQ_GET_INT(data, status);
 		DBCREQ_GET_INT(data, queuenum);
-		DBCREQ_GET_CHAR(data, queuedata, DataProduceequip_queuedata_COUNT);
-		DBCREQ_GET_CHAR(data, shelfdata, DataProduceequip_shelfdata_COUNT);
+		DBCREQ_GET_BINARY(data, queuedata, DataProduceequip_queuedata_COUNT);
+		DBCREQ_GET_BINARY(data, shelfdata, DataProduceequip_shelfdata_COUNT);
+		DBCREQ_GET_BINARY(data, shelfsource, DataProduceequip_shelfsource_COUNT);
 		DBCREQ_GET_INT(data, finish_time);
 		return 0;
 	}
@@ -209,6 +286,7 @@ public:
 		DBCREQ_NEED(queuenum);
 		DBCREQ_NEED(queuedata);
 		DBCREQ_NEED(shelfdata);
+		DBCREQ_NEED(shelfsource);
 		DBCREQ_NEED(finish_time);
 
 		DBCREQ_EXEC;
@@ -218,8 +296,9 @@ public:
 		DBCREQ_ARRAY_GET_INT(data, id);
 		DBCREQ_ARRAY_GET_INT(data, status);
 		DBCREQ_ARRAY_GET_INT(data, queuenum);
-		DBCREQ_ARRAY_GET_CHAR(data, queuedata,	DataProduceequip_queuedata_COUNT);
-		DBCREQ_ARRAY_GET_CHAR(data, shelfdata,	DataProduceequip_shelfdata_COUNT);
+		DBCREQ_ARRAY_GET_BINARY(data, queuedata,	DataProduceequip_queuedata_COUNT);
+		DBCREQ_ARRAY_GET_BINARY(data, shelfdata,	DataProduceequip_shelfdata_COUNT);
+		DBCREQ_ARRAY_GET_BINARY(data, shelfsource,	DataProduceequip_shelfsource_COUNT);
 		DBCREQ_ARRAY_GET_INT(data, finish_time);
 
 		DBCREQ_ARRAY_GET_END();
@@ -233,8 +312,9 @@ public:
 		DBCREQ_SET_INT(data, id);
 		DBCREQ_SET_INT(data, status);
 		DBCREQ_SET_INT(data, queuenum);
-		DBCREQ_SET_CHAR(data, queuedata, DataProduceequip_queuedata_COUNT);
-		DBCREQ_SET_CHAR(data, shelfdata, DataProduceequip_shelfdata_COUNT);
+		DBCREQ_SET_BINARY(data, queuedata, DataProduceequip_queuedata_COUNT);
+		DBCREQ_SET_BINARY(data, shelfdata, DataProduceequip_shelfdata_COUNT);
+		DBCREQ_SET_BINARY(data, shelfsource, DataProduceequip_shelfsource_COUNT);
 		DBCREQ_SET_INT(data, finish_time);
 
 		DBCREQ_EXEC;
@@ -250,8 +330,9 @@ public:
 		DBCREQ_SET_INT(data, id);
 		DBCREQ_SET_INT(data, status);
 		DBCREQ_SET_INT(data, queuenum);
-		DBCREQ_SET_CHAR(data, queuedata, DataProduceequip_queuedata_COUNT);
-		DBCREQ_SET_CHAR(data, shelfdata, DataProduceequip_shelfdata_COUNT);
+		DBCREQ_SET_BINARY(data, queuedata, DataProduceequip_queuedata_COUNT);
+		DBCREQ_SET_BINARY(data, shelfdata, DataProduceequip_shelfdata_COUNT);
+		DBCREQ_SET_BINARY(data, shelfsource, DataProduceequip_shelfsource_COUNT);
 		DBCREQ_SET_INT(data, finish_time);
 
 		DBCREQ_EXEC;

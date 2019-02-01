@@ -17,7 +17,8 @@ struct DataCropland {
 		status = status_free;
 	}
 
-	void SetMessage(ProtoProduce::CropLandCPP *msg)
+	template<class T>
+	void SetMessage(T *msg)
 	{
 		msg->set_ud(id);
 		msg->set_status(status);
@@ -25,18 +26,25 @@ struct DataCropland {
 		msg->set_harvesttime(harvest_time);
 	}
 
+	void FromMessage(const ProtoUser::CropLandCPP * msg)
+	{
+		status = msg->status();
+		plant = msg->plant();
+		harvest_time = msg->harvesttime();
+	}
+
 	//收获
 	void Harvest()
 	{
 		status = status_free;
 		plant = 0;
-		harvest_time = 0;
 	}
 
 	//成熟
 	void Mature()
 	{
 		status = status_harvest;
+		harvest_time = 0;
 	}
 };
 

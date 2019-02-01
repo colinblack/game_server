@@ -15,6 +15,7 @@
 #define CONFIG_PLATFORM_MAPPING 			"pi/conf/platform/platform_mapping.xml"
 #define CONFIG_ALL_DATA_LOG_PATH			"datalog/"
 #define CONFIG_STRING_FILTER_DATA 			"data/stringfilter.dat"
+#define CONFIG_JSON_PATH		 			"pi/conf/json/"
 #define CONFIG_DBC_SERVER					"pi/conf/dbc_server.xml"
 #define CONFIG_BARBARIANKING_PATH 			"data/"
 
@@ -58,6 +59,18 @@
 #define DB_MARKET_TASK	    6
 #define DB_PAY_HISTORY		51
 
+#define DB_BASE             101
+#define DB_SHOPSELLCOIN    148
+//商会
+#define DB_ALLIANCE 134
+#define DataAlliance_name_LENG 32
+#define DataAlliance_description_LENG 210
+#define BASE_NAME_LEN 32
+#define BASE_FIG_LEN 128
+//商会成员
+#define DB_ALLIANCE_MEMBER 135
+#define DB_ALLIANCE_MEMBER_FULL 100
+
 #define MEM_SESSION			91
 //DB other
 #define KEY_UID_CTRL		1
@@ -92,6 +105,17 @@ typedef vector<unsigned>	UidList;
 //exchange code
 #define CODE_SIZE 12
 #define CODE_TYPE 32//0-31
+
+// 玩家标志位
+enum BaseFlagId
+{
+	base_flag_id_follow_public_reward	= 1,	// 关注公众号奖励
+	base_falg_id_is_have_month_card     = 2,    //是否拥有月卡
+	base_falg_id_is_reward_month_card   = 3,    //当天是否已领过月卡奖励
+	base_falg_id_is_have_life_card      = 4,    //是否拥有终身卡
+	base_falg_id_is_reward_life_card    = 5,    //当天是否已领过终身卡奖励
+
+};
 
 enum ASYN_TYPE
 {

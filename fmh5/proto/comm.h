@@ -46,5 +46,7 @@ struct BattleHead{
 
 #include "Admin.pb.h"
 #include "Common.pb.h"
+#include "ProtoArchive.pb.h"
+#include "ProtoUser.pb.h"
 
 #endif

@@ -47,13 +47,23 @@ using std::stack;
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
-#include <google/protobuf/generated_enum_reflection.h>
+//#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 #include <google/protobuf/descriptor.h>
+//#include <google/protobuf/compiler/importer.h>
+#include <google/protobuf/dynamic_message.h>
+
+using google::protobuf::DynamicMessageFactory;
+
+//using google::protobuf::compiler::Importer;
+//using google::protobuf::compiler::MultiFileErrorCollector;
+//using google::protobuf::compiler::SourceTree;
+//using google::protobuf::compiler::DiskSourceTree;
 
 using google::protobuf::Message;
 using google::protobuf::Descriptor;
 using google::protobuf::FieldDescriptor;
+using google::protobuf::FileDescriptor;
 using google::protobuf::DescriptorPool;
 using google::protobuf::MessageFactory;
 using google::protobuf::Reflection;

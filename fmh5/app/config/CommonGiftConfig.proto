@@ -5,6 +5,7 @@ message BaseItem
 	optional int32 coin		= 1; //金币
 	optional int32 cash		= 2; //钻石
 	optional int32 exp		= 3; //经验
+	optional int32 friend	= 4; //友情
 }
 
 message PropsItem
@@ -17,4 +18,26 @@ message CommonModifyItem
 {
 	optional BaseItem based		= 1;   //玩家属性
 	repeated PropsItem props 	= 2;   //玩家装备
+}
+
+message CommonModifyItemRate
+{
+	required uint32 id = 1;  //ID
+	required uint32 rate = 2;  //权重
+	required CommonModifyItem item = 3;	// 物品
+}
+message CommonModifyItemGrow
+{
+	required uint32  id = 1;	//ID
+	required uint32  level = 2;	//等级
+	required CommonModifyItem item = 3;	// 物品
+}
+message CommonModifyItemNormal
+{
+	required CommonModifyItem item = 1;	// 物品
+}
+message CommonModifyItemSimple
+{
+	required uint32  id = 1;	//ID
+	required CommonModifyItem item = 2;	// 物品
 }

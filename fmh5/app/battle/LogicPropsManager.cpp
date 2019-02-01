@@ -3,19 +3,28 @@
 
 int LogicPropsManager::Process(unsigned uid, User::BuyMaterialReq* req, User::BuyMaterialResp* resp)
 {
-	//计算所需花费的钻石
+	//校验物品是否已解锁、并计算所需花费的钻石
+	DBCUserBaseWrap userwrap(uid);
 	int cost_diamond = 0;
-	for(int i = 0; i < req->buy_info_size(); i++)
+	unsigned user_level = userwrap.Obj().level;
+	uint32_t buyProductId = 0;
+	for(int i = 0; i < req->buyinfo_size(); i++)
 	{
-		User::BuyMaterialInfo buy_info = req->buy_info(i);
-		unsigned props_id = buy_info.props_id();
-		unsigned props_cnt = buy_info.props_cnt();
-
+		User::BuyMaterialInfo buy_info = req->buyinfo(i);
+		unsigned props_id = buy_info.propsid();
+		buyProductId = props_id;
+		unsigned props_cnt = buy_info.propscnt();
 		cost_diamond += props_cnt * ItemCfgWrap().GetPropsItem(props_id).dimond_cost().based().cash();
+
+		unsigned props_unlock_level = ItemCfgWrap().GetPropsItem(props_id).unlock_level();
+		if(user_level < props_unlock_level)
+		{
+			error_log("some props don't unlock.user_level = %u,unlock_level=%u,props_id=%u",user_level,props_unlock_level,props_id);
+			throw std::runtime_error("some props don't unlock");
+		}
 	}
 
 	//校验钻石是否足够
-	DBCUserBaseWrap userwrap(uid);
 	if(-cost_diamond > userwrap.GetCash())
 	{
 		error_log("cash is not enough.cur_cash=%u,cost_cash=%u", userwrap.GetCash(), -cost_diamond);
@@ -23,7 +32,8 @@ int LogicPropsManager::Process(unsigned uid, User::BuyMaterialReq* req, User::Bu
 	}
 
 	//扣除钻石
-	string reason = "cost_cash_buy_material";
+	string reason;
+	String::Format(reason, "CostCashBuyMaterial_%u", buyProductId);
 	userwrap.CostCash(-cost_diamond,reason);
 	DataCommon::CommonItemsCPP *common = resp->mutable_commons();
 	DataCommon::BaseItemCPP *base = common->mutable_userbase()->add_baseitem();
@@ -32,14 +42,24 @@ int LogicPropsManager::Process(unsigned uid, User::BuyMaterialReq* req, User::Bu
 	base->set_totalvalue(userwrap.GetCash());
 
 	//添加物品
-	for(int i = 0; i < req->buy_info_size(); i++)
+	for(int i = 0; i < req->buyinfo_size(); i++)
 	{
-		User::BuyMaterialInfo buy_info = req->buy_info(i);
-		unsigned props_id = buy_info.props_id();
-		unsigned props_cnt = buy_info.props_cnt();
+		User::BuyMaterialInfo buy_info = req->buyinfo(i);
+		unsigned props_id = buy_info.propsid();
+		unsigned props_cnt = buy_info.propscnt();
 
 		AddProps(uid,props_id,props_cnt,reason,resp->mutable_commons()->mutable_props());
 	}
+
+	//添加返回序列号
+	resp->set_seq(req->seq());
+	return 0;
+}
+
+int LogicPropsManager::Process(unsigned uid, User::ViewAdGetSpeedUpCardReq* req, User::ViewAdGetSpeedUpCardResp* resp)
+{
+	const ConfigItem::Items & item_cfg = ConfigManager::Instance()->propsitem.m_config;
+	LogicUserManager::Instance()->CommonProcess(uid,item_cfg.view_ad_reward(),"view_ad_reward_speedup_card",resp->mutable_commons());
 	return 0;
 }
 
@@ -95,7 +115,7 @@ int LogicPropsManager::CostProps(unsigned uid, unsigned propsud, unsigned propsi
 	int restcount = dataprops.item_cnt;
 
 	DataCommon::PropsChangeCPP* costpropsmsg = msg->add_propsitem();
-	costpropsmsg->set_change(count);
+	costpropsmsg->set_change(-count);
 	dataprops.SetMessage(costpropsmsg->mutable_props());
 
 	if (0 == dataprops.item_cnt)  //道具已用完，删除
@@ -111,6 +131,8 @@ int LogicPropsManager::CostProps(unsigned uid, unsigned propsud, unsigned propsi
 
 	PROPS_LOG("uid=%u,id=%u,propsid=%d,act=%s,chg=%d,count=%d,code=%s.",
 			uid, propsud, propsid, logtype.c_str(), count, restcount, reason.c_str());
+
+	LogicKeeperManager::Instance()->OnStorageChange(uid);
 
 	return 0;
 }
@@ -141,7 +163,10 @@ int LogicPropsManager::AddProps(unsigned uid, unsigned propsid, unsigned count, 
 			AddPropsImpl(additem, reason, msg);
 		}
 	}
-
+	if(count > 0)
+	{
+		LogicKeeperManager::Instance()->OnAddMaterial(uid, propsid);
+	}
 	return 0;
 }
 

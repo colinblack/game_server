@@ -20,6 +20,8 @@ public:
 	{
 		string openid = CCGIIn::GetCGIStr("openid");
 		string openkey = CCGIIn::GetCGIStr("openkey");
+		int serverid = CCGIIn::GetCGIInt("serverid", 0, 100000, 0, 0);
+		ConfigManager::Instance()->SetServer(serverid);
 		if (openid.empty() || openkey.empty())
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");

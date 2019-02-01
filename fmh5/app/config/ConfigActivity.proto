@@ -1,0 +1,25 @@
+package ConfigActivity;
+
+import "CommonGiftConfig.proto";
+
+//每日基金
+message DailyFundCPP
+{
+	required CommonGiftConfig.CommonModifyItem diamond		= 1;  //钻石消耗
+	repeated CommonGiftConfig.CommonModifyItem reward		= 2;  //奖励
+}
+
+//新分享活动(邀请好友领奖励)
+message NewShareCPP
+{
+	repeated uint32 share_cd_time                            = 1;//分享后的冷却cd
+	repeated CommonGiftConfig.CommonModifyItem share_reward  = 2;//分享奖励
+	repeated CommonGiftConfig.CommonModifyItem reward		 = 3;//领取奖励
+}
+
+//活动
+message ActivityCfg
+{
+	required DailyFundCPP  daily_fund     = 1;//每日基金
+	required NewShareCPP   new_share      = 2;//新分享活动
+}

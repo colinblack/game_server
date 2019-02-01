@@ -55,8 +55,7 @@ int C9Platform::GetUserInfo(OPUserInfo &userInfo, const string &openid, const st
 		return -1;
 	}
 
-	int server = 0;
-	Config::GetDB(server);
+	int server = ConfigManager::Instance()->GetServer();
 	string osig  = CTrans::ITOS(server) + openid + CTrans::ITOS(m_time)	+ CTrans::ITOS(m_cm) + m_appKey; 
 	string sig = Crypt::Md5Encode(osig);
 	if(sig != openkey)

@@ -51,7 +51,7 @@ private:
 	vector<CInternetAddress> m_listenList;
 	int m_listenCount;
 	int m_maxConn;
-	CTcpChannel *m_pChannels;
+	map<unsigned, CTcpChannel> m_pChannels;
 	int m_lastFreeChannelId;
 	int m_fdEpoll;
 };

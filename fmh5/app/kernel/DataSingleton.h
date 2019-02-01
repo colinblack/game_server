@@ -36,7 +36,9 @@ public:
 	virtual bool IsWorking() = 0;
 	virtual int OnCheck() = 0;
 	virtual void DoSave(unsigned uid) = 0;
+	virtual void DoAllianceSave(unsigned aid) = 0;
 	virtual void DoClear(unsigned uid) = 0;
+	virtual void DoAllianceClear(unsigned alliance_id) = 0;
 	virtual void DebugLog() = 0;
 
 	static unsigned BASE_BUFF;
@@ -281,7 +283,7 @@ public:
 		dbc = new T4;
 		dbc_l = new T4;
 		pthread_cond_init(&m_cond, NULL);
-		if(pthread_create(&m_thread, NULL, _save, NULL) != 0)
+		if(pthread_create(&m_thread, NULL, DataSingleton::_save, NULL) != 0)
 			return R_ERR_DATA;
 
 		int semgroup = 0;
@@ -339,7 +341,9 @@ public:
 	virtual void OnTimer2(){}
 	virtual void CallDestroy() = 0;
 	virtual void DoSave(unsigned uid) {}
+	virtual void DoAllianceSave(unsigned aid) {}
 	virtual void DoClear(unsigned uid){}
+	virtual void DoAllianceClear(unsigned alliance_id) {}
 
 	void DebugLog()
 	{
@@ -359,7 +363,7 @@ public:
 	{
 		return GetFreeCount() < T5;
 	}
-	bool IsNeedClear()
+	virtual bool IsNeedClear()
 	{
 		return GetFreeCount() * 10 / MAX_BUFF <= 1;
 	}
@@ -434,7 +438,7 @@ protected:
 	}
 	void AddSave(unsigned i)
 	{
-		m_queue.push_back(i);
+		m_queue.insert(i);
 	}
 	bool Save()
 	{
@@ -445,7 +449,7 @@ protected:
 
 		CScopedLock guard(m_mutex);
 
-		for(vector<unsigned>::iterator it=m_queue.begin();it!=m_queue.end();++it)
+		for(set<unsigned>::iterator it=m_queue.begin();it!=m_queue.end();++it)
 		{
 			//debug_log("----id=%d,index=%u,work=%u", T2, *it, m_data->plus[*it].status);
 			if(m_data->MarkWorking(*it))
@@ -468,7 +472,6 @@ protected:
 
 		m_working = true;
 		pthread_cond_signal(&m_cond);
-
 		return true;
 	}
 	bool AfterSave()
@@ -602,7 +605,8 @@ protected:
 	static vector<unsigned>m_work;
 	static vector<int> m_dbc_ret;
 	/*************************/
-	static vector<unsigned> m_index, m_queue;
+	static vector<unsigned> m_index;
+	static set<unsigned> m_queue;
 	static bool m_working;
 	static set<unsigned> m_freeIndex;
 
@@ -629,7 +633,7 @@ vector<int> DataSingleton<T1, T2, T3, T4, T5>::m_dbc_ret;
 template<typename T1, int T2, unsigned T3, class T4, unsigned T5>
 vector<unsigned> DataSingleton<T1, T2, T3, T4, T5>::m_index;
 template<typename T1, int T2, unsigned T3, class T4, unsigned T5>
-vector<unsigned> DataSingleton<T1, T2, T3, T4, T5>::m_queue;
+set<unsigned> DataSingleton<T1, T2, T3, T4, T5>::m_queue;
 template<typename T1, int T2, unsigned T3, class T4, unsigned T5>
 bool DataSingleton<T1, T2, T3, T4, T5>::m_working = false;
 template<typename T1, int T2, unsigned T3, class T4, unsigned T5>
@@ -681,7 +685,9 @@ public:
 	virtual void OnTimer2(){}
 	virtual void CallDestroy() = 0;
 	virtual void DoSave(unsigned uid){}
+	virtual void DoAllianceSave(unsigned aid) {}
 	virtual void DoClear(unsigned uid){}
+	virtual void DoAllianceClear(unsigned alliance_id) {}
 	virtual unsigned GetFreeCount(){return 0;}
 	virtual unsigned GetFreeIndex(){return 0;}
 	virtual bool IsFull(){return false;}
@@ -777,7 +783,9 @@ public:
 	virtual void OnTimer2(){}
 	virtual void CallDestroy() = 0;
 	virtual void DoSave(unsigned uid){}
+	virtual void DoAllianceSave(unsigned aid) {}
 	virtual void DoClear(unsigned uid){}
+	virtual void DoAllianceClear(unsigned alliance_id) {}
 	virtual unsigned GetFreeCount(){return 0;}
 	virtual unsigned GetFreeIndex(){return 0;}
 	virtual bool IsFull(){return false;}
@@ -810,7 +818,7 @@ public:
 
 	static string GetSavePath(unsigned id) {return Config::GetPath(CONFIG_SAVE_PATH) + CTrans::ITOS(id) + ".proto";}
 	static string GetRoomPath(unsigned id) {return Config::GetPath(CONFIG_ROOM_PATH) + CTrans::ITOS(id) + ".dat";}
-	static void Destroy(unsigned id) {system(string("rm -f ").append(GetSavePath(id)).append(" ").append(GetRoomPath(id)).c_str());}
+	static void Destroy(unsigned id) {remove(GetSavePath(id).c_str()); remove(GetRoomPath(id).c_str());}
 	void Parse(T2* msg){m_data->Parse(*msg);}
 	void Serialize(T2* msg){m_data->Serialize(msg);}
 	bool Load()

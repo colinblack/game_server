@@ -23,6 +23,8 @@ public:
 		const string itemid = CCGIIn::GetCGIStr("itemid");
 		const string pf = CCGIIn::GetCGIStr("pf");
 		const string pfkey = CCGIIn::GetCGIStr("pfkey");
+		int serverid = CCGIIn::GetCGIInt("serverid", 0, 100000, 0, 0);
+		ConfigManager::Instance()->SetServer(serverid);
 		if (openid.empty() || openkey.empty() || itemid.empty())
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");

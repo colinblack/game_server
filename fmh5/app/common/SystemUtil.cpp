@@ -35,7 +35,7 @@ namespace System
 	}
 };
 
-bool System::InitDaemon(SignalCallback sigusr1, SignalCallback sigusr2, OnSig onsig)
+bool System::InitDaemon()
 {
 	umask(0);
 
@@ -57,7 +57,14 @@ bool System::InitDaemon(SignalCallback sigusr1, SignalCallback sigusr2, OnSig on
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGHUP,  SIG_IGN);
 	IgnoreSignal(SIGPIPE);
+	signal(SIGUSR1,  SIG_IGN);
+	signal(SIGUSR2,  SIG_IGN);
 
+	return daemon(1, 1) == 0;
+}
+
+void System::InitSig(SignalCallback sigusr1, SignalCallback sigusr2, OnSig onsig)
+{
 	if(sigusr1 != NULL)
 	{
 		System::s_sigusr1 = sigusr1;
@@ -86,8 +93,6 @@ bool System::InitDaemon(SignalCallback sigusr1, SignalCallback sigusr2, OnSig on
 			sigaction(i, &act, NULL);
 		}
 	}
-
-	return daemon(1, 1) == 0;
 }
 
 bool System::IgnoreSignal(int signum)

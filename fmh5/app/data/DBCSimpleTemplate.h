@@ -34,9 +34,15 @@ protected:
 
 	void NewItem(unsigned uid, int index)
 	{
+		if(CMI->IsNeedConnectByUID(uid))
+		{
+			error_log("Name: %s, uid:%u, data_need_connect", name(), uid);
+			throw std::runtime_error("data_need_connect");
+		}
+
 		_DBC data;
 		data.uid = uid;
-		if(Add(index, data))
+		if(this->Add(index, data))
 		{
 			m_map[uid] = index;
 		}
@@ -132,9 +138,14 @@ public:
 protected:
 	int _Load(unsigned uid)
 	{
+		if(CMI->IsNeedConnectByUID(uid))
+		{
+			error_log("Name: %s, uid:%u, data_need_connect", name(), uid);
+			throw std::runtime_error("data_need_connect");
+		}
 		if (base::IsFull())
 		{
-			error_log("Name: %s, uid:%u, load_data_error", name(), uid);
+			error_log("Name: %s, uid:%u, data_is_full", name(), uid);
 			throw std::runtime_error("data_is_full");
 		}
 

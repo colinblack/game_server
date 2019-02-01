@@ -13,6 +13,12 @@ int main(int argc,char** argv){
 		return 0;
 	}
 
+	if(!BattleServer::Instance()->InitThread())
+	{
+		printf("battle Server InitThread Error\n");
+		return 0;
+	}
+
 	if(!BattleServer::Instance()->Run())
 	{
 		fatal_log("[FireServer::Run fail]");

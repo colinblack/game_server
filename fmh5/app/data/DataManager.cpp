@@ -72,6 +72,12 @@ int DataGameActivityManager::CheckBuff(unsigned uid)
 
 int DataGameActivityManager::AddBuff(DataGameActivity & activity)
 {
+	if(CMI->IsNeedConnectByUID(activity.uid))
+	{
+		error_log("uid:%u, data_need_connect", activity.uid);
+		throw std::runtime_error("data_need_connect");
+	}
+
 	unsigned index = GetFreeIndex();
 
 	uint32_t uid = activity.uid;
@@ -98,6 +104,12 @@ int DataGameActivityManager::AddBuff(DataGameActivity & activity)
 
 int DataGameActivityManager::LoadBuff(unsigned uid)
 {
+	if(CMI->IsNeedConnectByUID(uid))
+	{
+		error_log("uid:%u, data_need_connect", uid);
+		throw std::runtime_error("data_need_connect");
+	}
+
 	//为防止重复加载
 	if (m_map.count(uid) > 0)
 	{
@@ -176,5 +188,55 @@ void DataGameActivityManager::DoSave(unsigned uid)
 		 {
 				AddSave(miter->second);
 		 }
+	}
+}
+
+void DataGameActivityManager::DelItem(unsigned uid, unsigned id)
+{
+	if(!IsExistItem(uid, id))
+		return;
+	base::m_data->MarkDel(m_map[uid][id]);
+	base::AddSave(m_map[uid][id]);
+	m_map[uid].erase(id);
+}
+
+bool DataGameActivityManager::IsExistItem(unsigned uid, unsigned id)
+{
+	LoadBuff(uid);
+
+	const std::map<unsigned, unsigned>& items = m_map[uid];
+	std::map<unsigned, unsigned>::const_iterator it = items.find(id);
+	return (it != items.end());
+}
+
+
+void DataGameActivityManager::FullMessage(unsigned uid,::google::protobuf::RepeatedPtrField< ::ProtoUser::ActivityCPP >* msg)
+{
+
+	for(int id = e_Activity_Recharge; id < e_Activity_max; id++)
+	{
+		DataGameActivity & activity = GetUserActivity(uid,id);
+		activity.SetMessage(msg->Add());
+	}
+}
+
+
+void DataGameActivityManager::FromMessage(unsigned uid, const ProtoArchive::UserData & data)
+{
+	//删除旧数据
+	for(int id = e_Activity_Recharge; id < e_Activity_max; id++)
+	{
+		DataGameActivity & activity = GetUserActivity(uid,id);
+		DelItem(activity.uid, activity.id);
+	}
+
+	//新增新数据
+	for(int i = 0; i < data.activity_size(); ++i)
+	{
+		unsigned id = data.activity(i).id();
+
+		DataGameActivity & activity = GetUserActivity(uid,id);
+
+		activity.FromMessage(&data.activity(i));
 	}
 }

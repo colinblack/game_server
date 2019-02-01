@@ -1,7 +1,8 @@
 #ifndef _LOGIC_MANAGER_H_
 #define _LOGIC_MANAGER_H_
 
-#include "ServerInc.h"
+#include "Kernel.h"
+#include "DataInc.h"
 
 class LogicManager : public CSingleton<LogicManager>
 {
@@ -12,6 +13,7 @@ private:
 public:
 	bool Initialize();
 	void process(CFirePacket* packet);
+//	bool sendMsgBC(unsigned uid, Message* msg); // 自动判断是否需要跨服，调用方负责释放消息内存
 	bool sendMsg(unsigned uid, Message* msg, bool delmsg = true);//主动推送用
 	bool sendMsgFD(unsigned fd, Message* msg, bool delmsg = true);//主动推送用
 	bool sendMsgGroup(set<unsigned>& uid, Message* msg, bool delmsg = true);//主动推送用
@@ -28,7 +30,9 @@ public:
 	bool IsDataManagerNeedClear();
 	bool IsMemoryManagerNeedClear();
 	void DoDataManagerSave(unsigned uid);
+	void DoDataManagerAllianceSave(unsigned aid);
 	void DoDataManagerClear(unsigned uid);
+	void DoAllianceManagerClear(unsigned alliance_id);
 	void DoMemoryManagerClear(unsigned uid);
 
 	void Addfd(unsigned uid, unsigned fd);
@@ -61,6 +65,8 @@ private:
 	void timerProcess(CFirePacket* packet);
 	int onTimer2();
 	void preOffline(CFirePacket* packet);
+	void battleProcess(CFirePacket* packet);
+	void forwardProcess(CFirePacket* packet);
 
 	//注册协议回调
 	void RegProto();

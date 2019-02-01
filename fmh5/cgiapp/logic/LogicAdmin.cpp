@@ -883,3 +883,194 @@ string CLogicAdmin::SetActTime(unsigned id, unsigned bts, unsigned ets, unsigned
 
 	return res;
 }
+
+int CLogicAdmin::Export(unsigned uid, Json::Value & result)
+{
+	//导出用户档
+	//发送导出协议
+	ProtoArchive::ExportReq * reqmsg = new ProtoArchive::ExportReq;
+
+	reqmsg->set_uid(uid);
+
+	CSG17Packet replay_packet_;
+
+	int ret = SendMsg(uid, reqmsg, replay_packet_);
+
+	if (ret)
+	{
+		return ret;
+	}
+
+	ProtoArchive::ExportResp * resp = (ProtoArchive::ExportResp *) replay_packet_.m_msg;
+
+	//转换成json
+	Proto2Json protoUtil;
+	protoUtil._p2j(resp, result);
+
+	return 0;
+}
+
+int CLogicAdmin::Import(unsigned uid, Json::Value & data)
+{
+	//将json转换成对应的proto
+	Json2Proto json2prot;
+
+	ProtoArchive::ImportReq * reqmsg = new ProtoArchive::ImportReq;
+	reqmsg->set_uid(uid);
+
+	int ret = json2prot._j2p(reqmsg->mutable_data(), data);
+
+	if (ret)
+	{
+		ERROR_RETURN_MSG(5, "json to proto error.");
+	}
+
+	CSG17Packet replay_packet_;
+
+	ret = SendMsg(uid, reqmsg, replay_packet_);
+
+	if (ret)
+	{
+		return ret;
+	}
+
+	ProtoArchive::ImportResp * resp = (ProtoArchive::ImportResp *) replay_packet_.m_msg;
+
+	if (resp->has_err_msg())
+	{
+		ERROR_RETURN_MSG(5, resp->err_msg());
+	}
+
+	return 0;
+}
+
+int CLogicAdmin::SendMsg(unsigned uid, Message * msg, CSG17Packet &reply)
+{
+	if (NULL == msg)
+	{
+		error_log("msg is null. uid=%u", uid);
+		ERROR_RETURN_MSG(5, "msg is null.");
+	}
+
+	if (uid == 0)
+	{
+		error_log("uid is zero. uid=%u", uid);
+		ERROR_RETURN_MSG(5, "uid is zero");
+	}
+
+	//发送协议
+	CSG17Packet packet;
+	packet.cmd = PROTOCOL_ADMIN;
+	packet.m_msg = msg;
+
+	int ret = BattleSocket::Send(Config::GetZoneByUID(uid), &packet);
+
+	if(ret)
+	{
+		error_log("send_data_to_battle_faild. uid=%u", uid);
+		ERROR_RETURN_MSG(5, "send_data_to_battle_faild");
+	}
+
+	ret = BattleSocket::Receive(Config::GetZoneByUID(uid), &reply);
+
+	if(ret)
+	{
+		error_log("redv_data_from_battle_faild. uid=%u", uid);
+		ERROR_RETURN_MSG(5, "redv_data_from_battle_faild");
+	}
+
+	return 0;
+}
+
+int CLogicAdmin::SendMsgToServer(unsigned srvId,  Message *msg)
+{
+	//发送协议
+	CSG17Packet packet;
+	packet.cmd = PROTOCOL_ADMIN;
+	packet.m_msg = msg;
+
+	int ret = BattleSocket::Send(srvId, &packet);
+	if(ret)
+	{
+		error_log("send system error srvId=%u ret=%d", srvId, ret);
+		return -1;
+	}
+
+	CSG17Packet reply;
+	ret = BattleSocket::Receive(srvId, &reply);
+	if(ret)
+	{
+		error_log("recv system error srvId=%u ret=%d", srvId, ret);
+		return -1;
+	}
+
+	Admin::ReplySysMail* rmsg = (Admin::ReplySysMail*) reply.m_msg;
+	ret = rmsg->ret();
+	if(ret)
+	{
+		error_log("reply error srvId=%u ret=%d", srvId, ret);
+		return -1;
+	}
+	return 0;
+}
+int CLogicAdmin::SysMail(string& uid, string& sys, string& reward)
+{
+	Json::Reader reader;
+	Json::Value uidv, sysv, rewardv;
+	if(!reader.parse(uid, uidv)  || !uidv.isArray()
+	|| !reader.parse(sys, sysv)
+	|| (!reward.empty() && !reader.parse(reward, rewardv)))
+	{
+		ERROR_RETURN_MSG(5, "param error");
+	}
+
+	map<uint32_t, set<uint32_t> > allUid;
+	for(unsigned i=0;i<uidv.size();++i)
+	{
+		uint32_t iUid = uidv[i].asUInt();
+		uint32_t srvId = Config::GetZoneByUID(iUid);
+
+		allUid[srvId].insert(iUid);
+		//addmsg->add_uid(uidv[i].asUInt());
+	}
+	if(allUid.empty())	// 全服
+	{
+		set<uint32_t> allServer;
+		ConfigManager::Instance()->GetAllServer(allServer);
+		for(set<uint32_t>::iterator iter = allServer.begin(); iter != allServer.end(); ++iter)
+		{
+			Admin::SysMail * addmsg = new Admin::SysMail;
+			addmsg->set_sys(sys);
+			addmsg->set_reward(reward);
+			uint32_t srvId = *iter;
+			if(SendMsgToServer(srvId, addmsg) != 0)
+			{
+				error_log("SendMsgToServer fail srvId=%u", srvId);
+			}
+		}
+
+	}
+	else
+	{
+		for(map<uint32_t, set<uint32_t> >::iterator sIter = allUid.begin(); sIter != allUid.end(); ++sIter)
+		{
+			Admin::SysMail * addmsg = new Admin::SysMail;
+			addmsg->set_sys(sys);
+			addmsg->set_reward(reward);
+
+			uint32_t srvId = sIter->first;
+			set<uint32_t>& sUid = sIter->second;
+			for(set<uint32_t>::iterator uIter = sUid.begin(); uIter != sUid.end(); ++uIter)
+			{
+				addmsg->add_uid(*uIter);
+			}
+			if(SendMsgToServer(srvId, addmsg) != 0)
+			{
+				error_log("SendMsgToServer fail srvId=%u", srvId);
+			}
+		}
+	}
+
+
+	return 0;
+}

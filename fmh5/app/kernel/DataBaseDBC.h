@@ -46,6 +46,8 @@ public:
 
 #define DBCREQ_SET_INT(data, field)		req.Set(#field, data.field)
 #define DBCREQ_SET_BIN(dd, field)		req.Set(#field, dd.field.data(), dd.field.length())
+#define DBCREQ_SET_BINARY(dd, field, len)	req.Set(#field, dd.field, len)
+#define DBCREQ_SET_BIN_SIZE(dd, field)	req.Set(#field, (char*)dd.field, sizeof(dd.field))
 #define DBCREQ_SET_STR(data, field)		req.Set(#field, data.field.c_str())
 #define DBCREQ_SET_CHAR(dd, field, len)	req.Set(#field, dd.field, len)
 #define DBCREQ_SET_INT_V(field)			req.Set(#field, field);DBCREQ_EXEC
@@ -63,6 +65,8 @@ public:
 #define DBCREQ_GET_BEGIN()				reqItemIndex = 0
 #define DBCREQ_GET_INT(data, field)		data.field = m_dbcret.IntValue(++reqItemIndex)
 #define DBCREQ_GET_BIN(data, field)     {int len;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&len);data.field.append(pTmp,len);}
+#define DBCREQ_GET_BINARY(data, field, len) {int l;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&l);memcpy(data.field,pTmp,min(l,(int)len));}
+#define DBCREQ_GET_BIN_SIZE(data, field) {int l;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&l);memcpy(data.field,pTmp,min(l,(int)sizeof(data.field)));}
 #define DBCREQ_GET_STR(data, field)		data.field = m_dbcret.StringValue(++reqItemIndex)
 #define DBCREQ_GET_CHAR(data, field, len) {const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(data.field,pTmp,len);}
 #define DBCREQ_GET_INT_S(field)			field = m_dbcret.IntValue(++reqItemIndex)
@@ -91,6 +95,8 @@ public:
 		reqItemIndex = 0	\
 
 #define DBCREQ_ARRAY_GET_BIN(array, field)      {int len;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&len);array[i].field.append(pTmp,len);}
+#define DBCREQ_ARRAY_GET_BINARY(array, field, len) {int l;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&l);memcpy(array[i].field,pTmp,min(l,(int)len));}
+#define DBCREQ_ARRAY_GET_BIN_SIZE(array, field) {int l;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&l);memcpy(array[i].field,pTmp,min(l,(int)sizeof(array[i].field)));}
 #define DBCREQ_ARRAY_GET_INT(array, field)		array[i].field = m_dbcret.IntValue(++reqItemIndex)
 #define DBCREQ_ARRAY_GET_CHAR(array, field, len)	{const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(array[i].field,pTmp,len);}
 #define DBCREQ_ARRAY_GET_STR(array, field)		array[i].field = m_dbcret.StringValue(++reqItemIndex)

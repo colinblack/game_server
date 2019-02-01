@@ -2,6 +2,16 @@
 #include "TestPlatform.h"
 #include "TencentPlatform.h"
 #include "C9Platform.h"
+#include "WanBaPlatform.h"
+#include "LiMiPlatform.h"
+#include "WXPlatform.h"
+#include "U9Platform.h"
+#include "FBPlatform.h"
+#include "Mi2Platform.h"
+#include "XMFourPlatform.h"
+#include "XMZZPlatform.h"
+#include "VIVOPlatform.h"
+
 
 static map<int,bool> g_bInitPlatform;
 static bool g_bMultiPlatform = true;
@@ -74,6 +84,33 @@ IOpenPlatform *InitPlatform(const string &configPath)
     case PT_CYXC:
         pPlatform = new C9Platform();
         break;
+    case PT_WB:
+        pPlatform = new WanBaPlatform();
+        break;
+    case PT_LIMI:
+        pPlatform = new LiMiPlatform();
+        break;
+    case PT_WX:
+    	pPlatform = new WXPlatform();
+    	break;
+    case PT_U9:
+    	pPlatform = new U9Platform();
+    	break;
+    case PT_FB:
+        pPlatform = new FBPlatform();
+        break;
+    case PT_Mi2:
+    	pPlatform = new Mi2Platform();
+        break;
+    case PT_XMFOUR:
+    	pPlatform = new XMFourPlatform();
+    	break;
+    case PT_XMZZ:
+    	pPlatform = new XMZZPlatform();
+    	break;
+    case PT_VIVO:
+    	pPlatform = new VIVOPlatform();
+    	break;
 	default:
 		fatal_log("[parse platform config fail][path=%s, error=unknow_platform, platform=%s]",
 				configPath.c_str(), config["platform"].c_str());
@@ -109,6 +146,15 @@ bool OpenPlatform::IsOurPlatform()
 		|| g_currPlatformType == PT_FACEBOOK
 		|| g_currPlatformType == PT_EN
 		|| g_currPlatformType == PT_VN
+		|| g_currPlatformType == PT_WB
+		|| g_currPlatformType == PT_LIMI
+		|| g_currPlatformType == PT_WX
+		|| g_currPlatformType == PT_U9
+		|| g_currPlatformType == PT_FB
+		|| g_currPlatformType == PT_Mi2
+		|| g_currPlatformType == PT_XMFOUR
+		|| g_currPlatformType == PT_XMZZ
+		|| g_currPlatformType == PT_VIVO
 		|| IsQQPlatform()
 		|| IsLY_ALL_Platform();
 }

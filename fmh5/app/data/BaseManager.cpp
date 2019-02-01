@@ -30,6 +30,11 @@ int BaseManager::CheckBuff(unsigned uid)
 }
 int BaseManager::AddBuff(unsigned uid)
 {
+	if(CMI->IsNeedConnectByUID(uid))
+	{
+		error_log("uid:%u, data_need_connect", uid);
+		throw std::runtime_error("data_need_connect");
+	}
 	unsigned index = GetFreeIndex();
 	if(index == -1)
 		return R_ERR_DATA;
@@ -45,6 +50,11 @@ int BaseManager::AddBuff(unsigned uid)
 }
 int BaseManager::LoadBuff(unsigned uid)
 {
+	if(CMI->IsNeedConnectByUID(uid))
+	{
+		error_log("uid:%u, data_need_connect", uid);
+		throw std::runtime_error("data_need_connect");
+	}
 	unsigned index = GetFreeIndex();
 	if(index == -1)
 		return R_ERR_DATA;
@@ -84,10 +94,12 @@ void BaseManager::TryClear(vector<unsigned> &uids)
 {
 	for(map<unsigned, unsigned>::iterator it=m_map.begin();it!=m_map.end();++it)
 	{
+		/*
 		debug_log("%u,%u,%u,%s,%s,%s",m_data->data[it->second].uid, m_data->data[it->second].last_login_time, m_data->data[it->second].last_off_time
 				,m_data->data[it->second].CanClear()?"can clear":"not clear"
 				,m_data->NeedWork(it->second)?"need word":"not work"
 				,(m_data->data[it->second].CanClear() && !m_data->NeedWork(it->second))?"yes":"no");
+		*/
 		if(m_data->data[it->second].CanClear() && !m_data->NeedWork(it->second))
 			uids.push_back(it->first);
 	}

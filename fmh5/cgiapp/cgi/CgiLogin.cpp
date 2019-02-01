@@ -25,12 +25,20 @@ public:
 		string via = CCGIIn::GetCGIStr("via");
 		string time = CCGIIn::GetCGIStr("time");
 		string cm = CCGIIn::GetCGIStr("cm");
-		int isWhite = openkey == "white" ? 1 : 0;
+		int serverid = CCGIIn::GetCGIInt("serverid", 0, 100000, 0, 0);
+		string js_code = CCGIIn::GetCGIStr("code");//接入微信平台前端传入的code
+		string itest  = CCGIIn::GetCGIStr("itest");
+		string token  = CCGIIn::GetCGIStr("token");//小米4部接入传入的token
+		ConfigManager::Instance()->SetServer(serverid);
+		int isWhite = (openkey.empty() && OpenPlatform::GetType() != PT_TEST && OpenPlatform::GetType() != PT_WX && OpenPlatform::GetType() != PT_XMFOUR && OpenPlatform::GetType() != PT_XMZZ && OpenPlatform::GetType() != PT_VIVO) ? 1 : 0;
+		String::Trim(openid);
 		if (openid.empty())
 		{
-			error_log("[openid is empty][platform=%d,openid=%s,openkey=%s]",
+			if(OpenPlatform::GetType() != PT_WX && OpenPlatform::GetType() != PT_XMFOUR){
+				error_log("[openid is empty][platform=%d,openid=%s,openkey=%s]",
 					OpenPlatform::GetType(), openid.c_str(),openkey.c_str());
-			PARAM_ERROR_RETURN_MSG("check_openid_fail");
+				PARAM_ERROR_RETURN_MSG("check_openid_fail");
+			}
 		}
 		if(OpenPlatform::GetType() == PT_360)
 		{
@@ -55,8 +63,7 @@ public:
 		{
 			if(gmFlag == gm_white)
 			{
-				CDataUserMapping dbUserMapping;
-				int ret = dbUserMapping.GetMapping(openid, PT_TEST, uid);
+				int ret = CDataUserMapping().GetMapping(openid, PT_TEST, uid);
 				if(ret)
 				{
 					error_log("[GetMapping fail][ret=%d,openid=%s]", ret, openid.c_str());
@@ -91,6 +98,14 @@ public:
 				params["vip_type"] = CCGIIn::GetCGIStr("vip_type");
 				params["vip_expired"] = CCGIIn::GetCGIStr("vip_expired");
 			}
+			else if(OpenPlatform::GetType() == PT_WX)
+			{
+				params["code"] = js_code;
+			}
+			else if(OpenPlatform::GetType() == PT_XMFOUR)
+			{
+				params["token"] = token;
+			}
 			OpenPlatform::GetPlatform()->SetParameter(params);
 
 			ret = OpenPlatform::GetPlatform()->GetUserInfo(userinfo, openid, openkey);
@@ -107,18 +122,30 @@ public:
 			}
 
 			CLogicUserMapping LogicUserMapping;
-			ret = LogicUserMapping.LoginPlatformUser(OpenPlatform::GetPlatform()->GetPlatformByPF(), userinfo, iopenid, uid,isNewUser,via);
+			ret = LogicUserMapping.LoginPlatformUser(OpenPlatform::GetPlatform()->GetPlatformByPF(), userinfo, iopenid, uid, isNewUser, via);
 			if(ret != 0)
 				return ret;
+		}
+
+		if(OpenPlatform::GetType() == PT_TEST && ((uid & 0x1) == 0))	// 偶数ID
+		{
+			userinfo.msg.set_isbluevip(1);
+			userinfo.msg.set_isblueyearvip(1);
+			userinfo.msg.set_issuperbluevip(1);
+			userinfo.msg.set_blueviplevel(4);
 		}
 
 		userinfo.msg.set_uid(uid);
 		userinfo.msg.set_openkey(openkey);
 		userinfo.msg.set_ts(Time::GetGlobalTime());
 		userinfo.msg.set_fig(userinfo.FigureUrl);
+		userinfo.msg.set_name(userinfo.Name);
 		userinfo.msg.set_isnew(isNewUser);
-		userinfo.msg.set_platform((unsigned)OpenPlatform::GetPlatform()->GetPlatformByPF());
-		userinfo.msg.set_openid(openid);
+		userinfo.msg.set_platform(isWhite?0:((unsigned)OpenPlatform::GetPlatform()->GetPlatformByPF()));
+		if(OpenPlatform::GetType() != PT_WX && OpenPlatform::GetType() != PT_XMFOUR)
+			userinfo.msg.set_openid(openid);
+		else
+			userinfo.msg.set_openid(userinfo.OpenId);
 
 		string suid = CTrans::UTOS(uid);
 		string sts = CTrans::UTOS(Time::GetGlobalTime());
@@ -131,19 +158,67 @@ public:
 		Proto2Json p2j;
 		p2j._p2j(&userinfo.msg, m_jsonResult["msg"]);
 
-		m_jsonResult["open_ts"] = Config::GetIntValue(CONFIG_OPEN_TS);
+		const Demo::Server& c = ConfigManager::Instance()->GetServer(ConfigManager::Instance()->GetServer());
+		//m_jsonResult["open_ts"] = Config::GetIntValue(CONFIG_OPEN_TS);
 		m_jsonResult["cur_pt"] = (int)OpenPlatform::GetType();
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
-		m_jsonResult["tcp_server"] = Config::GetValue(CONFIG_TCP_SERVER);
-		m_jsonResult["access_server"] = Config::GetValue(CONFIG_ACCESS_SERVER);
-		int serveridb;
-		Config::GetDomain(serveridb);
-		m_jsonResult["serverid"] = serveridb;
-		set<int> db;
-		MainConfig::GetIncludeDomains(serveridb, db);
-		m_jsonResult["domains"].resize(0);
-		for(set<int>::iterator it=db.begin();it!=db.end();++it)
-			m_jsonResult["domains"].append(*it);
+		if(pf == "wechat")
+		{
+			if(itest == "1")
+			{
+				//表明需连测试服
+				m_jsonResult["tcp_server"] = "test.wx.tianyuan.dawx.net:7001";
+				m_jsonResult["access_host"] = "test.wx.tianyuan.dawx.net";
+			}
+			else
+			{
+				m_jsonResult["tcp_server"] = "wx.tianyuan.dawx.net:7001";
+				if(c.accesshost() == "118.89.27.97")
+					m_jsonResult["access_host"] = "g1.tianyuan.dawx.net";
+				else if(c.accesshost() == "111.230.140.229")
+					m_jsonResult["access_host"] = "g3.tianyuan.dawx.net";
+				else
+				{
+					REFUSE_RETURN_MSG("access_server_error");
+				}
+
+			}
+
+		}
+		else if(pf == "facebook-instant")
+		{
+			if(itest == "1")
+			{
+				//表明需连测试服
+				m_jsonResult["tcp_server"] = "test.tianyuan.dawx.com:7001";
+				m_jsonResult["access_host"] = "test.tianyuan.dawx.com";
+			}
+			else
+			{
+				m_jsonResult["tcp_server"] = "tianyuan.dawx.com:7001";
+				m_jsonResult["access_host"] = "tianyuan.dawx.com";
+			}
+		}
+		else if(pf == "xiaomi2")
+		{
+			m_jsonResult["tcp_server"] = "wx.tianyuan.dawx.net:7001";
+			if(c.accesshost() == "118.89.27.97")
+				m_jsonResult["access_host"] = "g1.tianyuan.dawx.net";
+			else if(c.accesshost() == "111.230.140.229")
+				m_jsonResult["access_host"] = "g3.tianyuan.dawx.net";
+			else
+			{
+				REFUSE_RETURN_MSG("access_server_error");
+			}
+		}
+		else
+		{
+			m_jsonResult["tcp_server"] = Config::GetValue(CONFIG_TCP_SERVER);
+			m_jsonResult["access_host"] = c.accesshost();
+		}
+		m_jsonResult["access_port"] = c.accessport();
+		m_jsonResult["serverid"] = c.begin();
+		m_jsonResult["switch"] = Config::GetIntValue("switch");
 
 		CGI_SEND_LOG("uid=%u&platform=%d&openid=%s&openkey=%s&iopenid=%s&isWhite=%d",
 				uid, OpenPlatform::GetPlatform()->GetPlatformByPF(), openid.c_str(), openkey.c_str(), iopenid.c_str(), isWhite);

@@ -17,6 +17,27 @@ struct DataGameActivity
 	{
 		memset(actdata, 0, sizeof(actdata));
 	}
+
+
+	void SetMessage(ProtoUser::ActivityCPP * msg)
+	{
+		msg->set_id(id);
+		msg->set_version(version);
+		for(int i = 0; i < DB_GAME_DATA_NUM; i++)
+		{
+			msg->add_data(actdata[i]);
+		}
+	}
+
+	void FromMessage(const ProtoUser::ActivityCPP * msg)
+	{
+		id = msg->id();
+		version = msg->version();
+		for(int i = 0; i < DB_GAME_DATA_NUM; i++)
+		{
+			actdata[i] = msg->data(i);
+		}
+	}
 };
 
 class CDataGameActivity :public DBCBase<DataGameActivity, DB_GAME_ACTIVITY>

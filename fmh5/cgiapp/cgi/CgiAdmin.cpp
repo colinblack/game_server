@@ -22,6 +22,7 @@ string CreateCode()
 	}
 	return skey;
 }
+
 class CCgiAdmin : public CCgiBase
 {
 public:
@@ -53,7 +54,9 @@ public:
 	CGI_SET_ACTION_MAP("SetActTime",SetActTime)
 	CGI_SET_ACTION_MAP("GetForbidTime",GetForbidTime)
 	CGI_SET_ACTION_MAP("SetForbidTime",SetForbidTime)
-
+	CGI_SET_ACTION_MAP("ExportArchives", ExportArchives)
+	CGI_SET_ACTION_MAP("ImportArchives", ImportArchives)
+	CGI_SET_ACTION_MAP("SysMail",SysMail)
 
 	CGI_ACTION_MAP_END
 
@@ -809,11 +812,12 @@ public:
 		}
 		Admin::ReplyForbidTS* rmsg = (Admin::ReplyForbidTS*) reply.m_msg;
 
-		m_jsonResult["forbid_ts"] = rmsg->forbid_ts();
+		m_jsonResult["forbid_ts"] = rmsg->forbidts();
 		m_jsonResult["reason"] = rmsg->reason();
 
 		return 0;
 	}
+
 	int SetForbidTime()
 	{
 		string name = CCGIIn::GetCGIStr("username");
@@ -843,12 +847,14 @@ public:
 
 		Admin::SetForbidTS * msg = new Admin::SetForbidTS;
 		msg->set_uid(uid);
-		msg->set_forbid_ts(forbid_ts);
+		msg->set_forbidts(forbid_ts);
 		msg->set_reason(reason);
 		CSG17Packet packet;
 		packet.cmd = PROTOCOL_ADMIN;
 		packet.m_msg = msg;
+
 		ret = BattleSocket::Send(Config::GetZoneByUID(uid), &packet);
+
 		if(ret)
 		{
 			ERROR_RETURN_MSG(5, "send system error");
@@ -856,6 +862,179 @@ public:
 
 		string value = CTrans::ITOS(forbid_ts);
 		CLogicAdmin::Log(name, "SetForbidTime", "", uid, value, "");
+
+		return 0;
+	}
+
+
+	int ExportArchives()
+	{
+		string name = CCGIIn::GetCGIStr("username");
+		string skey = CCGIIn::GetCGIStr("skey");
+		int ts =  CCGIIn::GetCGIInt("ts");
+//		string reason = CCGIIn::GetCGIStr("reason");
+		unsigned uid = CCGIIn::GetCGIInt("uid");
+
+		if (name.empty() || skey.empty() || 0 == uid)
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		int ret = checkIP(name);
+
+		if(ret)
+			return ret;
+
+		ret = CheckTs(name,ts);
+		if(ret)
+			return ret;
+
+		ts = Time::GetGlobalTime();
+		AddTsCheck(name,ts);
+
+		m_jsonResult["ts"] = ts;
+
+		//校验
+		CLogicAdmin logicAdmin;
+
+		ret = logicAdmin.CheckSession(name, skey);
+
+		if (ret != 0)
+		{
+			return ret;
+		}
+
+		ret = logicAdmin.Export(uid, m_jsonResult);
+
+		if (ret)
+		{
+			return ret;
+		}
+
+		CLogicAdmin::Log(name, "ExportArchives", "admin_op", uid, "");
+
+		return 0;
+	}
+
+	int ImportArchives()
+	{
+		string name = CCGIIn::GetCGIStr("username");
+		string skey = CCGIIn::GetCGIStr("skey");
+		int ts =  CCGIIn::GetCGIInt("ts");
+		string reason = CCGIIn::GetCGIStr("reason");
+		unsigned uid = CCGIIn::GetCGIInt("uid");
+		string sdata = CCGIIn::GetCGIStr("data");
+
+		if (reason.empty() || name.empty() || skey.empty() || (int) uid == CCGIIn::CGI_INT_ERR || sdata.empty())
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		if (name.empty() || skey.empty() || 0 == uid)
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		int ret = checkIP(name);
+
+		if(ret)
+			return ret;
+		ret = CheckTs(name,ts);
+
+		if(ret)
+			return ret;
+		ts = Time::GetGlobalTime();
+
+		AddTsCheck(name,ts);
+
+		try
+		{
+			CLogicAdmin logicAdmin;
+			Json::Value json_data, old;
+
+			if (!Json::Reader().parse(sdata, json_data))
+			{
+				PARAM_ERROR_RETURN_MSG("data_params_error");
+			}
+
+			ret = logicAdmin.Export(uid, old);
+
+			if (ret)
+			{
+				return ret;
+			}
+
+			ret = logicAdmin.Import(uid, json_data);
+
+			if (ret)
+			{
+				return ret;
+			}
+
+			//记录日志
+			Json::Value all;
+			all["old"] = old;
+			all["new"] = json_data;
+			string as = Json::FastWriter().write(all);
+
+			m_jsonResult["uid"] = uid;
+			m_jsonResult["ts"] = ts;
+
+			CGI_SEND_LOG("action=ExportArchives&name=%s&uid=%u", name.c_str(), uid);
+			CLogicAdmin::Log(name, "import", reason, uid, "", as);
+
+			CLogicAdmin::AddCheckLog(name,m_ipstr,"导入档",reason,uid,0,0);
+		}
+		catch (const std::exception& e)
+		{
+			ERROR_RETURN_MSG(R_ERROR, e.what());
+		}
+
+		return 0;
+	}
+	int SysMail()
+	{
+		string name = CCGIIn::GetCGIStr("username");
+		string skey = CCGIIn::GetCGIStr("skey");
+		int ts =  CCGIIn::GetCGIInt("ts");
+
+		string title = CCGIIn::GetCGIStr("title");
+		string content = CCGIIn::GetCGIStr("content");
+		string reward =  CCGIIn::GetCGIStr("reward");
+		string uid =  CCGIIn::GetCGIStr("uid");
+
+		if (name.empty() || skey.empty() || title.empty() || content.empty())
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		//校验
+		CLogicAdmin logicAdmin;
+		int ret = logicAdmin.CheckSession(name, skey);
+		if (ret != 0)
+		{
+			return ret;
+		}
+		ret = logicAdmin.CheckLevel(name, ADMIN_LEVEL_9);
+		if (ret != 0)
+		{
+			return ret;
+		}
+		ret = checkIP(name);if(ret)	return ret;
+		ret = CheckTs(name,ts);if(ret)return ret;
+		ts = Time::GetGlobalTime();
+		AddTsCheck(name,ts);
+		m_jsonResult["ts"] = ts;
+
+		uid = "[" + uid + "]";
+		string sys = "{\"t\":\"" + title + "\",\"c\":\"" + content + "\"}";
+		ret = logicAdmin.SysMail(uid, sys, reward);
+		if (ret)
+		{
+			return ret;
+		}
+
+		CLogicAdmin::Log(name, "SysMail", sys, 0, uid+reward);
 
 		return 0;
 	}

@@ -4,7 +4,7 @@
 class CCgiQQDeliver : public CCgiBase
 {
 public:
-	CCgiQQDeliver() : CCgiBase("qqdeliver")
+	CCgiQQDeliver() : CCgiBase("oldqqdeliver")
 	{
 		SetFeature(CF_GET_REMOTE_IP);
 		SetFeature(CF_CHECK_PLATFORM);
@@ -110,7 +110,7 @@ public:
 					bfirst = false;
 				}
 			}
-			string osig = "GET&%2Fcgi%2Fqqdeliver&" + Crypt::UrlEncodeForTX(qsig);
+			string osig = "GET&%2Fcgi%2Foldqqdeliver&" + Crypt::UrlEncodeForTX(qsig);
 			string sha1Key = appkey + "&";
 			string bnsig = Crypt::HmacSha1(osig, sha1Key);
 			string nsig;

@@ -34,12 +34,18 @@ protected:
 
 	void NewItem(unsigned uid, unsigned id, int index)
 	{
+		if(CMI->IsNeedConnectByUID(uid))
+		{
+			error_log("Name: %s, uid:%u, data_need_connect", name(), uid);
+			throw std::runtime_error("data_need_connect");
+		}
+
 		_DBC data;
 		data.uid = uid;
 		data.id = id;
-		if(Add(index, data))
+		if(this->Add(index, data))
 		{
-			m_map[uid].insert(std::make_pair<unsigned, unsigned>(id, index));
+			m_map[uid].insert(std::make_pair(id, index));
 		}
 		else
 		{
@@ -50,14 +56,20 @@ protected:
 
 	int NewItem(unsigned uid, unsigned id)
 	{
+		if(CMI->IsNeedConnectByUID(uid))
+		{
+			error_log("Name: %s, uid:%u, data_need_connect", name(), uid);
+			throw std::runtime_error("data_need_connect");
+		}
+
 		int index = FreeIndex();
 
 		_DBC data;
 		data.uid = uid;
 		data.id = id;
-		if(Add(index, data))
+		if(this->Add(index, data))
 		{
-			m_map[uid].insert(std::make_pair<unsigned, unsigned>(id, index));
+			m_map[uid].insert(std::make_pair(id, index));
 		}
 		else
 		{
@@ -121,9 +133,14 @@ public:
 			return ;
 		}
 
+		if(CMI->IsNeedConnectByUID(uid))
+		{
+			error_log("Name: %s, uid:%u, data_need_connect", name(), uid);
+			throw std::runtime_error("data_need_connect");
+		}
 		if (base::IsFull())
 		{
-			error_log("Name: %s, uid:%u, load_data_error", name(), uid);
+			error_log("Name: %s, uid:%u, data_is_full", name(), uid);
 			throw std::runtime_error("data_is_full");
 		}
 
@@ -184,6 +201,17 @@ public:
 
 	}
 
+	void GetIndexsFromMem(unsigned uid, std::vector<unsigned>& vResult)
+	{
+		vResult.clear();
+
+		const std::map<unsigned, unsigned>& items = m_map[uid];
+		std::map<unsigned, unsigned>::const_iterator it = items.begin();
+		for (; it != items.end(); ++it)
+		{
+			vResult.push_back(it->second);
+		}
+	}
 	void GetIndexs(unsigned uid, std::vector<unsigned>& vResult)
 	{
 		vResult.clear();

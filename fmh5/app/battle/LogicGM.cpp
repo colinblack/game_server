@@ -61,6 +61,7 @@ LogicGM::LogicGM()
 bool LogicGM::HandleUserBase(const GMCmd& gm, DBCUserBaseWrap& user)
 {
 	CommonGiftConfig::BaseItem  baseitem;
+	string name;
 
 	if (gm.cmd() == string("pass"))
 	{
@@ -70,9 +71,25 @@ bool LogicGM::HandleUserBase(const GMCmd& gm, DBCUserBaseWrap& user)
 	{
 		baseitem.set_cash(gm.get_arg<int>(0));
 	}
+	else if (gm.cmd() == string("accharge"))
+	{
+		user.Obj().acccharge += gm.get_arg<int>(0);
+		user.RefreshVIPLevel(false);
+		user.Save();
+	}
 	else if (gm.cmd() == string("coin"))
 	{
 		baseitem.set_coin(gm.get_arg<int>(0));
+	}
+	else if (gm.cmd() == string("name"))
+	{
+		name = gm.get_arg<string>(0);
+		memset(user.Obj().name, 0, sizeof(user.Obj().name));
+		strncpy(user.Obj().name, name.c_str(), BASE_NAME_LEN-1);
+		user.Save();
+		OfflineResourceItem& rmi = GET_RMI(user.Obj().uid);
+		memset(rmi.name, 0, sizeof(rmi.name));
+		strncpy(rmi.name, name.c_str(), BASE_NAME_LEN-1);
 	}
 	else if (gm.cmd() == string("level"))
 	{
@@ -99,6 +116,40 @@ bool LogicGM::HandleUserBase(const GMCmd& gm, DBCUserBaseWrap& user)
 	{
 		baseitem.set_exp(gm.get_arg<int>(0));
 	}
+	else if(gm.cmd() == string("mcard"))
+	{
+		//月卡处理
+		const ConfigCard::MonthCardCPP &monthcard = ConfigManager::Instance()->card.m_config.monthcard();
+
+		//1.添加钻石奖励
+		unsigned cash = monthcard.first_reward().based().cash();
+		baseitem.set_cash(cash);
+
+		//2.添加累积充值
+		user.Obj().acccharge = cash;
+		user.RefreshVIPLevel(false);
+		user.Save();
+
+		//3.添加月卡处理
+		LogicCardManager::Instance()->HandleCardPurchase(user.Obj().uid,MONTH_CARD_ID);
+	}
+	else if(gm.cmd() == string("lcard"))
+	{
+		//终生卡处理
+		const ConfigCard::LifeCardCPP &liftcard = ConfigManager::Instance()->card.m_config.lifecard();
+
+		//1.添加钻石奖励
+		unsigned cash = liftcard.first_reward().based().cash();
+		baseitem.set_cash(cash);
+
+		//2.添加累积充值
+		user.Obj().acccharge = cash;
+		user.RefreshVIPLevel(false);
+		user.Save();
+
+		//3.添加终生卡处理
+		LogicCardManager::Instance()->HandleCardPurchase(user.Obj().uid,LIFE_CARD_ID);
+	}
 	else
 	{
 		return false;
@@ -114,9 +165,19 @@ bool LogicGM::HandleProps(const GMCmd& gm, unsigned uid)
 	if (gm.cmd() == string("equip"))
 	{
 		unsigned eq_id = gm.get_arg<int>(0);
-		unsigned count = gm.get_arg<int>(1);
-		if (count >= 100000) count = 100000;
-		LogicPropsManager::Instance()->AddProps(uid, eq_id, count, "gm_op", msg_.mutable_common()->mutable_props());
+		int count = gm.get_arg<int>(1);
+		if(count > 0)
+		{
+			if (count >= 100000 )
+				count = 100000;
+			LogicPropsManager::Instance()->AddProps(uid, eq_id, count, "gm_op", msg_.mutable_common()->mutable_props());
+		}
+		else {
+			unsigned ud = DataItemManager::Instance()->GetPropsUd(uid, eq_id);
+			LogicPropsManager::Instance()->CostProps(uid,ud,eq_id,-count,"gm_op", msg_.mutable_common()->mutable_props());
+		}
+
+
 	}
 	else
 	{
@@ -142,14 +203,19 @@ int LogicGM::Process(unsigned uid, ProtoGM::GMCmdReq* req)
 {
 	msg_.Clear();
 
+	Common::Login info;
+	if(!UMI->GetUserInfo(uid, info) || info.platform() != 0)
+	{
+		throw std::runtime_error("gm_only_support_test_platform");
+	}
+
 	DBCUserBaseWrap user(uid);
-	if (user.Obj().register_platform != 0)
+	if(user.Obj().register_platform != 0)
 	{
 		throw std::runtime_error("gm_only_support_test_platform");
 	}
 
 	GMCmd gm(req->cmd());
-
 	do
 	{
 		if (HandleUserBase(gm, user)) break;

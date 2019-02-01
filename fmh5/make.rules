@@ -4,10 +4,10 @@ CXX  = g++
 AR   = ar
 
 #Debug Version
-CFLAGS  = -g -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_DEBUG_BUILD -fPIC
+CFLAGS  = -g -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_DEBUG_BUILD -fPIC -std=c++11
 
 #Release Version
-#CFLAGS  = -O3 -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_RELEASE_BUILD -fPIC
+#CFLAGS  = -O3 -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_RELEASE_BUILD -fPIC -std=c++11
 
 CXXFLAGS= $(CFLAGS)
 
@@ -42,6 +42,10 @@ DBC_LIB			= -L$(PATH_PLATFORM_PRJ)/outerlib/dbc/lib -ldbs-gcc-4.4
 ### PENGYOU
 PENGYOU_INC		= -I$(PATH_PLATFORM_PRJ)/outerlib/pengyou/include
 PENGYOU_LIB		= -L$(PATH_PLATFORM_PRJ)/outerlib/pengyou/lib -lsg17openapi -lcurl -lz -ldl
+
+### XSG
+XSG_INC         = -I$(PATH_PLATFORM_PRJ)/outerlib/xsg/include
+XSG_LIB         =  -L$(PATH_PLATFORM_PRJ)/outerlib/xsg/lib -lxsg
 
 ### PROTO
 PROTO_INC       = -I$(PATH_PLATFORM_PRJ)/proto

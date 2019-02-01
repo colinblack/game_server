@@ -13,4 +13,7 @@
 #include "DataMarketTask.h"
 #include "DataBlackUser.h"
 #include "DataPayHistory.h"
+#include "DataAlliance.h"
+#include "DataBase.h"
+#include "DataShopSellCoin.h"
 #endif /* DATAINC_H_ */

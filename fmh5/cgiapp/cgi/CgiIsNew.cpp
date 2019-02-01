@@ -23,12 +23,13 @@ public:
 	int IsNew()
 	{
 		string openid = CCGIIn::GetCGIStr("openid");
+		int serverid = CCGIIn::GetCGIInt("serverid", 0, 100000, 0, 0);
+		ConfigManager::Instance()->SetServer(serverid);
 		if(openid.empty())
 			return R_ERR_PARAM;
 
-		CDataUserMapping dbUserMapping;
 		unsigned uid;
-		int ret = dbUserMapping.GetMapping(openid, PT_TEST, uid);
+		int ret = CDataUserMapping().GetMapping(openid, PT_TEST, uid);
 		if (R_ERR_NO_DATA == ret)
 			m_jsonResult["isNew"] = 1;
 		else if(ret == 0)

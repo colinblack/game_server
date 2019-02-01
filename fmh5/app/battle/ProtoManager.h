@@ -8,7 +8,9 @@
 #ifndef PROTOMANAGER_H_
 #define PROTOMANAGER_H_
 
-#include "ServerInc.h"
+#include "Kernel.h"
+#include "DataInc.h"
+#include "LogicManager.h"
 
 /*
  * 回调管理器
@@ -132,6 +134,96 @@ public:
 		}
 
 		return ret;
+	}
+
+	/*禁用同步接口
+	//指定serverid的battle之间的有回复跨服请求，对方的消息注册应该使用 ProcessNoUID
+	static int BattleConnect(unsigned serverid, Message& msg, Message& resp)
+	{
+		int ret = 0;
+		try
+		{
+			CFirePacket packet(PROTOCOL_EVENT_BATTLE_CONNECT, false);
+			packet.m_msg = &msg;
+			ret = BattleConnect::Send(serverid, &packet);
+			if(ret)
+			{
+				error_log("send to server:%u error!", serverid);
+				return ret;
+			}
+
+			CFirePacket reply;
+			ret = BattleConnect::Receive(serverid, &reply);
+			if(ret)
+			{
+				error_log("receive from server:%u error!", serverid);
+				return ret;
+			}
+
+			if(reply.m_msg->GetTypeName() == "ErrorRet.ErrorRet")
+			{
+				ErrorRet::ErrorRet* t = dynamic_cast<ErrorRet::ErrorRet*>(reply.m_msg);
+				ret = t->errorret();
+				error_log("reply %s error, ret=%u, msg=%s", t->requestmsg().c_str(), ret, t->errormsg().c_str());
+				return ret;
+			}
+
+			resp.MergeFrom(*reply.m_msg);
+		}
+		catch(const std::exception& e)
+		{
+			error_log("BattleConnect error %s", e.what());
+			return R_ERROR;
+		}
+
+		return ret;
+	}
+	*/
+
+	//指定serverid的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
+	static int BattleConnectNoReply(unsigned serverid, Message* msg, bool d = true)
+	{
+		try
+		{
+			CFirePacket* packet = new CFirePacket(PROTOCOL_EVENT_BATTLE_CONNECT, d);
+			packet->m_msg = msg;
+			BattleConnect::AddSend(serverid, packet);
+		}
+		catch(const std::exception& e)
+		{
+			error_log("BattleConnect error %s", e.what());
+			return R_ERROR;
+		}
+
+		return 0;
+	}
+
+	/*禁用同步接口
+	//指定uid的battle之间的有回复跨服请求，对方的消息注册应该使用 ProcessNoUID
+	static int BattleConnectByUID(unsigned uid, Message& msg, Message& resp)
+	{
+		return BattleConnect(Config::GetZoneByUID(uid), msg, resp);
+	}
+	//指定aid的battle之间的有回复跨服请求，对方的消息注册应该使用 ProcessNoUID
+	static int BattleConnectByAID(unsigned aid, Message& msg, Message& resp)
+	{
+		return BattleConnect(Config::GetZoneByAID(aid), msg, resp);
+	}
+	*/
+	//指定uid的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
+	static int BattleConnectNoReplyByUID(unsigned uid, Message* msg, bool d = true)
+	{
+		return BattleConnectNoReply(Config::GetZoneByUID(uid), msg, d);
+	}
+	//指定aid的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
+	static int BattleConnectNoReplyByAID(unsigned aid, Message* msg, bool d = true)
+	{
+		return BattleConnectNoReply(Config::GetZoneByAID(aid), msg, d);
+	}
+	//指定zoneId的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
+	static int BattleConnectNoReplyByZoneID(unsigned zoneId, Message* msg, bool d = true)
+	{
+		return BattleConnectNoReply(zoneId, msg, d);
 	}
 };
 

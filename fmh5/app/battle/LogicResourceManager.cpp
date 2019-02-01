@@ -36,6 +36,7 @@ int LogicResourceManager::Sync(const DataBase& userBase)
 		}
 
 		index = ResourceManager::Instance()->GetIndex(uid);
+
 		if (index < 0)
 		{
 			throw std::runtime_error("data_error");
@@ -43,14 +44,18 @@ int LogicResourceManager::Sync(const DataBase& userBase)
 	}
 
 	OfflineResourceItem& item = ResourceManager::Instance()->m_data->item[index];
+
 	//同步需要的数据
 	item.level = userBase.level;
 	item.viplevel = userBase.viplevel;
 	item.alliance_id = userBase.alliance_id;
+	item.helptimes = userBase.helptimes;
+
 	memcpy(item.fig, userBase.fig, BASE_FIG_LEN);
 	memcpy(item.name, userBase.name, BASE_NAME_LEN);
 
 	item.ts = Time::GetGlobalTime();
+
 	return index;
 }
 
@@ -123,6 +128,11 @@ void LogicResourceManager::Offline(unsigned uid)
 	try
 	{
 		OfflineResourceItem& src = this->Get(uid);
+
+		DBCUserBaseWrap userwrap(uid);
+
+		src.helptimes = userwrap.Obj().helptimes;
+
 		src.ts = Time::GetGlobalTime();
 	}
 	catch(const std::exception& e)

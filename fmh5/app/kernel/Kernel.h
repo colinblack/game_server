@@ -34,4 +34,6 @@
 #include "ConfigPB.h"
 #include "ConfigInc.h"
 
+#include "BattleConnect.h"
+
 #endif //__KERNEL_H__

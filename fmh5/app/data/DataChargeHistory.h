@@ -22,11 +22,18 @@ struct DataChargeHistory
     	cash = 0;
     }
 
-	void SetMessage(User::ChargeItem * msg)
+    template<class T>
+	void SetMessage(T * msg)
 	{
 		msg->set_cash(cash);
 		msg->set_ts(ts);
 	}
+
+    void FromMessage(const ProtoUser::ChargeItem * msg)
+    {
+    	cash = msg->cash();
+    	ts = msg->ts();
+    }
 };
 
 class CDataChargeHistory :public DBCBase<DataChargeHistory, DB_CHARGE_HISTORY>

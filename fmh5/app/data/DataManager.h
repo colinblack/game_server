@@ -9,6 +9,7 @@
 //活动
 class DataGameActivityManager : public DataSingleton<DataGameActivity, DB_GAME_ACTIVITY, DB_GAME_ACTIVITY_FULL, CDataGameActivity, DB_GAME_ACTIVITY_FULL>, public CSingleton<DataGameActivityManager>
 {
+	typedef DataSingleton<DataGameActivity, DB_GAME_ACTIVITY, DB_GAME_ACTIVITY_FULL, CDataGameActivity, DB_GAME_ACTIVITY_FULL> base;
 private:
 	friend class CSingleton<DataGameActivityManager>;
 	DataGameActivityManager(){};
@@ -31,6 +32,14 @@ public:
 	void DoSave(unsigned uid);
 
 	bool UpdateActivity(DataGameActivity & activity);
+
+	void DelItem(unsigned uid, unsigned id);
+
+	bool IsExistItem(unsigned uid, unsigned id);
+
+	void FullMessage(unsigned uid,::google::protobuf::RepeatedPtrField< ::ProtoUser::ActivityCPP >* msg);
+
+	void FromMessage(unsigned uid, const ProtoArchive::UserData & data);
 };
 
 #endif  //DATA_MANAGER_H_

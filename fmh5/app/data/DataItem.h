@@ -27,12 +27,19 @@ struct DataItem
 
     }
 
-	void SetMessage(DataCommon::PropsItemCPP *msg)
+    template<class T>
+	void SetMessage(T *msg)
 	{
 		msg->set_ud(id);
 		msg->set_propsid(props_id);
 		msg->set_itemcnt(item_cnt);
 	}
+
+    void FromMessage(const ProtoUser::PropsItemCPP * msg)
+    {
+    	props_id = msg->propsid();
+    	item_cnt = msg->itemcnt();
+    }
 };
 
 class CDataItem :public DBCBase<DataItem, DB_ITEM>

@@ -9,6 +9,7 @@ struct DataAnimal
 	uint16_t residence_ud;
 	uint16_t animal_id;
 	uint8_t status;
+	int8_t produce_type;	// 0:手动生产,1:助手生产
 
 	DataAnimal()
 	{
@@ -19,15 +20,26 @@ struct DataAnimal
 		residence_ud = 0;
 		animal_id = 0;
 		status = status_hungry;
+		produce_type = PRODUCE_TYPE_MAN;
 	}
 
-	void SetMessage(ProtoProduce::AnimalCPP *msg)
+	template<class T>
+	void SetMessage(T *msg)
 	{
 		msg->set_ud(id);
 		msg->set_residenceud(residence_ud);
 		msg->set_animalid(animal_id);
 		msg->set_fulltime(full_time);
 		msg->set_status(status);
+//		msg->set_keeper(produce_type);
+	}
+
+	void FromMessage(const ProtoUser::AnimalCPP * msg)
+	{
+		residence_ud = msg->residenceud();
+		animal_id = msg->animalid();
+		full_time = msg->fulltime();
+		status = msg->status();
 	}
 
 	void Full()

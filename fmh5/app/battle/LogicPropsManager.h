@@ -35,6 +35,9 @@ public:
 	//是否可叠加
 	bool IsAllowOverlay(unsigned propsid);
 
+	//购买加速卡
+	int Process(unsigned uid, User::ViewAdGetSpeedUpCardReq* req, User::ViewAdGetSpeedUpCardResp* resp);
+
 private:
 	int AddPropsImpl(DataItem & props, string & reason, DataCommon::PropsAllChangeCPP * msg);
 };

@@ -37,7 +37,7 @@ public:
 
 	string GetErrmsg() {return m_errmsg;}
 private:
-	int ConnectServer();
+	int ConnectServer(unsigned uid);
 
 	int SetPoll();  //设置epoll
 

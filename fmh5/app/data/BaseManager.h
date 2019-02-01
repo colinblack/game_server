@@ -10,7 +10,6 @@
 
 #include "Kernel.h"
 #include "DataBase.h"
-#include "DataInc.h"
 
 class BaseManager : public DataSingleton<DataBase, DB_BASE, DB_BASE_FULL, CDataBase, DB_BASE_FULL>, public CSingleton<BaseManager>
 {
@@ -41,7 +40,6 @@ public:
 
 	//throw std::runtime_error
 	DataBase& Get(unsigned uid);
-
 
 	bool UpdateDatabase(unsigned index);
 

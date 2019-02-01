@@ -64,10 +64,10 @@ public:
 			string &zoneid);
 	int AddPayHistory(DataPayHistory &payHistory);
 
-private:
 	static int GetItemInfo(
 			const string &itemid,
 			QQItemInfo &item);
+private:
 
 	typedef map<string, QQItemInfo> T_ItemMap;
 	static T_ItemMap g_ItemInfo;

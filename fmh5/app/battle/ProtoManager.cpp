@@ -5,7 +5,7 @@
  *      Author: Ralf
  */
 
-#include "ProtoManager.h"
+#include "ServerInc.h"
 
 CurCMD ProtoManager::m_CurCMD = e_CMD_none;
 

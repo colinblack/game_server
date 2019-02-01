@@ -18,4 +18,7 @@
 #include "BattleSocket.h"
 #include "BusinessLog.h"
 
+#include "ConfigManager.h"
+
+
 #endif //__KERNEL_H__

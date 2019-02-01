@@ -39,4 +39,5 @@ message CommonItemsCPP
 {
 	optional UserBaseChangeCPP 	userbase	 = 1;  //玩家属性
 	optional PropsAllChangeCPP		props	 = 2;  //玩家道具
+	optional uint32 from 					 = 3;  //来源(1:
 }

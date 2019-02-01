@@ -18,23 +18,43 @@ private:
 	virtual ~UserManager(){}
 
 	map<unsigned, Common::Login> m_infomap;
-	set<unsigned> m_save;
+	set<unsigned> m_save, m_alliance_save;
 
-	CDataName m_dbName;
+	//CDataName m_dbName;
+
+	int _requestOtherUser(unsigned othuid, User::OtherUser* reply);
 public:
 	virtual void CallDestroy() {Destroy();}
 	virtual void OnTimer2();
 
 	int ProcessLogin(Common::Login* msg);
-	int Process(unsigned myuid, User::RequestOtherUser* msg, User::OtherUser* reply);
+	int Process(unsigned myuid, User::RequestOtherUser* msg);
+	int Process(User::RequestOtherUserBC* msg);
 	int Process(unsigned uid, Common::ChangeName* msg, Common::ReplyChangeName* resp);
 	int Process(Admin::AddCash* msg, Admin::ReplyAddCash* resp);
-	int Process(unsigned uid, User::Tutorial_stage* msg);
+	int Process(unsigned uid, User::Tutorialstage* msg);
+	int Process(unsigned uid, User::SwitchStatus* msg);
 	int Process(Admin::AsycAdd* req, Admin::AsycAddResp* resp);
 	int Process(Admin::RequestForbidTS* req, Admin::ReplyForbidTS* resp);
 	int Process(Admin::SetForbidTS* req);
+	int Process(Admin::SetAllianceRaceGroup* req);
+	int Process(Admin::SetActivity* req);
 
+	int Process(unsigned uid, User::SetVersion* msg);
+	int Process(unsigned uid, User::SetFlag* msg);
 	int Process(unsigned uid, Common::ShutDown* msg);
+
+	int Process(uint32_t uid, User::ReqNewMsg* req, User::ReplyNewMsg* resp);
+
+	//存档的导出
+	int Process(ProtoArchive::ExportReq* req, ProtoArchive::ExportResp* resp);
+
+	//存档的导入
+	int Process(ProtoArchive::ImportReq* req, ProtoArchive::ImportResp* resp);
+
+	//物品助手
+	int Process(unsigned uid, ProtoAssistor::OpenAssistorReq* msg, ProtoAssistor::OpenAssistorResp* resp);
+	int Process(unsigned uid, ProtoAssistor::UseAssistorReq* msg, ProtoAssistor::UseAssistorResp* resp);
 
 	int CheckUser(unsigned uid);
 	int AddUser(unsigned uid);
@@ -63,9 +83,26 @@ public:
 
 	std::string GetOpenId(unsigned uid);
 
-private:
 	int LoadArchives(unsigned uid);
-};
 
+	int SyncSave(unsigned uid);
+	int AllianceSave(unsigned aid);
+
+	//同服访问好友庄园添加动态消息
+	bool AddVisitDyInfo(unsigned uid,unsigned other_uid);
+	//跨服访问好友庄园添加动态消息
+	bool AddVisitDyInfoOverServer(unsigned uid,unsigned other_uid);
+	//仙人加速功能激活
+	bool OnFairySpeedUpOpen(uint32_t uid);
+	bool IsFairySpeedUpCrop(uint32_t uid);
+	bool IsFairySpeedUpEquip(uint32_t uid);
+	bool IsFairySpeedUpFarm(uint32_t uid);
+	float GetFairySpeedUpCrop(uint32_t uid);
+	float GetFairySpeedUpEquip(uint32_t uid);
+	float GetFairySpeedUpFarm(uint32_t uid);
+	void SendFlagInfo(uint32_t uid);
+	bool SendNewMsgToUser(uint32_t uid, uint32_t type);
+	bool SendNewMsgToAll(uint32_t type);
+};
 
 #endif /* USERMANAGER_H_ */

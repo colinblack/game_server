@@ -26,6 +26,7 @@ message CropLand
 	repeated uint32 need_level	= 3;  //要求的解锁等级
 	repeated uint32 gain_num	= 4;
 	repeated uint32 wait_time	= 5;  //可不配置
+	required CommonGiftConfig.CommonModifyItem build_reward = 6; //建筑奖励
 }
 
 message AnimalResidence
@@ -38,6 +39,7 @@ message AnimalResidence
 	required uint32 animal_id	= 6;
 	required uint32 capacity	= 7;
 	required uint32 speed_price = 8;  //立即完成价格。1钻的秒数
+	required CommonGiftConfig.CommonModifyItem build_reward = 9; //建筑奖励	
 }
 
 message Animal
@@ -46,13 +48,15 @@ message Animal
 	repeated CommonGiftConfig.CommonModifyItem need_cost = 2; //解锁消耗
 	repeated uint32 need_level	= 3;  //要求的解锁等级
 	repeated uint32 gain_num	= 4;
+	required CommonGiftConfig.CommonModifyItem build_reward = 5; //建筑奖励	
 }
 
 message UpgradeStar
 {
 	required uint32 need_time	= 1;  //熟练时间
-	required uint32 ptype		= 2;  //属性类型
-	required uint32 value		= 3;  //属性值
+	required uint32 need_price	= 2;  //需要的总价格
+	required uint32 ptype		= 3;  //属性类型
+	required uint32 value		= 4;  //属性值
 }
 
 message ProduceEquipment
@@ -65,6 +69,7 @@ message ProduceEquipment
 	repeated UpgradeStar upgrade_star	= 7;
 	required uint32 init_queue	= 8;
 	required uint32 speed_price = 9;  //立即完成价格。1钻的秒数
+	required CommonGiftConfig.CommonModifyItem build_reward = 10; //建筑奖励	
 }
 
 message FruitTree
@@ -74,16 +79,25 @@ message FruitTree
 	repeated uint32 						need_level	 = 3;  //要求的解锁等级
 	repeated uint32 						gain_num	 = 4;
 	repeated uint32 						wait_time	 = 5;  //可不配置
-	required uint32 					harvest_times	 = 6;
-	required uint32 					cut_tree_props	 = 7;	
+	required CommonGiftConfig.CommonModifyItem cut_tree_props	= 6;	
 }
 
 message Decoration
 {
-	required uint32 id										= 1;
-	repeated CommonGiftConfig.CommonModifyItem need_cost 	= 2; //解锁消耗
-	repeated uint32 need_level								= 3;  //要求的解锁等级
-	repeated uint32 	wait_time	 						= 4;  //可不配置
+	required uint32 							id			= 1;
+	repeated CommonGiftConfig.CommonModifyItem need_cost 	= 2;  //解锁消耗
+	repeated uint32 						need_level		= 3;  //要求的解锁等级
+	repeated uint32 						wait_time	 	= 4;  //可不配置
+	repeated uint32 						gain_num		= 5;  //建造数量上限
+	required uint32							factor			= 6;  //系数
+	
+}
+
+message ViewAdReduceTimeCPP
+{
+	required uint32 base_time        = 1;
+	required uint32 reduce_percent   = 2;
+	required uint32 view_ad_max_cnt  = 3;
 }
 
 message Buildings
@@ -98,6 +112,7 @@ message Buildings
 	repeated BuildFoot 			build_print		= 8;  //地块相关信息
 	repeated Animal				 animal			= 9;  //动物
 	required uint32 unlock_upgardestar_level	= 10; //升星功能解锁等级
+	required ViewAdReduceTimeCPP   view_ad_cfg  = 11;//看广告配置
 }
 
 message Barrier

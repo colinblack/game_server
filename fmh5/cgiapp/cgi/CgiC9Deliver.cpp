@@ -24,6 +24,7 @@ public:
 	int deliver()
 	{
 		const unsigned serverid = CCGIIn::GetCGIInt("serverid");
+		ConfigManager::Instance()->SetServer(serverid);
 		const string serverid_s = CCGIIn::GetCGIStr("serverid");
 		const string order_id = CCGIIn::GetCGIStr("order_id");
 		const string openid = CCGIIn::GetCGIStr("uid");
@@ -77,7 +78,7 @@ public:
 		int ret = 0;
 		unsigned uid = 0;
 		CDataUserMapping dbUserMapping;
-		ret = dbUserMapping.GetUID(openid, serverid, uid);
+		ret = dbUserMapping.GetMapping(openid, 0, uid);
 		if(ret == R_ERR_NO_DATA)
 		{
 			result["errno"] = -3;

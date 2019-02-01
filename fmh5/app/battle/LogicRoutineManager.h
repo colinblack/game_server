@@ -16,32 +16,14 @@ private:
 
     long timeGen();
 
-	long GetNextRid(bool isPadding, long busId);
 
 public:
 	virtual void CallDestroy() { Destroy();}
 
-	void OnTimer1();
+	long GetNextRid(bool isPadding, long busId);
 
-	//添加常规任务，返回任务id
-	long AddTask(DataRoutineBase * task);
-
-	//用户离线处理
-	void Offline(unsigned uid);
-
-	void DelTask(long rid, bool isdeluser = true);
-
-	//对某个任务进行加速
-	int SpeedUpTask(long rid, int sec);
-
-	//任务完成
-	void TaskDone(DataRoutineBase * task);
 
 private:
-	map<unsigned, vector<DataRoutineBase *> > tasks_;  //ts -> task
-	map<long, unsigned> rid_ts;  //rid-> task
-	map<unsigned, vector<long> > user_task;  //用户的任务
-
 	long sequence;
     long workerId;
     long regionId;

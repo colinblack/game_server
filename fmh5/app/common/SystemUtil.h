@@ -15,7 +15,8 @@ typedef void (*OnSig)(int ,siginfo_t *,void *);
 
 namespace System
 {
-	bool InitDaemon(SignalCallback sigusr1 = NULL, SignalCallback sigusr2 = NULL, OnSig onsig = NULL);
+	bool InitDaemon();
+	void InitSig(SignalCallback sigusr1 = NULL, SignalCallback sigusr2 = NULL, OnSig onsig = NULL);
 	bool IgnoreSignal(int signum);
 	string GetModuleDirectory();
 	bool SetCurrentDirectory(const string &path);

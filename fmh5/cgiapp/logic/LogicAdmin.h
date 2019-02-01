@@ -67,6 +67,20 @@ public:
 
 	string GetActTime();
 	string SetActTime(unsigned id, unsigned bts, unsigned ets, unsigned ver);
+
+	//导出
+	int Export(unsigned uid, Json::Value & result);
+
+	//导入
+	int Import(unsigned uid, Json::Value & data);
+
+	int SysMail(string& uid, string& sys, string& reward);
+private:
+	//发送数据，并等待回包
+	int SendMsg(unsigned uid, Message * msg, CSG17Packet &reply);
+	//发送数据, 并等待回包
+	int SendMsgToServer(unsigned srvId,  Message *msg);
+
 private:
 	static map<string, AdminInfo> adminList;
 	static map<string, AdminSession> adminSession;

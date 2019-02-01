@@ -14,12 +14,13 @@
 #include <netdb.h>
 #include "BattleSocket.h"
 #include "ErrorUtil.h"
+#include "ConfigManager.h"
 
 map<unsigned, BattleSocket*> BattleSocket::m_map;
 
 int BattleSocket::Send(unsigned server, CSG17Packet* packet)
 {
-	server = MainConfig::GetMergedDomain(server);
+	server = ConfigManager::Instance()->GetMainServer(server);
 	if(!m_map.count(server))
 		m_map[server] = new BattleSocket(server);
 	if(m_map[server]->IsClosed() && m_map[server]->Connect() != 0)
@@ -28,7 +29,7 @@ int BattleSocket::Send(unsigned server, CSG17Packet* packet)
 }
 int BattleSocket::Receive(unsigned server, CSG17Packet* packet)
 {
-	server = MainConfig::GetMergedDomain(server);
+	server = ConfigManager::Instance()->GetMainServer(server);
 	if(!m_map.count(server) || m_map[server]->IsClosed())
 		return R_ERROR;
 	return m_map[server]->Receive(packet);
@@ -36,33 +37,29 @@ int BattleSocket::Receive(unsigned server, CSG17Packet* packet)
 
 int BattleSocket::Connect()
 {
+	const Demo::Server& c = ConfigManager::Instance()->GetServer(serverid);
+
 	if (!socket.Socket(SOCK_STREAM, 0, AF_INET))
 	{
 		error_log("create socket error");
 		return R_ERROR;
 	}
 
-	Config::SelectDomain(serverid, serverid);
-	string tcpserver = Config::GetValue("server_listen");
-	size_t pos = tcpserver.find(':');
-	string host = tcpserver.substr(0, pos);
-	string port = tcpserver.substr(pos + 1, tcpserver.length() - pos - 1);
-
 	struct sockaddr_in server;
-	server.sin_addr.s_addr = inet_addr(host.c_str());
-	server.sin_port = htons(atoi(port.c_str()));
+	server.sin_addr.s_addr = inet_addr(c.host().c_str());
+	server.sin_port = htons(c.port());
 	server.sin_family = AF_INET;
 	memset(server.sin_zero, 0x00, sizeof(server.sin_zero));
 
 	if (!socket.Connect((struct sockaddr *) &server,sizeof(struct sockaddr)))
 	{
-		error_log("connect socket error,addr = %s, port=%s,errno = %d, errmsg = %s", host.c_str(),port.c_str(),errno, strerror(errno));
+		error_log("connect socket error,addr = %s, port=%u,errno = %d, errmsg = %s", c.host().c_str(),c.port(),errno, strerror(errno));
 		socket.Close();
 		return R_ERR_REFUSE;
 	}
 
 	struct timeval timeout;
-	timeout.tv_sec = 3;
+	timeout.tv_sec = 30;
 	timeout.tv_usec = 0;
 	if(!socket.SetSockOpt(SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout, sizeof(struct timeval))
 	|| !socket.SetSockOpt(SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(struct timeval))
@@ -83,9 +80,10 @@ int BattleSocket::Send(CSG17Packet* packet)
 		error_log(" packet encode failed");
 		return R_ERR_DATA;
 	}
-	if(!(socket.Send(buffer.GetConstBuffer(), buffer.GetSize(), 0)))
+	int ret = socket.Send(buffer.GetConstBuffer(), buffer.GetSize(), 0);
+	if(ret <= 0)
 	{
-		error_log("send socket error");
+		error_log("send socket error ret=%d", ret);
 		socket.Close();
 		return R_ERR_REFUSE;
 	}
@@ -94,16 +92,42 @@ int BattleSocket::Send(CSG17Packet* packet)
 int BattleSocket::Receive(CSG17Packet* packet)
 {
 	CBuffer buffer(SG17_MAX_PACKET_SIZE);
-	unsigned int recvsize = 0;
-	recvsize = socket.Receive(buffer.GetNativeBuffer(), buffer.GetFreeCapacity());
-	if (recvsize < 0)
+	int recvsize =  0;
+	while(true)
 	{
-		error_log("receive socket error");
-		socket.Close();
-		return R_ERR_REFUSE;
-	}
-	buffer.SetSize(recvsize);
+		recvsize += socket.Receive(buffer.GetNativeBuffer() + buffer.GetSize(), buffer.GetFreeCapacity());
+		if(recvsize > 0)
+		{
+			buffer.SetSize(recvsize);
+		}
+		if (recvsize <= 0)
+		{
+			error_log("receive socket error");
+			socket.Close();
+			return R_ERR_REFUSE;
+		}
 
+
+		CBufferReader reader(&buffer);
+		unsigned bodyLen = 0;
+		unsigned short head = 0;
+		if(!reader.GetUInt16(head))
+		{
+			error_log("receive socket error");
+			socket.Close();
+			return R_ERR_REFUSE;
+		}
+
+		if(!reader.GetUInt32(bodyLen))
+		{
+			error_log("receive socket error");
+			socket.Close();
+			return R_ERR_REFUSE;
+		}
+
+		if(recvsize >= (unsigned)(SG17_PACKET_HEADER_SIZE + bodyLen))
+			break;
+	}
 	if(!packet->Decode(&buffer))
 	{
 		error_log("cpacket decode error");
@@ -111,5 +135,6 @@ int BattleSocket::Receive(CSG17Packet* packet)
 		return R_ERR_DATA;
 	}
 
+	socket.Close();
 	return 0;
 }

@@ -289,3 +289,64 @@ bool LogicCommonUtil::IsCrossTime(unsigned start, unsigned end, int hour)
 	}
 }
 
+int LogicCommonUtil::ExecCommand(const char * pCmd, string & errmsg, string & output)
+{
+	if (NULL == pCmd)
+	{
+	    return 5;
+	}
+
+	char *pBuf = 0;
+	char *pFilter = 0;
+	FILE *pipe_fp = 0;
+	int r = 0;
+	int nCount = 0;
+
+	if(0 == (pBuf = (char *)calloc(sizeof(char), 1024)))
+	{
+	    return 7;
+	}
+
+	pipe_fp = popen(pCmd, "r");
+
+	if (NULL == pipe_fp)
+	{
+		errmsg = strerror(errno);
+		return 1;
+	}
+
+	for (;;)
+	{
+	    r = fread(pBuf + r, 1, 1024 - nCount, pipe_fp);
+
+	    if (r <= 0)
+	    	break;
+
+	    nCount += r;
+	}
+
+	int ret = pclose(pipe_fp);
+
+	if (-1 == ret)
+	{
+		//关闭失败?
+		errmsg = strerror(errno);
+		return ret;
+	}
+
+	// child process exit status.
+	int status_child = WEXITSTATUS(ret);
+
+	if (0 == status_child)
+	{
+		//去掉末尾的换行符
+        pFilter = strrchr(pBuf, '\n');
+
+        if(pFilter)
+        	*pFilter = 0;
+		output = pBuf;
+	}
+
+	return status_child;
+}
+

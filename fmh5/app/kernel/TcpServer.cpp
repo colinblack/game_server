@@ -8,7 +8,7 @@
 #include "TcpServer.h"
 #include <sys/epoll.h>
 
-#define EPOLL_WAIT_TIMEOUT 10
+#define EPOLL_WAIT_TIMEOUT 1
 #define TCP_SERVER_STAT_INTERVAL 60
 
 IServer::~IServer(){
@@ -19,7 +19,6 @@ CTcpServer::CTcpServer() :
 	m_bRunning(false),
 	m_listenCount(0),
 	m_maxConn(0),
-	m_pChannels(NULL),
 	m_lastFreeChannelId(0),
 	m_fdEpoll(-1)
 {
@@ -51,7 +50,6 @@ bool CTcpServer::Initialize(const vector<CInternetAddress> &listenList, int maxC
 	}
 
 	//创建监听Socket
-	m_pChannels = new CTcpChannel[maxChannel];
 	CTcpChannel::SetServer(this);
 	m_lastFreeChannelId = m_listenCount - 1;
 	for(int i = 0; i < m_listenCount; i++)
@@ -107,7 +105,7 @@ bool CTcpServer::Run()
 		close(m_fdEpoll);
 		return false;
 	}
-	//unsigned s_lastStatTime = 0;
+//	unsigned s_lastStatTime = 0;
 	m_bRunning = true;
 	while(m_bRunning)
 	{
@@ -115,11 +113,6 @@ bool CTcpServer::Run()
 		Time::UpdateGlobalTime();
 		if(nReady != -1)
 		{
-			if(nReady == 0){
-				OnIdle();
-				continue;
-			}
-
 			for(int i = 0; i < nReady; i++)
 			{
 				CTcpChannel *pChannel = (CTcpChannel *)events[i].data.ptr;
@@ -190,6 +183,7 @@ bool CTcpServer::Run()
 					}
 				}
 			}
+			OnIdle();
 		}
 		else if(errno == EINTR)
 		{
@@ -225,7 +219,7 @@ bool CTcpServer::Run()
 //		if(s_lastStatTime + TCP_SERVER_STAT_INTERVAL <= Time::GetGlobalTime())
 //		{
 //			s_lastStatTime = Time::GetGlobalTime();
-//			//OLUSER_LOG("%u|%d", s_lastStatTime, connectCount);
+//			debug_log("channel:%u", m_pChannels.size());
 //		}
 	}
 
@@ -239,7 +233,7 @@ bool CTcpServer::Run()
 	m_fdEpoll = -1;
 
 	delete [] events;
-	delete [] m_pChannels;
+	m_pChannels.clear();
 
 	return true;
 }
@@ -271,6 +265,7 @@ bool CTcpServer::CloseChannel(int channelId)
 		pChannel->Close();
 		OnChannelClose(channelId);
 	}
+	m_pChannels.erase(channelId);
 	return true;
 }
 
@@ -329,30 +324,29 @@ void CTcpServer::OnChannelReceive(CTcpChannel *pChannel)
 	//debug_log("received data\n%s",pChannel->GetReceiveData()->ToString().c_str());
 	do
 	{
-		CFirePacket packet;
-		bool decodeSuccess = packet.Decode(pChannel->GetReceiveData());
+		CFirePacket* packet = new CFirePacket;
+		bool decodeSuccess = packet->Decode(pChannel->GetReceiveData());
 		///TODO: decode size error auto close
-		decodeSize = packet.GetDecodeSize();
+		decodeSize = packet->GetDecodeSize();
 		if(decodeSize > 0)
 		{
-			if(!decodeSuccess)
+			if(decodeSuccess)
 			{
-				error_log("[Decode fail][channelId=%d,size=%u,packet=%s]",
+				//debug_log("decode success,bodyLen=%u",packet.bodyLen);
+				packet->ChannelId = pChannel->GetChannelId();
+				OnReceive(packet);
+			}
+			else
+			{
+				error_log("[Decode fail][channelId=%d,size=%u,packet=\n%s]",
 						pChannel->GetChannelId(), pChannel->GetReceiveData()->GetSize(),
 						pChannel->GetReceiveData()->ToString().c_str());
-				pChannel->Close();
-				decodeSize = 0;
-				break;
+				delete packet;
 			}
 			pChannel->SetDataRead(decodeSize);
 		}
-		if(decodeSuccess)
-		{
-			//debug_log("decode success,bodyLen=%u",packet.bodyLen);
-			packet.ChannelId  = pChannel->GetChannelId();
-
-			OnReceive(&packet);
-		}
+		else
+			delete packet;
 	}while(decodeSize > 0);
 	return ;
 }
@@ -364,7 +358,7 @@ const CTcpChannel *CTcpServer::GetChannel(int channelId) const
 	{
 		return NULL;
 	}
-	return &m_pChannels[channelId];
+	return &m_pChannels.at(channelId);
 }
 
 int CTcpServer::GetFreeChannelId()

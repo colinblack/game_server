@@ -51,7 +51,6 @@ public:
 	int ParseData();
 	int DecryptData();
 	int GetData();
-	int Die(bool decrypt);
 
 	void PrintResult(int result = 0);
 

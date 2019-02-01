@@ -13,7 +13,7 @@ int CDataIdCtrl::SetId(int key, uint64_t curr_id, unsigned db)
 	if(db)
 		serverid = db;
 	else
-		Config::GetDB(serverid);
+		serverid = ConfigManager::Instance()->GetServer();//Config::GetDB(serverid);
 	//debug_log("serverid=%d", serverid);
 	DBCREQ_DECLARE(DBC::UpdateRequest, key);
 	DBCREQ_SET_KEY(key);
@@ -28,7 +28,7 @@ int CDataIdCtrl::GetId(int key, uint64_t &curr_id, unsigned db)
 	if(db)
 		serverid = db;
 	else
-		Config::GetDB(serverid);
+		serverid = ConfigManager::Instance()->GetServer();//Config::GetDB(serverid);
 	//debug_log("serverid=%d", serverid);
 	DBCREQ_DECLARE(DBC::GetRequest, key);
 	DBCREQ_SET_KEY(key);

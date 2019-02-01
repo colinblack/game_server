@@ -22,6 +22,10 @@ public:
 			string openid = CCGIIn::GetCGIStr("openid");
 			string openkey = CCGIIn::GetCGIStr("openkey");
 			string pf = CCGIIn::GetCGIStr("pf");
+			map<string, string> params;
+			params["pf"] = pf;
+			params["userip"] = m_ipstr;
+			OpenPlatform::GetPlatform()->SetParameter(params);
 			OpenPlatform::GetPlatform()->Is_Login(openid,openkey,pf);
 			CGI_SEND_LOG("operator=%s", openid.c_str());
 		}

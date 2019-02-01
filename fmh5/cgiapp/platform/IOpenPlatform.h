@@ -57,6 +57,15 @@ enum PlatformType
 	PT_360		    = 40,	//
 	PT_YLT		    = 41,	//
 	PT_CYXC		    = 42,	//
+	PT_WB		    = 43,	//手q玩吧
+	PT_LIMI		    = 44,	//厘米秀
+	PT_WX           = 45,   //微信
+	PT_U9           = 46,   //u9
+	PT_FB           = 47,   //facebook
+	PT_Mi2			= 48,   //小米2
+	PT_XMFOUR       = 49,   //小米4部
+	PT_XMZZ         = 50,   //小米赚赚
+	PT_VIVO         = 51,   //vivo
 
 	PT_MAX,
 };

@@ -6,6 +6,7 @@ namespace Math
 	bool InitRandom();
 	int GetRandomInt(int max);
 	int GetRandomInt();
+	unsigned GetRandomUInt();
 
 	int Abs(int n);
 

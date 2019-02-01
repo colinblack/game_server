@@ -100,6 +100,7 @@ int CLogicQQPay::deliver(
 		Convert::StringToUInt(uid, uidanitem[0]);
 		items[0] = uidanitem[1];
 	}
+	ConfigManager::Instance()->SetServer(Config::GetZoneByUID(uid));
 
 	//防重发, 如果该payment_id已经处理, 那么不再增加钻石
 	DataPayHistory payHistory;
@@ -110,6 +111,7 @@ int CLogicQQPay::deliver(
 
 	QQItemInfo itemInfo;
 	ret = GetItemInfo(items[0], itemInfo);
+	string itemid = items[0];
 	if (ret != 0)
 	{
 		ERROR_RETURN_MSG(4, "请求参数错误：（payitem） ");
@@ -120,11 +122,43 @@ int CLogicQQPay::deliver(
 	packet.cmd = PROTOCOL_DELIVER;
 	Common::Pay* msg = new Common::Pay;
 	msg->set_uid(uid);
+	msg->set_itemid(CTrans::STOI(itemid));
 	msg->set_cash(itemInfo.cash * count);
 	msg->set_ts(Time::GetGlobalTime());
 	packet.m_msg = msg;
 
+	unsigned cash = 0, cost = 0;
+	cash = itemInfo.cash * count;
+	cost = cash;
+
+	bool f = true;
 	ret = BattleSocket::Send(Config::GetZoneByUID(uid), &packet);
+	if(ret)
+	{
+		error_log("[Send error][openid=%s,billno=%s,cash=%u,cost=%u]", openid.c_str(), billno.c_str(), cash, cost);
+		f = false;
+	}
+	else
+	{
+		CSG17Packet reply;
+		ret = BattleSocket::Receive(Config::GetZoneByUID(uid), &reply);
+		if(ret)
+		{
+			error_log("[Receive error][openid=%s,billno=%s,cash=%u,cost=%u]", openid.c_str(), billno.c_str(), cash, cost);
+			f = false;
+		}
+		else
+		{
+			Common::ReplyPay* rmsg = (Common::ReplyPay*)reply.m_msg;
+			ret = rmsg->ret();
+			if(ret)
+			{
+				error_log("[Receive error][openid=%s,billno=%s,cash=%u,cost=%u,ret=%u]", openid.c_str(), billno.c_str(), cash, cost, ret);
+				f = false;
+			}
+		}
+	}
+	/*
 	if(ret)
 	{
 		ERROR_RETURN_MSG(5, "system error");
@@ -143,13 +177,14 @@ int CLogicQQPay::deliver(
 	{
 		ERROR_RETURN_MSG(5, "system error");
 	}
+	*/
 
 	DataPayHistory payhis;
 	payhis.channel = PT_QZONE;
 	payhis.channel_pay_id = billno;
 	payhis.count = itemInfo.cash * count;
 	payhis.credit = amt;
-	payhis.status = PST_OK;
+	payhis.status = f?PST_OK:PST_PENDING;
 	payhis.type = itemInfo.type;
 	payhis.uid = uid;
 	payhis.open_id = openid;
@@ -200,7 +235,7 @@ int CLogicQQPay::v3_buy_goods(
 	qstr += "&openid=" + Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey);
 	string payitem;
 	String::Format(payitem, "%u", uid);
-	payitem += "_" + itemid + "*" + CTrans::ITOS(itemInfo.price) + "*1";
+	payitem += "_" + itemid + "*" + CTrans::ITOS(itemInfo.price / 10) + "*1";
 
 	qsig += "&payitem=" + payitem + "&pf=" + pf + "&pfkey=" + pfkey;
 	qstr += "&payitem=" + Crypt::UrlEncodeForTX(payitem) + "&pf=" + Crypt::UrlEncodeForTX(pf) + "&pfkey=" + Crypt::UrlEncodeForTX(pfkey);

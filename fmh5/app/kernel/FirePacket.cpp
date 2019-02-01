@@ -6,6 +6,7 @@
  */
 
 #include "FirePacket.h"
+#include "AppDefine.h"
 
 #define PACKET_HEAD_MAGIC_NUMBER 21961
 
@@ -31,6 +32,8 @@ CFirePacket::~CFirePacket()
 {
 	if(delmsg && m_msg)
 		delete m_msg;
+	if(group)
+		delete group;
 }
 
 bool CFirePacket::Encode(IBuffer *pBuffer)
@@ -41,7 +44,9 @@ bool CFirePacket::Encode(IBuffer *pBuffer)
 	|| cmd == PROTOCOL_ACCESS_GROUP_SEND
 	|| cmd == PROTOCOL_DELIVER
 	|| cmd == PROTOCOL_ADMIN
-	|| cmd == PROTOCOL_BOT)
+	|| cmd == PROTOCOL_BOT
+	|| cmd == PROTOCOL_EVENT_BATTLE_CONNECT
+	|| cmd == PROTOCOL_EVENT_BATTLE_FORWARD)
 	{
 		if(!EncodePB())
 			return false;
@@ -117,7 +122,9 @@ bool CFirePacket::Decode(IBuffer *pBuffer)
 	if(cmd == PROTOCOL_ACCESS_TRANSFER
 	|| cmd == PROTOCOL_DELIVER
 	|| cmd == PROTOCOL_ADMIN
-	|| cmd == PROTOCOL_BOT)
+	|| cmd == PROTOCOL_BOT
+	|| cmd == PROTOCOL_EVENT_BATTLE_CONNECT
+	|| cmd == PROTOCOL_EVENT_BATTLE_FORWARD)
 		return DecodePB();
 
 	return true;

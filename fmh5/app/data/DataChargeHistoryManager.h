@@ -32,6 +32,10 @@ public:
 
 	void FullMessage(unsigned uid, User::AccumulateCharge * msg);
 
+	void FullMessage(unsigned uid, google::protobuf::RepeatedPtrField<ProtoUser::ChargeItem >* msg);
+
+	void FromMessage(unsigned uid, const ProtoArchive::UserData & data);
+
 	//添加充值记录
 	int AddChargeHistory(unsigned uid, unsigned cash);
 	//获取最近的充值记录对应的index
@@ -44,7 +48,7 @@ public:
 
 	bool UpdateChargeHistory(DataChargeHistory& datacharge);
 
-	//删除好友
+	//删除充值记录
 	bool DeleteChargeHistory(DataChargeHistory & datacharge);
 
 	bool DeleteDBC(unsigned index);

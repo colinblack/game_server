@@ -297,3 +297,23 @@ string Crypt::Md5Encode(const string &data)
 	md5[32] = '\0';
 	return md5;
 }
+
+string Crypt::Md5EncodeC(const string &data)
+{
+	MD5_CTX context;
+	unsigned char digest[MD5_SIZE];
+	MD5Init(&context);
+	MD5Update(&context, (const unsigned char *)data.c_str(), data.size());
+	MD5Final(digest, &context);
+
+	static char s_itox[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	string md5;
+	md5.resize(32);
+	for(int i = 0; i < 16; i++)
+	{
+		md5[i * 2] = s_itox[(digest[i]) >> 4];
+		md5[i * 2 + 1] = s_itox[(digest[i]) & 0x0F];
+	}
+	md5[32] = '\0';
+	return md5;
+}

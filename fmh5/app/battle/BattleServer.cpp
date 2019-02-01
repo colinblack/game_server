@@ -1,5 +1,11 @@
 #include "BattleServer.h"
 
+CBaseMutex   BattleServer::m_mutex;
+pthread_t BattleServer::m_thread;
+pthread_cond_t BattleServer::m_cond;
+list<CFirePacket*> BattleServer::m_recv;
+list<CFirePacket*> BattleServer::m_send;
+set<int> BattleServer::m_closed;
 
 static void OnReloadConfig()
 {
@@ -56,7 +62,7 @@ bool BattleServer::Initialize()
 		return false;
 	}
 
-	if(!System::InitDaemon(OnExit, OnReloadConfig, OnSigNum))
+	if(!System::InitDaemon())
 	{
 		fatal_log("[System::InitDaemon fail][error=%d]", errno);
 		return false;
@@ -68,13 +74,102 @@ bool BattleServer::Initialize()
 }
 
 
-void BattleServer::OnReceive(CFirePacket *pPacket){
-	LogicManager::Instance()->process(pPacket);
-	//debug_log("receive packet:%s",pPacket->ToString().c_str());
+void BattleServer::OnReceive(CFirePacket *pPacket)
+{
+	CScopedLock guard(m_mutex);
+	m_recv.push_back(pPacket);
+	pthread_cond_signal(&m_cond);
 }
 
-void BattleServer::OnChannelClose(int channelId){
-	if(LogicManager::Instance()->getchannelId() == channelId)
-		LogicManager::Instance()->ClearUser(false);
+void* BattleServer::_run(void* args)
+{
+	System::InitSig(OnExit, OnReloadConfig, OnSigNum);
+	CFirePacket *packet = NULL;
+	while(1)
+	{
+		{
+			CScopedLock guard(m_mutex);
+			if(!packet)
+				pthread_cond_wait(&m_cond, m_mutex.GetMutex());
+			if(!m_recv.empty())
+			{
+				packet = *m_recv.begin();
+				m_recv.pop_front();
+			}
+			else
+				packet = NULL;
+		}
+		if(packet)
+		{
+			try
+			{
+				LogicManager::Instance()->process(packet);
+			}
+			catch(const std::exception& e)
+			{}
+			//if(packet->m_msg) debug_log("process:%s", packet->m_msg->GetTypeName().c_str());
+			delete packet;
+		}
+	}
+	pthread_exit(NULL);
 }
 
+bool BattleServer::AddSend(CFirePacket* packet)
+{
+	if(!packet->delmsg)
+	{
+		packet->delmsg = true;
+		Message* m = packet->m_msg->New();
+		m->MergeFrom(*packet->m_msg);
+		packet->m_msg = m;
+	}
+	CScopedLock guard(m_mutex);
+	m_send.push_back(packet);
+	return true;
+}
+
+void BattleServer::OnIdle()
+{
+	CFirePacket* packet = NULL;
+	do
+	{
+		{
+			CScopedLock guard(m_mutex);
+			if(!m_send.empty())
+			{
+				packet = *m_send.begin();
+				m_send.pop_front();
+			}
+			else
+				packet = NULL;
+		}
+		if(packet)
+		{
+			try
+			{
+				SendData(packet);
+			}
+			catch(const std::exception& e)
+			{}
+			//if(packet->m_msg) debug_log("send:%s", packet->m_msg->GetTypeName().c_str());
+			delete packet;
+		}
+	}
+	while(packet);
+}
+
+void BattleServer::OnChannelClose(int channelId)
+{
+	CScopedLock guard(m_mutex);
+	m_closed.insert(channelId);
+}
+
+bool BattleServer::IsChannelClosed(int channel)
+{
+	CScopedLock guard(m_mutex);
+	bool c = false;
+	if(m_closed.count(channel))
+		c = true;
+	m_closed.clear();
+	return c;
+}

@@ -11,75 +11,35 @@
 class DataRoutineBase
 {
 public:
-	DataRoutineBase(unsigned int uid, unsigned endts) :
+	DataRoutineBase(unsigned int uid, unsigned endts, unsigned ud) :
 		uid_(uid),
 		endts_(endts),
-		rid(0)
+		ud_(ud),
+		type(0)
 	{
-
 	}
-
-	virtual int DoEnd() = 0;
 
 	virtual ~DataRoutineBase() {}
 
-	virtual int SpeedUp(unsigned buildud, User::SpeedUpResp * resp);
-
-	virtual void CheckUd(unsigned buildud){};
-
-	virtual void GetPriceAndATime(unsigned buildud, int & cash, int & diffts)
+	//加速。立即完成系列
+	virtual void CheckUd(unsigned ud);
+	virtual void GetPriceAndATime(unsigned buildud, int & cash, int & diffts, int &type)
 	{
 		cash = 0;
 		diffts = 0;
+		type = routine_speed_cash;
 	}
-
-	virtual vector<unsigned> & GetLands() = 0;
-	virtual void SingleRoutineEnd(unsigned buildud, ProtoPush::PushBuildingsCPP * msg) = 0;
-
+	virtual int DoEnd();
+	virtual uint32_t GetBuildType();
+	virtual void SingleRoutineEnd(unsigned ud, ProtoPush::PushBuildingsCPP * msg) = 0;
+	void setType(uint8_t t){type = t;}
+	int GetLeftTime();
+public:
 	unsigned int uid_;
 	unsigned int endts_;  //操作的结束时间
-	long rid;
+	unsigned int ud_;
+	uint8_t type;
 };
-
-//定时任务队列
-class DataQueueRoutine: public DataRoutineBase
-{
-public:
-	DataQueueRoutine(unsigned uid, unsigned endts, vector<unsigned> & uds):
-		DataRoutineBase(uid, endts),
-		uds_(uds)
-	{
-		JoinRoutine();
-	}
-
-	int JoinRoutine();
-
-	virtual int DoEnd();
-
-	//加速。立即完成系列
-	virtual void CheckUd(unsigned buildud)
-	{
-		//建筑加速
-		vector<unsigned>::iterator it = find(uds_.begin(), uds_.end(), buildud);
-
-		if (it == uds_.end())
-		{
-			error_log("build not exist. uid=%u,ud=%u", uid_, buildud);
-			throw runtime_error("build_not_exist");
-		}
-	}
-
-	virtual vector<unsigned> & GetLands()
-	{
-		return uds_;
-	}
-
-	virtual void SingleRoutineEnd(unsigned buildud, ProtoPush::PushBuildingsCPP * msg){}
-
-protected:
-	vector<unsigned> uds_;  //同一批次的地块
-};
-
 class LogicQueueManager :public BattleSingleton, public CSingleton<LogicQueueManager>
 {
 private:
@@ -89,8 +49,15 @@ private:
 public:
 	virtual void CallDestroy() { Destroy();}
 
+	void OnTimer1();
+
+	//加速
+	int Process(unsigned uid, User::SpeedUpReq* req, User::SpeedUpResp* resp);
+
 	template<class T>
-	int JoinRoutine(unsigned uid, unsigned endts, vector<unsigned> & lands);
+	int JoinRoutine(unsigned uid, unsigned endts, uint8_t type, unsigned ud);
+	template<class T>
+	int JoinRoutine(unsigned uid, unsigned endts, uint8_t type, set<unsigned> & uds);
 
 	//用户离线处理
 	void Offline(unsigned uid);
@@ -98,33 +65,54 @@ public:
 	//判断指定ud是否存在定时任务队列
 	bool IsExistBuildRoutine(unsigned uid, unsigned ud) const;
 
-	//队列结束
-	int FinishQueue(unsigned uid, unsigned ud);
+	virtual int FinishRoutine(DataRoutineBase* proutine, unsigned ud, int diffts);
 
-	//加速
-	int Process(unsigned uid, User::SpeedUpReq* req, User::SpeedUpResp* resp);
+	DataRoutineBase * GetRoutineObj(unsigned uid, unsigned ud, uint8_t type);
+
+	//任务完成
+	void TaskDone(DataRoutineBase * task);
+	void FinishInstant(uint32_t uid, uint32_t buildType);
 private:
 	//加速队列
-	int SpeedUp(unsigned uid, unsigned ud, User::SpeedUpResp * resp);
+	int SpeedUp(unsigned uid, unsigned type, unsigned method,unsigned ud, User::SpeedUpResp * resp);
+
+	//对某个任务进行加速
+	int SpeedUpTask(DataRoutineBase *pTask, int sec, bool &taskDone);
+	//添加常规任务
+	void AddTask(DataRoutineBase * task);
+	//删除任务映射，不释放内存
+	DataRoutineBase* EraseTask(uint32_t uid, uint32_t ud, uint8_t type);
 
 private:
-	map<unsigned, map<long, DataRoutineBase *> > routine_;  //建筑有关的定时任务 uid->(rid->p*)
-	map<unsigned, map<unsigned, long> > buildRid_;  //uid->(ud->rid)
+	//关键是要如何才能获得唯一的rid. ud并不能保证唯一.再加个类型
+	map<unsigned, list<DataRoutineBase*> > userTask; // 玩家任务
 };
 
 template<class T>
-int LogicQueueManager::JoinRoutine(unsigned uid, unsigned endts, vector<unsigned> & uds)
+int LogicQueueManager::JoinRoutine(unsigned uid, unsigned endts, uint8_t type, unsigned ud)
 {
 	//加入到队列
-	DataRoutineBase * proutine = new T(uid, endts, uds);
+	DataRoutineBase * pTask = new T(uid, endts, ud);
+	pTask->setType(type);
 
-	//设置映射
-	routine_[uid][proutine->rid] = proutine;
-
-	for(size_t i = 0; i < uds.size(); ++i)
+	// 删除旧任务
+	DataRoutineBase* pOld = EraseTask(uid, ud, type);
+	if(pOld != NULL)
 	{
-		unsigned ud = uds[i];
-		buildRid_[uid][ud] = proutine->rid;
+		delete pOld;
+	}
+
+	// 添加新任务
+	AddTask(pTask);
+
+	return 0;
+}
+template<class T>
+int LogicQueueManager::JoinRoutine(unsigned uid, unsigned endts, uint8_t type, set<unsigned> & uds)
+{
+	for(set<unsigned>::iterator iter = uds.begin(); iter != uds.end(); ++iter)
+	{
+		JoinRoutine<T>(uid, endts, type, *iter);
 	}
 
 	return 0;

@@ -79,5 +79,10 @@ bool Kernel::Init(const string &configPath)
 		cout << "Kernel::InitLog faile" << endl;
 		return false;
 	}
+	if(!ConfigManager::Instance()->Inited())
+	{
+		error_log("ConfigManager Init error!");
+		return false;
+	}
 	return true;
 }

@@ -36,13 +36,13 @@ struct DataBuildings
 
 	}
 
-	void Upgrade()
+	void ResetTime()
 	{
-		level += 1;
 		done_time = 0;
 	}
 
-	void SetMessage(ProtoBuilding::BuildingCPP* msg)
+	template<class T>
+	void SetMessage(T * msg)
 	{
 		msg->set_ud(id);
 		msg->set_buildid(build_id);
@@ -55,6 +55,20 @@ struct DataBuildings
 		msg->set_direct(direct);
 		msg->set_donetime(done_time);
 		msg->set_level(level);
+	}
+
+	void FromMessage(const ProtoUser::BuildingsCPP * msg)
+	{
+		build_id = msg->buildid();
+
+		unsigned xpos = msg->position(0u);
+		unsigned ypos = msg->position(1u);
+
+		position = xpos * 1000 + ypos;
+
+		direct = msg->direct();
+		done_time = msg->donetime();
+		level = msg->level();
 	}
 };
 

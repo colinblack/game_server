@@ -69,7 +69,7 @@ PlatformType CTencentPlatform::GetPlatformByPF()
 	else if (m_pf == "c9")
 		return PT_TX_C9;
 	else
-		return PT_UNKNOW;
+		return PT_QZONE;
 }
 
 int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, const string &openkey)
@@ -87,8 +87,7 @@ int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, co
 			return -1;
 		}
 
-		int server = 0;
-		Config::GetDB(server);
+		int server = ConfigManager::Instance()->GetServer();
 		string osig  = CTrans::ITOS(server) + openid + CTrans::ITOS(m_time)	+ CTrans::ITOS(m_cm) + m_appKey;
 		string sig = Crypt::Md5Encode(osig);
 		if(sig != openkey)
@@ -199,10 +198,10 @@ int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, co
 	if(value.isMember("is_super_blue_vip"))
 		is_super_blue_vip = value["is_super_blue_vip"].asUInt();
 	Json::GetInt(value, "blue_vip_level", blue_vip_level);
-	//userInfo.msg.set_is_blue_vip(is_blue_vip);
-	//userInfo.msg.set_is_blue_year_vip(is_blue_year_vip);
-	//userInfo.msg.set_is_super_blue_vip(is_super_blue_vip);
-	//userInfo.msg.set_blue_vip_level(blue_vip_level);
+	userInfo.msg.set_isbluevip(is_blue_vip);
+	userInfo.msg.set_isblueyearvip(is_blue_year_vip);
+	userInfo.msg.set_issuperbluevip(is_super_blue_vip);
+	userInfo.msg.set_blueviplevel(blue_vip_level);
 
 	if((m_app_appbitmap & 0x000F) == 1 || (m_app_appbitmap & 0x000F) == 2)
 	{

@@ -72,7 +72,7 @@ int SimulationWebClient::Run()
 		return ret;
 	}
 
-	ret = ConnectServer();
+	ret = ConnectServer(loginmsg->uid());
 
 	if (ret)
 	{
@@ -127,6 +127,9 @@ int SimulationWebClient::LoginCGI(unsigned uid, Common::Login * msg)
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
 
     res = curl_easy_perform(curl);//执行登录
+
+    //curl访问到此结束，关闭curl发起的http连接
+    curl_easy_cleanup(curl);
 
     if (CURLE_OK != res)
     {
@@ -194,7 +197,7 @@ int SimulationWebClient::LoginCGI(unsigned uid, Common::Login * msg)
     return 0;
 }
 
-int SimulationWebClient::ConnectServer()
+int SimulationWebClient::ConnectServer(unsigned uid)
 {
 	int fd = 0;
 
@@ -207,7 +210,9 @@ int SimulationWebClient::ConnectServer()
 	struct sockaddr_in serveraddr;
 
 	bzero((void*)&serveraddr, sizeof(serveraddr));
-	const int server_port = 7301;
+	int server_port = 7301;
+	if(uid >= UID_MIN + UID_ZONE * 2)
+		server_port = 7303;
 
 	m_serverip = "127.0.0.1";
 

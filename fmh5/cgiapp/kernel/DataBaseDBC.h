@@ -43,11 +43,14 @@ public:
 
 #define DBCREQ_SET_INT(data, field)		req.Set(#field, data.field)
 #define DBCREQ_SET_STR(data, field)		req.Set(#field, data.field.c_str())
+#define DBCREQ_SET_CHAR(dd, field, len)	req.Set(#field, dd.field, len)
 #define DBCREQ_SET_INT_V(field)			req.Set(#field, field);DBCREQ_EXEC
 #define DBCREQ_SET_STR_V(field)			req.Set(#field, field.c_str());DBCREQ_EXEC
 #define DBCREQ_ADD_INT_V(field)			req.Add(#field, field);DBCREQ_EXEC
+#define DBCREQ_SET_CHAR_V(dd, field, len)	req.Set(#field, dd.field, len);DBCREQ_EXEC
 #define DBCREQ_SET_INT_S(field)			req.Set(#field, field)
 #define DBCREQ_SET_STR_S(field)			req.Set(#field, field.c_str())
+#define DBCREQ_SET_CHAR_S(field, len)	req.Set(#field, field, len)
 #define DBCREQ_GET_INSERT_KEY(data)		data = m_dbcret.InsertID()
 
 #define DBCREQ_NEED_BEGIN()				int reqItemIndex = 0
@@ -55,8 +58,10 @@ public:
 #define DBCREQ_GET_BEGIN()				reqItemIndex = 0
 #define DBCREQ_GET_INT(data, field)		data.field = m_dbcret.IntValue(++reqItemIndex)
 #define DBCREQ_GET_STR(data, field)		data.field = m_dbcret.StringValue(++reqItemIndex)
+#define DBCREQ_GET_CHAR(data, field, len) {const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(data.field,pTmp,len);}
 #define DBCREQ_GET_INT_S(field)			field = m_dbcret.IntValue(++reqItemIndex)
 #define DBCREQ_GET_STR_S(field)			field = m_dbcret.StringValue(++reqItemIndex)
+#define DBCREQ_GET_CHAR_S(field)		{const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(field, pTmp, len);}
 
 #define DBCREQ_GET_INT_V(field)	\
 		req.Need(#field, 1);	\

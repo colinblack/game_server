@@ -38,6 +38,12 @@ int DataChargeHistoryManager::CheckBuff(unsigned uid)
 
 int DataChargeHistoryManager::AddBuff(DataChargeHistory & datacharge)
 {
+	if(CMI->IsNeedConnectByUID(datacharge.uid))
+	{
+		error_log("uid:%u, data_need_connect", datacharge.uid);
+		throw std::runtime_error("data_need_connect");
+	}
+
 	unsigned index = GetFreeIndex();
 
 	uint32_t uid = datacharge.uid;
@@ -64,6 +70,12 @@ int DataChargeHistoryManager::AddBuff(DataChargeHistory & datacharge)
 
 int DataChargeHistoryManager::LoadBuff(unsigned uid)
 {
+	if(CMI->IsNeedConnectByUID(uid))
+	{
+		error_log("uid:%u, data_need_connect", uid);
+		throw std::runtime_error("data_need_connect");
+	}
+
 	//为防止重复加载
 	if (m_map.count(uid) > 0)
 	{
@@ -157,6 +169,50 @@ void DataChargeHistoryManager::FullMessage(unsigned uid, User::AccumulateCharge 
 
 			 m_data->data[index].SetMessage(msg->add_accumulatecharge());
 		 }
+	}
+}
+
+
+void DataChargeHistoryManager::FullMessage(unsigned uid, google::protobuf::RepeatedPtrField<ProtoUser::ChargeItem >* msg)
+{
+	if(m_map.count(uid))
+	{
+		 map<uint32_t, uint32_t>::iterator miter = m_map[uid].begin();
+
+		 for(; miter != m_map[uid].end(); ++miter)
+		 {
+			 unsigned index = miter->second;
+
+			 m_data->data[index].SetMessage(msg->Add());
+		 }
+	}
+}
+
+void DataChargeHistoryManager::FromMessage(unsigned uid, const ProtoArchive::UserData & data)
+{
+	//删除旧数据
+	vector<unsigned> indexs;
+
+	GetChargeHistoryList(uid, indexs);
+
+	for(int i = 0; i < indexs.size(); ++i)
+	{
+		DataChargeHistory & chargeHistory = GetChargeHistory(indexs[i]);
+
+		DeleteChargeHistory(chargeHistory);
+	}
+
+	//添加新数据
+	for(int i = 0; i < data.charges_size(); ++i)
+	{
+		unsigned ts = data.charges(i).ts();
+
+		DataChargeHistory chargeHistory;
+		chargeHistory.uid = uid;
+
+		chargeHistory.FromMessage(&data.charges(i));
+
+		AddBuff(chargeHistory);
 	}
 }
 

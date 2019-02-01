@@ -9,11 +9,11 @@
 #include "LogicQueueManager.h"
 
 //建筑建造
-class DataBuildRoutine : public DataQueueRoutine
+class DataBuildRoutine : public DataRoutineBase
 {
 public:
-	DataBuildRoutine(unsigned uid, unsigned endts, vector<unsigned> & uds):
-		DataQueueRoutine(uid, endts, uds)
+	DataBuildRoutine(unsigned uid, unsigned endts, unsigned ud):
+		DataRoutineBase(uid, endts, ud)
 	{
 
 	}
@@ -21,7 +21,7 @@ public:
 	virtual void CheckUd(unsigned buildud);
 
 	//获取需要扣的钻石数以及剩余时间
-	virtual void GetPriceAndATime(unsigned buildud, int & cash, int & diffts);
+	virtual void GetPriceAndATime(unsigned buildud, int & cash, int & diffts, int &type);
 
 	virtual void SingleRoutineEnd(unsigned buildud, ProtoPush::PushBuildingsCPP * msg);
 };
@@ -31,11 +31,13 @@ class LogicBuildManager : public BattleSingleton, public CSingleton<LogicBuildMa
 private:
 	friend class CSingleton<LogicBuildManager>;
 	LogicBuildManager();
-
+	int userActId;
 public:
 	enum
 	{
 		grid_ypos_len = 1000,  //y坐标表示的范围
+
+		e_Activity_UserData_1_index_11 = 11,//每日看广告减少建筑cd的使用次数
 	};
 
 	virtual void CallDestroy() { Destroy();}
@@ -48,35 +50,82 @@ public:
 
 	//建造
 	int Process(unsigned uid, ProtoBuilding::BuildReq* req, ProtoBuilding::BuildResp* resp);
+
+	//生产设备揭幕
+	int Process(unsigned uid, ProtoBuilding::UnveilBuildReq* req, ProtoBuilding::UnveilBuildResp* resp);
+
 	//移动
 	int Process(unsigned uid, ProtoBuilding::MoveReq* req, ProtoBuilding::MoveResp* resp);
+
 	//翻转
 	int Process(unsigned uid, ProtoBuilding::FlipReq* req, ProtoBuilding::FlipResp* resp);
+
 	//升级(粮仓、货仓)
 	int Process(unsigned uid, ProtoBuilding::BuildingUpReq *req, ProtoBuilding::BuildingUpResp* resp);
+
+	//建筑星级加速
+	int Process(unsigned uid, ProtoBuilding::UpgradeStarSpeedUpReq *req, ProtoBuilding::UpgradeStarSpeedUpResp* resp);
+
+	//拆除障碍物
+	int Process(unsigned uid, ProtoBuilding::RemoveBarrierReq *req, ProtoBuilding::RemoveBarrierResp* resp);
+
+	//变卖装饰物
+	int Process(unsigned uid, ProtoBuilding::SellDecorateReq* req, ProtoBuilding::SellDecorateResq* resp);
+
+	//地块解锁
+	int Process(unsigned uid, ProtoBuilding::ExpandMapReq* req, ProtoBuilding::ExpandMapResp* resp);
+
+	//看广告减少建筑cd时间
+	int Process(unsigned uid, ProtoBuilding::ViewAdReduceBuildTimeReq* req, ProtoBuilding::ViewAdReduceBuildTimeResp* resp);
+
+	//获取看广告减建筑cd的次数
+	int Process(unsigned uid, ProtoBuilding::GetViewAdReduceBuildTimeReq* req, ProtoBuilding::GetViewAdReduceBuildTimeResp* resp);
+
+	//每日重置看广告减建筑cd的次数
+	int ResetViewAdReduceBuildTime(unsigned uid);
 
 	//获取仓库的剩余可用空间.type: 1-粮仓 2-货仓
 	int GetStorageRestSpace(unsigned uid, unsigned type);
 
+	//建造经验奖励
+	int BuildExpReward(unsigned uid, unsigned build_id, DataCommon::CommonItemsCPP * msg);
+
+	//获取所有生产数目
+	int GetAllProductBuildNum(unsigned uid);
+
 private:
 	//建造
-	int Build(unsigned uid, unsigned build_id, unsigned xpos, unsigned ypos, ProtoBuilding::BuildResp *resp);
-
-	//加入到定时任务
-	int JoinRoutine(unsigned uid, unsigned endts, vector<unsigned> & lands);
+	int Build(unsigned uid, unsigned build_id, unsigned xpos, unsigned ypos, unsigned direct,ProtoBuilding::BuildResp *resp);
 
 	//建造前的处理
-	int PreBuild(unsigned uid, unsigned build_id, unsigned & wait_time, ProtoBuilding::BuildResp *resp);
+	int CheckAndCostBeforeBuild(unsigned uid, unsigned build_id, unsigned & wait_time, ProtoBuilding::BuildResp *resp);
+
+	//建筑揭幕
+	int UnVeil(unsigned uid, unsigned buildud, ProtoBuilding::UnveilBuildResp * resp);
+
+	bool IsNoExpReward(unsigned type);
 
 	//移动
-	int Move(unsigned uid, unsigned build_ud, unsigned xpos, unsigned ypos, ProtoBuilding::MoveResp *resp);
+	int Move(unsigned uid, unsigned build_ud, unsigned direct,unsigned xpos, unsigned ypos, ProtoBuilding::MoveResp *resp);
 	//翻转
 	int Flip(unsigned uid, unsigned build_ud, ProtoBuilding::FlipResp *resp);
 
+	//设备升星立即完成
+	int StarSpeedUp(unsigned uid, unsigned id, ProtoBuilding::UpgradeStarSpeedUpResp * resp);
+
+	//拆除障碍物
+	int RemoveBarrier(unsigned uid, unsigned id, ProtoBuilding::RemoveBarrierResp * resp);
+
 	//根据建筑id,原点id，计算所占的所有格子
-	int SeteBuildGrid(unsigned uid, unsigned xpos, unsigned ypos, uint8_t direct, unsigned build_id, int * status, bool isbarrier = false);
+	int SeteBuildGrid(unsigned uid, unsigned xpos, unsigned ypos, uint8_t direct, unsigned build_id, int * status,bool isbuild, bool isbarrier = false);
 
 	bool IsIntersect(unsigned uid, unsigned ud, int * build_status);
+
+	//校验扩展地图格子是否已解锁
+	bool CheckMapGridIsUnlock(unsigned uid,unsigned xpos,unsigned x_offset,unsigned ypos,unsigned y_offset);
+
+	//地块扩展
+	int LandExpand(unsigned uid, ProtoBuilding::ExpandMapReq* req, ProtoBuilding::ExpandMapResp* resp);
 
 	template<class P, class T>
 	int CostBeforeBuild(unsigned uid, T& cfg, string reason,int num, int level, unsigned & wait_time, ProtoBuilding::BuildResp *resp);

@@ -17,8 +17,8 @@ int CDataUserMapping::AddMapping(const string &openid, int platform, unsigned ui
 			crc += UID_MIN;
 		}
 	}
-	int serverid = 0;
-	Config::GetDB(serverid);
+	int serverid = Config::GetZoneByUID(uid);//0;
+	//Config::GetDB(serverid);
 	//debug_log("serverid=%d", serverid);
 	int updatetime = Time::GetGlobalTime();
 	int lastlogin = Time::GetGlobalTime();
@@ -34,8 +34,9 @@ int CDataUserMapping::AddMapping(const string &openid, int platform, unsigned ui
 	return 0;
 }
 
-int CDataUserMapping::GetMapping(const string &openid, int platform,
-		unsigned &uid) {
+int CDataUserMapping::GetMapping(const string &openid, int platform, unsigned &uid)
+{
+	/*
 	unsigned crc = CCRC::GetCrc32(openid);
 	if (crc > UID_MAX) {
 		crc %= UID_MAX;
@@ -51,6 +52,24 @@ int CDataUserMapping::GetMapping(const string &openid, int platform,
 	//DBCREQ_SET_CONDITION(EQ, platform, platform);
 	DBCREQ_SET_CONDITION(EQ, serverid, serverid);
 	DBCREQ_GET_INT_V(uid);
+	*/
+
+	if(ConfigManager::Instance()->GetServer())
+		return GetUID(openid, ConfigManager::Instance()->GetServer(), uid);
+
+	vector<unsigned> uids;
+	int ret = GetAllMapping(openid, uids);
+	if(ret)
+		return ret;
+	if(uids.size() == 0)
+	{
+		ConfigManager::Instance()->SetServer(ConfigManager::Instance()->GetRandomOpen());
+		return R_ERR_NO_DATA;
+	}
+	if(uids.size() > 1)
+		sort(uids.begin(), uids.end());
+	uid = uids[0];
+	ConfigManager::Instance()->SetServer(Config::GetZoneByUID(uid));
 	return 0;
 }
 
@@ -93,8 +112,8 @@ int CDataUserMapping::RemoveMapping(const string &openid, int platform) {
 			crc += UID_MIN;
 		}
 	}
-	int serverid = 0;
-	Config::GetDB(serverid);
+	int serverid = ConfigManager::Instance()->GetServer();//0;
+	//Config::GetDB(serverid);
 	DBCREQ_DECLARE(DBC::DeleteRequest, crc);
 	DBCREQ_SET_KEY(openid.c_str());
 	//DBCREQ_SET_CONDITION(EQ, platform, platform);
@@ -178,8 +197,8 @@ int CDataUserMapping::UpdateLastLogin(const string &openid, int platform)
 		}
 	}
 	int lastlogin = Time::GetGlobalTime();
-	int serverid = 0;
-	Config::GetDB(serverid);
+	int serverid = ConfigManager::Instance()->GetServer();//0;
+	//Config::GetDB(serverid);
 	//debug_log("serverid=%d", serverid);
 	DBCREQ_DECLARE(DBC::UpdateRequest, crc);
 	DBCREQ_SET_KEY(openid.c_str());
@@ -247,8 +266,8 @@ int CDataUserMapping::SetTime(const string &openid, unsigned ts)
 	}
 	int lastlogin = ts;
 	int updatetime = ts;
-	int serverid = 0;
-	Config::GetDB(serverid);
+	int serverid = ConfigManager::Instance()->GetServer();//0;
+	//Config::GetDB(serverid);
 	//debug_log("serverid=%d", serverid);
 	DBCREQ_DECLARE(DBC::UpdateRequest, crc);
 	DBCREQ_SET_KEY(openid.c_str());

@@ -29,6 +29,7 @@ namespace Crypt
 
 	//MD5
 	string Md5Encode(const string &data);
+	string Md5EncodeC(const string &data);
 
 	//HMAC-SHA
 	string Sha1(const string &text);

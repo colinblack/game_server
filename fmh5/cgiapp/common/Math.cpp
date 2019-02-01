@@ -28,6 +28,11 @@ int Math::GetRandomInt()
 	return rand();
 }
 
+unsigned Math::GetRandomUInt()
+{
+	return (((unsigned)rand()) << 16) | (((unsigned)rand()) & 0xffff);
+}
+
 int Math::Abs(int n)
 {
 	return n >= 0 ? n : -n;

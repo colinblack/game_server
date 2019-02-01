@@ -15,11 +15,18 @@ struct DataEquipmentStar
 		usedtime = 0;
 	}
 
-	void SetMessage(ProtoBuilding::EquipmentStarCPP * msg)
+	template<class T>
+	void SetMessage(T * msg)
 	{
 		msg->set_id(id);
 		msg->set_star(star);
 		msg->set_usedtime(usedtime);
+	}
+
+	void FromMessage(const ProtoUser::EquipmentStarCPP * msg)
+	{
+		star = msg->star();
+		usedtime = msg->usedtime();
 	}
 };
 
