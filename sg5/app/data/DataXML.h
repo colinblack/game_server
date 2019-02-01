@@ -1743,6 +1743,7 @@ public:
 
 #define INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_NAME) m_##CONFIG_NAME = CONFIG_NAME##_CONFIG(data);
 /********************************************************************/
+//autolable3
 //vicky没想好名字的活动
 CHARGE_DRAW_ACT_CONFIG(CONFIG_VICKY_NO_NAME)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_VICKY_BINGSHU)
@@ -4002,6 +4003,7 @@ public:
 	const Confighuangzhong& Gethuangzhong() const;
 	//vicky的开服活动
 	const ConfigVickyNewOpen& GetVickyNewOpen() const;
+//autolable4
 	//vicky没想好名字的活动
 	GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_VICKY_NO_NAME)
 	//兵书突破

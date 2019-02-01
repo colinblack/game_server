@@ -62,6 +62,7 @@ const char* all_activity_table[] = {
 	   CONFIG_BEAUTY, //美人献计
 	   CONFIG_INVESTMENT, //充值投资
 	   CONFIG_VICKY_NNA, //vicky懒得给我说名字的活动
+//autolable2
        NULL
 };
 

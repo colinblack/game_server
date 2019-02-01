@@ -928,6 +928,7 @@
  * CgiSave.cpp 中CGI_ACTION_DEFAULT_MAP_BEGIN 下实现宏  CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_NAME)
  */
 /********************************************************************/
+//autolable1
 //vicky没想好名字的活动
 #define CONFIG_VICKY_NO_NAME "vicky_no_name"
 #define CONFIG_VICKY_BINGSHU "vicky_bingshu"

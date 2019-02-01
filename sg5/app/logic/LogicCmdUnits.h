@@ -2624,6 +2624,7 @@ public:
 			const CONFIG_NAME##_CONFIG& cfg_; \
 		};
 /********************************************************************/
+//autolable6
 //vicky没想好名字的活动
 CHARGE_DRAW_ACT(CONFIG_VICKY_NO_NAME)
 CHARGE_DRAW_ACT(CONFIG_VICKY_BINGSHU)

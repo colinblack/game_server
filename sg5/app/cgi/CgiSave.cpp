@@ -420,6 +420,7 @@ public:
 #define CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_NAME) \
 		CGI_SET_ACTION_DEFAULT_MAP(CONFIG_NAME, CONFIG_NAME##_ACT)
 	/********************************************************************/
+//autolable7
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_NO_NAME)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_BINGSHU)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_QIANFU)
@@ -4149,6 +4150,7 @@ public:
 #define CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_NAME) \
 	CGI_ACTION_FUNCTION(CONFIG_NAME##_ACT, CONFIG_NAME##_Unit::DrawParams, CONFIG_NAME##_Unit, false, DrawImpl);
 	/********************************************************************/
+//autolable8
 	//vicky没想好名字的活动
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_VICKY_NO_NAME)
 	//兵书突破活动
