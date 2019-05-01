@@ -1,5 +1,0 @@
-include $(trunk_path)/make.rules
-
-INC     = -I.  $(BASE_INC) $(FCGI_INC) $(DBC_INC) $(PENGYOU_INC) $(PROTO_INC)
-LINK    = $(BASE_LIB) $(DBC_LIB) $(FCGI_LIB)  $(PENGYOU_LIB)  $(PROTO_LIB)
-
