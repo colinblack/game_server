@@ -1,0 +1,93 @@
+package ProtoYellowVip;
+import "DataCommon.proto";
+
+message FinalRewardCPP
+{
+	optional DataCommon.EquipmentAllCPP  equips = 1;	//批量装备信息，可选
+	optional int32  coin	= 2;	//银两，可选	
+	optional int32  wood	= 3;	//木材，可选
+	optional int32  food	= 4;	//粮食，可选
+	optional int32  iron	= 5;	//镔铁，可选
+	optional int32  hammer	= 6;	//黄金锤子，可选
+	optional int32  order	= 7;	//募兵令，可选
+}
+
+message YellowVipCPP
+{
+	required uint32 newerstatus			= 1;  //新手礼包领取状态
+    required uint32 dailystatus			= 2;  //每日领取状态
+    required uint32 yearstatus			= 3;  //年费黄钻礼包领取状态
+  	required uint32 levelstatus			= 4;   //等级奖励领取状态，按位表示是否领取
+  	required uint32 daily_reward_time	= 5;   //每日礼包领取时间，用于重置
+   	required uint32 year_reward_time	= 6;   //年费黄钻礼包领取时间,用于重置
+   	required uint32 qqzone_dailystatus	= 7;   //空间每日礼包状态
+  	required uint32 qqzone_daily_time	= 8;   //空间每日礼包领取时间,用于重置
+   	required uint32 qqzone_levelstatus	= 9;   //空间等级奖励领取状态，按位表示是否领取
+}
+
+//领取黄钻新手奖励
+message GetNewerGiftReq
+{
+}
+
+message GetNewerGiftResp
+{
+	required FinalRewardCPP reward = 1;		//奖励
+	required YellowVipCPP yellowvip = 2;	//礼包领取信息
+}
+
+message GetDailyGiftReq
+{
+}
+
+message GetDailyGiftResp
+{
+	required FinalRewardCPP reward = 1; 	//奖励
+	required YellowVipCPP yellowvip = 2;	//礼包领取信息
+}
+
+message GetYearDailyGiftReq
+{
+}
+
+message GetYearDailyGiftResp
+{
+	required FinalRewardCPP reward = 1;		//奖励
+	required YellowVipCPP yellowvip = 2;	//礼包领取信息
+}
+
+message GetLevelGiftReq
+{
+	required uint32 index = 1;   //等级奖励的索引，从1开始
+}
+
+message GetLevelGiftResp
+{
+	required FinalRewardCPP reward = 1;		//奖励
+	required YellowVipCPP yellowvip = 2;	//礼包领取信息
+}
+
+//空间每日礼包领取
+message QQZoneGetDailyGiftReq
+{
+
+}
+
+message QQZoneGetDailyGiftResp
+{
+	required FinalRewardCPP reward = 1; 	//奖励
+	required YellowVipCPP yellowvip = 2;   //礼包领取信息
+}
+
+//空间用户等级礼包领取
+message QQZoneGetLevelGiftReq
+{
+	required uint32 index = 1;   //等级奖励的索引，从1开始
+}
+
+message QQZoneGetLevelGiftResp
+{
+	required FinalRewardCPP reward = 1;		//奖励
+	required YellowVipCPP yellowvip = 2;   //礼包领取信息
+}
+

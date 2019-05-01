@@ -1,0 +1,34 @@
+package MineConfig;
+
+//普通矿洞
+message Normal
+{	
+	repeated uint32 exp			= 1;  //矿洞经验列表
+	repeated uint32 open_cost 	= 2;  //开启消耗
+	repeated uint32 donate_cnt 	= 3;  //捐献次数满
+	required uint32 donate_cost = 4;  //捐献消耗
+	repeated uint32 harvest		= 5; //捐赠满了的钻石数
+}
+
+//国家矿洞
+message Kingdom
+{
+	required uint32 open_cost 	= 1;
+	required uint32 donate_cnt 	= 2;
+	required uint32 donate_cost = 3;
+	required uint32	reward 		= 4;   //
+	repeated uint32	harvest		= 5;
+}
+
+message MineItem
+{
+	required uint32	open_exp 	= 1;  //开启经验
+	required uint32 donate_exp 	= 2;  //捐献经验
+	required Normal  normal 	= 3;
+	required Kingdom kingdom 	= 4;
+}
+
+message Mine
+{
+	required MineItem mine		= 1;
+}

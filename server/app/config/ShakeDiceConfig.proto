@@ -1,0 +1,37 @@
+import "RewardConfig.proto";
+
+package ShakeDiceConfig;
+
+message PointReward
+{
+	required uint32 pid	= 1; //地点id
+	repeated RewardConfig.Reward reward = 2; //地点奖励 
+}
+
+message MapInfo
+{
+	required uint32 id	= 1;  //地图id
+	required uint32 points	= 2; //地点数
+	repeated RewardConfig.Reward extra_reward = 3; //额外奖励
+	repeated PointReward 	points_reward	= 4;  //地点奖励集合
+}
+
+message OpenPlatformMap
+{
+	required uint32 startday	= 1;  //距离开发时间
+	repeated MapInfo mapinfo	= 2; //地图信息集合
+}
+
+message ShakeDice
+{
+	required uint32 reset_times	= 1;  //重置次数上限
+	required uint32 reset_cash	= 2;	//重置花费钻石
+	required uint32 free_times	= 3;	//免费次数上限
+	required uint32 dice_cash	= 4;	//摇骰子花钻数
+	repeated OpenPlatformMap open_platform_map	= 5;  //开服信息集合
+}
+
+message ShakeDiceAll
+{
+	required ShakeDice shakedice	= 1;
+}

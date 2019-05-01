@@ -1,0 +1,47 @@
+package NPC;
+
+message NPCInfoItem
+{
+	required uint32 id		= 1;
+	required uint32 count	= 2;
+}
+message NPCInfo
+{
+	required uint32 npcid			= 1;
+	required uint32 character		= 2;//品质
+	required uint32 skillid			= 3;//战法特效
+	required float skillco			= 4;//战法系数
+	required uint32 skillrange		= 5;//战法范围
+	required uint32 skilltime		= 6;//可释放战法次数
+	repeated uint32 tacticalarea1	= 7;//加强战术
+	repeated uint32 tacticalarea2	= 8;//加强战术
+	repeated uint32 tacticalarea3	= 9;//加强战术
+	repeated uint32 tacticalarea4	= 10;//加强战术
+	required uint32 tacticaladd		= 11;//加强战术伤害
+	repeated uint32 giftarea		= 12;//平砍强化地形
+	required float  giftadd			= 13;//平砍强化系数
+	required uint32 p_hp			= 14;//血量
+	required uint32 p_attack		= 15;//攻击
+	required uint32 p_defend		= 16;//防御
+	required uint32 p_skill_extra	= 17;//额外战法
+	required uint32 p_skill_anti	= 18;//抵抗额外战法
+	required uint32 p_attack_extra	= 19;//额外平砍
+	required uint32 p_attack_anti	= 20;//抵抗额外平砍
+	required uint32 p_int			= 21;//统
+	required uint32 p_str			= 22;//勇
+	required uint32 p_level			= 23;//等级
+	required uint32 p_soldier		= 24;//士兵排数
+	required uint32 p_tech			= 25;//科技战法系数
+	required uint32 p_anti_tech		= 26;//科技抵抗系数
+	required uint32 r_exp			= 27;//奖励
+	required uint32 r_coin			= 28;//奖励
+	required uint32 r_food			= 29;//奖励
+	required uint32 r_wood			= 30;//奖励
+	required uint32 r_iron			= 31;//奖励
+	repeated NPCInfoItem r_item		= 32;//奖励
+}
+
+message NPCList
+{
+	repeated NPCInfo npc			= 1;	
+}

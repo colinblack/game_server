@@ -1,0 +1,15 @@
+package ResourceConfig;
+
+ //祭司
+message FlamenItem
+{
+	required uint32 multiple 	= 1; //暴击倍数
+	required uint32 free_prob 	= 2; //免费概率
+	required uint32 buy_prob 	= 3; //元宝概率	
+}
+
+
+message Resource
+{
+	repeated  FlamenItem flamen = 1;   //祭司
+}

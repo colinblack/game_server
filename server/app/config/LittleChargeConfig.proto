@@ -1,0 +1,15 @@
+import "RewardConfig.proto";
+
+package LittleChargeConfig;
+
+message OpenPlatFormReward
+{
+	required uint32 startday	= 1;
+	repeated RewardConfig.Reward reward = 2; //充值奖励 
+}
+
+message LittleCharge
+{
+	required uint32 condition	= 1; //充值额度
+	repeated OpenPlatFormReward open_platform = 2; //开服相关的奖励 
+}

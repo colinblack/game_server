@@ -1,0 +1,42 @@
+package ProtoAttackHarbor;
+import "User.proto";
+
+message CountryRankCPP
+{
+	required uint32 kingdom	= 1;   //国家
+	required uint32 wreckage	= 2;   //国家残骸
+	required uint32 trump_uid	= 3;   //王牌uid
+	required bytes trump_name	= 4;   //王牌玩家名称
+	required uint32 trump_wreckage	= 5;   //王牌残骸
+	required uint32 rank	= 6;   //排名
+}
+
+message CountryRankCPPAll
+{
+	repeated CountryRankCPP  countryrank	= 1;  //国家排名信息
+}
+
+//打开窗口
+message OpenAttackWindowReq
+{
+
+}
+
+message OpenAttackWindowResp
+{
+	required CountryRankCPPAll  countryranks	= 1;  //国家排名信息
+	required uint32 	reward_status	= 2;   //是否已领取
+	required uint32 	wreckage = 3;  //个人残骸
+}
+
+//领取奖励
+message RecieveCountryRewardReq
+{
+
+}
+
+message RecieveCountryRewardResp
+{
+	required User.RewardBagInfo reward	= 1;  //奖励 
+	required uint32 	reward_status	= 2;  //是否已领取
+}

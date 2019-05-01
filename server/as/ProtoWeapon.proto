@@ -1,0 +1,40 @@
+import "DataCommon.proto";
+
+package ProtoWeapon;
+
+message WeaponInfoCPP
+{
+	required uint32		id			= 1; //兵器Id
+	required uint32		level		= 2; //等级   为0时表示未解锁
+	required uint32		cast		= 3; //铸造进度
+}
+
+//兵器解锁
+message WeaponUnlockReq
+{
+	required uint32	id			= 1; //兵器
+}
+
+message WeaponUnlockResp
+{
+	required WeaponInfoCPP 				item		= 1;
+	required DataCommon.UserResourceCPP	resource	= 2;  //最新资源	
+}
+
+
+//兵器铸造
+message WeaponCastReq
+{
+	required uint32	id			= 1; //兵器
+}
+
+message WeaponCastResp
+{
+	required WeaponInfoCPP 				item		= 1;
+	required uint32						multiple 	= 2;  //倍数
+	required DataCommon.UserResourceCPP	resource	= 3;  //最新资源	
+}
+
+
+
+

@@ -1,0 +1,23 @@
+package CrossBusinessConfig;
+
+import "RewardConfig.proto";
+
+message SlotGoods
+{
+	required uint32 id					= 1;
+	required uint32 price				= 2;  //购买价格
+	required uint32 rate				= 3;  //概率
+	repeated RewardConfig.Reward goods	= 4; //商品
+}
+
+message OpenPlatformSlots
+{
+	required uint32 startday	= 1;  //距离开服时间天数
+	repeated SlotGoods slots	= 2;  //物品库
+}
+
+message CrossBusinessCfg
+{
+	required uint32 cash_refresh					= 1;  //花钻刷新价格
+	repeated OpenPlatformSlots open_platform_shop	= 2;
+}

@@ -1,0 +1,19 @@
+package ModelTrialConfig;
+
+import "RewardConfig.proto";
+
+message TrialGate
+{
+	required uint32 id							= 1;  //关卡id
+	required uint32 terrain						= 2; //地形
+	repeated uint32 npcs						= 3; //NPC
+	repeated RewardConfig.Reward first_reward	= 4; //首通奖励 
+	repeated RewardConfig.Reward reward			= 5; //普通闯关奖励
+}
+
+message ModelTrial
+{
+	required uint32 maxtimes		= 1;  //每天最大挑战次数
+	repeated uint32 times_price		= 2;  
+	repeated TrialGate gates		= 3;
+}

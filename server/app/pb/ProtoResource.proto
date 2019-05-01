@@ -1,0 +1,48 @@
+package ProtoResource;
+
+//祭司请求
+message FlamenReq
+{
+	required uint32		type  	= 1;	//资源类型[跟资源建筑类型一致]
+	required bool		isOnce	= 2;	//true--单次  false--10次
+	required bool		isFree	= 3;	//是否扣元宝 true--消耗免费次数 false--免费次数不够的消耗元宝
+}
+
+//祭司响应
+message FlamemResp
+{
+	required uint32		type		= 1; //类型
+	repeated uint32		multiple	= 2; //暴击倍数
+	required uint64 	value		= 3; //最新的资源值[与type相关]
+	required uint32		free_cnt	= 4; //免费祭司次数
+	required uint32		buy_cnt		= 5; //对应的资源购买次数[与type相关]
+	required uint32		cash		= 6; //元宝
+	repeated uint32		rewards		= 7; //每次奖励的值
+}
+
+//黑市秒CD
+message CutBlackMarketCDReq
+{
+
+}
+
+message CutBlackMarketCDResp
+{
+	required uint32 bmarketcd	= 1;   //黑市cd
+	required uint32 cash		= 2;   //钻石
+}
+
+//黑市购买
+message BMarketExchangeReq
+{
+	required uint32 usedtype   	= 1;  //消耗的资源类型
+	required uint32 gaintype	= 2;   //得到的资源类型
+}
+
+message BMarketExchangeResp
+{
+	required uint32 coin		= 1;	//银两
+	required uint32 wood		= 2;	//木材
+	required uint32 food		= 3;	//粮食
+	required uint32 bmarketcd	= 4;	//黑市cd
+}

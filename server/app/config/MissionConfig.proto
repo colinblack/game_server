@@ -1,0 +1,83 @@
+package MissionConfig;
+
+message MissionReward
+{
+	required uint32 food	= 1;
+	required uint32 coin	= 2;
+	required uint32 wood	= 3;
+	required uint32 exp		= 4;
+	optional uint32 hammer	= 5;
+}
+
+message DoubleCondition
+{
+	required uint32 subtype		= 1;
+	required uint32 count		= 2;
+}
+
+message TripleCondition
+{
+	required uint32 subtype		= 1;
+	required uint32 level		= 2;
+	required uint32 count		= 3;
+}
+
+//各种类型的任务
+
+message WhetherMission
+{
+	required uint32 id				= 1;
+	required uint32 pre				= 2;
+	required uint32 type			= 3;
+	required MissionReward	reward	= 4;
+}
+
+message SingleMission
+{
+	required uint32 id				= 1;
+	required uint32 pre				= 2;
+	required uint32 type			= 3;
+	required uint32 condition 		= 4;
+	required MissionReward	reward	= 5;
+}
+
+message DoubleMission
+{
+	required uint32 id					= 1;
+	required uint32 pre					= 2;
+	required uint32 type				= 3;
+	required DoubleCondition condition	= 4;
+	required MissionReward	reward		= 5;
+}
+
+message TripleMission
+{
+	required uint32 id					= 1;
+	required uint32 pre					= 2;
+	required uint32 type				= 3;
+	required TripleCondition condition	= 4;
+	required MissionReward	reward		= 5;
+}
+
+message AssembleMission
+{
+	required uint32 id					= 1;
+	required uint32 pre					= 2;
+	required uint32 type				= 3;
+	repeated uint32 	condition		= 4;
+	required MissionReward	reward		= 5;
+}
+
+message Mission
+{
+	repeated  WhetherMission 	whether		= 1;
+	repeated 	SingleMission 	single		= 2;
+	repeated DoubleMission		_double		= 3;
+	repeated TripleMission 		triple		= 4;
+	repeated AssembleMission 	assemble	= 5;
+}
+
+message MissionAll
+{
+	required  Mission missions		= 1;
+}

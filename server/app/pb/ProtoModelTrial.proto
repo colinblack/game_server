@@ -1,0 +1,55 @@
+package ProtoModelTrial;
+
+import "User.proto";
+
+message ModelTrialCPP
+{
+	required uint32 curpos 		= 1;  //当前已闯过的最大关卡位置
+	required uint32 fight_times = 2;  //挑战次数
+	required uint32 buy_times	= 3;  //购买次数
+	required uint32 resetts 	= 4;  //上次重置次数的时间
+}
+
+//打开机型试验窗口
+message OpenModelWindowReq
+{
+
+}
+
+message OpenModelWindowResp
+{
+	required ModelTrialCPP modeltrial = 1;  //机型试炼信息
+}
+
+//购买挑战次数
+message BuyFightTimesReq
+{
+
+}
+
+message BuyFightTimesResp
+{
+	required ModelTrialCPP modeltrial = 1;  //机型试炼信息
+	required uint32 		cash	  = 2;  //钻石	
+}
+
+//开始试验战斗
+message StartTrialGateReq
+{
+	required uint32 pos		= 1;  //关卡位置
+	required uint32 gateid	= 2; //关卡id
+	repeated uint32	heros 	= 3; //英雄id集合
+}
+
+message StartTrialGateResp
+{
+	required ModelTrialCPP modeltrial	= 1;  //机型试炼信息
+}
+
+//试验奖励推送
+message PushTrialRewardReq
+{
+	required bool  isfirst				= 1;  //是否首通奖励
+	required User.RewardBagInfo reward	= 2;  //战斗奖励
+	optional ModelTrialCPP modeltrial	= 3;  //机型试炼信息
+}

@@ -1,0 +1,56 @@
+package BotConfig;
+
+message BotEquipment
+{
+	required uint32	eqid			= 1;
+	optional uint32 star			= 2;
+	optional uint32 born1			= 3;
+	optional uint32 born2			= 4;
+	optional uint32 subt1			= 5;
+	optional uint32 sublv1			= 6;
+	optional uint32 subt2			= 7;
+	optional uint32 sublv2			= 8;
+	optional uint32 subt3			= 9;
+	optional uint32 sublv3			= 10;
+	optional uint32 subt4			= 11;
+	optional uint32 sublv4			= 12;
+}
+message BotHero
+{
+	required uint32	heroid			= 1;
+	required uint32 level			= 2;
+	repeated BotEquipment equip		= 3;
+}
+message BotWeapon
+{
+	required uint32 id				= 1;
+	required uint32 level  			= 2;  
+}
+message BotPlayer
+{
+	required uint32	day				= 1;
+	required uint32	level			= 2;
+	required uint32 viplevel 		= 3;  
+	repeated BotHero hero			= 4;
+	repeated uint32 science			= 5;
+	repeated BotWeapon weapon		= 6;
+}
+message BotAccount
+{
+	required uint32 id				= 1;
+	repeated BotPlayer player		= 2;
+}
+message BotName
+{
+	required uint32 id				= 1;
+	required uint32 kingdom			= 2;
+	repeated bytes name				= 3;
+}
+
+message BotConfig
+{
+	required string fig				= 1;
+	repeated BotName name			= 2;
+	repeated BotAccount	account		= 3;
+	repeated bytes chat				= 4;
+}

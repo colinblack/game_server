@@ -1,0 +1,42 @@
+package ProtoMarket;
+
+//集市
+message MarketCPP
+{
+	required uint32 refreshtime		= 1;    //刷新时间
+	required uint32 type1 			= 2;	//第一格类型	
+	required uint32 character1 		= 3;    //第一格品质
+	required uint32 type2			= 4;    //第二格类型
+	required uint32 character2		= 5;    //第二格品质
+	required uint32 type3			= 6;    //第三格类型
+	required uint32 character3 		= 7;	//第三格品质
+}
+
+//集市刷新
+message MarketRefreshReq
+{
+	
+}
+
+//集市刷新
+message MarketRefreshResp
+{
+	required  MarketCPP market	= 1;   //集市信息
+}
+
+//集市购买
+message PurchaseMarketReq
+{
+	required uint32 index	= 1;    //格子索引
+}
+
+message PurchaseMarketResp
+{
+	required uint32  coin		= 1;	//银两
+	required uint32 markettime	= 2;	//购买次数
+	required MarketCPP market	= 3;	//集市信息
+	optional uint32  wood		= 4;  //木材-可选
+	optional uint32  food		= 5;  //粮食,可选
+	optional uint32  iron		= 6;   //镔铁，可选
+	optional uint32  order		= 7;   //募兵令，可选
+}

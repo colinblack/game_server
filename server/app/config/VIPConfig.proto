@@ -1,0 +1,51 @@
+import "RewardConfig.proto";
+
+
+package VIPConfig;
+
+
+message UVIPBasePower
+{
+	repeated uint32 integral_cnt 	= 1;  //后勤奖励
+	repeated uint32 market_cnt 		= 2;  //集市次数
+	repeated uint32 sacrifice_cnt 	= 3;  //免费征收次数
+	repeated uint32 order_cnt 		= 4;  //地勤令
+	repeated uint32 bmarket_add 	= 5;  //黑市加成
+	repeated uint32 refresh_cnt 	= 6;  //免费洗练
+	repeated uint32 market_add 		= 7;  //集市加成
+	repeated uint32 auto_build_cnt  = 8;  //自动建造
+	repeated uint32	order_limit		= 9;  //地勤令限制
+	repeated uint32	iron_add		= 10; //黄金加成(镔铁)
+}
+
+message UVIPLvlPower
+{
+	optional uint32 resource_yield_add 		= 1; //资源产量
+	optional uint32	fight_exp_add			= 2; //战斗产出经验
+	optional float  polity_task_factor 		= 3; //政务事件
+	repeated uint32 weapon_prob 			= 4; //军工升级暴击概率
+	optional uint32 storage_capacity_add	= 5; //仓库容量
+}
+
+
+message UVIPItem
+{
+	repeated uint32					cash 		= 1;  //等级需要的充值金额
+	required UVIPBasePower			base_power 	= 2;
+	repeated UVIPLvlPower			lvl_power 	= 3;
+	repeated RewardConfig.Reward 	reward_1	= 4; //基本奖励配置
+	repeated RewardConfig.Reward 	reward_2	= 5;
+	repeated RewardConfig.Reward 	reward_3	= 6;
+	repeated RewardConfig.Reward 	reward_4	= 7;
+	repeated RewardConfig.Reward 	reward_5	= 8;
+	repeated RewardConfig.Reward 	reward_6	= 9;
+	repeated RewardConfig.Reward 	reward_7	= 10;
+	repeated RewardConfig.Reward 	reward_8	= 11;
+	repeated RewardConfig.Reward 	reward_9	= 12;
+	repeated RewardConfig.Reward 	reward_10	= 13;
+}
+
+message UVIP
+{
+	required UVIPItem	vip = 1;
+}

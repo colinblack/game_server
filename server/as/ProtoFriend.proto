@@ -1,0 +1,98 @@
+import "DataCommon.proto";
+
+package ProtoFriend;
+
+//好友
+message FriendCPP
+{
+	required uint32 friend_uid	= 1;  //好友uid
+	required uint32  send_gift_ts =2; //赠送该好友礼物的时间
+	required bool  isonline	= 3;  //是否在线
+	required bytes 	name		= 4;  //好友名字
+	required uint32 kindom		= 5; //好友国家
+	required uint32 level 		= 6;  //好友等级
+}
+
+message FriendCPPAll
+{
+	repeated FriendCPP friends	= 1;
+}
+
+//好友赠礼
+message FriendGiftCPP
+{
+	required uint32 prestige			= 1; //威望
+	required uint32 grades				= 2; //奖励档次
+	required uint32 receive_gift_times	= 3; //接收赠礼的次数
+	required uint32 receive_gift_ts		= 4; //接收赠礼的时间
+	required uint32 send_gift_times		= 5; //赠送礼物的次数
+	required uint32 send_gift_ts		= 6; //赠送礼物的时间
+	required bytes 	log_data			= 7; //日志记录
+}
+
+//加好友
+message AddFriendReq
+{
+	required uint32 othuid	= 1;  //好友uid
+}
+
+message AddFriendResp
+{
+	required FriendCPP yourfriend	= 1;  //好友信息
+	required FriendGiftCPP friendgift = 2; //赠礼信息，主要是日志记录
+}
+
+//删好友
+message DelFriendReq
+{
+	required uint32 othuid	= 1;  //好友uid
+}
+
+message DelFriendResp
+{
+}
+
+//打开窗口
+message OpenFriendWindowReq
+{
+
+}
+
+message OpenFriendWindowResp
+{
+	required FriendCPPAll friendall	= 1;  //全部好友信息
+	required FriendGiftCPP friendgift = 2; //赠礼信息
+}
+
+//给好友赠礼
+message SendGiftReq
+{
+	required uint32 othuid	= 1;  //好友uid
+}
+
+message SendGiftResp
+{
+	required FriendCPP yourfriend	= 1;  //好友信息
+	required FriendGiftCPP friendgift = 2; //赠礼信息
+}
+
+//接收赠礼推送
+message ReceiveGiftPushReq
+{
+	required uint32 recv_times					= 1;  //接收赠礼次数
+	required uint32 recv_ts						= 2; //接收赠礼的时间
+	required DataCommon.RewardItemCPP coin		= 3;  //好友赠送钞票
+	required DataCommon.RewardItemCPP prestige	= 4;  //赠送的威望
+}
+
+//领取威望奖励
+message ReceivePrestigeRewardReq
+{
+
+}
+
+message ReceivePrestigeRewardResp
+{
+	required uint32 cash				= 1;  //钻石
+	required FriendGiftCPP friendgift	= 2; //赠礼信息
+}

@@ -1,0 +1,37 @@
+package Bot;
+
+message RequestLogin {
+		required uint32 uid 				= 1;
+		required uint32 kingdom 			= 2;
+		required uint32 id 					= 3;
+		required bool reload				= 4;
+}
+message ReplyLogin {
+		required uint32 ret 				= 1;
+}
+message RequestLogout {
+		required uint32 uid 				= 1;
+}
+message RequestCity {
+		required uint32 uid 				= 1;
+}
+message RequestMove {
+		required uint32 uid 				= 1;
+}
+
+message ChatInfo {
+		required uint32 uid 				= 1;	
+		required bytes name 				= 2;
+		required uint32 kingdom				= 3;
+		required uint32 vip 				= 4;
+		required uint32 lvl 				= 5;
+}
+message BotChat {
+		required ChatInfo info				= 1;
+		required bytes msg					= 2;
+}
+message BotMove {
+		required ChatInfo info				= 1;
+		repeated uint32 id	 				= 2;//武将id
+		repeated uint32 cids 				= 3;//据点路径
+}

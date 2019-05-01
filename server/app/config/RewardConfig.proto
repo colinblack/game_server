@@ -1,0 +1,103 @@
+import "VipGiftConfig.proto";
+import "CommonGiftConfig.proto";
+
+package RewardConfig;
+
+//部件
+message Component
+{
+	required uint32					id		=  1;
+	required uint32					level	=  2;  //等级
+	required uint32					exp		=  3;  //经验
+	optional uint32					slave1	=  4;  
+	optional uint32					slave2	=  5;
+	optional uint32					slave3	=  6;
+	
+}
+
+message Reward
+{
+	optional VipGiftConfig.EquipReward	 equips 	= 1; //装备奖励
+	optional CommonGiftConfig.BaseReward base  		= 2; //基本奖励(资源，经验等)  
+	optional uint32						 hero		= 3; //英雄
+	optional Component					 component	= 4; //部件
+}
+
+//国战任务奖励
+message CountryTaskBaseItem
+{
+	required uint32						 day 		= 1; //开服天数配置
+	required CommonGiftConfig.BaseReward base		= 2; //基本奖励配置
+	repeated uint32						 kills		= 3; //杀敌阶段数
+}
+
+message CountryTaskItem
+{
+	repeated Reward 				reward_1 		= 1; //个人任务1奖励
+	repeated Reward 				reward_2 		= 2; //个人任务2奖励
+	repeated Reward 				reward_3 		= 3; //个人任务3奖励
+	repeated float			   		base_factor 	= 4; //基本奖励系数A
+	repeated float					expand_factor 	= 5; //加成奖励系数B
+	repeated CountryTaskBaseItem	base_reward		= 6; //基本奖励配置
+	repeated uint32 				tech_coefficient = 7;  //科技系数
+}	
+
+message CountryTask	
+{
+	required CountryTaskItem country_task = 1;
+}
+
+//首充奖励
+message FirstRechargeReward
+{
+	repeated Reward reward	= 1;
+}
+
+message FirstRecharge
+{
+	required FirstRechargeReward first_recharge	= 1;
+}
+
+//整点奖励
+message IntegralReward
+{
+	required CommonGiftConfig.BaseReward base  		= 1; //基本奖励(资源，经验等)
+	required uint32						 prob		= 2; //概率系数  
+}
+
+message IntegralTime
+{
+	repeated	IntegralReward	integral_time	= 1;
+}
+
+//竞技场奖励
+message PkFieldReward
+{
+	required uint32							rank_start	= 1;
+	optional uint32							rank_end	= 2;
+	required CommonGiftConfig.BaseReward 	base		= 3;
+}
+
+message PkField
+{
+	repeated PkFieldReward pk_field	= 1;
+}
+
+//累积登录奖励
+message DayReward
+{
+	required uint32 day		= 1;   //累积登录天数
+	repeated Reward reward	= 2;
+}
+
+message CumulationLogin
+{
+	repeated DayReward dayrewards	= 1;  //累积登录的批量奖励配置
+}
+
+message CumulationLoginReward
+{
+	required CumulationLogin cumulation_login	= 1; 
+}
+
+//@end

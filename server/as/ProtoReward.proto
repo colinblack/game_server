@@ -1,0 +1,48 @@
+import "DataCommon.proto";
+import "ProtoHero.proto";
+
+package ProtoReward;
+
+//领取首充奖励
+message FirstRechargeReq
+{
+}
+
+message FirstRechargeResp
+{
+	required	DataCommon.EquipmentAllCPP 		equips	   		= 1;  //装备
+	repeated	uint32							equips_cnt 		= 2;  //奖励装备数
+	required	DataCommon.CommonBaseRewardCPP	base			= 3;
+	repeated	ProtoHero.HeroBaseInfoCPP		heros			= 4;  //解锁英雄
+	required	uint32	 						first_recharge 	= 5;  //首充状态
+	required	uint32							auto_build_flag = 6;  //建筑自动升级
+}
+
+//整点/后勤奖励
+message IntegralTimeReq
+{
+	
+}
+
+message IntegralTimeResp
+{
+	required	uint32	 						new_cnt 	= 1; //剩余次数
+	required	DataCommon.CommonBaseRewardCPP	base		= 2; //奖励
+}
+
+//VIP奖励
+message VIPReq
+{
+	
+}
+
+message VIPResp
+{
+	required	DataCommon.EquipmentAllCPP 		equips	   		= 1;  //装备  //如果奖励了同样的装备，会有多条记录,以最后一条数据为准
+	repeated	uint32							equips_id		= 2;  //奖励的装备id  //合并之后的
+	repeated	uint32							equips_cnt 		= 3;  //奖励装备数
+	required	DataCommon.CommonBaseRewardCPP	base			= 4;
+	repeated	ProtoHero.HeroBaseInfoCPP		heros			= 5;  //解锁英雄
+	required	uint32							vip_level		= 6; //vip
+	required 	uint32							vip_reward		= 7; //vip奖励记录
+}

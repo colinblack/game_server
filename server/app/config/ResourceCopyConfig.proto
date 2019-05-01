@@ -1,0 +1,18 @@
+package ResourceCopyConfig;
+
+import "RewardConfig.proto";
+
+message ResourceCopy
+{
+	required uint32 id				= 1;  //副本id
+	required uint32 gateid			= 2; //闯关id
+	required uint32 viplevel		= 3; //vip等级限制
+	required uint32 timeslimit		= 4; //次数限制
+	repeated uint32 cash			= 5; //每一次花费钻石
+	repeated RewardConfig.Reward reward = 6; //每一次的奖励 
+}
+
+message ResourceCopyAll
+{
+	repeated ResourceCopy resource_copies	= 1;  //资源副本
+}

@@ -1,0 +1,38 @@
+package ProtoResourceCopy;
+
+import "User.proto";
+
+message ResourceCopyCPP
+{
+	required uint32 id	= 1; //副本id
+	required uint32 buytimes = 2;  //已购买次数
+}
+
+message ResourceCopyCPPAll
+{
+	repeated ResourceCopyCPP rescopy = 1; //资源副本信息
+}
+
+//打开闯关窗口
+message OpenGateWindowReq
+{
+
+}
+
+message OpenGateWindowResp
+{
+	required ResourceCopyCPPAll rescopies = 1;  //副本集合
+}
+
+//购买资源副本
+message BuyResourceCopyReq
+{
+	required uint32 id	= 1;  //副本id
+}
+
+message BuyResourceCopyResp
+{
+	required ResourceCopyCPP rescopy	= 1;  //副本信息
+	required User.RewardBagInfo reward	= 2;  //奖励
+	required uint32 cash				= 3;  //钻石
+}

@@ -1,0 +1,51 @@
+package ProtoCrossBusiness;
+
+import "User.proto";
+
+message CrossBusinessCPP
+{
+	required uint32 refreshts	= 1;	//下次可刷新时间
+	required uint32 slot1 		= 2;	//槽1-id
+	required uint32 slot2 		= 3;	//槽2-id
+	required uint32 slot3 		= 4;	//槽3-id
+	required uint32 slot4 		= 5;	//槽4-id
+	required uint32 slot5 		= 6;	//槽5-id
+	required uint32 slot6 		= 7;	//槽6-id
+	required uint32 status		= 8;	//购买状态
+}
+
+//打开窗口
+message BusinessOpenWindowReq
+{
+
+}
+
+message BusinessOpenWindowResp
+{
+	required CrossBusinessCPP crossbusiness	= 1; //跨国商人数据
+}
+
+//刷新
+message BusinessRefreshReq
+{
+	required bool iscash	= 1; //是否花钻刷新
+} 
+
+message BusinessRefreshResp
+{
+	required CrossBusinessCPP crossbusiness	= 1; //跨国商人数据
+	required uint32 cash					= 2;  //钻石
+}
+
+//购买
+message BusinessPurchaseReq
+{
+	required uint32 pos	= 1;  //位置
+}
+
+message BusinessPurchaseResp
+{
+	required User.RewardBagInfo goods		= 1;  //购买的物品
+	required CrossBusinessCPP crossbusiness	= 2; //跨国商人数据
+	required uint32				cash		= 3;  //钻石
+}

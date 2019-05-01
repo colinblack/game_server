@@ -1,0 +1,23 @@
+import "VipGiftConfig.proto";
+
+package UserCfg;
+
+message UserBase
+{
+	required uint32 coin		= 1;
+	required uint32 wood		= 2;
+	required uint32 food		= 3;
+	required uint32 iron		= 4;
+	required uint32 cash		= 5;
+	required uint32 level		= 6;
+	required uint32 exp			= 7;
+	required uint32 order		= 8;
+	repeated VipGiftConfig.EquipReward	equips 			= 9; //道具初始化
+}
+
+message User
+{
+	required	UserBase   					user_init 		= 1;
+	repeated	uint64	   					user_exp		= 2;
+	
+}
