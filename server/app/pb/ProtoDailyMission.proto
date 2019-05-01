@@ -1,0 +1,69 @@
+package ProtoDailyMission;
+
+message DailyMissionCPP
+{
+	required uint32 missid		= 1; //任务id
+	required uint32 star		= 2;  //任务星级
+	required uint32 status		= 3;  //状态。0-未完成，1-待领取奖励，2-已领取奖励
+	required uint32 current		= 4;  //当前进度
+}
+
+message DailyMissionAllCPP
+{
+	repeated DailyMissionCPP missions	= 1;
+}
+
+//刷新每日任务
+message RefreshDailyMissionReq
+{
+
+}
+
+message RefreshDailyMissionResp
+{
+	required DailyMissionAllCPP missionall	= 1;   //所有刷新的每日任务信息
+	required uint32 			refreshtime	= 2; //上次刷新时间
+	required uint32 			freetimes	= 3;  //已用的免费刷新次数
+}
+
+//花钻刷新
+message CashRefreshMissionReq
+{
+
+}
+
+message CashRefreshMissionResp
+{
+	required DailyMissionAllCPP missionall	= 1; //所有刷新的每日任务信息
+	required uint32 cash					= 2;  //现有的钻石数目
+}
+
+//打开每日任务窗口
+message OpenDailyMissionWindowReq
+{
+
+}
+
+message OpenDailyMissionWindowResp
+{
+	required DailyMissionAllCPP missionall 	= 1;  //部分不能实时更新的每日任务信息
+}
+
+//任务完成后的主动推送
+message PushDailyMissionReq
+{
+	required DailyMissionAllCPP missionall 	= 1;  //每日任务信息
+}
+
+//领取每日任务奖励
+message GetDailyMissionRewardReq
+{
+	required uint32 missid	= 1; //任务id
+}
+
+message GetDailyMissionRewardResp
+{
+	required DailyMissionCPP mission	= 1; //任务详情
+	required uint64  exp				= 2; //经验
+	required uint32  reward_times 		= 3; //已领取奖励个数
+}

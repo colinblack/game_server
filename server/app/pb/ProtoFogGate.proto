@@ -1,0 +1,26 @@
+package ProtoFogGate;
+
+message FogGateCPP
+{
+	required uint32 gateid		= 1;  //关卡id
+    required uint32 leftnpc 	= 2;  //剩余npc数
+}
+
+message FogGateCPPAll
+{
+	repeated FogGateCPP foggates	= 1;
+}
+
+//开始迷雾战
+message StartFogGateReq
+{
+	required uint32 gateid		 = 1; //关卡id
+	repeated uint32	heros = 2; //英雄id集合
+}
+
+//剩余npc的推送
+message PushFogGateReq
+{
+	required uint32 gateid	= 1;
+	required uint32 leftnpc	= 2;
+}

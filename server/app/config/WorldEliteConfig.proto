@@ -1,0 +1,24 @@
+package WorldEliteConfig;
+
+message NPCInfo
+{
+	required uint32 npcid	= 1;
+	required uint32 count	= 2;
+}
+
+message TypeNPC
+{
+	required uint32 type	= 1;
+	repeated NPCInfo npcs	= 2;
+}
+
+message OpenPlatformNPC
+{
+	required uint32 startday	= 1;
+	repeated TypeNPC npcall		= 2;
+}
+
+message EliteNPC
+{
+	repeated OpenPlatformNPC open_platform_npc	= 1;
+}

@@ -1,0 +1,17 @@
+package ProtoPass;
+
+message NPCPassRecord
+{
+	required uint32 id		 = 1; //关卡Id
+	required uint32	cnt		 = 2; //通过次数
+}
+
+//进入关卡
+message EnterFightReq
+{
+	required uint32 id		 = 1; //关卡Id
+	repeated uint32	hero_ids = 2; //英雄ID	
+	optional int32 diff		 = 3; //随机难度
+}
+
+//@end

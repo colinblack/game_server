@@ -1,0 +1,70 @@
+import "DataCommon.proto";
+
+package ProtoPkField;
+
+
+message PkUserItem
+{
+	required uint32	uid  = 1;  //0--npc >0 真实玩家
+	required bytes	name = 2;  //
+	required uint32	lvl	 = 3;  //
+	required uint32 rank = 4;  //起始值 为 1;
+	required bytes	head = 5;  //头像	
+}
+
+
+message PkFieldReq
+{
+	
+}
+
+message PkFieldResp
+{
+	required int32		rank		= 1; //名次  //-1表示没有计入排名
+	required uint32		challenge 	= 2; //挑战次数
+	repeated PkUserItem winners 	= 3; //前几名    //3个
+	repeated PkUserItem	defier 		= 4; //挑战者  //5个 名次在5名之内 返回不足5
+	required int32		reward_rank	= 5; //领奖的名次  0 代表没有
+}
+
+//进入竞技场
+message EnterPkFieldReq
+{
+	required int32		rank		= 1;
+}
+
+message EnterPkFieldResp
+{
+	repeated uint32		hero_ids 	= 1; //英雄ID 对方的英雄队列  可能为 空	
+	repeated uint32		hero_lvl	= 2; //英雄等级
+	repeated uint32		hero_troops	= 3; //带兵量
+}
+
+//开始战斗
+message StartPkReq
+{
+	required int32		rank		= 1;
+	repeated uint32		hero_ids 	= 2; //英雄ID		
+}
+
+//换一批
+message RefreshRivalReq
+{
+}
+
+message RefreshRivalResp
+{
+	required uint32		cash		= 1; //最新钻石数
+	repeated PkUserItem	rival 		= 2; //挑战者  //5个 名次在5名之内 返回不足5
+}
+
+//领奖
+message PkRewardReq
+{
+}
+
+message PkRewardResp
+{
+	required	DataCommon.CommonBaseRewardCPP	base 		= 1; //奖励
+	required	uint32							ladder_ts	= 2; //
+}

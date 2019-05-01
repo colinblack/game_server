@@ -1,0 +1,89 @@
+package ComponentConfig;
+
+message Product
+{
+	required uint32 rate		= 1;  //概率
+	optional uint32 material	= 2;  //材料
+	optional uint32 compid		= 3;  //部件
+}
+
+message Produce
+{
+	required uint32 level		= 1; //产出等级
+	required uint32 cost		= 2; //消耗材料
+	required uint32 nextrate	= 3; //到下一级的概率
+	repeated Product product	= 4; //产出库
+}
+
+message ComponentProduce
+{
+	repeated Produce cash_produce	= 1;
+	repeated Produce common			= 2;
+}
+
+message ComponentBase
+{
+	required uint32 compid		= 1;  //部件id
+	required uint32 type		= 2; //类型
+	required uint32 character	= 3;  //品质
+	optional uint32 master		= 4; //主属性
+}
+
+message ComponentExp
+{
+	required uint32 base_exp	= 1;  //品质基本经验
+	repeated uint32 exp_level	= 2;  //等级经验数组
+}
+
+message LevelCost
+{
+	required uint32 coin	= 1;  //钞票
+	required uint32 wood	= 2;  //钢材
+}
+
+message ComponentUpgrade
+{
+	repeated LevelCost level_cost	= 1;
+}
+
+message LevelValue
+{
+	repeated double value	= 1;
+}
+
+message ComponentProperty
+{
+	repeated LevelValue master	= 1;
+	repeated LevelValue slave	= 2;
+}
+
+message CharacterObject
+{
+	required uint32 character	 					= 1; //品质
+	required ComponentExp component_exp				= 2; //经验
+	required ComponentUpgrade component_upgrade		= 3;  //升级
+	required ComponentProperty component_property	= 4; //属性
+}
+
+message ComponentProps
+{
+	required uint32 compid		= 1; //部件id
+	required uint32 exp			= 2;  //道具自带的经验
+	required uint32 coin		= 3;  //使用道具消耗的钞票
+	required uint32 wood		= 4;  //使用道具消耗的钢材
+}
+
+message ComponentItem
+{
+	required ComponentProduce compont_produce	= 1;
+	repeated ComponentBase component_base		= 2;   //部件
+	required uint32 max_level					= 3;  //最大等级
+	repeated uint32 component_unlock			= 4;  //解锁等级
+	repeated CharacterObject character_objects	= 5;  //品质相关的部件对象
+	repeated ComponentProps component_props		= 6;  //部件经验道具
+}
+
+message Component
+{
+	required ComponentItem component	= 1;
+}

@@ -1,0 +1,17 @@
+package AchievementConfig;
+import "RewardConfig.proto";
+
+message Achievement
+{
+	required uint32 id						= 1;
+	required uint32 achitype				= 2;
+	required uint32 type					= 3;
+	optional uint32 subtype					= 4;
+	repeated uint32 condition				= 5;
+	repeated RewardConfig.Reward reward		= 6;
+}
+
+message AchievementList
+{
+	repeated Achievement achievements	= 1;
+}

@@ -1,0 +1,43 @@
+package AttackHarborConfig;
+
+import "RewardConfig.proto";
+
+message NPCInfo
+{
+	required uint32 npcid	= 1;
+	required uint32 count	= 2;  
+}
+
+message OpenPlatformNPC
+{
+	required uint32 startday	= 1;
+	repeated NPCInfo npcs		= 2;
+}
+
+message NPCRefresh
+{
+	repeated uint32 cid	= 1;
+	required uint32 enemy_kindom	= 2;
+	required uint32 start_time	= 3;
+	repeated OpenPlatformNPC open_platform_npc	= 4;
+}
+
+message OpenPlatformReward
+{
+	required uint32 startday	= 1;
+	repeated RewardConfig.Reward reward	= 2; //商品
+}
+
+message CountryRankReward
+{
+	required uint32 rank	= 1;
+	repeated OpenPlatformReward open_platform_reward	= 2;
+}
+
+message AttackPearlHarbor
+{
+	repeated NPCRefresh npcrefresh	= 1;
+	required uint32 refresh_frequency	= 2;
+	repeated uint32 individual_reward	= 3;
+	repeated CountryRankReward country_reward	= 4;
+}

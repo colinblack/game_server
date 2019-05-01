@@ -1,0 +1,26 @@
+import "DataCommon.proto";
+
+package ProtoEquip;
+
+//装备卖出
+message SoldEquipReq
+{
+	required uint32 equd	= 1;	//出售的装备ud
+}
+
+message SoldEquipResp
+{
+	required DataCommon.EquipmentCPP soldequip		= 1;  //出售的装备信息
+	required uint32 coin							= 2;	//银两
+}
+
+//打开装备商店接口
+message OpenRepurchaseWindowReq
+{
+
+}
+
+message OpenRepurchaseWindowResp
+{
+	repeated DataCommon.EquipmentCPP equips		= 1;   //待回购的装备
+}

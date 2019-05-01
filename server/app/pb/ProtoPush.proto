@@ -1,0 +1,77 @@
+import "ProtoBuilding.proto";
+import "ProtoHero.proto";
+import "ProtoScience.proto";
+import "ProtoPass.proto";
+
+
+package ProtoPush;
+
+//主推消息 
+
+//用户升级了
+message UserUpLevel
+{
+	required uint32	uid 		= 1;
+	required uint32	old_level 	= 2; //老的用户等级
+	required uint32	new_level	= 3; //新的用户等级
+	required uint64	exp			= 4; //经验
+	required uint32 sacrifice	= 5; //最新祭司次数
+	required uint32 reward_s	= 6; //奖励的祭司次数	
+}
+
+//建筑产能变化
+message BuildYieldInfo
+{
+	repeated ProtoBuilding.BuildYield	 yield = 1;
+}
+
+
+//英雄信息
+message HerosInfo
+{
+	repeated ProtoHero.HeroBaseInfoCPP	heros = 1;
+}
+
+//科技研究完成
+message ScienceFinish
+{
+	required ProtoScience.ScienceItemCPP science	= 1;
+}
+
+//闯关通过，只针对又闯关数记录的关卡
+message PushNPCPassRecord
+{
+	required ProtoPass.NPCPassRecord	item = 1;
+}
+
+
+message OnceEveryDayReward
+{
+	required uint32	integral_time_cnt 	= 1; //整点/地勤奖励
+	required uint32	market				= 2; //集市次数
+	required uint32 sacrifice			= 3;
+	required uint32	order				= 4;
+	required uint32 refresh				= 5;
+	required uint32	ladder				= 6; //竞技场次数
+	required uint32 freerefresh			= 7; //每日任务免费刷新已用次数
+	required uint32 reward_times		= 8; //每日任务领取任务次数
+}
+
+//洗练放送领奖提示
+message SmeltActivityHint
+{
+	required uint32 type = 1; //提示
+}
+
+//次数增加时推送
+message TimesAddPushReq
+{
+	optional uint32 mission_times = 1;   //政务次数 
+}
+
+
+//国家矿可领取了
+message MineKingdomRewardStatus
+{
+	required uint32 kingdom = 1; //广播 前端需要判断这个协议包是不是自己国家的 
+}

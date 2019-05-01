@@ -1,0 +1,73 @@
+package VipGiftConfig;
+
+message EquipReward
+{
+	required uint32 eqid	= 1;
+	required uint32 count	= 2;
+}
+
+message FinalReward
+{
+	repeated EquipReward  equips 	= 1;
+	optional uint32 coin			= 2;
+	optional uint32 wood			= 3;
+	optional uint32 food			= 4;
+	optional uint32 iron			= 5;
+	optional uint32 hammer			= 6;
+	optional uint32 order			= 7;
+	optional uint32 exp				= 8;
+}
+
+message LevelDailyGift
+{
+	required uint32 level	= 1;
+	required FinalReward reward = 2;
+}
+
+message YearDailyGift
+{
+	required FinalReward reward = 1;
+}
+
+message NewerGift
+{
+	required FinalReward reward	= 1;
+}
+
+message PrivilegeGift
+{
+	repeated  LevelDailyGift leveldaily = 1;
+	required YearDailyGift yeardaily 	= 2;
+}
+
+message UpgradeGift
+{
+	required uint32 userlevel = 1;
+	required FinalReward reward = 2;
+}
+
+message YellowVIPGift
+{
+	required NewerGift newer 			= 1;
+	required PrivilegeGift privilege	= 2;
+	repeated UpgradeGift upgrade		= 3;
+}
+
+message PrivilegeZoneGift
+{
+	required  YearDailyGift daily = 1;   //空间每日礼包
+}
+
+message QQZoneGift
+{
+	required PrivilegeZoneGift privilege	= 1;   //每日礼包
+	repeated UpgradeGift upgrade			= 2;   //等级礼包
+}
+
+
+message VIPGift
+{
+	required YellowVIPGift yellowvip 	= 1;
+	required QQZoneGift  qqzone		 	= 2;		
+}
+

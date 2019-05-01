@@ -1,0 +1,53 @@
+import "DataCommon.proto";
+
+package ProtoGovernAffair;
+
+message AffairItemCPP
+{
+	required uint32 mission_time	= 1;  //政务次数
+	required uint32 mission_id		= 2;  //政务id
+	required uint32 loyal			= 3;
+}
+
+//打开政务事件窗口
+message OpenAffairWindowReq
+{
+
+}
+
+message OpenAffairWindowResp
+{
+	required AffairItemCPP affair	= 1;
+}
+
+//政务事件领取奖励
+message GetAffairRewardReq
+{
+	required uint32 index		= 1;  //区分上下
+}
+
+message GetAffairRewardResp
+{
+	required uint32 coin			= 1;  //钞票 
+	required uint32 wood			= 2;  //钢材
+	required uint32 food			= 3;  //原油
+	required uint32 cash			= 5;  //钻石
+	required AffairItemCPP  affair	= 6;  //新的政务事件
+}
+
+//民忠兑换
+message LoyalExchangeReq
+{
+	
+}
+
+
+
+message LoyalExchangeResp
+{
+	required DataCommon.RewardItemCPP coin			= 1;  //钞票 
+	required DataCommon.RewardItemCPP wood			= 2;  //钢材
+	required DataCommon.RewardItemCPP food			= 3;  //原油
+	required DataCommon.RewardItemCPP iron			= 4; //黄金
+	required uint32 loyal		= 5;  //民忠
+}

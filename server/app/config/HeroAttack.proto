@@ -1,0 +1,18 @@
+package HeroAttackConfig;
+
+message Soldier
+{
+	required uint32 slevel		= 1;
+	repeated uint32 property 	= 2;
+}
+
+message AttackBase
+{
+	required uint32 hlevel		= 1;
+	repeated Soldier soldiers  	= 2;
+}
+
+message Attack
+{
+	repeated AttackBase  attacks	= 1;
+}

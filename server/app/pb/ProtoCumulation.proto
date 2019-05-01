@@ -1,0 +1,23 @@
+import "DataCommon.proto";
+import "ProtoHero.proto";
+
+package ProtoCumulation;
+
+message CumulationCPP
+{
+	required uint32 status	= 1;  //领取状态
+}
+
+//累积登录奖励
+message CumulationRewardReq
+{
+	required uint32 rindex	= 1; //奖励的索引
+}
+
+message CumulationRewardResp
+{
+	optional DataCommon.EquipmentAllCPP equips		= 1; //装备
+	optional DataCommon.CommonBaseRewardCPP	base	= 2; //资源、钻石和各种次数
+	optional ProtoHero.HeroBaseInfoCPP	hero		= 3; //解锁的英雄信息
+	required uint32 status							= 4; //累积登录的领取状态
+}

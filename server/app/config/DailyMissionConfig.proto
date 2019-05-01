@@ -1,0 +1,24 @@
+package DailyMissionConfig;
+
+message DailyMission
+{
+	required uint32 id					= 1;
+	required uint32 rate				= 2;  //概率
+	required uint32 type				= 3;  //类型
+	required uint32 subtype				= 4;  //子类型
+	required uint32 count				= 5;  //数量
+	repeated uint32 starrate			= 6;  //星级概率
+	repeated double starcoefficient		= 7;  //星级系数
+	required uint32 exp					= 8;  //经验
+}
+
+message DailyMissionsItem
+{
+	required uint32 tech				= 1;
+	repeated DailyMission missions		= 2;
+}
+
+message DailyMissonItemList
+{
+	repeated DailyMissionsItem daily_missions	= 1;
+}

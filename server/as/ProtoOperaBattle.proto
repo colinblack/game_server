@@ -1,0 +1,93 @@
+import "User.proto";
+
+package ProtoOperaBattle;
+
+//个人剧本战奖励领取记录
+message OperaBattleCPP
+{
+	required uint32 gateid	= 1; //剧本id
+	required uint32 difficulty	= 2; //难度
+	required uint32 star	= 3;  //已领取的星级
+}
+
+message OperaBattleCPPAll
+{
+	repeated OperaBattleCPP operabattles	= 1;
+}
+
+//剧本战共享数据
+message MemoryRecordCPP
+{
+	required uint32 kingdom		= 1;  //国家
+	required bytes name			=2;  //玩家名称
+	required uint32  left_time	= 3;  //战斗用时
+}
+
+//单个剧本闯关的记录
+message MemoryBattleRecordCPP
+{
+	required uint32 gateid	= 1;  //闯关记录
+	repeated MemoryRecordCPP  diff_record	= 2;  //全部难度的记录
+}
+
+//剧本战的记录
+message MemoryOperaBattleRecordCPPAll
+{
+	repeated MemoryBattleRecordCPP  battle_record	= 1; //全部的剧本战记录
+}
+
+//打开剧本战窗口
+message OpenOperaBattleWindowReq
+{
+
+}
+
+message OpenOperaBattleWindowResp
+{
+	required OperaBattleCPPAll operabattles	= 1; //据本战奖励领取信息
+	required MemoryOperaBattleRecordCPPAll records	= 2; //记录信息
+}
+
+//开启剧本战
+message StartOperaBattleReq
+{
+	required uint32 gateid	= 1; 
+	required uint32 difficulty	= 2;
+}
+
+message StartOperaBattleResp
+{
+	required uint32 food	= 1;   //石油
+}
+
+//结束战斗
+message EndOperaBattleReq
+{
+	required uint32 gateid		= 1; 
+	required uint32 difficulty	= 2;
+	required uint32 left_time	= 3;  //剩余时间
+}
+
+message EndOperaBattleResp
+{
+	optional MemoryRecordCPP record	= 1; //记录
+	optional uint32 gateid = 2;
+	optional uint32 difficulty = 3;
+}
+
+//领取星级奖励
+message ReceiveStarRewardReq
+{
+	required uint32 gateid		= 1; 
+	required uint32 difficulty	= 2;
+	required uint32 star		= 3;  //奖励的星级
+	required uint32 battle_star	= 4;  //战斗获得的星级
+}
+
+message ReceiveStarRewardResp
+{
+	required uint32 cash	= 1; //钻石
+	required OperaBattleCPP operabattle	= 2; //据本战奖励领取信息
+	required User.RewardBagInfo reward	= 3;  //奖励
+}
+

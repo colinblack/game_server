@@ -1,0 +1,287 @@
+import "ProtoBuilding.proto";
+import "ProtoBattleField.proto";
+import "DataCommon.proto";
+import "ProtoHero.proto";
+import "ProtoMission.proto";
+import "ProtoScience.proto";
+import "ProtoYellowVip.proto";
+import "ProtoMarket.proto";
+import "ProtoWeapon.proto";
+import "ProtoPass.proto";
+import "ProtoCumulation.proto";
+import "ProtoOfficial.proto";
+import "ProtoFogGate.proto";
+import "ProtoDailyMission.proto";
+import "ProtoComponent.proto";
+import "ProtoAchievement.proto";
+
+package User;
+
+message Base {
+	required uint32 register_platform	 = 1;
+	required uint32 register_time		 = 2;
+	required uint32 invite_uid			 = 3;
+	required uint32 last_login_platform	 = 4;
+	required uint32 last_login_time		 = 5;
+	required uint32 login_times			 = 6;
+	required uint32 login_days			 = 7;
+	required uint32 last_active_time 	 = 8;
+	required uint32 last_off_time	 	 = 9;
+	required uint32 forbid_ts			 = 10;
+	required bytes forbid_reason		 = 11;
+	required uint32 invite_count		 = 12;
+	required uint32 today_invite_count	 = 13;
+	required uint32 tutorial_stage		 = 14;
+	required bytes name					 = 15;
+	required bytes fig					 = 16;
+	required uint32 kingdom				 = 17;
+	required uint64 exp					 = 18;
+	required uint32 level				 = 19;
+	required uint32 acccharge			 = 20;
+	required uint32 viplevel			 = 21;
+	required uint32 cash				 = 22;
+	required uint32 coin				 = 23;
+	required uint32 wood				 = 24;
+	required uint32 food				 = 25;
+	required uint32 iron				 = 26;
+	required uint32 ticket				 = 27;
+	required uint32 silk				 = 28;
+	required uint32 order				 = 29;
+	required uint32 bag					 = 30;
+	required uint32 preward				 = 31;
+	required uint32 loyal				 = 32;
+	required uint32 sacrifice			 = 33;
+	required uint32 market				 = 34;
+	required uint32 bmarketcd			 = 35;
+	required uint32 banquet				 = 36;
+	required uint32 eshopintimacy		 = 37;
+	required uint32 eshopcd				 = 38;
+	required uint32 refresh				 = 39;
+	required uint32 arefresh			 = 40;
+	required uint32 harmmer				 = 41;
+	required uint32 shadow				 = 42;
+	required uint32 up_res_time			 = 43;
+	required uint32 rests				 = 44;
+	required uint32 mp1					 = 45;
+	required uint32 mp2					 = 46;
+	required uint32 mk1					 = 47;
+	required uint32 mk2					 = 48;
+	required uint32 rewardb				 = 49;
+	required uint32 mp3					 = 50;
+	required uint32 npc_pass			 = 51;
+	required uint32 flamen_coins_cnt	 = 52;
+	required uint32 flamem_wood_cnt		 = 53;
+	required uint32 flamem_food_cnt		 = 54;
+	required uint32 flamem_iron_cnt		 = 55;
+	required uint32 first_recharge 		 = 56;  //首充 1--可领取 2--已经领取
+	required uint32 auto_build_flag 	 = 57;
+	required uint32 integral_time_cnt 	 = 58;
+	required uint32 mission_time		 = 59;  //政务次数
+	required uint32 mission_id			 = 60; //政务事件id
+	required uint32 vip_reward			 = 61; //vip奖励进度
+	required uint32	ladder				 = 62; //竞技场次数
+	required uint32	ladder_ts			 = 63; //竞技场领奖
+	required uint32	job_reward_ts		 = 64; //军职领奖
+	required uint32	department			 = 65; //所在部门 0--为没有
+	required uint32	official			 = 66; //职位
+	optional uint32	prestige			 = 67;  //官威
+	required uint32	token_ts			 = 68;  //响应的官员令
+	required uint32 daily_refresh_ts	 = 69; //上次普通刷新时间
+	required uint32 daily_reward_times	 = 70; //领取奖励次数
+	required uint32 daily_free_times	 = 71; //已使用免费刷新次数
+}
+
+message Building {
+	repeated ProtoBuilding.BuildInfo 	builds 		= 1;
+	required ProtoBuilding.BuildQueue 	queue		= 2;
+	repeated ProtoBuilding.BuildYield	yield		= 3;
+}
+message Hero
+{
+	repeated ProtoHero.HeroBaseInfoCPP hero 		= 1;
+	repeated ProtoHero.HeroSoldiersCPP soldiers 	= 2; //英雄兵力信息集合												
+}
+message Science {
+	repeated ProtoScience.ScienceItemCPP items	= 1;
+	required uint32					     recruit_hero_capacity	= 2; //最大英雄招募数	
+	required uint32						 soldiers_row			= 3; //士兵排数
+	required uint32 					 soldiers_level			= 4; //士兵等级
+	required uint32 					 exploit_box_level		= 5; //功勋宝箱等级
+}
+
+message Weapon {
+	repeated ProtoWeapon.WeaponInfoCPP	items = 1;
+}
+
+//副本记录
+message NPCPass {
+	repeated ProtoPass.NPCPassRecord	items = 1;
+}
+
+message ActivityItem{
+	required uint32	id			= 1;
+	required uint32	bts			= 2;
+	required uint32	ets			= 3;
+	required uint32	ver			= 4;
+}
+message Activity{
+	repeated ActivityItem act	 = 1;
+}
+
+//小煤窑
+message MineItem
+{
+	required uint32	mine_reward_ts = 1;      //自己的国家矿领取时间
+	required bool	mine_kingdom_status = 2; //国家矿领取
+}
+
+//限时道具
+message TimeLimtPropItem
+{
+	required uint32		id 				= 1;  //
+	required uint32		expire_time  	= 2;  //时间
+}
+
+//精英部队
+message EliteNPCInfo
+{
+	required uint32 cid		= 1; //城市id
+	required uint32 type	= 2;  //刷出的npc类型
+}
+
+message EliteNPCInfoAll
+{
+	repeated EliteNPCInfo npc	= 1;
+}
+
+message User {
+		required Base base								= 1;
+		required Building building						= 2;
+		required Hero heroes							= 3;
+		repeated DataCommon.EquipmentCPP equip			= 4;
+		repeated DataCommon.EquipShopCPP equipshop		= 5;
+		required ProtoBattleField.Field field			= 6;		
+		required ProtoMission.MissionAllCPP  mission	= 7;
+		required Science science						= 8;
+		required uint32 ts								= 9;
+		required ProtoYellowVip.YellowVipCPP  yellowvip = 10;
+		optional ProtoMarket.MarketCPP 		market		= 11;
+		required ProtoBattleField.ReplyRewardInfo reward= 12;
+		required Weapon	weapon							= 13; //兵器
+		required NPCPass npcpass						= 14; //副本记录
+		required ProtoCumulation.CumulationCPP  cumulation	= 15; //累积登录
+		required Activity activity						= 16;//活动时间
+		repeated ProtoOfficial.PublishToken	 token		= 17; //官员令
+		required ProtoFogGate.FogGateCPPAll	 foggates	= 18; //迷雾战
+		required MineItem					 mine		= 19; //小煤窑
+		required ProtoDailyMission.DailyMissionAllCPP  dailymissions = 20; //每日任务
+		repeated TimeLimtPropItem	time_limit_props	= 21; //限时道具
+		required ProtoComponent.ComponentAllCPP  components = 22; //部件
+		required ProtoComponent.ProduceComponentCPP  producecomponent = 23; //部件产出
+		required ProtoAchievement.AchievementAllCPP  achievements	= 24; //成就
+		required EliteNPCInfoAll 				elitenpcs	= 25;  //精英部队
+}
+
+message Tutorial_stage{	
+	required uint32 tutorial_stage		 = 1;
+}
+
+message ServerTime{	
+	required uint32 ts					 = 1;
+}
+
+//////////////////////////////////
+//消耗钻石
+message CostCashReq {
+	required uint32  cash 	 	= 1;  //消耗钻石数
+	required string  op_code 	= 2;  //操作备注（不能为空,勿用中文）
+	required uint32	 operation 	= 3;  //用于区分客户端逻辑
+}
+
+message CostCashResp {
+	required uint32  cash 		= 1;  //最新钻石数
+	required uint32	 operation 	= 2;  //用于区分客户端逻辑
+}
+//////////////////////////////////
+
+//打开礼包
+message OpenNormalGifgBagReq
+{
+	required uint32 eqid	= 1;	//道具id
+	required uint32 equd	= 2;	//道具ud
+}
+
+//幸运礼包
+message OpenLuckGifgBagReq
+{
+	required uint32 eqid	= 1;	//道具id
+	required uint32 equd	= 2;	//道具ud
+}
+
+message OpenGifgBagResp
+{
+	required uint32 						equd			= 1; //道具ud
+	required uint32 						count			= 2; //道具剩余数量
+	required RewardBagInfo					bag_info		= 3;  //礼包
+}
+
+//统一奖励接口
+message RewardBagInfo
+{
+	optional DataCommon.EquipmentAllCPP 	equips	   		= 1; //装备
+	optional DataCommon.CommonBaseRewardCPP	base			= 2; //基本奖励 
+	repeated ProtoHero.HeroBaseInfoCPP		heros			= 3; //英雄(解锁英雄)
+	repeated ProtoComponent.ComponentCPP	components		= 4; //部件
+}
+
+//使用道具
+message UseTimeLimitPropReq
+{
+	required uint32 eqid	= 1;	//道具id
+	required uint32 equd	= 2;	//道具ud
+}
+
+message UseTimeLimitPropResp
+{
+	required uint32 equd			= 1; //道具ud
+	required uint32 count			= 2; //道具剩余数量
+	required TimeLimtPropItem item	= 3; 
+}
+
+//升级 洗练令
+message UseUpdateSmeltPropReq
+{
+	required uint32 prop_id	 = 1;	//道具id
+	required uint32 prop_ud	 = 2;	//道具ud
+	required uint32	equip_ud = 3;   //待洗练装备ud	
+}
+
+message UseUpdateSmeltPropResp
+{
+	required uint32 prop_ud					= 1; //道具ud
+	required uint32 prop_cnt				= 2; //道具剩余数量
+	required DataCommon.EquipmentCPP equip  = 3; //装备信息
+	optional ProtoHero.HeroBaseInfoCPP hero	= 4; //英雄信息,可能有，可能没有
+}
+
+//指定洗练令
+message UseSpecificSmeltPropReq
+{
+	required uint32 prop_id	 = 1;	//道具id
+	required uint32 prop_ud	 = 2;	//道具ud
+	required uint32	equip_ud = 3;   //待洗练装备ud
+	required uint32	type	 = 4;   //洗练的目标类型
+}
+message UseSpecificSmeltPropResp
+{
+	required uint32 prop_ud					= 1; //道具ud
+	required uint32 prop_cnt				= 2; //道具剩余数量
+	required DataCommon.EquipmentCPP equip  = 3; //装备信息
+	optional ProtoHero.HeroBaseInfoCPP hero = 4; //英雄信息,可能有，可能没有
+}
+
+//精英部队刷新推送
+message EliteNPCPushReq
+{
+	repeated EliteNPCInfo npcs	= 1;  //精英部队
+}

@@ -1,0 +1,37 @@
+package ProtoScience;
+
+message ScienceItemCPP
+{
+	required uint32		id 		= 1;
+	required uint32		status	= 2; ///-1未解锁 0 正常 1--注资 2--cd  
+	required uint32		value	= 3; //status=0[加成值]status=1[表示注资阶段]status=2[表示解锁的起始时间]
+}
+
+//每项科技结束时， 需要同步对应的属性值
+
+//注资
+message ScienceCapitalReq
+{
+	required uint32 	id		= 1;
+}
+
+message ScienceCapitalResp
+{
+	required ScienceItemCPP		item	= 1;
+	required uint32 			coin	= 2;
+	required uint32				wood	= 3;
+	required uint32 			food	= 4;
+	required uint32 			iron	= 5;
+}
+
+//加速
+message ScienceSpeedCdReq
+{
+	required uint32 	id		= 1;
+}
+
+message ScienceSpeedCdResp
+{
+	required ScienceItemCPP		item	= 1; //科技
+	required uint32				cash 	= 2; //用户元宝				
+}

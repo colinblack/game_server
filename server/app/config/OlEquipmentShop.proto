@@ -1,0 +1,44 @@
+package EquipmentShopConfig;
+
+message Equip
+{
+	required uint32 eqid 		= 1;
+	required uint32 rate		= 2;
+	required uint32 price		= 3;
+	required bool   isjp		= 4;
+}
+
+message EquipPositionPool
+{
+	required uint32 pid 		= 1;
+	repeated Equip  equips		= 2;	
+}
+
+message EquipLevelPool
+{
+	required uint32 id 						= 1;
+	required uint32 level					= 2;
+	required uint32 jpprice					= 3;
+	repeated EquipPositionPool  positions	= 4;	
+}
+
+message EquipNum
+{
+	required uint32 eqid	= 1;  
+	required uint32 num		= 2;  //物品数量 
+}
+
+message SpecialEquip
+{
+	repeated uint32 order	= 1;   //募兵令的eqid范围
+	repeated uint32 iron	= 2;	//黄金的eqid范围	
+}
+
+message EquipmentShop
+{
+	required uint32 			clearCdPrice 	= 1;
+	repeated EquipLevelPool  	levelpool		= 2;	
+	repeated EquipNum 			eqid_num		= 3;
+	required SpecialEquip 		special			= 4;
+}
+

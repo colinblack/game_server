@@ -1,0 +1,20 @@
+package MarketConfig;
+
+message MarketItem
+{
+	required uint32 type		= 1;
+	required uint32 price		= 2;
+	repeated uint32 reward		= 3;
+}
+
+message BlackMarketItem
+{
+	required uint32 clearCdPrice	= 1;
+	repeated uint32 ratio			= 2;
+}
+
+message MarketAll
+{
+	repeated MarketItem market				= 1;
+	required BlackMarketItem blackmarket	= 2;
+}

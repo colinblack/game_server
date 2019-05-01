@@ -1,0 +1,46 @@
+package GovernAffairConfig;
+
+message RewardItem
+{
+	optional uint32 coin		= 1;  //钞票 
+	optional uint32 wood		= 2;  //钢材
+	optional uint32 food		= 3;  //原油
+	optional uint32 loyal		= 4;  //民忠
+	optional uint32 paycash		= 5;  //花费钻石
+}
+
+message AffairsItem
+{
+	required uint32 id				= 1;   //政务id
+	required uint32 rate			= 2;   //概率
+	repeated RewardItem reward		= 3;
+}
+
+message BuildRelationTimes
+{
+	required uint32 type			= 1; //建筑类型
+	repeated uint32 sublevelsum		= 2;  //子建筑等级和
+}
+
+message Coefficients
+{
+	required uint32 coefficient	= 1; //系数
+	repeated uint32 levelrange	= 2;  //用户等级范围
+}
+
+message LoyalReward
+{
+	required uint32 coin	= 1;   //钞票加成倍数
+	required uint32 wood	= 2;   //钢材加成倍数
+	required uint32 food	= 3;	//原油加成倍数
+	required uint32 iron	= 4;   //黄金加成倍数
+}
+
+message GovernAffairs
+{
+	repeated AffairsItem govern_affairs				= 1;   //政务事件
+	repeated BuildRelationTimes build_affairtimes	= 2;   //建筑与次数映射关系
+	repeated Coefficients coefficients				= 3;   //用户等级系数
+	required LoyalReward loyal_reward				= 4;	//民忠兑换奖励倍数
+}
+

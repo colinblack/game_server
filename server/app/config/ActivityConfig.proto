@@ -1,0 +1,100 @@
+package ActivityConfig;
+
+////////////////////////////
+//闯关送钻
+message  PassActivityItem
+{
+	required uint32	id		= 1;
+	required uint32 pass_id = 2;
+	required uint32 reward  = 3;	
+}
+
+message PassActivity
+{
+	repeated PassActivityItem pass_activity = 1;
+}
+///////////////@end 闯关送钻
+
+/////////////////////////////////////
+//充值返钻
+message CashBackItem
+{
+	required uint32	  id 		= 1;
+	required uint32   total  	= 2;  //累计充值
+	required uint32	  back		= 3;  //返现值 	
+}
+
+message CashBack
+{
+	repeated CashBackItem	cash_back	= 1; 
+}
+///////////////@end 充值返钻
+
+/////////////////////////////////////
+//洗练放送
+message SmeltActivityItem
+{
+	required uint32	id 					= 1;
+	required uint32 smelt_total_cnt 	= 2; //需要洗练的次数
+	required uint32 limit_reward_cnt 	= 3; //领取奖励的上限
+	required uint32 reward				= 4; //奖励道具
+}
+
+message SmeltActivity
+{
+	repeated SmeltActivityItem	smelt_activity	= 1; 
+}
+///////////////@end 洗练放送
+///////////////@end 充值返钻
+
+/////////////////////////////////////
+//摸金校尉
+message TouchGoldOut
+{
+	required uint32		value			= 1;  //产出值
+	required uint32		prob			= 2;  //概率权重
+}
+
+message TouchGoldItem
+{
+	required uint32	 		id    				= 1;
+	required uint32 		cost  				= 2;
+	required uint32 		open_next_prob		= 3;
+	repeated TouchGoldOut	out					= 4;
+	optional uint32			unlock				= 5;
+}
+
+message TouchGold
+{
+	repeated TouchGoldItem touch_gold	= 1; //
+}
+///////////////@end 摸金校尉
+
+/////////////////////////////////////
+//超值钜惠
+message HugeDiscountItem
+{
+	required uint32	  id 		= 1;
+	required uint32   equip_id  = 2;  //物品id
+	required uint32	  price		= 3;  //价格 	
+	required uint32	  limit_cnt	= 4;  //限制次数
+}
+
+message HugeDiscountGood
+{
+	required uint32	  			open_day 		= 1;
+	repeated HugeDiscountItem	items			= 2; 
+}
+
+message HugeDiscountPage
+{
+	required uint32				page_id				= 1;
+	required uint32 			cash_account		= 2;
+	repeated HugeDiscountGood	goods				= 3;	
+}
+
+message HugeDiscount
+{
+	repeated HugeDiscountPage	huge_discount		= 1;
+}
+///////////////@end 超值钜惠
