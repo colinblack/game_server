@@ -1,0 +1,593 @@
+
+//package com.ihuizhi.network.mahjong.protobuf;
+package proto.game;
+
+enum ChouCode
+{
+	CHOU_CODE_NULL		= 0; //无
+	CHOU_CODE_PENG		= 1; //碰臭
+	CHOU_CODE_CHI		= 2; //吃臭
+	CHOU_CODE_CHIPENG	= 3; //吃碰臭
+}
+
+//每局得分记录
+message tagGain
+{
+	repeated int32 score = 1;				//得分
+}
+//手牌信息
+message tagHandCards
+{
+	repeated int32 card = 1;				//手牌
+	optional int32 huxi = 2;				//胡息
+	optional int32 wv_kind = 3;				//胡息
+}
+//组合牌
+message tagWeaveCards
+{
+	optional int32 weave_kind = 1;			//组合类型
+	optional int32 card_count = 2;			//牌数
+	optional int32 center_card = 3;			//中心牌
+	repeated int32 card_list = 4;			//牌列表
+	optional int32 hu_xi = 5;				//胡息
+	optional int32 out_card = 6;			//组合后打出牌
+}
+//吃牌信息第三层
+message tagThirdInfo
+{
+	optional int32 chi_kind = 1;			//吃牌类型
+	optional int32 center_card = 2;			//吃的中心牌
+	repeated int32 cards = 3;				//吃的牌
+}
+//吃牌信息第二层
+message tagSecondInfo
+{
+	optional int32 chi_kind = 1;			//吃牌类型
+	optional int32 center_card = 2;			//吃的中心牌
+	repeated int32 cards = 3;				//吃的牌
+	repeated tagThirdInfo third_info = 4;	//吃牌信息第二层
+}
+//吃牌信息
+message tagChiCardInfo
+{
+	optional int32 chi_kind = 1;			//吃牌类型
+	optional int32 center_card = 2;			//吃的中心牌
+	repeated int32 cards = 3;				//吃的牌
+	repeated tagSecondInfo second_info = 4;	//吃牌信息第二层
+}
+//组合得分信息
+message tagWeaveScore
+{
+	optional int32 little_count = 1;		//小字个数
+	optional int32 big_count = 2;			//大字个数
+	optional int32 score = 3;				//得分
+}
+//牌桌玩家信息
+message tagPlayers
+{
+	optional int32 uid = 1;					//uid
+	optional int32 seatid = 2;				//座位号
+	optional int32 ready = 3;				//0表示没有准备，非0表示已经准备
+	optional int32 money = 4;				//money
+	optional bytes name = 5;				//name
+	optional int32 sex = 6;					//性别
+	optional bytes avatar = 7;				//头像
+	optional int32 hu_xi = 8;				//显示胡息
+	repeated tagWeaveCards weaves = 9;		//组合信息
+	repeated int32 abandon_cards = 10;		//弃牌信息
+	repeated int32 abandon_type = 11;		//弃牌类型
+	optional int32 niao = 12;				//打鸟信息
+	optional int32 piao = 13;				//飘信息
+	optional bool  xiang_gong = 14;			//是否为相公
+	optional int32 offline = 15;			//是否离线
+	optional int32 action = 16;				//解散操作类型
+	repeated tagHandCards hand_cards = 17;	//手牌信息，二维数组
+	optional int32 total_score = 18;		//得分信息
+	optional int32 total_huxi = 19;			//玩家总胡息
+	optional int32 hong_count = 20;			//红字个数
+	optional int32 hei_count = 21;			//黑字个数
+	optional int32 hand_count = 22;			//手牌个数
+	optional int32 hu_count = 23;			//胡牌次数
+	optional int32 best_huxi = 24;			//最优胡息
+	optional int32 dian_pao_count = 25;		//点炮次数
+	optional int32 best_score = 26;			//最高得分
+	repeated int32 listen_cards = 27;		//听牌信息
+	optional int32 operate_type = 28;		//操作类型
+	optional int32 score = 29;				//得分信息
+	repeated int32 gains = 33;				//每局得分
+	optional int32 total_gains = 34;		//战绩总得分
+	
+	//恢复数据增加字段
+	optional int32	dissolve_cnt = 40;		//解散次数
+	optional int32	dissovle_state = 41;	//解散状态
+	optional bytes tid	= 42;				//tid
+	optional bytes skey = 43;				//skey
+	repeated int32 card_index = 44;			//手牌
+	repeated tagHandCards cards_weave = 45;	//普通手牌
+	repeated tagHandCards best_weave = 46;	//最佳手牌
+	repeated bool peng_chou = 47;			//碰臭
+	repeated bool chi_chou = 48;			//吃臭
+	repeated bool chou_wei = 49;			//臭偎
+	repeated tagChiCardInfo chicard_info = 50;//吃牌信息	
+}
+//解散房间信息
+message tagDissolveRoomInfo
+{
+	optional int32 state = 1;				//解散状态
+	optional int32 uid = 2;					//申请结算的uid
+	repeated int32 voters_uid = 3;			//可以投票的uid
+	repeated tagPlayers players = 4;		//已经操作的玩家
+	optional int32 remain_time = 5;			//剩余投票时间
+}
+message tagIsChouPai
+{
+	repeated bool is_chou_pai = 1;			//可以投票的uid
+}
+//牌桌信息
+message AckTableInfo
+{
+	optional int32 seatid = 1;				//玩家的椅子id
+	optional int32 state = 2;				//游戏状态
+	optional int32 operate_timer_stamp = 3; //操作思考时间
+	optional int32 left_card_count = 4;		//剩余牌数
+	optional int32 banker_user = 5;			//庄家座位号
+	optional int32 current_user = 6;		//当前玩家
+	optional int32 current_card = 7;		//当前牌
+	optional int32 current_outcard_user = 8;//当前打牌玩家
+	optional int32 current_outcard = 9;		//当前打的牌
+	optional bool  is_dispatch = 10;		//是否是发牌
+	optional bool  card_operated = 11;		//当前牌是否被操作
+	optional bool  is_da_niao = 12;			//是否打鸟
+	optional bool  is_out_card = 13;		//是否是打牌
+	optional bool  is_first_card = 14;		//是否是第一张牌
+	optional int32 huang_count = 15;		//黄庄次数
+	optional int32 take_in = 16;			//房间携带
+	optional int32 play_id = 17;			//游戏编号
+	optional int32 base_huxi = 18;			//起胡胡息
+	optional int32 room_user_id = 19;		//房主uid
+	repeated int32 niao_count = 20;			//可以选择的打鸟个数
+	repeated int32 piao_count = 21;			//可选择的飘的分数
+	optional int32 user_action = 22;		//玩家可操作类型
+	optional bool  is_first_operate = 23;	//是否是第一优先级操作
+	optional bool  response = 24;			//是否已经操作
+	optional int32 perform_action = 25;		//已经操作的类型
+	repeated tagHandCards hand_cards = 26;	//手牌信息，二维数组
+	repeated int32 listen_cards = 27;		//听牌信息
+	optional int32 total_huxi = 28;			//总胡息
+	repeated tagChiCardInfo chicard_info = 29;//吃牌信息	
+	optional int32 stand_money = 30;		//下桌分数线
+	optional int32 base_money = 31;			//初始带入
+	optional tagDissolveRoomInfo dissolve_room_info = 32;//解散房间信息 
+	repeated tagPlayers players = 33;		//桌子上的玩家
+	repeated bytes offline_info = 34;		//离线信息
+	optional int32 offline_max_count = 35;	//离线信息最大长度
+	optional int32 game_player = 36;		//游戏人数
+	optional bytes game_name = 37;			//游戏名字
+	optional bool dong_zhang = 38;			//是否为不动张
+	optional bool daizhuang_jushou = 39;	//带庄举手
+	optional bool budai_wuhu = 40;			//不带无胡
+	optional bool budai_yidianhong = 41;	//不带一点红
+	optional int32 fan_xing = 42;			//翻醒类型
+	optional bool is_yiwushi = 43;			//是否一五十
+	//optional bool is_hongheidian = 44;		//是否红黑点
+	optional int32 feng_ding = 45;			//封顶信息
+	optional bool is_base_two_score = 46;	//底分, true:2分  false：1分
+	repeated int32 chou_pai = 47;			//不能出的牌
+
+
+	//恢复数据增加字段
+	optional bytes tid = 50;				//tid
+	optional int32 room_status = 51;		//房间状态
+	optional int32 dissolve_applyer = 52;	//申请解散者
+	optional int32 dissovle_state = 53;		//解散状态
+	optional int32 is_dissolved = 54;		//已经解散
+	optional int32 is_piao = 55;			//是否飘
+	repeated bool can_piao_hu = 56;			//能否瞟胡
+
+	repeated int32 repertory_cards = 60;	//牌库剩余牌
+	repeated int32 weave_huxi = 61;			//组合胡息
+	repeated int32 show_huxi = 62;			//展示胡息
+	repeated int32 hands_huxi = 63;			//手牌胡息
+	repeated int32 out_count = 64;			//出牌次数
+	repeated int32 cur_card_huxi = 65;		//当前胡牌胡息
+	repeated tagWeaveScore weave_score = 66;//组合得分
+
+	optional bool dispatch_hu = 70;			//派发胡牌标志
+	optional bool tiweipao_hu = 71;			//提偎跑胡
+	optional bool wei_hu = 72;				//偎胡
+	optional bool ti_card = 73;				//提牌标志
+	optional bool is_weiti_card = 74;		//是提偎牌
+	optional bool pao_card = 75;			//跑牌标志
+	optional bool after_weave = 76;			//组合后标志
+
+	optional int32 banker_card = 80;		//庄家牌
+	repeated bool user_responses = 81;		//回应标志
+	repeated int32 user_actions = 82;		//玩家操作
+	repeated int32 user_prerform = 83;		//玩家已经操作
+	repeated int32 chi_kind = 84;			//玩家第一层吃
+	repeated int32 second_chi_kind = 85;	//玩家第一层吃
+	repeated int32 third_chi_kind = 86;		//玩家第一层吃
+	repeated bool xiang_gong = 87;			//是否相公
+	repeated bool user_dong_zhang = 88;		//是否不动张
+	repeated bool common_best = 89;			//最优或者普通手牌组合
+	repeated bool ju_shou = 90;				//是否举手
+	optional int32 cur_timer = 91;			//当前定时器
+	optional bool is_tianhu_show = 92;		//是否天胡
+	repeated bool is_dihu_out = 93;			//是否地胡
+	optional bool already_resp = 94;		//游戏已经开始
+	repeated int32 wait_out_cnt = 95;		//忍牌次数
+	repeated tagIsChouPai is_chou_pai = 96;	//是否臭牌，true不能出
+
+	optional int32 is_ming_xiao = 100;		//是否是明消
+	optional int32 huxi_to_tun = 101;		//胡息转换成囤数
+	optional int32 current_num = 105;		//局数编号
+	optional bytes innings = 106;			//唯一标识
+	optional bytes video_str = 107;			//录像数据
+
+	optional bool  is_tdkp = 108;			//
+	optional bool double_cycle = 109;		//
+	optional bool cycle_hu = 110;			//
+	optional bool all_same_color = 111;		//
+	optional int32 cycle = 112;				//
+	optional int32 current_cycle = 113;		//
+	optional int32 first_banker_user = 114;		//
+	repeated tagGain gains = 117;			//战绩信息
+}
+//请求打鸟
+message ReqBetting
+{
+	required int32 cout = 1;				//打鸟个数
+}
+//开始打鸟
+message AckStartBetting
+{
+	required int32 state = 1;				//状态
+	optional int32 banker = 2;				//庄家座位号
+}
+//打鸟失败返回
+message AckBettingErr
+{
+	required int32 uid = 1;					//uid
+	optional int32 seatid = 2;				//座位号
+	optional int32 code = 3;				//错误码
+}
+//打鸟成功返回
+message AckBettingSucc
+{
+	required int32 uid = 1;					//uid
+	optional int32 seatid = 2;				//座位号
+	optional bytes name = 3;				//name
+	optional int32 sex = 4;					//性别
+	optional bytes avatar = 5;				//头像
+	optional int32 niao = 6;				//鸟的个数
+}
+//开始飘
+message AckStartPiao
+{
+	required int32 state = 1;				//状态
+	optional int32 banker = 2;				//庄家座位号
+}
+//请求打飘
+message ReqPiao
+{
+	required int32 cout = 1;				//飘个数
+}
+//飘失败返回
+message AckPiaoErr
+{
+	required int32 uid = 1;					//uid
+	optional int32 seatid = 2;				//座位号
+	optional int32 code = 3;				//错误码
+}
+//飘成功返回
+message AckPiaoSucc
+{
+	required int32 uid = 1;					//uid
+	optional int32 seatid = 2;				//座位号
+	optional bytes name = 3;				//name
+	optional int32 sex = 4;					//性别
+	optional bytes avatar = 5;				//头像
+	optional int32 piao = 6;				//飘的个数
+}
+//游戏开始
+message AckGameStart
+{
+	required int32 banker = 1;				//庄家座位号
+	optional int32 banker_card = 2;			//庄家的最后一张牌
+	optional int32 left_card_count = 3;		//牌墩剩余牌数
+	repeated tagHandCards hand_cards = 4;	//手牌信息，二维数组
+	repeated tagWeaveCards weaves = 5;          //赢牌组合
+	optional int32 total_huxi = 6;			//总胡息	
+	repeated int32 listen_cards = 7;		//听牌信息
+	optional int32 current_num = 8;			//当前局数	
+}
+
+//预操作请求
+message ReqPreOperate
+{
+	required int32 operate_type = 1;		//操作类型
+	optional int32 chi_kind = 2;			//吃类型
+	optional int32 second_kind = 3;			//二层类型
+	optional int32 third_kind = 4;			//三层类型
+}
+//预操作返回
+message AckPreOperate
+{
+	required int32 operate_type = 1;		//操作类型
+	optional bool can_operate = 2;			//是否能操作
+}
+//操作牌请求
+message ReqOperateCard
+{
+	required int32 operate_type = 1;		//操作类型
+	optional int32 chi_kind = 2;			//吃类型
+	optional int32 second_kind = 3;			//二层类型
+	optional int32 third_kind = 4;			//三层类型
+}
+//操作牌返回
+message AckOperateCard
+{
+	required int32 ack_code = 1;			//操作码
+	optional int32 seatid = 2;				//座位号
+	optional int32 action_card = 3;			//操作的牌
+	optional int32 remove_count = 4;		//移除手牌张数
+	repeated tagHandCards hand_cards = 5;	//手牌信息，二维数组
+	optional int32 total_huxi = 6;			//总胡息	
+	optional int32 hu_xi = 7;				//显示胡息
+	repeated int32 listen_cards = 8;		//听牌信息
+	repeated tagHandCards chi_results = 9;	//吃牌结果
+	optional bool chou_wei = 10;			//是否臭偎
+	optional int32 off_count = 11;			//离线信息标号
+	repeated tagPlayers players = 12;		//玩家信息
+}
+//操作回应
+message AckOperateRes
+{
+	required int32 seatid = 1;				//座位号
+	optional int32 operate_type = 2;		//操作类型
+}
+//派发牌
+message AckDispatchCard
+{
+	required int32 seatid = 1;				//发牌座位号
+	optional int32 card = 2;				//发的牌
+	optional int32 left_card_count = 3;		//牌墩剩余牌张数
+	optional int32 to_seatid = 4;			//目标座位号
+	repeated tagHandCards hand_cards = 5;	//手牌信息，二维数组
+	optional int32 total_huxi = 6;			//总胡息
+	repeated int32 listen_cards = 7;		//听牌信息
+	optional int32 off_count = 8;			//离线信息标号
+}
+//打牌提示
+message AckOutNotify
+{
+	required int32 seatid = 1;				//出牌座位号
+	optional bool is_begin_per_circle = 2;      //每一圈开始标志
+	repeated int32 win_weaves = 3;          //上家打出的牌 
+	optional bool is_out_card = 4;			//出牌标志
+	optional int32 off_count = 5;			//离线信息标号
+//	repeated tagWeaveCards user_win_weaves = 6;  //一圈打完以后玩家赢的牌
+}
+
+//相公提示
+message AckXiangGong
+{
+	required int32 seatid = 1;				//相公座位号
+}
+//打牌
+message ReqOutCard
+{
+	repeated int32 out_card = 1;			//打出的牌
+	repeated int32 row = 2;					//打出的牌的行下标
+	repeated int32 col = 3;					//打出的牌的列下标
+}
+//打牌返回
+message AckOutCard
+{
+	repeated int32 out_card = 1;			//打出的牌
+	required int32 seatid = 2;				//打牌的座位号
+	optional int32 total_huxi = 3;			//总胡息
+	repeated tagHandCards hand_cards = 4;	//手牌信息，二维数组
+	repeated int32 listen_cards = 5;		//听牌信息
+	optional int32 off_count = 6;			//离线信息标号
+	optional int32 out_limit = 7;			//是否允许出牌
+}
+//请求换牌
+message ReqChangeCard
+{
+	repeated tagHandCards hand_cards = 1;	//手牌
+}
+//换牌成功
+message AckChangeCard
+{
+	repeated tagHandCards hand_cards = 1;	//手牌
+	optional int32 total_huxi = 2;			//总胡息
+}
+//整理牌
+message AckUpdateCard
+{
+	repeated tagHandCards hand_cards = 1;	//手牌
+	optional int32 total_huxi = 2;			//总胡息
+	repeated int32 listen_cards = 3;		//听牌信息
+}
+//更新弃牌
+message AckUpdateAbandon
+{
+	required int32 seatid = 1;				//座位号
+	optional int32 card = 2;				//牌
+	repeated int32 abandon_cards = 3;		//弃牌信息
+	optional int32 off_count = 4;			//离线信息标号
+	repeated int32 abandon_type = 5;		//弃牌类型
+}
+//番数信息
+message tagFanInfo
+{
+	optional int32 fan_type = 1;			//番类型
+	optional int32 fan_num = 2;				//番数
+	optional int32 fan_xi = 3;				//番息
+}
+
+//翻醒信息
+message tagFanXing
+{
+	optional int32 fan_type = 1;			//翻醒类型
+	optional int32 fan_card = 2;			//翻出的牌
+	optional int32 fan_tuns = 3;			//囤数
+}
+
+//游戏结束
+message AckGameEnd 
+{
+	required int32 end_type = 1;			//结束类型 0:黄庄 1：胡牌结束 
+	optional int32 win_seatid = 2;			//胡牌的座位号
+	optional int32 hu_card = 3;				//胡的牌
+	repeated int32 left_cards = 4;			//剩余牌
+	optional int32 total_huxi = 5;			//手牌组合总胡息
+	optional int32 hu_xis = 6;				//最终胡息
+	optional int32 tuns = 7;				//囤数
+	optional int32 fans = 8;				//番数
+	repeated tagFanInfo fan_info = 9;		//番数信息
+	repeated tagWeaveCards weaves = 10;		//组合信息
+	repeated tagPlayers players = 11;		//结算玩家信息
+	optional int32 off_count = 12;			//离线信息标号
+	optional bool dian_pao = 13;			//是否点炮
+	optional int32 dian_pao_user = 14;		//点炮玩家
+	repeated tagWeaveScore weave_score = 15;//组合得分信息
+	optional tagFanXing fan_xing_info = 16;	//翻醒信息
+	optional int32 current_cycle = 17;		//当前圈数
+}
+
+//游戏开始失败
+message AckGameStartFail
+{
+   required int32 vid = 1;					//vid
+   optional bytes roomid = 2;				//房间号
+   optional int32 can_start = 3;			//是否能开始
+   optional int32 code = 4;					//不能开始的错误码
+   optional int32 ts = 5;					//当前时间戳
+}
+
+//准备成功返回
+message AckUserReady
+{
+	required int32 seatid = 1;				//座位号
+	optional int32 uid = 2;					//uid
+}
+
+//申请解散房间失败
+message AckDissolveErr
+{
+	required int32 code = 1;				//申请解散房间失败的错误码
+}
+//申请解散房间成功
+message AckDissolveSucc
+{
+	required int32 uid = 1;					//申请人uid
+	repeated int32 voters_uid = 2;			//投票人uid
+	optional int32 remain_time = 3;			//投票剩余时间
+}
+//操作解散房间请求
+message ReqDissolveAct
+{
+	required int32 uid = 1;					//操作的uid
+	optional int32 action = 2;				//操作类型
+}
+//操作解散房间成功
+message AckDissolveActSucc
+{
+	required int32 uid = 1;					//操作的uid
+	optional int32 action = 2;				//操作类型
+}
+//解散房间结果
+message AckDissolveResult
+{
+	required int32 result = 1;				//解散房间结果
+}
+//离线广播
+message AckOffline
+{
+	required int32 uid = 1;					//uid
+	optional int32 seatid = 2;				//seatid
+}
+//最终结算面板
+message AckFinalEnd
+{
+	required bytes roomid = 1;				//房间号
+	optional int32 room_user_id = 2;		//房主uid
+	optional int32 ts = 3;					//当前时间戳
+	repeated tagPlayers players = 4;		//最终结算玩家信息
+}
+//手牌详情
+message AckHandDetail
+{
+	repeated tagPlayers players = 1;		//手牌详情	
+}
+//上局结算信息返回
+message AckLastEndInfo
+{
+	required bytes info = 1;				//上局结算信息
+}
+//臭牌提示
+message AckChouNotity
+{
+	required int32 type = 1;				//臭牌类型
+}
+
+
+/*录像数据*/
+//桌上数据录像
+message TableInfoVideo
+{
+	optional int32 banker = 1;				//庄家座位号
+	optional int32 take_in = 2;				//房间携带
+	optional int32 play_id = 3;				//游戏编号
+	optional int32 base_huxi = 4;			//起胡胡息
+	optional int32 room_user_id = 5;		//房主uid
+	repeated tagPlayers players = 6;		//桌子上的玩家
+	optional int32 game_player = 7;			//游戏人数
+	optional bytes game_name = 8;			//游戏名字
+}
+//游戏开始录像
+message GameStartVideo
+{
+	required int32 banker = 1;				//庄家座位号
+	optional int32 banker_card = 2;			//庄家的最后一张牌
+	optional int32 left_card_count = 3;		//牌墩剩余牌数
+	repeated tagPlayers players = 4;		//玩家信息
+}
+//操作信息
+message OperateVideo
+{
+	required int32 ack_code = 1;			//操作码
+	optional int32 seatid = 2;				//座位号
+	optional int32 action_card = 3;			//操作的牌
+	repeated tagHandCards hand_cards = 4;	//手牌信息，二维数组
+	optional int32 total_huxi = 5;			//总胡息	
+	repeated int32 listen_cards = 6;		//听牌信息
+	repeated tagWeaveCards weaves = 7;		//组合信息
+	repeated tagPlayers players = 8;		//玩家信息
+}
+//操作提示
+message OperateNotify
+{
+	repeated tagPlayers players = 1;		//操作提示玩家
+}
+
+
+message AckChat
+{
+	required int32 seatid = 1;			//
+	optional bytes text = 2;			//
+}
+
+message AckFace
+{
+	required int32 seatid = 1;			//
+	optional int32 faceid = 2;			//
+}
+
+//战绩返回
+message AckGains
+{
+	repeated tagPlayers players = 1;		//玩家信息
+}

@@ -1,0 +1,334 @@
+[info][2018-02-21 10:46:47] client_type: 0 
+[debug][2018-02-21 10:46:47] client[9] open
+[info][2018-02-21 10:46:57] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-21 10:46:57] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 10:46:57] del client fd[9] uid[-1].
+[info][2018-02-21 10:46:57] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:36:01] game svr zid[10] vid[10].
+[info][2018-02-21 17:36:02] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-21 17:36:02] client_type: 1 
+[debug][2018-02-21 17:36:02] client[7] open
+[info][2018-02-21 17:36:02] connect data svr fd[7].
+[info][2018-02-21 17:36:02] Listening on 0.0.0.0:19782
+[info][2018-02-21 17:36:02] listen ok
+[info][2018-02-21 17:36:38] client_type: 0 
+[debug][2018-02-21 17:36:38] client[9] open
+[info][2018-02-21 17:36:38] dispatch2 client fd[9] uid[-1] recv cmd[0]
+[error][2018-02-21 17:36:38] safe check client player is NULL.
+[error][2018-02-21 17:36:39] slow cmd: [1]
+[error][2018-02-21 17:36:39] dispatch err
+[info][2018-02-21 17:36:39] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 17:36:39] del client fd[9] uid[-1].
+[info][2018-02-21 17:36:39] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:37:26] client_type: 0 
+[debug][2018-02-21 17:37:26] client[9] open
+[info][2018-02-21 17:37:26] dispatch2 client fd[9] uid[-1] recv cmd[0]
+[error][2018-02-21 17:37:26] safe check client player is NULL.
+[error][2018-02-21 17:37:26] dispatch err
+[info][2018-02-21 17:37:26] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 17:37:26] del client fd[9] uid[-1].
+[info][2018-02-21 17:37:26] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:38:38] client_type: 0 
+[debug][2018-02-21 17:38:38] client[9] open
+[info][2018-02-21 17:38:50] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-21 17:38:50] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 17:38:50] del client fd[9] uid[-1].
+[info][2018-02-21 17:38:50] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:48:28] client_type: 0 
+[debug][2018-02-21 17:48:28] client[9] open
+[info][2018-02-21 17:48:28] dispatch2 client fd[9] uid[-1] recv cmd[0]
+[error][2018-02-21 17:48:28] safe check client player is NULL.
+[error][2018-02-21 17:48:28] dispatch err
+[info][2018-02-21 17:48:28] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 17:48:28] del client fd[9] uid[-1].
+[info][2018-02-21 17:48:28] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:48:45] client_type: 0 
+[debug][2018-02-21 17:48:45] client[9] open
+[info][2018-02-21 17:48:55] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-21 17:48:55] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 17:48:55] del client fd[9] uid[-1].
+[info][2018-02-21 17:48:55] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:52:30] client_type: 0 
+[debug][2018-02-21 17:52:30] client[9] open
+[info][2018-02-21 17:52:40] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-21 17:52:40] client destroy fd[9] uid[-1] destroy
+[info][2018-02-21 17:52:40] del client fd[9] uid[-1].
+[info][2018-02-21 17:52:40] ~client fd[9] uid[-1] destrutor
+[info][2018-02-21 17:57:39] game svr zid[10] vid[10].
+[info][2018-02-21 17:57:39] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-21 17:57:39] client_type: 1 
+[debug][2018-02-21 17:57:39] client[7] open
+[info][2018-02-21 17:57:39] connect data svr fd[7].
+[info][2018-02-21 17:57:39] Listening on 0.0.0.0:19782
+[info][2018-02-21 17:57:39] listen ok
+[info][2018-02-21 18:00:26]  read_cb 
+[error][2018-02-21 18:00:26] read header failed[Connection reset by peer]
+[info][2018-02-21 18:00:26] client destroy fd[7] uid[-1] destroy
+[info][2018-02-21 18:00:26] for disconnect to datasvr, delete all client fd_client_len[0] temp_fd_client_map[0]  .
+[info][2018-02-21 18:00:26] ~client fd[7] uid[-1] destrutor
+[error][2018-02-21 18:00:26] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:26] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:27] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:27] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:27] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:28] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:28] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:28] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:28] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:29] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:29] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:29] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:30] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:30] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:30] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:31] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:31] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:31] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:31] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:32] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:32] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:32] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:33] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:33] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:33] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:34] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:34] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:34] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:34] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:35] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:35] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:35] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:36] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:36] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:36] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:37] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:37] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:37] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:37] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:38] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:38] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:38] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:39] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:39] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:39] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:40] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:40] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:40] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:40] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:41] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:41] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:41] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:42] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:42] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:42] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:43] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:43] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:43] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:43] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:44] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:44] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:44] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:45] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:45] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:45] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:46] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:46] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:46] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:46] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:47] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:47] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:47] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:48] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:48] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:48] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:49] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:49] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:49] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:49] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:50] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:50] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:50] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:51] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:51] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:51] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:52] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:52] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:52] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:52] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:53] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:53] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:53] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:54] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:54] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:54] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:55] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:55] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:55] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:55] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:56] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:56] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:56] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:57] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:57] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:57] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:58] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:58] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:58] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:58] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:59] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:59] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:00:59] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:00] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:00] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:00] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:01] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:01] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:01] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:01] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:02] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:02] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:02] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:03] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:03] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:03] reconnect datasvr error: Connection refused(errno: 111)
+[error][2018-02-21 18:01:04] reconnect datasvr error: Connection refused(errno: 111)
+[info][2018-02-21 18:02:10] game svr zid[10] vid[10].
+[info][2018-02-21 18:02:10] datasvr management ip[127.0.0.1] port[8100].
+[error][2018-02-21 18:02:10] connect data svr error: Connection refused(errno: 111)
+[info][2018-02-21 18:13:26] game svr zid[10] vid[10].
+[info][2018-02-21 18:13:26] datasvr management ip[127.0.0.1] port[8100].
+[error][2018-02-21 18:13:26] connect data svr error: Connection refused(errno: 111)
+[info][2018-02-21 18:19:07] game svr zid[10] vid[10].
+[info][2018-02-21 18:19:08] datasvr management ip[127.0.0.1] port[8100].
+[error][2018-02-21 18:19:08] connect data svr error: Connection refused(errno: 111)
+[info][2018-02-21 18:21:53] game svr zid[10] vid[10].
+[info][2018-02-21 18:21:53] datasvr management ip[127.0.0.1] port[8100].
+[error][2018-02-21 18:21:53] connect data svr error: Connection refused(errno: 111)
+[info][2018-02-21 18:38:53] game svr zid[10] vid[10].
+[info][2018-02-21 18:38:53] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-21 18:38:53] client_type: 1 
+[debug][2018-02-21 18:38:53] client[7] open
+[info][2018-02-21 18:38:53] connect data svr fd[7].
+[info][2018-02-21 18:38:53] Listening on 0.0.0.0:19782
+[info][2018-02-21 18:38:53] listen ok
+[info][2018-02-21 18:42:17] game svr zid[10] vid[10].
+[info][2018-02-21 18:42:17] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-21 18:42:17] client_type: 1 
+[debug][2018-02-21 18:42:17] client[7] open
+[info][2018-02-21 18:42:17] connect data svr fd[7].
+[info][2018-02-21 18:42:17] Listening on 0.0.0.0:19782
+[info][2018-02-21 18:42:17] listen ok
+[info][2018-02-21 18:43:49] accept start... 
+[info][2018-02-21 18:44:15] client_type: 0 
+[debug][2018-02-21 18:44:15] client[9] open
+[info][2018-02-21 18:53:11] game svr zid[10] vid[10].
+[info][2018-02-21 18:53:11] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-21 18:53:11] client_type: 1 
+[debug][2018-02-21 18:53:11] client[7] open
+[info][2018-02-21 18:53:11] connect data svr fd[7].
+[info][2018-02-21 18:53:11] Listening on 0.0.0.0:19782
+[info][2018-02-21 18:53:11] listen ok
+[info][2018-02-21 19:00:11] game svr zid[10] vid[10].
+[info][2018-02-21 19:00:11] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-21 19:00:11] client_type: 1 
+[debug][2018-02-21 19:00:11] client[7] open
+[info][2018-02-21 19:00:11] connect data svr fd[7].
+[info][2018-02-21 19:00:11] Listening on 0.0.0.0:19782
+[info][2018-02-21 19:00:11] listen ok
+[info][2018-02-21 19:00:18] accept start... 
+[info][2018-02-21 19:00:18] client_type: 0 
+[debug][2018-02-21 19:00:18] client[9] open
+[info][2018-02-23 09:38:56] game svr zid[10] vid[10].
+[info][2018-02-23 09:38:56] datasvr management ip[127.0.0.1] port[8100].
+[error][2018-02-23 09:38:56] connect data svr error: Connection refused(errno: 111)
+[info][2018-02-23 09:40:37] game svr zid[10] vid[10].
+[info][2018-02-23 09:40:37] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-23 09:40:37] client_type: 1 
+[debug][2018-02-23 09:40:37] client[7] open
+[info][2018-02-23 09:40:37] connect data svr fd[7].
+[info][2018-02-23 09:40:37] Listening on 0.0.0.0:19782
+[info][2018-02-23 09:40:37] listen ok
+[info][2018-02-23 10:18:08] game svr zid[10] vid[10].
+[info][2018-02-23 10:18:08] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-23 10:18:08] client_type: 1 
+[debug][2018-02-23 10:18:08] client[7] open
+[info][2018-02-23 10:18:08] connect data svr fd[7].
+[info][2018-02-23 10:18:08] Listening on 0.0.0.0:19782
+[info][2018-02-23 10:18:08] listen ok
+[info][2018-02-23 10:18:51] accept start... 
+[info][2018-02-23 10:18:51] client_type: 0 
+[debug][2018-02-23 10:18:51] client[9] open
+[info][2018-02-23 10:30:10] dispatch2 client fd[9] uid[-1] recv cmd[0]
+[error][2018-02-23 10:33:02] safe check client player is NULL.
+[info][2018-02-23 23:15:47] game svr zid[10] vid[10].
+[info][2018-02-23 23:15:47] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-23 23:15:47] client_type: 1 
+[debug][2018-02-23 23:15:47] client[7] open
+[info][2018-02-23 23:15:47] connect data svr fd[7].
+[info][2018-02-23 23:15:47] Listening on 0.0.0.0:19782
+[info][2018-02-23 23:15:47] listen ok
+[info][2018-02-23 23:19:25] accept start... 
+[info][2018-02-23 23:19:25] client_type: 0 
+[debug][2018-02-23 23:19:25] client[9] open
+[info][2018-02-24 10:31:09] game svr zid[10] vid[10].
+[info][2018-02-24 10:31:09] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-24 10:31:09] client_type: 1 
+[debug][2018-02-24 10:31:09] client[7] open
+[info][2018-02-24 10:31:09] connect data svr fd[7].
+[info][2018-02-24 10:31:09] Listening on 0.0.0.0:19782
+[info][2018-02-24 10:31:09] listen ok
+[info][2018-02-24 10:31:56] accept start... 
+[info][2018-02-24 10:31:56] client_type: 0 
+[debug][2018-02-24 10:31:56] client[9] open
+[info][2018-02-24 10:32:14] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-24 10:32:14] client destroy fd[9] uid[-1] destroy
+[info][2018-02-24 10:32:14] del client fd[9] uid[-1].
+[info][2018-02-24 10:32:14] ~client fd[9] uid[-1] destrutor
+[info][2018-02-24 10:33:49] game svr zid[10] vid[10].
+[info][2018-02-24 10:33:49] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-24 10:33:49] client_type: 1 
+[debug][2018-02-24 10:33:49] client[7] open
+[info][2018-02-24 10:33:49] connect data svr fd[7].
+[info][2018-02-24 10:33:49] Listening on 0.0.0.0:19782
+[info][2018-02-24 10:33:49] listen ok
+[info][2018-02-24 10:33:53] accept start... 
+[info][2018-02-24 10:33:53] client_type: 0 
+[debug][2018-02-24 10:33:53] client[9] open
+[info][2018-02-24 10:38:11] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-24 10:38:11] client destroy fd[9] uid[-1] destroy
+[info][2018-02-24 10:38:11] del client fd[9] uid[-1].
+[info][2018-02-24 10:38:11] ~client fd[9] uid[-1] destrutor
+[info][2018-02-24 10:54:50] game svr zid[10] vid[10].
+[info][2018-02-24 10:54:50] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-24 10:54:50] client_type: 1 
+[debug][2018-02-24 10:54:50] client[7] open
+[info][2018-02-24 10:54:50] connect data svr fd[7].
+[info][2018-02-24 10:54:50] Listening on 0.0.0.0:19782
+[info][2018-02-24 10:54:50] listen ok
+[info][2018-02-24 10:54:58] accept start... 
+[info][2018-02-24 10:54:58] client_type: 0 
+[debug][2018-02-24 10:54:58] client[9] open
+[info][2018-02-24 10:55:13] nodata_timer_cb client fd[9] uid[-1] timeout
+[info][2018-02-24 10:55:13] client destroy fd[9] uid[-1] destroy
+[info][2018-02-24 10:55:13] del client fd[9] uid[-1].
+[info][2018-02-24 10:55:13] ~client fd[9] uid[-1] destrutor
+[info][2018-02-24 11:10:45] game svr zid[10] vid[10].
+[info][2018-02-24 11:10:45] datasvr management ip[127.0.0.1] port[8100].
+[info][2018-02-24 11:10:45] client_type: 1 
+[debug][2018-02-24 11:10:45] client[7] open
+[info][2018-02-24 11:10:45] connect data svr fd[7].
+[info][2018-02-24 11:10:45] Listening on 0.0.0.0:19782
+[info][2018-02-24 11:10:45] listen ok
+[info][2018-02-24 11:10:58] accept start... 
+[info][2018-02-24 11:10:58] client_type: 0 
+[debug][2018-02-24 11:10:58] client[9] open
+[info][2018-02-24 11:13:30] dispatch2 client fd[9] uid[-1] recv cmd[1200]
+[debug][2018-02-24 11:17:39] request login stLogin[uid: 1
+skey: "123"
+roomid: "123456"
+req_count: 2
+] .
+[info][2018-02-24 11:17:53] request login uid[1] roomid[123456]
+[info][2019-06-17 08:53:19] game svr zid[10] vid[10].
+[info][2019-06-17 08:53:19] datasvr management ip[127.0.0.1] port[8100].
+[error][2019-06-17 08:53:19] connect data svr error: Connection refused(errno: 111)

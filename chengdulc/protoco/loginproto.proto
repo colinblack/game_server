@@ -1,0 +1,128 @@
+
+//package com.ihuizhi.network.mahjong.protobuf;
+package proto.game;
+
+//客户端上行结构体
+//请求登陆
+message ReqLogin
+{
+	required int32 uid      = 1; 		//uid
+	optional bytes skey     = 2;
+	optional bytes roomid   = 3;
+	optional int32 req_count = 4;		
+}
+
+//请求退出房间
+message ReqLogout
+{
+	required int32   uid      = 1; 		//uid
+}
+
+//互动表情
+message ReqEmotion
+{
+    required int32 seatid = 1;
+	optional int32 target_seatid = 2;
+	optional int32 type = 3;
+}
+//服务端下发结构体
+//登录成功返回（单播）
+message AckLoginSuccessUc
+{
+	required int32 seatid = 1; 		
+	optional bytes avatar = 2;
+	optional int32 exp = 3;
+	optional int32 money = 4;			
+	optional bytes name = 5;
+	optional int32 ready = 6;			
+	optional int32 rmb = 7;
+	optional int32 see = 8;			
+	optional int32 sex = 9;
+	optional int32 uid = 10;			
+}
+//登录成功返回（广播）
+message AckLoginSuccessBc
+{
+	required int32 seatid = 1; 		//
+	optional int32 uid = 2;
+	optional int32 money = 3;
+	optional bytes name = 4;			//
+	optional bytes avatar = 5;//头像
+	optional int32 sex = 6;	
+}
+//登陆错误
+message AckLoginError
+{
+	required int32 uid       = 1;
+	optional int32 code      = 2;
+}
+
+//玩家退出房间请求返回(广播)
+message AckLogoutBc
+{
+	required int32 seatid = 1; 		//桌子id
+	optional int32 uid = 2;
+	optional int32 type = 3;	//
+}
+//上桌成功
+message  AckUpTableSuccess
+{
+    required int32 uid = 1;
+	optional int32 seatid = 2;
+	optional int32 ready = 3;
+	optional bytes name = 4;
+	optional int32 sex = 5;
+	optional bytes avatar = 6;
+	optional int32 money = 7;
+	optional int32 exp = 8;
+}
+//上桌失败
+message AckUpTableErrorUc
+{
+    required int32 uid = 1;
+	optional int32 money = 2;
+	optional int32 code = 3;
+}
+
+//游戏过程中选择下桌返回
+message AckAheadDownTable
+{
+    required int32 uid = 1;
+	optional int32 seatid = 2;
+	optional int32 down_tag = 3; //1：游戏结束自动下桌
+}
+
+//下桌成功返回
+message AckDownTableSuccess
+{
+    required int32 uid = 1;
+	optional int32 seatid = 2;
+	optional int32 money = 3;
+}
+
+//广播下一局开赛
+message AckPrereadyBC
+{
+   required bytes roomid = 1; //房间号
+}
+//广播互动表情
+message AckEmotionBC
+{
+    required int32 seatid = 1;
+	optional int32 money = 2;
+	optional int32 target_seatid = 3;
+	optional int32 target_seat_num = 4;
+	optional int32 type = 5;
+}
+
+//错误码
+enum ErrCode
+{
+	DIS_ROOM_MORETHAN_TWICE_ERR			= 101;//申请解散房间失败已超过2次 
+	USER_ALREADY_IN_SEAT_ERR			= 102;//上桌失败玩家已在桌子上
+	USER_NO_MONEY_UPTABLE_ERR			= 104;//上桌失败金币不足
+	NO_UPTABLE_SEAT_ERR					= 105;//上桌失败没有座位了
+	USER_NO_MONEY_LOGIN_ERR 			= 508;//登录失败金币不足
+	ROOM_STATUS_ERR		 				= 608;//登录失败房间已解散或结束
+}
+
