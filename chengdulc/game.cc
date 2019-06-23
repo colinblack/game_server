@@ -37,9 +37,9 @@ Game::~Game()
 
 int Game::start()
 {
-	connect_datasvr();
-	connect_videosvr();
-	request_data_from_redis();
+	//connect_datasvr();
+	//connect_videosvr();
+	//request_data_from_redis();
 	init_accept();
 	return 0;
 }
@@ -142,8 +142,9 @@ void Game::start_reconnect()
 }
 void Game::reconnect_datasvr_cb( struct ev_loop *loop, struct ev_timer *w, int revents )
 {
-	Game *p_game = (Game*)w->data;
-	p_game->reconnect_datasvr();
+    //连接数据库，暂时注释
+/*	Game *p_game = (Game*)w->data;
+	p_game->reconnect_datasvr();*/
 }
 int Game::reconnect_datasvr()
 {
