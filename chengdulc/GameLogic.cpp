@@ -17,15 +17,94 @@ _uint16 const CGameLogic::m_cbCardDataArray[MAX_CARDS] =
 
 #elif 1
 _uint16 const CGameLogic::m_cbCardDataArray[MAX_CARDS] =
-{
-	 0x01A, 0x026, 0x027, 0x02A, 0x02B, 0x105, 0x109, 0x205, 0x207, 0x218, 0x303, 0x306, 0x004, 0x014, 0x016, 0x004, 0x014, 0x016, 0x01A, 0x026, 0x027,
-	 0x02A, 0x02B, 0x105, 0x109, 0x205, 0x207, 0x218, 0x00C, 0x00C, 0x00C, 0x00C, 0x209, 0x209, 0x209, 0x209, 0x002, 0x002, 0x002, 0x002, 0x208, 0x208, 
-	 0x208, 0x208, 0x008, 0x008, 0x008, 0x008, 0x107, 0x107, 0x107, 0x107, 0x303, 0x306, 0x004, 0x014, 0x016, 0x01A, 0x026, 0x027, 0x02A, 0x02B, 0x105,
-	 0x109, 0x205, 0x207, 0x218, 0x303, 0x306, 0x004, 0x014, 0x016, 0x01A, 0x026, 0x027, 0x02A, 0x02B, 0x105, 0x109, 0x205, 0x207, 0x218, 0x303, 0x306,
+	{
+		0x01A,
+		0x026,
+		0x027,
+		0x02A,
+		0x02B,
+		0x105,
+		0x109,
+		0x205,
+		0x207,
+		0x218,
+		0x303,
+		0x306,
+		0x004,
+		0x014,
+		0x016,
+		0x004,
+		0x014,
+		0x016,
+		0x01A,
+		0x026,
+		0x027,
+		0x02A,
+		0x02B,
+		0x105,
+		0x109,
+		0x205,
+		0x207,
+		0x218,
+		0x00C,
+		0x00C,
+		0x00C,
+		0x00C,
+		0x209,
+		0x209,
+		0x209,
+		0x209,
+		0x002,
+		0x002,
+		0x002,
+		0x002,
+		0x208,
+		0x208,
+		0x208,
+		0x208,
+		0x008,
+		0x008,
+		0x008,
+		0x008,
+		0x107,
+		0x107,
+		0x107,
+		0x107,
+		0x303,
+		0x306,
+		0x004,
+		0x014,
+		0x016,
+		0x01A,
+		0x026,
+		0x027,
+		0x02A,
+		0x02B,
+		0x105,
+		0x109,
+		0x205,
+		0x207,
+		0x218,
+		0x303,
+		0x306,
+		0x004,
+		0x014,
+		0x016,
+		0x01A,
+		0x026,
+		0x027,
+		0x02A,
+		0x02B,
+		0x105,
+		0x109,
+		0x205,
+		0x207,
+		0x218,
+		0x303,
+		0x306,
 };
 
 #endif
-
 
 //构造函数
 CGameLogic::CGameLogic()
@@ -64,7 +143,7 @@ void CGameLogic::RandCardData(_uint16 cbCardData[], _uint8 bMaxCount)
 	return;
 }
 
-void  CGameLogic::SwitchToCardIndex(_uint16 cbCardData[], _uint8 bCardCount, tagCardIndex& CardIndex)
+void CGameLogic::SwitchToCardIndex(_uint16 cbCardData[], _uint8 bCardCount, tagCardIndex &CardIndex)
 {
 	for (_uint8 i = 0; i < bCardCount; ++i)
 	{
@@ -77,19 +156,18 @@ void  CGameLogic::SwitchToCardIndex(_uint16 cbCardData[], _uint8 bCardCount, tag
 
 _uint16 CGameLogic::SwitchToCard(_uint8 cbFirstType, _uint8 cbSecondType, _uint8 cbIndex)
 {
-	return (cbFirstType << 8) |(cbSecondType << 4) | (cbIndex);
+	return (cbFirstType << 8) | (cbSecondType << 4) | (cbIndex);
 }
 
-
 //删除扑克
-bool CGameLogic::RemoveCard(tagCardIndex& CardIndex, vector<stCardInfo>& cbRemoveCards)
+bool CGameLogic::RemoveCard(tagCardIndex &CardIndex, vector<stCardInfo> &cbRemoveCards)
 {
 	//效验扑克
 	//assert(IsValidCard(cbRemoveCard));
 	//assert(cbCardIndex[SwitchToCardIndex(cbRemoveCard)]>0);
 	_uint8 cbRemoveCardCount = 0;
 	//删除扑克
-	for (_uint8 i = 0; i< cbRemoveCards.size(); ++i)
+	for (_uint8 i = 0; i < cbRemoveCards.size(); ++i)
 	{
 		_uint8 cbCardType_1 = (cbRemoveCards[i].cbCard & 0xF00) >> 8;
 		_uint8 cbCardType_2 = (cbRemoveCards[i].cbCard & 0x0F0) >> 4;
@@ -104,7 +182,6 @@ bool CGameLogic::RemoveCard(tagCardIndex& CardIndex, vector<stCardInfo>& cbRemov
 			++cbRemoveCardCount;
 		}
 	}
-	
 
 	if (cbRemoveCardCount == cbRemoveCards.size())
 	{
@@ -115,7 +192,6 @@ bool CGameLogic::RemoveCard(tagCardIndex& CardIndex, vector<stCardInfo>& cbRemov
 		return false;
 	}
 }
-
 
 //获取胡息
 _uint8 CGameLogic::GetWeaveHuXi(const tagWeaveItem &WeaveItem)
@@ -147,9 +223,6 @@ bool CGameLogic::AnalyseCard(_uint8 cbCardIndex[MAX_INDEX], CAnalyseItemArray &A
 	return true;
 }
 
-
-
-
 _uint8 CGameLogic::GetCardsWeaveHuXi(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 cbCardsWeaveCount)
 {
 
@@ -158,11 +231,11 @@ _uint8 CGameLogic::GetCardsWeaveHuXi(tagCardsWeave CardsWeave[MAX_INDEX], _uint8
 
 _uint8 CGameLogic::GetOrgCardsWeaveHuXi(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 cbCardsWeaveCount)
 {
-	
+
 	return 1;
 }
 
-bool CGameLogic::UpdateCardsWeave(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 &cbCardsWeaveCount, const vector<stCardInfo>& cbRemoveCards)
+bool CGameLogic::UpdateCardsWeave(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 &cbCardsWeaveCount, const vector<stCardInfo> &cbRemoveCards)
 {
 	const _uint8 maxNum = 12;
 	for (_uint8 i = 0; i < cbRemoveCards.size(); ++i)
@@ -190,8 +263,7 @@ bool CGameLogic::UpdateCardsWeave(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 &c
 		log.info("\n");
 	}
 
-
-	_uint16 wCardListTemp[maxNum] = { 0 };
+	_uint16 wCardListTemp[maxNum] = {0};
 	for (_uint8 i = 0; i < cbCardsWeaveCount; ++i)
 	{
 		memset(wCardListTemp, 0, sizeof(wCardListTemp));
@@ -214,10 +286,9 @@ bool CGameLogic::UpdateCardsWeave(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 &c
 		CardsWeave[i].cbCardCount = cnt;
 	}
 
-
 	for (_uint8 i = 0; i < cbCardsWeaveCount; ++i)
 	{
-	
+
 		if (CardsWeave[i].cbCardCount == 0)
 		{
 			for (_uint8 m = i + 1, n = i; m < cbCardsWeaveCount; ++m)
@@ -248,19 +319,19 @@ bool CGameLogic::UpdateCardsWeave(tagCardsWeave CardsWeave[MAX_INDEX], _uint8 &c
 }
 
 //整理普通模式牌
-bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWeave WeaveItem[MAX_INDEX], _uint8 &cbWeaveCount)
+bool CGameLogic::SettleCommonWeaves(const tagCardIndex &cbCardIndex, tagCardsWeave WeaveItem[MAX_INDEX], _uint8 &cbWeaveCount)
 {
-	tagCardIndex cbCardIndexTemp = const_cast<tagCardIndex&>(cbCardIndex);
-   cbWeaveCount = 0;
+	tagCardIndex cbCardIndexTemp = const_cast<tagCardIndex &>(cbCardIndex);
+	cbWeaveCount = 0;
 	memset(WeaveItem, 0, sizeof(tagCardsWeave) * MAX_INDEX);
 
-	for (_uint8 i = 0; i < CARD_TYPE_1; ++i)   
+	for (_uint8 i = 0; i < CARD_TYPE_1; ++i)
 	{
 		for (_uint8 j = 0; j < CARD_TYPE_2; ++j)
 		{
 			for (_uint8 k = 0; k < CARD_INDEX; ++k)
 			{
-				if (cbCardIndexTemp.cbCards[i][j][k] == 4)   //提取四牌
+				if (cbCardIndexTemp.cbCards[i][j][k] == 4) //提取四牌
 				{
 					_uint16 wCards = SwitchToCard(i, j, k);
 					WeaveItem[cbWeaveCount].cbCardCount = 4;
@@ -270,7 +341,7 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 					WeaveItem[cbWeaveCount++].cbCardList[3] = wCards;
 					cbCardIndexTemp.cbCards[i][j][k] = 0;
 				}
-				if (cbCardIndexTemp.cbCards[i][j][k] == 3)   //提取三牌
+				if (cbCardIndexTemp.cbCards[i][j][k] == 3) //提取三牌
 				{
 					_uint16 wCards = SwitchToCard(i, j, k);
 					WeaveItem[cbWeaveCount].cbCardCount = 3;
@@ -279,22 +350,20 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 					WeaveItem[cbWeaveCount++].cbCardList[2] = wCards;
 					cbCardIndexTemp.cbCards[i][j][k] = 0;
 				}
-				if (cbCardIndexTemp.cbCards[i][j][k] == 2)   //提取二牌
+				if (cbCardIndexTemp.cbCards[i][j][k] == 2) //提取二牌
 				{
 					_uint16 wCards = SwitchToCard(i, j, k);
 					WeaveItem[cbWeaveCount].cbCardCount = 2;
 					WeaveItem[cbWeaveCount].cbCardList[0] = wCards;
 					WeaveItem[cbWeaveCount++].cbCardList[1] = wCards;
 					cbCardIndexTemp.cbCards[i][j][k] = 0;
-
 				}
 			}
 		}
 	}
 
 	//同一类型的牌放在一起
-	if (cbCardIndexTemp.cbCards[0][0][12] > 0 || cbCardIndexTemp.cbCards[0][0][2] > 0
-			|| cbCardIndexTemp.cbCards[0][0][8] > 0 || cbCardIndexTemp.cbCards[0][0][4] > 0)
+	if (cbCardIndexTemp.cbCards[0][0][12] > 0 || cbCardIndexTemp.cbCards[0][0][2] > 0 || cbCardIndexTemp.cbCards[0][0][8] > 0 || cbCardIndexTemp.cbCards[0][0][4] > 0)
 	{
 		if (cbCardIndexTemp.cbCards[0][0][12] > 0)
 		{
@@ -320,8 +389,7 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 	}
 
 	//中三
-	if (cbCardIndexTemp.cbCards[0][1][4] > 0 || cbCardIndexTemp.cbCards[0][1][6] > 0
-			|| cbCardIndexTemp.cbCards[0][1][10] > 0)
+	if (cbCardIndexTemp.cbCards[0][1][4] > 0 || cbCardIndexTemp.cbCards[0][1][6] > 0 || cbCardIndexTemp.cbCards[0][1][10] > 0)
 	{
 		if (cbCardIndexTemp.cbCards[0][1][4] > 0)
 		{
@@ -341,11 +409,8 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 		++cbWeaveCount;
 	}
 
-
-
 	//下幺
-	if (cbCardIndexTemp.cbCards[0][2][6] > 0 || cbCardIndexTemp.cbCards[0][2][7] > 0
-		|| cbCardIndexTemp.cbCards[0][2][10] > 0 || cbCardIndexTemp.cbCards[0][2][11] > 0)
+	if (cbCardIndexTemp.cbCards[0][2][6] > 0 || cbCardIndexTemp.cbCards[0][2][7] > 0 || cbCardIndexTemp.cbCards[0][2][10] > 0 || cbCardIndexTemp.cbCards[0][2][11] > 0)
 	{
 		if (cbCardIndexTemp.cbCards[0][2][6] > 0)
 		{
@@ -371,8 +436,7 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 	}
 
 	//0x105, 0x107, 0x109
-	if (cbCardIndexTemp.cbCards[1][0][5] > 0 || cbCardIndexTemp.cbCards[1][0][7] > 0
-		|| cbCardIndexTemp.cbCards[1][0][9] > 0)
+	if (cbCardIndexTemp.cbCards[1][0][5] > 0 || cbCardIndexTemp.cbCards[1][0][7] > 0 || cbCardIndexTemp.cbCards[1][0][9] > 0)
 	{
 		if (cbCardIndexTemp.cbCards[1][0][5] > 0)
 		{
@@ -392,11 +456,9 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 		++cbWeaveCount;
 	}
 
-
 	//0x205, 0x207, 0x208, 0x209, 0x218,
 
-	if (cbCardIndexTemp.cbCards[2][0][5] > 0 || cbCardIndexTemp.cbCards[2][0][7] > 0 || cbCardIndexTemp.cbCards[2][0][8] > 0 
-			|| cbCardIndexTemp.cbCards[2][0][9] > 0 || cbCardIndexTemp.cbCards[2][1][8] > 0)
+	if (cbCardIndexTemp.cbCards[2][0][5] > 0 || cbCardIndexTemp.cbCards[2][0][7] > 0 || cbCardIndexTemp.cbCards[2][0][8] > 0 || cbCardIndexTemp.cbCards[2][0][9] > 0 || cbCardIndexTemp.cbCards[2][1][8] > 0)
 	{
 		if (cbCardIndexTemp.cbCards[2][0][5] > 0)
 		{
@@ -426,7 +488,6 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 
 		++cbWeaveCount;
 	}
-
 
 	//if (cbCardIndexTemp.cbCards[0][0][2] > 0)   //地八
 	//{
@@ -469,7 +530,6 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 	//		WeaveItem[cbWeaveCount++].cbCardCount++;
 	//	}
 	//}
-
 
 	//if (cbCardIndexTemp.cbCards[0][0][4] > 0)  //和五
 	//{
@@ -517,8 +577,7 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 	//		}
 	//	}
 	// }
-		//其他的牌
-
+	//其他的牌
 
 	for (_uint8 i = 0; i < CARD_TYPE_1; ++i)
 	{
@@ -538,33 +597,31 @@ bool CGameLogic::SettleCommonWeaves(const tagCardIndex& cbCardIndex, tagCardsWea
 			}
 		}
 	}
-		return true;
+	return true;
 }
 
-	//整理最优模式牌
-	//bool CGameLogic::SettleBestWeaves(_uint8 cbCardIndex[MAX_INDEX], tagCardsWeave WeaveItem[MAX_INDEX], _uint8 &cbWeaveCount)
-	//{
-	//	return true;
-	//}
-
+//整理最优模式牌
+//bool CGameLogic::SettleBestWeaves(_uint8 cbCardIndex[MAX_INDEX], tagCardsWeave WeaveItem[MAX_INDEX], _uint8 &cbWeaveCount)
+//{
+//	return true;
+//}
 
 //胡牌最优结果
-void CGameLogic::GetHuCardInfoFinal(_uint8 cbTotalCards, _uint8 cbWeaveItemCount, _uint8 cbUserID, _tint32 wUserHuXi[GAME_PLAYER], _tint32 wUserFanShu[GAME_PLAYER], _tint32  wUserScore[GAME_PLAYER],  tagWeaveItem WeaveItemArray[MAX_WEAVE], _uint8 cbBaseScore, _uint8 cbGamePlay, _uint8 wBaseHuCards)
+void CGameLogic::GetHuCardInfoFinal(_uint8 cbTotalCards, _uint8 cbWeaveItemCount, _uint8 cbUserID, _tint32 wUserHuXi[GAME_PLAYER], _tint32 wUserFanShu[GAME_PLAYER], _tint32 wUserScore[GAME_PLAYER], tagWeaveItem WeaveItemArray[MAX_WEAVE], _uint8 cbBaseScore, _uint8 cbGamePlay, _uint8 wBaseHuCards)
 {
 	_uint8 cbSecondUsr = (cbUserID + 1) % GAME_PLAYER;
 	_uint8 cbThirdUsr = (cbSecondUsr + 1) % GAME_PLAYER;
-	
 
 	wUserFanShu[cbUserID] = GetTotalFan(cbWeaveItemCount, WeaveItemArray, cbGamePlay);
 	if (cbGamePlay == YEZI)
 	{
-		wUserScore[cbUserID] = wUserFanShu[cbUserID] * cbBaseScore * (cbTotalCards - wBaseHuCards -1) * 2;		
+		wUserScore[cbUserID] = wUserFanShu[cbUserID] * cbBaseScore * (cbTotalCards - wBaseHuCards - 1) * 2;
 	}
 	else
 	{
 		wUserScore[cbUserID] = wUserFanShu[cbUserID] * cbBaseScore * 2;
 	}
-	wUserScore[cbSecondUsr] = (wUserScore[cbUserID] / 2)*(-1);
+	wUserScore[cbSecondUsr] = (wUserScore[cbUserID] / 2) * (-1);
 	wUserScore[cbThirdUsr] = wUserScore[cbSecondUsr];
 }
 
@@ -588,63 +645,51 @@ _tint32 CGameLogic::isHuOrHeCards(_uint8 cbTotalCards, _uint32 wBaseHe, _uint32 
 	return -1;
 }
 
-void  CGameLogic::GetNoBankerHuBestWeaves(_uint8& cbWeaveItemCount, tagWeaveItem WeaveItemArray[MAX_WEAVE], tagCardsWeave m_CardsWeaveInfo[GAME_PLAYER], _uint8& m_cbCardsWeaveCount, vector<_uint16>& wcbCenterCards, tagCardIndex	m_cbCardIndex[GAME_PLAYER], _tint32 wUserID)
-{	
-		std::map<_uint16, _uint32> stCardsMap;
-		std::map<_uint16, _uint32> stWinMap;
-		vector<_uint16> wcbOutCards;
-		std::sort(wcbCenterCards.begin(), wcbCenterCards.end());
+void CGameLogic::GetNoBankerHuBestWeaves(_uint8 &cbWeaveItemCount, tagWeaveItem WeaveItemArray[MAX_WEAVE], tagCardsWeave m_CardsWeaveInfo[GAME_PLAYER], _uint8 &m_cbCardsWeaveCount, vector<_uint16> &wcbCenterCards, tagCardIndex m_cbCardIndex[GAME_PLAYER], _tint32 wUserID)
+{
+	std::map<_uint16, _uint32> stCardsMap;
+	std::map<_uint16, _uint32> stWinMap;
+	vector<_uint16> wcbOutCards;
+	std::sort(wcbCenterCards.begin(), wcbCenterCards.end());
 
-		if (wcbCenterCards.size() >= 1)
+	if (wcbCenterCards.size() >= 1)
+	{
+		for (_uint8 i = 0; i < wcbCenterCards.size(); ++i)
 		{
-			for (_uint8 i = 0; i < wcbCenterCards.size(); ++i)
-			{
-				stCardsMap[wcbCenterCards[i]]++;
-			}
-			_uint16 wFirstCardKey = stCardsMap.begin()->first;
-			_uint16 wSeconCardKey = (++stCardsMap.begin())->first;
-			_uint8 cbCardsSize = wcbCenterCards.size();
-			_uint8 cbUserType_1 = (wcbCenterCards[0] >> 8) & 0xF;
-			_uint8 cbUserType_2 = (wcbCenterCards[0] >> 4) & 0xF;
-			_uint8 cbUserIndex = wcbCenterCards[0] & 0xF;
+			stCardsMap[wcbCenterCards[i]]++;
+		}
+		_uint16 wFirstCardKey = stCardsMap.begin()->first;
+		_uint16 wSeconCardKey = (++stCardsMap.begin())->first;
+		_uint8 cbCardsSize = wcbCenterCards.size();
+		_uint8 cbUserType_1 = (wcbCenterCards[0] >> 8) & 0xF;
+		_uint8 cbUserType_2 = (wcbCenterCards[0] >> 4) & 0xF;
+		_uint8 cbUserIndex = wcbCenterCards[0] & 0xF;
 
-			if (stCardsMap.size() == 2 || stCardsMap.size() == 3)
+		if (stCardsMap.size() == 2 || stCardsMap.size() == 3)
+		{
+			if (m_cbCardIndex[wUserID].cbCards[0][0][12] + m_cbCardIndex[wUserID].cbCards[1][0][9] + m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
 			{
-				if (m_cbCardIndex[wUserID].cbCards[0][0][12] + m_cbCardIndex[wUserID].cbCards[1][0][9]
-					+ m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
+				_uint8 &cbIndex_1 = m_cbCardIndex[wUserID].cbCards[0][0][12];
+				_uint8 &cbIndex_2 = m_cbCardIndex[wUserID].cbCards[1][0][9];
+				_uint8 &cbIndex_3 = m_cbCardIndex[wUserID].cbCards[2][0][9];
+
+				while (cbCardsSize - 1 && cbIndex_1)
 				{
-					_uint8& cbIndex_1 = m_cbCardIndex[wUserID].cbCards[0][0][12];
-					_uint8& cbIndex_2 = m_cbCardIndex[wUserID].cbCards[1][0][9];
-					_uint8& cbIndex_3 = m_cbCardIndex[wUserID].cbCards[2][0][9];
-
-					while (cbCardsSize - 1 && cbIndex_1)
+					wcbOutCards.push_back(0x00C);
+					--cbCardsSize;
+					--cbIndex_1;
+				}
+				if (cbCardsSize > 0)
+				{
+					if (cbIndex_2 >= cbIndex_3)
 					{
-						wcbOutCards.push_back(0x00C);
-						--cbCardsSize;
-						--cbIndex_1;
-					}
-					if (cbCardsSize > 0)
-					{
-						if (cbIndex_2 >= cbIndex_3)
+						while (cbCardsSize && cbIndex_2)
 						{
-							while (cbCardsSize && cbIndex_2)
-							{
-								wcbOutCards.push_back(0x109);
-								--cbCardsSize;
-								--cbIndex_2;
-							}
-							if (cbCardsSize > 0)
-							{
-								while (cbCardsSize && cbIndex_3)
-								{
-									wcbOutCards.push_back(0x209);
-									--cbCardsSize;
-									--cbIndex_3;
-								}
-							}
-
+							wcbOutCards.push_back(0x109);
+							--cbCardsSize;
+							--cbIndex_2;
 						}
-						else
+						if (cbCardsSize > 0)
 						{
 							while (cbCardsSize && cbIndex_3)
 							{
@@ -652,56 +697,54 @@ void  CGameLogic::GetNoBankerHuBestWeaves(_uint8& cbWeaveItemCount, tagWeaveItem
 								--cbCardsSize;
 								--cbIndex_3;
 							}
-							if (cbCardsSize > 0)
+						}
+					}
+					else
+					{
+						while (cbCardsSize && cbIndex_3)
+						{
+							wcbOutCards.push_back(0x209);
+							--cbCardsSize;
+							--cbIndex_3;
+						}
+						if (cbCardsSize > 0)
+						{
+							while (cbCardsSize && cbIndex_2)
 							{
-								while (cbCardsSize && cbIndex_2)
-								{
-									wcbOutCards.push_back(0x109);
-									--cbCardsSize;
-									--cbIndex_2;
-								}
+								wcbOutCards.push_back(0x109);
+								--cbCardsSize;
+								--cbIndex_2;
 							}
 						}
 					}
 				}
+			}
 
-				else if (m_cbCardIndex[wUserID].cbCards[0][0][2] + m_cbCardIndex[wUserID].cbCards[2][0][8]
-					+ m_cbCardIndex[wUserID].cbCards[2][1][8] >= cbCardsSize)
+			else if (m_cbCardIndex[wUserID].cbCards[0][0][2] + m_cbCardIndex[wUserID].cbCards[2][0][8] + m_cbCardIndex[wUserID].cbCards[2][1][8] >= cbCardsSize)
 
+			{
+				_uint8 &cbIndex_1 = m_cbCardIndex[wUserID].cbCards[0][0][2];
+				_uint8 &cbIndex_2 = m_cbCardIndex[wUserID].cbCards[2][0][8];
+				_uint8 &cbIndex_3 = m_cbCardIndex[wUserID].cbCards[2][1][8];
+
+				while (cbCardsSize - 1 && cbIndex_1)
 				{
-					_uint8& cbIndex_1 = m_cbCardIndex[wUserID].cbCards[0][0][2];
-					_uint8& cbIndex_2 = m_cbCardIndex[wUserID].cbCards[2][0][8];
-					_uint8& cbIndex_3 = m_cbCardIndex[wUserID].cbCards[2][1][8];
+					wcbOutCards.push_back(0x002);
+					--cbCardsSize;
+					--cbIndex_1;
+				}
 
-					while (cbCardsSize - 1&& cbIndex_1)
+				if (cbCardsSize > 0)
+				{
+					if (cbIndex_2 >= cbIndex_3)
 					{
-						wcbOutCards.push_back(0x002);
-						--cbCardsSize;
-						--cbIndex_1;
-					}
-
-					if (cbCardsSize > 0)
-					{
-						if (cbIndex_2 >= cbIndex_3)
+						while (cbCardsSize && cbIndex_2)
 						{
-							while (cbCardsSize && cbIndex_2)
-							{
-								wcbOutCards.push_back(0x208);
-								--cbCardsSize;
-								--cbIndex_2;
-							}
-							if (cbCardsSize > 0)
-							{
-								while (cbCardsSize && cbIndex_3)
-								{
-									wcbOutCards.push_back(0x218);
-									--cbCardsSize;
-									--cbIndex_3;
-								}
-							}
-
+							wcbOutCards.push_back(0x208);
+							--cbCardsSize;
+							--cbIndex_2;
 						}
-						else
+						if (cbCardsSize > 0)
 						{
 							while (cbCardsSize && cbIndex_3)
 							{
@@ -709,56 +752,52 @@ void  CGameLogic::GetNoBankerHuBestWeaves(_uint8& cbWeaveItemCount, tagWeaveItem
 								--cbCardsSize;
 								--cbIndex_3;
 							}
-							if (cbCardsSize > 0)
-							{
-								while (cbCardsSize && cbIndex_2)
-								{
-									wcbOutCards.push_back(0x208);
-									--cbCardsSize;
-									--cbIndex_2;
-								}
-							}
 						}
-
 					}
-				}
-				else if (m_cbCardIndex[wUserID].cbCards[0][0][8] + m_cbCardIndex[wUserID].cbCards[1][0][7]
-					+ m_cbCardIndex[wUserID].cbCards[2][0][7] >= cbCardsSize)
-				{
-					_uint8& cbIndex_1 = m_cbCardIndex[wUserID].cbCards[0][0][8];
-					_uint8& cbIndex_2 = m_cbCardIndex[wUserID].cbCards[1][0][7];
-					_uint8& cbIndex_3 = m_cbCardIndex[wUserID].cbCards[2][0][7];
-
-					while (cbCardsSize - 1 && cbIndex_1)
+					else
 					{
-						wcbOutCards.push_back(0x008);
-						--cbCardsSize;
-						--cbIndex_1;
-
-					}
-
-					if (cbCardsSize > 0)
-					{
-						if (cbIndex_2 >= cbIndex_3)
+						while (cbCardsSize && cbIndex_3)
+						{
+							wcbOutCards.push_back(0x218);
+							--cbCardsSize;
+							--cbIndex_3;
+						}
+						if (cbCardsSize > 0)
 						{
 							while (cbCardsSize && cbIndex_2)
 							{
-								wcbOutCards.push_back(0x107);
+								wcbOutCards.push_back(0x208);
 								--cbCardsSize;
 								--cbIndex_2;
 							}
-							if (cbCardsSize > 0)
-							{
-								while (cbCardsSize && cbIndex_3)
-								{
-									wcbOutCards.push_back(0x207);
-									--cbCardsSize;
-									--cbIndex_3;
-								}
-							}
-
 						}
-						else
+					}
+				}
+			}
+			else if (m_cbCardIndex[wUserID].cbCards[0][0][8] + m_cbCardIndex[wUserID].cbCards[1][0][7] + m_cbCardIndex[wUserID].cbCards[2][0][7] >= cbCardsSize)
+			{
+				_uint8 &cbIndex_1 = m_cbCardIndex[wUserID].cbCards[0][0][8];
+				_uint8 &cbIndex_2 = m_cbCardIndex[wUserID].cbCards[1][0][7];
+				_uint8 &cbIndex_3 = m_cbCardIndex[wUserID].cbCards[2][0][7];
+
+				while (cbCardsSize - 1 && cbIndex_1)
+				{
+					wcbOutCards.push_back(0x008);
+					--cbCardsSize;
+					--cbIndex_1;
+				}
+
+				if (cbCardsSize > 0)
+				{
+					if (cbIndex_2 >= cbIndex_3)
+					{
+						while (cbCardsSize && cbIndex_2)
+						{
+							wcbOutCards.push_back(0x107);
+							--cbCardsSize;
+							--cbIndex_2;
+						}
+						if (cbCardsSize > 0)
 						{
 							while (cbCardsSize && cbIndex_3)
 							{
@@ -766,28 +805,47 @@ void  CGameLogic::GetNoBankerHuBestWeaves(_uint8& cbWeaveItemCount, tagWeaveItem
 								--cbCardsSize;
 								--cbIndex_3;
 							}
-							if (cbCardsSize > 0)
+						}
+					}
+					else
+					{
+						while (cbCardsSize && cbIndex_3)
+						{
+							wcbOutCards.push_back(0x207);
+							--cbCardsSize;
+							--cbIndex_3;
+						}
+						if (cbCardsSize > 0)
+						{
+							while (cbCardsSize && cbIndex_2)
 							{
-								while (cbCardsSize && cbIndex_2)
-								{
-									wcbOutCards.push_back(0x107);
-									--cbCardsSize;
-									--cbIndex_2;
-								}
+								wcbOutCards.push_back(0x107);
+								--cbCardsSize;
+								--cbIndex_2;
 							}
 						}
-
 					}
 				}
 			}
+		}
 
-			if (stCardsMap.size() == 1)
+		if (stCardsMap.size() == 1)
+		{
+			if (cbUserType_1 == 0)
 			{
-				if (cbUserType_1 == 0)
+				if (cbUserType_2 == 0)
 				{
-					if (cbUserType_2 == 0)
+					if (cbUserIndex == 0x2 && m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
 					{
-						if (cbUserIndex == 0x2 && m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[0][0][12]--;
+							wcbOutCards.push_back(0x00C);
+						}
+					}
+					if (cbUserIndex == 0x8)
+					{
+						if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
 						{
 							while (cbCardsSize--)
 							{
@@ -795,54 +853,16 @@ void  CGameLogic::GetNoBankerHuBestWeaves(_uint8& cbWeaveItemCount, tagWeaveItem
 								wcbOutCards.push_back(0x00C);
 							}
 						}
-						if (cbUserIndex == 0x8)
+						else if (m_cbCardIndex[wUserID].cbCards[0][0][2] >= cbCardsSize)
 						{
-							if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
+							while (cbCardsSize--)
 							{
-								while (cbCardsSize--)
-								{
-									m_cbCardIndex[wUserID].cbCards[0][0][12]--;
-									wcbOutCards.push_back(0x00C);
-								}
-							}
-							else if (m_cbCardIndex[wUserID].cbCards[0][0][2] >= cbCardsSize)
-							{
-								while (cbCardsSize--)
-								{
-									m_cbCardIndex[wUserID].cbCards[0][0][2]--;
-									wcbOutCards.push_back(0x002);
-								}
-							}
-						}
-						if (cbUserIndex == 0x04)
-						{
-							if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
-							{
-								while (cbCardsSize--)
-								{
-									m_cbCardIndex[wUserID].cbCards[0][0][12]--;
-									wcbOutCards.push_back(0x00C);
-								}
-							}
-							else if (m_cbCardIndex[wUserID].cbCards[0][0][2] >= cbCardsSize)
-							{
-								while (cbCardsSize--)
-								{
-									m_cbCardIndex[wUserID].cbCards[0][0][2]--;
-									wcbOutCards.push_back(0x002);
-								}
-							}
-							else if (m_cbCardIndex[wUserID].cbCards[0][0][8] >= cbCardsSize)
-							{
-								while (cbCardsSize--)
-								{
-									m_cbCardIndex[wUserID].cbCards[0][0][8]--;
-									wcbOutCards.push_back(0x008);
-								}
+								m_cbCardIndex[wUserID].cbCards[0][0][2]--;
+								wcbOutCards.push_back(0x002);
 							}
 						}
 					}
-					else if (cbUserType_2 == 1)
+					if (cbUserIndex == 0x04)
 					{
 						if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
 						{
@@ -868,213 +888,238 @@ void  CGameLogic::GetNoBankerHuBestWeaves(_uint8& cbWeaveItemCount, tagWeaveItem
 								wcbOutCards.push_back(0x008);
 							}
 						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][0][4] >= cbCardsSize)
+					}
+				}
+				else if (cbUserType_2 == 1)
+				{
+					if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][0][4]--;
-								wcbOutCards.push_back(0x004);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][12]--;
+							wcbOutCards.push_back(0x00C);
 						}
 					}
-					else if (cbUserType_2 == 2)
+					else if (m_cbCardIndex[wUserID].cbCards[0][0][2] >= cbCardsSize)
 					{
-						if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][0][12]--;
-								wcbOutCards.push_back(0x00C);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][2]--;
+							wcbOutCards.push_back(0x002);
 						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][0][2] >= cbCardsSize)
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[0][0][8] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][0][2]--;
-								wcbOutCards.push_back(0x002);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][8]--;
+							wcbOutCards.push_back(0x008);
 						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][0][8] >= cbCardsSize)
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[0][0][4] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][0][8]--;
-								wcbOutCards.push_back(0x008);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][0][4] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][0][4]--;
-								wcbOutCards.push_back(0x004);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][1][4] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][1][4]--;
-								wcbOutCards.push_back(0x014);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][1][6] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][1][6]--;
-								wcbOutCards.push_back(0x016);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[0][1][10] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[0][1][10]--;
-								wcbOutCards.push_back(0x01A);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][4]--;
+							wcbOutCards.push_back(0x004);
 						}
 					}
 				}
-				if (cbUserType_1 == 1)
+				else if (cbUserType_2 == 2)
 				{
-					if (cbUserIndex == 0x7)
+					if (m_cbCardIndex[wUserID].cbCards[0][0][12] >= cbCardsSize)
 					{
-						if (m_cbCardIndex[wUserID].cbCards[1][0][9] >= cbCardsSize)
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[1][0][9]--;
-								wcbOutCards.push_back(0x109);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][12]--;
+							wcbOutCards.push_back(0x00C);
 						}
 					}
-					if (cbUserIndex == 0x5)
+					else if (m_cbCardIndex[wUserID].cbCards[0][0][2] >= cbCardsSize)
 					{
-						if (m_cbCardIndex[wUserID].cbCards[1][0][9] >= cbCardsSize)
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[1][0][9]--;
-								wcbOutCards.push_back(0x109);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[1][0][7] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[1][0][7]--;
-								wcbOutCards.push_back(0x107);
-							}
-						}	
-					}
-				}
-				if (cbUserType_1 == 2)
-				{
-					if (cbUserIndex == 0x8 || cbUserIndex == 0x8)
-					{
-						if (m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][0][9]--;
-								wcbOutCards.push_back(0x209);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][2]--;
+							wcbOutCards.push_back(0x002);
 						}
 					}
-					if (cbUserIndex == 0x7)
+					else if (m_cbCardIndex[wUserID].cbCards[0][0][8] >= cbCardsSize)
 					{
-						if (m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][0][9]--;
-								wcbOutCards.push_back(0x209);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[2][0][8] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][0][8]--;
-								wcbOutCards.push_back(0x208);
-							}
-						}
-						else if (m_cbCardIndex[wUserID].cbCards[2][1][8] >= cbCardsSize)
-						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][1][8]--;
-								wcbOutCards.push_back(0x218);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][8]--;
+							wcbOutCards.push_back(0x008);
 						}
 					}
-					if (cbUserIndex == 0x5)
+					else if (m_cbCardIndex[wUserID].cbCards[0][0][4] >= cbCardsSize)
 					{
-						if (m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][0][9]--;
-								wcbOutCards.push_back(0x209);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][0][4]--;
+							wcbOutCards.push_back(0x004);
 						}
-						else if (m_cbCardIndex[wUserID].cbCards[2][0][8] >= cbCardsSize)
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[0][1][4] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][0][8]--;
-								wcbOutCards.push_back(0x208);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][1][4]--;
+							wcbOutCards.push_back(0x014);
 						}
-						else if (m_cbCardIndex[wUserID].cbCards[2][1][8] >= cbCardsSize)
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[0][1][6] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][1][8]--;
-								wcbOutCards.push_back(0x218);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][1][6]--;
+							wcbOutCards.push_back(0x016);
 						}
-						else if (m_cbCardIndex[wUserID].cbCards[2][0][7] >= cbCardsSize)
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[0][1][10] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
 						{
-							while (cbCardsSize--)
-							{
-								m_cbCardIndex[wUserID].cbCards[2][0][7]--;
-								wcbOutCards.push_back(0x207);
-							}
+							m_cbCardIndex[wUserID].cbCards[0][1][10]--;
+							wcbOutCards.push_back(0x01A);
 						}
 					}
 				}
 			}
-
-		}
-
-
-		if (wcbOutCards.size() == wcbCenterCards.size())
-		{
-			wcbCenterCards = wcbOutCards;
-			for (_uint8 i = 0; i < wcbCenterCards.size(); ++i)
+			if (cbUserType_1 == 1)
 			{
-				WeaveItemArray[cbWeaveItemCount].cbCardList[i] = wcbCenterCards[i];
-				WeaveItemArray[cbWeaveItemCount].cbCardCount++;
-				log.info("GetNoBankerHuBestWeaves, wcbCenterCards: %d \n", wcbCenterCards[i]);
+				if (cbUserIndex == 0x7)
+				{
+					if (m_cbCardIndex[wUserID].cbCards[1][0][9] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[1][0][9]--;
+							wcbOutCards.push_back(0x109);
+						}
+					}
+				}
+				if (cbUserIndex == 0x5)
+				{
+					if (m_cbCardIndex[wUserID].cbCards[1][0][9] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[1][0][9]--;
+							wcbOutCards.push_back(0x109);
+						}
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[1][0][7] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[1][0][7]--;
+							wcbOutCards.push_back(0x107);
+						}
+					}
+				}
 			}
-			cbWeaveItemCount++;
+			if (cbUserType_1 == 2)
+			{
+				if (cbUserIndex == 0x8 || cbUserIndex == 0x8)
+				{
+					if (m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][0][9]--;
+							wcbOutCards.push_back(0x209);
+						}
+					}
+				}
+				if (cbUserIndex == 0x7)
+				{
+					if (m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][0][9]--;
+							wcbOutCards.push_back(0x209);
+						}
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[2][0][8] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][0][8]--;
+							wcbOutCards.push_back(0x208);
+						}
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[2][1][8] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][1][8]--;
+							wcbOutCards.push_back(0x218);
+						}
+					}
+				}
+				if (cbUserIndex == 0x5)
+				{
+					if (m_cbCardIndex[wUserID].cbCards[2][0][9] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][0][9]--;
+							wcbOutCards.push_back(0x209);
+						}
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[2][0][8] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][0][8]--;
+							wcbOutCards.push_back(0x208);
+						}
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[2][1][8] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][1][8]--;
+							wcbOutCards.push_back(0x218);
+						}
+					}
+					else if (m_cbCardIndex[wUserID].cbCards[2][0][7] >= cbCardsSize)
+					{
+						while (cbCardsSize--)
+						{
+							m_cbCardIndex[wUserID].cbCards[2][0][7]--;
+							wcbOutCards.push_back(0x207);
+						}
+					}
+				}
+			}
 		}
+	}
+
+	if (wcbOutCards.size() == wcbCenterCards.size())
+	{
+		wcbCenterCards = wcbOutCards;
+		for (_uint8 i = 0; i < wcbCenterCards.size(); ++i)
+		{
+			WeaveItemArray[cbWeaveItemCount].cbCardList[i] = wcbCenterCards[i];
+			WeaveItemArray[cbWeaveItemCount].cbCardCount++;
+			log.info("GetNoBankerHuBestWeaves, wcbCenterCards: %d \n", wcbCenterCards[i]);
+		}
+		cbWeaveItemCount++;
+	}
 }
-
 
 _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemArray[MAX_WEAVE], _uint8 cbGameplay)
 {
-	_uint8  cbFan = 1;
+	_uint8 cbFan = 1;
 	log.info("GetTotalFan: cbGameplay: %d \n ", cbGameplay);
 	for (_uint8 i = 0; i < cbWeaveItemCount; ++i)
 	{
 		//排序
 		for (_uint8 j = 0; j < WeaveItemArray[i].cbCardCount - 1; ++j)
 		{
-			for (_uint8 k = i; k< WeaveItemArray[i].cbCardCount - i; ++k)
+			for (_uint8 k = i; k < WeaveItemArray[i].cbCardCount - i; ++k)
 			{
 				if (WeaveItemArray[i].cbCardList[k] > WeaveItemArray[i].cbCardList[k + 1])
 				{
@@ -1089,10 +1134,7 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 		}
 		if (WeaveItemArray[i].cbCardCount == 3)
 		{
-			if ((WeaveItemArray[i].cbCardList[0] == 0x00C && WeaveItemArray[i].cbCardList[1] == 0x00C && WeaveItemArray[i].cbCardList[2] == 0x00C)
-				|| (WeaveItemArray[i].cbCardList[0] == 0x002 && WeaveItemArray[i].cbCardList[1] == 0x002 && WeaveItemArray[i].cbCardList[2] == 0x002)
-				|| (WeaveItemArray[i].cbCardList[0] == 0x008 && WeaveItemArray[i].cbCardList[1] == 0x008 && WeaveItemArray[i].cbCardList[2] == 0x008)
-				|| (WeaveItemArray[i].cbCardList[0] == 0x004 && WeaveItemArray[i].cbCardList[1] == 0x004 && WeaveItemArray[i].cbCardList[2] == 0x004))
+			if ((WeaveItemArray[i].cbCardList[0] == 0x00C && WeaveItemArray[i].cbCardList[1] == 0x00C && WeaveItemArray[i].cbCardList[2] == 0x00C) || (WeaveItemArray[i].cbCardList[0] == 0x002 && WeaveItemArray[i].cbCardList[1] == 0x002 && WeaveItemArray[i].cbCardList[2] == 0x002) || (WeaveItemArray[i].cbCardList[0] == 0x008 && WeaveItemArray[i].cbCardList[1] == 0x008 && WeaveItemArray[i].cbCardList[2] == 0x008) || (WeaveItemArray[i].cbCardList[0] == 0x004 && WeaveItemArray[i].cbCardList[1] == 0x004 && WeaveItemArray[i].cbCardList[2] == 0x004))
 			{
 				cbFan *= 2;
 			}
@@ -1108,11 +1150,11 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 			{
 				cbFan *= 2;
 			}
-			if (WeaveItemArray[i].cbCardList[0] == 0x008 && WeaveItemArray[i].cbCardList[1] == 0x008 && WeaveItemArray[i].cbCardList[2] == 0x008 )
+			if (WeaveItemArray[i].cbCardList[0] == 0x008 && WeaveItemArray[i].cbCardList[1] == 0x008 && WeaveItemArray[i].cbCardList[2] == 0x008)
 			{
 				cbFan *= 2;
 			}
-			if (WeaveItemArray[i].cbCardList[0] == 0x004 && WeaveItemArray[i].cbCardList[1] == 0x004 && WeaveItemArray[i].cbCardList[2] == 0x004 )
+			if (WeaveItemArray[i].cbCardList[0] == 0x004 && WeaveItemArray[i].cbCardList[1] == 0x004 && WeaveItemArray[i].cbCardList[2] == 0x004)
 			{
 				cbFan *= 2;
 			}
@@ -1123,7 +1165,7 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 				if (WeaveItemArray[i].cbCardList[0] == 0x00C)
 				{
 					_uint8 j = 1;
-					for (; j < WeaveItemArray[i].cbCardCount; ++j)											//可能是天九
+					for (; j < WeaveItemArray[i].cbCardCount; ++j) //可能是天九
 					{
 						if (WeaveItemArray[i].cbCardList[j] == 0x109 || WeaveItemArray[i].cbCardList[j] == 0x209)
 						{
@@ -1131,12 +1173,9 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 							break;
 						}
 					}
-					if (bFind == true &&j + 3 < WeaveItemArray[i].cbCardCount)
+					if (bFind == true && j + 3 < WeaveItemArray[i].cbCardCount)
 					{
-						if ((WeaveItemArray[i].cbCardList[j] == 0x209 && WeaveItemArray[i].cbCardList[j + 1] == 0x209
-							&& WeaveItemArray[i].cbCardList[j + 2] == 0x209 && WeaveItemArray[i].cbCardList[j + 3] == 0x209)
-							|| (WeaveItemArray[i].cbCardList[j] == 0x109 && WeaveItemArray[i].cbCardList[j + 1] == 0x109
-								&& WeaveItemArray[i].cbCardList[j + 2] == 0x109 && WeaveItemArray[i].cbCardList[j + 3] == 0x109))
+						if ((WeaveItemArray[i].cbCardList[j] == 0x209 && WeaveItemArray[i].cbCardList[j + 1] == 0x209 && WeaveItemArray[i].cbCardList[j + 2] == 0x209 && WeaveItemArray[i].cbCardList[j + 3] == 0x209) || (WeaveItemArray[i].cbCardList[j] == 0x109 && WeaveItemArray[i].cbCardList[j + 1] == 0x109 && WeaveItemArray[i].cbCardList[j + 2] == 0x109 && WeaveItemArray[i].cbCardList[j + 3] == 0x109))
 						{
 							cbFan *= 2;
 						}
@@ -1145,7 +1184,7 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 				else if (WeaveItemArray[i].cbCardList[0] == 0x002)
 				{
 					_uint8 j = 1;
-					for (; j < WeaveItemArray[i].cbCardCount; ++j)											//可能是地八
+					for (; j < WeaveItemArray[i].cbCardCount; ++j) //可能是地八
 					{
 						if (WeaveItemArray[i].cbCardList[j] == 0x208 || WeaveItemArray[i].cbCardList[j] == 0x218)
 						{
@@ -1155,10 +1194,7 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 					}
 					if (bFind == true && j + 3 < WeaveItemArray[i].cbCardCount)
 					{
-						if ((WeaveItemArray[i].cbCardList[j] == 0x208 && WeaveItemArray[i].cbCardList[j + 1] == 0x208
-							&& WeaveItemArray[i].cbCardList[j + 2] == 0x208 && WeaveItemArray[i].cbCardList[j + 3] == 0x208)
-							|| (WeaveItemArray[i].cbCardList[j] == 0x218 && WeaveItemArray[i].cbCardList[j + 1] == 0x218
-							&& WeaveItemArray[i].cbCardList[j + 2] == 0x218 && WeaveItemArray[i].cbCardList[j + 3] == 0x218))
+						if ((WeaveItemArray[i].cbCardList[j] == 0x208 && WeaveItemArray[i].cbCardList[j + 1] == 0x208 && WeaveItemArray[i].cbCardList[j + 2] == 0x208 && WeaveItemArray[i].cbCardList[j + 3] == 0x208) || (WeaveItemArray[i].cbCardList[j] == 0x218 && WeaveItemArray[i].cbCardList[j + 1] == 0x218 && WeaveItemArray[i].cbCardList[j + 2] == 0x218 && WeaveItemArray[i].cbCardList[j + 3] == 0x218))
 						{
 							cbFan *= 2;
 						}
@@ -1167,7 +1203,7 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 				else if (WeaveItemArray[i].cbCardList[0] == 0x008)
 				{
 					_uint8 j = 1;
-					for (; j < WeaveItemArray[i].cbCardCount; ++j)											//可能是人七
+					for (; j < WeaveItemArray[i].cbCardCount; ++j) //可能是人七
 					{
 						if (WeaveItemArray[i].cbCardList[j] == 0x107 || WeaveItemArray[i].cbCardList[j] == 0x207)
 						{
@@ -1177,19 +1213,16 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 					}
 					if (bFind == true && j + 3 < WeaveItemArray[i].cbCardCount)
 					{
-						if ((WeaveItemArray[i].cbCardList[j] == 0x107 && WeaveItemArray[i].cbCardList[j + 1] == 0x107
-							&& WeaveItemArray[i].cbCardList[j + 2] == 0x107 && WeaveItemArray[i].cbCardList[j + 3] == 0x107)
-							|| (WeaveItemArray[i].cbCardList[j] == 0x207 && WeaveItemArray[i].cbCardList[j + 1] == 0x207
-								&& WeaveItemArray[i].cbCardList[j + 2] == 0x207 && WeaveItemArray[i].cbCardList[j + 3] == 0x207))
+						if ((WeaveItemArray[i].cbCardList[j] == 0x107 && WeaveItemArray[i].cbCardList[j + 1] == 0x107 && WeaveItemArray[i].cbCardList[j + 2] == 0x107 && WeaveItemArray[i].cbCardList[j + 3] == 0x107) || (WeaveItemArray[i].cbCardList[j] == 0x207 && WeaveItemArray[i].cbCardList[j + 1] == 0x207 && WeaveItemArray[i].cbCardList[j + 2] == 0x207 && WeaveItemArray[i].cbCardList[j + 3] == 0x207))
 						{
 							cbFan *= 2;
 						}
 					}
 				}
-				else if (WeaveItemArray[i].cbCardList[0] == 0x004)										//可能和五
+				else if (WeaveItemArray[i].cbCardList[0] == 0x004) //可能和五
 				{
 					_uint8 j = 1;
-					for (; j < WeaveItemArray[i].cbCardCount; ++j)											
+					for (; j < WeaveItemArray[i].cbCardCount; ++j)
 					{
 						if (WeaveItemArray[i].cbCardList[j] == 0x105 || WeaveItemArray[i].cbCardList[j] == 0x205)
 						{
@@ -1199,10 +1232,7 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 					}
 					if (bFind == true && j + 3 < WeaveItemArray[i].cbCardCount)
 					{
-						if ((WeaveItemArray[i].cbCardList[j] == 0x105 && WeaveItemArray[i].cbCardList[j + 1] == 0x105
-							&& WeaveItemArray[i].cbCardList[j + 2] == 0x105 && WeaveItemArray[i].cbCardList[j + 3] == 0x105)
-							|| (WeaveItemArray[i].cbCardList[j] == 0x205 && WeaveItemArray[i].cbCardList[j + 1] == 0x205
-								&& WeaveItemArray[i].cbCardList[j + 2] == 0x205 && WeaveItemArray[i].cbCardList[j + 3] == 0x205))
+						if ((WeaveItemArray[i].cbCardList[j] == 0x105 && WeaveItemArray[i].cbCardList[j + 1] == 0x105 && WeaveItemArray[i].cbCardList[j + 2] == 0x105 && WeaveItemArray[i].cbCardList[j + 3] == 0x105) || (WeaveItemArray[i].cbCardList[j] == 0x205 && WeaveItemArray[i].cbCardList[j + 1] == 0x205 && WeaveItemArray[i].cbCardList[j + 2] == 0x205 && WeaveItemArray[i].cbCardList[j + 3] == 0x205))
 						{
 							cbFan *= 2;
 						}
@@ -1212,23 +1242,20 @@ _uint32 CGameLogic::GetTotalFan(_uint8 cbWeaveItemCount, tagWeaveItem WeaveItemA
 				{
 					if (WeaveItemArray[i].cbCardCount >= 4)
 					{
-						if (WeaveItemArray[i].cbCardList[0] == WeaveItemArray[i].cbCardList[1] 
-							&& WeaveItemArray[i].cbCardList[0] == WeaveItemArray[i].cbCardList[2]
-							&& WeaveItemArray[i].cbCardList[0] == WeaveItemArray[i].cbCardList[3])
+						if (WeaveItemArray[i].cbCardList[0] == WeaveItemArray[i].cbCardList[1] && WeaveItemArray[i].cbCardList[0] == WeaveItemArray[i].cbCardList[2] && WeaveItemArray[i].cbCardList[0] == WeaveItemArray[i].cbCardList[3])
 						{
-							cbFan *= 2;                                    //其他的牌
+							cbFan *= 2; //其他的牌
 						}
-					
-					}				
+					}
 				}
 			}
 		}
 	}
 
-	return  cbFan;
+	return cbFan;
 }
 
-bool CGameLogic::IsValidCard(stCardInfo& cbCardData)
+bool CGameLogic::IsValidCard(stCardInfo &cbCardData)
 {
 	_uint8 cbType_1 = (cbCardData.cbCard & 0xF00) >> 8;
 	_uint8 cbType_2 = (cbCardData.cbCard & 0x0F0) >> 4;
@@ -1241,10 +1268,9 @@ bool CGameLogic::IsValidCard(stCardInfo& cbCardData)
 	return false;
 }
 
-
-bool CGameLogic::FisrstCardIsValid(vector<_uint16>& wCurUserOutCards)
+bool CGameLogic::FisrstCardIsValid(vector<_uint16> &wCurUserOutCards)
 {
-	if (wCurUserOutCards.size() > 12 )
+	if (wCurUserOutCards.size() > 12)
 	{
 		return false;
 	}
@@ -1270,29 +1296,24 @@ bool CGameLogic::FisrstCardIsValid(vector<_uint16>& wCurUserOutCards)
 		_uint16 wFirstKey = stCardsMap.begin()->first;
 		_uint16 wSecondKey = (++stCardsMap.begin())->first;
 
-		if (wFirstKey == 0x00C || wFirstKey == 0x002
-			|| wFirstKey == 0x008 || wFirstKey == 0x004)
+		if (wFirstKey == 0x00C || wFirstKey == 0x002 || wFirstKey == 0x008 || wFirstKey == 0x004)
 		{
 
-			if (wFirstKey == 0x00C && (wSecondKey == 0x109
-				|| wSecondKey == 0x209))
+			if (wFirstKey == 0x00C && (wSecondKey == 0x109 || wSecondKey == 0x209))
 			{
 				return true;
 			}
-			if (wFirstKey == 0x002 && (wSecondKey == 0x208
-				|| wSecondKey == 0x218))
-			{
-				return true;
-			}
-
-			if (wFirstKey == 0x008 && (wSecondKey == 0x107
-				|| wSecondKey == 0x207))
+			if (wFirstKey == 0x002 && (wSecondKey == 0x208 || wSecondKey == 0x218))
 			{
 				return true;
 			}
 
-			if (wFirstKey == 0x004 && (wSecondKey == 0x105
-				|| wSecondKey == 0x205))
+			if (wFirstKey == 0x008 && (wSecondKey == 0x107 || wSecondKey == 0x207))
+			{
+				return true;
+			}
+
+			if (wFirstKey == 0x004 && (wSecondKey == 0x105 || wSecondKey == 0x205))
 			{
 				return true;
 			}
@@ -1302,8 +1323,7 @@ bool CGameLogic::FisrstCardIsValid(vector<_uint16>& wCurUserOutCards)
 	return false;
 }
 
-
-bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint16>& wCurUserOutCards)
+bool CGameLogic::IsValidCardWeaves(vector<_uint16> &wWinCarsWeaves, vector<_uint16> &wCurUserOutCards)
 {
 	//如果是同一张牌点数是否相同
 	if (!wWinCarsWeaves.size() && !wCurUserOutCards.size())
@@ -1313,7 +1333,7 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 
 	std::map<_uint16, _uint32> stCardsMap;
 	std::map<_uint16, _uint32> stWinMap;
-	
+
 	std::sort(wCurUserOutCards.begin(), wCurUserOutCards.end());
 	std::sort(wWinCarsWeaves.begin(), wWinCarsWeaves.end());
 	_uint8 cbWinType_1 = (wWinCarsWeaves[0] >> 8) & 0xF;
@@ -1324,50 +1344,43 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 	_uint8 cbWinIndex = wWinCarsWeaves[0] & 0xF;
 	_uint8 cbUserIndex = wCurUserOutCards[0] & 0xF;
 
-
-	if (wCurUserOutCards.size() >= 1 )
+	if (wCurUserOutCards.size() >= 1)
 	{
 		for (_uint8 i = 0; i < wCurUserOutCards.size(); ++i)
 		{
 			stCardsMap[wCurUserOutCards[i]]++;
 		}
-		
+
 		if (stCardsMap.size() >= 2)
 		{
 			_uint16 wFirstCardKey = stCardsMap.begin()->first;
 			_uint16 wSeconCardKey = (++stCardsMap.begin())->first;
-			
-			if (wFirstCardKey != 0x00C && wFirstCardKey != 0x002
-				&& wFirstCardKey != 0x008 && wFirstCardKey != 0x004)
+
+			if (wFirstCardKey != 0x00C && wFirstCardKey != 0x002 && wFirstCardKey != 0x008 && wFirstCardKey != 0x004)
 			{
 				return false;
 			}
 
-			 if (wFirstCardKey == 0x00C  || wFirstCardKey == 0x002
-					|| wFirstCardKey == 0x008 || wFirstCardKey == 0x004)
-			 {
+			if (wFirstCardKey == 0x00C || wFirstCardKey == 0x002 || wFirstCardKey == 0x008 || wFirstCardKey == 0x004)
+			{
 
-				 if (wFirstCardKey == 0x00C && wSeconCardKey != 0x109
-						&& wSeconCardKey != 0x209)
-				 {
-					 return false;
-				 }
-				 if (wFirstCardKey == 0x002 && wSeconCardKey != 0x208
-						&& wSeconCardKey != 0x218)
-				 {
-					 return false;
-				 }
+				if (wFirstCardKey == 0x00C && wSeconCardKey != 0x109 && wSeconCardKey != 0x209)
+				{
+					return false;
+				}
+				if (wFirstCardKey == 0x002 && wSeconCardKey != 0x208 && wSeconCardKey != 0x218)
+				{
+					return false;
+				}
 
-				 if (wFirstCardKey == 0x008 && wSeconCardKey != 0x107
-					 && wSeconCardKey != 0x207)
-				 {
-					 return false;
-				 }
-				 if (wFirstCardKey == 0x004 && wSeconCardKey != 0x105
-					 && wSeconCardKey == 0x205)
-				 {
-					 return false;
-				 }
+				if (wFirstCardKey == 0x008 && wSeconCardKey != 0x107 && wSeconCardKey != 0x207)
+				{
+					return false;
+				}
+				if (wFirstCardKey == 0x004 && wSeconCardKey != 0x105 && wSeconCardKey == 0x205)
+				{
+					return false;
+				}
 			}
 			else
 			{
@@ -1375,7 +1388,7 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 			}
 		}
 	}
-	
+
 	if (stCardsMap.size() == 1 && cbWinType_1 == cbUserType_1)
 	{
 		if ((wCurUserOutCards.size() != wWinCarsWeaves.size()))
@@ -1387,22 +1400,20 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 		{
 			if (cbWinType_2 == 0)
 			{
-				if (wWinCarsWeaves[0] == 0x00C)   //天牌最大
+				if (wWinCarsWeaves[0] == 0x00C) //天牌最大
 				{
 					return false;
 				}
-				if (wWinCarsWeaves[0] == 0x002
-						&& wCurUserOutCards[0] != 0x00C)  //不能同时为地牌
+				if (wWinCarsWeaves[0] == 0x002 && wCurUserOutCards[0] != 0x00C) //不能同时为地牌
 				{
 					return false;
 				}
 
 				if (wCurUserOutCards[0] == 0x002 && wWinCarsWeaves[0] == 0x002)
-				{	
+				{
 					return false;
 				}
-				if (wCurUserOutCards[0] != 0x002
-						&& cbUserIndex <= cbWinIndex)  //其他的牌按照牌序的大小比较
+				if (wCurUserOutCards[0] != 0x002 && cbUserIndex <= cbWinIndex) //其他的牌按照牌序的大小比较
 				{
 					return false;
 				}
@@ -1429,19 +1440,17 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 				if (cbWinIndex >= cbUserIndex)
 				{
 					return false;
-				}				
+				}
 			}
-			else if ((wWinCarsWeaves[0] == 0x208 && wCurUserOutCards[0] == 218)
-						|| (wWinCarsWeaves[0] == 0x218 && wCurUserOutCards[0] == 208))
+			else if ((wWinCarsWeaves[0] == 0x208 && wCurUserOutCards[0] == 218) || (wWinCarsWeaves[0] == 0x218 && wCurUserOutCards[0] == 208))
 			{
-				return false;	
+				return false;
 			}
-		}	
+		}
 
 		return true;
 	}
 
-	
 	for (_uint8 i = 0; i < wWinCarsWeaves.size(); ++i)
 	{
 		stWinMap[wWinCarsWeaves[i]]++;
@@ -1449,9 +1458,9 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 
 	if (stWinMap.size() >= 2)
 	{
-		_uint8 u8TotalWins  = stWinMap.begin()->second + (++stWinMap.begin())->second;
+		_uint8 u8TotalWins = stWinMap.begin()->second + (++stWinMap.begin())->second;
 		_uint8 u8TotalCards = stCardsMap.begin()->second + (++stCardsMap.begin())->second;
-		
+
 		log.info("isValidCardWeaves: u8TotalWins: %d, u8TotalCards: %d \n", u8TotalWins, u8TotalCards);
 		if (u8TotalCards != u8TotalWins)
 		{
@@ -1474,11 +1483,9 @@ bool CGameLogic::IsValidCardWeaves(vector<_uint16>& wWinCarsWeaves, vector<_uint
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
 
-
 	return false;
 }
-

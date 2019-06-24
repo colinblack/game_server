@@ -37,7 +37,7 @@ Game::~Game()
 
 int Game::start()
 {
-	//connect_datasvr();
+	connect_datasvr();
 	//connect_videosvr();
 	//request_data_from_redis();
 	init_accept();
@@ -97,6 +97,7 @@ int Game::connect_datasvr()
 	log.info("datasvr management ip[%s] port[%d].\n",
 				zjh.conf["data-svr"]["host"].asString().c_str(),
 				zjh.conf["data-svr"]["port"].asInt() );
+#if 0				
 	struct sockaddr_in addr;
 	int fd = socket(PF_INET, SOCK_STREAM, 0);
 	if (fd < 0)
@@ -122,6 +123,8 @@ int Game::connect_datasvr()
 		exit(1);
 	}
 	fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
+#endif	
+	int fd = 0;
 	link_data_client = new(std::nothrow) Client( fd, false, 1);
 	if( NULL != link_data_client )
 	{
@@ -213,12 +216,12 @@ void Game::accept_cb(struct ev_loop *loop, struct ev_io *w, int revents)
 		return;
 	}
 	Game *game = (Game*) (w->data);
-	if( NULL == game->link_data_client )
+/* 	if( NULL == game->link_data_client )
 	{
 		close(fd);
 		log.error("accept client error for the link of datasvr disconnect.\n");
 		return;
-	}
+	} */
 
 	fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NONBLOCK);
 

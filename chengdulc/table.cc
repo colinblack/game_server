@@ -496,6 +496,9 @@ int Table::handler_user_operate(int cmd, Player *player)
 	case CLIENT_PHZ_GAINS_REQ:
 		OnUserGainsReq(player);
 		break;
+	case 1234:
+		log.info("demo cmd[%d], uid[%d] tid[%s]. \n", cmd, player->uid, player->tid.c_str());
+		break;	
 	default:
 		log.error("user operate error invalid cmd[%d] uid[%d] tid[%s] .\n", cmd, player->uid, player->tid.c_str());
 		return -1;

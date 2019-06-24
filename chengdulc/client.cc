@@ -40,13 +40,13 @@ Client::Client(int fd_in, bool flag, int cli_type) :
 	}
 	ev_io_start(zjh.loop, &_ev_read);
 	ev_io_init(&_ev_write, Client::write_cb, fd, EV_WRITE);
-
+/* 
 	_ev_nodata_timer.data = this;
 	ev_timer_init(&_ev_nodata_timer, Client::nodata_timer_cb, _ev_nodata_tstamp, _ev_nodata_tstamp);
 	if( flag )
 	{
 		ev_timer_start(zjh.loop, &_ev_nodata_timer);
-	}
+	} */
 	log.debug("client[%d] open\n", fd);
 }
 
@@ -102,8 +102,9 @@ void Client::read_cb(struct ev_loop *loop, struct ev_io *w, int revents)
 	int ret;
 	static char recv_buf[DEF_BUF_LEN];
 	Client *self = (Client*) w->data;
-	self->update_timer();
+//	self->update_timer();
 
+#if 0
 	if (self->_state == PARSE_HEADER) {
 		ret = read(self->fd, &self->_header[self->_cur_head_len],
 					sizeof(struct Header) - self->_cur_head_len);
@@ -216,14 +217,17 @@ void Client::read_cb(struct ev_loop *loop, struct ev_io *w, int revents)
 			return;
 		}
 	}
+#endif
+
 }
 
 void Client::read_cb2(struct ev_loop *loop, struct ev_io *w, int revents)
 {
+	log.debug("read_cb2 \n");
 	int ret;
 	static char recv_buf[DEF_BUF_LEN];
 	Client *self = (Client*) w->data;
-	self->update_timer();
+	//self->update_timer();
 	if (self->_state == PARSE_HEADER) {
 		ret = read(self->fd, &self->p_header[self->_cur_head_len],
 					sizeof(struct Pheader) - self->_cur_head_len);
