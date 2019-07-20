@@ -1,0 +1,25 @@
+package CfgCopy;
+import "CfgCommon.proto";
+
+message Copy {
+	required uint32 quickDay = 1;
+	required uint32 costId = 2;
+	required uint32 needLevel = 3;
+	required uint32 daily = 4;
+	repeated CfgCommon.Reward firstReward =5;
+	required uint32 num = 6;	
+	required uint32 costNum = 7;
+	required uint32 time = 8;	
+	required uint32 reincarnLevel = 9;
+	repeated CfgCommon.Reward reward =10;
+	required uint32 type = 11;
+	required uint32 copyId = 12;
+	required uint32 mapId = 13;
+	optional uint32 duringTime = 14;
+	optional uint32 preapareTime = 15;
+
+}
+
+message Copys {
+	repeated Copy copys = 1;
+}

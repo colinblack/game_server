@@ -1,0 +1,14 @@
+package CfgBoss;
+import "CfgCommon.proto";
+
+
+message Boss {
+	required uint32 reincarnLevel= 1;
+	required uint32 bossid = 2;
+	required uint32 bossType = 3;
+	repeated CfgCommon.Reward reward =4;
+}
+
+message Bosses {
+	repeated Boss boss = 1;
+}

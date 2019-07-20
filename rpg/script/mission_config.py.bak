@@ -1,0 +1,439 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import json
+from lib.common import _parse_reward
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+
+def contition(arr, missionId):
+    values = list()
+    for i in range(7):
+        if i < len(arr):
+            values.append(int(arr[i]))
+        else:
+            values.append(0)
+    # v0 = values[0]
+    v1 = values[1]
+    v2 = values[2]
+    v3 = values[3]
+    v4 = values[4]
+    v5 = values[5]
+    v6 = values[6]
+    obj = {}
+    if v1 == 1:
+        obj = {"levelMin": v2, "levelMax": v3, "num": v2}
+    elif v1 == 12:
+        obj = {"star": v2, "num": v2}
+    elif v1 == 13:
+        obj = {"reincarnLv": v2, "num": v2}
+    elif v1 == 14:
+        obj = {"hang": v2, "num": v2}
+    elif v1 == 15:
+        obj = {"gem": v2, "num": v2}
+    elif v1 == 16:
+        obj = {"totalStren": v2, "num": v2}
+    elif v1 == 17:
+        obj = {"subtype": v2, "num": 1}
+    elif v1 == 18:
+        obj = {"equipGemNum": v2, "num": v2}
+    elif v1 == 19:
+        obj = {"shenQiSuiPianId": v2, "num": 1}
+    elif v1 == 20:
+        obj = {"shenQiId": v2, "num": v2}
+    elif v1 == 21:
+        obj = {"equipNum": v2, "num": v2}
+    elif v1 == 22:
+        obj = {"zhanLingId": v2, "num": 1}
+    elif v1 == 23:
+        obj = {"totalSkill": v2, "num": v2}
+    elif v1 == 24:
+        obj = {"advanceType": v2, "num": v3}
+    elif v1 == 25:
+        obj = {"treasureType": v2, "num": v3}
+    elif v1 == 26:
+        obj = {"zhanLingId": v2, "num": v2}
+    elif v1 == 27:
+        obj = {"starLv": v2, "num": v2}
+    elif v1 == 28:
+        obj = {"copyType": v2, "num": v3}
+    elif v1 == 29:
+        obj = {"vipLv": v2, "day": v3, "num": 1}
+    elif v1 == 30:
+        obj = {"copyType": v2, "num": v2}
+    elif v1 == 31:
+        obj = {"color": v2, "num": v3}
+    elif v1 == 32:
+        obj = {"copyId": v2, "num": v3}
+    elif v1 == 33:
+        obj = {"totalLayer": v2, "num": v2}
+    elif v1 == 34:
+        obj = {"kill": v2, "num": v2}
+    elif v1 == 35:
+        obj = {"petId": v2, "num": 1}
+    elif v1 == 36:
+        obj = {"color": v2, "star": v3, "reincarn": v4, "level": v5, "num": v6}
+    elif v1 == 37:
+        obj = {"color": v2, "num": v3}
+    elif v1 == 38:
+        obj = {"win": v2, "num": v2}
+    elif v1 == 39:
+        obj = {"guwu": v2, "num": v2}
+    elif v1 == 40:
+        obj = {"kill": v2, "num": v2}
+    elif v1 == 41:
+        obj = {"isJion": 1, "num": 1}
+    elif v1 == 42:
+        obj = {"join": v2, "num": v2}
+    elif v1 == 43:
+        obj = {"join": v2, "num": v2}
+    elif v1 == 44:
+        obj = {"correct": v2, "num": v2}
+    elif v1 == 45:
+        obj = {"rechargeDay": v2, "num": v2}
+    elif v1 == 46:
+        obj = {"rechargeToday": v2, "num": v2}
+    elif v1 == 47:
+        obj = {"hunQiId": v2, "num": 1}
+    elif v1 == 48:
+        obj = {"hunQi": v2, "num": v2}
+    elif v1 == 49:
+        obj = {"color": v2, "num": v3}
+    elif v1 == 50:
+        obj = {"shenYin": v2, "num": v2}
+    elif v1 == 51:
+        obj = {"shenYinSuit": v2, "num": 1}
+    elif v1 == 52:
+        obj = {"subtype": v2, "num": 1}
+    elif v1 == 53:
+        obj = {"treasureType": v2, "num": v3}
+    elif v1 == 54:
+        obj = {"totalCount": v2, "num": v2}
+    elif v1 == 55:
+        obj = {"npcId": v2, "num": 1}
+    elif v1 == 56:
+        obj = {"addNum": v2, "num": v2}
+    elif v1 == 57:
+        # var goingChapter = AchievementConfig_1.AchievementConfig.getChapterGoing()
+        # var achiCount = v2 - AchievementConfig_1.AchievementConfig.getPreAchiCount(goingChapter[1])
+        obj = {"achiCount": v2, "num": v2}
+    elif v1 == 58:
+        obj = {"roleNum": v2, "num": v2}
+    elif v1 == 59:
+        obj = {"shopId": v2, "num": v3}
+    elif v1 == 60:
+        obj = {"roleNum": v2, "advanceType": v3, "level": v4, "num": v2}
+    elif v1 == 61:
+        obj = {"layer": v2, "num": v2}
+    elif v1 == 62:
+        obj = {"openDay": v2, "num": v2}
+    elif v1 == 63:
+        obj = {"xianhunNum": v2, "num": v2}
+    elif v1 == 64:
+        obj = {"xianhunLayer": v2, "num": v2}
+    elif v1 == 65:
+        # var realFloor = (v2 - 1) * CopyConfig_1.CopyConfig.maxAwakeFloor + v3
+        realFloor = 0
+        obj = {"xianhunLayer": v2, "xianhunFloor": v3, "num": realFloor}
+    elif v1 == 66:
+        obj = {"totalPartner": v2, "num": v2}
+    elif v1 == 67:
+        obj = {"totalSuit": v2, "num": v2}
+    elif v1 == 68:
+        obj = {"totalMengPet": v2, "num": v2}
+    elif v1 == 69:
+        obj = {"totalZhuling": v2, "num": v2}
+    elif v1 == 70:
+        obj = {"totalMengPetLayer": v2, "num": v2}
+    elif v1 == 71:
+        obj = {"totalZhulingLayer": v2, "num": v2}
+    elif v1 == 72:
+        obj = {"equipNum": v2, "openNum": v3, "num": v2}
+    elif v1 == 73:
+        obj = {"activeNum": v2, "num": v2}
+    elif v1 == 74:
+        obj = {"worldBossNum": v2, "num": v2}
+    elif v1 == 75:
+        obj = {"BossGod": v2, "num": v2}
+    elif v1 == 76:
+        obj = {"color": v2, "juhunNum": v3, "num": v3}
+    elif v1 == 77:
+        obj = {"anqiSubtype": v2, "num": 1}
+    elif v1 == 78:
+        obj = {"shenShouNum": v2, "num": v2}
+    elif v1 == 79:
+        obj = {"doubleNum": v2, "num": v2}
+    elif v1 == 80:
+        obj = {"partnerId": v2, "num": v3}
+    elif v1 == 81:
+        obj = {"missionId": v2, "num": 1}
+    elif v1 == 82:
+        obj = {"suitLv": v3, "roleNum": v2, "num": v2}
+    elif v1 == 83:
+        obj = {"zhulingAd": v3, "roleNum": v2, "num": v2}
+    elif v1 == 84:
+        obj = {"petLv": v3, "num": v2}
+    elif v1 == 85:
+        obj = {"xianhunLv": v2, "num": v2}
+    elif v1 == 86:
+        obj = {"trumpActNum": v2, "num": v2}
+    elif v1 == 88:
+        obj = {"mengPetLv": v3, "num": v2}
+    elif v1 == 89:
+        obj = {"zhulingOpenNum": v2, "num": v2}
+    elif v1 == 90:
+        obj = {"suitOpenNum": v2, "num": v2}
+    elif v1 == 91:
+        obj = {"refineOpenNum": v2, "num": v2}
+    elif v1 == 92:
+        obj = {"copyLv": v2, "num": v2}
+    elif v1 == 93:
+        obj = {"tutengId": v2, "num": 1}
+    elif v1 == 94:
+        obj = {"hunqiType": v2, "huanqiSubType": v3, "num": 1}
+    elif v1 == 95:
+        obj = {"xiuxianLv": v2, "num": v2}
+    elif v1 == 96:
+        obj = {"lianyaoId": v2, "num": 1}
+    elif v1 == 97:
+        obj = {"shenjiangId": v2, "num": 1}
+    elif v1 == 98:
+        obj = {"fulingNum": v2, "num": v2}
+    elif v1 == 99:
+        obj = {"lunpoOutNum": v2, "num": v2}
+    elif v1 == 100:
+        obj = {"color": v3, "num": v2}
+    elif v1 == 101:
+        obj = {"type": v2, "color": v4, "num": v3}
+    elif v1 == 102:
+        obj = {"level": v2, "num": v3}
+    elif v1 == 103:
+        obj = {"level": v2, "color": v3, "num": v4}
+    elif v1 == 104:
+        obj = {"id": v2, "level": v3, "num": v3}
+    elif v1 == 105:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 106:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 107:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 108:
+        obj = {"num": v2}
+    elif v1 == 109:
+        obj = {"num": v2}
+    elif v1 == 110:
+        obj = {"num": v2}
+    elif v1 == 111:
+        obj = {"num": v2}
+    elif v1 == 112:
+        obj = {"num": v3, "id": v2}
+    elif v1 == 113:
+        obj = {"num": v2}
+    elif v1 == 114:
+        obj = {"num": v2}
+    elif v1 == 115:
+        obj = {"num": v2}
+    elif v1 == 116:
+        obj = {"id": v2, "num": v3}
+    elif v1 == 117:
+        obj = {"num": v2}
+    elif v1 == 118:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 119:
+        obj = {"num": v2}
+    elif v1 == 120:
+        obj = {"num": v2}
+    elif v1 == 121:
+        obj = {"num": v2}
+    elif v1 == 122:
+        obj = {"type": v2, "num": v3}
+    elif v1 == 123:
+        obj = {"type": v2, "num": 1}
+    elif v1 == 124:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 125:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 126:
+        obj = {"id": v2, "num": 1}
+    elif v1 == 127:
+        obj = {"suitId": v2, "suitNum": v3, "num": 1}
+    elif v1 == 128:
+        obj = {"suitId": v2, "num": 1}
+    elif v1 == 129:
+        obj = {"subtype": v2, "num": v3}
+    elif v1 == 130:
+        obj = {"pinzhi": v2, "num": v3}
+    elif v1 == 131:
+        obj = {"color": v2, "star": v3, "num": v4}
+    elif v1 == 132:
+        obj = {"color": v2, "star": v3, "num": v4}
+    elif v1 == 133:
+        obj = {"id": v2, "num": v3}
+    elif v1 == 134:
+        obj = {"id": v2, "num": v3}
+    elif v1 == 135:
+        obj = {"id": v2, "num": v3}
+    elif v1 == 136:
+        obj = {"id": v2, "num": v3}
+    elif v1 == 137:
+        obj = {"typeEx": v2, "level": v3, "num": 1}
+    elif v1 == 1001:
+        obj = {"copyId": v2, "num": v3}
+    elif v1 == 1006:
+        obj = {"monster": v2, "num": v2}
+    elif v1 == 1007:
+        obj = {"equipNum": v2, "num": v2}
+    elif v1 == 1008:
+        obj = {"equipNum": v2, "num": v2}
+    elif v1 == 1009:
+        obj = {"copyId": v2, "num": v3}
+    elif v1 == 1010:
+        obj = {"treasureType": v2, "num": v3}
+    elif v1 == 1011:
+        obj = {"advanceType": v2, "num": v3}
+    elif v1 == 1012:
+        obj = {"upSkillNum": v2, "num": v2}
+    elif v1 == 1013:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1014:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1015:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1016:
+        obj = {"treasureType": v2, "num": v3}
+    elif v1 == 1017:
+        obj = {"killed": v2, "num": v2}
+    elif v1 == 1018:
+        obj = {"rune": v2, "num": v2}
+    elif v1 == 1019:
+        obj = {"donateNum": v2, "num": v2}
+    elif v1 == 1020:
+        obj = {"ballNum": v2, "num": v2}
+    elif v1 == 1021:
+        obj = {"ballNum": v2, "num": v2}
+    elif v1 == 1022:
+        obj = {"ballNum": v3, "num": v3}
+    elif v1 == 1023:
+        obj = {"ballNum": v3, "num": v3}
+    elif v1 == 1024:
+        obj = {"belongNum": v2, "num": v2}
+    elif v1 == 1025:
+        obj = {"chatNum": v2, "num": v2}
+    elif v1 == 1027:
+        obj = {"num": v2}
+    elif v1 == 1029:
+        obj = {"num": v2}
+    elif v1 == 1033:
+        obj = {"color": v2, "num": v3}
+    elif v1 == 1034:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1035:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1036:
+        obj = {"winNum": v2, "num": v2}
+    elif v1 == 1037:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1038:
+        obj = {"copyId": v2, "num": v3}
+    elif v1 == 1039:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1040:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1041:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1042:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1043:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1044:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1045:
+        obj = {"copyId": v2, "num": v3}
+    elif v1 == 1046:
+        obj = {"killNum": v2, "num": v2}
+    elif v1 == 1047:
+        obj = {"shopCode": v2, "num": v3}
+    elif v1 == 1048:
+        obj = {"luckyNum": v2, "num": v2}
+    elif v1 == 1049:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1051:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1052:
+        obj = {"fuwenNum": v2, "num": v2}
+    elif v1 == 1053:
+        obj = {"bossId": v2, "num": v3}
+    elif v1 == 1054:
+        obj = {"xiuNum": v2, "num": v2}
+    elif v1 == 1055:
+        obj = {"bossId": v2, "num": v2}
+    elif v1 == 1056:
+        obj = {"joinNum": v2, "num": v2}
+    elif v1 == 1057:
+        obj = {"recharge": v3, "num": v2}
+    elif v1 == 1058:
+        obj = {"num": v2}
+    elif v1 == 1059:
+        obj = {"num": v2}
+    elif v1 == 1060:
+        obj = {"num": v2}
+    elif v1 == 1061:
+        obj = {"num": v2}
+    elif v1 == 1062:
+        obj = {"num": v2}
+    elif v1 == 1063:
+        obj = {"num": v2}
+    elif v1 == 1065:
+        obj = {"num": v2}
+    elif v1 == 1066:
+        obj = {"num": v2}
+    elif v1 == 2000:
+        obj = {"npcId": v2, "num": 1}
+    elif v1 == 2001:
+        obj = {"monsterId": v2, "mapId": v3, "num": v4}
+    obj["typex"] = v1
+    return obj
+
+
+def parse_contition(arr):
+    obj = {}
+    for i in range(len(arr)):
+        k = 'v{0}'.format(i)
+        obj[k] = int(arr[i])
+    return obj
+
+
+def parse_mission():
+    fd = open("src/preloadData.json", "r")
+    data = json.load(fd)
+    missions = {}
+    missions["missions"] = list()
+    types = {}
+    for i in data["t_mission"]:
+        arr = i[3].split(r'&')
+        # if i[19] != 1:
+        #    continue
+        item = {}
+        item["id"] = i[6]
+        item["condition"] = list()
+        item["reward"] = _parse_reward(i[15])
+        for j in arr:
+            cc = parse_contition(j.split(r'#'))
+            tt = cc['v1']
+            if tt not in types:
+                types[tt] = {}
+            types[tt][i[9]] = True
+            item["condition"].append(cc)
+        missions["missions"].append(item)
+    fd.close()
+    fd = open("tar/missions.json", "w")
+    json.dump(missions, fd, ensure_ascii=False, indent=2)
+    fd.close()
+    # print(json.dumps(types, ensure_ascii=False))
+    for k in types.keys():
+        print(k)
+
+
+if __name__ == "__main__":
+    parse_mission()

@@ -1,0 +1,31 @@
+package CfgAdvance;
+import "CfgCommon.proto";
+
+message Advance {
+	required uint32 type = 1;
+	required uint32 group = 2;	//阶数
+	required uint32 star = 3;
+	required uint32 cost_item = 4;
+	required uint32 cost_num = 5;
+	required uint32 bless = 6;
+	required uint32 max_bless = 7;
+	required uint32 mode = 8;
+	repeated CfgCommon.Attribute attr = 9;
+}
+
+message Advances {
+	repeated Advance advances = 1;
+}
+
+message Dan {
+	required uint32 item = 1;			//消耗道具
+	required uint32 id = 2;				//丹药索引
+	required uint32 type = 3;			//进阶类型
+	required uint32 level = 4;			//进阶阶数
+	required uint32 total = 5;			//丹药上限
+	repeated CfgCommon.Attribute attr = 6;
+}
+
+message Dans {
+	repeated Dan dans = 1;
+}

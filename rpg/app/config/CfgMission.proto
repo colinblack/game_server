@@ -1,0 +1,23 @@
+package CfgMission;
+import "CfgCommon.proto";
+
+message Condition {
+	required uint32 v0 = 1;
+	required uint32 v1 = 2;
+	optional uint32 v2 = 3;
+	optional uint32 v3 = 4;
+	optional uint32 v4 = 5;
+	optional uint32 v5 = 6;
+	optional uint32 v6 = 7;
+} 
+
+message Mission {
+	required uint32 id = 1;
+	repeated Condition condition = 2;
+	repeated CfgCommon.Reward reward = 3;
+	required uint32 exp = 4;
+}
+
+message Missions {
+	repeated Mission missions = 1;
+}

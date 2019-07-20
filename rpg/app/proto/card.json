@@ -1,0 +1,16 @@
+{
+"namespace":"card",
+"filename":"Card",
+"include":["Kernel","Dbs","MsgDef"],
+"msgs":[{"name": "CSCardActiveCard", 
+			"extends": "", 
+			"id": "1920",
+			"msg": [{"name": "uid", "id": 1, "type": "int64_t"}]
+		},
+		{"name": "CSCardActiveCard", 
+			"extends": "", 
+			"id": "1920",
+			"msg": [{"name": "uid", "id": 1, "type": "int64_t"}]
+		]
+
+}

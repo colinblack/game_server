@@ -1,0 +1,13 @@
+package CfgForge;
+import "CfgCommon.proto";
+
+message Strengthen {
+	required uint32 id = 1;
+	required uint32 type = 2;
+	repeated CfgCommon.Reward cost = 3;
+	repeated CfgCommon.Attribute attr = 4;
+}
+
+message Strengthens {
+	repeated Strengthen strengthens = 1;
+}

@@ -1,0 +1,15 @@
+package CfgTitle;
+import "CfgCommon.proto";
+
+message Title {
+	required uint32 id = 1;	// 称号id
+	required uint32 item_id = 2; // 激活道具id
+	required string title_name = 3;	// 称号名字
+	required uint32 limit_time = 4; // 称号时效（小时）
+	repeated CfgCommon.Attribute attr = 5; // 称号增加属性
+}
+
+// 称号数组 根据定义好的json文件配置
+message Titles {
+	repeated Title Titles = 1;
+} 

@@ -1,0 +1,13 @@
+package CfgPurify;
+import "CfgCommon.proto";
+
+message Purify {
+	required uint32 level = 1;
+	repeated CfgCommon.Reward useProps = 2; // 消耗道具(item num rate)
+	repeated CfgCommon.Attribute attr = 3; // 属性
+	
+}
+
+message Purifys {
+	repeated Purify purifys = 1;
+} 

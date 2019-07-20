@@ -1,0 +1,551 @@
+{
+	"namespace": "logins",
+	"include": ["Kernel", "Dbs", "GameApps", "MsgDef"],
+	"filename": "Logins",
+	"msgs": [{
+		"id": "342",
+		"msg": [{
+			"name": "username_",
+			"id": 1,
+			"type": "string"
+		}, {
+			"name": "gameChannel_",
+			"id": 2,
+			"type": "string"
+		}, {
+			"name": "channelId_",
+			"id": 3,
+			"type": "string"
+		}, {
+			"name": "time_",
+			"id": 4,
+			"type": "int32_t"
+		}, {
+			"name": "flag_",
+			"id": 5,
+			"type": "string"
+		}, {
+			"name": "version_",
+			"id": 6,
+			"type": "string"
+		}, {
+			"name": "serverId_",
+			"id": 7,
+			"type": "int32_t"
+		}, {
+			"name": "json_",
+			"id": 8,
+			"type": "string"
+		}],
+		"name": "SQuery"
+	}, {
+		"id": "343",
+		"msg": [{
+			"name": "proxyId_",
+			"id": 1,
+			"type": "uint16_t"
+		}, {
+			"name": "serverId_",
+			"id": 2,
+			"type": "uint16_t"
+		}, {
+			"name": "playerList_",
+			"id": 3,
+			"type": "vector<dbs::TPlayer>"
+		}],
+		"name": "SQueryResult"
+	}, {
+		"id": "344",
+		"msg": [{
+			"name": "username_",
+			"id": 1,
+			"type": "string"
+		}, {
+			"name": "gameChannel_",
+			"id": 2,
+			"type": "string"
+		}, {
+			"name": "channelId_",
+			"id": 3,
+			"type": "string"
+		}, {
+			"name": "time_",
+			"id": 4,
+			"type": "int32_t"
+		}, {
+			"name": "flag_",
+			"id": 5,
+			"type": "string"
+		}, {
+			"name": "version_",
+			"id": 6,
+			"type": "string"
+		}, {
+			"name": "playerId_",
+			"id": 7,
+			"type": "int32_t"
+		}, {
+			"name": "name_",
+			"id": 8,
+			"type": "string"
+		}, {
+			"name": "sex_",
+			"id": 9,
+			"type": "int16_t"
+		}, {
+			"name": "career_",
+			"id": 10,
+			"type": "int16_t"
+		}, {
+			"name": "sdkTime_",
+			"id": 11,
+			"type": "int32_t"
+		}, {
+			"name": "platformExtend_",
+			"id": 12,
+			"type": "string"
+		}, {
+			"name": "serverId_",
+			"id": 13,
+			"type": "int32_t"
+		}, {
+			"name": "json_",
+			"id": 14,
+			"type": "string"
+		}],
+		"name": "SLogin"
+	}, {
+		"id": "345",
+		"msg": [{
+			"name": "gateHost_",
+			"id": 1,
+			"type": "string"
+		}, {
+			"name": "gatePort_",
+			"id": 2,
+			"type": "int32_t"
+		}, {
+			"name": "token_",
+			"id": 3,
+			"type": "string"
+		}, {
+			"name": "proxyId_",
+			"id": 4,
+			"type": "uint16_t"
+		}, {
+			"name": "serverId_",
+			"id": 5,
+			"type": "uint16_t"
+		}, {
+			"name": "player_",
+			"id": 6,
+			"type": "dbs::TPlayer"
+		}],
+		"name": "SLoginResult"
+	}, {
+		"id": "346",
+		"msg": [{
+			"name": "clientTs_",
+			"id": 1,
+			"type": "int64_t"
+		}, {
+			"name": "extend_",
+			"id": 2,
+			"type": "string"
+		}],
+		"name": "SLoginPing"
+	}, {
+		"id": "347",
+		"msg": [{
+			"name": "clientTs_",
+			"id": 1,
+			"type": "int64_t"
+		}, {
+			"name": "serverTs_",
+			"id": 2,
+			"type": "int64_t"
+		}],
+		"name": "SLoginPong"
+	}, {
+		"id": "348",
+		"msg": [{
+			"name": "cmds_",
+			"id": 1,
+			"type": "vector<int32_t>"
+		}],
+		"name": "SQueryGameData"
+	}, {
+		"id": "349",
+		"msg": [{
+			"name": "entityId_",
+			"id": 1,
+			"type": "Identity"
+		}, {
+			"name": "operTime_",
+			"id": 2,
+			"type": "int64_t"
+		}, {
+			"name": "moveId_",
+			"id": 3,
+			"type": "uint16_t"
+		}, {
+			"name": "path_",
+			"id": 4,
+			"type": "vector<Point>"
+		}],
+		"name": "SRoleMove"
+	}, {
+		"id": "350",
+		"msg": [],
+		"name": "SEnterHang"
+	}, {
+		"id": "351",
+		"msg": [],
+		"name": "SBackToCity"
+	}, {
+		"id": "352",
+		"msg": [{
+			"name": "monsters_",
+			"id": 1,
+			"type": "map<int32_t, int32_t>"
+		}],
+		"name": "SBatchFightResultReq"
+	}, {
+		"id": "353",
+		"msg": [{
+			"name": "canRefreshElite_",
+			"id": 1,
+			"type": "bool"
+		}],
+		"name": "SBatchFightResultResp"
+	}, {
+		"id": "354",
+		"msg": [{
+			"name": "resetPoints_",
+			"id": 1,
+			"type": "vector<Point>"
+		}],
+		"name": "SHangChallengeBoss"
+	}, {
+		"id": "355",
+		"msg": [{
+			"name": "roleId_",
+			"id": 1,
+			"type": "int32_t"
+		}, {
+			"name": "oper_",
+			"id": 2,
+			"type": "igameapp::SFightOper"
+		}, {
+			"name": "skillUid_",
+			"id": 3,
+			"type": "int16_t"
+		}, {
+			"name": "noCd_",
+			"id": 4,
+			"type": "bool"
+		}],
+		"name": "SUseSkill"
+	}, {
+		"id": "356",
+		"msg": [{
+			"name": "monsterId_",
+			"id": 1,
+			"type": "int32_t"
+		}, {
+			"name": "killPoint_",
+			"id": 2,
+			"type": "Point"
+		}],
+		"name": "SFightResultReq"
+	}, {
+		"id": "366",
+		"msg": [{
+			"name": "entityId_",
+			"id": 1,
+			"type": "Identity"
+		}, {
+			"name": "operTime_",
+			"id": 2,
+			"type": "int64_t"
+		}, {
+			"name": "moveId_",
+			"id": 3,
+			"type": "uint16_t"
+		}, {
+			"name": "jumpId_",
+			"id": 4,
+			"type": "string"
+		}, {
+			"name": "isReverse_",
+			"id": 5,
+			"type": "bool"
+		}],
+		"name": "SMapJump"
+	}, {
+		"id": "367",
+		"msg": [{
+			"name": "operTime_",
+			"id": 1,
+			"type": "int64_t"
+		}, {
+			"name": "passType_",
+			"id": 2,
+			"type": "int32_t"
+		}, {
+			"name": "passId_",
+			"id": 3,
+			"type": "int32_t"
+		}, {
+			"name": "passToId_",
+			"id": 4,
+			"type": "int32_t"
+		}],
+		"name": "SMapTransfer"
+	}, {
+		"id": "368",
+		"msg": [{
+			"name": "missionId_",
+			"id": 1,
+			"type": "int32_t"
+		}],
+		"name": "SMissionReq"
+	}, {
+		"id": "369",
+		"msg": [{
+			"name": "missionId_",
+			"id": 1,
+			"type": "int32_t"
+		}],
+		"name": "SMissionCommit"
+	}, {
+		"id": "370",
+		"msg": [{
+			"name": "roleId_",
+			"id": 1,
+			"type": "int32_t"
+		}, {
+			"name": "type_",
+			"id": 2,
+			"type": "int32_t"
+		}],
+		"name": "SActiveAdvance"
+	}, {
+		"id": "371",
+		"name": "SUpgradeSkill",
+		"msg": [
+			{"name": "roleId_", "id":1, "type":"int32_t"},
+			{"name": "skillId_", "id":1, "type":"int32_t"}
+		]
+	}, {
+		"id": "372",
+		"name": "SAdvanceReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"type_", "id":2, "type": "int32_t"},
+			{"name":"itemId_", "id":3, "type": "int32_t"},
+			{"name":"autoBuy_", "id":4, "type": "bool"}
+		]
+	}, {
+		"id": "373",
+		"name": "SAdvanceResp",
+		"msg": [
+			{"name":"success_", "id":1, "type": "bool"},
+			{"name":"activeMul_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "374",
+		"name": "SAdvanceEatDan",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"type_", "id":2, "type": "int32_t"},
+			{"name":"itemId_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "1699",
+		"name": "SBagDecompose",
+		"msg":	[
+			{"name":"uidList", "id":1, "type": "vector<int64_t>"}
+		]
+	}, {
+		"id": "375",
+		"name": "SShenQiPiece",
+		"msg": [
+			{"name":"itemId_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "376",
+		"name": "SShenQi",
+		"msg": []
+	}, {
+		"id": "377",
+		"name": "SUpgradeSkillAll",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "378",
+		"name": "SEquipEquip",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"uds_", "id":2, "type": "vector<int64_t>"}
+		]
+	}, {
+		"id": "379",
+		"name": "SBagOpenGrid",
+		"msg": [
+			{"name":"bagType_", "id":1, "type": "int32_t"},
+			{"name":"gridId_", "id":2, "type": "int32_t"},
+			{"name":"gridNum_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "1773",
+		"name": "SActiveTreasure",
+		"msg": [
+			{"name":"type_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "1754",
+		"name": "STreasureAdvance",
+		"msg": [
+			{"name":"type_", "id":1, "type": "int32_t"},
+			{"name":"itemId_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "1771",
+		"name": "STreasureEatDan",
+		"msg": [
+			{"name":"type_", "id":1, "type": "int32_t"},
+			{"name":"itemId_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "422",
+		"name": "SBagUse",
+		"msg": [
+			{"name":"bagType_", "id":1, "type": "int32_t"},
+			{"name":"itemUid_", "id":2, "type": "int64_t"},
+			{"name":"itemNum_", "id":3, "type": "int32_t"},
+			{"name":"value_", "id":4, "type": "int32_t"}
+		]
+	}, {
+		"id": "1053",
+		"name": "SStrengthenReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"equipType_", "id":2, "type": "vector<int32_t>"},
+			{"name":"toLevel_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "1053",
+		"name": "SStrengthenResp",
+		"msg": [
+			{"name":"equip_", "id":1, "type": "vector<dbs::TPlayerEquip>"}
+		]
+	}, {
+		"id": "599",
+		"name": "SAdvanceRide",
+		"msg": [
+			{"name":"ride_", "id":1, "type": "bool"}
+		]
+	}, {
+		"id": "2222",
+		"name": "SPurifyReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"equipType_", "id":2, "type": "vector<int32_t>"}
+		]
+	}, {
+		"id": "2222",
+		"name": "SPurifyResp",
+		"msg": [
+			{"name":"equip_", "id":1, "type": "vector<dbs::TPlayerEquip>"}
+		]
+	}, {
+		"id": "1077",
+		"name": "STitleReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"titleId_", "id":2, "type": "int32_t"}
+		]
+	}
+	, {
+		"id": "3077",
+		"name": "SActiveSuitReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"suitId_", "id":2, "type": "int32_t"},
+			{"name":"uids_", "id":3, "type": "vector<int64_t>"}
+		]
+	}, {
+		"id": "3085",
+		"name": "SUnlockSuitReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"suitId_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "3086",
+		"name": "SDressSuitReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"suitId_", "id":2, "type": "int32_t"},
+			{"name":"isDress_", "id":3, "type": "bool"}
+		]
+	}, {
+		"id": "1486",
+		"name": "STreasureDrawReq",
+		"msg": [
+			{"name":"type_", "id":1, "type": "int32_t"},
+			{"name":"drewNum_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "1486",
+		"name": "STreasureDrawResp",
+		"msg": [
+			{"name":"drawIds_", "id":1, "type": "vector<int32_t>"},
+			{"name":"rewards_", "id":2, "type": "vector<int32_t>"}
+		]
+	}, {
+		"id": "1519",
+		"name": "STreasureGetRewardHisReq",
+		"msg": [
+			{"name":"type_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "1519",
+		"name": "STreasureGetRewardHisResp",
+		"msg": [
+			{"name":"records_", "id":1, "type": "vector<dbs::TTreasureRecord>"}
+		]
+	}, {
+		"id": "425",
+		"name": "SBagMoveItem",
+		"msg": [
+			{"name":"fromBagType_", "id":1, "type": "int32_t"},
+			{"name":"toBagType_", "id":2, "type": "int32_t"},
+			{"name":"itemUid_", "id":3, "type": "int64_t"}
+		]
+	}, {
+		"id": "2018",
+		"name": "SBagMoveItemAll",
+		"msg": [
+			{"name":"fromBagType_", "id":1, "type": "int32_t"},
+			{"name":"toBagType_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "2809",
+		"name": "SGetActivityReq",
+		"msg": [
+			{"name":"id_", "id":1, "type": "int32_t"},
+			{"name":"count_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "2809",
+		"name": "SGetActivityRewardReq",
+		"msg": [
+			{"name":"id_", "id":1, "type": "int32_t"}
+		]
+	}
+	
+	]
+}

@@ -1,0 +1,12 @@
+package CfgRing;
+import "CfgCommon.proto";
+
+message Ring {
+	required uint32 level = 1;
+	required uint32 exp = 2;
+	repeated CfgCommon.Attribute attr = 3;
+}
+
+message Rings {
+	repeated Ring ring = 1;
+}

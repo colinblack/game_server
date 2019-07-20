@@ -1,0 +1,15 @@
+{
+"namespace":"chat",
+"filename":"Chat",
+"include":["Kernel","Dbs","MsgDef"],
+"msgs":[{"name": "CSChatProxy", 
+			"extends": "", 
+			"id": "580",
+			"msg": [{"name": "channel", "id": 1, "type": "int16_t"}, 
+			{"name": "content", "id": 2, "type": "string"}, 
+			{"name": "extend", "id": 3, "type": "string"}, 
+			{"name": "targetId", "id": 4, "type": "Identity"},
+			{"name": "useGold", "id":5, "type": "int32_t"}]
+		}]
+
+}

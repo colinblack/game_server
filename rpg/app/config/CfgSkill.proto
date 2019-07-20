@@ -1,0 +1,43 @@
+package CfgSkill;
+import "CfgCommon.proto";
+
+message Skill {
+	required uint32 serial = 1;
+	required uint32 career = 2;
+	required uint32 id = 3;
+	required uint32 cd = 4;
+	required uint32 range = 5;
+	required uint32 range2 = 6;
+	required uint32 level = 7;
+	required string buff = 8;
+	required uint32 type = 9;
+	required uint32 type2 = 10;
+	required uint32 hurt = 11;
+	required uint32 unlock = 12;
+	required uint32 cost = 13;
+	optional uint32 careerlevel = 14;
+	repeated CfgCommon.Attribute attr = 15;
+}
+
+message Skills {
+	repeated Skill skills = 1;
+}
+
+message Monsters {
+	repeated Skill monsters = 1;
+}
+
+message Base {
+	required uint32 id = 1;
+	required uint32 cost = 2;
+	required uint32 xishu = 3;
+	required uint32 hurt = 4;
+	required uint32 unlocklevel = 5;
+	required uint32 hurtAdd = 6;
+	required uint32 maxLevel = 7;
+	required uint32 learnLevel = 8;
+}
+
+message Bases {
+	repeated Base bases = 1;
+}

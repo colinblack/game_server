@@ -1,0 +1,13 @@
+package CfgReinCarn;
+import "CfgCommon.proto";
+
+message ReinCarn {
+	required uint32 level = 1;
+	required uint32 value = 2;
+	required uint32 skillId = 3;
+	repeated CfgCommon.Attribute attr = 4;
+}
+
+message ReinCarns {
+	repeated ReinCarn reincarn = 1;
+}

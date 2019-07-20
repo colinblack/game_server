@@ -1,0 +1,5509 @@
+{
+  "levels": [
+    {
+      "reincarnExp": 0, 
+      "id": 1, 
+      "exp": 53
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 2, 
+      "exp": 78
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 3, 
+      "exp": 117
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 4, 
+      "exp": 174
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 5, 
+      "exp": 252
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 6, 
+      "exp": 354
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 7, 
+      "exp": 484
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 8, 
+      "exp": 645
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 9, 
+      "exp": 841
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 10, 
+      "exp": 1076
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 11, 
+      "exp": 1352
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 12, 
+      "exp": 1673
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 13, 
+      "exp": 2043
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 14, 
+      "exp": 2465
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 15, 
+      "exp": 2943
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 16, 
+      "exp": 3479
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 17, 
+      "exp": 4078
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 18, 
+      "exp": 4743
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 19, 
+      "exp": 5477
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 20, 
+      "exp": 6284
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 21, 
+      "exp": 7168
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 22, 
+      "exp": 8131
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 23, 
+      "exp": 9177
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 24, 
+      "exp": 10310
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 25, 
+      "exp": 11533
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 26, 
+      "exp": 12849
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 27, 
+      "exp": 14263
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 28, 
+      "exp": 15777
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 29, 
+      "exp": 17395
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 30, 
+      "exp": 19120
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 31, 
+      "exp": 20956
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 32, 
+      "exp": 22907
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 33, 
+      "exp": 24975
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 34, 
+      "exp": 27164
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 35, 
+      "exp": 29478
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 36, 
+      "exp": 31920
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 37, 
+      "exp": 34494
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 38, 
+      "exp": 37203
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 39, 
+      "exp": 40050
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 40, 
+      "exp": 55951
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 41, 
+      "exp": 60025
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 42, 
+      "exp": 64294
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 43, 
+      "exp": 68760
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 44, 
+      "exp": 73429
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 45, 
+      "exp": 78305
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 46, 
+      "exp": 83392
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 47, 
+      "exp": 88696
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 48, 
+      "exp": 94219
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 49, 
+      "exp": 99968
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 50, 
+      "exp": 105946
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 51, 
+      "exp": 112158
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 52, 
+      "exp": 118609
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 53, 
+      "exp": 125302
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 54, 
+      "exp": 132243
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 55, 
+      "exp": 139436
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 56, 
+      "exp": 146885
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 57, 
+      "exp": 154595
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 58, 
+      "exp": 162570
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 59, 
+      "exp": 170816
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 60, 
+      "exp": 179335
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 61, 
+      "exp": 188134
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 62, 
+      "exp": 197216
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 63, 
+      "exp": 206586
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 64, 
+      "exp": 216248
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 65, 
+      "exp": 226207
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 66, 
+      "exp": 236467
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 67, 
+      "exp": 247033
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 68, 
+      "exp": 257910
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 69, 
+      "exp": 269101
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 70, 
+      "exp": 280611
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 71, 
+      "exp": 292446
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 72, 
+      "exp": 304608
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 73, 
+      "exp": 317104
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 74, 
+      "exp": 329936
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 75, 
+      "exp": 343111
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 76, 
+      "exp": 356631
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 77, 
+      "exp": 370503
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 78, 
+      "exp": 384730
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 79, 
+      "exp": 399316
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 80, 
+      "exp": 489811
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 81, 
+      "exp": 590170
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 82, 
+      "exp": 695727
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 83, 
+      "exp": 806558
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 84, 
+      "exp": 922738
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 85, 
+      "exp": 1044342
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 86, 
+      "exp": 1171447
+    }, 
+    {
+      "reincarnExp": 0, 
+      "id": 87, 
+      "exp": 1304127
+    }, 
+    {
+      "reincarnExp": 15000, 
+      "id": 88, 
+      "exp": 1442458
+    }, 
+    {
+      "reincarnExp": 16000, 
+      "id": 89, 
+      "exp": 1586515
+    }, 
+    {
+      "reincarnExp": 17000, 
+      "id": 90, 
+      "exp": 1736374
+    }, 
+    {
+      "reincarnExp": 18000, 
+      "id": 91, 
+      "exp": 1892111
+    }, 
+    {
+      "reincarnExp": 19000, 
+      "id": 92, 
+      "exp": 2053801
+    }, 
+    {
+      "reincarnExp": 20000, 
+      "id": 93, 
+      "exp": 2221518
+    }, 
+    {
+      "reincarnExp": 21000, 
+      "id": 94, 
+      "exp": 2395340
+    }, 
+    {
+      "reincarnExp": 22000, 
+      "id": 95, 
+      "exp": 2575341
+    }, 
+    {
+      "reincarnExp": 23000, 
+      "id": 96, 
+      "exp": 2761597
+    }, 
+    {
+      "reincarnExp": 24000, 
+      "id": 97, 
+      "exp": 2954183
+    }, 
+    {
+      "reincarnExp": 25000, 
+      "id": 98, 
+      "exp": 3153175
+    }, 
+    {
+      "reincarnExp": 26000, 
+      "id": 99, 
+      "exp": 3358649
+    }, 
+    {
+      "reincarnExp": 27000, 
+      "id": 100, 
+      "exp": 3570679
+    }, 
+    {
+      "reincarnExp": 28000, 
+      "id": 101, 
+      "exp": 3789341
+    }, 
+    {
+      "reincarnExp": 29000, 
+      "id": 102, 
+      "exp": 4014710
+    }, 
+    {
+      "reincarnExp": 30000, 
+      "id": 103, 
+      "exp": 4246863
+    }, 
+    {
+      "reincarnExp": 31000, 
+      "id": 104, 
+      "exp": 4485875
+    }, 
+    {
+      "reincarnExp": 32000, 
+      "id": 105, 
+      "exp": 4731821
+    }, 
+    {
+      "reincarnExp": 33000, 
+      "id": 106, 
+      "exp": 4984776
+    }, 
+    {
+      "reincarnExp": 34000, 
+      "id": 107, 
+      "exp": 5244816
+    }, 
+    {
+      "reincarnExp": 35000, 
+      "id": 108, 
+      "exp": 5512017
+    }, 
+    {
+      "reincarnExp": 36000, 
+      "id": 109, 
+      "exp": 5786454
+    }, 
+    {
+      "reincarnExp": 37000, 
+      "id": 110, 
+      "exp": 6728423
+    }, 
+    {
+      "reincarnExp": 40000, 
+      "id": 111, 
+      "exp": 7702051
+    }, 
+    {
+      "reincarnExp": 40400, 
+      "id": 112, 
+      "exp": 8021440
+    }, 
+    {
+      "reincarnExp": 40804, 
+      "id": 113, 
+      "exp": 8128960
+    }, 
+    {
+      "reincarnExp": 41212, 
+      "id": 114, 
+      "exp": 8236480
+    }, 
+    {
+      "reincarnExp": 41624, 
+      "id": 115, 
+      "exp": 8344000
+    }, 
+    {
+      "reincarnExp": 42040, 
+      "id": 116, 
+      "exp": 8451520
+    }, 
+    {
+      "reincarnExp": 42461, 
+      "id": 117, 
+      "exp": 8559040
+    }, 
+    {
+      "reincarnExp": 42885, 
+      "id": 118, 
+      "exp": 8666560
+    }, 
+    {
+      "reincarnExp": 43314, 
+      "id": 119, 
+      "exp": 8774080
+    }, 
+    {
+      "reincarnExp": 43747, 
+      "id": 120, 
+      "exp": 8881600
+    }, 
+    {
+      "reincarnExp": 44185, 
+      "id": 121, 
+      "exp": 8989120
+    }, 
+    {
+      "reincarnExp": 44627, 
+      "id": 122, 
+      "exp": 9096640
+    }, 
+    {
+      "reincarnExp": 45073, 
+      "id": 123, 
+      "exp": 9204160
+    }, 
+    {
+      "reincarnExp": 45524, 
+      "id": 124, 
+      "exp": 9311680
+    }, 
+    {
+      "reincarnExp": 45979, 
+      "id": 125, 
+      "exp": 9419200
+    }, 
+    {
+      "reincarnExp": 46439, 
+      "id": 126, 
+      "exp": 9526720
+    }, 
+    {
+      "reincarnExp": 46903, 
+      "id": 127, 
+      "exp": 9634240
+    }, 
+    {
+      "reincarnExp": 47372, 
+      "id": 128, 
+      "exp": 9741760
+    }, 
+    {
+      "reincarnExp": 47846, 
+      "id": 129, 
+      "exp": 9849280
+    }, 
+    {
+      "reincarnExp": 48324, 
+      "id": 130, 
+      "exp": 9956800
+    }, 
+    {
+      "reincarnExp": 48808, 
+      "id": 131, 
+      "exp": 10064320
+    }, 
+    {
+      "reincarnExp": 49296, 
+      "id": 132, 
+      "exp": 10171840
+    }, 
+    {
+      "reincarnExp": 49789, 
+      "id": 133, 
+      "exp": 10279360
+    }, 
+    {
+      "reincarnExp": 50287, 
+      "id": 134, 
+      "exp": 10386880
+    }, 
+    {
+      "reincarnExp": 50789, 
+      "id": 135, 
+      "exp": 10494400
+    }, 
+    {
+      "reincarnExp": 51297, 
+      "id": 136, 
+      "exp": 10601920
+    }, 
+    {
+      "reincarnExp": 51810, 
+      "id": 137, 
+      "exp": 10709440
+    }, 
+    {
+      "reincarnExp": 52328, 
+      "id": 138, 
+      "exp": 10816960
+    }, 
+    {
+      "reincarnExp": 52848, 
+      "id": 139, 
+      "exp": 10924480
+    }, 
+    {
+      "reincarnExp": 53369, 
+      "id": 140, 
+      "exp": 11032000
+    }, 
+    {
+      "reincarnExp": 53889, 
+      "id": 141, 
+      "exp": 11139520
+    }, 
+    {
+      "reincarnExp": 54409, 
+      "id": 142, 
+      "exp": 11247040
+    }, 
+    {
+      "reincarnExp": 54929, 
+      "id": 143, 
+      "exp": 11354560
+    }, 
+    {
+      "reincarnExp": 55449, 
+      "id": 144, 
+      "exp": 11462080
+    }, 
+    {
+      "reincarnExp": 55969, 
+      "id": 145, 
+      "exp": 11569600
+    }, 
+    {
+      "reincarnExp": 56489, 
+      "id": 146, 
+      "exp": 11677120
+    }, 
+    {
+      "reincarnExp": 57010, 
+      "id": 147, 
+      "exp": 11784640
+    }, 
+    {
+      "reincarnExp": 57530, 
+      "id": 148, 
+      "exp": 11892160
+    }, 
+    {
+      "reincarnExp": 58050, 
+      "id": 149, 
+      "exp": 11999680
+    }, 
+    {
+      "reincarnExp": 58570, 
+      "id": 150, 
+      "exp": 12107200
+    }, 
+    {
+      "reincarnExp": 59090, 
+      "id": 151, 
+      "exp": 12214720
+    }, 
+    {
+      "reincarnExp": 59610, 
+      "id": 152, 
+      "exp": 12322240
+    }, 
+    {
+      "reincarnExp": 60130, 
+      "id": 153, 
+      "exp": 12429760
+    }, 
+    {
+      "reincarnExp": 60651, 
+      "id": 154, 
+      "exp": 12537280
+    }, 
+    {
+      "reincarnExp": 61171, 
+      "id": 155, 
+      "exp": 12644800
+    }, 
+    {
+      "reincarnExp": 61691, 
+      "id": 156, 
+      "exp": 12752320
+    }, 
+    {
+      "reincarnExp": 62211, 
+      "id": 157, 
+      "exp": 12859840
+    }, 
+    {
+      "reincarnExp": 62731, 
+      "id": 158, 
+      "exp": 12967360
+    }, 
+    {
+      "reincarnExp": 63251, 
+      "id": 159, 
+      "exp": 13074880
+    }, 
+    {
+      "reincarnExp": 63771, 
+      "id": 160, 
+      "exp": 13182400
+    }, 
+    {
+      "reincarnExp": 64292, 
+      "id": 161, 
+      "exp": 13289920
+    }, 
+    {
+      "reincarnExp": 64812, 
+      "id": 162, 
+      "exp": 13397440
+    }, 
+    {
+      "reincarnExp": 65332, 
+      "id": 163, 
+      "exp": 13504960
+    }, 
+    {
+      "reincarnExp": 65852, 
+      "id": 164, 
+      "exp": 13612480
+    }, 
+    {
+      "reincarnExp": 66372, 
+      "id": 165, 
+      "exp": 13720000
+    }, 
+    {
+      "reincarnExp": 66892, 
+      "id": 166, 
+      "exp": 13827520
+    }, 
+    {
+      "reincarnExp": 67412, 
+      "id": 167, 
+      "exp": 13935040
+    }, 
+    {
+      "reincarnExp": 67933, 
+      "id": 168, 
+      "exp": 14042560
+    }, 
+    {
+      "reincarnExp": 68453, 
+      "id": 169, 
+      "exp": 14150080
+    }, 
+    {
+      "reincarnExp": 68973, 
+      "id": 170, 
+      "exp": 14257600
+    }, 
+    {
+      "reincarnExp": 69493, 
+      "id": 171, 
+      "exp": 14365120
+    }, 
+    {
+      "reincarnExp": 70013, 
+      "id": 172, 
+      "exp": 14472640
+    }, 
+    {
+      "reincarnExp": 70533, 
+      "id": 173, 
+      "exp": 14580160
+    }, 
+    {
+      "reincarnExp": 71053, 
+      "id": 174, 
+      "exp": 14687680
+    }, 
+    {
+      "reincarnExp": 71574, 
+      "id": 175, 
+      "exp": 14795200
+    }, 
+    {
+      "reincarnExp": 72094, 
+      "id": 176, 
+      "exp": 14902720
+    }, 
+    {
+      "reincarnExp": 72614, 
+      "id": 177, 
+      "exp": 15010240
+    }, 
+    {
+      "reincarnExp": 73134, 
+      "id": 178, 
+      "exp": 15117760
+    }, 
+    {
+      "reincarnExp": 73654, 
+      "id": 179, 
+      "exp": 15225280
+    }, 
+    {
+      "reincarnExp": 74174, 
+      "id": 180, 
+      "exp": 15332800
+    }, 
+    {
+      "reincarnExp": 74694, 
+      "id": 181, 
+      "exp": 15440320
+    }, 
+    {
+      "reincarnExp": 75215, 
+      "id": 182, 
+      "exp": 15547840
+    }, 
+    {
+      "reincarnExp": 75735, 
+      "id": 183, 
+      "exp": 15655360
+    }, 
+    {
+      "reincarnExp": 76255, 
+      "id": 184, 
+      "exp": 15762880
+    }, 
+    {
+      "reincarnExp": 76775, 
+      "id": 185, 
+      "exp": 15870400
+    }, 
+    {
+      "reincarnExp": 77295, 
+      "id": 186, 
+      "exp": 15977920
+    }, 
+    {
+      "reincarnExp": 77815, 
+      "id": 187, 
+      "exp": 16085440
+    }, 
+    {
+      "reincarnExp": 78335, 
+      "id": 188, 
+      "exp": 16192960
+    }, 
+    {
+      "reincarnExp": 78856, 
+      "id": 189, 
+      "exp": 16300480
+    }, 
+    {
+      "reincarnExp": 79376, 
+      "id": 190, 
+      "exp": 16408000
+    }, 
+    {
+      "reincarnExp": 79896, 
+      "id": 191, 
+      "exp": 16515520
+    }, 
+    {
+      "reincarnExp": 80416, 
+      "id": 192, 
+      "exp": 16623040
+    }, 
+    {
+      "reincarnExp": 80936, 
+      "id": 193, 
+      "exp": 16730560
+    }, 
+    {
+      "reincarnExp": 81456, 
+      "id": 194, 
+      "exp": 16838080
+    }, 
+    {
+      "reincarnExp": 81976, 
+      "id": 195, 
+      "exp": 16945600
+    }, 
+    {
+      "reincarnExp": 82497, 
+      "id": 196, 
+      "exp": 17053120
+    }, 
+    {
+      "reincarnExp": 83017, 
+      "id": 197, 
+      "exp": 17160640
+    }, 
+    {
+      "reincarnExp": 83537, 
+      "id": 198, 
+      "exp": 17268160
+    }, 
+    {
+      "reincarnExp": 84057, 
+      "id": 199, 
+      "exp": 17375680
+    }, 
+    {
+      "reincarnExp": 84577, 
+      "id": 200, 
+      "exp": 17483200
+    }, 
+    {
+      "reincarnExp": 85097, 
+      "id": 201, 
+      "exp": 17590720
+    }, 
+    {
+      "reincarnExp": 85617, 
+      "id": 202, 
+      "exp": 17698240
+    }, 
+    {
+      "reincarnExp": 86138, 
+      "id": 203, 
+      "exp": 17805760
+    }, 
+    {
+      "reincarnExp": 86658, 
+      "id": 204, 
+      "exp": 17913280
+    }, 
+    {
+      "reincarnExp": 87178, 
+      "id": 205, 
+      "exp": 18020800
+    }, 
+    {
+      "reincarnExp": 87698, 
+      "id": 206, 
+      "exp": 18128320
+    }, 
+    {
+      "reincarnExp": 88218, 
+      "id": 207, 
+      "exp": 18235840
+    }, 
+    {
+      "reincarnExp": 88738, 
+      "id": 208, 
+      "exp": 18343360
+    }, 
+    {
+      "reincarnExp": 89258, 
+      "id": 209, 
+      "exp": 18450880
+    }, 
+    {
+      "reincarnExp": 89779, 
+      "id": 210, 
+      "exp": 18558400
+    }, 
+    {
+      "reincarnExp": 90299, 
+      "id": 211, 
+      "exp": 18665920
+    }, 
+    {
+      "reincarnExp": 90819, 
+      "id": 212, 
+      "exp": 18773440
+    }, 
+    {
+      "reincarnExp": 91339, 
+      "id": 213, 
+      "exp": 18880960
+    }, 
+    {
+      "reincarnExp": 91859, 
+      "id": 214, 
+      "exp": 18988480
+    }, 
+    {
+      "reincarnExp": 92379, 
+      "id": 215, 
+      "exp": 19096000
+    }, 
+    {
+      "reincarnExp": 92899, 
+      "id": 216, 
+      "exp": 19203520
+    }, 
+    {
+      "reincarnExp": 93419, 
+      "id": 217, 
+      "exp": 19311040
+    }, 
+    {
+      "reincarnExp": 93940, 
+      "id": 218, 
+      "exp": 19418560
+    }, 
+    {
+      "reincarnExp": 94460, 
+      "id": 219, 
+      "exp": 19526080
+    }, 
+    {
+      "reincarnExp": 94980, 
+      "id": 220, 
+      "exp": 19633600
+    }, 
+    {
+      "reincarnExp": 95500, 
+      "id": 221, 
+      "exp": 19741120
+    }, 
+    {
+      "reincarnExp": 96020, 
+      "id": 222, 
+      "exp": 19848640
+    }, 
+    {
+      "reincarnExp": 96540, 
+      "id": 223, 
+      "exp": 19956160
+    }, 
+    {
+      "reincarnExp": 97060, 
+      "id": 224, 
+      "exp": 20063680
+    }, 
+    {
+      "reincarnExp": 97581, 
+      "id": 225, 
+      "exp": 20171200
+    }, 
+    {
+      "reincarnExp": 98101, 
+      "id": 226, 
+      "exp": 20278720
+    }, 
+    {
+      "reincarnExp": 98621, 
+      "id": 227, 
+      "exp": 20386240
+    }, 
+    {
+      "reincarnExp": 99141, 
+      "id": 228, 
+      "exp": 20493760
+    }, 
+    {
+      "reincarnExp": 99661, 
+      "id": 229, 
+      "exp": 20601280
+    }, 
+    {
+      "reincarnExp": 100181, 
+      "id": 230, 
+      "exp": 20708800
+    }, 
+    {
+      "reincarnExp": 100701, 
+      "id": 231, 
+      "exp": 20816320
+    }, 
+    {
+      "reincarnExp": 101222, 
+      "id": 232, 
+      "exp": 20923840
+    }, 
+    {
+      "reincarnExp": 101742, 
+      "id": 233, 
+      "exp": 21031360
+    }, 
+    {
+      "reincarnExp": 102262, 
+      "id": 234, 
+      "exp": 21138880
+    }, 
+    {
+      "reincarnExp": 102782, 
+      "id": 235, 
+      "exp": 21246400
+    }, 
+    {
+      "reincarnExp": 103302, 
+      "id": 236, 
+      "exp": 21353920
+    }, 
+    {
+      "reincarnExp": 103822, 
+      "id": 237, 
+      "exp": 21461440
+    }, 
+    {
+      "reincarnExp": 104342, 
+      "id": 238, 
+      "exp": 21568960
+    }, 
+    {
+      "reincarnExp": 104863, 
+      "id": 239, 
+      "exp": 21676480
+    }, 
+    {
+      "reincarnExp": 105383, 
+      "id": 240, 
+      "exp": 21784000
+    }, 
+    {
+      "reincarnExp": 105903, 
+      "id": 241, 
+      "exp": 21891520
+    }, 
+    {
+      "reincarnExp": 106423, 
+      "id": 242, 
+      "exp": 21999040
+    }, 
+    {
+      "reincarnExp": 106943, 
+      "id": 243, 
+      "exp": 22106560
+    }, 
+    {
+      "reincarnExp": 107463, 
+      "id": 244, 
+      "exp": 22214080
+    }, 
+    {
+      "reincarnExp": 107983, 
+      "id": 245, 
+      "exp": 22321600
+    }, 
+    {
+      "reincarnExp": 108504, 
+      "id": 246, 
+      "exp": 22429120
+    }, 
+    {
+      "reincarnExp": 109024, 
+      "id": 247, 
+      "exp": 22536640
+    }, 
+    {
+      "reincarnExp": 109544, 
+      "id": 248, 
+      "exp": 22644160
+    }, 
+    {
+      "reincarnExp": 110064, 
+      "id": 249, 
+      "exp": 22751680
+    }, 
+    {
+      "reincarnExp": 110584, 
+      "id": 250, 
+      "exp": 22859200
+    }, 
+    {
+      "reincarnExp": 111104, 
+      "id": 251, 
+      "exp": 22966720
+    }, 
+    {
+      "reincarnExp": 111624, 
+      "id": 252, 
+      "exp": 23074240
+    }, 
+    {
+      "reincarnExp": 112145, 
+      "id": 253, 
+      "exp": 23181760
+    }, 
+    {
+      "reincarnExp": 112665, 
+      "id": 254, 
+      "exp": 23289280
+    }, 
+    {
+      "reincarnExp": 113185, 
+      "id": 255, 
+      "exp": 23396800
+    }, 
+    {
+      "reincarnExp": 113705, 
+      "id": 256, 
+      "exp": 23504320
+    }, 
+    {
+      "reincarnExp": 114225, 
+      "id": 257, 
+      "exp": 23611840
+    }, 
+    {
+      "reincarnExp": 114745, 
+      "id": 258, 
+      "exp": 23719360
+    }, 
+    {
+      "reincarnExp": 115265, 
+      "id": 259, 
+      "exp": 23826880
+    }, 
+    {
+      "reincarnExp": 115786, 
+      "id": 260, 
+      "exp": 23934400
+    }, 
+    {
+      "reincarnExp": 116306, 
+      "id": 261, 
+      "exp": 24041920
+    }, 
+    {
+      "reincarnExp": 116826, 
+      "id": 262, 
+      "exp": 24149440
+    }, 
+    {
+      "reincarnExp": 117346, 
+      "id": 263, 
+      "exp": 24256960
+    }, 
+    {
+      "reincarnExp": 117866, 
+      "id": 264, 
+      "exp": 24364480
+    }, 
+    {
+      "reincarnExp": 118386, 
+      "id": 265, 
+      "exp": 24472000
+    }, 
+    {
+      "reincarnExp": 118906, 
+      "id": 266, 
+      "exp": 24579520
+    }, 
+    {
+      "reincarnExp": 119427, 
+      "id": 267, 
+      "exp": 24687040
+    }, 
+    {
+      "reincarnExp": 119947, 
+      "id": 268, 
+      "exp": 24794560
+    }, 
+    {
+      "reincarnExp": 120467, 
+      "id": 269, 
+      "exp": 24902080
+    }, 
+    {
+      "reincarnExp": 120987, 
+      "id": 270, 
+      "exp": 25009600
+    }, 
+    {
+      "reincarnExp": 121507, 
+      "id": 271, 
+      "exp": 25117120
+    }, 
+    {
+      "reincarnExp": 122027, 
+      "id": 272, 
+      "exp": 25224640
+    }, 
+    {
+      "reincarnExp": 122547, 
+      "id": 273, 
+      "exp": 25332160
+    }, 
+    {
+      "reincarnExp": 123068, 
+      "id": 274, 
+      "exp": 25439680
+    }, 
+    {
+      "reincarnExp": 123588, 
+      "id": 275, 
+      "exp": 25547200
+    }, 
+    {
+      "reincarnExp": 124108, 
+      "id": 276, 
+      "exp": 25654720
+    }, 
+    {
+      "reincarnExp": 124628, 
+      "id": 277, 
+      "exp": 25762240
+    }, 
+    {
+      "reincarnExp": 125148, 
+      "id": 278, 
+      "exp": 25869760
+    }, 
+    {
+      "reincarnExp": 125668, 
+      "id": 279, 
+      "exp": 25977280
+    }, 
+    {
+      "reincarnExp": 126188, 
+      "id": 280, 
+      "exp": 26084800
+    }, 
+    {
+      "reincarnExp": 126709, 
+      "id": 281, 
+      "exp": 26192320
+    }, 
+    {
+      "reincarnExp": 127229, 
+      "id": 282, 
+      "exp": 26299840
+    }, 
+    {
+      "reincarnExp": 127749, 
+      "id": 283, 
+      "exp": 26407360
+    }, 
+    {
+      "reincarnExp": 128269, 
+      "id": 284, 
+      "exp": 26514880
+    }, 
+    {
+      "reincarnExp": 128789, 
+      "id": 285, 
+      "exp": 26622400
+    }, 
+    {
+      "reincarnExp": 129309, 
+      "id": 286, 
+      "exp": 26729920
+    }, 
+    {
+      "reincarnExp": 129829, 
+      "id": 287, 
+      "exp": 26837440
+    }, 
+    {
+      "reincarnExp": 130350, 
+      "id": 288, 
+      "exp": 26944960
+    }, 
+    {
+      "reincarnExp": 130870, 
+      "id": 289, 
+      "exp": 27052480
+    }, 
+    {
+      "reincarnExp": 131390, 
+      "id": 290, 
+      "exp": 27160000
+    }, 
+    {
+      "reincarnExp": 131910, 
+      "id": 291, 
+      "exp": 27267520
+    }, 
+    {
+      "reincarnExp": 132430, 
+      "id": 292, 
+      "exp": 27375040
+    }, 
+    {
+      "reincarnExp": 132950, 
+      "id": 293, 
+      "exp": 27482560
+    }, 
+    {
+      "reincarnExp": 133470, 
+      "id": 294, 
+      "exp": 27590080
+    }, 
+    {
+      "reincarnExp": 133990, 
+      "id": 295, 
+      "exp": 27697600
+    }, 
+    {
+      "reincarnExp": 134511, 
+      "id": 296, 
+      "exp": 27805120
+    }, 
+    {
+      "reincarnExp": 135031, 
+      "id": 297, 
+      "exp": 27912640
+    }, 
+    {
+      "reincarnExp": 135551, 
+      "id": 298, 
+      "exp": 28020160
+    }, 
+    {
+      "reincarnExp": 136071, 
+      "id": 299, 
+      "exp": 28127680
+    }, 
+    {
+      "reincarnExp": 136591, 
+      "id": 300, 
+      "exp": 28235200
+    }, 
+    {
+      "reincarnExp": 137111, 
+      "id": 301, 
+      "exp": 28342720
+    }, 
+    {
+      "reincarnExp": 137631, 
+      "id": 302, 
+      "exp": 28450240
+    }, 
+    {
+      "reincarnExp": 138152, 
+      "id": 303, 
+      "exp": 28557760
+    }, 
+    {
+      "reincarnExp": 138672, 
+      "id": 304, 
+      "exp": 28665280
+    }, 
+    {
+      "reincarnExp": 139192, 
+      "id": 305, 
+      "exp": 28772800
+    }, 
+    {
+      "reincarnExp": 139712, 
+      "id": 306, 
+      "exp": 28880320
+    }, 
+    {
+      "reincarnExp": 140232, 
+      "id": 307, 
+      "exp": 28987840
+    }, 
+    {
+      "reincarnExp": 140752, 
+      "id": 308, 
+      "exp": 29095360
+    }, 
+    {
+      "reincarnExp": 141272, 
+      "id": 309, 
+      "exp": 29202880
+    }, 
+    {
+      "reincarnExp": 141793, 
+      "id": 310, 
+      "exp": 29310400
+    }, 
+    {
+      "reincarnExp": 142313, 
+      "id": 311, 
+      "exp": 29417920
+    }, 
+    {
+      "reincarnExp": 142833, 
+      "id": 312, 
+      "exp": 29525440
+    }, 
+    {
+      "reincarnExp": 143353, 
+      "id": 313, 
+      "exp": 29632960
+    }, 
+    {
+      "reincarnExp": 143873, 
+      "id": 314, 
+      "exp": 29740480
+    }, 
+    {
+      "reincarnExp": 144393, 
+      "id": 315, 
+      "exp": 29848000
+    }, 
+    {
+      "reincarnExp": 144913, 
+      "id": 316, 
+      "exp": 29955520
+    }, 
+    {
+      "reincarnExp": 145434, 
+      "id": 317, 
+      "exp": 30063040
+    }, 
+    {
+      "reincarnExp": 145954, 
+      "id": 318, 
+      "exp": 30170560
+    }, 
+    {
+      "reincarnExp": 146474, 
+      "id": 319, 
+      "exp": 30278080
+    }, 
+    {
+      "reincarnExp": 146994, 
+      "id": 320, 
+      "exp": 30385600
+    }, 
+    {
+      "reincarnExp": 147514, 
+      "id": 321, 
+      "exp": 30493120
+    }, 
+    {
+      "reincarnExp": 148034, 
+      "id": 322, 
+      "exp": 30600640
+    }, 
+    {
+      "reincarnExp": 148554, 
+      "id": 323, 
+      "exp": 30708160
+    }, 
+    {
+      "reincarnExp": 149075, 
+      "id": 324, 
+      "exp": 30815680
+    }, 
+    {
+      "reincarnExp": 149595, 
+      "id": 325, 
+      "exp": 30923200
+    }, 
+    {
+      "reincarnExp": 150115, 
+      "id": 326, 
+      "exp": 31030720
+    }, 
+    {
+      "reincarnExp": 150635, 
+      "id": 327, 
+      "exp": 31138240
+    }, 
+    {
+      "reincarnExp": 151155, 
+      "id": 328, 
+      "exp": 31245760
+    }, 
+    {
+      "reincarnExp": 151675, 
+      "id": 329, 
+      "exp": 31353280
+    }, 
+    {
+      "reincarnExp": 152195, 
+      "id": 330, 
+      "exp": 31460800
+    }, 
+    {
+      "reincarnExp": 152716, 
+      "id": 331, 
+      "exp": 31568320
+    }, 
+    {
+      "reincarnExp": 153236, 
+      "id": 332, 
+      "exp": 31675840
+    }, 
+    {
+      "reincarnExp": 153756, 
+      "id": 333, 
+      "exp": 31783360
+    }, 
+    {
+      "reincarnExp": 154276, 
+      "id": 334, 
+      "exp": 31890880
+    }, 
+    {
+      "reincarnExp": 154796, 
+      "id": 335, 
+      "exp": 31998400
+    }, 
+    {
+      "reincarnExp": 155316, 
+      "id": 336, 
+      "exp": 32105920
+    }, 
+    {
+      "reincarnExp": 155836, 
+      "id": 337, 
+      "exp": 32213440
+    }, 
+    {
+      "reincarnExp": 156357, 
+      "id": 338, 
+      "exp": 32320960
+    }, 
+    {
+      "reincarnExp": 156877, 
+      "id": 339, 
+      "exp": 32428480
+    }, 
+    {
+      "reincarnExp": 157397, 
+      "id": 340, 
+      "exp": 32536000
+    }, 
+    {
+      "reincarnExp": 157917, 
+      "id": 341, 
+      "exp": 32643520
+    }, 
+    {
+      "reincarnExp": 158437, 
+      "id": 342, 
+      "exp": 32751040
+    }, 
+    {
+      "reincarnExp": 158957, 
+      "id": 343, 
+      "exp": 32858560
+    }, 
+    {
+      "reincarnExp": 159477, 
+      "id": 344, 
+      "exp": 32966080
+    }, 
+    {
+      "reincarnExp": 159998, 
+      "id": 345, 
+      "exp": 33073600
+    }, 
+    {
+      "reincarnExp": 160518, 
+      "id": 346, 
+      "exp": 33181120
+    }, 
+    {
+      "reincarnExp": 161038, 
+      "id": 347, 
+      "exp": 33288640
+    }, 
+    {
+      "reincarnExp": 161558, 
+      "id": 348, 
+      "exp": 33396160
+    }, 
+    {
+      "reincarnExp": 162078, 
+      "id": 349, 
+      "exp": 33503680
+    }, 
+    {
+      "reincarnExp": 162598, 
+      "id": 350, 
+      "exp": 33611200
+    }, 
+    {
+      "reincarnExp": 163118, 
+      "id": 351, 
+      "exp": 33718720
+    }, 
+    {
+      "reincarnExp": 163639, 
+      "id": 352, 
+      "exp": 33826240
+    }, 
+    {
+      "reincarnExp": 164159, 
+      "id": 353, 
+      "exp": 33933760
+    }, 
+    {
+      "reincarnExp": 164679, 
+      "id": 354, 
+      "exp": 34041280
+    }, 
+    {
+      "reincarnExp": 165199, 
+      "id": 355, 
+      "exp": 34148800
+    }, 
+    {
+      "reincarnExp": 165719, 
+      "id": 356, 
+      "exp": 34256320
+    }, 
+    {
+      "reincarnExp": 166239, 
+      "id": 357, 
+      "exp": 34363840
+    }, 
+    {
+      "reincarnExp": 166759, 
+      "id": 358, 
+      "exp": 34471360
+    }, 
+    {
+      "reincarnExp": 167280, 
+      "id": 359, 
+      "exp": 34578880
+    }, 
+    {
+      "reincarnExp": 167800, 
+      "id": 360, 
+      "exp": 34686400
+    }, 
+    {
+      "reincarnExp": 168320, 
+      "id": 361, 
+      "exp": 34793920
+    }, 
+    {
+      "reincarnExp": 168840, 
+      "id": 362, 
+      "exp": 34901440
+    }, 
+    {
+      "reincarnExp": 169360, 
+      "id": 363, 
+      "exp": 35008960
+    }, 
+    {
+      "reincarnExp": 169880, 
+      "id": 364, 
+      "exp": 35116480
+    }, 
+    {
+      "reincarnExp": 170400, 
+      "id": 365, 
+      "exp": 35224000
+    }, 
+    {
+      "reincarnExp": 170921, 
+      "id": 366, 
+      "exp": 35331520
+    }, 
+    {
+      "reincarnExp": 171441, 
+      "id": 367, 
+      "exp": 35439040
+    }, 
+    {
+      "reincarnExp": 171961, 
+      "id": 368, 
+      "exp": 35546560
+    }, 
+    {
+      "reincarnExp": 172481, 
+      "id": 369, 
+      "exp": 35654080
+    }, 
+    {
+      "reincarnExp": 173001, 
+      "id": 370, 
+      "exp": 35761600
+    }, 
+    {
+      "reincarnExp": 173521, 
+      "id": 371, 
+      "exp": 35869120
+    }, 
+    {
+      "reincarnExp": 174041, 
+      "id": 372, 
+      "exp": 35976640
+    }, 
+    {
+      "reincarnExp": 174561, 
+      "id": 373, 
+      "exp": 36084160
+    }, 
+    {
+      "reincarnExp": 175082, 
+      "id": 374, 
+      "exp": 36191680
+    }, 
+    {
+      "reincarnExp": 175602, 
+      "id": 375, 
+      "exp": 36299200
+    }, 
+    {
+      "reincarnExp": 176122, 
+      "id": 376, 
+      "exp": 36406720
+    }, 
+    {
+      "reincarnExp": 176642, 
+      "id": 377, 
+      "exp": 36514240
+    }, 
+    {
+      "reincarnExp": 177162, 
+      "id": 378, 
+      "exp": 36621760
+    }, 
+    {
+      "reincarnExp": 177682, 
+      "id": 379, 
+      "exp": 36729280
+    }, 
+    {
+      "reincarnExp": 178202, 
+      "id": 380, 
+      "exp": 36836800
+    }, 
+    {
+      "reincarnExp": 178723, 
+      "id": 381, 
+      "exp": 36944320
+    }, 
+    {
+      "reincarnExp": 179243, 
+      "id": 382, 
+      "exp": 37051840
+    }, 
+    {
+      "reincarnExp": 179763, 
+      "id": 383, 
+      "exp": 37159360
+    }, 
+    {
+      "reincarnExp": 180283, 
+      "id": 384, 
+      "exp": 37266880
+    }, 
+    {
+      "reincarnExp": 180803, 
+      "id": 385, 
+      "exp": 37374400
+    }, 
+    {
+      "reincarnExp": 181323, 
+      "id": 386, 
+      "exp": 37481920
+    }, 
+    {
+      "reincarnExp": 181843, 
+      "id": 387, 
+      "exp": 37589440
+    }, 
+    {
+      "reincarnExp": 182364, 
+      "id": 388, 
+      "exp": 37696960
+    }, 
+    {
+      "reincarnExp": 182884, 
+      "id": 389, 
+      "exp": 37804480
+    }, 
+    {
+      "reincarnExp": 183404, 
+      "id": 390, 
+      "exp": 37912000
+    }, 
+    {
+      "reincarnExp": 183924, 
+      "id": 391, 
+      "exp": 38019520
+    }, 
+    {
+      "reincarnExp": 184444, 
+      "id": 392, 
+      "exp": 38127040
+    }, 
+    {
+      "reincarnExp": 184964, 
+      "id": 393, 
+      "exp": 38234560
+    }, 
+    {
+      "reincarnExp": 185484, 
+      "id": 394, 
+      "exp": 38342080
+    }, 
+    {
+      "reincarnExp": 186005, 
+      "id": 395, 
+      "exp": 38449600
+    }, 
+    {
+      "reincarnExp": 186525, 
+      "id": 396, 
+      "exp": 38557120
+    }, 
+    {
+      "reincarnExp": 187045, 
+      "id": 397, 
+      "exp": 38664640
+    }, 
+    {
+      "reincarnExp": 187565, 
+      "id": 398, 
+      "exp": 38772160
+    }, 
+    {
+      "reincarnExp": 188085, 
+      "id": 399, 
+      "exp": 38879680
+    }, 
+    {
+      "reincarnExp": 188605, 
+      "id": 400, 
+      "exp": 38987200
+    }, 
+    {
+      "reincarnExp": 189125, 
+      "id": 401, 
+      "exp": 39094720
+    }, 
+    {
+      "reincarnExp": 189646, 
+      "id": 402, 
+      "exp": 39202240
+    }, 
+    {
+      "reincarnExp": 190166, 
+      "id": 403, 
+      "exp": 39309760
+    }, 
+    {
+      "reincarnExp": 190686, 
+      "id": 404, 
+      "exp": 39417280
+    }, 
+    {
+      "reincarnExp": 191206, 
+      "id": 405, 
+      "exp": 39524800
+    }, 
+    {
+      "reincarnExp": 191726, 
+      "id": 406, 
+      "exp": 39632320
+    }, 
+    {
+      "reincarnExp": 192246, 
+      "id": 407, 
+      "exp": 39739840
+    }, 
+    {
+      "reincarnExp": 192766, 
+      "id": 408, 
+      "exp": 39847360
+    }, 
+    {
+      "reincarnExp": 193287, 
+      "id": 409, 
+      "exp": 39954880
+    }, 
+    {
+      "reincarnExp": 193807, 
+      "id": 410, 
+      "exp": 40062400
+    }, 
+    {
+      "reincarnExp": 194327, 
+      "id": 411, 
+      "exp": 40169920
+    }, 
+    {
+      "reincarnExp": 194847, 
+      "id": 412, 
+      "exp": 40277440
+    }, 
+    {
+      "reincarnExp": 195367, 
+      "id": 413, 
+      "exp": 40384960
+    }, 
+    {
+      "reincarnExp": 195887, 
+      "id": 414, 
+      "exp": 40492480
+    }, 
+    {
+      "reincarnExp": 196407, 
+      "id": 415, 
+      "exp": 40600000
+    }, 
+    {
+      "reincarnExp": 196928, 
+      "id": 416, 
+      "exp": 40707520
+    }, 
+    {
+      "reincarnExp": 197448, 
+      "id": 417, 
+      "exp": 40815040
+    }, 
+    {
+      "reincarnExp": 197968, 
+      "id": 418, 
+      "exp": 40922560
+    }, 
+    {
+      "reincarnExp": 198488, 
+      "id": 419, 
+      "exp": 41030080
+    }, 
+    {
+      "reincarnExp": 199008, 
+      "id": 420, 
+      "exp": 41137600
+    }, 
+    {
+      "reincarnExp": 199528, 
+      "id": 421, 
+      "exp": 41245120
+    }, 
+    {
+      "reincarnExp": 200048, 
+      "id": 422, 
+      "exp": 41352640
+    }, 
+    {
+      "reincarnExp": 200569, 
+      "id": 423, 
+      "exp": 41460160
+    }, 
+    {
+      "reincarnExp": 201089, 
+      "id": 424, 
+      "exp": 41567680
+    }, 
+    {
+      "reincarnExp": 201609, 
+      "id": 425, 
+      "exp": 41675200
+    }, 
+    {
+      "reincarnExp": 202129, 
+      "id": 426, 
+      "exp": 41782720
+    }, 
+    {
+      "reincarnExp": 202649, 
+      "id": 427, 
+      "exp": 41890240
+    }, 
+    {
+      "reincarnExp": 203169, 
+      "id": 428, 
+      "exp": 41997760
+    }, 
+    {
+      "reincarnExp": 203689, 
+      "id": 429, 
+      "exp": 42105280
+    }, 
+    {
+      "reincarnExp": 204210, 
+      "id": 430, 
+      "exp": 42212800
+    }, 
+    {
+      "reincarnExp": 204730, 
+      "id": 431, 
+      "exp": 42320320
+    }, 
+    {
+      "reincarnExp": 205250, 
+      "id": 432, 
+      "exp": 42427840
+    }, 
+    {
+      "reincarnExp": 205770, 
+      "id": 433, 
+      "exp": 42535360
+    }, 
+    {
+      "reincarnExp": 206290, 
+      "id": 434, 
+      "exp": 42642880
+    }, 
+    {
+      "reincarnExp": 206810, 
+      "id": 435, 
+      "exp": 42750400
+    }, 
+    {
+      "reincarnExp": 207330, 
+      "id": 436, 
+      "exp": 42857920
+    }, 
+    {
+      "reincarnExp": 207851, 
+      "id": 437, 
+      "exp": 42965440
+    }, 
+    {
+      "reincarnExp": 208371, 
+      "id": 438, 
+      "exp": 43072960
+    }, 
+    {
+      "reincarnExp": 208891, 
+      "id": 439, 
+      "exp": 43180480
+    }, 
+    {
+      "reincarnExp": 209411, 
+      "id": 440, 
+      "exp": 43288000
+    }, 
+    {
+      "reincarnExp": 209931, 
+      "id": 441, 
+      "exp": 43395520
+    }, 
+    {
+      "reincarnExp": 210451, 
+      "id": 442, 
+      "exp": 43503040
+    }, 
+    {
+      "reincarnExp": 210971, 
+      "id": 443, 
+      "exp": 43610560
+    }, 
+    {
+      "reincarnExp": 211492, 
+      "id": 444, 
+      "exp": 43718080
+    }, 
+    {
+      "reincarnExp": 212012, 
+      "id": 445, 
+      "exp": 43825600
+    }, 
+    {
+      "reincarnExp": 212532, 
+      "id": 446, 
+      "exp": 43933120
+    }, 
+    {
+      "reincarnExp": 213052, 
+      "id": 447, 
+      "exp": 44040640
+    }, 
+    {
+      "reincarnExp": 213572, 
+      "id": 448, 
+      "exp": 44148160
+    }, 
+    {
+      "reincarnExp": 214092, 
+      "id": 449, 
+      "exp": 44255680
+    }, 
+    {
+      "reincarnExp": 214612, 
+      "id": 450, 
+      "exp": 44363200
+    }, 
+    {
+      "reincarnExp": 215132, 
+      "id": 451, 
+      "exp": 44470720
+    }, 
+    {
+      "reincarnExp": 215653, 
+      "id": 452, 
+      "exp": 44578240
+    }, 
+    {
+      "reincarnExp": 216173, 
+      "id": 453, 
+      "exp": 44685760
+    }, 
+    {
+      "reincarnExp": 216693, 
+      "id": 454, 
+      "exp": 44793280
+    }, 
+    {
+      "reincarnExp": 217213, 
+      "id": 455, 
+      "exp": 44900800
+    }, 
+    {
+      "reincarnExp": 217733, 
+      "id": 456, 
+      "exp": 45008320
+    }, 
+    {
+      "reincarnExp": 218253, 
+      "id": 457, 
+      "exp": 45115840
+    }, 
+    {
+      "reincarnExp": 218773, 
+      "id": 458, 
+      "exp": 45223360
+    }, 
+    {
+      "reincarnExp": 219294, 
+      "id": 459, 
+      "exp": 45330880
+    }, 
+    {
+      "reincarnExp": 219814, 
+      "id": 460, 
+      "exp": 45438400
+    }, 
+    {
+      "reincarnExp": 220334, 
+      "id": 461, 
+      "exp": 45545920
+    }, 
+    {
+      "reincarnExp": 220854, 
+      "id": 462, 
+      "exp": 45653440
+    }, 
+    {
+      "reincarnExp": 221374, 
+      "id": 463, 
+      "exp": 45760960
+    }, 
+    {
+      "reincarnExp": 221894, 
+      "id": 464, 
+      "exp": 45868480
+    }, 
+    {
+      "reincarnExp": 222414, 
+      "id": 465, 
+      "exp": 45976000
+    }, 
+    {
+      "reincarnExp": 222935, 
+      "id": 466, 
+      "exp": 46083520
+    }, 
+    {
+      "reincarnExp": 223455, 
+      "id": 467, 
+      "exp": 46191040
+    }, 
+    {
+      "reincarnExp": 223975, 
+      "id": 468, 
+      "exp": 46298560
+    }, 
+    {
+      "reincarnExp": 224495, 
+      "id": 469, 
+      "exp": 46406080
+    }, 
+    {
+      "reincarnExp": 225015, 
+      "id": 470, 
+      "exp": 46513600
+    }, 
+    {
+      "reincarnExp": 225535, 
+      "id": 471, 
+      "exp": 46621120
+    }, 
+    {
+      "reincarnExp": 226055, 
+      "id": 472, 
+      "exp": 46728640
+    }, 
+    {
+      "reincarnExp": 226576, 
+      "id": 473, 
+      "exp": 46836160
+    }, 
+    {
+      "reincarnExp": 227096, 
+      "id": 474, 
+      "exp": 46943680
+    }, 
+    {
+      "reincarnExp": 227616, 
+      "id": 475, 
+      "exp": 47051200
+    }, 
+    {
+      "reincarnExp": 228136, 
+      "id": 476, 
+      "exp": 47158720
+    }, 
+    {
+      "reincarnExp": 228656, 
+      "id": 477, 
+      "exp": 47266240
+    }, 
+    {
+      "reincarnExp": 229176, 
+      "id": 478, 
+      "exp": 47373760
+    }, 
+    {
+      "reincarnExp": 229696, 
+      "id": 479, 
+      "exp": 47481280
+    }, 
+    {
+      "reincarnExp": 230217, 
+      "id": 480, 
+      "exp": 47588800
+    }, 
+    {
+      "reincarnExp": 230737, 
+      "id": 481, 
+      "exp": 47696320
+    }, 
+    {
+      "reincarnExp": 231257, 
+      "id": 482, 
+      "exp": 47803840
+    }, 
+    {
+      "reincarnExp": 231777, 
+      "id": 483, 
+      "exp": 47911360
+    }, 
+    {
+      "reincarnExp": 232297, 
+      "id": 484, 
+      "exp": 48018880
+    }, 
+    {
+      "reincarnExp": 232817, 
+      "id": 485, 
+      "exp": 48126400
+    }, 
+    {
+      "reincarnExp": 233337, 
+      "id": 486, 
+      "exp": 48233920
+    }, 
+    {
+      "reincarnExp": 233858, 
+      "id": 487, 
+      "exp": 48341440
+    }, 
+    {
+      "reincarnExp": 234378, 
+      "id": 488, 
+      "exp": 48448960
+    }, 
+    {
+      "reincarnExp": 234898, 
+      "id": 489, 
+      "exp": 48556480
+    }, 
+    {
+      "reincarnExp": 235418, 
+      "id": 490, 
+      "exp": 48664000
+    }, 
+    {
+      "reincarnExp": 235938, 
+      "id": 491, 
+      "exp": 48771520
+    }, 
+    {
+      "reincarnExp": 236458, 
+      "id": 492, 
+      "exp": 48879040
+    }, 
+    {
+      "reincarnExp": 236978, 
+      "id": 493, 
+      "exp": 48986560
+    }, 
+    {
+      "reincarnExp": 237499, 
+      "id": 494, 
+      "exp": 49094080
+    }, 
+    {
+      "reincarnExp": 238019, 
+      "id": 495, 
+      "exp": 49201600
+    }, 
+    {
+      "reincarnExp": 238539, 
+      "id": 496, 
+      "exp": 49309120
+    }, 
+    {
+      "reincarnExp": 239059, 
+      "id": 497, 
+      "exp": 49416640
+    }, 
+    {
+      "reincarnExp": 239579, 
+      "id": 498, 
+      "exp": 49524160
+    }, 
+    {
+      "reincarnExp": 240099, 
+      "id": 499, 
+      "exp": 49631680
+    }, 
+    {
+      "reincarnExp": 240619, 
+      "id": 500, 
+      "exp": 49739200
+    }, 
+    {
+      "reincarnExp": 241140, 
+      "id": 501, 
+      "exp": 49846720
+    }, 
+    {
+      "reincarnExp": 241660, 
+      "id": 502, 
+      "exp": 49954240
+    }, 
+    {
+      "reincarnExp": 242180, 
+      "id": 503, 
+      "exp": 50061760
+    }, 
+    {
+      "reincarnExp": 242700, 
+      "id": 504, 
+      "exp": 50169280
+    }, 
+    {
+      "reincarnExp": 243220, 
+      "id": 505, 
+      "exp": 50276800
+    }, 
+    {
+      "reincarnExp": 243740, 
+      "id": 506, 
+      "exp": 50384320
+    }, 
+    {
+      "reincarnExp": 244260, 
+      "id": 507, 
+      "exp": 50491840
+    }, 
+    {
+      "reincarnExp": 244781, 
+      "id": 508, 
+      "exp": 50599360
+    }, 
+    {
+      "reincarnExp": 245301, 
+      "id": 509, 
+      "exp": 50706880
+    }, 
+    {
+      "reincarnExp": 245821, 
+      "id": 510, 
+      "exp": 50814400
+    }, 
+    {
+      "reincarnExp": 246341, 
+      "id": 511, 
+      "exp": 50921920
+    }, 
+    {
+      "reincarnExp": 246861, 
+      "id": 512, 
+      "exp": 51029440
+    }, 
+    {
+      "reincarnExp": 247381, 
+      "id": 513, 
+      "exp": 51136960
+    }, 
+    {
+      "reincarnExp": 247901, 
+      "id": 514, 
+      "exp": 51244480
+    }, 
+    {
+      "reincarnExp": 248422, 
+      "id": 515, 
+      "exp": 51352000
+    }, 
+    {
+      "reincarnExp": 248942, 
+      "id": 516, 
+      "exp": 51459520
+    }, 
+    {
+      "reincarnExp": 249462, 
+      "id": 517, 
+      "exp": 51567040
+    }, 
+    {
+      "reincarnExp": 249982, 
+      "id": 518, 
+      "exp": 51674560
+    }, 
+    {
+      "reincarnExp": 250502, 
+      "id": 519, 
+      "exp": 51782080
+    }, 
+    {
+      "reincarnExp": 251022, 
+      "id": 520, 
+      "exp": 51889600
+    }, 
+    {
+      "reincarnExp": 251542, 
+      "id": 521, 
+      "exp": 51997120
+    }, 
+    {
+      "reincarnExp": 252063, 
+      "id": 522, 
+      "exp": 52104640
+    }, 
+    {
+      "reincarnExp": 252583, 
+      "id": 523, 
+      "exp": 52212160
+    }, 
+    {
+      "reincarnExp": 253103, 
+      "id": 524, 
+      "exp": 52319680
+    }, 
+    {
+      "reincarnExp": 253623, 
+      "id": 525, 
+      "exp": 52427200
+    }, 
+    {
+      "reincarnExp": 254143, 
+      "id": 526, 
+      "exp": 52534720
+    }, 
+    {
+      "reincarnExp": 254663, 
+      "id": 527, 
+      "exp": 52642240
+    }, 
+    {
+      "reincarnExp": 255183, 
+      "id": 528, 
+      "exp": 52749760
+    }, 
+    {
+      "reincarnExp": 255703, 
+      "id": 529, 
+      "exp": 52857280
+    }, 
+    {
+      "reincarnExp": 256224, 
+      "id": 530, 
+      "exp": 52964800
+    }, 
+    {
+      "reincarnExp": 256744, 
+      "id": 531, 
+      "exp": 53072320
+    }, 
+    {
+      "reincarnExp": 257264, 
+      "id": 532, 
+      "exp": 53179840
+    }, 
+    {
+      "reincarnExp": 257784, 
+      "id": 533, 
+      "exp": 53287360
+    }, 
+    {
+      "reincarnExp": 258304, 
+      "id": 534, 
+      "exp": 53394880
+    }, 
+    {
+      "reincarnExp": 258824, 
+      "id": 535, 
+      "exp": 53502400
+    }, 
+    {
+      "reincarnExp": 259344, 
+      "id": 536, 
+      "exp": 53609920
+    }, 
+    {
+      "reincarnExp": 259865, 
+      "id": 537, 
+      "exp": 53717440
+    }, 
+    {
+      "reincarnExp": 260385, 
+      "id": 538, 
+      "exp": 53824960
+    }, 
+    {
+      "reincarnExp": 260905, 
+      "id": 539, 
+      "exp": 53932480
+    }, 
+    {
+      "reincarnExp": 261425, 
+      "id": 540, 
+      "exp": 54040000
+    }, 
+    {
+      "reincarnExp": 261945, 
+      "id": 541, 
+      "exp": 54147520
+    }, 
+    {
+      "reincarnExp": 262465, 
+      "id": 542, 
+      "exp": 54255040
+    }, 
+    {
+      "reincarnExp": 262985, 
+      "id": 543, 
+      "exp": 54362560
+    }, 
+    {
+      "reincarnExp": 263506, 
+      "id": 544, 
+      "exp": 54470080
+    }, 
+    {
+      "reincarnExp": 264026, 
+      "id": 545, 
+      "exp": 54577600
+    }, 
+    {
+      "reincarnExp": 264546, 
+      "id": 546, 
+      "exp": 54685120
+    }, 
+    {
+      "reincarnExp": 265066, 
+      "id": 547, 
+      "exp": 54792640
+    }, 
+    {
+      "reincarnExp": 265586, 
+      "id": 548, 
+      "exp": 54900160
+    }, 
+    {
+      "reincarnExp": 266106, 
+      "id": 549, 
+      "exp": 55007680
+    }, 
+    {
+      "reincarnExp": 266626, 
+      "id": 550, 
+      "exp": 55115200
+    }, 
+    {
+      "reincarnExp": 267147, 
+      "id": 551, 
+      "exp": 55222720
+    }, 
+    {
+      "reincarnExp": 267667, 
+      "id": 552, 
+      "exp": 55330240
+    }, 
+    {
+      "reincarnExp": 268187, 
+      "id": 553, 
+      "exp": 55437760
+    }, 
+    {
+      "reincarnExp": 268707, 
+      "id": 554, 
+      "exp": 55545280
+    }, 
+    {
+      "reincarnExp": 269227, 
+      "id": 555, 
+      "exp": 55652800
+    }, 
+    {
+      "reincarnExp": 269747, 
+      "id": 556, 
+      "exp": 55760320
+    }, 
+    {
+      "reincarnExp": 270267, 
+      "id": 557, 
+      "exp": 55867840
+    }, 
+    {
+      "reincarnExp": 270788, 
+      "id": 558, 
+      "exp": 55975360
+    }, 
+    {
+      "reincarnExp": 271308, 
+      "id": 559, 
+      "exp": 56082880
+    }, 
+    {
+      "reincarnExp": 271828, 
+      "id": 560, 
+      "exp": 56190400
+    }, 
+    {
+      "reincarnExp": 272348, 
+      "id": 561, 
+      "exp": 56297920
+    }, 
+    {
+      "reincarnExp": 272868, 
+      "id": 562, 
+      "exp": 56405440
+    }, 
+    {
+      "reincarnExp": 273388, 
+      "id": 563, 
+      "exp": 56512960
+    }, 
+    {
+      "reincarnExp": 273908, 
+      "id": 564, 
+      "exp": 56620480
+    }, 
+    {
+      "reincarnExp": 274429, 
+      "id": 565, 
+      "exp": 56728000
+    }, 
+    {
+      "reincarnExp": 274949, 
+      "id": 566, 
+      "exp": 56835520
+    }, 
+    {
+      "reincarnExp": 275469, 
+      "id": 567, 
+      "exp": 56943040
+    }, 
+    {
+      "reincarnExp": 275989, 
+      "id": 568, 
+      "exp": 57050560
+    }, 
+    {
+      "reincarnExp": 276509, 
+      "id": 569, 
+      "exp": 57158080
+    }, 
+    {
+      "reincarnExp": 277029, 
+      "id": 570, 
+      "exp": 57265600
+    }, 
+    {
+      "reincarnExp": 277549, 
+      "id": 571, 
+      "exp": 57373120
+    }, 
+    {
+      "reincarnExp": 278070, 
+      "id": 572, 
+      "exp": 57480640
+    }, 
+    {
+      "reincarnExp": 278590, 
+      "id": 573, 
+      "exp": 57588160
+    }, 
+    {
+      "reincarnExp": 279110, 
+      "id": 574, 
+      "exp": 57695680
+    }, 
+    {
+      "reincarnExp": 279630, 
+      "id": 575, 
+      "exp": 57803200
+    }, 
+    {
+      "reincarnExp": 280150, 
+      "id": 576, 
+      "exp": 57910720
+    }, 
+    {
+      "reincarnExp": 280670, 
+      "id": 577, 
+      "exp": 58018240
+    }, 
+    {
+      "reincarnExp": 281190, 
+      "id": 578, 
+      "exp": 58125760
+    }, 
+    {
+      "reincarnExp": 281711, 
+      "id": 579, 
+      "exp": 58233280
+    }, 
+    {
+      "reincarnExp": 282231, 
+      "id": 580, 
+      "exp": 58340800
+    }, 
+    {
+      "reincarnExp": 282751, 
+      "id": 581, 
+      "exp": 58448320
+    }, 
+    {
+      "reincarnExp": 283271, 
+      "id": 582, 
+      "exp": 58555840
+    }, 
+    {
+      "reincarnExp": 283791, 
+      "id": 583, 
+      "exp": 58663360
+    }, 
+    {
+      "reincarnExp": 284311, 
+      "id": 584, 
+      "exp": 58770880
+    }, 
+    {
+      "reincarnExp": 284831, 
+      "id": 585, 
+      "exp": 58878400
+    }, 
+    {
+      "reincarnExp": 285352, 
+      "id": 586, 
+      "exp": 58985920
+    }, 
+    {
+      "reincarnExp": 285872, 
+      "id": 587, 
+      "exp": 59093440
+    }, 
+    {
+      "reincarnExp": 286392, 
+      "id": 588, 
+      "exp": 59200960
+    }, 
+    {
+      "reincarnExp": 286912, 
+      "id": 589, 
+      "exp": 59308480
+    }, 
+    {
+      "reincarnExp": 287432, 
+      "id": 590, 
+      "exp": 59416000
+    }, 
+    {
+      "reincarnExp": 287952, 
+      "id": 591, 
+      "exp": 59523520
+    }, 
+    {
+      "reincarnExp": 288472, 
+      "id": 592, 
+      "exp": 59631040
+    }, 
+    {
+      "reincarnExp": 288993, 
+      "id": 593, 
+      "exp": 59738560
+    }, 
+    {
+      "reincarnExp": 289513, 
+      "id": 594, 
+      "exp": 59846080
+    }, 
+    {
+      "reincarnExp": 290033, 
+      "id": 595, 
+      "exp": 59953600
+    }, 
+    {
+      "reincarnExp": 290553, 
+      "id": 596, 
+      "exp": 60061120
+    }, 
+    {
+      "reincarnExp": 291073, 
+      "id": 597, 
+      "exp": 60168640
+    }, 
+    {
+      "reincarnExp": 291593, 
+      "id": 598, 
+      "exp": 60276160
+    }, 
+    {
+      "reincarnExp": 292113, 
+      "id": 599, 
+      "exp": 60383680
+    }, 
+    {
+      "reincarnExp": 292634, 
+      "id": 600, 
+      "exp": 60491200
+    }, 
+    {
+      "reincarnExp": 293154, 
+      "id": 601, 
+      "exp": 60598720
+    }, 
+    {
+      "reincarnExp": 293674, 
+      "id": 602, 
+      "exp": 60706240
+    }, 
+    {
+      "reincarnExp": 294194, 
+      "id": 603, 
+      "exp": 60813760
+    }, 
+    {
+      "reincarnExp": 294714, 
+      "id": 604, 
+      "exp": 60921280
+    }, 
+    {
+      "reincarnExp": 295234, 
+      "id": 605, 
+      "exp": 61028800
+    }, 
+    {
+      "reincarnExp": 295754, 
+      "id": 606, 
+      "exp": 61136320
+    }, 
+    {
+      "reincarnExp": 296274, 
+      "id": 607, 
+      "exp": 61243840
+    }, 
+    {
+      "reincarnExp": 296795, 
+      "id": 608, 
+      "exp": 61351360
+    }, 
+    {
+      "reincarnExp": 297315, 
+      "id": 609, 
+      "exp": 61458880
+    }, 
+    {
+      "reincarnExp": 297835, 
+      "id": 610, 
+      "exp": 61566400
+    }, 
+    {
+      "reincarnExp": 298355, 
+      "id": 611, 
+      "exp": 61673920
+    }, 
+    {
+      "reincarnExp": 298875, 
+      "id": 612, 
+      "exp": 61781440
+    }, 
+    {
+      "reincarnExp": 299395, 
+      "id": 613, 
+      "exp": 61888960
+    }, 
+    {
+      "reincarnExp": 299915, 
+      "id": 614, 
+      "exp": 61996480
+    }, 
+    {
+      "reincarnExp": 300436, 
+      "id": 615, 
+      "exp": 62104000
+    }, 
+    {
+      "reincarnExp": 300956, 
+      "id": 616, 
+      "exp": 62211520
+    }, 
+    {
+      "reincarnExp": 301476, 
+      "id": 617, 
+      "exp": 62319040
+    }, 
+    {
+      "reincarnExp": 301996, 
+      "id": 618, 
+      "exp": 62426560
+    }, 
+    {
+      "reincarnExp": 302516, 
+      "id": 619, 
+      "exp": 62534080
+    }, 
+    {
+      "reincarnExp": 303036, 
+      "id": 620, 
+      "exp": 62641600
+    }, 
+    {
+      "reincarnExp": 303556, 
+      "id": 621, 
+      "exp": 62749120
+    }, 
+    {
+      "reincarnExp": 304077, 
+      "id": 622, 
+      "exp": 62856640
+    }, 
+    {
+      "reincarnExp": 304597, 
+      "id": 623, 
+      "exp": 62964160
+    }, 
+    {
+      "reincarnExp": 305117, 
+      "id": 624, 
+      "exp": 63071680
+    }, 
+    {
+      "reincarnExp": 305637, 
+      "id": 625, 
+      "exp": 63179200
+    }, 
+    {
+      "reincarnExp": 306157, 
+      "id": 626, 
+      "exp": 63286720
+    }, 
+    {
+      "reincarnExp": 306677, 
+      "id": 627, 
+      "exp": 63394240
+    }, 
+    {
+      "reincarnExp": 307197, 
+      "id": 628, 
+      "exp": 63501760
+    }, 
+    {
+      "reincarnExp": 307718, 
+      "id": 629, 
+      "exp": 63609280
+    }, 
+    {
+      "reincarnExp": 308238, 
+      "id": 630, 
+      "exp": 63716800
+    }, 
+    {
+      "reincarnExp": 308758, 
+      "id": 631, 
+      "exp": 63824320
+    }, 
+    {
+      "reincarnExp": 309278, 
+      "id": 632, 
+      "exp": 63931840
+    }, 
+    {
+      "reincarnExp": 309798, 
+      "id": 633, 
+      "exp": 64039360
+    }, 
+    {
+      "reincarnExp": 310318, 
+      "id": 634, 
+      "exp": 64146880
+    }, 
+    {
+      "reincarnExp": 310838, 
+      "id": 635, 
+      "exp": 64254400
+    }, 
+    {
+      "reincarnExp": 311359, 
+      "id": 636, 
+      "exp": 64361920
+    }, 
+    {
+      "reincarnExp": 311879, 
+      "id": 637, 
+      "exp": 64469440
+    }, 
+    {
+      "reincarnExp": 312399, 
+      "id": 638, 
+      "exp": 64576960
+    }, 
+    {
+      "reincarnExp": 312919, 
+      "id": 639, 
+      "exp": 64684480
+    }, 
+    {
+      "reincarnExp": 313439, 
+      "id": 640, 
+      "exp": 64792000
+    }, 
+    {
+      "reincarnExp": 313959, 
+      "id": 641, 
+      "exp": 64899520
+    }, 
+    {
+      "reincarnExp": 314479, 
+      "id": 642, 
+      "exp": 65007040
+    }, 
+    {
+      "reincarnExp": 315000, 
+      "id": 643, 
+      "exp": 65114560
+    }, 
+    {
+      "reincarnExp": 315520, 
+      "id": 644, 
+      "exp": 65222080
+    }, 
+    {
+      "reincarnExp": 316040, 
+      "id": 645, 
+      "exp": 65329600
+    }, 
+    {
+      "reincarnExp": 316560, 
+      "id": 646, 
+      "exp": 65437120
+    }, 
+    {
+      "reincarnExp": 317080, 
+      "id": 647, 
+      "exp": 65544640
+    }, 
+    {
+      "reincarnExp": 317600, 
+      "id": 648, 
+      "exp": 65652160
+    }, 
+    {
+      "reincarnExp": 318120, 
+      "id": 649, 
+      "exp": 65759680
+    }, 
+    {
+      "reincarnExp": 318641, 
+      "id": 650, 
+      "exp": 65867200
+    }, 
+    {
+      "reincarnExp": 319161, 
+      "id": 651, 
+      "exp": 65974720
+    }, 
+    {
+      "reincarnExp": 319681, 
+      "id": 652, 
+      "exp": 66082240
+    }, 
+    {
+      "reincarnExp": 320201, 
+      "id": 653, 
+      "exp": 66189760
+    }, 
+    {
+      "reincarnExp": 320721, 
+      "id": 654, 
+      "exp": 66297280
+    }, 
+    {
+      "reincarnExp": 321241, 
+      "id": 655, 
+      "exp": 66404800
+    }, 
+    {
+      "reincarnExp": 321761, 
+      "id": 656, 
+      "exp": 66512320
+    }, 
+    {
+      "reincarnExp": 322282, 
+      "id": 657, 
+      "exp": 66619840
+    }, 
+    {
+      "reincarnExp": 322802, 
+      "id": 658, 
+      "exp": 66727360
+    }, 
+    {
+      "reincarnExp": 323322, 
+      "id": 659, 
+      "exp": 66834880
+    }, 
+    {
+      "reincarnExp": 323842, 
+      "id": 660, 
+      "exp": 66942400
+    }, 
+    {
+      "reincarnExp": 324362, 
+      "id": 661, 
+      "exp": 67049920
+    }, 
+    {
+      "reincarnExp": 324882, 
+      "id": 662, 
+      "exp": 67157440
+    }, 
+    {
+      "reincarnExp": 325402, 
+      "id": 663, 
+      "exp": 67264960
+    }, 
+    {
+      "reincarnExp": 325923, 
+      "id": 664, 
+      "exp": 67372480
+    }, 
+    {
+      "reincarnExp": 326443, 
+      "id": 665, 
+      "exp": 67480000
+    }, 
+    {
+      "reincarnExp": 326963, 
+      "id": 666, 
+      "exp": 67587520
+    }, 
+    {
+      "reincarnExp": 327483, 
+      "id": 667, 
+      "exp": 67695040
+    }, 
+    {
+      "reincarnExp": 328003, 
+      "id": 668, 
+      "exp": 67802560
+    }, 
+    {
+      "reincarnExp": 328523, 
+      "id": 669, 
+      "exp": 67910080
+    }, 
+    {
+      "reincarnExp": 329043, 
+      "id": 670, 
+      "exp": 68017600
+    }, 
+    {
+      "reincarnExp": 329564, 
+      "id": 671, 
+      "exp": 68125120
+    }, 
+    {
+      "reincarnExp": 330084, 
+      "id": 672, 
+      "exp": 68232640
+    }, 
+    {
+      "reincarnExp": 330604, 
+      "id": 673, 
+      "exp": 68340160
+    }, 
+    {
+      "reincarnExp": 331124, 
+      "id": 674, 
+      "exp": 68447680
+    }, 
+    {
+      "reincarnExp": 331644, 
+      "id": 675, 
+      "exp": 68555200
+    }, 
+    {
+      "reincarnExp": 332164, 
+      "id": 676, 
+      "exp": 68662720
+    }, 
+    {
+      "reincarnExp": 332684, 
+      "id": 677, 
+      "exp": 68770240
+    }, 
+    {
+      "reincarnExp": 333205, 
+      "id": 678, 
+      "exp": 68877760
+    }, 
+    {
+      "reincarnExp": 333725, 
+      "id": 679, 
+      "exp": 68985280
+    }, 
+    {
+      "reincarnExp": 334245, 
+      "id": 680, 
+      "exp": 69092800
+    }, 
+    {
+      "reincarnExp": 334765, 
+      "id": 681, 
+      "exp": 69200320
+    }, 
+    {
+      "reincarnExp": 335285, 
+      "id": 682, 
+      "exp": 69307840
+    }, 
+    {
+      "reincarnExp": 335805, 
+      "id": 683, 
+      "exp": 69415360
+    }, 
+    {
+      "reincarnExp": 336325, 
+      "id": 684, 
+      "exp": 69522880
+    }, 
+    {
+      "reincarnExp": 336845, 
+      "id": 685, 
+      "exp": 69630400
+    }, 
+    {
+      "reincarnExp": 337366, 
+      "id": 686, 
+      "exp": 69737920
+    }, 
+    {
+      "reincarnExp": 337886, 
+      "id": 687, 
+      "exp": 69845440
+    }, 
+    {
+      "reincarnExp": 338406, 
+      "id": 688, 
+      "exp": 69952960
+    }, 
+    {
+      "reincarnExp": 338926, 
+      "id": 689, 
+      "exp": 70060480
+    }, 
+    {
+      "reincarnExp": 339446, 
+      "id": 690, 
+      "exp": 70168000
+    }, 
+    {
+      "reincarnExp": 339966, 
+      "id": 691, 
+      "exp": 70275520
+    }, 
+    {
+      "reincarnExp": 340486, 
+      "id": 692, 
+      "exp": 70383040
+    }, 
+    {
+      "reincarnExp": 341007, 
+      "id": 693, 
+      "exp": 70490560
+    }, 
+    {
+      "reincarnExp": 341527, 
+      "id": 694, 
+      "exp": 70598080
+    }, 
+    {
+      "reincarnExp": 342047, 
+      "id": 695, 
+      "exp": 70705600
+    }, 
+    {
+      "reincarnExp": 342567, 
+      "id": 696, 
+      "exp": 70813120
+    }, 
+    {
+      "reincarnExp": 343087, 
+      "id": 697, 
+      "exp": 70920640
+    }, 
+    {
+      "reincarnExp": 343607, 
+      "id": 698, 
+      "exp": 71028160
+    }, 
+    {
+      "reincarnExp": 344127, 
+      "id": 699, 
+      "exp": 71135680
+    }, 
+    {
+      "reincarnExp": 344648, 
+      "id": 700, 
+      "exp": 71243200
+    }, 
+    {
+      "reincarnExp": 345168, 
+      "id": 701, 
+      "exp": 71350720
+    }, 
+    {
+      "reincarnExp": 345688, 
+      "id": 702, 
+      "exp": 71458240
+    }, 
+    {
+      "reincarnExp": 346208, 
+      "id": 703, 
+      "exp": 71565760
+    }, 
+    {
+      "reincarnExp": 346728, 
+      "id": 704, 
+      "exp": 71673280
+    }, 
+    {
+      "reincarnExp": 347248, 
+      "id": 705, 
+      "exp": 71780800
+    }, 
+    {
+      "reincarnExp": 347768, 
+      "id": 706, 
+      "exp": 71888320
+    }, 
+    {
+      "reincarnExp": 348289, 
+      "id": 707, 
+      "exp": 71995840
+    }, 
+    {
+      "reincarnExp": 348809, 
+      "id": 708, 
+      "exp": 72103360
+    }, 
+    {
+      "reincarnExp": 349329, 
+      "id": 709, 
+      "exp": 72210880
+    }, 
+    {
+      "reincarnExp": 349849, 
+      "id": 710, 
+      "exp": 72318400
+    }, 
+    {
+      "reincarnExp": 350369, 
+      "id": 711, 
+      "exp": 72425920
+    }, 
+    {
+      "reincarnExp": 350889, 
+      "id": 712, 
+      "exp": 72533440
+    }, 
+    {
+      "reincarnExp": 351409, 
+      "id": 713, 
+      "exp": 72640960
+    }, 
+    {
+      "reincarnExp": 351930, 
+      "id": 714, 
+      "exp": 72748480
+    }, 
+    {
+      "reincarnExp": 352450, 
+      "id": 715, 
+      "exp": 72856000
+    }, 
+    {
+      "reincarnExp": 352970, 
+      "id": 716, 
+      "exp": 72963520
+    }, 
+    {
+      "reincarnExp": 353490, 
+      "id": 717, 
+      "exp": 73071040
+    }, 
+    {
+      "reincarnExp": 354010, 
+      "id": 718, 
+      "exp": 73178560
+    }, 
+    {
+      "reincarnExp": 354530, 
+      "id": 719, 
+      "exp": 73286080
+    }, 
+    {
+      "reincarnExp": 355050, 
+      "id": 720, 
+      "exp": 73393600
+    }, 
+    {
+      "reincarnExp": 355571, 
+      "id": 721, 
+      "exp": 73501120
+    }, 
+    {
+      "reincarnExp": 356091, 
+      "id": 722, 
+      "exp": 73608640
+    }, 
+    {
+      "reincarnExp": 356611, 
+      "id": 723, 
+      "exp": 73716160
+    }, 
+    {
+      "reincarnExp": 357131, 
+      "id": 724, 
+      "exp": 73823680
+    }, 
+    {
+      "reincarnExp": 357651, 
+      "id": 725, 
+      "exp": 73931200
+    }, 
+    {
+      "reincarnExp": 358171, 
+      "id": 726, 
+      "exp": 74038720
+    }, 
+    {
+      "reincarnExp": 358691, 
+      "id": 727, 
+      "exp": 74146240
+    }, 
+    {
+      "reincarnExp": 359212, 
+      "id": 728, 
+      "exp": 74253760
+    }, 
+    {
+      "reincarnExp": 359732, 
+      "id": 729, 
+      "exp": 74361280
+    }, 
+    {
+      "reincarnExp": 360252, 
+      "id": 730, 
+      "exp": 74468800
+    }, 
+    {
+      "reincarnExp": 360772, 
+      "id": 731, 
+      "exp": 74576320
+    }, 
+    {
+      "reincarnExp": 361292, 
+      "id": 732, 
+      "exp": 74683840
+    }, 
+    {
+      "reincarnExp": 361812, 
+      "id": 733, 
+      "exp": 74791360
+    }, 
+    {
+      "reincarnExp": 362332, 
+      "id": 734, 
+      "exp": 74898880
+    }, 
+    {
+      "reincarnExp": 362853, 
+      "id": 735, 
+      "exp": 75006400
+    }, 
+    {
+      "reincarnExp": 363373, 
+      "id": 736, 
+      "exp": 75113920
+    }, 
+    {
+      "reincarnExp": 363893, 
+      "id": 737, 
+      "exp": 75221440
+    }, 
+    {
+      "reincarnExp": 364413, 
+      "id": 738, 
+      "exp": 75328960
+    }, 
+    {
+      "reincarnExp": 364933, 
+      "id": 739, 
+      "exp": 75436480
+    }, 
+    {
+      "reincarnExp": 365453, 
+      "id": 740, 
+      "exp": 75544000
+    }, 
+    {
+      "reincarnExp": 365973, 
+      "id": 741, 
+      "exp": 75651520
+    }, 
+    {
+      "reincarnExp": 366494, 
+      "id": 742, 
+      "exp": 75759040
+    }, 
+    {
+      "reincarnExp": 367014, 
+      "id": 743, 
+      "exp": 75866560
+    }, 
+    {
+      "reincarnExp": 367534, 
+      "id": 744, 
+      "exp": 75974080
+    }, 
+    {
+      "reincarnExp": 368054, 
+      "id": 745, 
+      "exp": 76081600
+    }, 
+    {
+      "reincarnExp": 368574, 
+      "id": 746, 
+      "exp": 76189120
+    }, 
+    {
+      "reincarnExp": 369094, 
+      "id": 747, 
+      "exp": 76296640
+    }, 
+    {
+      "reincarnExp": 369614, 
+      "id": 748, 
+      "exp": 76404160
+    }, 
+    {
+      "reincarnExp": 370135, 
+      "id": 749, 
+      "exp": 76511680
+    }, 
+    {
+      "reincarnExp": 370655, 
+      "id": 750, 
+      "exp": 76619200
+    }, 
+    {
+      "reincarnExp": 371175, 
+      "id": 751, 
+      "exp": 76726720
+    }, 
+    {
+      "reincarnExp": 371695, 
+      "id": 752, 
+      "exp": 76834240
+    }, 
+    {
+      "reincarnExp": 372215, 
+      "id": 753, 
+      "exp": 76941760
+    }, 
+    {
+      "reincarnExp": 372735, 
+      "id": 754, 
+      "exp": 77049280
+    }, 
+    {
+      "reincarnExp": 373255, 
+      "id": 755, 
+      "exp": 77156800
+    }, 
+    {
+      "reincarnExp": 373776, 
+      "id": 756, 
+      "exp": 77264320
+    }, 
+    {
+      "reincarnExp": 374296, 
+      "id": 757, 
+      "exp": 77371840
+    }, 
+    {
+      "reincarnExp": 374816, 
+      "id": 758, 
+      "exp": 77479360
+    }, 
+    {
+      "reincarnExp": 375336, 
+      "id": 759, 
+      "exp": 77586880
+    }, 
+    {
+      "reincarnExp": 375856, 
+      "id": 760, 
+      "exp": 77694400
+    }, 
+    {
+      "reincarnExp": 376376, 
+      "id": 761, 
+      "exp": 77801920
+    }, 
+    {
+      "reincarnExp": 376896, 
+      "id": 762, 
+      "exp": 77909440
+    }, 
+    {
+      "reincarnExp": 377417, 
+      "id": 763, 
+      "exp": 78016960
+    }, 
+    {
+      "reincarnExp": 377937, 
+      "id": 764, 
+      "exp": 78124480
+    }, 
+    {
+      "reincarnExp": 378457, 
+      "id": 765, 
+      "exp": 78232000
+    }, 
+    {
+      "reincarnExp": 378977, 
+      "id": 766, 
+      "exp": 78339520
+    }, 
+    {
+      "reincarnExp": 379497, 
+      "id": 767, 
+      "exp": 78447040
+    }, 
+    {
+      "reincarnExp": 380017, 
+      "id": 768, 
+      "exp": 78554560
+    }, 
+    {
+      "reincarnExp": 380537, 
+      "id": 769, 
+      "exp": 78662080
+    }, 
+    {
+      "reincarnExp": 381057, 
+      "id": 770, 
+      "exp": 78769600
+    }, 
+    {
+      "reincarnExp": 381578, 
+      "id": 771, 
+      "exp": 78877120
+    }, 
+    {
+      "reincarnExp": 382098, 
+      "id": 772, 
+      "exp": 78984640
+    }, 
+    {
+      "reincarnExp": 382618, 
+      "id": 773, 
+      "exp": 79092160
+    }, 
+    {
+      "reincarnExp": 383138, 
+      "id": 774, 
+      "exp": 79199680
+    }, 
+    {
+      "reincarnExp": 383658, 
+      "id": 775, 
+      "exp": 79307200
+    }, 
+    {
+      "reincarnExp": 384178, 
+      "id": 776, 
+      "exp": 79414720
+    }, 
+    {
+      "reincarnExp": 384698, 
+      "id": 777, 
+      "exp": 79522240
+    }, 
+    {
+      "reincarnExp": 385219, 
+      "id": 778, 
+      "exp": 79629760
+    }, 
+    {
+      "reincarnExp": 385739, 
+      "id": 779, 
+      "exp": 79737280
+    }, 
+    {
+      "reincarnExp": 386259, 
+      "id": 780, 
+      "exp": 79844800
+    }, 
+    {
+      "reincarnExp": 386779, 
+      "id": 781, 
+      "exp": 79952320
+    }, 
+    {
+      "reincarnExp": 387299, 
+      "id": 782, 
+      "exp": 80059840
+    }, 
+    {
+      "reincarnExp": 387819, 
+      "id": 783, 
+      "exp": 80167360
+    }, 
+    {
+      "reincarnExp": 388339, 
+      "id": 784, 
+      "exp": 80274880
+    }, 
+    {
+      "reincarnExp": 388860, 
+      "id": 785, 
+      "exp": 80382400
+    }, 
+    {
+      "reincarnExp": 389380, 
+      "id": 786, 
+      "exp": 80489920
+    }, 
+    {
+      "reincarnExp": 389900, 
+      "id": 787, 
+      "exp": 80597440
+    }, 
+    {
+      "reincarnExp": 390420, 
+      "id": 788, 
+      "exp": 80704960
+    }, 
+    {
+      "reincarnExp": 390940, 
+      "id": 789, 
+      "exp": 80812480
+    }, 
+    {
+      "reincarnExp": 391460, 
+      "id": 790, 
+      "exp": 80920000
+    }, 
+    {
+      "reincarnExp": 391980, 
+      "id": 791, 
+      "exp": 81027520
+    }, 
+    {
+      "reincarnExp": 392501, 
+      "id": 792, 
+      "exp": 81135040
+    }, 
+    {
+      "reincarnExp": 393021, 
+      "id": 793, 
+      "exp": 81242560
+    }, 
+    {
+      "reincarnExp": 393541, 
+      "id": 794, 
+      "exp": 81350080
+    }, 
+    {
+      "reincarnExp": 394061, 
+      "id": 795, 
+      "exp": 81457600
+    }, 
+    {
+      "reincarnExp": 394581, 
+      "id": 796, 
+      "exp": 81565120
+    }, 
+    {
+      "reincarnExp": 395101, 
+      "id": 797, 
+      "exp": 81672640
+    }, 
+    {
+      "reincarnExp": 395621, 
+      "id": 798, 
+      "exp": 81780160
+    }, 
+    {
+      "reincarnExp": 396142, 
+      "id": 799, 
+      "exp": 81887680
+    }, 
+    {
+      "reincarnExp": 396662, 
+      "id": 800, 
+      "exp": 81995200
+    }, 
+    {
+      "reincarnExp": 397182, 
+      "id": 801, 
+      "exp": 82102720
+    }, 
+    {
+      "reincarnExp": 397702, 
+      "id": 802, 
+      "exp": 82210240
+    }, 
+    {
+      "reincarnExp": 398222, 
+      "id": 803, 
+      "exp": 82317760
+    }, 
+    {
+      "reincarnExp": 398742, 
+      "id": 804, 
+      "exp": 82425280
+    }, 
+    {
+      "reincarnExp": 399262, 
+      "id": 805, 
+      "exp": 82532800
+    }, 
+    {
+      "reincarnExp": 399783, 
+      "id": 806, 
+      "exp": 82640320
+    }, 
+    {
+      "reincarnExp": 400303, 
+      "id": 807, 
+      "exp": 82747840
+    }, 
+    {
+      "reincarnExp": 400823, 
+      "id": 808, 
+      "exp": 82855360
+    }, 
+    {
+      "reincarnExp": 401343, 
+      "id": 809, 
+      "exp": 82962880
+    }, 
+    {
+      "reincarnExp": 401863, 
+      "id": 810, 
+      "exp": 83070400
+    }, 
+    {
+      "reincarnExp": 402383, 
+      "id": 811, 
+      "exp": 83177920
+    }, 
+    {
+      "reincarnExp": 402903, 
+      "id": 812, 
+      "exp": 83285440
+    }, 
+    {
+      "reincarnExp": 403424, 
+      "id": 813, 
+      "exp": 83392960
+    }, 
+    {
+      "reincarnExp": 403944, 
+      "id": 814, 
+      "exp": 83500480
+    }, 
+    {
+      "reincarnExp": 404464, 
+      "id": 815, 
+      "exp": 83608000
+    }, 
+    {
+      "reincarnExp": 404984, 
+      "id": 816, 
+      "exp": 83715520
+    }, 
+    {
+      "reincarnExp": 405504, 
+      "id": 817, 
+      "exp": 83823040
+    }, 
+    {
+      "reincarnExp": 406024, 
+      "id": 818, 
+      "exp": 83930560
+    }, 
+    {
+      "reincarnExp": 406544, 
+      "id": 819, 
+      "exp": 84038080
+    }, 
+    {
+      "reincarnExp": 407065, 
+      "id": 820, 
+      "exp": 84145600
+    }, 
+    {
+      "reincarnExp": 407585, 
+      "id": 821, 
+      "exp": 84253120
+    }, 
+    {
+      "reincarnExp": 408105, 
+      "id": 822, 
+      "exp": 84360640
+    }, 
+    {
+      "reincarnExp": 408625, 
+      "id": 823, 
+      "exp": 84468160
+    }, 
+    {
+      "reincarnExp": 409145, 
+      "id": 824, 
+      "exp": 84575680
+    }, 
+    {
+      "reincarnExp": 409665, 
+      "id": 825, 
+      "exp": 84683200
+    }, 
+    {
+      "reincarnExp": 410185, 
+      "id": 826, 
+      "exp": 84790720
+    }, 
+    {
+      "reincarnExp": 410706, 
+      "id": 827, 
+      "exp": 84898240
+    }, 
+    {
+      "reincarnExp": 411226, 
+      "id": 828, 
+      "exp": 85005760
+    }, 
+    {
+      "reincarnExp": 411746, 
+      "id": 829, 
+      "exp": 85113280
+    }, 
+    {
+      "reincarnExp": 412266, 
+      "id": 830, 
+      "exp": 85220800
+    }, 
+    {
+      "reincarnExp": 412786, 
+      "id": 831, 
+      "exp": 85328320
+    }, 
+    {
+      "reincarnExp": 413306, 
+      "id": 832, 
+      "exp": 85435840
+    }, 
+    {
+      "reincarnExp": 413826, 
+      "id": 833, 
+      "exp": 85543360
+    }, 
+    {
+      "reincarnExp": 414347, 
+      "id": 834, 
+      "exp": 85650880
+    }, 
+    {
+      "reincarnExp": 414867, 
+      "id": 835, 
+      "exp": 85758400
+    }, 
+    {
+      "reincarnExp": 415387, 
+      "id": 836, 
+      "exp": 85865920
+    }, 
+    {
+      "reincarnExp": 415907, 
+      "id": 837, 
+      "exp": 85973440
+    }, 
+    {
+      "reincarnExp": 416427, 
+      "id": 838, 
+      "exp": 86080960
+    }, 
+    {
+      "reincarnExp": 416947, 
+      "id": 839, 
+      "exp": 86188480
+    }, 
+    {
+      "reincarnExp": 417467, 
+      "id": 840, 
+      "exp": 86296000
+    }, 
+    {
+      "reincarnExp": 417988, 
+      "id": 841, 
+      "exp": 86403520
+    }, 
+    {
+      "reincarnExp": 418508, 
+      "id": 842, 
+      "exp": 86511040
+    }, 
+    {
+      "reincarnExp": 419028, 
+      "id": 843, 
+      "exp": 86618560
+    }, 
+    {
+      "reincarnExp": 419548, 
+      "id": 844, 
+      "exp": 86726080
+    }, 
+    {
+      "reincarnExp": 420068, 
+      "id": 845, 
+      "exp": 86833600
+    }, 
+    {
+      "reincarnExp": 420588, 
+      "id": 846, 
+      "exp": 86941120
+    }, 
+    {
+      "reincarnExp": 421108, 
+      "id": 847, 
+      "exp": 87048640
+    }, 
+    {
+      "reincarnExp": 421628, 
+      "id": 848, 
+      "exp": 87156160
+    }, 
+    {
+      "reincarnExp": 422149, 
+      "id": 849, 
+      "exp": 87263680
+    }, 
+    {
+      "reincarnExp": 422669, 
+      "id": 850, 
+      "exp": 87371200
+    }, 
+    {
+      "reincarnExp": 423189, 
+      "id": 851, 
+      "exp": 87478720
+    }, 
+    {
+      "reincarnExp": 423709, 
+      "id": 852, 
+      "exp": 87586240
+    }, 
+    {
+      "reincarnExp": 424229, 
+      "id": 853, 
+      "exp": 87693760
+    }, 
+    {
+      "reincarnExp": 424749, 
+      "id": 854, 
+      "exp": 87801280
+    }, 
+    {
+      "reincarnExp": 425269, 
+      "id": 855, 
+      "exp": 87908800
+    }, 
+    {
+      "reincarnExp": 425790, 
+      "id": 856, 
+      "exp": 88016320
+    }, 
+    {
+      "reincarnExp": 426310, 
+      "id": 857, 
+      "exp": 88123840
+    }, 
+    {
+      "reincarnExp": 426830, 
+      "id": 858, 
+      "exp": 88231360
+    }, 
+    {
+      "reincarnExp": 427350, 
+      "id": 859, 
+      "exp": 88338880
+    }, 
+    {
+      "reincarnExp": 427870, 
+      "id": 860, 
+      "exp": 88446400
+    }, 
+    {
+      "reincarnExp": 428390, 
+      "id": 861, 
+      "exp": 88553920
+    }, 
+    {
+      "reincarnExp": 428910, 
+      "id": 862, 
+      "exp": 88661440
+    }, 
+    {
+      "reincarnExp": 429431, 
+      "id": 863, 
+      "exp": 88768960
+    }, 
+    {
+      "reincarnExp": 429951, 
+      "id": 864, 
+      "exp": 88876480
+    }, 
+    {
+      "reincarnExp": 430471, 
+      "id": 865, 
+      "exp": 88984000
+    }, 
+    {
+      "reincarnExp": 430991, 
+      "id": 866, 
+      "exp": 89091520
+    }, 
+    {
+      "reincarnExp": 431511, 
+      "id": 867, 
+      "exp": 89199040
+    }, 
+    {
+      "reincarnExp": 432031, 
+      "id": 868, 
+      "exp": 89306560
+    }, 
+    {
+      "reincarnExp": 432551, 
+      "id": 869, 
+      "exp": 89414080
+    }, 
+    {
+      "reincarnExp": 433072, 
+      "id": 870, 
+      "exp": 89521600
+    }, 
+    {
+      "reincarnExp": 433592, 
+      "id": 871, 
+      "exp": 89629120
+    }, 
+    {
+      "reincarnExp": 434112, 
+      "id": 872, 
+      "exp": 89736640
+    }, 
+    {
+      "reincarnExp": 434632, 
+      "id": 873, 
+      "exp": 89844160
+    }, 
+    {
+      "reincarnExp": 435152, 
+      "id": 874, 
+      "exp": 89951680
+    }, 
+    {
+      "reincarnExp": 435672, 
+      "id": 875, 
+      "exp": 90059200
+    }, 
+    {
+      "reincarnExp": 436192, 
+      "id": 876, 
+      "exp": 90166720
+    }, 
+    {
+      "reincarnExp": 436713, 
+      "id": 877, 
+      "exp": 90274240
+    }, 
+    {
+      "reincarnExp": 437233, 
+      "id": 878, 
+      "exp": 90381760
+    }, 
+    {
+      "reincarnExp": 437753, 
+      "id": 879, 
+      "exp": 90489280
+    }, 
+    {
+      "reincarnExp": 438273, 
+      "id": 880, 
+      "exp": 90596800
+    }, 
+    {
+      "reincarnExp": 438793, 
+      "id": 881, 
+      "exp": 90704320
+    }, 
+    {
+      "reincarnExp": 439313, 
+      "id": 882, 
+      "exp": 90811840
+    }, 
+    {
+      "reincarnExp": 439833, 
+      "id": 883, 
+      "exp": 90919360
+    }, 
+    {
+      "reincarnExp": 440354, 
+      "id": 884, 
+      "exp": 91026880
+    }, 
+    {
+      "reincarnExp": 440874, 
+      "id": 885, 
+      "exp": 91134400
+    }, 
+    {
+      "reincarnExp": 441394, 
+      "id": 886, 
+      "exp": 91241920
+    }, 
+    {
+      "reincarnExp": 441914, 
+      "id": 887, 
+      "exp": 91349440
+    }, 
+    {
+      "reincarnExp": 442434, 
+      "id": 888, 
+      "exp": 91456960
+    }, 
+    {
+      "reincarnExp": 442954, 
+      "id": 889, 
+      "exp": 91564480
+    }, 
+    {
+      "reincarnExp": 443474, 
+      "id": 890, 
+      "exp": 91672000
+    }, 
+    {
+      "reincarnExp": 443995, 
+      "id": 891, 
+      "exp": 91779520
+    }, 
+    {
+      "reincarnExp": 444515, 
+      "id": 892, 
+      "exp": 91887040
+    }, 
+    {
+      "reincarnExp": 445035, 
+      "id": 893, 
+      "exp": 91994560
+    }, 
+    {
+      "reincarnExp": 445555, 
+      "id": 894, 
+      "exp": 92102080
+    }, 
+    {
+      "reincarnExp": 446075, 
+      "id": 895, 
+      "exp": 92209600
+    }, 
+    {
+      "reincarnExp": 446595, 
+      "id": 896, 
+      "exp": 92317120
+    }, 
+    {
+      "reincarnExp": 447115, 
+      "id": 897, 
+      "exp": 92424640
+    }, 
+    {
+      "reincarnExp": 447636, 
+      "id": 898, 
+      "exp": 92532160
+    }, 
+    {
+      "reincarnExp": 448156, 
+      "id": 899, 
+      "exp": 92639680
+    }, 
+    {
+      "reincarnExp": 448676, 
+      "id": 900, 
+      "exp": 92747200
+    }, 
+    {
+      "reincarnExp": 449196, 
+      "id": 901, 
+      "exp": 92854720
+    }, 
+    {
+      "reincarnExp": 449716, 
+      "id": 902, 
+      "exp": 92962240
+    }, 
+    {
+      "reincarnExp": 450236, 
+      "id": 903, 
+      "exp": 93069760
+    }, 
+    {
+      "reincarnExp": 450756, 
+      "id": 904, 
+      "exp": 93177280
+    }, 
+    {
+      "reincarnExp": 451277, 
+      "id": 905, 
+      "exp": 93284800
+    }, 
+    {
+      "reincarnExp": 451797, 
+      "id": 906, 
+      "exp": 93392320
+    }, 
+    {
+      "reincarnExp": 452317, 
+      "id": 907, 
+      "exp": 93499840
+    }, 
+    {
+      "reincarnExp": 452837, 
+      "id": 908, 
+      "exp": 93607360
+    }, 
+    {
+      "reincarnExp": 453357, 
+      "id": 909, 
+      "exp": 93714880
+    }, 
+    {
+      "reincarnExp": 453877, 
+      "id": 910, 
+      "exp": 93822400
+    }, 
+    {
+      "reincarnExp": 454397, 
+      "id": 911, 
+      "exp": 93929920
+    }, 
+    {
+      "reincarnExp": 454918, 
+      "id": 912, 
+      "exp": 94037440
+    }, 
+    {
+      "reincarnExp": 455438, 
+      "id": 913, 
+      "exp": 94144960
+    }, 
+    {
+      "reincarnExp": 455958, 
+      "id": 914, 
+      "exp": 94252480
+    }, 
+    {
+      "reincarnExp": 456478, 
+      "id": 915, 
+      "exp": 94360000
+    }, 
+    {
+      "reincarnExp": 456998, 
+      "id": 916, 
+      "exp": 94467520
+    }, 
+    {
+      "reincarnExp": 457518, 
+      "id": 917, 
+      "exp": 94575040
+    }, 
+    {
+      "reincarnExp": 458038, 
+      "id": 918, 
+      "exp": 94682560
+    }, 
+    {
+      "reincarnExp": 458559, 
+      "id": 919, 
+      "exp": 94790080
+    }, 
+    {
+      "reincarnExp": 459079, 
+      "id": 920, 
+      "exp": 94897600
+    }, 
+    {
+      "reincarnExp": 459599, 
+      "id": 921, 
+      "exp": 95005120
+    }, 
+    {
+      "reincarnExp": 460119, 
+      "id": 922, 
+      "exp": 95112640
+    }, 
+    {
+      "reincarnExp": 460639, 
+      "id": 923, 
+      "exp": 95220160
+    }, 
+    {
+      "reincarnExp": 461159, 
+      "id": 924, 
+      "exp": 95327680
+    }, 
+    {
+      "reincarnExp": 461679, 
+      "id": 925, 
+      "exp": 95435200
+    }, 
+    {
+      "reincarnExp": 462199, 
+      "id": 926, 
+      "exp": 95542720
+    }, 
+    {
+      "reincarnExp": 462720, 
+      "id": 927, 
+      "exp": 95650240
+    }, 
+    {
+      "reincarnExp": 463240, 
+      "id": 928, 
+      "exp": 95757760
+    }, 
+    {
+      "reincarnExp": 463760, 
+      "id": 929, 
+      "exp": 95865280
+    }, 
+    {
+      "reincarnExp": 464280, 
+      "id": 930, 
+      "exp": 95972800
+    }, 
+    {
+      "reincarnExp": 464800, 
+      "id": 931, 
+      "exp": 96080320
+    }, 
+    {
+      "reincarnExp": 465320, 
+      "id": 932, 
+      "exp": 96187840
+    }, 
+    {
+      "reincarnExp": 465840, 
+      "id": 933, 
+      "exp": 96295360
+    }, 
+    {
+      "reincarnExp": 466361, 
+      "id": 934, 
+      "exp": 96402880
+    }, 
+    {
+      "reincarnExp": 466881, 
+      "id": 935, 
+      "exp": 96510400
+    }, 
+    {
+      "reincarnExp": 467401, 
+      "id": 936, 
+      "exp": 96617920
+    }, 
+    {
+      "reincarnExp": 467921, 
+      "id": 937, 
+      "exp": 96725440
+    }, 
+    {
+      "reincarnExp": 468441, 
+      "id": 938, 
+      "exp": 96832960
+    }, 
+    {
+      "reincarnExp": 468961, 
+      "id": 939, 
+      "exp": 96940480
+    }, 
+    {
+      "reincarnExp": 469481, 
+      "id": 940, 
+      "exp": 97048000
+    }, 
+    {
+      "reincarnExp": 470002, 
+      "id": 941, 
+      "exp": 97155520
+    }, 
+    {
+      "reincarnExp": 470522, 
+      "id": 942, 
+      "exp": 97263040
+    }, 
+    {
+      "reincarnExp": 471042, 
+      "id": 943, 
+      "exp": 97370560
+    }, 
+    {
+      "reincarnExp": 471562, 
+      "id": 944, 
+      "exp": 97478080
+    }, 
+    {
+      "reincarnExp": 472082, 
+      "id": 945, 
+      "exp": 97585600
+    }, 
+    {
+      "reincarnExp": 472602, 
+      "id": 946, 
+      "exp": 97693120
+    }, 
+    {
+      "reincarnExp": 473122, 
+      "id": 947, 
+      "exp": 97800640
+    }, 
+    {
+      "reincarnExp": 473643, 
+      "id": 948, 
+      "exp": 97908160
+    }, 
+    {
+      "reincarnExp": 474163, 
+      "id": 949, 
+      "exp": 98015680
+    }, 
+    {
+      "reincarnExp": 474683, 
+      "id": 950, 
+      "exp": 98123200
+    }, 
+    {
+      "reincarnExp": 475203, 
+      "id": 951, 
+      "exp": 98230720
+    }, 
+    {
+      "reincarnExp": 475723, 
+      "id": 952, 
+      "exp": 98338240
+    }, 
+    {
+      "reincarnExp": 476243, 
+      "id": 953, 
+      "exp": 98445760
+    }, 
+    {
+      "reincarnExp": 476763, 
+      "id": 954, 
+      "exp": 98553280
+    }, 
+    {
+      "reincarnExp": 477284, 
+      "id": 955, 
+      "exp": 98660800
+    }, 
+    {
+      "reincarnExp": 477804, 
+      "id": 956, 
+      "exp": 98768320
+    }, 
+    {
+      "reincarnExp": 478324, 
+      "id": 957, 
+      "exp": 98875840
+    }, 
+    {
+      "reincarnExp": 478844, 
+      "id": 958, 
+      "exp": 98983360
+    }, 
+    {
+      "reincarnExp": 479364, 
+      "id": 959, 
+      "exp": 99090880
+    }, 
+    {
+      "reincarnExp": 479884, 
+      "id": 960, 
+      "exp": 99198400
+    }, 
+    {
+      "reincarnExp": 480404, 
+      "id": 961, 
+      "exp": 99305920
+    }, 
+    {
+      "reincarnExp": 480925, 
+      "id": 962, 
+      "exp": 99413440
+    }, 
+    {
+      "reincarnExp": 481445, 
+      "id": 963, 
+      "exp": 99520960
+    }, 
+    {
+      "reincarnExp": 481965, 
+      "id": 964, 
+      "exp": 99628480
+    }, 
+    {
+      "reincarnExp": 482485, 
+      "id": 965, 
+      "exp": 99736000
+    }, 
+    {
+      "reincarnExp": 483005, 
+      "id": 966, 
+      "exp": 99843520
+    }, 
+    {
+      "reincarnExp": 483525, 
+      "id": 967, 
+      "exp": 99951040
+    }, 
+    {
+      "reincarnExp": 484045, 
+      "id": 968, 
+      "exp": 100058560
+    }, 
+    {
+      "reincarnExp": 484566, 
+      "id": 969, 
+      "exp": 100166080
+    }, 
+    {
+      "reincarnExp": 485086, 
+      "id": 970, 
+      "exp": 100273600
+    }, 
+    {
+      "reincarnExp": 485606, 
+      "id": 971, 
+      "exp": 100381120
+    }, 
+    {
+      "reincarnExp": 486126, 
+      "id": 972, 
+      "exp": 100488640
+    }, 
+    {
+      "reincarnExp": 486646, 
+      "id": 973, 
+      "exp": 100596160
+    }, 
+    {
+      "reincarnExp": 487166, 
+      "id": 974, 
+      "exp": 100703680
+    }, 
+    {
+      "reincarnExp": 487686, 
+      "id": 975, 
+      "exp": 100811200
+    }, 
+    {
+      "reincarnExp": 488207, 
+      "id": 976, 
+      "exp": 100918720
+    }, 
+    {
+      "reincarnExp": 488727, 
+      "id": 977, 
+      "exp": 101026240
+    }, 
+    {
+      "reincarnExp": 489247, 
+      "id": 978, 
+      "exp": 101133760
+    }, 
+    {
+      "reincarnExp": 489767, 
+      "id": 979, 
+      "exp": 101241280
+    }, 
+    {
+      "reincarnExp": 490287, 
+      "id": 980, 
+      "exp": 101348800
+    }, 
+    {
+      "reincarnExp": 490807, 
+      "id": 981, 
+      "exp": 101456320
+    }, 
+    {
+      "reincarnExp": 491327, 
+      "id": 982, 
+      "exp": 101563840
+    }, 
+    {
+      "reincarnExp": 491848, 
+      "id": 983, 
+      "exp": 101671360
+    }, 
+    {
+      "reincarnExp": 492368, 
+      "id": 984, 
+      "exp": 101778880
+    }, 
+    {
+      "reincarnExp": 492888, 
+      "id": 985, 
+      "exp": 101886400
+    }, 
+    {
+      "reincarnExp": 493408, 
+      "id": 986, 
+      "exp": 101993920
+    }, 
+    {
+      "reincarnExp": 493928, 
+      "id": 987, 
+      "exp": 102101440
+    }, 
+    {
+      "reincarnExp": 494448, 
+      "id": 988, 
+      "exp": 102208960
+    }, 
+    {
+      "reincarnExp": 494968, 
+      "id": 989, 
+      "exp": 102316480
+    }, 
+    {
+      "reincarnExp": 495489, 
+      "id": 990, 
+      "exp": 102424000
+    }, 
+    {
+      "reincarnExp": 496009, 
+      "id": 991, 
+      "exp": 102531520
+    }, 
+    {
+      "reincarnExp": 496529, 
+      "id": 992, 
+      "exp": 102639040
+    }, 
+    {
+      "reincarnExp": 497049, 
+      "id": 993, 
+      "exp": 102746560
+    }, 
+    {
+      "reincarnExp": 497569, 
+      "id": 994, 
+      "exp": 102854080
+    }, 
+    {
+      "reincarnExp": 498089, 
+      "id": 995, 
+      "exp": 102961600
+    }, 
+    {
+      "reincarnExp": 498609, 
+      "id": 996, 
+      "exp": 103069120
+    }, 
+    {
+      "reincarnExp": 499130, 
+      "id": 997, 
+      "exp": 103176640
+    }, 
+    {
+      "reincarnExp": 499650, 
+      "id": 998, 
+      "exp": 103284160
+    }, 
+    {
+      "reincarnExp": 500170, 
+      "id": 999, 
+      "exp": 103391680
+    }, 
+    {
+      "reincarnExp": 500690, 
+      "id": 1000, 
+      "exp": 103499200
+    }, 
+    {
+      "reincarnExp": 501210, 
+      "id": 1001, 
+      "exp": 104534192
+    }, 
+    {
+      "reincarnExp": 501731, 
+      "id": 1002, 
+      "exp": 105579534
+    }, 
+    {
+      "reincarnExp": 502251, 
+      "id": 1003, 
+      "exp": 106635329
+    }, 
+    {
+      "reincarnExp": 502771, 
+      "id": 1004, 
+      "exp": 107701683
+    }, 
+    {
+      "reincarnExp": 503291, 
+      "id": 1005, 
+      "exp": 108778699
+    }, 
+    {
+      "reincarnExp": 503812, 
+      "id": 1006, 
+      "exp": 109866486
+    }, 
+    {
+      "reincarnExp": 504332, 
+      "id": 1007, 
+      "exp": 110965151
+    }, 
+    {
+      "reincarnExp": 504852, 
+      "id": 1008, 
+      "exp": 112074803
+    }, 
+    {
+      "reincarnExp": 505372, 
+      "id": 1009, 
+      "exp": 113195551
+    }, 
+    {
+      "reincarnExp": 505893, 
+      "id": 1010, 
+      "exp": 114327506
+    }, 
+    {
+      "reincarnExp": 506413, 
+      "id": 1011, 
+      "exp": 115470781
+    }, 
+    {
+      "reincarnExp": 506933, 
+      "id": 1012, 
+      "exp": 116625489
+    }, 
+    {
+      "reincarnExp": 507453, 
+      "id": 1013, 
+      "exp": 117791744
+    }, 
+    {
+      "reincarnExp": 507973, 
+      "id": 1014, 
+      "exp": 118969661
+    }, 
+    {
+      "reincarnExp": 508494, 
+      "id": 1015, 
+      "exp": 120159358
+    }, 
+    {
+      "reincarnExp": 509014, 
+      "id": 1016, 
+      "exp": 121360952
+    }, 
+    {
+      "reincarnExp": 509534, 
+      "id": 1017, 
+      "exp": 122574561
+    }, 
+    {
+      "reincarnExp": 510054, 
+      "id": 1018, 
+      "exp": 123800307
+    }, 
+    {
+      "reincarnExp": 510575, 
+      "id": 1019, 
+      "exp": 125038310
+    }, 
+    {
+      "reincarnExp": 511095, 
+      "id": 1020, 
+      "exp": 126288693
+    }, 
+    {
+      "reincarnExp": 511615, 
+      "id": 1021, 
+      "exp": 127551580
+    }, 
+    {
+      "reincarnExp": 512135, 
+      "id": 1022, 
+      "exp": 128827096
+    }, 
+    {
+      "reincarnExp": 512655, 
+      "id": 1023, 
+      "exp": 130115367
+    }, 
+    {
+      "reincarnExp": 513176, 
+      "id": 1024, 
+      "exp": 131416520
+    }, 
+    {
+      "reincarnExp": 513696, 
+      "id": 1025, 
+      "exp": 132730686
+    }, 
+    {
+      "reincarnExp": 514216, 
+      "id": 1026, 
+      "exp": 134057992
+    }, 
+    {
+      "reincarnExp": 514736, 
+      "id": 1027, 
+      "exp": 135398572
+    }, 
+    {
+      "reincarnExp": 515257, 
+      "id": 1028, 
+      "exp": 136752558
+    }, 
+    {
+      "reincarnExp": 515777, 
+      "id": 1029, 
+      "exp": 138120084
+    }, 
+    {
+      "reincarnExp": 516297, 
+      "id": 1030, 
+      "exp": 139501284
+    }, 
+    {
+      "reincarnExp": 516817, 
+      "id": 1031, 
+      "exp": 140896297
+    }, 
+    {
+      "reincarnExp": 517338, 
+      "id": 1032, 
+      "exp": 142305260
+    }, 
+    {
+      "reincarnExp": 517858, 
+      "id": 1033, 
+      "exp": 143728313
+    }, 
+    {
+      "reincarnExp": 518378, 
+      "id": 1034, 
+      "exp": 145165596
+    }, 
+    {
+      "reincarnExp": 518898, 
+      "id": 1035, 
+      "exp": 146617252
+    }, 
+    {
+      "reincarnExp": 519418, 
+      "id": 1036, 
+      "exp": 148083424
+    }, 
+    {
+      "reincarnExp": 519939, 
+      "id": 1037, 
+      "exp": 149564259
+    }, 
+    {
+      "reincarnExp": 520459, 
+      "id": 1038, 
+      "exp": 151059901
+    }, 
+    {
+      "reincarnExp": 520979, 
+      "id": 1039, 
+      "exp": 152570500
+    }, 
+    {
+      "reincarnExp": 521499, 
+      "id": 1040, 
+      "exp": 154096205
+    }, 
+    {
+      "reincarnExp": 522020, 
+      "id": 1041, 
+      "exp": 155637167
+    }, 
+    {
+      "reincarnExp": 522540, 
+      "id": 1042, 
+      "exp": 157193539
+    }, 
+    {
+      "reincarnExp": 523060, 
+      "id": 1043, 
+      "exp": 158765474
+    }, 
+    {
+      "reincarnExp": 523580, 
+      "id": 1044, 
+      "exp": 160353129
+    }, 
+    {
+      "reincarnExp": 524101, 
+      "id": 1045, 
+      "exp": 161956660
+    }, 
+    {
+      "reincarnExp": 524621, 
+      "id": 1046, 
+      "exp": 163576227
+    }, 
+    {
+      "reincarnExp": 525141, 
+      "id": 1047, 
+      "exp": 165211989
+    }, 
+    {
+      "reincarnExp": 525661, 
+      "id": 1048, 
+      "exp": 166864109
+    }, 
+    {
+      "reincarnExp": 526181, 
+      "id": 1049, 
+      "exp": 168532750
+    }, 
+    {
+      "reincarnExp": 526702, 
+      "id": 1050, 
+      "exp": 170218078
+    }, 
+    {
+      "reincarnExp": 527222, 
+      "id": 1051, 
+      "exp": 171920259
+    }, 
+    {
+      "reincarnExp": 527742, 
+      "id": 1052, 
+      "exp": 173639461
+    }, 
+    {
+      "reincarnExp": 528262, 
+      "id": 1053, 
+      "exp": 175375856
+    }, 
+    {
+      "reincarnExp": 528783, 
+      "id": 1054, 
+      "exp": 177129614
+    }, 
+    {
+      "reincarnExp": 529303, 
+      "id": 1055, 
+      "exp": 178900911
+    }, 
+    {
+      "reincarnExp": 529823, 
+      "id": 1056, 
+      "exp": 180689920
+    }, 
+    {
+      "reincarnExp": 530343, 
+      "id": 1057, 
+      "exp": 182496819
+    }, 
+    {
+      "reincarnExp": 530863, 
+      "id": 1058, 
+      "exp": 184321787
+    }, 
+    {
+      "reincarnExp": 531384, 
+      "id": 1059, 
+      "exp": 186165005
+    }, 
+    {
+      "reincarnExp": 531904, 
+      "id": 1060, 
+      "exp": 188026655
+    }, 
+    {
+      "reincarnExp": 532424, 
+      "id": 1061, 
+      "exp": 189906921
+    }, 
+    {
+      "reincarnExp": 532944, 
+      "id": 1062, 
+      "exp": 191805991
+    }, 
+    {
+      "reincarnExp": 533465, 
+      "id": 1063, 
+      "exp": 193724051
+    }, 
+    {
+      "reincarnExp": 533985, 
+      "id": 1064, 
+      "exp": 195661291
+    }, 
+    {
+      "reincarnExp": 534505, 
+      "id": 1065, 
+      "exp": 197617904
+    }, 
+    {
+      "reincarnExp": 535025, 
+      "id": 1066, 
+      "exp": 199594083
+    }, 
+    {
+      "reincarnExp": 535546, 
+      "id": 1067, 
+      "exp": 201590024
+    }, 
+    {
+      "reincarnExp": 536066, 
+      "id": 1068, 
+      "exp": 203605924
+    }, 
+    {
+      "reincarnExp": 536586, 
+      "id": 1069, 
+      "exp": 205641983
+    }, 
+    {
+      "reincarnExp": 537106, 
+      "id": 1070, 
+      "exp": 207698403
+    }, 
+    {
+      "reincarnExp": 537626, 
+      "id": 1071, 
+      "exp": 209775387
+    }, 
+    {
+      "reincarnExp": 538147, 
+      "id": 1072, 
+      "exp": 211873141
+    }, 
+    {
+      "reincarnExp": 538667, 
+      "id": 1073, 
+      "exp": 213991873
+    }, 
+    {
+      "reincarnExp": 539187, 
+      "id": 1074, 
+      "exp": 216131791
+    }, 
+    {
+      "reincarnExp": 539707, 
+      "id": 1075, 
+      "exp": 218293109
+    }, 
+    {
+      "reincarnExp": 540228, 
+      "id": 1076, 
+      "exp": 220476040
+    }, 
+    {
+      "reincarnExp": 540748, 
+      "id": 1077, 
+      "exp": 222680801
+    }, 
+    {
+      "reincarnExp": 541268, 
+      "id": 1078, 
+      "exp": 224907609
+    }, 
+    {
+      "reincarnExp": 541788, 
+      "id": 1079, 
+      "exp": 227156685
+    }, 
+    {
+      "reincarnExp": 542309, 
+      "id": 1080, 
+      "exp": 229428252
+    }, 
+    {
+      "reincarnExp": 542829, 
+      "id": 1081, 
+      "exp": 231722534
+    }, 
+    {
+      "reincarnExp": 543349, 
+      "id": 1082, 
+      "exp": 234039759
+    }, 
+    {
+      "reincarnExp": 543869, 
+      "id": 1083, 
+      "exp": 236380157
+    }, 
+    {
+      "reincarnExp": 544389, 
+      "id": 1084, 
+      "exp": 238743959
+    }, 
+    {
+      "reincarnExp": 544910, 
+      "id": 1085, 
+      "exp": 241131398
+    }, 
+    {
+      "reincarnExp": 545430, 
+      "id": 1086, 
+      "exp": 243542712
+    }, 
+    {
+      "reincarnExp": 545950, 
+      "id": 1087, 
+      "exp": 245978139
+    }, 
+    {
+      "reincarnExp": 546470, 
+      "id": 1088, 
+      "exp": 248437921
+    }, 
+    {
+      "reincarnExp": 546991, 
+      "id": 1089, 
+      "exp": 250922300
+    }, 
+    {
+      "reincarnExp": 547511, 
+      "id": 1090, 
+      "exp": 253431523
+    }, 
+    {
+      "reincarnExp": 548031, 
+      "id": 1091, 
+      "exp": 255965838
+    }, 
+    {
+      "reincarnExp": 548551, 
+      "id": 1092, 
+      "exp": 258525497
+    }, 
+    {
+      "reincarnExp": 549071, 
+      "id": 1093, 
+      "exp": 261110751
+    }, 
+    {
+      "reincarnExp": 549592, 
+      "id": 1094, 
+      "exp": 263721859
+    }, 
+    {
+      "reincarnExp": 550112, 
+      "id": 1095, 
+      "exp": 266359078
+    }, 
+    {
+      "reincarnExp": 550632, 
+      "id": 1096, 
+      "exp": 269022668
+    }, 
+    {
+      "reincarnExp": 551152, 
+      "id": 1097, 
+      "exp": 271712895
+    }, 
+    {
+      "reincarnExp": 551673, 
+      "id": 1098, 
+      "exp": 274430024
+    }, 
+    {
+      "reincarnExp": 552193, 
+      "id": 1099, 
+      "exp": 277174324
+    }, 
+    {
+      "reincarnExp": 552713, 
+      "id": 1100, 
+      "exp": 279946067
+    }, 
+    {
+      "reincarnExp": 552713, 
+      "id": 1101, 
+      "exp": 0
+    }
+  ]
+}

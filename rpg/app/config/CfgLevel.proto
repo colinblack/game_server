@@ -1,0 +1,21 @@
+package CfgLevel;
+import "CfgCommon.proto";
+
+message Level {
+	required uint32 id = 1;
+	required uint32 exp = 2;
+	required uint32 reincarnExp = 3;
+}
+
+message Levels {
+	repeated Level levels = 1;
+}
+
+message Attr {
+	required uint32 level = 1;
+	repeated CfgCommon.Attribute attr = 2;
+}
+
+message Attrs {
+	repeated Attr levels = 1;
+}

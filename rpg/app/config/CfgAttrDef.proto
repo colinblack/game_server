@@ -1,0 +1,11 @@
+package CfgAttrDef;
+
+message AttrDef {
+	required uint32 group = 1;
+	required uint32 type = 2;
+	required bool percent = 3;
+}
+
+message AttrDefs {
+	repeated AttrDef attr_defs = 1;
+}

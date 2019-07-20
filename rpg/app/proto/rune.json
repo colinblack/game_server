@@ -1,0 +1,26 @@
+{
+"namespace":"rune",
+"filename":"Rune",
+"include":["Kernel","Dbs","MsgDef"],
+"msgs":[{"name": "CSMagicOpenHole", 
+			"extends": "", 
+			"id": "1268",
+			"msg": [{"name": "roleId", "id": 1, "type": "int32_t"},{"name": "id", "id": 2, "type": "int32_t"}]
+		},
+		{"name": "CSMagicLearn", 
+			"extends": "", 
+			"id": "1273",
+			"msg": [{"name": "roleId", "id": 1, "type": "int32_t"},{"name": "holeId", "id": 2, "type": "int32_t"},{"name": "magicUid", "id": 3, "type": "int64_t"}]	
+		},
+		{"name": "CSMagicUpgrade", 
+			"extends": "", 
+			"id": "1274",
+			"msg": [{"name": "roleId", "id": 1, "type": "int32_t"},{"name": "magicUid", "id": 2, "type": "int64_t"}]
+		},
+		{"name": "CSMagicDecomPose", 
+			"extends": "", 
+			"id": "1824",
+			"msg": [{"name": "uidList", "id": 1, "type": "vector<int64_t>"}]
+		}
+		]
+}

@@ -1,0 +1,34 @@
+{
+"namespace":"boss",
+"filename":"Boss",
+"include":["Kernel","Dbs","MsgDef"],
+"msgs":[{"name": "CSEnterReincarnCopy", 
+			"extends": "", 
+			"id": "1827",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},{"name": "CSLeaveCopy", 
+			"extends": "", 
+			"id": "1060",
+			"msg": []
+		},{"name": "CSQuickFinish", 
+			"extends": "", 
+			"id": "1885",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSGotReward", 
+			"extends": "", 
+			"id": "3456",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterMagicTowerCopy", 
+			"extends": "", 
+			"id": "1562",
+			"msg": []
+		},
+		{"name": "CSEnterMaterialCopy", 
+			"extends": "", 
+			"id": "1562",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		}
+		]
+}

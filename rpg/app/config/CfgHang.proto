@@ -1,0 +1,24 @@
+package CfgHang;
+
+message Plan {
+	required int32 id = 1;
+	required int32 mapid = 2;
+	required int32 plan = 3;
+}
+
+message Plans {
+	repeated Plan plans = 1;
+}
+
+message Hang {
+	required int32 id = 1;
+	required int32 mapid = 2;
+	required int32 exp = 3;
+	required int32 coin = 4;
+	required int32 plan = 5;
+	required int32 power = 6;
+}
+
+message Hangs {
+	repeated Hang hangs = 1;
+}

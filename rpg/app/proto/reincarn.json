@@ -1,0 +1,26 @@
+{
+"namespace":"reincarn",
+"filename":"Reincarn",
+"include":["Kernel","Dbs","MsgDef"],
+"msgs":[{"name": "CSRingActive", 
+			"extends": "", 
+			"id": "1112",
+			"msg": [{"name": "ringId", "id": 1, "type": "int32_t"}]
+		},{"name": "CSReinCarn", 
+			"extends": "", 
+			"id": "1724",
+			"msg": []
+		},
+		{"name": "CSReinCarnGetExpByItems", 
+			"extends": "", 
+			"id": "1725",
+			"msg": [{"name": "itemId", "id": 1, "type": "int32_t"}]
+				
+		},
+		{"name": "CSReinCarnGetExpByLevel", 
+			"extends": "", 
+			"id": "1726",
+			"msg": []
+		}
+		]
+}

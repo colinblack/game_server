@@ -1,0 +1,13 @@
+package CfgCommon;
+
+message Reward {
+	required uint32 item = 1;
+	required uint32 num = 2;
+	optional uint32 rate = 3;
+}
+
+message Attribute {
+	required int32 group = 1;
+	required int32 type = 2;
+	required int64 num = 3;
+}

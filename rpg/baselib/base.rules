@@ -1,0 +1,10 @@
+include $(trunk_path)/make.rules
+
+INC     = -I.  $(BASE_INC) $(FCGI_INC) $(DBC_INC)
+LINK    = 
+CFLAGS  = -g -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT
+CXXFLAGS= $(CFLAGS)
+H_DIR	= $(trunk_path)/baselib/include/
+OBJ_DIR	= $(trunk_path)/baselib/obj/
+LIB_DIR	= $(trunk_path)/baselib/lib/
+TARGET_HEADERS = $(patsubst %, $(H_DIR)/%, $(wildcard *.h));

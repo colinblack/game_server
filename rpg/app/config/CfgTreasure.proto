@@ -1,0 +1,61 @@
+package CfgTreasure;
+import "CfgCommon.proto";
+
+message Dan {
+	required uint32 item = 1;			//消耗道具
+	required uint32 num = 2;			//丹药索引
+}
+
+message Dans {
+	repeated Dan dans = 1;
+}
+
+message CostItem {
+	repeated uint32 id = 1; 
+}
+message Treasure {
+	repeated CfgCommon.Attribute attr = 1;
+	required uint32 bless = 2;
+	repeated CostItem cost_items = 3;
+	required uint32 cost_num = 4;
+	required Dans dans = 5;
+	required uint32 id = 6;
+	required uint32 level = 7;
+	required uint32 star = 8;
+	required uint32 type = 9;
+}
+
+message Treasures {
+	repeated Treasure treasures = 1;
+}
+
+message Hunt {
+	required uint32 id = 1;
+	required uint32 career_level_min = 2;
+	required uint32 career_level_max = 3;
+	required uint32 item = 4;
+	required uint32 num = 5;
+	required uint32 rate = 6;
+	required uint32 type = 7;
+	required uint32 must = 8;
+	required uint32 xiyou = 9;
+}
+
+message Hunts {
+	repeated Hunt hunts = 1;
+}
+
+message HuntBase {
+	required uint32 type = 1;
+	required uint32 gold = 2;
+	required uint32 fifty = 3;
+	required uint32 cost_item = 4;
+	required uint32 cost_num = 5;
+	required uint32 day = 6;
+	required uint32 free_num = 7;
+	required uint32 score_item = 8;
+}
+
+message HuntBases {
+	repeated HuntBase bases = 1;
+}

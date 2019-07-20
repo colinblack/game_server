@@ -1,0 +1,564 @@
+{
+  "purifys": [
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 50, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 300
+        }
+      ], 
+      "level": 1
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 600
+        }
+      ], 
+      "level": 11
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 1050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 1000
+        }
+      ], 
+      "level": 21
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 1550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 1500
+        }
+      ], 
+      "level": 31
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 2050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 2000
+        }
+      ], 
+      "level": 41
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 2550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 2500
+        }
+      ], 
+      "level": 51
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 3050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 3000
+        }
+      ], 
+      "level": 61
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 3550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 3500
+        }
+      ], 
+      "level": 71
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 4050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 4000
+        }
+      ], 
+      "level": 81
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 4550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 4500
+        }
+      ], 
+      "level": 91
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 5050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 5000
+        }
+      ], 
+      "level": 101
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 5550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 5500
+        }
+      ], 
+      "level": 111
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 6050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 6000
+        }
+      ], 
+      "level": 121
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 6550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 6800
+        }
+      ], 
+      "level": 131
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 7050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 7600
+        }
+      ], 
+      "level": 141
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 7550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 8400
+        }
+      ], 
+      "level": 151
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 8050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 9200
+        }
+      ], 
+      "level": 161
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 8550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 10000
+        }
+      ], 
+      "level": 171
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 9050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 10800
+        }
+      ], 
+      "level": 181
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 9550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 11600
+        }
+      ], 
+      "level": 191
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 10050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 12400
+        }
+      ], 
+      "level": 201
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 10550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 13200
+        }
+      ], 
+      "level": 211
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 11050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 14000
+        }
+      ], 
+      "level": 221
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 11550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 14800
+        }
+      ], 
+      "level": 231
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 12050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 15600
+        }
+      ], 
+      "level": 241
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 12550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 16400
+        }
+      ], 
+      "level": 251
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 13050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 17200
+        }
+      ], 
+      "level": 261
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 13550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 18000
+        }
+      ], 
+      "level": 271
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 14050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 18800
+        }
+      ], 
+      "level": 281
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 14550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 19600
+        }
+      ], 
+      "level": 291
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 15050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 20400
+        }
+      ], 
+      "level": 301
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 15550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 21200
+        }
+      ], 
+      "level": 311
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 16050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 22000
+        }
+      ], 
+      "level": 321
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 16550, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 22800
+        }
+      ], 
+      "level": 331
+    }, 
+    {
+      "attr": [
+        {
+          "type": 1, 
+          "num": 17050, 
+          "group": 1
+        }
+      ], 
+      "useProps": [
+        {
+          "item": 210420001, 
+          "num": 23600
+        }
+      ], 
+      "level": 341
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+package MsgLocal;
+
+message TreasureHuntRecord {
+	required int32 id = 1;
+	required int32 type = 2;
+	required int32 treasureId = 3;
+	required int32 playerId = 4;
+	required string name = 5;
+	required int32 career = 6;
+	required int32 level = 7;
+	required int32 careerLevel = 8;
+	required int32 drawDt = 9;
+}
+
+message TreasureHuntRecords {
+	repeated TreasureHuntRecord records = 1;
+}

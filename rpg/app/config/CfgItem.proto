@@ -1,0 +1,84 @@
+package CfgItem;
+import "CfgCommon.proto";
+
+message Item {
+	required uint32 id = 1;
+	required uint32 type = 2;
+	required uint32 itemType = 3;
+	required uint32 subType = 4;
+	required uint32 color = 5;
+	required uint32 level = 6;
+	required uint32 data = 7;
+	repeated CfgCommon.Attribute attr = 8;
+	repeated CfgCommon.Reward smeltAward = 9;
+}
+
+message Items {
+	repeated Item items = 1;
+}
+
+message StarRate {
+	required uint32 star = 1;
+	required uint32 rate = 2;
+}
+
+message Equip {
+	required uint32 id = 1;
+	repeated CfgCommon.Reward smeltAward = 2;
+	required uint32 part = 3;
+	required uint32 career = 4;
+	repeated CfgCommon.Attribute attr = 5;
+	repeated StarRate starRate = 6;
+	required uint32 color = 7;	//品质
+	required uint32 sub = 8;	//传奇属性group
+	required uint32 changeLevel = 9; //转生等级
+}
+
+message Equips {
+	repeated Equip equips = 1;
+}
+
+//传奇属性
+message Attr {
+	required uint32 id = 1;
+	required uint32 star = 2;
+	required uint32 rate = 3;
+	required bool best = 4;
+	required uint32 group = 5;
+	repeated CfgCommon.Attribute attr = 6;
+}
+
+message Attrs {
+	repeated Attr attrs= 1;
+}
+
+message ShenQi {
+	required uint32 item = 1;
+	required uint32 id = 2;
+}
+
+message ShenQis {
+	repeated ShenQi shenqis = 1;
+}
+
+message Gift {
+	required uint32 id = 1;
+	required uint32 subtype = 2;
+	repeated CfgCommon.Reward reward = 3;
+	repeated CfgCommon.Reward extend = 4;
+}
+
+message Gifts {
+	repeated Gift gifts = 1;
+}
+
+message Drop {
+	required uint32 id = 1;
+	required uint32 randomCount = 2;
+	repeated CfgCommon.Reward fixedReward = 3;
+	repeated CfgCommon.Reward randomReward = 4;
+}
+
+message Drops {
+	repeated Drop drops = 1;
+}

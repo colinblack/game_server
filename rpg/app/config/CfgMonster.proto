@@ -1,0 +1,46 @@
+package CfgMonster;
+import "CfgCommon.proto";
+
+message Point {
+	required int32 x = 1;
+	required int32 y = 2;
+}
+
+
+
+message Monster {
+	required uint32 id = 1;
+	required uint32 level = 2;
+	required uint64 hp = 3;
+	required uint32 hpPercent = 4;
+	required uint32 speed = 5;
+	required uint32 width = 6;
+	required uint32 skill = 7;
+	required uint32 defence = 8;
+	required uint32 alive = 9;
+	required uint32 attack = 10;
+	repeated CfgCommon.Reward reward = 11;
+	required uint32 exp = 12;
+	required string skill2 = 13;
+	required uint32 wuxing = 14;
+	required uint32 fixDmgDec = 15;
+	required uint32 dmgDec = 16;
+	required uint32 critBreakRate = 17;
+	required uint32 critBreak = 18;
+}
+
+message Monsters {
+	repeated Monster monsters = 1;
+}
+
+message Plan {
+	required uint32 id = 1;
+	required uint32 mapid = 2;
+	required uint32 boss = 3;
+	required uint32 plan = 4;
+	repeated Point pos = 5;
+}
+
+message Plans {
+	repeated Plan plans = 1;
+}

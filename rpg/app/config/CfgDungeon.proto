@@ -1,0 +1,11 @@
+package CfgDungeon;
+
+message DungeonItem {
+	required uint32 ID = 1;
+	required uint32 MapId = 2;
+	optional string AroundBornInterPosList = 3;
+}
+
+message Dungeon {
+	repeated DungeonItem Dungeonconfig = 1;
+}

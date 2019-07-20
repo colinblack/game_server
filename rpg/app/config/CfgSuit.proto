@@ -1,0 +1,18 @@
+package CfgSuit;
+import "CfgCommon.proto";
+
+message Suit {
+	required uint32 star = 1;
+	repeated CfgCommon.Attribute attr = 2;
+	required uint32 level = 3;
+	required uint32 color = 4;
+	repeated uint32 skills = 5;
+	required uint32 id = 6;
+	required uint32 mode = 7;
+	
+}
+
+message Suits {
+	repeated Suit suits = 1;
+}
+

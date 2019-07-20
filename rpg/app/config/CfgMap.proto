@@ -1,0 +1,51 @@
+package CfgMap;
+
+message Map {
+	required uint32 id = 1;
+	required uint32 mapscene = 2;
+	required uint32 version = 3;
+	required string name = 4;
+	required bool hasBossPoint = 5;
+	required uint32 copyid = 6;
+}
+
+message Maps {
+	repeated Map maps = 1;
+}
+
+message Point {
+	required int32 x = 1;
+	required int32 y = 2;
+}
+
+message PassTo {
+	required int32 passToId = 1;
+	required uint32 mapId = 2;
+	required Point toPoint = 3;
+}
+
+message PassPoint {
+	required int32 passPointId = 1;
+	repeated PassTo passTo = 2;
+}
+
+message BossPoint {
+	required int32 plan = 1;
+	required Point point = 2;
+}
+
+message Scene {
+	required int32 id = 1;
+	required int32 mapId = 2;
+	optional int32 aiMode = 3;
+	required uint32 instanceType = 4;
+	required uint32 fightModel = 5;
+	repeated BossPoint bossCenterPoints = 6;
+	repeated PassPoint passPoints = 7;
+	optional uint32 addEnterPoint_x = 8;
+	optional uint32 addEnterPoint_y = 9;
+}
+
+message Scenes {
+	repeated Scene scenes = 1;
+}

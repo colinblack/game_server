@@ -1,0 +1,37 @@
+package CfgActivity;
+import "CfgCommon.proto";
+
+message LimitTs {
+	required uint32 startTs = 1;
+	required uint32 endTs = 2;
+}
+
+message DaliyAct {
+	required uint32 activity = 1;
+	required uint32 copyCfg = 2;
+	required uint32 copyId = 3;
+	required uint32 count = 4;
+	required uint32 type = 5;
+	required uint32 actId = 6;
+	repeated LimitTs limits = 7;
+	
+}
+
+message DaliyActs {
+	repeated DaliyAct daliy_act = 1;
+}
+
+message Reward {
+	required uint32 id = 1;
+	required uint32 count = 2;
+}
+
+message Active {
+	required uint32 limit = 1;
+	required uint32 type = 2;
+	repeated CfgCommon.Reward reward =3;
+}
+
+message Actives {
+	repeated Active active = 1;
+}
