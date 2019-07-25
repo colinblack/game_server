@@ -1,0 +1,59 @@
+{
+"namespace":"copy",
+"filename":"Copy",
+"include":["Kernel","Dbs","MsgDef"],
+"msgs":[{"name": "CSEnterReincarnCopy", 
+			"extends": "", 
+			"id": "1827",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},{"name": "CSLeaveCopy", 
+			"extends": "", 
+			"id": "1060",
+			"msg": []
+		},{"name": "CSQuickFinish", 
+			"extends": "", 
+			"id": "1885",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSGotReward", 
+			"extends": "", 
+			"id": "3456",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterMagicTowerCopy", 
+			"extends": "", 
+			"id": "1562",
+			"msg": []
+		},
+		{"name": "CSEnterMaterialCopy", 
+			"extends": "", 
+			"id": "1562",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSLotteryMagicTower", 
+			"extends": "", 
+			"id": "2050",
+			"msg": []
+		},
+		{"name": "SCLotteryMagicTowerResp", 
+			"extends": "", 
+			"id": "2050",
+			"msg": [{"name": "pos", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSQuickFinishMaterial", 
+			"extends": "", 
+			"id": "2050",
+			"msg": [{"name": "copyCodes", "id": 1, "type": "vector<int32_t>"}]
+		},
+		{"name": "CSMopMaterial", 
+			"extends": "", 
+			"id": "2050",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterWorldBoss", 
+			"extends": "", 
+			"id": "1803",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		}
+		]
+}

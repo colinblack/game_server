@@ -1,0 +1,14 @@
+package CfgZhanLing;
+import "CfgCommon.proto";
+
+message Base {
+	required uint32 level = 1;
+	required uint32 model = 2;
+	required uint32 speed = 3;
+	required uint32 skill = 4;
+	repeated CfgCommon.Attribute attr = 5;
+}
+
+message Bases {
+	repeated Base bases = 1;
+}

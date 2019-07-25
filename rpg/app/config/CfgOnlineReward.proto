@@ -1,0 +1,13 @@
+package CfgOnlineReward;
+import "CfgCommon.proto";
+
+message OnlineReward {
+	required uint32 id = 1; // 奖励id 
+	required uint32 registeredDay = 2; // 注册天数(天) 
+	required uint32 onlineTime = 3;	// 在线时长（s）
+	repeated CfgCommon.Reward reward = 4; // (奖励 的道具) 
+}
+
+message OnlineRewards {
+	repeated OnlineReward OnlineRewards = 1;
+}

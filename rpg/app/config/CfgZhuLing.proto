@@ -1,0 +1,27 @@
+package CfgZhuLing;
+import "CfgCommon.proto";
+
+message zhuLing {
+	required uint32 advance = 1;
+	required uint32 rate = 2;
+	required uint32 consum = 3;
+	required uint32 level = 4;
+	required uint32 id = 5;
+}
+
+message zhuLings {
+	repeated zhuLing zhuling = 1;
+}
+
+message Spet {
+	required uint32 advance = 1;
+	repeated CfgCommon.Attribute attr = 2;
+	required uint32 rate = 3;
+	required uint32 limit = 4;
+	required uint32 id = 5;
+	required uint32 part = 6;	
+}
+
+message Spets {
+	repeated Spet spets = 1;
+}
