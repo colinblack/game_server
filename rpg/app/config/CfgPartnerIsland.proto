@@ -1,0 +1,13 @@
+package CfgPartnerIsland;
+import "CfgCommon.proto";
+
+message PartnerIsland {
+	required uint32 layer = 1;
+	required uint32 type = 2;
+	repeated CfgCommon.Reward reward = 3;
+	repeated CfgCommon.Reward exReward = 4;
+}
+
+message PartnerIslands {
+	repeated PartnerIsland partner_islands = 1;
+}

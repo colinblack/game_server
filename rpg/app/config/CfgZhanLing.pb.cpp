@@ -20,6 +20,9 @@ namespace CfgZhanLing {
 
 namespace {
 
+const ::google::protobuf::Descriptor* Equips_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Equips_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Base_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Base_reflection_ = NULL;
@@ -36,13 +39,31 @@ void protobuf_AssignDesc_CfgZhanLing_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "CfgZhanLing.proto");
   GOOGLE_CHECK(file != NULL);
-  Base_descriptor_ = file->message_type(0);
-  static const int Base_offsets_[5] = {
+  Equips_descriptor_ = file->message_type(0);
+  static const int Equips_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Equips, pos_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Equips, id_),
+  };
+  Equips_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Equips_descriptor_,
+      Equips::default_instance_,
+      Equips_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Equips, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Equips, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Equips));
+  Base_descriptor_ = file->message_type(1);
+  static const int Base_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, level_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, equips_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, model_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, speed_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, skill_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, attr_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Base, skill_mode_),
   };
   Base_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -55,7 +76,7 @@ void protobuf_AssignDesc_CfgZhanLing_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Base));
-  Bases_descriptor_ = file->message_type(1);
+  Bases_descriptor_ = file->message_type(2);
   static const int Bases_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Bases, bases_),
   };
@@ -83,6 +104,8 @@ inline void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Equips_descriptor_, &Equips::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Base_descriptor_, &Base::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Bases_descriptor_, &Bases::default_instance());
@@ -91,6 +114,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
 }  // namespace
 
 void protobuf_ShutdownFile_CfgZhanLing_2eproto() {
+  delete Equips::default_instance_;
+  delete Equips_reflection_;
   delete Base::default_instance_;
   delete Base_reflection_;
   delete Bases::default_instance_;
@@ -106,14 +131,19 @@ void protobuf_AddDesc_CfgZhanLing_2eproto() {
   ::CfgCommon::protobuf_AddDesc_CfgCommon_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\021CfgZhanLing.proto\022\013CfgZhanLing\032\017CfgCom"
-    "mon.proto\"f\n\004Base\022\r\n\005level\030\001 \002(\r\022\r\n\005mode"
-    "l\030\002 \002(\r\022\r\n\005speed\030\003 \002(\r\022\r\n\005skill\030\004 \002(\r\022\"\n"
-    "\004attr\030\005 \003(\0132\024.CfgCommon.Attribute\")\n\005Bas"
-    "es\022 \n\005bases\030\001 \003(\0132\021.CfgZhanLing.Base", 196);
+    "mon.proto\"!\n\006Equips\022\013\n\003pos\030\001 \002(\r\022\n\n\002id\030\002"
+    " \002(\r\"\237\001\n\004Base\022\r\n\005level\030\001 \002(\r\022#\n\006equips\030\002"
+    " \003(\0132\023.CfgZhanLing.Equips\022\r\n\005model\030\003 \002(\r"
+    "\022\r\n\005speed\030\004 \002(\r\022\r\n\005skill\030\005 \002(\r\022\"\n\004attr\030\006"
+    " \003(\0132\024.CfgCommon.Attribute\022\022\n\nskill_mode"
+    "\030\007 \003(\r\")\n\005Bases\022 \n\005bases\030\001 \003(\0132\021.CfgZhan"
+    "Ling.Base", 289);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgZhanLing.proto", &protobuf_RegisterTypes);
+  Equips::default_instance_ = new Equips();
   Base::default_instance_ = new Base();
   Bases::default_instance_ = new Bases();
+  Equips::default_instance_->InitAsDefaultInstance();
   Base::default_instance_->InitAsDefaultInstance();
   Bases::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_CfgZhanLing_2eproto);
@@ -129,11 +159,288 @@ struct StaticDescriptorInitializer_CfgZhanLing_2eproto {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int Equips::kPosFieldNumber;
+const int Equips::kIdFieldNumber;
+#endif  // !_MSC_VER
+
+Equips::Equips()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CfgZhanLing.Equips)
+}
+
+void Equips::InitAsDefaultInstance() {
+}
+
+Equips::Equips(const Equips& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:CfgZhanLing.Equips)
+}
+
+void Equips::SharedCtor() {
+  _cached_size_ = 0;
+  pos_ = 0u;
+  id_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Equips::~Equips() {
+  // @@protoc_insertion_point(destructor:CfgZhanLing.Equips)
+  SharedDtor();
+}
+
+void Equips::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Equips::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Equips::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Equips_descriptor_;
+}
+
+const Equips& Equips::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_CfgZhanLing_2eproto();
+  return *default_instance_;
+}
+
+Equips* Equips::default_instance_ = NULL;
+
+Equips* Equips::New() const {
+  return new Equips;
+}
+
+void Equips::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<Equips*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(pos_, id_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Equips::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CfgZhanLing.Equips)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 pos = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &pos_)));
+          set_has_pos();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_id;
+        break;
+      }
+
+      // required uint32 id = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_id:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CfgZhanLing.Equips)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CfgZhanLing.Equips)
+  return false;
+#undef DO_
+}
+
+void Equips::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CfgZhanLing.Equips)
+  // required uint32 pos = 1;
+  if (has_pos()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->pos(), output);
+  }
+
+  // required uint32 id = 2;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->id(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:CfgZhanLing.Equips)
+}
+
+::google::protobuf::uint8* Equips::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CfgZhanLing.Equips)
+  // required uint32 pos = 1;
+  if (has_pos()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->pos(), target);
+  }
+
+  // required uint32 id = 2;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->id(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CfgZhanLing.Equips)
+  return target;
+}
+
+int Equips::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 pos = 1;
+    if (has_pos()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->pos());
+    }
+
+    // required uint32 id = 2;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->id());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Equips::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Equips* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Equips*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Equips::MergeFrom(const Equips& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_pos()) {
+      set_pos(from.pos());
+    }
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Equips::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Equips::CopyFrom(const Equips& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Equips::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void Equips::Swap(Equips* other) {
+  if (other != this) {
+    std::swap(pos_, other->pos_);
+    std::swap(id_, other->id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Equips::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Equips_descriptor_;
+  metadata.reflection = Equips_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int Base::kLevelFieldNumber;
+const int Base::kEquipsFieldNumber;
 const int Base::kModelFieldNumber;
 const int Base::kSpeedFieldNumber;
 const int Base::kSkillFieldNumber;
 const int Base::kAttrFieldNumber;
+const int Base::kSkillModeFieldNumber;
 #endif  // !_MSC_VER
 
 Base::Base()
@@ -208,7 +515,9 @@ void Base::Clear() {
 #undef OFFSET_OF_FIELD_
 #undef ZR_
 
+  equips_.Clear();
   attr_.Clear();
+  skill_mode_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -233,13 +542,27 @@ bool Base::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_model;
+        if (input->ExpectTag(18)) goto parse_equips;
         break;
       }
 
-      // required uint32 model = 2;
+      // repeated .CfgZhanLing.Equips equips = 2;
       case 2: {
-        if (tag == 16) {
+        if (tag == 18) {
+         parse_equips:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_equips()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_equips;
+        if (input->ExpectTag(24)) goto parse_model;
+        break;
+      }
+
+      // required uint32 model = 3;
+      case 3: {
+        if (tag == 24) {
          parse_model:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -248,13 +571,13 @@ bool Base::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_speed;
+        if (input->ExpectTag(32)) goto parse_speed;
         break;
       }
 
-      // required uint32 speed = 3;
-      case 3: {
-        if (tag == 24) {
+      // required uint32 speed = 4;
+      case 4: {
+        if (tag == 32) {
          parse_speed:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -263,13 +586,13 @@ bool Base::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_skill;
+        if (input->ExpectTag(40)) goto parse_skill;
         break;
       }
 
-      // required uint32 skill = 4;
-      case 4: {
-        if (tag == 32) {
+      // required uint32 skill = 5;
+      case 5: {
+        if (tag == 40) {
          parse_skill:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -278,20 +601,39 @@ bool Base::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_attr;
+        if (input->ExpectTag(50)) goto parse_attr;
         break;
       }
 
-      // repeated .CfgCommon.Attribute attr = 5;
-      case 5: {
-        if (tag == 42) {
+      // repeated .CfgCommon.Attribute attr = 6;
+      case 6: {
+        if (tag == 50) {
          parse_attr:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_attr()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_attr;
+        if (input->ExpectTag(50)) goto parse_attr;
+        if (input->ExpectTag(56)) goto parse_skill_mode;
+        break;
+      }
+
+      // repeated uint32 skill_mode = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_skill_mode:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 56, input, this->mutable_skill_mode())));
+        } else if (tag == 58) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_skill_mode())));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(56)) goto parse_skill_mode;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -326,25 +668,37 @@ void Base::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->level(), output);
   }
 
-  // required uint32 model = 2;
+  // repeated .CfgZhanLing.Equips equips = 2;
+  for (int i = 0; i < this->equips_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->equips(i), output);
+  }
+
+  // required uint32 model = 3;
   if (has_model()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->model(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->model(), output);
   }
 
-  // required uint32 speed = 3;
+  // required uint32 speed = 4;
   if (has_speed()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->speed(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->speed(), output);
   }
 
-  // required uint32 skill = 4;
+  // required uint32 skill = 5;
   if (has_skill()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->skill(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->skill(), output);
   }
 
-  // repeated .CfgCommon.Attribute attr = 5;
+  // repeated .CfgCommon.Attribute attr = 6;
   for (int i = 0; i < this->attr_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      5, this->attr(i), output);
+      6, this->attr(i), output);
+  }
+
+  // repeated uint32 skill_mode = 7;
+  for (int i = 0; i < this->skill_mode_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      7, this->skill_mode(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -362,26 +716,39 @@ void Base::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->level(), target);
   }
 
-  // required uint32 model = 2;
+  // repeated .CfgZhanLing.Equips equips = 2;
+  for (int i = 0; i < this->equips_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->equips(i), target);
+  }
+
+  // required uint32 model = 3;
   if (has_model()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->model(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->model(), target);
   }
 
-  // required uint32 speed = 3;
+  // required uint32 speed = 4;
   if (has_speed()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->speed(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->speed(), target);
   }
 
-  // required uint32 skill = 4;
+  // required uint32 skill = 5;
   if (has_skill()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->skill(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->skill(), target);
   }
 
-  // repeated .CfgCommon.Attribute attr = 5;
+  // repeated .CfgCommon.Attribute attr = 6;
   for (int i = 0; i < this->attr_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        5, this->attr(i), target);
+        6, this->attr(i), target);
+  }
+
+  // repeated uint32 skill_mode = 7;
+  for (int i = 0; i < this->skill_mode_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(7, this->skill_mode(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -403,21 +770,21 @@ int Base::ByteSize() const {
           this->level());
     }
 
-    // required uint32 model = 2;
+    // required uint32 model = 3;
     if (has_model()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->model());
     }
 
-    // required uint32 speed = 3;
+    // required uint32 speed = 4;
     if (has_speed()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->speed());
     }
 
-    // required uint32 skill = 4;
+    // required uint32 skill = 5;
     if (has_skill()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -425,12 +792,30 @@ int Base::ByteSize() const {
     }
 
   }
-  // repeated .CfgCommon.Attribute attr = 5;
+  // repeated .CfgZhanLing.Equips equips = 2;
+  total_size += 1 * this->equips_size();
+  for (int i = 0; i < this->equips_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->equips(i));
+  }
+
+  // repeated .CfgCommon.Attribute attr = 6;
   total_size += 1 * this->attr_size();
   for (int i = 0; i < this->attr_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->attr(i));
+  }
+
+  // repeated uint32 skill_mode = 7;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->skill_mode_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->skill_mode(i));
+    }
+    total_size += 1 * this->skill_mode_size() + data_size;
   }
 
   if (!unknown_fields().empty()) {
@@ -458,7 +843,9 @@ void Base::MergeFrom(const ::google::protobuf::Message& from) {
 
 void Base::MergeFrom(const Base& from) {
   GOOGLE_CHECK_NE(&from, this);
+  equips_.MergeFrom(from.equips_);
   attr_.MergeFrom(from.attr_);
+  skill_mode_.MergeFrom(from.skill_mode_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_level()) {
       set_level(from.level());
@@ -489,8 +876,9 @@ void Base::CopyFrom(const Base& from) {
 }
 
 bool Base::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x0000001d) != 0x0000001d) return false;
 
+  if (!::google::protobuf::internal::AllAreInitialized(this->equips())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->attr())) return false;
   return true;
 }
@@ -498,10 +886,12 @@ bool Base::IsInitialized() const {
 void Base::Swap(Base* other) {
   if (other != this) {
     std::swap(level_, other->level_);
+    equips_.Swap(&other->equips_);
     std::swap(model_, other->model_);
     std::swap(speed_, other->speed_);
     std::swap(skill_, other->skill_);
     attr_.Swap(&other->attr_);
+    skill_mode_.Swap(&other->skill_mode_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

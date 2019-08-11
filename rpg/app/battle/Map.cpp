@@ -553,9 +553,9 @@ int Map::delObject(MapDisplayObject *obj) {
 			if (pDo == NULL) {
 				continue;
 			}
+			m_curField[pDo->getId()].erase(my_id);
 			if (pDo->getRace() == RACE_HUMAN) {
 				//TODO del me
-				m_curField[pDo->getId()].erase(my_id);
 				LogicManager::Instance()->SendMsg(pDo->getId(), CMD_MAP_LEAVES, sel_disappear);
 			}
 			oth_disappear->entityIds_.push_back(pDo->getEntityMsg());
@@ -579,6 +579,7 @@ int Map::objectDie(MapMoveObject *pMo) {
 		if (!pMo->isNeedRecove()) {
 			DestoryManager::Instance()->addObject(pMo);
 		}
+		return 0;
 	}
 	info_log("object die id=%u mapid=%u race=%d", pMo->getId(), pMo->getMapId(), pMo->getRace());
 	return 0;

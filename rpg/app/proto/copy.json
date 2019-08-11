@@ -54,6 +54,61 @@
 			"extends": "", 
 			"id": "1803",
 			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterTaskCopy", 
+			"extends": "", 
+			"id": "2001",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSSavePlayerConfig", 
+			"extends": "", 
+			"id": "1799",
+			"msg": [{"name": "configString", "id": 1, "type": "string"}]
+		},
+		{"name": "CSGetWorldBossList", 
+			"extends": "", 
+			"id": "1315",
+			"msg": []
+		},
+		{"name": "CSGetGodPlaneList", 
+			"extends": "", 
+			"id": "1856",
+			"msg": []
+		},
+		{"name": "CSEnterGodPlane", 
+			"extends": "", 
+			"id": "1857",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSFightRevive", 
+			"extends": "", 
+			"id": "949",
+			"msg": [{"name": "type", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterImmortalroadCopy", 
+			"extends": "", 
+			"id": "2711",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterExpCopy", 
+			"extends": "", 
+			"id": "969",
+			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"},{"name": "count", "id": 2, "type": "int32_t"}]
+		},
+		{"name": "CSEncourageExpCopy", 
+			"extends": "", 
+			"id": "981",
+			"msg": [{"name": "type", "id": 1, "type": "int32_t"},{"name": "count", "id": 2, "type": "int32_t"}]
+		},
+		{"name": "CSBuyExtraExpCopy", 
+			"extends": "", 
+			"id": "4149",
+			"msg": [{"name": "type", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSEnterPartnerIslandCopy", 
+			"extends": "", 
+			"id": "2877",
+			"msg": [{"name": "type", "id": 1, "type": "int32_t"}]
 		}
 		]
 }

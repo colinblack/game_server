@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import json
-from lib.common import _parse_reward
+from lib.common import _parse_reward, _parse_attribut
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -29,6 +29,8 @@ def parse_mission():
         item["id"] = i[6]
         item["condition"] = list()
         item["reward"] = _parse_reward(i[15])
+        item["type"] = i[19]
+        item["shengId"] = i[20]
         for j in arr:
             cc = parse_contition(j.split(r'#'))
             tt = cc['v1']
@@ -45,6 +47,24 @@ def parse_mission():
     for k in types.keys():
         print(k)
 
+
+def parse_sheng_mission():
+    fd = open("src/t_reincarn_sheng.json", "r")
+    data = json.load(fd)
+    missions = {}
+    missions["sheng_mission"] = list()
+    for i in data:
+        item = {}
+        item["id"] = i[0]
+        item["part"] = i[1]
+        item["reincarnlevel"] = i[2]
+        item["attr"] = _parse_attribut(i[3])
+        item["rate"] = i[4]
+        missions["sheng_mission"].append(item)
+    fd.close()
+    fd = open("tar/reincarn_sheng.json", "w")
+    json.dump(missions, fd, ensure_ascii=False, indent=2)
+    fd.close()
 
 if __name__ == "__main__":
     parse_mission()

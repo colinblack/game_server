@@ -17,6 +17,7 @@ int CDataForge::AddData(const DataForge &data) {
 	DBCREQ_SET_INT(data, purify);
 	DBCREQ_SET_INT(data, zhulingLevel);
 	DBCREQ_SET_INT(data, zhulingAdvance);
+	DBCREQ_SET_STR(data, extend);
 
 	DBCREQ_EXEC;
 
@@ -33,6 +34,7 @@ int CDataForge::SetData(const DataForge &data) {
 	DBCREQ_SET_INT(data, purify);
 	DBCREQ_SET_INT(data, zhulingLevel);
 	DBCREQ_SET_INT(data, zhulingAdvance);
+	DBCREQ_SET_STR(data, extend);
 
 
 	DBCREQ_EXEC;
@@ -69,6 +71,8 @@ int CDataForge::GetData(uint32_t uid, DataForge &data) {
 	DBCREQ_NEED(purify);
 	DBCREQ_NEED(zhulingLevel);
 	DBCREQ_NEED(zhulingAdvance);
+	DBCREQ_NEED(extend);
+
 
 	DBCREQ_EXEC;
 	DBCREQ_IFNULLROW;
@@ -82,6 +86,8 @@ int CDataForge::GetData(uint32_t uid, DataForge &data) {
 	DBCREQ_GET_INT(data, purify);
 	DBCREQ_GET_INT(data, zhulingLevel);
 	DBCREQ_GET_INT(data, zhulingAdvance);
+	DBCREQ_GET_STR(data, extend);
+
 
 
 	return 0;
@@ -99,6 +105,8 @@ int CDataForge::GetData(uint32_t uid, vector<DataForge> &datas) {
 	DBCREQ_NEED(purify);
 	DBCREQ_NEED(zhulingLevel);
 	DBCREQ_NEED(zhulingAdvance);
+	DBCREQ_NEED(extend);
+
 
 	DBCREQ_EXEC;
 	DBCREQ_IFNULLROW;
@@ -108,8 +116,10 @@ int CDataForge::GetData(uint32_t uid, vector<DataForge> &datas) {
 	DBCREQ_ARRAY_GET_INT(datas, rid);
 	DBCREQ_ARRAY_GET_INT(datas, type);
 	DBCREQ_ARRAY_GET_INT(datas, strength);
+	DBCREQ_ARRAY_GET_INT(datas, purify);
 	DBCREQ_ARRAY_GET_INT(datas, zhulingLevel);
 	DBCREQ_ARRAY_GET_INT(datas, zhulingAdvance);
+	DBCREQ_ARRAY_GET_STR(datas, extend);
 	DBCREQ_ARRAY_GET_END();
 
 	return 0;

@@ -39,6 +39,8 @@ message Plan {
 	required uint32 boss = 3;
 	required uint32 plan = 4;
 	repeated Point pos = 5;
+	required uint32 count = 6;
+	required int32 index = 7;
 }
 
 message Plans {

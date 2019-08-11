@@ -21,10 +21,11 @@ private:
 	~CardManager();
 public:
 	bool CalcProperty(const UserCache &cache, byte rid, PropertySets &props);
-
+	bool setStarExt(DataEquip& data, uint32_t star);
+	uint32_t getStarExt(DataEquip& data);
 public:
 	int Process(uint32_t uid, card::CSCardActiveCard *req);
-
+	int Process(uint32_t uid, logins::SCardUpStarReq *req);
 public:
 	int Sync(const UserCache &cache, uint32_t cmd, msgs::SCardGroup *resp);
 

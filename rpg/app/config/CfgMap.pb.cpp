@@ -55,13 +55,14 @@ void protobuf_AssignDesc_CfgMap_2eproto() {
       "CfgMap.proto");
   GOOGLE_CHECK(file != NULL);
   Map_descriptor_ = file->message_type(0);
-  static const int Map_offsets_[6] = {
+  static const int Map_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, mapscene_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, version_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, hasbosspoint_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, copyid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Map, copytype_),
   };
   Map_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -250,23 +251,23 @@ void protobuf_AddDesc_CfgMap_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\014CfgMap.proto\022\006CfgMap\"h\n\003Map\022\n\n\002id\030\001 \002("
+    "\n\014CfgMap.proto\022\006CfgMap\"z\n\003Map\022\n\n\002id\030\001 \002("
     "\r\022\020\n\010mapscene\030\002 \002(\r\022\017\n\007version\030\003 \002(\r\022\014\n\004"
     "name\030\004 \002(\t\022\024\n\014hasBossPoint\030\005 \002(\010\022\016\n\006copy"
-    "id\030\006 \002(\r\"!\n\004Maps\022\031\n\004maps\030\001 \003(\0132\013.CfgMap."
-    "Map\"\035\n\005Point\022\t\n\001x\030\001 \002(\005\022\t\n\001y\030\002 \002(\005\"I\n\006Pa"
-    "ssTo\022\020\n\010passToId\030\001 \002(\005\022\r\n\005mapId\030\002 \002(\r\022\036\n"
-    "\007toPoint\030\003 \002(\0132\r.CfgMap.Point\"@\n\tPassPoi"
-    "nt\022\023\n\013passPointId\030\001 \002(\005\022\036\n\006passTo\030\002 \003(\0132"
-    "\016.CfgMap.PassTo\"7\n\tBossPoint\022\014\n\004plan\030\001 \002"
-    "(\005\022\034\n\005point\030\002 \002(\0132\r.CfgMap.Point\"\342\001\n\005Sce"
-    "ne\022\n\n\002id\030\001 \002(\005\022\r\n\005mapId\030\002 \002(\005\022\016\n\006aiMode\030"
-    "\003 \001(\005\022\024\n\014instanceType\030\004 \002(\r\022\022\n\nfightMode"
-    "l\030\005 \002(\r\022+\n\020bossCenterPoints\030\006 \003(\0132\021.CfgM"
-    "ap.BossPoint\022%\n\npassPoints\030\007 \003(\0132\021.CfgMa"
-    "p.PassPoint\022\027\n\017addEnterPoint_x\030\010 \001(\r\022\027\n\017"
-    "addEnterPoint_y\030\t \001(\r\"\'\n\006Scenes\022\035\n\006scene"
-    "s\030\001 \003(\0132\r.CfgMap.Scene", 662);
+    "id\030\006 \002(\r\022\020\n\010copyType\030\007 \002(\r\"!\n\004Maps\022\031\n\004ma"
+    "ps\030\001 \003(\0132\013.CfgMap.Map\"\035\n\005Point\022\t\n\001x\030\001 \002("
+    "\005\022\t\n\001y\030\002 \002(\005\"I\n\006PassTo\022\020\n\010passToId\030\001 \002(\005"
+    "\022\r\n\005mapId\030\002 \002(\r\022\036\n\007toPoint\030\003 \002(\0132\r.CfgMa"
+    "p.Point\"@\n\tPassPoint\022\023\n\013passPointId\030\001 \002("
+    "\005\022\036\n\006passTo\030\002 \003(\0132\016.CfgMap.PassTo\"7\n\tBos"
+    "sPoint\022\014\n\004plan\030\001 \002(\005\022\034\n\005point\030\002 \002(\0132\r.Cf"
+    "gMap.Point\"\342\001\n\005Scene\022\n\n\002id\030\001 \002(\005\022\r\n\005mapI"
+    "d\030\002 \002(\005\022\016\n\006aiMode\030\003 \001(\005\022\024\n\014instanceType\030"
+    "\004 \002(\r\022\022\n\nfightModel\030\005 \002(\r\022+\n\020bossCenterP"
+    "oints\030\006 \003(\0132\021.CfgMap.BossPoint\022%\n\npassPo"
+    "ints\030\007 \003(\0132\021.CfgMap.PassPoint\022\027\n\017addEnte"
+    "rPoint_x\030\010 \001(\r\022\027\n\017addEnterPoint_y\030\t \001(\r\""
+    "\'\n\006Scenes\022\035\n\006scenes\030\001 \003(\0132\r.CfgMap.Scene", 680);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgMap.proto", &protobuf_RegisterTypes);
   Map::default_instance_ = new Map();
@@ -304,6 +305,7 @@ const int Map::kVersionFieldNumber;
 const int Map::kNameFieldNumber;
 const int Map::kHasBossPointFieldNumber;
 const int Map::kCopyidFieldNumber;
+const int Map::kCopyTypeFieldNumber;
 #endif  // !_MSC_VER
 
 Map::Map()
@@ -331,6 +333,7 @@ void Map::SharedCtor() {
   name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   hasbosspoint_ = false;
   copyid_ = 0u;
+  copytype_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -379,9 +382,9 @@ void Map::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 63) {
+  if (_has_bits_[0 / 32] & 127) {
     ZR_(id_, mapscene_);
-    ZR_(version_, copyid_);
+    ZR_(version_, copytype_);
     if (has_name()) {
       if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         name_->clear();
@@ -493,6 +496,21 @@ bool Map::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(56)) goto parse_copyType;
+        break;
+      }
+
+      // required uint32 copyType = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_copyType:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &copytype_)));
+          set_has_copytype();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -557,6 +575,11 @@ void Map::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->copyid(), output);
   }
 
+  // required uint32 copyType = 7;
+  if (has_copytype()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->copytype(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -601,6 +624,11 @@ void Map::SerializeWithCachedSizes(
   // required uint32 copyid = 6;
   if (has_copyid()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(6, this->copyid(), target);
+  }
+
+  // required uint32 copyType = 7;
+  if (has_copytype()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->copytype(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -655,6 +683,13 @@ int Map::ByteSize() const {
           this->copyid());
     }
 
+    // required uint32 copyType = 7;
+    if (has_copytype()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->copytype());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -700,6 +735,9 @@ void Map::MergeFrom(const Map& from) {
     if (from.has_copyid()) {
       set_copyid(from.copyid());
     }
+    if (from.has_copytype()) {
+      set_copytype(from.copytype());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -717,7 +755,7 @@ void Map::CopyFrom(const Map& from) {
 }
 
 bool Map::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
+  if ((_has_bits_[0] & 0x0000007f) != 0x0000007f) return false;
 
   return true;
 }
@@ -730,6 +768,7 @@ void Map::Swap(Map* other) {
     std::swap(name_, other->name_);
     std::swap(hasbosspoint_, other->hasbosspoint_);
     std::swap(copyid_, other->copyid_);
+    std::swap(copytype_, other->copytype_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

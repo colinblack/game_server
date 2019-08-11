@@ -6,7 +6,6 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-
 def parse_star_rate(v):
     arr = v.split(r'&')
     rate = list()
@@ -29,12 +28,20 @@ def parse_equip():
         item['id'] = i[1]
         item['part'] = i[5]
         item['career'] = i[13]
+        item['active_min'] = i[14]
         item['smeltAward'] = _parse_reward(i[31])
         item['attr'] = _parse_attribut(i[19])
         item['starRate'] = parse_star_rate(i[20])
         item['sub'] = i[30]
         item['color'] = i[6]
         item['changeLevel'] = i[17]
+        arr = i[27].split(r'#')
+        if len(arr) == 2:
+            sundry = {}
+            sundry['id'] = int(arr[0])
+            sundry['num'] = int(arr[1])
+            item['sundry'] = sundry
+        item['type'] = i[4]
         equips['equips'].append(item)
         #if i[30] != 10001 and i[30] > 6:
         #    print(i[1])
@@ -151,12 +158,11 @@ def parse_equip_purify():
     fd.close()
     fd = open('tar/t_equip_purify.json', 'w')
     json.dump(items, fd, ensure_ascii=False, indent=2)
-
-
+    
 if __name__ == "__main__":
-    # parse_equip()
-      parse_item()
-    # parse_gift()
+    parse_equip()
+    # parse_item()
+    #parse_gift()
     # parse_shenqi()
     # parse_equip_attr()
     # parse_equip_strengthen()

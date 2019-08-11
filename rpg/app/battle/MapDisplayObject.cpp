@@ -43,6 +43,13 @@ uint32_t MapDisplayObject::getId() {
 	return id_;
 }
 
+uint32_t MapDisplayObject::getRid() {
+	return role_id_;
+}
+uint32_t MapDisplayObject::getRealFbId() {
+	return real_fb_id;
+}
+
 uint32_t MapDisplayObject::getMapId() {
 	return map_id_;
 }
@@ -98,6 +105,10 @@ void MapDisplayObject::setFbId(uint32_t id) {
 	fb_id_ = id;
 	onSetFbId();
 }
+void MapDisplayObject::setRealFbId(uint32_t id) {
+	real_fb_id = id;
+}
+
 
 void MapDisplayObject::setBelong(uint32_t id) {
 	belong_id_ = id;

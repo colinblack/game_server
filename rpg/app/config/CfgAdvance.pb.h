@@ -38,6 +38,13 @@ class Advance;
 class Advances;
 class Dan;
 class Dans;
+class EquipStrength;
+class EquipStrengths;
+class Consume;
+class Awaken;
+class Awakens;
+class Target;
+class Targets;
 
 // ===================================================================
 
@@ -162,6 +169,18 @@ class Advance : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
       mutable_attr();
 
+  // repeated uint32 skill = 10;
+  inline int skill_size() const;
+  inline void clear_skill();
+  static const int kSkillFieldNumber = 10;
+  inline ::google::protobuf::uint32 skill(int index) const;
+  inline void set_skill(int index, ::google::protobuf::uint32 value);
+  inline void add_skill(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      skill() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_skill();
+
   // @@protoc_insertion_point(class_scope:CfgAdvance.Advance)
  private:
   inline void set_has_type();
@@ -194,6 +213,7 @@ class Advance : public ::google::protobuf::Message {
   ::google::protobuf::uint32 max_bless_;
   ::google::protobuf::uint32 mode_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > skill_;
   friend void  protobuf_AddDesc_CfgAdvance_2eproto();
   friend void protobuf_AssignDesc_CfgAdvance_2eproto();
   friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
@@ -497,6 +517,699 @@ class Dans : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static Dans* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class EquipStrength : public ::google::protobuf::Message {
+ public:
+  EquipStrength();
+  virtual ~EquipStrength();
+
+  EquipStrength(const EquipStrength& from);
+
+  inline EquipStrength& operator=(const EquipStrength& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const EquipStrength& default_instance();
+
+  void Swap(EquipStrength* other);
+
+  // implements Message ----------------------------------------------
+
+  EquipStrength* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const EquipStrength& from);
+  void MergeFrom(const EquipStrength& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgCommon.Attribute attr = 1;
+  inline int attr_size() const;
+  inline void clear_attr();
+  static const int kAttrFieldNumber = 1;
+  inline const ::CfgCommon::Attribute& attr(int index) const;
+  inline ::CfgCommon::Attribute* mutable_attr(int index);
+  inline ::CfgCommon::Attribute* add_attr();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+      attr() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+      mutable_attr();
+
+  // required uint32 consumId = 2;
+  inline bool has_consumid() const;
+  inline void clear_consumid();
+  static const int kConsumIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 consumid() const;
+  inline void set_consumid(::google::protobuf::uint32 value);
+
+  // required uint32 consumCnt = 3;
+  inline bool has_consumcnt() const;
+  inline void clear_consumcnt();
+  static const int kConsumCntFieldNumber = 3;
+  inline ::google::protobuf::uint32 consumcnt() const;
+  inline void set_consumcnt(::google::protobuf::uint32 value);
+
+  // required uint32 level = 4;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 4;
+  inline ::google::protobuf::uint32 level() const;
+  inline void set_level(::google::protobuf::uint32 value);
+
+  // required uint32 type = 5;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 5;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
+  // required uint32 part = 6;
+  inline bool has_part() const;
+  inline void clear_part();
+  static const int kPartFieldNumber = 6;
+  inline ::google::protobuf::uint32 part() const;
+  inline void set_part(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.EquipStrength)
+ private:
+  inline void set_has_consumid();
+  inline void clear_has_consumid();
+  inline void set_has_consumcnt();
+  inline void clear_has_consumcnt();
+  inline void set_has_level();
+  inline void clear_has_level();
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_part();
+  inline void clear_has_part();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
+  ::google::protobuf::uint32 consumid_;
+  ::google::protobuf::uint32 consumcnt_;
+  ::google::protobuf::uint32 level_;
+  ::google::protobuf::uint32 type_;
+  ::google::protobuf::uint32 part_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static EquipStrength* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class EquipStrengths : public ::google::protobuf::Message {
+ public:
+  EquipStrengths();
+  virtual ~EquipStrengths();
+
+  EquipStrengths(const EquipStrengths& from);
+
+  inline EquipStrengths& operator=(const EquipStrengths& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const EquipStrengths& default_instance();
+
+  void Swap(EquipStrengths* other);
+
+  // implements Message ----------------------------------------------
+
+  EquipStrengths* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const EquipStrengths& from);
+  void MergeFrom(const EquipStrengths& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgAdvance.EquipStrength strength = 1;
+  inline int strength_size() const;
+  inline void clear_strength();
+  static const int kStrengthFieldNumber = 1;
+  inline const ::CfgAdvance::EquipStrength& strength(int index) const;
+  inline ::CfgAdvance::EquipStrength* mutable_strength(int index);
+  inline ::CfgAdvance::EquipStrength* add_strength();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgAdvance::EquipStrength >&
+      strength() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::EquipStrength >*
+      mutable_strength();
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.EquipStrengths)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgAdvance::EquipStrength > strength_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static EquipStrengths* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Consume : public ::google::protobuf::Message {
+ public:
+  Consume();
+  virtual ~Consume();
+
+  Consume(const Consume& from);
+
+  inline Consume& operator=(const Consume& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Consume& default_instance();
+
+  void Swap(Consume* other);
+
+  // implements Message ----------------------------------------------
+
+  Consume* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Consume& from);
+  void MergeFrom(const Consume& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required uint32 num = 2;
+  inline bool has_num() const;
+  inline void clear_num();
+  static const int kNumFieldNumber = 2;
+  inline ::google::protobuf::uint32 num() const;
+  inline void set_num(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.Consume)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_num();
+  inline void clear_has_num();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 num_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static Consume* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Awaken : public ::google::protobuf::Message {
+ public:
+  Awaken();
+  virtual ~Awaken();
+
+  Awaken(const Awaken& from);
+
+  inline Awaken& operator=(const Awaken& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Awaken& default_instance();
+
+  void Swap(Awaken* other);
+
+  // implements Message ----------------------------------------------
+
+  Awaken* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Awaken& from);
+  void MergeFrom(const Awaken& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgCommon.Attribute attr = 1;
+  inline int attr_size() const;
+  inline void clear_attr();
+  static const int kAttrFieldNumber = 1;
+  inline const ::CfgCommon::Attribute& attr(int index) const;
+  inline ::CfgCommon::Attribute* mutable_attr(int index);
+  inline ::CfgCommon::Attribute* add_attr();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+      attr() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+      mutable_attr();
+
+  // optional .CfgAdvance.Consume consume = 2;
+  inline bool has_consume() const;
+  inline void clear_consume();
+  static const int kConsumeFieldNumber = 2;
+  inline const ::CfgAdvance::Consume& consume() const;
+  inline ::CfgAdvance::Consume* mutable_consume();
+  inline ::CfgAdvance::Consume* release_consume();
+  inline void set_allocated_consume(::CfgAdvance::Consume* consume);
+
+  // required uint32 advance = 3;
+  inline bool has_advance() const;
+  inline void clear_advance();
+  static const int kAdvanceFieldNumber = 3;
+  inline ::google::protobuf::uint32 advance() const;
+  inline void set_advance(::google::protobuf::uint32 value);
+
+  // required uint32 star = 4;
+  inline bool has_star() const;
+  inline void clear_star();
+  static const int kStarFieldNumber = 4;
+  inline ::google::protobuf::uint32 star() const;
+  inline void set_star(::google::protobuf::uint32 value);
+
+  // required uint32 type = 5;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 5;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.Awaken)
+ private:
+  inline void set_has_consume();
+  inline void clear_has_consume();
+  inline void set_has_advance();
+  inline void clear_has_advance();
+  inline void set_has_star();
+  inline void clear_has_star();
+  inline void set_has_type();
+  inline void clear_has_type();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
+  ::CfgAdvance::Consume* consume_;
+  ::google::protobuf::uint32 advance_;
+  ::google::protobuf::uint32 star_;
+  ::google::protobuf::uint32 type_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static Awaken* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Awakens : public ::google::protobuf::Message {
+ public:
+  Awakens();
+  virtual ~Awakens();
+
+  Awakens(const Awakens& from);
+
+  inline Awakens& operator=(const Awakens& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Awakens& default_instance();
+
+  void Swap(Awakens* other);
+
+  // implements Message ----------------------------------------------
+
+  Awakens* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Awakens& from);
+  void MergeFrom(const Awakens& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgAdvance.Awaken awaken = 1;
+  inline int awaken_size() const;
+  inline void clear_awaken();
+  static const int kAwakenFieldNumber = 1;
+  inline const ::CfgAdvance::Awaken& awaken(int index) const;
+  inline ::CfgAdvance::Awaken* mutable_awaken(int index);
+  inline ::CfgAdvance::Awaken* add_awaken();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Awaken >&
+      awaken() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Awaken >*
+      mutable_awaken();
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.Awakens)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Awaken > awaken_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static Awakens* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Target : public ::google::protobuf::Message {
+ public:
+  Target();
+  virtual ~Target();
+
+  Target(const Target& from);
+
+  inline Target& operator=(const Target& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Target& default_instance();
+
+  void Swap(Target* other);
+
+  // implements Message ----------------------------------------------
+
+  Target* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Target& from);
+  void MergeFrom(const Target& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgCommon.Attribute attr = 1;
+  inline int attr_size() const;
+  inline void clear_attr();
+  static const int kAttrFieldNumber = 1;
+  inline const ::CfgCommon::Attribute& attr(int index) const;
+  inline ::CfgCommon::Attribute* mutable_attr(int index);
+  inline ::CfgCommon::Attribute* add_attr();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+      attr() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+      mutable_attr();
+
+  // required uint32 advance = 2;
+  inline bool has_advance() const;
+  inline void clear_advance();
+  static const int kAdvanceFieldNumber = 2;
+  inline ::google::protobuf::uint32 advance() const;
+  inline void set_advance(::google::protobuf::uint32 value);
+
+  // required uint32 type = 3;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 3;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.Target)
+ private:
+  inline void set_has_advance();
+  inline void clear_has_advance();
+  inline void set_has_type();
+  inline void clear_has_type();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
+  ::google::protobuf::uint32 advance_;
+  ::google::protobuf::uint32 type_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static Target* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Targets : public ::google::protobuf::Message {
+ public:
+  Targets();
+  virtual ~Targets();
+
+  Targets(const Targets& from);
+
+  inline Targets& operator=(const Targets& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Targets& default_instance();
+
+  void Swap(Targets* other);
+
+  // implements Message ----------------------------------------------
+
+  Targets* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Targets& from);
+  void MergeFrom(const Targets& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgAdvance.Target target = 1;
+  inline int target_size() const;
+  inline void clear_target();
+  static const int kTargetFieldNumber = 1;
+  inline const ::CfgAdvance::Target& target(int index) const;
+  inline ::CfgAdvance::Target* mutable_target(int index);
+  inline ::CfgAdvance::Target* add_target();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Target >&
+      target() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Target >*
+      mutable_target();
+
+  // @@protoc_insertion_point(class_scope:CfgAdvance.Targets)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Target > target_;
+  friend void  protobuf_AddDesc_CfgAdvance_2eproto();
+  friend void protobuf_AssignDesc_CfgAdvance_2eproto();
+  friend void protobuf_ShutdownFile_CfgAdvance_2eproto();
+
+  void InitAsDefaultInstance();
+  static Targets* default_instance_;
+};
 // ===================================================================
 
 
@@ -726,6 +1439,36 @@ Advance::mutable_attr() {
   return &attr_;
 }
 
+// repeated uint32 skill = 10;
+inline int Advance::skill_size() const {
+  return skill_.size();
+}
+inline void Advance::clear_skill() {
+  skill_.Clear();
+}
+inline ::google::protobuf::uint32 Advance::skill(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Advance.skill)
+  return skill_.Get(index);
+}
+inline void Advance::set_skill(int index, ::google::protobuf::uint32 value) {
+  skill_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CfgAdvance.Advance.skill)
+}
+inline void Advance::add_skill(::google::protobuf::uint32 value) {
+  skill_.Add(value);
+  // @@protoc_insertion_point(field_add:CfgAdvance.Advance.skill)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Advance::skill() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.Advance.skill)
+  return skill_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Advance::mutable_skill() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.Advance.skill)
+  return &skill_;
+}
+
 // -------------------------------------------------------------------
 
 // Advances
@@ -946,6 +1689,543 @@ inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Dan >*
 Dans::mutable_dans() {
   // @@protoc_insertion_point(field_mutable_list:CfgAdvance.Dans.dans)
   return &dans_;
+}
+
+// -------------------------------------------------------------------
+
+// EquipStrength
+
+// repeated .CfgCommon.Attribute attr = 1;
+inline int EquipStrength::attr_size() const {
+  return attr_.size();
+}
+inline void EquipStrength::clear_attr() {
+  attr_.Clear();
+}
+inline const ::CfgCommon::Attribute& EquipStrength::attr(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrength.attr)
+  return attr_.Get(index);
+}
+inline ::CfgCommon::Attribute* EquipStrength::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.EquipStrength.attr)
+  return attr_.Mutable(index);
+}
+inline ::CfgCommon::Attribute* EquipStrength::add_attr() {
+  // @@protoc_insertion_point(field_add:CfgAdvance.EquipStrength.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+EquipStrength::attr() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.EquipStrength.attr)
+  return attr_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+EquipStrength::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.EquipStrength.attr)
+  return &attr_;
+}
+
+// required uint32 consumId = 2;
+inline bool EquipStrength::has_consumid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void EquipStrength::set_has_consumid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void EquipStrength::clear_has_consumid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void EquipStrength::clear_consumid() {
+  consumid_ = 0u;
+  clear_has_consumid();
+}
+inline ::google::protobuf::uint32 EquipStrength::consumid() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrength.consumId)
+  return consumid_;
+}
+inline void EquipStrength::set_consumid(::google::protobuf::uint32 value) {
+  set_has_consumid();
+  consumid_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.EquipStrength.consumId)
+}
+
+// required uint32 consumCnt = 3;
+inline bool EquipStrength::has_consumcnt() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void EquipStrength::set_has_consumcnt() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void EquipStrength::clear_has_consumcnt() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void EquipStrength::clear_consumcnt() {
+  consumcnt_ = 0u;
+  clear_has_consumcnt();
+}
+inline ::google::protobuf::uint32 EquipStrength::consumcnt() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrength.consumCnt)
+  return consumcnt_;
+}
+inline void EquipStrength::set_consumcnt(::google::protobuf::uint32 value) {
+  set_has_consumcnt();
+  consumcnt_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.EquipStrength.consumCnt)
+}
+
+// required uint32 level = 4;
+inline bool EquipStrength::has_level() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void EquipStrength::set_has_level() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void EquipStrength::clear_has_level() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void EquipStrength::clear_level() {
+  level_ = 0u;
+  clear_has_level();
+}
+inline ::google::protobuf::uint32 EquipStrength::level() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrength.level)
+  return level_;
+}
+inline void EquipStrength::set_level(::google::protobuf::uint32 value) {
+  set_has_level();
+  level_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.EquipStrength.level)
+}
+
+// required uint32 type = 5;
+inline bool EquipStrength::has_type() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void EquipStrength::set_has_type() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void EquipStrength::clear_has_type() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void EquipStrength::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 EquipStrength::type() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrength.type)
+  return type_;
+}
+inline void EquipStrength::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.EquipStrength.type)
+}
+
+// required uint32 part = 6;
+inline bool EquipStrength::has_part() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void EquipStrength::set_has_part() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void EquipStrength::clear_has_part() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void EquipStrength::clear_part() {
+  part_ = 0u;
+  clear_has_part();
+}
+inline ::google::protobuf::uint32 EquipStrength::part() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrength.part)
+  return part_;
+}
+inline void EquipStrength::set_part(::google::protobuf::uint32 value) {
+  set_has_part();
+  part_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.EquipStrength.part)
+}
+
+// -------------------------------------------------------------------
+
+// EquipStrengths
+
+// repeated .CfgAdvance.EquipStrength strength = 1;
+inline int EquipStrengths::strength_size() const {
+  return strength_.size();
+}
+inline void EquipStrengths::clear_strength() {
+  strength_.Clear();
+}
+inline const ::CfgAdvance::EquipStrength& EquipStrengths::strength(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.EquipStrengths.strength)
+  return strength_.Get(index);
+}
+inline ::CfgAdvance::EquipStrength* EquipStrengths::mutable_strength(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.EquipStrengths.strength)
+  return strength_.Mutable(index);
+}
+inline ::CfgAdvance::EquipStrength* EquipStrengths::add_strength() {
+  // @@protoc_insertion_point(field_add:CfgAdvance.EquipStrengths.strength)
+  return strength_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgAdvance::EquipStrength >&
+EquipStrengths::strength() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.EquipStrengths.strength)
+  return strength_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::EquipStrength >*
+EquipStrengths::mutable_strength() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.EquipStrengths.strength)
+  return &strength_;
+}
+
+// -------------------------------------------------------------------
+
+// Consume
+
+// required uint32 id = 1;
+inline bool Consume::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Consume::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Consume::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Consume::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 Consume::id() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Consume.id)
+  return id_;
+}
+inline void Consume::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Consume.id)
+}
+
+// required uint32 num = 2;
+inline bool Consume::has_num() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Consume::set_has_num() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Consume::clear_has_num() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Consume::clear_num() {
+  num_ = 0u;
+  clear_has_num();
+}
+inline ::google::protobuf::uint32 Consume::num() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Consume.num)
+  return num_;
+}
+inline void Consume::set_num(::google::protobuf::uint32 value) {
+  set_has_num();
+  num_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Consume.num)
+}
+
+// -------------------------------------------------------------------
+
+// Awaken
+
+// repeated .CfgCommon.Attribute attr = 1;
+inline int Awaken::attr_size() const {
+  return attr_.size();
+}
+inline void Awaken::clear_attr() {
+  attr_.Clear();
+}
+inline const ::CfgCommon::Attribute& Awaken::attr(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Awaken.attr)
+  return attr_.Get(index);
+}
+inline ::CfgCommon::Attribute* Awaken::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.Awaken.attr)
+  return attr_.Mutable(index);
+}
+inline ::CfgCommon::Attribute* Awaken::add_attr() {
+  // @@protoc_insertion_point(field_add:CfgAdvance.Awaken.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+Awaken::attr() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.Awaken.attr)
+  return attr_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+Awaken::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.Awaken.attr)
+  return &attr_;
+}
+
+// optional .CfgAdvance.Consume consume = 2;
+inline bool Awaken::has_consume() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Awaken::set_has_consume() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Awaken::clear_has_consume() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Awaken::clear_consume() {
+  if (consume_ != NULL) consume_->::CfgAdvance::Consume::Clear();
+  clear_has_consume();
+}
+inline const ::CfgAdvance::Consume& Awaken::consume() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Awaken.consume)
+  return consume_ != NULL ? *consume_ : *default_instance_->consume_;
+}
+inline ::CfgAdvance::Consume* Awaken::mutable_consume() {
+  set_has_consume();
+  if (consume_ == NULL) consume_ = new ::CfgAdvance::Consume;
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.Awaken.consume)
+  return consume_;
+}
+inline ::CfgAdvance::Consume* Awaken::release_consume() {
+  clear_has_consume();
+  ::CfgAdvance::Consume* temp = consume_;
+  consume_ = NULL;
+  return temp;
+}
+inline void Awaken::set_allocated_consume(::CfgAdvance::Consume* consume) {
+  delete consume_;
+  consume_ = consume;
+  if (consume) {
+    set_has_consume();
+  } else {
+    clear_has_consume();
+  }
+  // @@protoc_insertion_point(field_set_allocated:CfgAdvance.Awaken.consume)
+}
+
+// required uint32 advance = 3;
+inline bool Awaken::has_advance() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Awaken::set_has_advance() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Awaken::clear_has_advance() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Awaken::clear_advance() {
+  advance_ = 0u;
+  clear_has_advance();
+}
+inline ::google::protobuf::uint32 Awaken::advance() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Awaken.advance)
+  return advance_;
+}
+inline void Awaken::set_advance(::google::protobuf::uint32 value) {
+  set_has_advance();
+  advance_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Awaken.advance)
+}
+
+// required uint32 star = 4;
+inline bool Awaken::has_star() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Awaken::set_has_star() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Awaken::clear_has_star() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Awaken::clear_star() {
+  star_ = 0u;
+  clear_has_star();
+}
+inline ::google::protobuf::uint32 Awaken::star() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Awaken.star)
+  return star_;
+}
+inline void Awaken::set_star(::google::protobuf::uint32 value) {
+  set_has_star();
+  star_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Awaken.star)
+}
+
+// required uint32 type = 5;
+inline bool Awaken::has_type() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Awaken::set_has_type() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Awaken::clear_has_type() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Awaken::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 Awaken::type() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Awaken.type)
+  return type_;
+}
+inline void Awaken::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Awaken.type)
+}
+
+// -------------------------------------------------------------------
+
+// Awakens
+
+// repeated .CfgAdvance.Awaken awaken = 1;
+inline int Awakens::awaken_size() const {
+  return awaken_.size();
+}
+inline void Awakens::clear_awaken() {
+  awaken_.Clear();
+}
+inline const ::CfgAdvance::Awaken& Awakens::awaken(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Awakens.awaken)
+  return awaken_.Get(index);
+}
+inline ::CfgAdvance::Awaken* Awakens::mutable_awaken(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.Awakens.awaken)
+  return awaken_.Mutable(index);
+}
+inline ::CfgAdvance::Awaken* Awakens::add_awaken() {
+  // @@protoc_insertion_point(field_add:CfgAdvance.Awakens.awaken)
+  return awaken_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Awaken >&
+Awakens::awaken() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.Awakens.awaken)
+  return awaken_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Awaken >*
+Awakens::mutable_awaken() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.Awakens.awaken)
+  return &awaken_;
+}
+
+// -------------------------------------------------------------------
+
+// Target
+
+// repeated .CfgCommon.Attribute attr = 1;
+inline int Target::attr_size() const {
+  return attr_.size();
+}
+inline void Target::clear_attr() {
+  attr_.Clear();
+}
+inline const ::CfgCommon::Attribute& Target::attr(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Target.attr)
+  return attr_.Get(index);
+}
+inline ::CfgCommon::Attribute* Target::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.Target.attr)
+  return attr_.Mutable(index);
+}
+inline ::CfgCommon::Attribute* Target::add_attr() {
+  // @@protoc_insertion_point(field_add:CfgAdvance.Target.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+Target::attr() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.Target.attr)
+  return attr_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+Target::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.Target.attr)
+  return &attr_;
+}
+
+// required uint32 advance = 2;
+inline bool Target::has_advance() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Target::set_has_advance() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Target::clear_has_advance() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Target::clear_advance() {
+  advance_ = 0u;
+  clear_has_advance();
+}
+inline ::google::protobuf::uint32 Target::advance() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Target.advance)
+  return advance_;
+}
+inline void Target::set_advance(::google::protobuf::uint32 value) {
+  set_has_advance();
+  advance_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Target.advance)
+}
+
+// required uint32 type = 3;
+inline bool Target::has_type() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Target::set_has_type() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Target::clear_has_type() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Target::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 Target::type() const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Target.type)
+  return type_;
+}
+inline void Target::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:CfgAdvance.Target.type)
+}
+
+// -------------------------------------------------------------------
+
+// Targets
+
+// repeated .CfgAdvance.Target target = 1;
+inline int Targets::target_size() const {
+  return target_.size();
+}
+inline void Targets::clear_target() {
+  target_.Clear();
+}
+inline const ::CfgAdvance::Target& Targets::target(int index) const {
+  // @@protoc_insertion_point(field_get:CfgAdvance.Targets.target)
+  return target_.Get(index);
+}
+inline ::CfgAdvance::Target* Targets::mutable_target(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgAdvance.Targets.target)
+  return target_.Mutable(index);
+}
+inline ::CfgAdvance::Target* Targets::add_target() {
+  // @@protoc_insertion_point(field_add:CfgAdvance.Targets.target)
+  return target_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Target >&
+Targets::target() const {
+  // @@protoc_insertion_point(field_list:CfgAdvance.Targets.target)
+  return target_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgAdvance::Target >*
+Targets::mutable_target() {
+  // @@protoc_insertion_point(field_mutable_list:CfgAdvance.Targets.target)
+  return &target_;
 }
 
 

@@ -40,6 +40,8 @@ class CardGroup;
 class CardGroups;
 class Suit;
 class Suits;
+class Star;
+class Stars;
 
 // ===================================================================
 
@@ -606,6 +608,200 @@ class Suits : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static Suits* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class Star : public ::google::protobuf::Message {
+ public:
+  Star();
+  virtual ~Star();
+
+  Star(const Star& from);
+
+  inline Star& operator=(const Star& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Star& default_instance();
+
+  void Swap(Star* other);
+
+  // implements Message ----------------------------------------------
+
+  Star* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Star& from);
+  void MergeFrom(const Star& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgCommon.Attribute attr = 1;
+  inline int attr_size() const;
+  inline void clear_attr();
+  static const int kAttrFieldNumber = 1;
+  inline const ::CfgCommon::Attribute& attr(int index) const;
+  inline ::CfgCommon::Attribute* mutable_attr(int index);
+  inline ::CfgCommon::Attribute* add_attr();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+      attr() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+      mutable_attr();
+
+  // required uint32 exp = 2;
+  inline bool has_exp() const;
+  inline void clear_exp();
+  static const int kExpFieldNumber = 2;
+  inline ::google::protobuf::uint32 exp() const;
+  inline void set_exp(::google::protobuf::uint32 value);
+
+  // required uint32 color = 3;
+  inline bool has_color() const;
+  inline void clear_color();
+  static const int kColorFieldNumber = 3;
+  inline ::google::protobuf::uint32 color() const;
+  inline void set_color(::google::protobuf::uint32 value);
+
+  // required uint32 level = 4;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 4;
+  inline ::google::protobuf::uint32 level() const;
+  inline void set_level(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgCard.Star)
+ private:
+  inline void set_has_exp();
+  inline void clear_has_exp();
+  inline void set_has_color();
+  inline void clear_has_color();
+  inline void set_has_level();
+  inline void clear_has_level();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
+  ::google::protobuf::uint32 exp_;
+  ::google::protobuf::uint32 color_;
+  ::google::protobuf::uint32 level_;
+  friend void  protobuf_AddDesc_CfgCard_2eproto();
+  friend void protobuf_AssignDesc_CfgCard_2eproto();
+  friend void protobuf_ShutdownFile_CfgCard_2eproto();
+
+  void InitAsDefaultInstance();
+  static Star* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Stars : public ::google::protobuf::Message {
+ public:
+  Stars();
+  virtual ~Stars();
+
+  Stars(const Stars& from);
+
+  inline Stars& operator=(const Stars& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Stars& default_instance();
+
+  void Swap(Stars* other);
+
+  // implements Message ----------------------------------------------
+
+  Stars* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Stars& from);
+  void MergeFrom(const Stars& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgCard.Star star = 1;
+  inline int star_size() const;
+  inline void clear_star();
+  static const int kStarFieldNumber = 1;
+  inline const ::CfgCard::Star& star(int index) const;
+  inline ::CfgCard::Star* mutable_star(int index);
+  inline ::CfgCard::Star* add_star();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCard::Star >&
+      star() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCard::Star >*
+      mutable_star();
+
+  // @@protoc_insertion_point(class_scope:CfgCard.Stars)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCard::Star > star_;
+  friend void  protobuf_AddDesc_CfgCard_2eproto();
+  friend void protobuf_AssignDesc_CfgCard_2eproto();
+  friend void protobuf_ShutdownFile_CfgCard_2eproto();
+
+  void InitAsDefaultInstance();
+  static Stars* default_instance_;
+};
 // ===================================================================
 
 
@@ -985,6 +1181,146 @@ inline ::google::protobuf::RepeatedPtrField< ::CfgCard::Suit >*
 Suits::mutable_suits() {
   // @@protoc_insertion_point(field_mutable_list:CfgCard.Suits.suits)
   return &suits_;
+}
+
+// -------------------------------------------------------------------
+
+// Star
+
+// repeated .CfgCommon.Attribute attr = 1;
+inline int Star::attr_size() const {
+  return attr_.size();
+}
+inline void Star::clear_attr() {
+  attr_.Clear();
+}
+inline const ::CfgCommon::Attribute& Star::attr(int index) const {
+  // @@protoc_insertion_point(field_get:CfgCard.Star.attr)
+  return attr_.Get(index);
+}
+inline ::CfgCommon::Attribute* Star::mutable_attr(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgCard.Star.attr)
+  return attr_.Mutable(index);
+}
+inline ::CfgCommon::Attribute* Star::add_attr() {
+  // @@protoc_insertion_point(field_add:CfgCard.Star.attr)
+  return attr_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >&
+Star::attr() const {
+  // @@protoc_insertion_point(field_list:CfgCard.Star.attr)
+  return attr_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
+Star::mutable_attr() {
+  // @@protoc_insertion_point(field_mutable_list:CfgCard.Star.attr)
+  return &attr_;
+}
+
+// required uint32 exp = 2;
+inline bool Star::has_exp() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Star::set_has_exp() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Star::clear_has_exp() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Star::clear_exp() {
+  exp_ = 0u;
+  clear_has_exp();
+}
+inline ::google::protobuf::uint32 Star::exp() const {
+  // @@protoc_insertion_point(field_get:CfgCard.Star.exp)
+  return exp_;
+}
+inline void Star::set_exp(::google::protobuf::uint32 value) {
+  set_has_exp();
+  exp_ = value;
+  // @@protoc_insertion_point(field_set:CfgCard.Star.exp)
+}
+
+// required uint32 color = 3;
+inline bool Star::has_color() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Star::set_has_color() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Star::clear_has_color() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Star::clear_color() {
+  color_ = 0u;
+  clear_has_color();
+}
+inline ::google::protobuf::uint32 Star::color() const {
+  // @@protoc_insertion_point(field_get:CfgCard.Star.color)
+  return color_;
+}
+inline void Star::set_color(::google::protobuf::uint32 value) {
+  set_has_color();
+  color_ = value;
+  // @@protoc_insertion_point(field_set:CfgCard.Star.color)
+}
+
+// required uint32 level = 4;
+inline bool Star::has_level() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Star::set_has_level() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Star::clear_has_level() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Star::clear_level() {
+  level_ = 0u;
+  clear_has_level();
+}
+inline ::google::protobuf::uint32 Star::level() const {
+  // @@protoc_insertion_point(field_get:CfgCard.Star.level)
+  return level_;
+}
+inline void Star::set_level(::google::protobuf::uint32 value) {
+  set_has_level();
+  level_ = value;
+  // @@protoc_insertion_point(field_set:CfgCard.Star.level)
+}
+
+// -------------------------------------------------------------------
+
+// Stars
+
+// repeated .CfgCard.Star star = 1;
+inline int Stars::star_size() const {
+  return star_.size();
+}
+inline void Stars::clear_star() {
+  star_.Clear();
+}
+inline const ::CfgCard::Star& Stars::star(int index) const {
+  // @@protoc_insertion_point(field_get:CfgCard.Stars.star)
+  return star_.Get(index);
+}
+inline ::CfgCard::Star* Stars::mutable_star(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgCard.Stars.star)
+  return star_.Mutable(index);
+}
+inline ::CfgCard::Star* Stars::add_star() {
+  // @@protoc_insertion_point(field_add:CfgCard.Stars.star)
+  return star_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCard::Star >&
+Stars::star() const {
+  // @@protoc_insertion_point(field_list:CfgCard.Stars.star)
+  return star_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCard::Star >*
+Stars::mutable_star() {
+  // @@protoc_insertion_point(field_mutable_list:CfgCard.Stars.star)
+  return &star_;
 }
 
 

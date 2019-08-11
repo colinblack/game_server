@@ -1,5 +1,6 @@
 #include "AsyncDBManager.h"
 #include "DataManager.h"
+#include "Utils.h"
 
 #define DB_WRITER "dbwriter"
 
@@ -8,20 +9,7 @@ m_tables[tableId] = className::Instance(); \
 }
 
 void* AsyncDBThread(void* data) {
-	AsyncDBManager* dbMng = AsyncDBManager::getInstance();
-	DataPacket packet;
-	while (true) {
-		while (dbMng->get(packet)) {
-			AsyncDBInterfaceBase* processor = dbMng->getProcessor(packet.m_tableId);
-			if (!processor) {
-				error_log("table %u has no processor", packet.m_tableId);
-				continue;
-			}
-			processor->doRequest(&packet);
-		}
-		usleep(1000);
-	}
-
+	AsyncDBManager::Instance()->pop();
 	return NULL;
 }
 
@@ -60,6 +48,10 @@ bool AsyncDBManager::initThread() {
 	ADD_PROCESSOR(DB_ATTR, DataAttrManager);
 	ADD_PROCESSOR(DB_ROLE_ATTR, DataRoleAttrManager);
 	ADD_PROCESSOR(DB_ACTIVE, DataActiveManager);
+	ADD_PROCESSOR(DB_REWARD, DataSignManager);
+	ADD_PROCESSOR(DB_TRUMP, DataTrumpManager);
+	ADD_PROCESSOR(DB_PLAYER_CONFIG, DataPlayerConfigManager);
+
 	if (!startAsynThread()) {
 		return false;
 	}
@@ -79,26 +71,52 @@ bool AsyncDBManager::startAsynThread() {
 bool AsyncDBManager::push(const DataPacket& packet) {
 	if (m_mutex.acquire() == 0) {
 		m_packets.push_back(packet);
+		m_recvCond.Signal();
 		m_mutex.release();
 		return true;
 	}
 	return false;
 }
 
-bool AsyncDBManager::get(DataPacket& packet) {
+bool AsyncDBManager::pop() {
 	bool ret = true;
-	if (m_mutex.acquire() == 0) {
-		if (!m_packets.empty()) {
-			packet = m_packets.front();
-			m_packets.pop_front();
+	DataPacket packet;
+	AsyncDBInterfaceBase *processor = NULL;
+	while (stop == 0) {
+		if (m_mutex.acquire() == 0) {
+			if (!m_packets.empty()) {
+				ret = true;
+				packet = m_packets.front();
+				m_packets.pop_front();
+			} else {
+				ret = false;
+				m_recvCond.Wait(m_mutex.getMutex());
+			}
+			m_mutex.release();
 		} else {
 			ret = false;
 		}
-		m_mutex.release();
-	} else {
-		ret = false;
+		if (!ret) {
+			continue;
+		}
+		processor = getProcessor(packet.m_tableId);
+		if (!processor) {
+			error_log("table %u has no processor", packet.m_tableId);
+			continue;
+		}
+		processor->doRequest(&packet);
 	}
-	return ret;
+	return true;
+}
+
+bool AsyncDBManager::onExit() {
+	m_recvCond.Broadcast();
+	return true;
+}
+
+AsyncDBInterfaceBase* AsyncDBManager::getProcessor(uint32_t tableId) {
+	map<uint32_t, AsyncDBInterfaceBase*>::iterator it = m_tables.find(tableId);
+	return it == m_tables.end() ? NULL : it->second;
 }
 
 bool AsyncDBManager::send(DataPacket& packet) {
@@ -116,16 +134,14 @@ bool AsyncDBManager::send(DataPacket& packet) {
 	return true;
 }
 
-int AsyncDBManager::onSecondTimer() {
+bool AsyncDBManager::onSecondTimer() {
 	if (m_channel == NULL) {
 		info_log("try reconnect dbwriter,%s", Config::GetValue(DB_WRITER).c_str());
-		return init(m_server) ? 0 : -1;
+		return init(m_server);
 	}
-
 	if (m_channel->IsClosed() || m_channel->getFlag() != DP_CHEAD) {
 		info_log("try reconnect dbwriter,%s", Config::GetValue(DB_WRITER).c_str());
-		return init(m_server) ? 0 : -1;
+		return init(m_server);
 	}
-
-	return 0;
+	return true;
 }

@@ -1,0 +1,14 @@
+package CfgReinCarnSheng;
+import "CfgCommon.proto";
+
+message ShengMission {
+	required uint32 id =1;
+	required int32 part = 2;
+	required uint32 reincarnlevel = 3;
+	repeated CfgCommon.Attribute attr = 4;
+	required uint32 rate = 5;
+}
+
+message ShengMissions {
+	repeated ShengMission sheng_mission = 1;
+}

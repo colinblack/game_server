@@ -79,7 +79,7 @@ bool SkillManager::AutoUnlock(UserCache &cache, bool sync) {
 }
 
 bool SkillManager::UnlockShenQi(UserCache &cache) {
-	const CfgSkill::Skill &cfg = SkillCfgWrap().GetFirst(SHENQI_SKILL_BEGIN + cache.shenqi_.id);
+	const CfgSkill::Skill &cfg = SkillCfgWrap().GetFirst(SKILL_SHENQI_BEGIN + cache.shenqi_.id);
 	list<DataSkill>::iterator itr = cache.skill_.begin();
 	for (; itr != cache.skill_.end(); ++itr) {
 		if (itr->id == cfg.serial()) {
@@ -101,6 +101,66 @@ bool SkillManager::UnlockShenQi(UserCache &cache) {
 	m_chgs.push_back(data);
 
 	debug_log("unlocke shenqi skill uid=%u serial=%u", cache.uid_, cfg.serial());
+	return true;
+}
+
+bool SkillManager::UnlockZhanLing(UserCache &cache) {
+	const CfgSkill::Skill &cfg = SkillCfgWrap().GetFirst(SKILL_ZHANLING_BEGIN);
+	list<DataSkill>::iterator itr = cache.skill_.begin();
+	for (; itr != cache.skill_.end(); ++itr) {
+		if (itr->id == cfg.serial()) {
+			error_log("skill is exists uid=%u id=%u serial=%u", cache.uid_, itr->id, cfg.serial());
+			return false;
+		}
+	}
+
+	DataSkill data;
+	data.uid = cache.uid_;
+	data.rid = 0;
+	data.lv = 1;
+	data.id = cfg.serial();
+	data.skill_id = cfg.id();
+	DataSkillManager::Instance()->Add(data);
+	cache.skill_.push_back(data);
+	Human *pHuman = MapManager::Instance()->getHuman(cache.uid_);
+	if (pHuman != NULL) {
+		pHuman->doAddSkill(data);
+	}
+	m_oper = SKILL_ADD;
+	m_chgs.push_back(data);
+
+	debug_log("unlocke zhanling skill uid=%u serial=%u", cache.uid_, cfg.serial());
+
+	return true;
+}
+
+bool SkillManager::UnlockAdvance(UserCache &cache, uint32_t rid, uint32_t id) {
+	const CfgSkill::Skill &cfg = SkillCfgWrap().GetById(id);
+	list<DataSkill>::iterator itr = cache.skill_.begin();
+	for (; itr != cache.skill_.end(); ++itr) {
+		if (itr->id == cfg.id()) {
+			error_log("skill is exists uid=%u id=%u serial=%u", cache.uid_, itr->id, cfg.serial());
+			return false;
+		}
+	}
+
+	DataSkill data;
+	data.uid = cache.uid_;
+	data.rid = rid;
+	data.lv = 1;
+	data.id = cfg.serial();
+	data.skill_id = cfg.id();
+	DataSkillManager::Instance()->Add(data);
+	cache.skill_.push_back(data);
+	Human *pHuman = MapManager::Instance()->getHuman(cache.uid_);
+	if (pHuman != NULL) {
+		pHuman->doAddSkill(data);
+	}
+	m_oper = SKILL_ADD;
+	m_chgs.push_back(data);
+
+	debug_log("unlocke Advance skill uid=%u rid=%u, serial:%u", cache.uid_, rid, cfg.serial());
+
 	return true;
 }
 
@@ -140,7 +200,7 @@ bool SkillManager::UpgradeSkill(const UserCache &cache, DataSkill &data) {
 			const CfgSkill::Skill &cfg = cfg_warp.GetByLv(data.id, skill_lv + 1, skill_id + 1);
 
 			if (cost + cfg.cost() > coin
-			|| skill_lv + 1 >= static_cast<uint32_t>(cache.base_.level)
+			|| skill_lv + 1 > static_cast<uint32_t>(cache.base_.level)
 			|| cfg.careerlevel() > static_cast<uint32_t>(cache.m_reinCarnInfo.reinCarnLevel)) {
 				break;
 			}
@@ -152,11 +212,10 @@ bool SkillManager::UpgradeSkill(const UserCache &cache, DataSkill &data) {
 
 		string code;
 		String::Format(code, "skill_up_%u_%u_%u", data.id, data.lv, skill_lv);
-		if (!UserManager::Instance()->UseMoney(data.uid, MONEY_COIN, cost, code)) {
+		if (cost > 0 && !UserManager::Instance()->UseMoney(data.uid, MONEY_COIN, cost, code)) {
 			error_log("use coin error uid=%u cost=%u", data.uid, cost);
 			return false;
 		}
-
 
 		data.lv = skill_lv;
 		data.skill_id = skill_id;
@@ -197,14 +256,14 @@ int SkillManager::Process(uint32_t uid, logins::SUseSkill *req) {
 	}
 	vector<uint32_t> targets;
 	vector<Identity>::iterator itr = req->oper_.seqEntity_.begin();
-	for(; itr != req->oper_.seqEntity_.end(); ++itr) {
+	for (; itr != req->oper_.seqEntity_.end(); ++itr) {
 		targets.push_back(itr->id_);
 	}
 	if (!pHuman->doUseSkill(req->oper_.skillId_, targets, req->oper_.centerPoint_)) {
-		error_log("uid=%u skill=%u tar=%u", uid, req->oper_.skillId_, targets.empty()?0:targets.front());
+		error_log("uid=%u skill=%u tar=%u", uid, req->oper_.skillId_, targets.empty() ? 0 : targets.front());
 		return R_ERROR;
 	}
-	debug_log("uid=%u skill=%u tar=%u", uid, req->oper_.skillId_, targets.empty()?0:targets.front());
+	debug_log("uid=%u skill=%u tar=%u num=%u", uid, req->oper_.skillId_, targets.empty() ? 0 : targets.front(), targets.size());
 	return 0;
 }
 
@@ -236,24 +295,8 @@ int SkillManager::Process(uint32_t uid, logins::SUpgradeSkill *req) {
 		error_log("upgrage skill error uid=%u rid=%u skid=%u", uid, req->roleId_, req->skillId_);
 		return R_ERROR;
 	}
-	MissionManager::Instance()->onUpgradeSkill(uid, itr->lv);
-//	const CfgSkill::Skill &new_cfg = cfg_warp.GetByLv(cfg.serial(), itr->lv + 1, req->skillId_ + 1);
-//	debug_log("unlock=%u,skid=%u", new_cfg.unlock(), req->skillId_ + 1);
-//	string code;
-//	String::Format(code, "skill_up_%u_%u", cfg.serial(), itr->lv + 1);
-//	if (!UserManager::Instance()->UseCoin(uid, new_cfg.cost(), code)) {
-//		error_log("use coin error uid=%u cost=%u", uid, new_cfg.cost());
-//		return R_ERROR;
-//	}
-//	itr->lv += 1;
-//	DataSkillManager::Instance()->Set(*itr);
-//	Human *pHuman = MapManager::Instance()->getHuman(cache.uid_);
-//	if (pHuman != NULL) {
-//		pHuman->doAddSkill(item);
-//	}
-//
-//	m_oper = SKILL_SET;
-//	m_chgs.push_back(*itr);
+
+	MissionManager::Instance()->onMission(uid, MT_UPGRADE_SKILL, itr->lv);
 
 	debug_log("uid=%u,skid=%u", uid, req->skillId_);
 
@@ -290,7 +333,7 @@ int SkillManager::Process(uint32_t uid, logins::SUpgradeSkillAll *req) {
 			try {
 				const CfgSkill::Skill &cfg = cfg_warp.GetByLv(skill.id, skill.lv + 1, skill.skill_id + 1);
 				if (cost + cfg.cost() > coin
-				|| skill.lv + 1 >= cache.base_.level
+				|| skill.lv + 1 > cache.base_.level
 				|| cfg.careerlevel() > static_cast<uint32_t>(cache.m_reinCarnInfo.reinCarnLevel)) {
 					continue;
 				}
@@ -335,7 +378,7 @@ int SkillManager::Process(uint32_t uid, logins::SUpgradeSkillAll *req) {
 		m_oper = SKILL_SET;
 		m_chgs.push_back(*itr);
 
-		MissionManager::Instance()->onUpgradeSkill(uid, itr->lv);
+		MissionManager::Instance()->onMission(uid, MT_UPGRADE_SKILL, itr->lv);
 	}
 
 	return 0;

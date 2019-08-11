@@ -226,7 +226,7 @@ bool CBufferWriter::AppendUVar32(uint32_t value) {
 	if (!AppendByte(255)) {
 		return false;
 	}
-	return AppendByte(value);
+	return AppendUInt32(value);
 }
 
 bool CBufferWriter::AppendBool(bool value) {

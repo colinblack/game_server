@@ -23,6 +23,8 @@ struct DataAdvance {
 	uint16_t dan2;
 	uint16_t dan3;
 	uint16_t dan4;
+	uint32_t awaken_level;
+	uint32_t awaken_star;
 
 	DataAdvance() {
 		uid = 0;
@@ -37,6 +39,8 @@ struct DataAdvance {
 		dan2 = 0;
 		dan3 = 0;
 		dan4 = 0;
+		awaken_level = 1;
+		awaken_star = 0;
 	}
 
 	const uint16_t* GetDan(uint32_t id) const {
@@ -83,6 +87,9 @@ struct DataAdvance {
 		PACKET_ENCODE(UInt16, dan2);
 		PACKET_ENCODE(UInt16, dan3);
 		PACKET_ENCODE(UInt16, dan4);
+		PACKET_ENCODE(UInt32, awaken_level);
+		PACKET_ENCODE(UInt32, awaken_star);
+
 		return true;
 	}
 
@@ -100,6 +107,8 @@ struct DataAdvance {
 		PACKET_DECODE(UInt16, dan2);
 		PACKET_DECODE(UInt16, dan3);
 		PACKET_DECODE(UInt16, dan4);
+		PACKET_DECODE(UInt32, awaken_level);
+		PACKET_DECODE(UInt32, awaken_star);
 		return true;
 	}
 };

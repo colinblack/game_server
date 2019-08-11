@@ -34,10 +34,100 @@ void  protobuf_AddDesc_CfgZhanLing_2eproto();
 void protobuf_AssignDesc_CfgZhanLing_2eproto();
 void protobuf_ShutdownFile_CfgZhanLing_2eproto();
 
+class Equips;
 class Base;
 class Bases;
 
 // ===================================================================
+
+class Equips : public ::google::protobuf::Message {
+ public:
+  Equips();
+  virtual ~Equips();
+
+  Equips(const Equips& from);
+
+  inline Equips& operator=(const Equips& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Equips& default_instance();
+
+  void Swap(Equips* other);
+
+  // implements Message ----------------------------------------------
+
+  Equips* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Equips& from);
+  void MergeFrom(const Equips& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 pos = 1;
+  inline bool has_pos() const;
+  inline void clear_pos();
+  static const int kPosFieldNumber = 1;
+  inline ::google::protobuf::uint32 pos() const;
+  inline void set_pos(::google::protobuf::uint32 value);
+
+  // required uint32 id = 2;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgZhanLing.Equips)
+ private:
+  inline void set_has_pos();
+  inline void clear_has_pos();
+  inline void set_has_id();
+  inline void clear_has_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 pos_;
+  ::google::protobuf::uint32 id_;
+  friend void  protobuf_AddDesc_CfgZhanLing_2eproto();
+  friend void protobuf_AssignDesc_CfgZhanLing_2eproto();
+  friend void protobuf_ShutdownFile_CfgZhanLing_2eproto();
+
+  void InitAsDefaultInstance();
+  static Equips* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class Base : public ::google::protobuf::Message {
  public:
@@ -99,31 +189,43 @@ class Base : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 level() const;
   inline void set_level(::google::protobuf::uint32 value);
 
-  // required uint32 model = 2;
+  // repeated .CfgZhanLing.Equips equips = 2;
+  inline int equips_size() const;
+  inline void clear_equips();
+  static const int kEquipsFieldNumber = 2;
+  inline const ::CfgZhanLing::Equips& equips(int index) const;
+  inline ::CfgZhanLing::Equips* mutable_equips(int index);
+  inline ::CfgZhanLing::Equips* add_equips();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgZhanLing::Equips >&
+      equips() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgZhanLing::Equips >*
+      mutable_equips();
+
+  // required uint32 model = 3;
   inline bool has_model() const;
   inline void clear_model();
-  static const int kModelFieldNumber = 2;
+  static const int kModelFieldNumber = 3;
   inline ::google::protobuf::uint32 model() const;
   inline void set_model(::google::protobuf::uint32 value);
 
-  // required uint32 speed = 3;
+  // required uint32 speed = 4;
   inline bool has_speed() const;
   inline void clear_speed();
-  static const int kSpeedFieldNumber = 3;
+  static const int kSpeedFieldNumber = 4;
   inline ::google::protobuf::uint32 speed() const;
   inline void set_speed(::google::protobuf::uint32 value);
 
-  // required uint32 skill = 4;
+  // required uint32 skill = 5;
   inline bool has_skill() const;
   inline void clear_skill();
-  static const int kSkillFieldNumber = 4;
+  static const int kSkillFieldNumber = 5;
   inline ::google::protobuf::uint32 skill() const;
   inline void set_skill(::google::protobuf::uint32 value);
 
-  // repeated .CfgCommon.Attribute attr = 5;
+  // repeated .CfgCommon.Attribute attr = 6;
   inline int attr_size() const;
   inline void clear_attr();
-  static const int kAttrFieldNumber = 5;
+  static const int kAttrFieldNumber = 6;
   inline const ::CfgCommon::Attribute& attr(int index) const;
   inline ::CfgCommon::Attribute* mutable_attr(int index);
   inline ::CfgCommon::Attribute* add_attr();
@@ -131,6 +233,18 @@ class Base : public ::google::protobuf::Message {
       attr() const;
   inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
       mutable_attr();
+
+  // repeated uint32 skill_mode = 7;
+  inline int skill_mode_size() const;
+  inline void clear_skill_mode();
+  static const int kSkillModeFieldNumber = 7;
+  inline ::google::protobuf::uint32 skill_mode(int index) const;
+  inline void set_skill_mode(int index, ::google::protobuf::uint32 value);
+  inline void add_skill_mode(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      skill_mode() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_skill_mode();
 
   // @@protoc_insertion_point(class_scope:CfgZhanLing.Base)
  private:
@@ -147,11 +261,13 @@ class Base : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgZhanLing::Equips > equips_;
   ::google::protobuf::uint32 level_;
   ::google::protobuf::uint32 model_;
   ::google::protobuf::uint32 speed_;
   ::google::protobuf::uint32 skill_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > skill_mode_;
   friend void  protobuf_AddDesc_CfgZhanLing_2eproto();
   friend void protobuf_AssignDesc_CfgZhanLing_2eproto();
   friend void protobuf_ShutdownFile_CfgZhanLing_2eproto();
@@ -246,6 +362,58 @@ class Bases : public ::google::protobuf::Message {
 
 // ===================================================================
 
+// Equips
+
+// required uint32 pos = 1;
+inline bool Equips::has_pos() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Equips::set_has_pos() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Equips::clear_has_pos() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Equips::clear_pos() {
+  pos_ = 0u;
+  clear_has_pos();
+}
+inline ::google::protobuf::uint32 Equips::pos() const {
+  // @@protoc_insertion_point(field_get:CfgZhanLing.Equips.pos)
+  return pos_;
+}
+inline void Equips::set_pos(::google::protobuf::uint32 value) {
+  set_has_pos();
+  pos_ = value;
+  // @@protoc_insertion_point(field_set:CfgZhanLing.Equips.pos)
+}
+
+// required uint32 id = 2;
+inline bool Equips::has_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Equips::set_has_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Equips::clear_has_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Equips::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 Equips::id() const {
+  // @@protoc_insertion_point(field_get:CfgZhanLing.Equips.id)
+  return id_;
+}
+inline void Equips::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:CfgZhanLing.Equips.id)
+}
+
+// -------------------------------------------------------------------
+
 // Base
 
 // required uint32 level = 1;
@@ -272,15 +440,45 @@ inline void Base::set_level(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:CfgZhanLing.Base.level)
 }
 
-// required uint32 model = 2;
+// repeated .CfgZhanLing.Equips equips = 2;
+inline int Base::equips_size() const {
+  return equips_.size();
+}
+inline void Base::clear_equips() {
+  equips_.Clear();
+}
+inline const ::CfgZhanLing::Equips& Base::equips(int index) const {
+  // @@protoc_insertion_point(field_get:CfgZhanLing.Base.equips)
+  return equips_.Get(index);
+}
+inline ::CfgZhanLing::Equips* Base::mutable_equips(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgZhanLing.Base.equips)
+  return equips_.Mutable(index);
+}
+inline ::CfgZhanLing::Equips* Base::add_equips() {
+  // @@protoc_insertion_point(field_add:CfgZhanLing.Base.equips)
+  return equips_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgZhanLing::Equips >&
+Base::equips() const {
+  // @@protoc_insertion_point(field_list:CfgZhanLing.Base.equips)
+  return equips_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgZhanLing::Equips >*
+Base::mutable_equips() {
+  // @@protoc_insertion_point(field_mutable_list:CfgZhanLing.Base.equips)
+  return &equips_;
+}
+
+// required uint32 model = 3;
 inline bool Base::has_model() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void Base::set_has_model() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void Base::clear_has_model() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void Base::clear_model() {
   model_ = 0u;
@@ -296,15 +494,15 @@ inline void Base::set_model(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:CfgZhanLing.Base.model)
 }
 
-// required uint32 speed = 3;
+// required uint32 speed = 4;
 inline bool Base::has_speed() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void Base::set_has_speed() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void Base::clear_has_speed() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Base::clear_speed() {
   speed_ = 0u;
@@ -320,15 +518,15 @@ inline void Base::set_speed(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:CfgZhanLing.Base.speed)
 }
 
-// required uint32 skill = 4;
+// required uint32 skill = 5;
 inline bool Base::has_skill() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void Base::set_has_skill() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void Base::clear_has_skill() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void Base::clear_skill() {
   skill_ = 0u;
@@ -344,7 +542,7 @@ inline void Base::set_skill(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:CfgZhanLing.Base.skill)
 }
 
-// repeated .CfgCommon.Attribute attr = 5;
+// repeated .CfgCommon.Attribute attr = 6;
 inline int Base::attr_size() const {
   return attr_.size();
 }
@@ -372,6 +570,36 @@ inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
 Base::mutable_attr() {
   // @@protoc_insertion_point(field_mutable_list:CfgZhanLing.Base.attr)
   return &attr_;
+}
+
+// repeated uint32 skill_mode = 7;
+inline int Base::skill_mode_size() const {
+  return skill_mode_.size();
+}
+inline void Base::clear_skill_mode() {
+  skill_mode_.Clear();
+}
+inline ::google::protobuf::uint32 Base::skill_mode(int index) const {
+  // @@protoc_insertion_point(field_get:CfgZhanLing.Base.skill_mode)
+  return skill_mode_.Get(index);
+}
+inline void Base::set_skill_mode(int index, ::google::protobuf::uint32 value) {
+  skill_mode_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CfgZhanLing.Base.skill_mode)
+}
+inline void Base::add_skill_mode(::google::protobuf::uint32 value) {
+  skill_mode_.Add(value);
+  // @@protoc_insertion_point(field_add:CfgZhanLing.Base.skill_mode)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Base::skill_mode() const {
+  // @@protoc_insertion_point(field_list:CfgZhanLing.Base.skill_mode)
+  return skill_mode_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Base::mutable_skill_mode() {
+  // @@protoc_insertion_point(field_mutable_list:CfgZhanLing.Base.skill_mode)
+  return &skill_mode_;
 }
 
 // -------------------------------------------------------------------

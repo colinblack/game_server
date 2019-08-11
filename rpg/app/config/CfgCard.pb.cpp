@@ -38,6 +38,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Suits_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Suits_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Star_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Star_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Stars_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Stars_reflection_ = NULL;
 
 }  // namespace
 
@@ -145,6 +151,39 @@ void protobuf_AssignDesc_CfgCard_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Suits));
+  Star_descriptor_ = file->message_type(6);
+  static const int Star_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Star, attr_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Star, exp_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Star, color_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Star, level_),
+  };
+  Star_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Star_descriptor_,
+      Star::default_instance_,
+      Star_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Star, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Star, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Star));
+  Stars_descriptor_ = file->message_type(7);
+  static const int Stars_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stars, star_),
+  };
+  Stars_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Stars_descriptor_,
+      Stars::default_instance_,
+      Stars_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stars, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stars, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Stars));
 }
 
 namespace {
@@ -169,6 +208,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
     Suit_descriptor_, &Suit::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Suits_descriptor_, &Suits::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Star_descriptor_, &Star::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Stars_descriptor_, &Stars::default_instance());
 }
 
 }  // namespace
@@ -186,6 +229,10 @@ void protobuf_ShutdownFile_CfgCard_2eproto() {
   delete Suit_reflection_;
   delete Suits::default_instance_;
   delete Suits_reflection_;
+  delete Star::default_instance_;
+  delete Star_reflection_;
+  delete Stars::default_instance_;
+  delete Stars_reflection_;
 }
 
 void protobuf_AddDesc_CfgCard_2eproto() {
@@ -206,7 +253,10 @@ void protobuf_AddDesc_CfgCard_2eproto() {
     "ribute\"0\n\nCardGroups\022\"\n\006groups\030\001 \003(\0132\022.C"
     "fgCard.CardGroup\"#\n\004Suit\022\n\n\002id\030\001 \002(\r\022\017\n\007"
     "include\030\002 \003(\r\"%\n\005Suits\022\034\n\005suits\030\001 \003(\0132\r."
-    "CfgCard.Suit", 412);
+    "CfgCard.Suit\"U\n\004Star\022\"\n\004attr\030\001 \003(\0132\024.Cfg"
+    "Common.Attribute\022\013\n\003exp\030\002 \002(\r\022\r\n\005color\030\003"
+    " \002(\r\022\r\n\005level\030\004 \002(\r\"$\n\005Stars\022\033\n\004star\030\001 \003"
+    "(\0132\r.CfgCard.Star", 537);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgCard.proto", &protobuf_RegisterTypes);
   Card::default_instance_ = new Card();
@@ -215,12 +265,16 @@ void protobuf_AddDesc_CfgCard_2eproto() {
   CardGroups::default_instance_ = new CardGroups();
   Suit::default_instance_ = new Suit();
   Suits::default_instance_ = new Suits();
+  Star::default_instance_ = new Star();
+  Stars::default_instance_ = new Stars();
   Card::default_instance_->InitAsDefaultInstance();
   Cards::default_instance_->InitAsDefaultInstance();
   CardGroup::default_instance_->InitAsDefaultInstance();
   CardGroups::default_instance_->InitAsDefaultInstance();
   Suit::default_instance_->InitAsDefaultInstance();
   Suits::default_instance_->InitAsDefaultInstance();
+  Star::default_instance_->InitAsDefaultInstance();
+  Stars::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_CfgCard_2eproto);
 }
 
@@ -1866,6 +1920,580 @@ void Suits::Swap(Suits* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = Suits_descriptor_;
   metadata.reflection = Suits_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int Star::kAttrFieldNumber;
+const int Star::kExpFieldNumber;
+const int Star::kColorFieldNumber;
+const int Star::kLevelFieldNumber;
+#endif  // !_MSC_VER
+
+Star::Star()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CfgCard.Star)
+}
+
+void Star::InitAsDefaultInstance() {
+}
+
+Star::Star(const Star& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:CfgCard.Star)
+}
+
+void Star::SharedCtor() {
+  _cached_size_ = 0;
+  exp_ = 0u;
+  color_ = 0u;
+  level_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Star::~Star() {
+  // @@protoc_insertion_point(destructor:CfgCard.Star)
+  SharedDtor();
+}
+
+void Star::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Star::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Star::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Star_descriptor_;
+}
+
+const Star& Star::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_CfgCard_2eproto();
+  return *default_instance_;
+}
+
+Star* Star::default_instance_ = NULL;
+
+Star* Star::New() const {
+  return new Star;
+}
+
+void Star::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<Star*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(exp_, level_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  attr_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Star::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CfgCard.Star)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .CfgCommon.Attribute attr = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_attr:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_attr()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_attr;
+        if (input->ExpectTag(16)) goto parse_exp;
+        break;
+      }
+
+      // required uint32 exp = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_exp:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &exp_)));
+          set_has_exp();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_color;
+        break;
+      }
+
+      // required uint32 color = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_color:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &color_)));
+          set_has_color();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_level;
+        break;
+      }
+
+      // required uint32 level = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_level:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &level_)));
+          set_has_level();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CfgCard.Star)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CfgCard.Star)
+  return false;
+#undef DO_
+}
+
+void Star::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CfgCard.Star)
+  // repeated .CfgCommon.Attribute attr = 1;
+  for (int i = 0; i < this->attr_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->attr(i), output);
+  }
+
+  // required uint32 exp = 2;
+  if (has_exp()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->exp(), output);
+  }
+
+  // required uint32 color = 3;
+  if (has_color()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->color(), output);
+  }
+
+  // required uint32 level = 4;
+  if (has_level()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->level(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:CfgCard.Star)
+}
+
+::google::protobuf::uint8* Star::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CfgCard.Star)
+  // repeated .CfgCommon.Attribute attr = 1;
+  for (int i = 0; i < this->attr_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->attr(i), target);
+  }
+
+  // required uint32 exp = 2;
+  if (has_exp()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->exp(), target);
+  }
+
+  // required uint32 color = 3;
+  if (has_color()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->color(), target);
+  }
+
+  // required uint32 level = 4;
+  if (has_level()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->level(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CfgCard.Star)
+  return target;
+}
+
+int Star::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+    // required uint32 exp = 2;
+    if (has_exp()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->exp());
+    }
+
+    // required uint32 color = 3;
+    if (has_color()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->color());
+    }
+
+    // required uint32 level = 4;
+    if (has_level()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->level());
+    }
+
+  }
+  // repeated .CfgCommon.Attribute attr = 1;
+  total_size += 1 * this->attr_size();
+  for (int i = 0; i < this->attr_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->attr(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Star::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Star* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Star*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Star::MergeFrom(const Star& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  attr_.MergeFrom(from.attr_);
+  if (from._has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+    if (from.has_exp()) {
+      set_exp(from.exp());
+    }
+    if (from.has_color()) {
+      set_color(from.color());
+    }
+    if (from.has_level()) {
+      set_level(from.level());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Star::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Star::CopyFrom(const Star& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Star::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000000e) != 0x0000000e) return false;
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->attr())) return false;
+  return true;
+}
+
+void Star::Swap(Star* other) {
+  if (other != this) {
+    attr_.Swap(&other->attr_);
+    std::swap(exp_, other->exp_);
+    std::swap(color_, other->color_);
+    std::swap(level_, other->level_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Star::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Star_descriptor_;
+  metadata.reflection = Star_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int Stars::kStarFieldNumber;
+#endif  // !_MSC_VER
+
+Stars::Stars()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CfgCard.Stars)
+}
+
+void Stars::InitAsDefaultInstance() {
+}
+
+Stars::Stars(const Stars& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:CfgCard.Stars)
+}
+
+void Stars::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Stars::~Stars() {
+  // @@protoc_insertion_point(destructor:CfgCard.Stars)
+  SharedDtor();
+}
+
+void Stars::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Stars::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Stars::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Stars_descriptor_;
+}
+
+const Stars& Stars::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_CfgCard_2eproto();
+  return *default_instance_;
+}
+
+Stars* Stars::default_instance_ = NULL;
+
+Stars* Stars::New() const {
+  return new Stars;
+}
+
+void Stars::Clear() {
+  star_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Stars::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CfgCard.Stars)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .CfgCard.Star star = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_star:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_star()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_star;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CfgCard.Stars)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CfgCard.Stars)
+  return false;
+#undef DO_
+}
+
+void Stars::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CfgCard.Stars)
+  // repeated .CfgCard.Star star = 1;
+  for (int i = 0; i < this->star_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->star(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:CfgCard.Stars)
+}
+
+::google::protobuf::uint8* Stars::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:CfgCard.Stars)
+  // repeated .CfgCard.Star star = 1;
+  for (int i = 0; i < this->star_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->star(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:CfgCard.Stars)
+  return target;
+}
+
+int Stars::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .CfgCard.Star star = 1;
+  total_size += 1 * this->star_size();
+  for (int i = 0; i < this->star_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->star(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Stars::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Stars* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Stars*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Stars::MergeFrom(const Stars& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  star_.MergeFrom(from.star_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Stars::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Stars::CopyFrom(const Stars& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Stars::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->star())) return false;
+  return true;
+}
+
+void Stars::Swap(Stars* other) {
+  if (other != this) {
+    star_.Swap(&other->star_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Stars::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Stars_descriptor_;
+  metadata.reflection = Stars_reflection_;
   return metadata;
 }
 

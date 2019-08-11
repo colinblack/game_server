@@ -17,6 +17,8 @@ message Skill {
 	required uint32 cost = 13;
 	optional uint32 careerlevel = 14;
 	repeated CfgCommon.Attribute attr = 15;
+	optional uint32 zhanlinghurt = 16;
+	optional uint32 hurtAdd = 17;
 }
 
 message Skills {
@@ -40,4 +42,14 @@ message Base {
 
 message Bases {
 	repeated Base bases = 1;
+}
+
+message Buff {
+	required uint32 id = 1;
+	required int32 ts = 2;
+	required uint32 type = 3;
+}
+
+message Buffs {
+	repeated Buff buffs = 1;
 }

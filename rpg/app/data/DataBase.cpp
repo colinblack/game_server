@@ -10,6 +10,8 @@ int CDataBase::AddData(const DataBase &data) {
 	DBCREQ_SET_INT(data, register_time);
 	DBCREQ_SET_INT(data, login_time);
 	DBCREQ_SET_INT(data, offline_time);
+	DBCREQ_SET_INT(data, online_time);
+	DBCREQ_SET_INT(data, ts);
 	DBCREQ_SET_INT(data, exp);
 	DBCREQ_SET_INT(data, guild_id);
 	DBCREQ_SET_INT(data, login_days);
@@ -32,6 +34,8 @@ int CDataBase::SetData(const DataBase &data) {
 	DBCREQ_SET_INT(data, register_time);
 	DBCREQ_SET_INT(data, login_time);
 	DBCREQ_SET_INT(data, offline_time);
+	DBCREQ_SET_INT(data, online_time);
+	DBCREQ_SET_INT(data, ts);
 	DBCREQ_SET_INT(data, exp);
 	DBCREQ_SET_INT(data, guild_id);
 	DBCREQ_SET_INT(data, login_days);
@@ -67,6 +71,8 @@ int CDataBase::GetData(uint32_t uid, DataBase &data) {
 	DBCREQ_NEED(register_time);
 	DBCREQ_NEED(login_time);
 	DBCREQ_NEED(offline_time);
+	DBCREQ_NEED(online_time);
+	DBCREQ_NEED(ts);
 	DBCREQ_NEED(exp);
 	DBCREQ_NEED(guild_id);
 	DBCREQ_NEED(login_days);
@@ -86,6 +92,8 @@ int CDataBase::GetData(uint32_t uid, DataBase &data) {
 	DBCREQ_GET_INT(data, register_time);
 	DBCREQ_GET_INT(data, login_time);
 	DBCREQ_GET_INT(data, offline_time);
+	DBCREQ_GET_INT(data, online_time);
+	DBCREQ_GET_INT(data, ts);
 	DBCREQ_GET_INT(data, exp);
 	DBCREQ_GET_INT(data, guild_id);
 	DBCREQ_GET_INT(data, login_days);

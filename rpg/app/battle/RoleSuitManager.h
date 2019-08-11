@@ -16,7 +16,6 @@ private:
 	RoleSuitManager();
 	~RoleSuitManager();
 public:
-	bool FormatSkills(uint32_t uid, uint32_t roleId, const CfgSuit::Suit& suit, vector<dbs::TPlayerSkill> &msg);
 	bool AddRoleSuit(uint32_t uid, uint32_t roleId, uint32_t suitId);
 	bool GetactiveSuit(const map<uint32_t, DataRoleSuit> &source, map<int32_t, map<int32_t, int32_t> > &target);
 	bool GetUnlockSuit(const map<uint32_t, DataRoleSuit> &source, map<int32_t, int32_t> &target);

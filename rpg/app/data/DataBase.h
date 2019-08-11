@@ -8,6 +8,8 @@ struct DataBase {
 	uint32_t register_time;
 	uint32_t login_time;
 	uint32_t offline_time;
+	uint32_t online_time;// 当天累计在线时长(s)
+	uint32_t ts; // 记录一个时间戳，用于判断是否跨天
 	uint32_t exp;
 	uint32_t guild_id;
 	uint32_t login_days;
@@ -23,6 +25,8 @@ struct DataBase {
 		register_time = 0;
 		login_time = 0;
 		offline_time = 0;
+		online_time = 0;
+		ts = 0;
 		exp = 0;
 		guild_id = 0;
 		login_days = 0;
@@ -39,6 +43,9 @@ struct DataBase {
 		PACKET_ENCODE(UInt32, register_time);
 		PACKET_ENCODE(UInt32, login_time);
 		PACKET_ENCODE(UInt32, offline_time);
+		PACKET_ENCODE(UInt32, online_time);
+		PACKET_ENCODE(UInt32, ts);
+
 		PACKET_ENCODE(UInt32, exp);
 		PACKET_ENCODE(UInt32, guild_id);
 		PACKET_ENCODE(UInt32, login_days);
@@ -57,6 +64,8 @@ struct DataBase {
 		PACKET_DECODE(UInt32, register_time);
 		PACKET_DECODE(UInt32, login_time);
 		PACKET_DECODE(UInt32, offline_time);
+		PACKET_DECODE(UInt32, online_time);
+		PACKET_DECODE(UInt32, ts);
 		PACKET_DECODE(UInt32, exp);
 		PACKET_DECODE(UInt32, guild_id);
 		PACKET_DECODE(UInt32, login_days);

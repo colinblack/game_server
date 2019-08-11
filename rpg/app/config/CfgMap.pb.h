@@ -144,6 +144,13 @@ class Map : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 copyid() const;
   inline void set_copyid(::google::protobuf::uint32 value);
 
+  // required uint32 copyType = 7;
+  inline bool has_copytype() const;
+  inline void clear_copytype();
+  static const int kCopyTypeFieldNumber = 7;
+  inline ::google::protobuf::uint32 copytype() const;
+  inline void set_copytype(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:CfgMap.Map)
  private:
   inline void set_has_id();
@@ -158,6 +165,8 @@ class Map : public ::google::protobuf::Message {
   inline void clear_has_hasbosspoint();
   inline void set_has_copyid();
   inline void clear_has_copyid();
+  inline void set_has_copytype();
+  inline void clear_has_copytype();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -169,6 +178,7 @@ class Map : public ::google::protobuf::Message {
   ::google::protobuf::uint32 version_;
   bool hasbosspoint_;
   ::google::protobuf::uint32 copyid_;
+  ::google::protobuf::uint32 copytype_;
   friend void  protobuf_AddDesc_CfgMap_2eproto();
   friend void protobuf_AssignDesc_CfgMap_2eproto();
   friend void protobuf_ShutdownFile_CfgMap_2eproto();
@@ -1079,6 +1089,30 @@ inline void Map::set_copyid(::google::protobuf::uint32 value) {
   set_has_copyid();
   copyid_ = value;
   // @@protoc_insertion_point(field_set:CfgMap.Map.copyid)
+}
+
+// required uint32 copyType = 7;
+inline bool Map::has_copytype() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Map::set_has_copytype() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Map::clear_has_copytype() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void Map::clear_copytype() {
+  copytype_ = 0u;
+  clear_has_copytype();
+}
+inline ::google::protobuf::uint32 Map::copytype() const {
+  // @@protoc_insertion_point(field_get:CfgMap.Map.copyType)
+  return copytype_;
+}
+inline void Map::set_copytype(::google::protobuf::uint32 value) {
+  set_has_copytype();
+  copytype_ = value;
+  // @@protoc_insertion_point(field_set:CfgMap.Map.copyType)
 }
 
 // -------------------------------------------------------------------

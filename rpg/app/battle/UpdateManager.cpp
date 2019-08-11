@@ -60,7 +60,7 @@ bool UpdateManager::Bag(uint32_t uid, int32_t chg, const DataEquip &data) {
 		op.operNum_ = chg;
 		op.operType_ = ITEM_ADD;
 	} else {
-		op.operNum_ = data.num;
+		op.operNum_ = 0;
 		op.operType_ = ITEM_SET;
 	}
 	op.item_.itemUid_ = data.ud;
@@ -104,12 +104,12 @@ bool UpdateManager::ChgBag(uint32_t uid, int16_t from, int16_t to, const DataEqu
 	op.item_.extend_ = data.ext;
 	op.item_.createDt_ = data.ts * 1000LL;
 	msg.opers_.push_back(op);
+	msg.updateCode_ = m_code;
 
 	op.operType_ = ITEM_ADD;
 	op.item_.itemNum_ = data.num;
 	op.item_.bagType_ = to;
 	msg.opers_.push_back(op);
-
 	msg.updateCode_ = m_code;
 	return true;
 }
@@ -191,16 +191,20 @@ bool UpdateManager::roleDress(uint32_t uid, uint32_t roleId, uint32_t suitId) {
 	return true;
 }
 
-bool UpdateManager::roleSkills(uint32_t uid, const CfgSuit::Suit& suit, uint32_t oper, uint32_t roleId) {
-	msgs::SUpdateSkill& msg = m_role_skills[uid];
+bool UpdateManager::skills(uint32_t uid, uint32_t oper, vector<DataSkill> &skills) {
+	msgs::SUpdateSkill& msg = m_skills[uid];
 	msg.oper_ = oper;
-	RoleSuitManager::Instance()->FormatSkills(uid, roleId, suit, msg.skills_);
-	return true;
-}
 
-bool UpdateManager::roleTitle(uint32_t uid, uint32_t roleId, uint32_t titleId) {
-	msgs::SIntIntMap& msg = m_role_title[uid];
-	msg.maps_[roleId] = titleId;
+	for(int index = 0; index < skills.size(); ++index) {
+		const CfgSkill::Skill &cfg = SkillCfgWrap().GetById(skills[index].skill_id);
+
+		dbs::TPlayerSkill skill;
+		skill.playerId_ = uid;
+		skill.roleId_ = skills[index].rid;
+		skill.skillSeries_ = cfg.serial();
+		skill.skillId_ = skills[index].skill_id;
+		msg.skills_.push_back(skill);
+	}
 	return true;
 }
 
@@ -208,8 +212,8 @@ bool UpdateManager::roleTitle(uint32_t uid, uint32_t roleId, uint32_t titleId) {
 bool UpdateManager::S2CPlayerTitle(uint32_t uid,  uint32_t titleId) {
 	msgs::SPlayerTitle& msg = m_player_title[uid];
 	msg.titleId_ = titleId;
-	const CfgTitle::Title &cfg = TitleCfgWrap().Get(titleId);// 通过id去获取单条数据
-	msg.indateTime_ = cfg.limit_time(); //称号限时
+	const CfgTitle::Title &cfg = TitleCfgWrap().Get(titleId); // 通过id去获取单条数据
+	msg.indateTime_ = cfg.limittime(); //称号限时
 	return true;
 }
 
@@ -232,7 +236,21 @@ bool UpdateManager::roleShows(uint32_t uid, uint32_t modeId, uint32_t isDress, u
 	return true;
 }
 
+bool UpdateManager::advanceAwaken(uint32_t uid, const DataAdvance &data) {
+	msgs::SAdvanceAwakenUpdate& msg = m_advance_awaken[uid];
+	msg.roleId_ = data.rid;
+	msg.type_ = data.type;
+	msg.level_ = data.awaken_level;
+	msg.star_ = data.awaken_star;
+	return true;
+}
 
+bool UpdateManager::advanceTarget(uint32_t uid, const DataAdvanceTarget &data) {
+	msgs::SIntIntPair& msg = m_advance_target[uid];
+	msg.first_ = data.advance_type;
+	msg.second_ = data.advance;
+	return true;
+}
 
 bool UpdateManager::Send(uint32_t uid) {
 	map<uint32_t, msgs::SPlayerMoneyOperList>::iterator moneyItr = m_moneys.find(uid);
@@ -289,10 +307,10 @@ bool UpdateManager::Send(uint32_t uid) {
 		m_role_dress.erase(role_dress);
 	}
 
-	map<uint32_t, msgs::SUpdateSkill>::iterator role_skills = m_role_skills.find(uid);
-	if (role_skills != m_role_skills.end()) {
+	map<uint32_t, msgs::SUpdateSkill>::iterator role_skills = m_skills.find(uid);
+	if (role_skills != m_skills.end()) {
 		LogicManager::Instance()->SendMsg(uid, CMD_PLAYER_SKILL_UPDATE, &(role_skills->second));
-		m_role_skills.erase(role_skills);
+		m_skills.erase(role_skills);
 	}
 
 	map<uint32_t, msgs::SEntityUpdateEntityShows>::iterator role_shows = m_role_shows.find(uid);
@@ -313,6 +331,25 @@ bool UpdateManager::Send(uint32_t uid) {
 		m_player_title.erase(player_titles);
 	}
 
+	map<uint32_t, msgs::SAdvanceAwakenUpdate>::iterator advance_awaken = m_advance_awaken.find(uid);
+	if (advance_awaken != m_advance_awaken.end()) {
+		LogicManager::Instance()->SendMsg(uid, CMD_PLAYER_UPDATE_ADVANCE_AWAKEN, &(advance_awaken->second));
+		m_advance_awaken.erase(advance_awaken);
+	}
 
+	map<uint32_t, msgs::SIntIntPair>::iterator advance_target = m_advance_target.find(uid);
+	if(advance_target != m_advance_target.end()) {
+		LogicManager::Instance()->SendMsg(uid, CMD_PLAYER_ADVANCE_TARGET_UPDATE, &(advance_target->second));
+		m_advance_target.erase(advance_target);
+	}
+	return true;
+}
+
+bool UpdateManager::UpdateBagNow(uint32_t uid) {
+	map<uint32_t, msgs::SPlayerBagItemOperList>::iterator bagItr = m_bags.find(uid);
+	if (bagItr != m_bags.end()) {
+		LogicManager::Instance()->SendMsg(uid, CMD_PLAYER_BAG_ITEM_OPER_LIST, &(bagItr->second));
+		m_bags.erase(bagItr);
+	}
 	return true;
 }

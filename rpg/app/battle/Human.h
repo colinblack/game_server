@@ -20,7 +20,7 @@ public:
 	virtual Msg* doAppear();
 	bool doUseSkill(int32_t skillId, vector<uint32_t> &tar, const Point &cen);
 	bool doAddSkill(const DataSkill &skill);
-
+	bool doSkillCost(const SkillUseInfo &info);
 public:
 	uint32_t getTeamId() {
 		return m_teamId;

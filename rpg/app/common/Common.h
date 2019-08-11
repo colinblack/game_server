@@ -28,6 +28,7 @@
 #include <stack>
 #include <algorithm>
 #include <arpa/inet.h>
+#include <iterator>
 
 using std::string;
 using std::pair;

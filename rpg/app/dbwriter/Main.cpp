@@ -16,10 +16,11 @@ using namespace std;
 
 #include "Kernel.h"
 #include "Common.h"
+#include "AsyncDBManager.h"
 
 static void OnExit() {
-	debug_log("safe exit");
 	stop = 1;
+	AsyncDBManager::Instance()->onExit();
 }
 
 int main(int argc, char** argv) {

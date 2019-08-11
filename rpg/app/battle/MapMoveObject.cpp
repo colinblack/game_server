@@ -16,7 +16,6 @@ MapMoveObject::MapMoveObject() {
 	need_recove_ = false;
 	is_active_ = false;
 	pathing_flag_ = false;
-	ride_ = false;
 	dis_ = 0;
 	dis_left_ = 0;
 	dis_move_ = 0;
@@ -25,7 +24,7 @@ MapMoveObject::MapMoveObject() {
 	next_skill_time_ = 0;
 	entity_id_ = 0;
 	pos_idx_ = 0;
-	state_ = MO_STATE_NORMAL;
+	state_ = 0;
 	last_move_time_ = 0;
 	alive_time_ = 0;
 	combat_ = 0;
@@ -69,13 +68,6 @@ void MapMoveObject::doHurt(const PropertySets &changProps) {
 			props_[it->first].pui += it->second.pi;
 		}
 			break;
-		}
-		if (it->first == AP_HP) {
-			update.clear();
-			update.updateType_ = ATTR_UPDATE_HURT;
-			update.updateData_.push_back(1);
-			update.updateData_.push_back(0 - it->second.pl);
-			fight_update_.push_back(update);
 		}
 	}
 
@@ -166,6 +158,24 @@ void MapMoveObject::getDiffProps(map<int16_t, int64_t> &diff, map<int16_t, int64
 	}
 }
 
+void MapMoveObject::setFirstAttacker(MapMoveObject *pMo) {
+	first_attacker_.id = pMo->getId();
+	first_attacker_.race = pMo->getRace();
+	first_attacker_.lastTime = Time::GetGlobalTime();
+}
+
+void MapMoveObject::addHp(int32_t hp) {
+	long temp = props_[AP_HP].pl + hp;
+	if (temp > props_[AP_MAXLIFE].pl) {
+		props_[AP_HP].pl = props_[AP_MAXLIFE].pl;
+	} else if (temp < 0) {
+		props_[AP_HP].pl = 0;
+	} else {
+		props_[AP_HP].pl = temp;
+	}
+	onUpdate(ATTR_UPDATE_HP);
+}
+
 bool MapMoveObject::isAttackAble(MapMoveObject *destObj) {
 	if ((destObj->race_ == RACE_HUMAN || destObj->race_ == RACE_MONSTER) && !destObj->isDie()) {
 		return true;
@@ -241,6 +251,12 @@ void MapMoveObject::onHurt(MapMoveObject *caster, const PropertySets &hurtProps)
 	}
 
 	setLastAttacker(hurtInfo.race, hurtInfo.id);
+
+	if (IS_MONSTER_RACE(race_)){
+		if(real_fb_id!=0){
+			CopyManager::Instance()->OnHurt(real_fb_id,id_,entity_id_, hurtInfo.id,hurt_map_, props_[AP_HP].pl);
+		}
+	}
 }
 
 void MapMoveObject::onAttack(int attackType) {
@@ -270,7 +286,7 @@ void MapMoveObject::onUpdate(short type) {
 	msg.updateType_ = type;
 	switch(type) {
 	case ATTR_UPDATE_RIDE:
-		msg.updateData_.push_back(ride_ ? 1 : 0);
+		msg.updateData_.push_back(getRide());
 		break;
 	case ATTR_UPDATE_HP:
 		msg.updateData_.push_back(props_[AP_HP].pl);
@@ -290,6 +306,7 @@ bool MapMoveObject::doAttack(MapMoveObject *other) {
 }
 
 bool MapMoveObject::doRecover() {
+	delState(AP_STAT_DIE);
 	if (props_[AP_HP].pl == props_[AP_MAXLIFE].pl) {
 		return true;
 	}
@@ -474,6 +491,12 @@ bool MapMoveObject::addTargetPoint(int &dx, int &dy) {
 
 	target_points_.insert(target_points_.begin(), Point(dx, dy));
 	return true;
+}
+
+
+
+bool MapMoveObject::checkEntityId(uint32_t entityid){
+	return entity_id_==entityid;
 }
 
 Msg* MapMoveObject::doAppear() {

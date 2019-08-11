@@ -29,6 +29,16 @@
 			"extends": "", 
 			"id": "1562",
 			"msg": [{"name": "copyCode", "id": 1, "type": "int32_t"}]
+		},
+		{"name": "CSLotteryMagicTower", 
+			"extends": "", 
+			"id": "2050",
+			"msg": []
+		},
+		{"name": "SCLotteryMagicTowerResp", 
+			"extends": "", 
+			"id": "2050",
+			"msg": [{"name": "pos", "id": 1, "type": "int32_t"}]
 		}
 		]
 }

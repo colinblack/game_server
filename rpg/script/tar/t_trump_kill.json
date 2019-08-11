@@ -1,0 +1,4100 @@
+{
+  "trump_skill": [
+    {
+      "skill_attr": [], 
+      "stage": 1
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 1
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 1
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 1
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 1
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 1
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 2
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 2
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 2
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 2
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 2
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 1, 
+          "num": 1388, 
+          "group": 1
+        }
+      ], 
+      "stage": 3
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 3
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 3
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 3
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 3
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 4
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 4
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 4
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 4
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 4
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 0, 
+          "num": 30000, 
+          "group": 1
+        }
+      ], 
+      "stage": 5
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 5
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 5
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 5
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 5
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 6
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 6
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 6
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 6
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 6
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 7
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 7
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 7
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 7
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 7
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 2, 
+          "num": 2222, 
+          "group": 1
+        }
+      ], 
+      "stage": 8
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 8
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 8
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 8
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 8
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 9
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 9
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 9
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 9
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 9
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 10
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 10
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 10
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 10
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 10
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 11
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 11
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 11
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 11
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 11
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 5, 
+          "num": 2500, 
+          "group": 1
+        }
+      ], 
+      "stage": 12
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 12
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 12
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 12
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 12
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 13
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 13
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 13
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 13
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 13
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 14
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 14
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 14
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 14
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 14
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 15
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 15
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 15
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 15
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 15
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 16
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 16
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 16
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 16
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 16
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 17
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 17
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 17
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 17
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 17
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 18
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 18
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 18
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 18
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 18
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 19
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 19
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 19
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 19
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 19
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 6, 
+          "num": 3000, 
+          "group": 1
+        }
+      ], 
+      "stage": 20
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 20
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 20
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 20
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 20
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 21
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 21
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 21
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 21
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 21
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 22
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 22
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 22
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 22
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 22
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 23
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 23
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 23
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 23
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 23
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 24
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 24
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 24
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 24
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 24
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 0, 
+          "num": 22506, 
+          "group": 1
+        }, 
+        {
+          "type": 1, 
+          "num": 1666, 
+          "group": 1
+        }, 
+        {
+          "type": 2, 
+          "num": 417, 
+          "group": 1
+        }
+      ], 
+      "stage": 25
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 25
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 25
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 25
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 25
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 26
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 26
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 26
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 26
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 26
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 27
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 27
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 27
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 27
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 27
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 28
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 28
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 28
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 28
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 28
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 29
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 29
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 29
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 29
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 29
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 30
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 30
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 30
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 30
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 30
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 31
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 31
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 31
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 31
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 31
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 32
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 32
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 32
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 32
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 32
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 33
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 33
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 33
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 33
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 33
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 34
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 34
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 34
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 34
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 34
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": 0, 
+          "num": 28128, 
+          "group": 1
+        }, 
+        {
+          "type": 1, 
+          "num": 2083, 
+          "group": 1
+        }, 
+        {
+          "type": 2, 
+          "num": 521, 
+          "group": 1
+        }
+      ], 
+      "stage": 35
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 35
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 35
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 35
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 35
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 36
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 36
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 36
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 36
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 36
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 37
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 37
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 37
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 37
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 37
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 38
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 38
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 38
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 38
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 38
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 39
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 39
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 39
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 39
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 39
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 40
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 40
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 40
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 40
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 40
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 41
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 41
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 41
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 41
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 41
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 42
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 42
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 42
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 42
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 42
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 43
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 43
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 43
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 43
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 43
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 44
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 44
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 44
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 44
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 44
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 45
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 45
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 45
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 45
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 45
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 46
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 46
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 46
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 46
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 46
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 47
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 47
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 47
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 47
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 47
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 48
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 48
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 48
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 48
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 48
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 49
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 49
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 49
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 49
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 49
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": -1, 
+          "num": 100, 
+          "group": 14
+        }
+      ], 
+      "stage": 50
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 50
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 50
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 50
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 50
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 51
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 51
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 51
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 51
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 51
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 52
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 52
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 52
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 52
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 52
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 53
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 53
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 53
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 53
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 53
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 54
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 54
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 54
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 54
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 54
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 55
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 55
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 55
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 55
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 55
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 56
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 56
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 56
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 56
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 56
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 57
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 57
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 57
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 57
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 57
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 58
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 58
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 58
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 58
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 58
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 59
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 59
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 59
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 59
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 59
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 60
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 60
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 60
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 60
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 60
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 61
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 61
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 61
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 61
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 61
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 62
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 62
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 62
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 62
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 62
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 63
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 63
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 63
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 63
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 63
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 64
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 64
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 64
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 64
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 64
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 65
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 65
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 65
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 65
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 65
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 66
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 66
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 66
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 66
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 66
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 67
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 67
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 67
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 67
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 67
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 68
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 68
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 68
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 68
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 68
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 69
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 69
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 69
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 69
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 69
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 70
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 70
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 70
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 70
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 70
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 71
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 71
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 71
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 71
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 71
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 72
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 72
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 72
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 72
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 72
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 73
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 73
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 73
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 73
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 73
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 74
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 74
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 74
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 74
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 74
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": -1, 
+          "num": 120, 
+          "group": 14
+        }
+      ], 
+      "stage": 75
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 75
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 75
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 75
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 75
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 76
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 76
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 76
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 76
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 76
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 77
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 77
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 77
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 77
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 77
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 78
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 78
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 78
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 78
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 78
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 79
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 79
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 79
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 79
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 79
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 80
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 80
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 80
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 80
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 80
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 81
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 81
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 81
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 81
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 81
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 82
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 82
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 82
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 82
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 82
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 83
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 83
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 83
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 83
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 83
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 84
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 84
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 84
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 84
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 84
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 85
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 85
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 85
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 85
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 85
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 86
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 86
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 86
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 86
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 86
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 87
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 87
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 87
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 87
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 87
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 88
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 88
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 88
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 88
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 88
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 89
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 89
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 89
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 89
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 89
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 90
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 90
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 90
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 90
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 90
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 91
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 91
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 91
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 91
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 91
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 92
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 92
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 92
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 92
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 92
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 93
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 93
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 93
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 93
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 93
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 94
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 94
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 94
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 94
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 94
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 95
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 95
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 95
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 95
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 95
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 96
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 96
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 96
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 96
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 96
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 97
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 97
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 97
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 97
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 97
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 98
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 98
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 98
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 98
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 98
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 99
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 99
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 99
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 99
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 99
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": -1, 
+          "num": 140, 
+          "group": 14
+        }
+      ], 
+      "stage": 100
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 100
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 100
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 100
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 100
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 101
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 101
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 101
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 101
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 101
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 102
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 102
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 102
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 102
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 102
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 103
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 103
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 103
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 103
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 103
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 104
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 104
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 104
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 104
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 104
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 105
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 105
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 105
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 105
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 105
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 106
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 106
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 106
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 106
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 106
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 107
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 107
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 107
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 107
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 107
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 108
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 108
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 108
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 108
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 108
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 109
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 109
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 109
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 109
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 109
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 110
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 110
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 110
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 110
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 110
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 111
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 111
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 111
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 111
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 111
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 112
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 112
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 112
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 112
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 112
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 113
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 113
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 113
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 113
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 113
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 114
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 114
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 114
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 114
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 114
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 115
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 115
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 115
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 115
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 115
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 116
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 116
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 116
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 116
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 116
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 117
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 117
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 117
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 117
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 117
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 118
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 118
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 118
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 118
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 118
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 119
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 119
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 119
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 119
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 119
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 120
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 120
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 120
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 120
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 120
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 121
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 121
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 121
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 121
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 121
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 122
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 122
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 122
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 122
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 122
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 123
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 123
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 123
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 123
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 123
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 124
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 124
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 124
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 124
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 124
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": -1, 
+          "num": 160, 
+          "group": 14
+        }
+      ], 
+      "stage": 125
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 125
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 125
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 125
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 125
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 126
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 126
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 126
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 126
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 126
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 127
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 127
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 127
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 127
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 127
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 128
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 128
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 128
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 128
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 128
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 129
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 129
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 129
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 129
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 129
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 130
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 130
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 130
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 130
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 130
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 131
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 131
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 131
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 131
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 131
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 132
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 132
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 132
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 132
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 132
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 133
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 133
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 133
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 133
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 133
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 134
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 134
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 134
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 134
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 134
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 135
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 135
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 135
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 135
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 135
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 136
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 136
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 136
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 136
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 136
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 137
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 137
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 137
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 137
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 137
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 138
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 138
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 138
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 138
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 138
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 139
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 139
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 139
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 139
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 139
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 140
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 140
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 140
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 140
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 140
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 141
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 141
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 141
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 141
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 141
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 142
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 142
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 142
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 142
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 142
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 143
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 143
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 143
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 143
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 143
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 144
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 144
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 144
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 144
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 144
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 145
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 145
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 145
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 145
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 145
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 146
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 146
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 146
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 146
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 146
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 147
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 147
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 147
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 147
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 147
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 148
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 148
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 148
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 148
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 148
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 149
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 149
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 149
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 149
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 149
+    }, 
+    {
+      "skill_attr": [
+        {
+          "type": -1, 
+          "num": 180, 
+          "group": 18
+        }
+      ], 
+      "stage": 150
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 150
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 150
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 150
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 150
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 151
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 151
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 151
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 151
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 151
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 152
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 152
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 152
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 152
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 152
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 153
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 153
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 153
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 153
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 153
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 154
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 154
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 154
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 154
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 154
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 155
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 155
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 155
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 155
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 155
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 156
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 156
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 156
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 156
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 156
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 157
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 157
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 157
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 157
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 157
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 158
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 158
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 158
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 158
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 158
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 159
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 159
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 159
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 159
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 159
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 160
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 160
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 160
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 160
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 160
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 161
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 161
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 161
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 161
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 161
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 162
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 162
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 162
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 162
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 162
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 163
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 163
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 163
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 163
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 163
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 164
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 164
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 164
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 164
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 164
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 165
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 165
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 165
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 165
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 165
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 166
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 166
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 166
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 166
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 166
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 167
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 167
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 167
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 167
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 167
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 168
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 168
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 168
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 168
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 168
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 169
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 169
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 169
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 169
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 169
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 170
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 170
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 170
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 170
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 170
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 171
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 171
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 171
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 171
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 171
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 172
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 172
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 172
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 172
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 172
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 173
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 173
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 173
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 173
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 173
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 174
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 174
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 174
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 174
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 174
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 175
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 175
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 175
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 175
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 175
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 176
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 176
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 176
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 176
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 176
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 177
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 177
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 177
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 177
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 177
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 178
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 178
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 178
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 178
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 178
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 179
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 179
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 179
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 179
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 179
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 180
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 180
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 180
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 180
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 180
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 181
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 181
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 181
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 181
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 181
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 182
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 182
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 182
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 182
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 182
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 183
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 183
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 183
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 183
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 183
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 184
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 184
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 184
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 184
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 184
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 185
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 185
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 185
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 185
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 185
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 186
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 186
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 186
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 186
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 186
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 187
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 187
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 187
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 187
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 187
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 188
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 188
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 188
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 188
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 188
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 189
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 189
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 189
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 189
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 189
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 190
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 190
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 190
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 190
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 190
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 191
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 191
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 191
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 191
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 191
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 192
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 192
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 192
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 192
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 192
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 193
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 193
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 193
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 193
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 193
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 194
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 194
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 194
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 194
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 194
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 195
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 195
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 195
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 195
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 195
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 196
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 196
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 196
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 196
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 196
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 197
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 197
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 197
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 197
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 197
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 198
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 198
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 198
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 198
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 198
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 199
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 199
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 199
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 199
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 199
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 200
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 200
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 200
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 200
+    }, 
+    {
+      "skill_attr": [], 
+      "stage": 200
+    }
+  ]
+}

@@ -43,11 +43,60 @@ struct ReinCarnInfo {
 };
 
 
+// 称号 储存在数据库中的结构
+struct DataTitle {
+	uint32_t uid;
+	uint32_t type;
+	uint32_t id;
+	uint32_t rid;
+	uint32_t isWear;
+	uint32_t indateTime;
+	uint32_t reseve[8];
+
+	DataTitle() {
+		memset(this,0,sizeof(*this));
+	}
+
+	bool init(uint32_t p_uid,uint32_t p_rid, uint32_t p_type, uint32_t p_id,uint32_t p_isWear){
+		memset(this,0,sizeof(*this));
+		uid = p_uid;
+		type = p_type;
+		id = p_id;
+		rid = p_rid;
+		isWear = p_isWear;
+		return true;
+	}
+};
+
+// 称号 储存在数据库中的结构
+struct DataOnlineReward {
+	uint32_t uid;
+	uint32_t type;
+	uint32_t id;
+	uint32_t hasGotReward;
+	uint32_t reseve[9];
+
+	DataOnlineReward() {
+		memset(this,0,sizeof(*this));
+	}
+
+	bool init(uint32_t p_uid, uint32_t p_type, uint32_t p_id,uint32_t p_hasGotReward){
+		memset(this,0,sizeof(*this));
+		uid = p_uid;
+		type = p_type;
+		id = p_id;
+		hasGotReward = p_hasGotReward;
+		return true;
+	}
+};
+
+
 //BOSS信息
 struct CopyInfo {
 	uint32_t uid;
 	uint32_t type;
 	uint32_t id;
+	uint32_t rewardMark;
 	uint32_t payNum;
 	uint32_t resetTime;
 	uint32_t enterTime;
@@ -59,7 +108,7 @@ struct CopyInfo {
 	uint16_t enterNum;
 	uint16_t data;
 	uint16_t dataExt;
-	uint16_t reserve[5];
+	uint16_t reserve[3];
 	CopyInfo() {
 		memset(this,0,sizeof(*this));
 	}
@@ -76,7 +125,6 @@ struct MagicTowerInfo {
 		memset(this,0,sizeof(*this));
 	}
 };
-
 
 //日常活动
 struct DataActivity{
@@ -135,6 +183,123 @@ struct TreasureHunt {
 		data.v3 = daily_num;
 		data.v4 = use_free;
 		data.v5 = has_fifty;
+	}
+};
+
+struct DataZhanLing {
+	uint32_t uid;
+	uint32_t dai;
+	uint32_t mission;
+	uint32_t deadline;
+	uint32_t adv;
+	uint32_t nuqi;
+
+	DataZhanLing() {
+		uid = 0;
+		dai = 0;
+		mission = 0;
+		deadline = 0;
+		adv = 0;
+		nuqi = 0;
+	}
+
+	void FromAttr(const DataAttr &data) {
+		uid = data.uid;
+		dai = data.v1;
+		mission = data.v2;
+		deadline = data.v3;
+		adv = data.v4;
+		nuqi = data.v5;
+	}
+	void ToAttr(DataAttr &data) {
+		data.uid = uid;
+		data.type = TYPE_ATTR_ZHAN_LING;
+		data.id = 0;
+		data.v1 = dai;
+		data.v2 = mission;
+		data.v3 = deadline;
+		data.v4 = adv;
+		data.v5 = nuqi;
+	}
+};
+
+//圣装任务
+struct DataShengMission{
+	uint32_t uid;
+	uint32_t type;
+	uint32_t reinCarnlevel;
+	uint32_t mission[9];
+	uint32_t reserve;
+	DataShengMission() {
+		memset(this, 0, sizeof(*this));
+	}
+
+	bool init(uint32_t Uid, uint32_t Type, uint32_t ReinCarnlevel) {
+		memset(this, 0, sizeof(*this));
+		uid = Uid;
+		type = Type;
+		reinCarnlevel = ReinCarnlevel;
+		return true;
+	}
+};
+//圣装任务数据
+struct DataShengCount{
+	uint32_t uid;
+	uint32_t type;
+	uint32_t reinCarnlevel;
+	uint32_t reserve;
+	uint32_t datas[9];
+	DataShengCount() {
+		memset(this, 0, sizeof(*this));
+	}
+
+	bool init(uint32_t Uid, uint32_t Type, uint32_t ReinCarnlevel) {
+		memset(this, 0, sizeof(*this));
+		uid = Uid;
+		type = Type;
+		reinCarnlevel = ReinCarnlevel;
+		return true;
+	}
+};
+
+//进阶羁绊
+struct DataAdvanceTarget{
+	uint32_t uid;
+	uint32_t type;
+	uint32_t advance_type;
+	uint32_t advance;
+	uint32_t reserve[9];
+	DataAdvanceTarget() {
+		memset(this, 0, sizeof(*this));
+	}
+
+	bool init(uint32_t Uid, uint32_t Type, uint32_t AdvanceType) {
+		memset(this, 0, sizeof(*this));
+		uid = Uid;
+		type = Type;
+		advance_type = AdvanceType;
+		return true;
+	}
+};
+
+//进阶羁绊
+struct DataShop{
+	uint32_t uid;
+	uint32_t type;
+	uint32_t id;
+	uint32_t cnt;
+	uint32_t ts;
+	uint32_t reserve[8];
+	DataShop() {
+		memset(this, 0, sizeof(*this));
+	}
+
+	bool init(uint32_t Uid, uint32_t Type, uint32_t Id) {
+		memset(this, 0, sizeof(*this));
+		uid = Uid;
+		type = Type;
+		id = Id;
+		return true;
 	}
 };
 

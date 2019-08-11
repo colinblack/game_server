@@ -1,0 +1,14 @@
+package CfgGemTarget;
+import "CfgCommon.proto";
+
+message GemTarget {
+	required uint32 id = 1;
+	required uint32 count = 2;
+	required uint32 gemLV = 3;
+	repeated uint32 gemType = 4;
+	repeated CfgCommon.Attribute attr = 5;
+}
+
+message GemTargets{
+	repeated GemTarget gem_targets = 1;
+}

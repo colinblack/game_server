@@ -86,26 +86,49 @@ bool ActivityManager::ReflashActive(uint32_t uid) {
 	return true;
 }
 
-bool ActivityManager::SyncActivity(UserCache& cache, uint32_t actId) {
+bool ActivityManager::SyncActivity(UserCache& cache, uint32_t actId, uint32_t num) {
 	if(0 == cache.act_cnt_.count(actId)) {
 		addActCnt(cache.uid_, actId);
 	}
 
 	DataActivity& act_cnt = cache.act_cnt_[actId];
 	const CfgActivity::DaliyAct& act_cfg = ActivityCfgWrap().GetAct(actId);
-	if((act_cnt.cnt + 1) > act_cfg.count()) {
+	if((act_cnt.cnt + num) > act_cfg.count()) {
 		error_log("act count:%d already complete", act_cfg.count());
 		return false;
 	}
-	act_cnt.cnt++;
+	act_cnt.cnt += num;
 	DataAttr attr;
 	memcpy((void*)&attr, (const void*)&act_cnt, sizeof(act_cnt));
 	DataAttrManager::Instance()->Set(attr);
 	return true;
 }
 
+bool ActivityManager::ActorLogin(uint32_t uid) {
+	return ReflashActive(uid);
+}
+
+bool ActivityManager::onHour(uint32_t lastHour) {
+	if(lastHour != 0) {
+		return false;
+	}
+	vector<uint32_t> uids;
+	CacheManager::Instance()->GetAllUser(uids);
+	for(uint32_t i=0;i<uids.size();i++){
+		UserCache &cache = CacheManager::Instance()->GetUser(uids[i]);
+		if(!cache.init_) {
+			return false;
+		}
+		ReflashActive(cache.uid_);
+	}
+	return true;
+}
+
 int ActivityManager::Process(uint32_t uid, logins::SGetActivityReq *req) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
 	//刷新每日、周活动数据
 	ReflashActive(uid);
 
@@ -153,6 +176,9 @@ int ActivityManager::Process(uint32_t uid, logins::SGetActivityReq *req) {
 
 int ActivityManager::Process(uint32_t uid, logins::SGetActivityRewardReq *req) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
 	uint32_t limit = ActivityCfgWrap().GetActiveLimit(req->id_, cache.m_reinCarnInfo.reinCarnLevel);
 
 	if(!ActivityCfgWrap().isActiveExit(limit, cache.m_reinCarnInfo.reinCarnLevel)) {

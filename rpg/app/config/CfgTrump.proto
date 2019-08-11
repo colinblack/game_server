@@ -1,0 +1,29 @@
+package CfgTrump;
+import "CfgCommon.proto";
+
+
+
+message TrumpInfo {
+	required int32 level				= 1;
+	required int32 star					= 2;
+	required int32 stage				= 3;
+	required int32 cost_item			= 4;
+	required int32 cost_count			= 5;
+	repeated CfgCommon.Attribute attr   = 6;
+};
+
+message Trumps {
+	repeated TrumpInfo trump = 1;
+};
+
+
+message TrumpSkillInfo{
+	required int32 stage		      = 1;
+	repeated CfgCommon.Attribute attr = 2;
+};
+
+message TrumpSkill{
+	repeated TrumpSkillInfo trump_skill 	  = 1;
+};
+
+

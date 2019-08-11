@@ -61,6 +61,43 @@ bool StdMonster::init(uint32_t id, uint32_t fbId, uint32_t mapId, const Point &p
 	return true;
 }
 
+bool StdMonster::init(uint32_t id, uint32_t fbId, uint32_t mapId, const Point &p,uint64_t hp) {
+	entity_id_ = id;
+	fb_id_ = fbId;
+	const CfgMonster::Monster &cfg = MonsterCfgWrap().Get(id);
+
+	props_[AP_HP].pl = hp;
+	props_[AP_MAXLIFE].pl = cfg.hp();
+	speed_ = cfg.speed();
+	level_ = cfg.level();
+	move_id_ = MapMoveManager::Instance()->GetMoveId();
+	props_[AP_ATTACK].pui = cfg.attack();
+	props_[AP_DEFENCE].pui = cfg.defence();
+	props_[AP_WUXINGDEFENSE].pui = cfg.wuxing();
+	props_[AP_FIXDMGDEC].pui = cfg.fixdmgdec();
+	props_[AP_DMGDEC].pui = cfg.dmgdec();
+	props_[AP_CRITBREAKRATE].pui = cfg.critbreakrate();
+	props_[AP_CRITBREAK].pui = cfg.critbreak();
+	props_[AP_MAX_HURTPERCENT].pui = cfg.hppercent();
+
+	map_id_ = mapId;
+	x_ = p.x;
+	y_ = p.y;
+	bx_ = p.x;
+	by_ = p.y;
+	if (cfg.alive() > 0) {
+		alive_time_ = LogicManager::GlobalTime + cfg.alive();
+		DestoryManager::Instance()->addAlive(this);
+	} else {
+		alive_time_ = 0;
+	}
+	body_width_ = cfg.width();
+
+	initSkill();
+
+	return true;
+}
+
 bool StdMonster::initSkill() {
 	map_skill_info_.clear();
 	const CfgMonster::Monster &cfg = MonsterCfgWrap().Get(entity_id_);
@@ -98,7 +135,7 @@ bool StdMonster::recove() {
 //	y_ = birthPoint.y;
 //	bx_ = birthPoint.x;
 //	by_ = birthPoint.y;
-	props_[AP_HP].pl = props_[AP_MAXLIFE].pl;
+//	props_[AP_HP].pl = props_[AP_MAXLIFE].pl;
 	first_attacker_.Clear();
 	is_active_ = false;
 	hurt_map_.clear();
@@ -122,6 +159,10 @@ void StdMonster::doMove(IBuffer* buf) {
  */
 
 bool StdMonster::findTarget() {
+	if (owner_id_ != 0) {
+		return getMasterTarget();
+	}
+
 	static MapManager* pMapManager = MapManager::Instance();
 	vector<MapMoveObject*> objs;
 	pMapManager->getAroundObjects(this, objs);
@@ -149,6 +190,22 @@ bool StdMonster::findTarget() {
 	}
 
 	return false;
+}
+
+bool StdMonster::getMasterTarget() {
+	if (owner_id_ == 0) {
+		return false;
+	}
+	MapDisplayObject *pDo = MapManager::Instance()->getObject(owner_id_);
+	if (pDo == NULL) {
+		return false;
+	}
+	MapMoveObject *pMo = dynamic_cast<MapMoveObject*>(pDo);
+	if (pMo == NULL) {
+		return false;
+	}
+	first_attacker_ = pMo->getFirstAttacker();
+	return true;
 }
 
 void StdMonster::doAi() {
@@ -189,7 +246,6 @@ void StdMonster::doAi() {
 
 	} else {
 		//能移动怪物处理
-
 		if (!m_isReturn) {
 			Point targetPoint;
 			if (first_attacker_.id == 0 && m_isActively == false) {
@@ -374,6 +430,7 @@ void StdMonster::onDie() {
 		if (itr->first >> 32 == RACE_HUMAN){
 			HangManager::Instance()->OnMonsterDie(itr->first & 0xFFFFFFFF, entity_id_, Point(x_, y_));
 			CopyManager::Instance()->OnMonsterDie(itr->first & 0xFFFFFFFF, entity_id_, Point(x_, y_));
+			NearEnemyManager::Instance()->OnMonsterDie(itr->first & 0xFFFFFFFF, entity_id_, Point(x_, y_));
 		}
 	}
 }
@@ -420,6 +477,15 @@ void StdMonster::setCanMove(bool flag) {
 
 void StdMonster::setActively(bool flag) {
 	m_isActively = flag;
+}
+
+bool StdMonster::setHurtSkill(uint32_t skillid) {
+	if (map_skill_info_.size() != 1) {
+		return false;
+	}
+	SkillUseInfo &info = map_skill_info_.begin()->second;
+	info.hurtSkillId = skillid;
+	return true;
 }
 
 void StdMonster::onDestory() {

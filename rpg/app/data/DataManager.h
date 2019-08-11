@@ -58,7 +58,7 @@ public:
 		if (!data.Encode(&sp.body)) {
 			return R_ERROR;
 		}
-		AsyncDBManager::getInstance()->send(sp);
+		AsyncDBManager::Instance()->send(sp);
 		return 0;
 	}
 	virtual int Set(const _DBC &data) {
@@ -68,7 +68,7 @@ public:
 		if (!data.Encode(&sp.body)) {
 			return R_ERROR;
 		}
-		AsyncDBManager::getInstance()->send(sp);
+		AsyncDBManager::Instance()->send(sp);
 		return 0;
 	}
 	virtual int Rep(const _DBC &data) {
@@ -78,7 +78,7 @@ public:
 		if (!data.Encode(&sp.body)) {
 			return R_ERROR;
 		}
-		AsyncDBManager::getInstance()->send(sp);
+		AsyncDBManager::Instance()->send(sp);
 		return 0;
 	}
 	virtual int Del(const _DBC &data) {
@@ -88,7 +88,7 @@ public:
 		if (!data.Encode(&sp.body)) {
 			return R_ERROR;
 		}
-		AsyncDBManager::getInstance()->send(sp);
+		AsyncDBManager::Instance()->send(sp);
 		return 0;
 	}
 	virtual int Get(uint32_t uid, _DBC &data) {
@@ -209,4 +209,23 @@ private:
 	friend class CSingleton<DataActiveManager>;
 	DataActiveManager() {}
 };
+
+class DataSignManager: public DataManagerBase<CDataReward, DataReward, DB_REWARD>, public CSingleton<DataSignManager> {
+private:
+	friend class CSingleton<DataSignManager>;
+	DataSignManager() {}
+};
+
+class DataTrumpManager: public DataManagerBase<CDataTrump, DataTrump, DB_TRUMP>, public CSingleton<DataTrumpManager> {
+private:
+	friend class CSingleton<DataTrumpManager>;
+	DataTrumpManager() {};
+};
+
+class DataPlayerConfigManager: public DataManagerBase<CDataPlayerConfig, DataPlayerConfig, DB_PLAYER_CONFIG>, public CSingleton<DataPlayerConfigManager> {
+private:
+	friend class CSingleton<DataPlayerConfigManager>;
+	DataPlayerConfigManager() {};
+};
+
 #endif /* DATA_MANAGER_H_ */

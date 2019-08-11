@@ -277,6 +277,11 @@ void ClientAsync::startProcess() {
 	if (strstr(buf, "GET ") != buf) {
 		m_recvBuf.append(buf, len);
 		m_stat = CONN_COMPLETE;
+		while (m_recvBuf.length() != 0) {
+			if (!decodeProcess()) {
+				return;
+			}
+		}
 	} else {
 		char *str = strstr(buf, "Sec-WebSocket-Key");
 		if (str == NULL) {

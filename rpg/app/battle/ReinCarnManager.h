@@ -11,7 +11,6 @@
 #define NORAML_DAN_ITEMID	210240001
 #define SUPER_DAN_ITEMID	210240002
 
-
 class ReinCarnManager: public CSingleton<ReinCarnManager> {
 private:
 	friend class CSingleton<ReinCarnManager>;

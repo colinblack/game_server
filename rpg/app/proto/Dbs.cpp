@@ -601,21 +601,6 @@ bangType_ = 0;
 score_ = 0;
 betDt_ = 0;
 }
-bool TPlayerOnlineSkill::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,playerId_);
-PACKET_DECODE(Int32,roleId_);
-PACKET_DECODE(String,skills_);
-return true;}
-bool TPlayerOnlineSkill::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,playerId_);
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(String,skills_);
-return true;}
-void TPlayerOnlineSkill::clear(){
-playerId_ = 0;
-roleId_ = 0;
-skills_.clear();
-}
 bool TFirstArenaRank::decode(CBufferReader &reader) {
 PACKET_DECODE(Int64,id_);
 PACKET_DECODE(Int32,proxy_);
@@ -714,18 +699,6 @@ bossId_ = 0;
 playerId_ = 0;
 name_.clear();
 killDt_ = 0;
-}
-bool TForbidIp::decode(CBufferReader &reader) {
-PACKET_DECODE(String,ip_);
-PACKET_DECODE(String,reason_);
-return true;}
-bool TForbidIp::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(String,ip_);
-PACKET_ENCODE(String,reason_);
-return true;}
-void TForbidIp::clear(){
-ip_.clear();
-reason_.clear();
 }
 bool TActive::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,id_);
@@ -940,42 +913,6 @@ property3_.clear();
 extend_.clear();
 updateDt_ = 0;
 }
-bool TMail::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,id_);
-PACKET_DECODE(Int32,playerId_);
-PACKET_DECODE(Int32,code_);
-PACKET_DECODE(Int32,isRead_);
-PACKET_DECODE(Int32,isFetched_);
-PACKET_DECODE(String,sender_);
-PACKET_DECODE(String,title_);
-PACKET_DECODE(String,content_);
-PACKET_DECODE(String,attachments_);
-PACKET_DECODE(Int64,mailDt_);
-return true;}
-bool TMail::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,id_);
-PACKET_ENCODE(Int32,playerId_);
-PACKET_ENCODE(Int32,code_);
-PACKET_ENCODE(Int32,isRead_);
-PACKET_ENCODE(Int32,isFetched_);
-PACKET_ENCODE(String,sender_);
-PACKET_ENCODE(String,title_);
-PACKET_ENCODE(String,content_);
-PACKET_ENCODE(String,attachments_);
-PACKET_ENCODE(Int64,mailDt_);
-return true;}
-void TMail::clear(){
-id_ = 0;
-playerId_ = 0;
-code_ = 0;
-isRead_ = 0;
-isFetched_ = 0;
-sender_.clear();
-title_.clear();
-content_.clear();
-attachments_.clear();
-mailDt_ = 0;
-}
 bool TDbMarket::decode(CBufferReader &reader) {
 PACKET_DECODE(String,uid_);
 PACKET_DECODE(Int32,playerId_);
@@ -1039,6 +976,42 @@ extendJs_.clear();
 dealTime_ = 0;
 isAuction_ = 0;
 }
+bool TMail::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,id_);
+PACKET_DECODE(Int32,playerId_);
+PACKET_DECODE(Int32,code_);
+PACKET_DECODE(Int32,isRead_);
+PACKET_DECODE(Int32,isFetched_);
+PACKET_DECODE(String,sender_);
+PACKET_DECODE(String,title_);
+PACKET_DECODE(String,content_);
+PACKET_DECODE(String,attachments_);
+PACKET_DECODE(Int64,mailDt_);
+return true;}
+bool TMail::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,id_);
+PACKET_ENCODE(Int32,playerId_);
+PACKET_ENCODE(Int32,code_);
+PACKET_ENCODE(Int32,isRead_);
+PACKET_ENCODE(Int32,isFetched_);
+PACKET_ENCODE(String,sender_);
+PACKET_ENCODE(String,title_);
+PACKET_ENCODE(String,content_);
+PACKET_ENCODE(String,attachments_);
+PACKET_ENCODE(Int64,mailDt_);
+return true;}
+void TMail::clear(){
+id_ = 0;
+playerId_ = 0;
+code_ = 0;
+isRead_ = 0;
+isFetched_ = 0;
+sender_.clear();
+title_.clear();
+content_.clear();
+attachments_.clear();
+mailDt_ = 0;
+}
 bool TTip::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,playerId_);
 PACKET_DECODE(String,key_);
@@ -1056,6 +1029,33 @@ playerId_ = 0;
 key_.clear();
 params_.clear();
 operDt_ = 0;
+}
+bool TPlayerOnlineSkill::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,playerId_);
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(String,skills_);
+return true;}
+bool TPlayerOnlineSkill::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,playerId_);
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(String,skills_);
+return true;}
+void TPlayerOnlineSkill::clear(){
+playerId_ = 0;
+roleId_ = 0;
+skills_.clear();
+}
+bool TForbidIp::decode(CBufferReader &reader) {
+PACKET_DECODE(String,ip_);
+PACKET_DECODE(String,reason_);
+return true;}
+bool TForbidIp::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(String,ip_);
+PACKET_ENCODE(String,reason_);
+return true;}
+void TForbidIp::clear(){
+ip_.clear();
+reason_.clear();
 }
 bool TTreasureCrossCount::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,id_);

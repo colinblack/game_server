@@ -35,6 +35,9 @@
 #define CONFIG_MAP_AREA_INFO	"map_area_info"
 #define CONFIG_JSON_PATH		"conf/json/"
 #define CONFIG_TREASURE_RECORD	"data/treasure_record.dat"
+#define CONFIG_LEVELREWARD_RECORD "data/level_reward_record.dat"
+#define CONFIG_BOSS_DATA		"data/copy_boss.data"
+
 #define SESSION_DATA			"data"
 
 //DB
@@ -58,6 +61,9 @@
 #define DB_ATTR				  17
 #define	DB_ROLE_ATTR		  18
 #define DB_ACTIVE			  19
+#define DB_REWARD			  20
+#define DB_TRUMP			  21
+#define DB_PLAYER_CONFIG	  22
 
 #define MEM_SESSION           99
 
@@ -70,10 +76,8 @@
 #define UID_MIN				10000000
 #define UID_MAX				2000000000
 
-#define HURT_TYPE_PHYSICAL 0x0001
-#define HURT_TYPE_MAGIC 0x0002
-#define HURT_TYPE_WIZARD 0x0004
-#define HURT_TYPE_ALL 0x0007
+#define HURT_TYPE_NORMAL		1
+#define HURT_TYPE_HEJIE			9
 
 #define DEFAULT_SAFEAREA_MAP 1
 #define DEFAULT_SAFEAREA_X 87
@@ -174,6 +178,7 @@
 #define MONEY_TREASURE_EQUIP		(110110001)
 #define MONEY_TREASURE_DIANFENG		(110110003)
 #define MONEY_TREASURE_SANJIE		(110110004)
+#define MONEY_CARD_EXP				(110090001)
 
 #define IS_MONEY(t)						\
 	t == MONEY_GOLD ||					\
@@ -183,37 +188,15 @@
 	t == MONEY_MAGIC_PIECE ||			\
 	t == MONEY_TREASURE_EQUIP ||		\
 	t == MONEY_TREASURE_DIANFENG ||		\
-	t == MONEY_TREASURE_SANJIE	 		\
+	t == MONEY_TREASURE_SANJIE	 ||		\
+	t == MONEY_CARD_EXP					\
+
 
 #define AP_STAT_STAND			0x1
 #define AP_STAT_MOVE			0x2
 #define AP_STAT_RIDE			0x4
-#define AP_STAT_ZANZEN			0x8
-#define AP_STAT_MARKET			0x10
-#define AP_STAT_SING			0x20
-#define AP_STAT_BATTLE			0x40
-#define AP_STAT_DIE				0x80
-#define AP_STAT_MOVE_FORBID		0x0100
-#define AP_STAT_DIZZY			0x0200
-#define AP_STAT_AUTO_BATTLE		0x0400
-#define AP_STAT_RETURN_BURN		0x0800
-#define AP_STAT_DISABLE_SKILLCD	0x1000
-#define AP_STAT_CHALLENGE		0x2000
-#define AP_STAT_TRAFFIC			0x4000
-#define AP_STAT_COUPLE_ZANZEN	0x8000
-#define AP_STAT_BODY_CHANGE		0x10000
-#define AP_STAT_SWIMMING		0x20000
-#define AP_STAT_KISS_SWIMMING	0x40000
-#define AP_STAT_FAST_BATTLE		0x80000
-#define AP_STAT_KISS_LAND		0x100000
-#define AP_STAT_CORPS_BATTLE	0x200000
-#define AP_STAT_CARRIER			0x400000
-#define AP_STAT_PASSENGGER		0x800000
-#define AP_STAT_DONGFANG		0x1000000
-#define AP_STAT_OWN_PET			0x2000000
-#define AP_STAT_HERO_FIT		0x4000000
-#define AP_STAT_GM				0x8000000
-#define AP_STAT_MAX_COUNT		0x10000000
+#define AP_STAT_DIE				0x8
+#define AP_STAT_DIZZY			0x10
 
 //怪物id最大值
 #define ID_MONSTER_MAX 100000
@@ -245,8 +228,13 @@
 
 #define MAX_ROLE_COUNT 5
 
+//skill id
+#define SKILL_SHENQI_BEGIN		(40000)
+#define SKILL_ZHANLING_BEGIN	(13001)
 
-
+#define HANG_LOOP_BASE       (56)
+#define HANG_MONSTER_ID_BASE (10001000)
+#define HANG_MONSTER_ID_MAX  (10010000)
 
 #define NORMAL_RUNE_COUNT 8
 #define SPECIAL_RUNE_COUNT 2

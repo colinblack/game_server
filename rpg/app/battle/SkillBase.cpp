@@ -24,7 +24,6 @@ SkillBase::SkillBase() {
 SkillBase::~SkillBase() {
 }
 
-
 bool SkillBase::doSkillHit(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target, AttackInfo &ainfo) {
 	return true;
 }
@@ -33,15 +32,20 @@ bool SkillBase::caculateHurt(const SkillUseInfo &sinfo, MapMoveObject *caster, M
 	return true;
 }
 
-void SkillBase::doSceneEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, const vector<uint32_t> &vecTargets) {
+void SkillBase::doSceneEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target) {
 }
 
-void SkillBase::doActorEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, const vector<uint32_t> &vecTargets) {
+void SkillBase::doActorEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target) {
+	SkillCfgWrap cfg_warp;
+	const CfgSkill::Skill &cfg = cfg_warp.GetById(sinfo.skillId);
+	if (cfg_warp.IsAddBuff(cfg)) {
+		BuffControler::Instance()->addBuff(cfg, caster, target);
+	}
 }
 
-void SkillBase::doEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, const vector<uint32_t> &vecTargets) {
-	doSceneEffect(sinfo, caster, vecTargets);
-	doActorEffect(sinfo, caster, vecTargets);
+void SkillBase::doEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target) {
+	doSceneEffect(sinfo, caster, target);
+	doActorEffect(sinfo, caster, target);
 }
 
 void SkillBase::getTargets(const SkillUseInfo &sinfo, MapMoveObject *caster, vector<uint32_t> &targets) {

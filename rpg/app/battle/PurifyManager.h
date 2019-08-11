@@ -25,4 +25,4 @@ public:
 
 };
 
-#endif /* FORGE_MANAGER_H_ */
+#endif /* PURIFY_MANAGER_H_ */

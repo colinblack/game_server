@@ -49,4 +49,19 @@ return true;}
 void CSEnterMaterialCopy::clear(){
 copyCode = 0;
 }
+bool CSLotteryMagicTower::decode(CBufferReader &reader) {
+return true;}
+bool CSLotteryMagicTower::encode(CBufferWriter &writer) const {
+return true;}
+void CSLotteryMagicTower::clear(){
+}
+bool SCLotteryMagicTowerResp::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,pos);
+return true;}
+bool SCLotteryMagicTowerResp::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,pos);
+return true;}
+void SCLotteryMagicTowerResp::clear(){
+pos = 0;
+}
 }

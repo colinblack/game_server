@@ -14,9 +14,9 @@ def parse_grid():
 		item = {}
 		item["bossid"] = int(i[0])
 		item["reincarnLevel"] = int(i[1])
-		item["bossType"] = int(i[2])
+		item["copyId"] = int(i[2])
 		item["reward"] = _parse_reward((i[3]))
-		
+		item["useType"] = int(i[11])
 		dict["boss"].append(item)
 		
 	fd.close()

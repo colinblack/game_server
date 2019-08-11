@@ -39,6 +39,8 @@ class Skills;
 class Monsters;
 class Base;
 class Bases;
+class Buff;
+class Buffs;
 
 // ===================================================================
 
@@ -210,6 +212,20 @@ class Skill : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute >*
       mutable_attr();
 
+  // optional uint32 zhanlinghurt = 16;
+  inline bool has_zhanlinghurt() const;
+  inline void clear_zhanlinghurt();
+  static const int kZhanlinghurtFieldNumber = 16;
+  inline ::google::protobuf::uint32 zhanlinghurt() const;
+  inline void set_zhanlinghurt(::google::protobuf::uint32 value);
+
+  // optional uint32 hurtAdd = 17;
+  inline bool has_hurtadd() const;
+  inline void clear_hurtadd();
+  static const int kHurtAddFieldNumber = 17;
+  inline ::google::protobuf::uint32 hurtadd() const;
+  inline void set_hurtadd(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:CfgSkill.Skill)
  private:
   inline void set_has_serial();
@@ -240,6 +256,10 @@ class Skill : public ::google::protobuf::Message {
   inline void clear_has_cost();
   inline void set_has_careerlevel();
   inline void clear_has_careerlevel();
+  inline void set_has_zhanlinghurt();
+  inline void clear_has_zhanlinghurt();
+  inline void set_has_hurtadd();
+  inline void clear_has_hurtadd();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -260,6 +280,8 @@ class Skill : public ::google::protobuf::Message {
   ::google::protobuf::uint32 cost_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
   ::google::protobuf::uint32 careerlevel_;
+  ::google::protobuf::uint32 zhanlinghurt_;
+  ::google::protobuf::uint32 hurtadd_;
   friend void  protobuf_AddDesc_CfgSkill_2eproto();
   friend void protobuf_AssignDesc_CfgSkill_2eproto();
   friend void protobuf_ShutdownFile_CfgSkill_2eproto();
@@ -661,6 +683,187 @@ class Bases : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static Bases* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Buff : public ::google::protobuf::Message {
+ public:
+  Buff();
+  virtual ~Buff();
+
+  Buff(const Buff& from);
+
+  inline Buff& operator=(const Buff& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Buff& default_instance();
+
+  void Swap(Buff* other);
+
+  // implements Message ----------------------------------------------
+
+  Buff* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Buff& from);
+  void MergeFrom(const Buff& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required int32 ts = 2;
+  inline bool has_ts() const;
+  inline void clear_ts();
+  static const int kTsFieldNumber = 2;
+  inline ::google::protobuf::int32 ts() const;
+  inline void set_ts(::google::protobuf::int32 value);
+
+  // required uint32 type = 3;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 3;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgSkill.Buff)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_ts();
+  inline void clear_has_ts();
+  inline void set_has_type();
+  inline void clear_has_type();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::int32 ts_;
+  ::google::protobuf::uint32 type_;
+  friend void  protobuf_AddDesc_CfgSkill_2eproto();
+  friend void protobuf_AssignDesc_CfgSkill_2eproto();
+  friend void protobuf_ShutdownFile_CfgSkill_2eproto();
+
+  void InitAsDefaultInstance();
+  static Buff* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Buffs : public ::google::protobuf::Message {
+ public:
+  Buffs();
+  virtual ~Buffs();
+
+  Buffs(const Buffs& from);
+
+  inline Buffs& operator=(const Buffs& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Buffs& default_instance();
+
+  void Swap(Buffs* other);
+
+  // implements Message ----------------------------------------------
+
+  Buffs* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Buffs& from);
+  void MergeFrom(const Buffs& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .CfgSkill.Buff buffs = 1;
+  inline int buffs_size() const;
+  inline void clear_buffs();
+  static const int kBuffsFieldNumber = 1;
+  inline const ::CfgSkill::Buff& buffs(int index) const;
+  inline ::CfgSkill::Buff* mutable_buffs(int index);
+  inline ::CfgSkill::Buff* add_buffs();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgSkill::Buff >&
+      buffs() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgSkill::Buff >*
+      mutable_buffs();
+
+  // @@protoc_insertion_point(class_scope:CfgSkill.Buffs)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::CfgSkill::Buff > buffs_;
+  friend void  protobuf_AddDesc_CfgSkill_2eproto();
+  friend void protobuf_AssignDesc_CfgSkill_2eproto();
+  friend void protobuf_ShutdownFile_CfgSkill_2eproto();
+
+  void InitAsDefaultInstance();
+  static Buffs* default_instance_;
 };
 // ===================================================================
 
@@ -1087,6 +1290,54 @@ Skill::mutable_attr() {
   return &attr_;
 }
 
+// optional uint32 zhanlinghurt = 16;
+inline bool Skill::has_zhanlinghurt() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void Skill::set_has_zhanlinghurt() {
+  _has_bits_[0] |= 0x00008000u;
+}
+inline void Skill::clear_has_zhanlinghurt() {
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline void Skill::clear_zhanlinghurt() {
+  zhanlinghurt_ = 0u;
+  clear_has_zhanlinghurt();
+}
+inline ::google::protobuf::uint32 Skill::zhanlinghurt() const {
+  // @@protoc_insertion_point(field_get:CfgSkill.Skill.zhanlinghurt)
+  return zhanlinghurt_;
+}
+inline void Skill::set_zhanlinghurt(::google::protobuf::uint32 value) {
+  set_has_zhanlinghurt();
+  zhanlinghurt_ = value;
+  // @@protoc_insertion_point(field_set:CfgSkill.Skill.zhanlinghurt)
+}
+
+// optional uint32 hurtAdd = 17;
+inline bool Skill::has_hurtadd() const {
+  return (_has_bits_[0] & 0x00010000u) != 0;
+}
+inline void Skill::set_has_hurtadd() {
+  _has_bits_[0] |= 0x00010000u;
+}
+inline void Skill::clear_has_hurtadd() {
+  _has_bits_[0] &= ~0x00010000u;
+}
+inline void Skill::clear_hurtadd() {
+  hurtadd_ = 0u;
+  clear_has_hurtadd();
+}
+inline ::google::protobuf::uint32 Skill::hurtadd() const {
+  // @@protoc_insertion_point(field_get:CfgSkill.Skill.hurtAdd)
+  return hurtadd_;
+}
+inline void Skill::set_hurtadd(::google::protobuf::uint32 value) {
+  set_has_hurtadd();
+  hurtadd_ = value;
+  // @@protoc_insertion_point(field_set:CfgSkill.Skill.hurtAdd)
+}
+
 // -------------------------------------------------------------------
 
 // Skills
@@ -1383,6 +1634,116 @@ inline ::google::protobuf::RepeatedPtrField< ::CfgSkill::Base >*
 Bases::mutable_bases() {
   // @@protoc_insertion_point(field_mutable_list:CfgSkill.Bases.bases)
   return &bases_;
+}
+
+// -------------------------------------------------------------------
+
+// Buff
+
+// required uint32 id = 1;
+inline bool Buff::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Buff::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Buff::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Buff::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 Buff::id() const {
+  // @@protoc_insertion_point(field_get:CfgSkill.Buff.id)
+  return id_;
+}
+inline void Buff::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:CfgSkill.Buff.id)
+}
+
+// required int32 ts = 2;
+inline bool Buff::has_ts() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Buff::set_has_ts() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Buff::clear_has_ts() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Buff::clear_ts() {
+  ts_ = 0;
+  clear_has_ts();
+}
+inline ::google::protobuf::int32 Buff::ts() const {
+  // @@protoc_insertion_point(field_get:CfgSkill.Buff.ts)
+  return ts_;
+}
+inline void Buff::set_ts(::google::protobuf::int32 value) {
+  set_has_ts();
+  ts_ = value;
+  // @@protoc_insertion_point(field_set:CfgSkill.Buff.ts)
+}
+
+// required uint32 type = 3;
+inline bool Buff::has_type() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Buff::set_has_type() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Buff::clear_has_type() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Buff::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 Buff::type() const {
+  // @@protoc_insertion_point(field_get:CfgSkill.Buff.type)
+  return type_;
+}
+inline void Buff::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:CfgSkill.Buff.type)
+}
+
+// -------------------------------------------------------------------
+
+// Buffs
+
+// repeated .CfgSkill.Buff buffs = 1;
+inline int Buffs::buffs_size() const {
+  return buffs_.size();
+}
+inline void Buffs::clear_buffs() {
+  buffs_.Clear();
+}
+inline const ::CfgSkill::Buff& Buffs::buffs(int index) const {
+  // @@protoc_insertion_point(field_get:CfgSkill.Buffs.buffs)
+  return buffs_.Get(index);
+}
+inline ::CfgSkill::Buff* Buffs::mutable_buffs(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgSkill.Buffs.buffs)
+  return buffs_.Mutable(index);
+}
+inline ::CfgSkill::Buff* Buffs::add_buffs() {
+  // @@protoc_insertion_point(field_add:CfgSkill.Buffs.buffs)
+  return buffs_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgSkill::Buff >&
+Buffs::buffs() const {
+  // @@protoc_insertion_point(field_list:CfgSkill.Buffs.buffs)
+  return buffs_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgSkill::Buff >*
+Buffs::mutable_buffs() {
+  // @@protoc_insertion_point(field_mutable_list:CfgSkill.Buffs.buffs)
+  return &buffs_;
 }
 
 

@@ -21,27 +21,27 @@ bool MissionManager::Init() {
 	m_unknow.insert(MT_REINCARNATION);
 	m_unknow.insert(MT_HANG_LEVEL);
 	m_unknow.insert(MT_UNKNOW_3);
-	m_unknow.insert(MT_UNKNOW_4);
+	m_unknow.insert(MT_FORGE_LEVEL);
 	m_unknow.insert(MT_ACTIVATE_SHENQI_PIECES);
 	m_unknow.insert(MT_REACTIVE_SHENQI);
 	m_unknow.insert(MT_UPGRADE_STATE);
 	m_unknow.insert(MT_UNKNOW_8);
 	m_unknow.insert(MT_UNKNOW_9);
-	m_unknow.insert(MT_UNKNOW_10);
+	m_unknow.insert(MT_TREASURE_UPGRADE);
 	m_unknow.insert(MT_UNKNOW_11);
 	m_unknow.insert(MT_UNKNOW_12);
 	m_unknow.insert(MT_UNKNOW_13);
 	m_unknow.insert(MT_UNKNOW_14);
-	m_unknow.insert(MT_UNKNOW_15);
-	m_unknow.insert(MT_CHALLANGE_BOSS);
-	m_unknow.insert(MT_UNKNOW_17);
+	m_unknow.insert(MT_MAGIC_LEARN);
+	m_unknow.insert(MT_KILL_BOSS);
+	m_unknow.insert(MT_RUNE_TOWER);
 	m_unknow.insert(MT_UNKNOW_18);
 	m_unknow.insert(MT_UNKNOW_19);
-	m_unknow.insert(MT_UNKNOW_20);
+	m_unknow.insert(MT_EQUIP_EQUIP);
 	m_unknow.insert(MT_UNKNOW_21);
 	m_unknow.insert(MT_UNKNOW_22);
 	m_unknow.insert(MT_UNKNOW_23);
-	m_unknow.insert(MT_UNKNOW_24);
+	m_unknow.insert(MT_WORLD_BOSS);
 	m_unknow.insert(MT_UNKNOW_25);
 	m_unknow.insert(MT_UNKNOW_26);
 	m_unknow.insert(MT_UNKNOW_27);
@@ -110,7 +110,7 @@ bool MissionManager::Init() {
 	m_unknow.insert(MT_KILL_HANG_MONSTER);
 	m_unknow.insert(MT_SMELT_EQUIP);
 	m_unknow.insert(MT_STRENGTH_EQUIP);
-	m_unknow.insert(MT_UNKNOW_93);
+	m_unknow.insert(MT_TASK_COPY);
 	m_unknow.insert(MT_ACTIVATE_TREASURE);
 	m_unknow.insert(MT_UPGRADE);
 	m_unknow.insert(MT_UNKNOW_96);
@@ -145,8 +145,45 @@ bool MissionManager::ActorLogin(uint32_t uid) {
 	if (!cache.init_) {
 		return false;
 	}
-	if (cache.mission_.empty()) {
-		InitMission(cache);
+
+	bool has_main = false;
+	uint32_t max_main = 0;
+	MissionCfgWrap cfg_wrap;
+	map<uint32_t, DataMission>::iterator itr = cache.mission_.begin();
+	for (; itr != cache.mission_.end(); ) {
+		try {
+			const DataMission &m = itr->second;
+			const CfgMission::Mission &cfg = cfg_wrap.Get(m.id);
+			if (m.status == MISSION_COMMIT) {
+				cache.pre_mission_.insert(m.id);
+				if (cfg.type() == 1 && m.id > max_main) {
+					max_main = m.id;
+				}
+				cache.mission_.erase(itr++);
+			} else {
+				if (cfg.type() == 1) {
+					has_main = true;
+				}
+				++itr;
+			}
+		} catch (...) {
+			continue;
+		}
+	}
+
+	if (!has_main) {
+		if (max_main == 0) {
+			InitMission(cache);
+		} else {
+			DataMission data;
+			data.uid = cache.uid_;
+			data.id = max_main + 1;
+			data.step = 0;
+			data.status = 1;
+			data.ts = Time::GetGlobalTime();
+			DataMissionManager::Instance()->Add(data);
+			cache.mission_[data.id] = data;
+		}
 	}
 	return true;
 }
@@ -174,7 +211,7 @@ bool MissionManager::SendMsg(const DataMission &m) {
 	msg.step_ = m.step;
 	msg.status_ = m.status;
 	msg.requestDt_ = m.ts * 1000LL;
-	msg.extend_ = m.extend;
+	msg.extend_ = m.extend.empty() ? "{}" : m.extend;
 	LogicManager::Instance()->SendMsg(m.uid, CMD_UPDATE_PLAYER_MISSION, &msg);
 	return true;
 }
@@ -240,6 +277,25 @@ uint32_t MissionManager::AddMv(string &str, uint32_t t, uint32_t st, uint32_t n)
 	value["mv"][key][sub_key] = value["mv"][key][sub_key].asUInt() + n;
 	str = writer.write(value);
 	return value["mv"][key][sub_key].asUInt();
+}
+
+uint32_t MissionManager::GetEquipCntByLimit(const UserCache &cache,uint32_t color) {
+	uint32_t count = 0;
+	map<byte, map<byte, uint32_t> >::const_iterator it = cache.role_bag_.begin();
+	for(; it != cache.role_bag_.end(); ++it) {
+		map<byte, uint32_t>::const_iterator item = it->second.begin();
+		for(; item != it->second.end(); ++item) {
+			map<uint32_t, DataEquip>::const_iterator it = cache.equip_.find(item->second);
+			if(it == cache.equip_.end()) {
+				continue;
+			}
+			const CfgItem::Equip& cfg = ItemCfgWrap().GetEquip(it->second.id);
+			if(cfg.color() >= color) {
+				count++;
+			}
+		}
+	}
+	return count;
 }
 
 bool MissionManager::OnKillHangMonster(uint32_t uid, uint32_t id, uint32_t num) {
@@ -374,6 +430,49 @@ bool MissionManager::onActivateShenqi(uint32_t uid,uint32_t itemId){
 	return true;
 }
 
+bool MissionManager::onEquipEquip(uint32_t uid, uint32_t star, uint32_t reincarnLevel, uint32_t career) {
+	//佩戴n件蓝色以上装备
+	onColorEquip(uid, 2, star, reincarnLevel, career);
+	//佩戴n件紫色以上装备
+	onColorEquip(uid, 4, star, reincarnLevel, career);
+	//佩戴n件橙色以上装备
+	onColorEquip(uid, 5, star, reincarnLevel, career);
+	//佩戴n件红色以上装备
+	onColorEquip(uid, 6, star, reincarnLevel, career);
+	return true;
+}
+
+bool MissionManager::onColorEquip(uint32_t uid, uint32_t color, uint32_t star, uint32_t reincarnLevel, uint32_t career) {
+	UserCache &cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
+	map<uint32_t, DataMission>::iterator itr = cache.mission_.begin();
+	for (; itr != cache.mission_.end(); ++itr) {
+		DataMission &data = itr->second;
+		if (data.status != MISSION_DOING) {
+			continue;
+		}
+		const CfgMission::Mission &cfg = MissionCfgWrap().Get(data.id);
+		uint32_t num = GetEquipCntByLimit(cache, color);
+		for (int i = 0; i < cfg.condition_size(); ++i) {
+			if(cfg.condition(i).v1() == MT_EQUIP_EQUIP && cfg.condition(i).v2() == color
+					&& cfg.condition(i).v3() == star && cfg.condition(i).v4() == reincarnLevel
+					&& cfg.condition(i).v5() == career && num >= cfg.condition(i).v6()) {
+				if(1 != cfg.type()) {
+					//非主线任务
+					data.step = 1;
+				}
+				data.status = MISSION_COMPLETE;
+				DataMissionManager::Instance()->Set(data);
+				SendMsg(data);
+				break;
+			}
+		}
+	}
+	return true;
+}
+/*
 bool MissionManager::onUpgradeSkill(uint32_t uid,uint32_t num){
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
 	if (!cache.init_) {
@@ -401,9 +500,113 @@ bool MissionManager::onUpgradeSkill(uint32_t uid,uint32_t num){
 		}
 	}
 	return true;
+}*/
+
+bool MissionManager::onMission(uint32_t uid, uint32_t type, uint32_t num) {
+	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if(!cache.init_) {
+		return false;
+	}
+	map<uint32_t, DataMission>::iterator it = cache.mission_.begin();
+	for(; it != cache.mission_.end(); ++it) {
+		DataMission& data = it->second;
+		if(data.status != MISSION_DOING) {
+			continue;
+		}
+		const CfgMission::Mission &cfg = MissionCfgWrap().Get(data.id);
+		for(int i = 0; i < cfg.condition_size(); ++i) {
+			if(type != cfg.condition(i).v1()) {
+				continue;
+			}
+			if(num < cfg.condition(i).v2())	{
+				continue;
+			}
+
+			if(1 != cfg.type()) {
+				//非主线任务
+				data.step = 1;
+			}
+			if(type == MT_SMELT_EQUIP || type == MT_STRENGTH_EQUIP) {
+				uint32_t curr = AddIv(data.extend, type, num);
+				if (curr >= cfg.condition(i).v2()) {
+					data.status = MISSION_COMPLETE;
+				}
+			} else {
+				data.status = MISSION_COMPLETE;
+			}
+
+			DataMissionManager::Instance()->Set(data);
+			SendMsg(data);
+		}
+	}
+	return true;
 }
 
-
+bool MissionManager::onSubMission(uint32_t uid, uint32_t type, uint32_t subType, uint32_t num) {
+	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if(!cache.init_) {
+		return false;
+	}
+	map<uint32_t, DataMission>::iterator it = cache.mission_.begin();
+	for(; it != cache.mission_.end(); ++it) {
+		DataMission& data = it->second;
+		if(data.status != MISSION_DOING) {
+			continue;
+		}
+		const CfgMission::Mission &cfg = MissionCfgWrap().Get(data.id);
+		for(int i = 0; i < cfg.condition_size(); ++i) {
+			if(cfg.condition(i).v1() == type && cfg.condition(i).v2() == subType && num >= cfg.condition(i).v3()) {
+				if(type == MT_ACTIVATE_TREASURE) {
+					uint32_t curr = AddMv(data.extend, type, subType, num);
+					if (curr < cfg.condition(i).v2()) {
+						continue;
+					}
+				}
+				if(1 != cfg.type()) {
+					//非主线任务
+					data.step = 1;
+				}
+				data.status = MISSION_COMPLETE;
+				DataMissionManager::Instance()->Set(data);
+				SendMsg(data);
+				break;
+			}
+		}
+	}
+	return true;
+}
+bool MissionManager::onEnterCopy(uint32_t uid,uint32_t type,uint32_t copyCode){
+	UserCache &cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
+	map<uint32_t, DataMission>::iterator itr = cache.mission_.begin();
+	MissionCfgWrap cfg_wrap;
+	for (; itr != cache.mission_.end(); ++itr) {
+		DataMission &data = itr->second;
+		if (data.status != MISSION_DOING) {
+			continue;
+		}
+		const CfgMission::Mission &cfg = cfg_wrap.Get(data.id);
+		for (int i = 0; i < cfg.condition_size(); ++i) {
+			uint32_t type = cfg.condition(i).v1();
+			if (MT_TASK_COPY != type) {
+				continue;
+			}
+			if (cfg.condition(i).v2() != copyCode) {
+				continue;
+			}
+			uint32_t curr = AddMv(data.extend, MT_TASK_COPY,copyCode,1);
+			if (curr < cfg.condition(i).v3()) {
+				continue;
+			}
+		}
+		data.status = MISSION_COMPLETE;
+		DataMissionManager::Instance()->Set(data);
+		SendMsg(data);
+	}
+	return true;
+}
 
 int MissionManager::Process(uint32_t uid, logins::SMissionReq *req) {
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
@@ -447,6 +650,7 @@ int MissionManager::Process(uint32_t uid, logins::SMissionCommit *req) {
 		SendMsg(data);
 		return 0;
 	}
+
 	data.status = MISSION_COMMIT;
 	data.step = 1;
 	DataMissionManager::Instance()->Set(data);
@@ -457,8 +661,13 @@ int MissionManager::Process(uint32_t uid, logins::SMissionCommit *req) {
 	UserManager::Instance()->Reward(uid, reward, "mission_" + CTrans::ITOS(req->missionId_));
 	ReinCarnManager::Instance()->onAddExp(uid,cfg.exp());
 	SendMsg(data);
-	debug_log("uid=%u,id=%d", uid, req->missionId_);
 
+	cache.pre_mission_.insert(data.id);
+	missions.erase(itr);
+
+	ZhanLingManager::Instance()->checkUnlock(uid);
+
+	debug_log("uid=%u,id=%d", uid, req->missionId_);
 	return 0;
 }
 
@@ -476,7 +685,8 @@ int MissionManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerMiss
 		item.missionId_ = itr->first;
 		item.step_ = data.step;
 		item.status_ = data.status;
-		item.requestDt_ = data.ts * 1000LL;
+		item.requestDt_ = data.ts * 1000L;
+		item.extend_ = data.extend.empty() ? "{}" : data.extend;
 		resp->missions_.push_back(item);
 	}
 	if (!LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp)) {

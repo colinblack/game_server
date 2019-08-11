@@ -89,7 +89,7 @@ void CDBClientAsync::recvProcess() {
 			m_inBuf.Remove(0, decodeSize);
 		}
 		if (ret) {
-			AsyncDBManager::getInstance()->push(packet);
+			AsyncDBManager::Instance()->push(packet);
 			debug_log("%u", packet.body.GetSize());
 		}
 	} while (decodeSize > 0);

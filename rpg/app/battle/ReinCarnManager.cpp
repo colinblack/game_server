@@ -125,8 +125,8 @@ int ReinCarnManager::Process(uint32_t uid, reincarn::CSReinCarn *req) {
 
 	LogicManager::Instance()->AddSync(CMD_PLAYER_CAREER_LEVEL);
 	PropertyManager::Instance()->AddUser(uid);
+	MissionManager::Instance()->onMission(uid, MT_REINCARNATION, cache.m_reinCarnInfo.reinCarnLevel);
 	return 0;
-
 }
 
 int ReinCarnManager::Process(uint32_t uid, reincarn::CSReinCarnGetExpByItems *req) {

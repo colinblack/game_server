@@ -7,6 +7,7 @@ message Map {
 	required string name = 4;
 	required bool hasBossPoint = 5;
 	required uint32 copyid = 6;
+	required uint32 copyType = 7;
 }
 
 message Maps {

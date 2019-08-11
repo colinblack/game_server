@@ -1,0 +1,36 @@
+{
+"namespace":"team",
+"filename":"Team",
+"include":["Kernel","Dbs","MsgDef","Msgs"],
+	"msgs":[
+				{"name": "CSCreateTeam", 
+					"extends": "", 
+					"id": "533",
+					"msg": [{"name": "target", "id": 1, "type": "Identity"},
+							{"name": "targetList", "id": 2, "type": "vector<int32_t>"},
+							{"name": "needLevel", "id": 3, "type": "int16_t"}
+							]
+				},
+				{"name": "CSLeaveTeam", 
+					"extends": "", 
+					"id": "534",
+					"msg": []
+				},
+				{"name": "CSDisBandTeam", 
+					"extends": "", 
+					"id": "2870",
+					"msg": []
+				},
+				{"name": "CSCheckMemCopy", 
+					"extends": "", 
+					"id": "1185",
+					"msg": []
+				},
+				{"name": "SCCheckMemCopyResponse", 
+					"extends": "", 
+					"id": "1185",
+					"msg": [{"name": "checkList", "id": 1, "type": "vector<msgs::STeamMemberCopyCheck>"}]
+				}
+			]
+		
+}

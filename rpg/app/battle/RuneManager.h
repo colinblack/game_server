@@ -18,6 +18,7 @@ private:
 	~RuneManager();
 public:
 	bool CalcProperty(const UserCache &cache, byte rid, PropertySets &props);
+
 public:
 	int Process(uint32_t uid, rune::CSMagicOpenHole *req);
 	int Process(uint32_t uid, rune::CSMagicLearn *req);

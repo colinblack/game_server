@@ -4,6 +4,7 @@ message Reward {
 	required uint32 item = 1;
 	required uint32 num = 2;
 	optional uint32 rate = 3;
+	optional uint32 career = 4;
 }
 
 message Attribute {

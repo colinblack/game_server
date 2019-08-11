@@ -23,6 +23,12 @@ namespace {
 const ::google::protobuf::Descriptor* TreasureHuntRecord_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TreasureHuntRecord_reflection_ = NULL;
+const ::google::protobuf::Descriptor* LevelRewardRecord_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  LevelRewardRecord_reflection_ = NULL;
+const ::google::protobuf::Descriptor* LevelRewardRecords_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  LevelRewardRecords_reflection_ = NULL;
 const ::google::protobuf::Descriptor* TreasureHuntRecords_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TreasureHuntRecords_reflection_ = NULL;
@@ -59,7 +65,39 @@ void protobuf_AssignDesc_MsgLocal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TreasureHuntRecord));
-  TreasureHuntRecords_descriptor_ = file->message_type(1);
+  LevelRewardRecord_descriptor_ = file->message_type(1);
+  static const int LevelRewardRecord_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecord, careerlevel_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecord, level_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecord, leftcount_),
+  };
+  LevelRewardRecord_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      LevelRewardRecord_descriptor_,
+      LevelRewardRecord::default_instance_,
+      LevelRewardRecord_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecord, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecord, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(LevelRewardRecord));
+  LevelRewardRecords_descriptor_ = file->message_type(2);
+  static const int LevelRewardRecords_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecords, records_),
+  };
+  LevelRewardRecords_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      LevelRewardRecords_descriptor_,
+      LevelRewardRecords::default_instance_,
+      LevelRewardRecords_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecords, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LevelRewardRecords, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(LevelRewardRecords));
+  TreasureHuntRecords_descriptor_ = file->message_type(3);
   static const int TreasureHuntRecords_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TreasureHuntRecords, records_),
   };
@@ -89,6 +127,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     TreasureHuntRecord_descriptor_, &TreasureHuntRecord::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    LevelRewardRecord_descriptor_, &LevelRewardRecord::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    LevelRewardRecords_descriptor_, &LevelRewardRecords::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     TreasureHuntRecords_descriptor_, &TreasureHuntRecords::default_instance());
 }
 
@@ -97,6 +139,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void protobuf_ShutdownFile_MsgLocal_2eproto() {
   delete TreasureHuntRecord::default_instance_;
   delete TreasureHuntRecord_reflection_;
+  delete LevelRewardRecord::default_instance_;
+  delete LevelRewardRecord_reflection_;
+  delete LevelRewardRecords::default_instance_;
+  delete LevelRewardRecords_reflection_;
   delete TreasureHuntRecords::default_instance_;
   delete TreasureHuntRecords_reflection_;
 }
@@ -112,14 +158,22 @@ void protobuf_AddDesc_MsgLocal_2eproto() {
     "untRecord\022\n\n\002id\030\001 \002(\005\022\014\n\004type\030\002 \002(\005\022\022\n\nt"
     "reasureId\030\003 \002(\005\022\020\n\010playerId\030\004 \002(\005\022\014\n\004nam"
     "e\030\005 \002(\t\022\016\n\006career\030\006 \002(\005\022\r\n\005level\030\007 \002(\005\022\023"
-    "\n\013careerLevel\030\010 \002(\005\022\016\n\006drawDt\030\t \002(\005\"D\n\023T"
-    "reasureHuntRecords\022-\n\007records\030\001 \003(\0132\034.Ms"
-    "gLocal.TreasureHuntRecord", 265);
+    "\n\013careerLevel\030\010 \002(\005\022\016\n\006drawDt\030\t \002(\005\"J\n\021L"
+    "evelRewardRecord\022\023\n\013careerLevel\030\001 \002(\005\022\r\n"
+    "\005level\030\002 \002(\005\022\021\n\tleftCount\030\003 \002(\005\"B\n\022Level"
+    "RewardRecords\022,\n\007records\030\001 \003(\0132\033.MsgLoca"
+    "l.LevelRewardRecord\"D\n\023TreasureHuntRecor"
+    "ds\022-\n\007records\030\001 \003(\0132\034.MsgLocal.TreasureH"
+    "untRecord", 409);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "MsgLocal.proto", &protobuf_RegisterTypes);
   TreasureHuntRecord::default_instance_ = new TreasureHuntRecord();
+  LevelRewardRecord::default_instance_ = new LevelRewardRecord();
+  LevelRewardRecords::default_instance_ = new LevelRewardRecords();
   TreasureHuntRecords::default_instance_ = new TreasureHuntRecords();
   TreasureHuntRecord::default_instance_->InitAsDefaultInstance();
+  LevelRewardRecord::default_instance_->InitAsDefaultInstance();
+  LevelRewardRecords::default_instance_->InitAsDefaultInstance();
   TreasureHuntRecords::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_MsgLocal_2eproto);
 }
@@ -698,6 +752,539 @@ void TreasureHuntRecord::Swap(TreasureHuntRecord* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = TreasureHuntRecord_descriptor_;
   metadata.reflection = TreasureHuntRecord_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int LevelRewardRecord::kCareerLevelFieldNumber;
+const int LevelRewardRecord::kLevelFieldNumber;
+const int LevelRewardRecord::kLeftCountFieldNumber;
+#endif  // !_MSC_VER
+
+LevelRewardRecord::LevelRewardRecord()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:MsgLocal.LevelRewardRecord)
+}
+
+void LevelRewardRecord::InitAsDefaultInstance() {
+}
+
+LevelRewardRecord::LevelRewardRecord(const LevelRewardRecord& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:MsgLocal.LevelRewardRecord)
+}
+
+void LevelRewardRecord::SharedCtor() {
+  _cached_size_ = 0;
+  careerlevel_ = 0;
+  level_ = 0;
+  leftcount_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+LevelRewardRecord::~LevelRewardRecord() {
+  // @@protoc_insertion_point(destructor:MsgLocal.LevelRewardRecord)
+  SharedDtor();
+}
+
+void LevelRewardRecord::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void LevelRewardRecord::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* LevelRewardRecord::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return LevelRewardRecord_descriptor_;
+}
+
+const LevelRewardRecord& LevelRewardRecord::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_MsgLocal_2eproto();
+  return *default_instance_;
+}
+
+LevelRewardRecord* LevelRewardRecord::default_instance_ = NULL;
+
+LevelRewardRecord* LevelRewardRecord::New() const {
+  return new LevelRewardRecord;
+}
+
+void LevelRewardRecord::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<LevelRewardRecord*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(careerlevel_, leftcount_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool LevelRewardRecord::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:MsgLocal.LevelRewardRecord)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required int32 careerLevel = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &careerlevel_)));
+          set_has_careerlevel();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_level;
+        break;
+      }
+
+      // required int32 level = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_level:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &level_)));
+          set_has_level();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_leftCount;
+        break;
+      }
+
+      // required int32 leftCount = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_leftCount:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &leftcount_)));
+          set_has_leftcount();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:MsgLocal.LevelRewardRecord)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:MsgLocal.LevelRewardRecord)
+  return false;
+#undef DO_
+}
+
+void LevelRewardRecord::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:MsgLocal.LevelRewardRecord)
+  // required int32 careerLevel = 1;
+  if (has_careerlevel()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->careerlevel(), output);
+  }
+
+  // required int32 level = 2;
+  if (has_level()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->level(), output);
+  }
+
+  // required int32 leftCount = 3;
+  if (has_leftcount()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->leftcount(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:MsgLocal.LevelRewardRecord)
+}
+
+::google::protobuf::uint8* LevelRewardRecord::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:MsgLocal.LevelRewardRecord)
+  // required int32 careerLevel = 1;
+  if (has_careerlevel()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->careerlevel(), target);
+  }
+
+  // required int32 level = 2;
+  if (has_level()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->level(), target);
+  }
+
+  // required int32 leftCount = 3;
+  if (has_leftcount()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->leftcount(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:MsgLocal.LevelRewardRecord)
+  return target;
+}
+
+int LevelRewardRecord::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 careerLevel = 1;
+    if (has_careerlevel()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->careerlevel());
+    }
+
+    // required int32 level = 2;
+    if (has_level()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->level());
+    }
+
+    // required int32 leftCount = 3;
+    if (has_leftcount()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->leftcount());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void LevelRewardRecord::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const LevelRewardRecord* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const LevelRewardRecord*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void LevelRewardRecord::MergeFrom(const LevelRewardRecord& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_careerlevel()) {
+      set_careerlevel(from.careerlevel());
+    }
+    if (from.has_level()) {
+      set_level(from.level());
+    }
+    if (from.has_leftcount()) {
+      set_leftcount(from.leftcount());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void LevelRewardRecord::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LevelRewardRecord::CopyFrom(const LevelRewardRecord& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LevelRewardRecord::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+
+  return true;
+}
+
+void LevelRewardRecord::Swap(LevelRewardRecord* other) {
+  if (other != this) {
+    std::swap(careerlevel_, other->careerlevel_);
+    std::swap(level_, other->level_);
+    std::swap(leftcount_, other->leftcount_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata LevelRewardRecord::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = LevelRewardRecord_descriptor_;
+  metadata.reflection = LevelRewardRecord_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int LevelRewardRecords::kRecordsFieldNumber;
+#endif  // !_MSC_VER
+
+LevelRewardRecords::LevelRewardRecords()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:MsgLocal.LevelRewardRecords)
+}
+
+void LevelRewardRecords::InitAsDefaultInstance() {
+}
+
+LevelRewardRecords::LevelRewardRecords(const LevelRewardRecords& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:MsgLocal.LevelRewardRecords)
+}
+
+void LevelRewardRecords::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+LevelRewardRecords::~LevelRewardRecords() {
+  // @@protoc_insertion_point(destructor:MsgLocal.LevelRewardRecords)
+  SharedDtor();
+}
+
+void LevelRewardRecords::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void LevelRewardRecords::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* LevelRewardRecords::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return LevelRewardRecords_descriptor_;
+}
+
+const LevelRewardRecords& LevelRewardRecords::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_MsgLocal_2eproto();
+  return *default_instance_;
+}
+
+LevelRewardRecords* LevelRewardRecords::default_instance_ = NULL;
+
+LevelRewardRecords* LevelRewardRecords::New() const {
+  return new LevelRewardRecords;
+}
+
+void LevelRewardRecords::Clear() {
+  records_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool LevelRewardRecords::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:MsgLocal.LevelRewardRecords)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .MsgLocal.LevelRewardRecord records = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_records:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_records()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_records;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:MsgLocal.LevelRewardRecords)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:MsgLocal.LevelRewardRecords)
+  return false;
+#undef DO_
+}
+
+void LevelRewardRecords::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:MsgLocal.LevelRewardRecords)
+  // repeated .MsgLocal.LevelRewardRecord records = 1;
+  for (int i = 0; i < this->records_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->records(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:MsgLocal.LevelRewardRecords)
+}
+
+::google::protobuf::uint8* LevelRewardRecords::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:MsgLocal.LevelRewardRecords)
+  // repeated .MsgLocal.LevelRewardRecord records = 1;
+  for (int i = 0; i < this->records_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->records(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:MsgLocal.LevelRewardRecords)
+  return target;
+}
+
+int LevelRewardRecords::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .MsgLocal.LevelRewardRecord records = 1;
+  total_size += 1 * this->records_size();
+  for (int i = 0; i < this->records_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->records(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void LevelRewardRecords::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const LevelRewardRecords* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const LevelRewardRecords*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void LevelRewardRecords::MergeFrom(const LevelRewardRecords& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  records_.MergeFrom(from.records_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void LevelRewardRecords::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LevelRewardRecords::CopyFrom(const LevelRewardRecords& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LevelRewardRecords::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->records())) return false;
+  return true;
+}
+
+void LevelRewardRecords::Swap(LevelRewardRecords* other) {
+  if (other != this) {
+    records_.Swap(&other->records_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata LevelRewardRecords::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = LevelRewardRecords_descriptor_;
+  metadata.reflection = LevelRewardRecords_reflection_;
   return metadata;
 }
 

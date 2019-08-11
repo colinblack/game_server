@@ -106,17 +106,24 @@ class Boss : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 bossid() const;
   inline void set_bossid(::google::protobuf::uint32 value);
 
-  // required uint32 bossType = 3;
-  inline bool has_bosstype() const;
-  inline void clear_bosstype();
-  static const int kBossTypeFieldNumber = 3;
-  inline ::google::protobuf::uint32 bosstype() const;
-  inline void set_bosstype(::google::protobuf::uint32 value);
+  // required uint32 copyId = 3;
+  inline bool has_copyid() const;
+  inline void clear_copyid();
+  static const int kCopyIdFieldNumber = 3;
+  inline ::google::protobuf::uint32 copyid() const;
+  inline void set_copyid(::google::protobuf::uint32 value);
 
-  // repeated .CfgCommon.Reward reward = 4;
+  // required uint32 useType = 4;
+  inline bool has_usetype() const;
+  inline void clear_usetype();
+  static const int kUseTypeFieldNumber = 4;
+  inline ::google::protobuf::uint32 usetype() const;
+  inline void set_usetype(::google::protobuf::uint32 value);
+
+  // repeated .CfgCommon.Reward reward = 5;
   inline int reward_size() const;
   inline void clear_reward();
-  static const int kRewardFieldNumber = 4;
+  static const int kRewardFieldNumber = 5;
   inline const ::CfgCommon::Reward& reward(int index) const;
   inline ::CfgCommon::Reward* mutable_reward(int index);
   inline ::CfgCommon::Reward* add_reward();
@@ -131,8 +138,10 @@ class Boss : public ::google::protobuf::Message {
   inline void clear_has_reincarnlevel();
   inline void set_has_bossid();
   inline void clear_has_bossid();
-  inline void set_has_bosstype();
-  inline void clear_has_bosstype();
+  inline void set_has_copyid();
+  inline void clear_has_copyid();
+  inline void set_has_usetype();
+  inline void clear_has_usetype();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -140,8 +149,9 @@ class Boss : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::google::protobuf::uint32 reincarnlevel_;
   ::google::protobuf::uint32 bossid_;
+  ::google::protobuf::uint32 copyid_;
+  ::google::protobuf::uint32 usetype_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > reward_;
-  ::google::protobuf::uint32 bosstype_;
   friend void  protobuf_AddDesc_CfgBoss_2eproto();
   friend void protobuf_AssignDesc_CfgBoss_2eproto();
   friend void protobuf_ShutdownFile_CfgBoss_2eproto();
@@ -286,31 +296,55 @@ inline void Boss::set_bossid(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:CfgBoss.Boss.bossid)
 }
 
-// required uint32 bossType = 3;
-inline bool Boss::has_bosstype() const {
+// required uint32 copyId = 3;
+inline bool Boss::has_copyid() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Boss::set_has_bosstype() {
+inline void Boss::set_has_copyid() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Boss::clear_has_bosstype() {
+inline void Boss::clear_has_copyid() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Boss::clear_bosstype() {
-  bosstype_ = 0u;
-  clear_has_bosstype();
+inline void Boss::clear_copyid() {
+  copyid_ = 0u;
+  clear_has_copyid();
 }
-inline ::google::protobuf::uint32 Boss::bosstype() const {
-  // @@protoc_insertion_point(field_get:CfgBoss.Boss.bossType)
-  return bosstype_;
+inline ::google::protobuf::uint32 Boss::copyid() const {
+  // @@protoc_insertion_point(field_get:CfgBoss.Boss.copyId)
+  return copyid_;
 }
-inline void Boss::set_bosstype(::google::protobuf::uint32 value) {
-  set_has_bosstype();
-  bosstype_ = value;
-  // @@protoc_insertion_point(field_set:CfgBoss.Boss.bossType)
+inline void Boss::set_copyid(::google::protobuf::uint32 value) {
+  set_has_copyid();
+  copyid_ = value;
+  // @@protoc_insertion_point(field_set:CfgBoss.Boss.copyId)
 }
 
-// repeated .CfgCommon.Reward reward = 4;
+// required uint32 useType = 4;
+inline bool Boss::has_usetype() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Boss::set_has_usetype() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Boss::clear_has_usetype() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Boss::clear_usetype() {
+  usetype_ = 0u;
+  clear_has_usetype();
+}
+inline ::google::protobuf::uint32 Boss::usetype() const {
+  // @@protoc_insertion_point(field_get:CfgBoss.Boss.useType)
+  return usetype_;
+}
+inline void Boss::set_usetype(::google::protobuf::uint32 value) {
+  set_has_usetype();
+  usetype_ = value;
+  // @@protoc_insertion_point(field_set:CfgBoss.Boss.useType)
+}
+
+// repeated .CfgCommon.Reward reward = 5;
 inline int Boss::reward_size() const {
   return reward_.size();
 }

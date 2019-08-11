@@ -19,7 +19,8 @@ int HangManager::Process(uint32_t uid, logins::SBatchFightResultReq *req, logins
 
 	const CfgHang::Hang &hang = HangCfgWrap().Get(cache.base_.hang);
 
-	resp->canRefreshElite_ = true;
+	resp->canRefreshElite_ = Math::GetRandomInt(100) < 80 ? true : false;
+
 	MonsterCfgWrap cfg_wrap;
 	uint32_t add_exp = 0;
 	map<int32_t, int32_t>::iterator itr = req->monsters_.begin();
@@ -45,7 +46,9 @@ int HangManager::Process(uint32_t uid, logins::SBatchFightResultReq *req, logins
 }
 
 int HangManager::Process(uint32_t uid, logins::SFightResultReq *req, logins::SBatchFightResultResp *resp) {
-	resp->canRefreshElite_ = true;
+	UpdateManager::Instance()->SetCode(UC_Hang);
+	resp->canRefreshElite_ = Math::GetRandomInt(100) < 80 ? true : false;
+	MonsterDrop(uid, req->monsterId_, req->killPoint_);
 	MissionManager::Instance()->OnKillHangMonster(uid, req->monsterId_, 1);
 	debug_log("uid=%u monster=%u", uid, req->monsterId_);
 	return R_SUCCESS;
@@ -53,7 +56,7 @@ int HangManager::Process(uint32_t uid, logins::SFightResultReq *req, logins::SBa
 
 int HangManager::Process(uint32_t uid, logins::SHangChallengeBoss *req) {
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
-	if(!cache.init_) {
+	if (!cache.init_) {
 		return R_ERR_NO_DATA;
 	}
 	Human *pHuman = MapManager::Instance()->getHuman(uid);
@@ -101,6 +104,8 @@ int HangManager::Process(uint32_t uid, logins::SHangChallengeBoss *req) {
 		return R_ERROR;
 	}
 
+	ZhanLingManager::Instance()->resetNuQi(uid);
+
 	m_boss[uid] = monster_plan.boss();
 
 	msgs::SHangLevelBoss msg;
@@ -123,11 +128,13 @@ bool HangManager::OnMonsterDie(uint32_t uid, uint32_t monster_id, const Point &d
 	}
 	m_boss.erase(uid);
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
-	if(!cache.init_) {
+	if (!cache.init_) {
 		return false;
 	}
 	cache.base_.hang += 1;
 	DataBaseManager::Instance()->Set(cache.base_);
+
+	UpdateManager::Instance()->SetCode(UC_AddDrop);
 
 	MonsterDrop(uid, monster_id, diePos);
 
@@ -144,6 +151,7 @@ bool HangManager::OnMonsterDie(uint32_t uid, uint32_t monster_id, const Point &d
 	if (pHuame != NULL) {
 		pHuame->doRecover();
 	}
+
 	return true;
 }
 
@@ -155,7 +163,7 @@ bool HangManager::OnHumanDie(uint32_t uid) {
 	m_boss.erase(uid);
 
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
-	if(!cache.init_) {
+	if (!cache.init_) {
 		return false;
 	}
 	msgs::SHangBossResult msg;
@@ -201,7 +209,6 @@ bool HangManager::MonsterDrop(uint32_t uid, uint32_t monster_id, const Point &di
 		}
 
 		reward.Add(MONEY_EXP, cfg.exp());
-		UpdateManager::Instance()->SetCode(UC_AddDrop);
 
 		string code;
 		String::Format(code, "hang_boss_%u", monster_id);
@@ -211,7 +218,7 @@ bool HangManager::MonsterDrop(uint32_t uid, uint32_t monster_id, const Point &di
 
 		LogicManager::Instance()->SendMsg(uid, CMD_PLAYER_AUTO_DROP_BAG, &msg);
 		return true;
-	}catch(...){
+	} catch (...) {
 		return false;
 	}
 }
@@ -256,4 +263,87 @@ bool HangManager::GetHangMap(uint16_t hang, uint32_t &des_map, Point &des_pos) {
 		return true;
 	}
 	return false;
+}
+
+bool HangManager::AfterLogin(uint32_t uid) {
+	UserCache &cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
+	OfflineReward(uid, cache.base_.hang, cache.base_.offline_time);
+	return true;
+}
+
+bool HangManager::OfflineReward(uint32_t uid, uint32_t hang, uint32_t offlineTs) {
+	uint32_t ts = 0, ts1 = 0, ts2 = 0;
+	if (Time::GetGlobalTime() > offlineTs) {
+		ts = Time::GetGlobalTime() - offlineTs;
+	}
+	if (ts < 120) {
+		return false;
+	}
+
+	if (ts > 28800) {
+		ts1 = 28800;
+		ts2 = ts - 28800 > 43200 ? 43200 : ts - 28800;
+	} else {
+		ts1 = ts;
+	}
+
+	msgs::SHangOfflineReward msg;
+	msg.clear();
+	Award reward;
+	HangCfgWrap wrap;
+	ItemCfgWrap item_wrap;
+	uint32_t drop_id = wrap.GetOnlineRewrad(hang);
+	const CfgItem::Drop &drop_cfg = ItemCfgWrap().GetDrop(drop_id);
+	const CfgHang::Hang &hang_cfg = wrap.Get(hang);
+
+	Award equips;
+	Award temp;
+	uint32_t equip_count = ts1 / 30 + ts2 / 30 * 0.8f;
+	for (uint32_t i = 0; i < equip_count; ++i) {
+		if (i % 120 == 0) {
+			temp.Clear();
+			temp.Random(drop_cfg.randomreward(), drop_cfg.randomcount());
+			temp.Format(drop_cfg.fixedreward(), 1);
+		}
+		equips += temp;
+	}
+
+	int decompose = 0;
+	map<uint32_t, uint32_t>::const_iterator itr = equips.Data().begin();
+	for (; itr != equips.Data().end(); ++itr) {
+		const CfgItem::Equip &equip_cfg = item_wrap.GetEquip(itr->first);
+		reward.Format(equip_cfg.smeltaward(), itr->second);
+		decompose += itr->second;
+	}
+	for (itr = reward.Data().begin(); itr != reward.Data().end(); ++itr) {
+		msg.rewards_[itr->first] = itr->second;
+	}
+
+	float coin_speed = static_cast<float>(hang_cfg.coin()) / 3600.0f;
+	float exp_speed = static_cast<float>(hang_cfg.exp()) / 3600.0f;
+
+	uint32_t r_coin = coin_speed * ts1 + coin_speed * ts2 * 0.8;
+	uint32_t r_exp = exp_speed * ts1 + coin_speed * ts2 * 0.8;
+
+	reward.Add(MONEY_COIN, r_coin);
+	reward.Add(MONEY_EXP, r_exp);
+
+	UpdateManager::Instance()->SetCode(UC_OfflineReward);
+	string code;
+	String::Format(code, "hang_offline_reward_%u", ts);
+	if (!UserManager::Instance()->Reward(uid, reward, code)) {
+		return false;
+	}
+
+	msg.coin_ = r_coin;
+	msg.exp_ = r_exp;
+	msg.offlineTime_ = ts;
+	msg.decomposeNum_ = decompose;
+
+	LogicManager::Instance()->SendMsg(uid, CMD_HANG_OFFLINE_REWARD, &msg);
+
+	return true;
 }

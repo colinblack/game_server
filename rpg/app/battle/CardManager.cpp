@@ -8,6 +8,8 @@
 #include "CardManager.h"
 #include "BattleInc.h"
 
+#define CARD_ITEM_TYPE 		22
+
 CardManager::CardManager() {
 }
 
@@ -58,6 +60,19 @@ bool CardManager::CalcProperty(const UserCache &cache, byte rid, PropertySets &p
 				}
 			}
 		}
+		//升星属性
+		map<uint32_t, DataEquip>::const_iterator item = cache.equip_.begin();
+		for(; item != cache.equip_.end(); ++item) {
+			if(ItemCfgWrap().IsItem(item->second.id)) {
+				const CfgItem::Item& item_cfg = ItemCfgWrap().GetItem(item->second.id);
+				if(CARD_ITEM_TYPE == item_cfg.itemtype()) {
+					uint32_t star = getStarExt(*(const_cast<DataEquip*>(&item->second)));
+					const CfgCard::Star& star_cfg = CardCfgWrap().GetStar(item_cfg.color(), star);
+					PropertyCfg::setProps(star_cfg.attr(), 1.0, props);
+				}
+			}
+		}
+
 	} catch (...) {
 		return false;
 	}
@@ -65,6 +80,28 @@ bool CardManager::CalcProperty(const UserCache &cache, byte rid, PropertySets &p
 	return true;
 }
 
+bool CardManager::setStarExt(DataEquip& data, uint32_t star) {
+	static Json::Reader reader;
+	static Json::FastWriter writer;
+	Json::Value value;
+	value = Json::Value(Json::objectValue);
+	value["star"] = star;
+	data.ext = writer.write(value);
+	return true;
+}
+uint32_t CardManager::getStarExt(DataEquip& data) {
+	uint32_t star = 0;
+	Json::Value value = Json::Value(Json::objectValue);
+	Json::Reader reader;
+	if (!data.ext.empty() && !reader.parse(data.ext, value)) {
+		error_log("parse equip extend error uid=%u ud=%u ext=%s", data.uid, data.ud, data.ext.c_str());
+		return false;
+	}
+	if(value.isMember("star")) {
+		star = value["star"].asUInt();
+	}
+	return star;
+}
 
 int CardManager::Process(uint32_t uid, card::CSCardActiveCard *req) {
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
@@ -138,6 +175,33 @@ int CardManager::Process(uint32_t uid, card::CSCardActiveCard *req) {
 	return 0;
 }
 
+int CardManager::Process(uint32_t uid, logins::SCardUpStarReq *req) {
+	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if(!cache.init_) {
+		return R_ERROR;
+	}
+	if(!cache.equip_.count(req->uid)) {
+		error_log("item:%u not exist", req->uid);
+		return R_ERROR;
+	}
+	DataEquip& data = cache.equip_[req->uid];
+	const CfgItem::Item& cfg = ItemCfgWrap().GetItem(data.id);
+	uint32_t star = getStarExt(data) + 1;
+	const CfgCard::Star& star_cfg = CardCfgWrap().GetStar(cfg.color(),star);
+
+	UpdateManager::Instance()->SetCode(UC_CardUpStar);
+	if(!UserManager::Instance()->UseMoney(uid, MONEY_CARD_EXP, star_cfg.exp(), "Card upStar")) {
+		return R_ERROR;
+	}
+	setStarExt(data, star);
+	DataEquipManager::Instance()->Set(data);
+
+	UpdateManager::Instance()->Bag(cache.uid_, 0, data);
+	UpdateManager::Instance()->UpdateBagNow(cache.uid_);
+	PropertyManager::Instance()->AddUser(uid);
+
+	return R_SUCCESS;
+}
 
 int CardManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SCardGroup *resp) {
 	uint32_t  count ;

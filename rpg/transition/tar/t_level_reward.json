@@ -1,0 +1,88 @@
+{
+  "levelReward": [
+    {
+      "career_level": 0, 
+      "limit_count": 0, 
+      "gift_id": 220003001, 
+      "level": 10
+    }, 
+    {
+      "career_level": 0, 
+      "limit_count": 0, 
+      "gift_id": 220003002, 
+      "level": 20
+    }, 
+    {
+      "career_level": 0, 
+      "limit_count": 0, 
+      "gift_id": 220003003, 
+      "level": 30
+    }, 
+    {
+      "career_level": 1, 
+      "limit_count": 0, 
+      "gift_id": 220003004, 
+      "level": 0
+    }, 
+    {
+      "career_level": 2, 
+      "limit_count": 0, 
+      "gift_id": 220003005, 
+      "level": 0
+    }, 
+    {
+      "career_level": 3, 
+      "limit_count": 0, 
+      "gift_id": 220003006, 
+      "level": 0
+    }, 
+    {
+      "career_level": 4, 
+      "limit_count": 1000, 
+      "gift_id": 220003007, 
+      "level": 0
+    }, 
+    {
+      "career_level": 5, 
+      "limit_count": 800, 
+      "gift_id": 220003008, 
+      "level": 0
+    }, 
+    {
+      "career_level": 6, 
+      "limit_count": 600, 
+      "gift_id": 220003009, 
+      "level": 0
+    }, 
+    {
+      "career_level": 7, 
+      "limit_count": 400, 
+      "gift_id": 220003010, 
+      "level": 0
+    }, 
+    {
+      "career_level": 8, 
+      "limit_count": 200, 
+      "gift_id": 220003011, 
+      "level": 0
+    }, 
+    {
+      "career_level": 9, 
+      "limit_count": 100, 
+      "gift_id": 220003012, 
+      "level": 0
+    }, 
+    {
+      "career_level": 10, 
+      "limit_count": 50, 
+      "gift_id": 220003013, 
+      "level": 0
+    }, 
+    {
+      "career_level": 11, 
+      "limit_count": 10, 
+      "gift_id": 220003014, 
+      "level": 0
+    }
+  ]
+}

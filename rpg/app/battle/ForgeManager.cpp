@@ -21,7 +21,8 @@ bool ForgeManager::FormatMsg(const DataForge &data, dbs::TPlayerEquip &msg) {
 	msg.subtype_ = data.type;
 	msg.strength_ = data.strength;
 	msg.purify_ = data.purify;
-	msg.extend_ = "{}";
+	msg.zhulingLevel_ = data.zhulingLevel;
+	msg.extend_ = data.extend;
 	msg.extendEx_ = "{}";
 	return true;
 }
@@ -70,6 +71,7 @@ int ForgeManager::Process(uint32_t uid, logins::SStrengthenReq *req, logins::SSt
 	bool is_new = false;
 	bool cost_error = false;
 	bool is_chg = false;
+	uint32_t forge_cnt = 0;
 
 	DataForge item;
 	item.uid = uid;
@@ -109,6 +111,9 @@ int ForgeManager::Process(uint32_t uid, logins::SStrengthenReq *req, logins::SSt
 			data.rid = req->roleId_;
 			data.type = *itr;
 			data.strength = 1;
+			data.zhulingLevel = 0;
+			data.zhulingAdvance = 0;
+
 			DataForgeManager::Instance()->Add(data);
 			cache.forge_.push_back(data);
 			FormatMsg(data, msg);
@@ -121,13 +126,22 @@ int ForgeManager::Process(uint32_t uid, logins::SStrengthenReq *req, logins::SSt
 			resp->equip_.push_back(msg);
 			is_chg = true;
 		}
+		forge_cnt++;
 	}
 
 	if (is_chg) {
 		PropertyManager::Instance()->AddUser(uid);
 	}
-	//日常活动同步
-	ActivityManager::Instance()->SyncActivity(cache, FORGE_ACTIVITY_TYPE);
+
+	uint32_t levelSum = 0;
+	fItr = cache.forge_.begin();
+	for(; fItr != cache.forge_.end(); ++fItr) {
+		levelSum += fItr->strength;
+	}
+
+	MissionManager::Instance()->onMission(uid, MT_STRENGTH_EQUIP, forge_cnt);
+	MissionManager::Instance()->onMission(uid, MT_FORGE_LEVEL, levelSum);
+	ActivityManager::Instance()->SyncActivity(cache, FORGE_ACTIVITY_TYPE, forge_cnt);
 	LogicManager::Instance()->AddSync(CMD_DAILY_ACTIVITY_INFO);
 	return 0;
 }
@@ -138,6 +152,12 @@ int ForgeManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerEquipL
 	for (;itr != cache.forge_.end(); ++itr) {
 		FormatMsg(*itr, msg);
 		resp->equips_.push_back(msg);
+
+
+		//
+
+
+
 	}
 	LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp);
 	return 0;

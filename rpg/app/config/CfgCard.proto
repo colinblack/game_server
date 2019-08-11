@@ -33,3 +33,15 @@ message Suit {
 message Suits {
 	repeated Suit suits = 1;
 }
+
+message Star {
+	repeated CfgCommon.Attribute attr = 1;
+	required uint32 exp = 2;
+	required uint32 color = 3;
+	required uint32 level = 4;
+}
+
+message Stars {
+	repeated Star star = 1;
+}
+

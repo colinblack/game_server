@@ -106,6 +106,8 @@ PACKET_DECODE(Int32,combo_);
 PACKET_DECODE(Int32,comboBreak_);
 PACKET_DECODE(Int32,maxMagic_);
 PACKET_DECODE(Int32,attackSpeed_);
+PACKET_DECODE(Int32,xpMonsterDmgAdd_);
+PACKET_DECODE(Int32,xpPlayerDmgAdd_);
 return true;}
 bool SFightAttribute::encode(CBufferWriter &writer) const {
 PACKET_ENCODE(Int64,maxLife_);
@@ -171,6 +173,8 @@ PACKET_ENCODE(Int32,combo_);
 PACKET_ENCODE(Int32,comboBreak_);
 PACKET_ENCODE(Int32,maxMagic_);
 PACKET_ENCODE(Int32,attackSpeed_);
+PACKET_ENCODE(Int32,xpMonsterDmgAdd_);
+PACKET_ENCODE(Int32,xpPlayerDmgAdd_);
 return true;}
 void SFightAttribute::clear(){
 maxLife_ = 0;
@@ -236,6 +240,8 @@ combo_ = 0;
 comboBreak_ = 0;
 maxMagic_ = 0;
 attackSpeed_ = 0;
+xpMonsterDmgAdd_ = 0;
+xpPlayerDmgAdd_ = 0;
 }
 bool SFightMiniAttribute::decode(CBufferReader &reader) {
 PACKET_DECODE(Int64,attack_);
@@ -1249,12 +1255,12 @@ itemId_ = 0;
 itemNum_ = 0;
 }
 bool SFriendZanData::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);friendIds_.push_back(item);}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);Identity item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}friendIds_.push_back(item);}}
 PACKET_DECODE(Int32,expNum_);
 return true;}
 bool SFriendZanData::encode(CBufferWriter &writer) const {
 PACKET_ENCODE(UVar32,friendIds_.size());
-for(vector<int32_t>::const_iterator vit=friendIds_.begin();vit!=friendIds_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+for(vector<Identity>::const_iterator vit=friendIds_.begin();vit!=friendIds_.end();++vit){if(!vit->encode(writer)){return false;}}
 PACKET_ENCODE(Int32,expNum_);
 return true;}
 void SFriendZanData::clear(){
@@ -1275,6 +1281,43 @@ void SFriendBeZan::clear(){
 entityId_.clear();
 name_.clear();
 exp_ = 0;
+}
+bool SCrossFriend::decode(CBufferReader &reader) {
+if(!playerId_.decode(reader)){return false;}
+if(!friendId_.decode(reader)){return false;}
+PACKET_DECODE(Int32,relation_);
+PACKET_DECODE(Int32,intimacy_);
+PACKET_DECODE(Int32,lastChatTime_);
+PACKET_DECODE(Int64,offlineDt_);
+if(!miniPlayer_.decode(reader)){return false;}
+return true;}
+bool SCrossFriend::encode(CBufferWriter &writer) const {
+if(!playerId_.encode(writer)){return false;}
+if(!friendId_.encode(writer)){return false;}
+PACKET_ENCODE(Int32,relation_);
+PACKET_ENCODE(Int32,intimacy_);
+PACKET_ENCODE(Int32,lastChatTime_);
+PACKET_ENCODE(Int64,offlineDt_);
+if(!miniPlayer_.encode(writer)){return false;}
+return true;}
+void SCrossFriend::clear(){
+playerId_.clear();
+friendId_.clear();
+relation_ = 0;
+intimacy_ = 0;
+lastChatTime_ = 0;
+offlineDt_ = 0;
+miniPlayer_.clear();
+}
+bool SCrossFriendList::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SCrossFriend item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}friends_.push_back(item);}}
+return true;}
+bool SCrossFriendList::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,friends_.size());
+for(vector<SCrossFriend>::const_iterator vit=friends_.begin();vit!=friends_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SCrossFriendList::clear(){
+friends_.clear();
 }
 bool SPlayerMrRight::decode(CBufferReader &reader) {
 {uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerMrRight item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}mrRights_.push_back(item);}}
@@ -2141,666 +2184,61 @@ return true;}
 void SMissionMonsterPlan::clear(){
 monsterPlans_.clear();
 }
-bool SEntityUpdate::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-PACKET_DECODE(Int16,updateType_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int64_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int64,item);updateData_.push_back(item);}}
-PACKET_DECODE(String,updateStr_);
+bool SGetBackRewardSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,round_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);items_[k] = v;}}
+PACKET_DECODE(Int64,exp_);
 return true;}
-bool SEntityUpdate::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(Int16,updateType_);
-PACKET_ENCODE(UVar32,updateData_.size());
-for(vector<int64_t>::const_iterator vit=updateData_.begin();vit!=updateData_.end();++vit){PACKET_ENCODE(Int64,*vit);}
-PACKET_ENCODE(String,updateStr_);
+bool SGetBackRewardSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,round_);
+PACKET_ENCODE(UVar32,items_.size());
+for(map<int32_t, int32_t>::const_iterator it=items_.begin();it!=items_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(Int64,exp_);
 return true;}
-void SEntityUpdate::clear(){
-entityId_.clear();
-updateType_ = 0;
-updateData_.clear();
-updateStr_.clear();
+void SGetBackRewardSingle::clear(){
+round_ = 0;
+items_.clear();
+exp_ = 0;
 }
-bool SUpdateDiffAttr::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,roleId_);
-PACKET_DECODE(Int64,combat_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);diffAttr_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);diffCopyAttr_[k] = v;}}
+bool SGetBackRewardInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);counts_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SGetBackRewardSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}rewards_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SGetBackRewardSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}halfRewards_[k] = v;}}
 return true;}
-bool SUpdateDiffAttr::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(Int64,combat_);
-PACKET_ENCODE(UVar32,diffAttr_.size());
-for(map<int16_t, int64_t>::const_iterator it=diffAttr_.begin();it!=diffAttr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
-PACKET_ENCODE(UVar32,diffCopyAttr_.size());
-for(map<int16_t, int64_t>::const_iterator it=diffCopyAttr_.begin();it!=diffCopyAttr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+bool SGetBackRewardInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,counts_.size());
+for(map<int32_t, int32_t>::const_iterator it=counts_.begin();it!=counts_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,rewards_.size());
+for(map<int32_t, SGetBackRewardSingle>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+PACKET_ENCODE(UVar32,halfRewards_.size());
+for(map<int32_t, SGetBackRewardSingle>::const_iterator it=halfRewards_.begin();it!=halfRewards_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
 return true;}
-void SUpdateDiffAttr::clear(){
-roleId_ = 0;
-combat_ = 0;
-diffAttr_.clear();
-diffCopyAttr_.clear();
+void SGetBackRewardInfo::clear(){
+counts_.clear();
+rewards_.clear();
+halfRewards_.clear();
 }
-bool SUpdateTotalAttrDiff::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);attr_[k] = v;}}
+bool SElementSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,level_);
+PACKET_DECODE(Int32,exp_);
 return true;}
-bool SUpdateTotalAttrDiff::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,attr_.size());
-for(map<int16_t, int64_t>::const_iterator it=attr_.begin();it!=attr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+bool SElementSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,level_);
+PACKET_ENCODE(Int32,exp_);
 return true;}
-void SUpdateTotalAttrDiff::clear(){
-attr_.clear();
-}
-bool SEntityUpdateEntityShows::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);shows_[k] = v;}}
-return true;}
-bool SEntityUpdateEntityShows::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(UVar32,shows_.size());
-for(map<int16_t, int32_t>::const_iterator it=shows_.begin();it!=shows_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SEntityUpdateEntityShows::clear(){
-entityId_.clear();
-shows_.clear();
-}
-bool SEntityUpdateEntityValues::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);values_[k] = v;}}
-return true;}
-bool SEntityUpdateEntityValues::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(UVar32,values_.size());
-for(map<int16_t, int32_t>::const_iterator it=values_.begin();it!=values_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SEntityUpdateEntityValues::clear(){
-entityId_.clear();
-values_.clear();
-}
-bool SEntityUpdateExtraAttr::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,roleId_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);attrMap_[k] = v;}}
-return true;}
-bool SEntityUpdateExtraAttr::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(UVar32,attrMap_.size());
-for(map<int16_t, int64_t>::const_iterator it=attrMap_.begin();it!=attrMap_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
-return true;}
-void SEntityUpdateExtraAttr::clear(){
-roleId_ = 0;
-attrMap_.clear();
-}
-bool SEntityTotalAttr::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,code_);
-if(!entityId_.decode(reader)){return false;}
-if(!totalAttr_.decode(reader)){return false;}
-return true;}
-bool SEntityTotalAttr::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,code_);
-if(!entityId_.encode(writer)){return false;}
-if(!totalAttr_.encode(writer)){return false;}
-return true;}
-void SEntityTotalAttr::clear(){
-code_ = 0;
-entityId_.clear();
-totalAttr_.clear();
-}
-bool SBuffInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,buffId_);
-PACKET_DECODE(Int32,roleId_);
-PACKET_DECODE(Int32,overlay_);
-PACKET_DECODE(Int32,count_);
-PACKET_DECODE(Int64,value_);
-PACKET_DECODE(Int64,endDt_);
-PACKET_DECODE(Int64,extend_);
-return true;}
-bool SBuffInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,buffId_);
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(Int32,overlay_);
-PACKET_ENCODE(Int32,count_);
-PACKET_ENCODE(Int64,value_);
-PACKET_ENCODE(Int64,endDt_);
-PACKET_ENCODE(Int64,extend_);
-return true;}
-void SBuffInfo::clear(){
-buffId_ = 0;
-roleId_ = 0;
-overlay_ = 0;
-count_ = 0;
-value_ = 0;
-endDt_ = 0;
-extend_ = 0;
-}
-bool SFightData::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-PACKET_DECODE(String,name_);
-PACKET_DECODE(Int16,sex_);
-PACKET_DECODE(Int16,career_);
-PACKET_DECODE(Int16,careerLevel_);
-PACKET_DECODE(Int64,combat_);
-PACKET_DECODE(Int16,status_);
-PACKET_DECODE(Int64,statusEnd_);
-if(!spacePos_.decode(reader)){return false;}
-PACKET_DECODE(Int16,direction_);
-PACKET_DECODE(Int16,speed_);
-PACKET_DECODE(Int16,bodySize_);
-PACKET_DECODE(Int16,camp_);
-PACKET_DECODE(Int16,force_);
-PACKET_DECODE(Int16,level_);
-PACKET_DECODE(Int32,vipLevel_);
-PACKET_DECODE(Int64,curLife_);
-PACKET_DECODE(Int64,inPower_);
-PACKET_DECODE(Int32,avaLife_);
-PACKET_DECODE(Int32,curMagic_);
-PACKET_DECODE(Int16,fightMode_);
-PACKET_DECODE(Int32,touxian_);
-PACKET_DECODE(Int32,statusMask_);
-PACKET_DECODE(Bool,isRide_);
-if(!warHorse_.decode(reader)){return false;}
-PACKET_DECODE(Bool,isHide_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);entityShows_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);entityValues_[k] = v;}}
-if(!fightAttr_.decode(reader)){return false;}
-if(!totalAttr_.decode(reader)){return false;}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);copyAttr_[k] = v;}}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);skills_.push_back(item);}}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SBuffInfo item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}buffs_.push_back(item);}}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);runes_.push_back(item);}}
-teamData_ = MsgPool::Instance()->DecodeMsg(reader);
-guildData_ = MsgPool::Instance()->DecodeMsg(reader);
-return true;}
-bool SFightData::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(String,name_);
-PACKET_ENCODE(Int16,sex_);
-PACKET_ENCODE(Int16,career_);
-PACKET_ENCODE(Int16,careerLevel_);
-PACKET_ENCODE(Int64,combat_);
-PACKET_ENCODE(Int16,status_);
-PACKET_ENCODE(Int64,statusEnd_);
-if(!spacePos_.encode(writer)){return false;}
-PACKET_ENCODE(Int16,direction_);
-PACKET_ENCODE(Int16,speed_);
-PACKET_ENCODE(Int16,bodySize_);
-PACKET_ENCODE(Int16,camp_);
-PACKET_ENCODE(Int16,force_);
-PACKET_ENCODE(Int16,level_);
-PACKET_ENCODE(Int32,vipLevel_);
-PACKET_ENCODE(Int64,curLife_);
-PACKET_ENCODE(Int64,inPower_);
-PACKET_ENCODE(Int32,avaLife_);
-PACKET_ENCODE(Int32,curMagic_);
-PACKET_ENCODE(Int16,fightMode_);
-PACKET_ENCODE(Int32,touxian_);
-PACKET_ENCODE(Int32,statusMask_);
-PACKET_ENCODE(Bool,isRide_);
-if(!warHorse_.encode(writer)){return false;}
-PACKET_ENCODE(Bool,isHide_);
-PACKET_ENCODE(UVar32,entityShows_.size());
-for(map<int16_t, int32_t>::const_iterator it=entityShows_.begin();it!=entityShows_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,entityValues_.size());
-for(map<int16_t, int32_t>::const_iterator it=entityValues_.begin();it!=entityValues_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
-if(!fightAttr_.encode(writer)){return false;}
-if(!totalAttr_.encode(writer)){return false;}
-PACKET_ENCODE(UVar32,copyAttr_.size());
-for(map<int16_t, int64_t>::const_iterator it=copyAttr_.begin();it!=copyAttr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
-PACKET_ENCODE(UVar32,skills_.size());
-for(vector<int32_t>::const_iterator vit=skills_.begin();vit!=skills_.end();++vit){PACKET_ENCODE(Int32,*vit);}
-PACKET_ENCODE(UVar32,buffs_.size());
-for(vector<SBuffInfo>::const_iterator vit=buffs_.begin();vit!=buffs_.end();++vit){if(!vit->encode(writer)){return false;}}
-PACKET_ENCODE(UVar32,runes_.size());
-for(vector<int32_t>::const_iterator vit=runes_.begin();vit!=runes_.end();++vit){PACKET_ENCODE(Int32,*vit);}
-if(!MsgPool::Instance()->EncodeMsg(writer, teamData_)){return false;}
-if(!MsgPool::Instance()->EncodeMsg(writer, guildData_)){return false;}
-return true;}
-void SFightData::clear(){
-entityId_.clear();
-name_.clear();
-sex_ = 0;
-career_ = 0;
-careerLevel_ = 0;
-combat_ = 0;
-status_ = 0;
-statusEnd_ = 0;
-spacePos_.clear();
-direction_ = 0;
-speed_ = 0;
-bodySize_ = 0;
-camp_ = 0;
-force_ = 0;
+void SElementSingle::clear(){
 level_ = 0;
-vipLevel_ = 0;
-curLife_ = 0;
-inPower_ = 0;
-avaLife_ = 0;
-curMagic_ = 0;
-fightMode_ = 0;
-touxian_ = 0;
-statusMask_ = 0;
-isRide_ = 0;
-warHorse_.clear();
-isHide_ = 0;
-entityShows_.clear();
-entityValues_.clear();
-fightAttr_.clear();
-totalAttr_.clear();
-copyAttr_.clear();
-skills_.clear();
-buffs_.clear();
-runes_.clear();
-teamData_ = NULL;
-guildData_ = NULL;
+exp_ = 0;
 }
-bool SFightPlayer::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-PACKET_DECODE(Int16,cellLine_);
-PACKET_DECODE(Int32,spaceId_);
-if(!spacePos_.decode(reader)){return false;}
-PACKET_DECODE(Int32,copyCode_);
-PACKET_DECODE(String,name_);
-PACKET_DECODE(Int16,career_);
-PACKET_DECODE(Int16,careerLevel_);
-PACKET_DECODE(Int16,camp_);
-PACKET_DECODE(Int16,level_);
-PACKET_DECODE(Int32,vipLevel_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);ornaments_[k] = v;}}
-PACKET_DECODE(Int64,combat_);
-PACKET_DECODE(Int16,fightMode_);
-PACKET_DECODE(Int32,hangLevel_);
-PACKET_DECODE(Int16,nuqi_);
-PACKET_DECODE(Int16,nuqiRecover_);
-PACKET_DECODE(Int32,zhanling_);
-PACKET_DECODE(Int32,godRingAttackLevel_);
-PACKET_DECODE(Int32,godRingDefenseLevel_);
-teamData_ = MsgPool::Instance()->DecodeMsg(reader);
-guildData_ = MsgPool::Instance()->DecodeMsg(reader);
-mateData_ = MsgPool::Instance()->DecodeMsg(reader);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SFightData item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}fightDatas_.push_back(item);}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dragonSoulAttr_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);addCopyDropRate_[k] = v;}}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);flyUpSkills_.push_back(item);}}
-PACKET_DECODE(Int32,zhanqiAtkPer_);
-PACKET_DECODE(Int32,zhanqiHurtPer_);
-PACKET_DECODE(Int32,officialId_);
-PACKET_DECODE(Int32,crossOfficialId_);
-PACKET_DECODE(String,jiebaiId_);
-PACKET_DECODE(Bool,isBeCaller_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);roleZhanWei_[k] = v;}}
-PACKET_DECODE(Int16,oldServerId_);
+bool SElementInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SElementSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}elementMap_[k] = v;}}
 return true;}
-bool SFightPlayer::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(Int16,cellLine_);
-PACKET_ENCODE(Int32,spaceId_);
-if(!spacePos_.encode(writer)){return false;}
-PACKET_ENCODE(Int32,copyCode_);
-PACKET_ENCODE(String,name_);
-PACKET_ENCODE(Int16,career_);
-PACKET_ENCODE(Int16,careerLevel_);
-PACKET_ENCODE(Int16,camp_);
-PACKET_ENCODE(Int16,level_);
-PACKET_ENCODE(Int32,vipLevel_);
-PACKET_ENCODE(UVar32,ornaments_.size());
-for(map<int16_t, int32_t>::const_iterator it=ornaments_.begin();it!=ornaments_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(Int64,combat_);
-PACKET_ENCODE(Int16,fightMode_);
-PACKET_ENCODE(Int32,hangLevel_);
-PACKET_ENCODE(Int16,nuqi_);
-PACKET_ENCODE(Int16,nuqiRecover_);
-PACKET_ENCODE(Int32,zhanling_);
-PACKET_ENCODE(Int32,godRingAttackLevel_);
-PACKET_ENCODE(Int32,godRingDefenseLevel_);
-if(!MsgPool::Instance()->EncodeMsg(writer, teamData_)){return false;}
-if(!MsgPool::Instance()->EncodeMsg(writer, guildData_)){return false;}
-if(!MsgPool::Instance()->EncodeMsg(writer, mateData_)){return false;}
-PACKET_ENCODE(UVar32,fightDatas_.size());
-for(vector<SFightData>::const_iterator vit=fightDatas_.begin();vit!=fightDatas_.end();++vit){if(!vit->encode(writer)){return false;}}
-PACKET_ENCODE(UVar32,dragonSoulAttr_.size());
-for(map<int32_t, int32_t>::const_iterator it=dragonSoulAttr_.begin();it!=dragonSoulAttr_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,addCopyDropRate_.size());
-for(map<int32_t, int32_t>::const_iterator it=addCopyDropRate_.begin();it!=addCopyDropRate_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,flyUpSkills_.size());
-for(vector<int32_t>::const_iterator vit=flyUpSkills_.begin();vit!=flyUpSkills_.end();++vit){PACKET_ENCODE(Int32,*vit);}
-PACKET_ENCODE(Int32,zhanqiAtkPer_);
-PACKET_ENCODE(Int32,zhanqiHurtPer_);
-PACKET_ENCODE(Int32,officialId_);
-PACKET_ENCODE(Int32,crossOfficialId_);
-PACKET_ENCODE(String,jiebaiId_);
-PACKET_ENCODE(Bool,isBeCaller_);
-PACKET_ENCODE(UVar32,roleZhanWei_.size());
-for(map<int32_t, int32_t>::const_iterator it=roleZhanWei_.begin();it!=roleZhanWei_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(Int16,oldServerId_);
+bool SElementInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,elementMap_.size());
+for(map<int32_t, SElementSingle>::const_iterator it=elementMap_.begin();it!=elementMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
 return true;}
-void SFightPlayer::clear(){
-entityId_.clear();
-cellLine_ = 0;
-spaceId_ = 0;
-spacePos_.clear();
-copyCode_ = 0;
-name_.clear();
-career_ = 0;
-careerLevel_ = 0;
-camp_ = 0;
-level_ = 0;
-vipLevel_ = 0;
-ornaments_.clear();
-combat_ = 0;
-fightMode_ = 0;
-hangLevel_ = 0;
-nuqi_ = 0;
-nuqiRecover_ = 0;
-zhanling_ = 0;
-godRingAttackLevel_ = 0;
-godRingDefenseLevel_ = 0;
-teamData_ = NULL;
-guildData_ = NULL;
-mateData_ = NULL;
-fightDatas_.clear();
-dragonSoulAttr_.clear();
-addCopyDropRate_.clear();
-flyUpSkills_.clear();
-zhanqiAtkPer_ = 0;
-zhanqiHurtPer_ = 0;
-officialId_ = 0;
-crossOfficialId_ = 0;
-jiebaiId_.clear();
-isBeCaller_ = 0;
-roleZhanWei_.clear();
-oldServerId_ = 0;
-}
-bool SDisplayData::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-PACKET_DECODE(String,name_);
-PACKET_DECODE(Int16,status_);
-PACKET_DECODE(Int64,statusEnd_);
-PACKET_DECODE(Int32,spaceId_);
-if(!spacePos_.decode(reader)){return false;}
-PACKET_DECODE(Int32,copyCode_);
-PACKET_DECODE(Int16,direction_);
-PACKET_DECODE(Int16,speed_);
-return true;}
-bool SDisplayData::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(String,name_);
-PACKET_ENCODE(Int16,status_);
-PACKET_ENCODE(Int64,statusEnd_);
-PACKET_ENCODE(Int32,spaceId_);
-if(!spacePos_.encode(writer)){return false;}
-PACKET_ENCODE(Int32,copyCode_);
-PACKET_ENCODE(Int16,direction_);
-PACKET_ENCODE(Int16,speed_);
-return true;}
-void SDisplayData::clear(){
-entityId_.clear();
-name_.clear();
-status_ = 0;
-statusEnd_ = 0;
-spaceId_ = 0;
-spacePos_.clear();
-copyCode_ = 0;
-direction_ = 0;
-speed_ = 0;
-}
-bool SPlayerSkillInfo::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerSkill item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}skills_.push_back(item);}}
-return true;}
-bool SPlayerSkillInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,skills_.size());
-for(vector<dbs::TPlayerSkill>::const_iterator vit=skills_.begin();vit!=skills_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SPlayerSkillInfo::clear(){
-skills_.clear();
-}
-bool SUpdateSkill::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerSkill item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}skills_.push_back(item);}}
-PACKET_DECODE(Byte,oper_);
-return true;}
-bool SUpdateSkill::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,skills_.size());
-for(vector<dbs::TPlayerSkill>::const_iterator vit=skills_.begin();vit!=skills_.end();++vit){if(!vit->encode(writer)){return false;}}
-PACKET_ENCODE(Byte,oper_);
-return true;}
-void SUpdateSkill::clear(){
-skills_.clear();
-oper_ = 0;
-}
-bool SFightUpdate::decode(CBufferReader &reader) {
-PACKET_DECODE(Int16,updateType_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int64_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int64,item);updateData_.push_back(item);}}
-return true;}
-bool SFightUpdate::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int16,updateType_);
-PACKET_ENCODE(UVar32,updateData_.size());
-for(vector<int64_t>::const_iterator vit=updateData_.begin();vit!=updateData_.end();++vit){PACKET_ENCODE(Int64,*vit);}
-return true;}
-void SFightUpdate::clear(){
-updateType_ = 0;
-updateData_.clear();
-}
-bool SBeginFight::decode(CBufferReader &reader) {
-PACKET_DECODE(Int16,attackId_);
-PACKET_DECODE(Int32,skillId_);
-if(!fromEntity_.decode(reader)){return false;}
-if(!centerPoint_.decode(reader)){return false;}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);Identity item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}toEntitys_.push_back(item);}}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SFightUpdate item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}propertyUpdates_.push_back(item);}}
-return true;}
-bool SBeginFight::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int16,attackId_);
-PACKET_ENCODE(Int32,skillId_);
-if(!fromEntity_.encode(writer)){return false;}
-if(!centerPoint_.encode(writer)){return false;}
-PACKET_ENCODE(UVar32,toEntitys_.size());
-for(vector<Identity>::const_iterator vit=toEntitys_.begin();vit!=toEntitys_.end();++vit){if(!vit->encode(writer)){return false;}}
-PACKET_ENCODE(UVar32,propertyUpdates_.size());
-for(vector<SFightUpdate>::const_iterator vit=propertyUpdates_.begin();vit!=propertyUpdates_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SBeginFight::clear(){
-attackId_ = 0;
-skillId_ = 0;
-fromEntity_.clear();
-centerPoint_.clear();
-toEntitys_.clear();
-propertyUpdates_.clear();
-}
-bool SSkillCast::decode(CBufferReader &reader) {
-if(!beginFight_.decode(reader)){return false;}
-PACKET_DECODE(Int64,endTime_);
-return true;}
-bool SSkillCast::encode(CBufferWriter &writer) const {
-if(!beginFight_.encode(writer)){return false;}
-PACKET_ENCODE(Int64,endTime_);
-return true;}
-void SSkillCast::clear(){
-beginFight_.clear();
-endTime_ = 0;
-}
-bool SSkillStopLead::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,skillId_);
-PACKET_DECODE(Int32,series_);
-PACKET_DECODE(Int64,cdTime_);
-return true;}
-bool SSkillStopLead::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,skillId_);
-PACKET_ENCODE(Int32,series_);
-PACKET_ENCODE(Int64,cdTime_);
-return true;}
-void SSkillStopLead::clear(){
-skillId_ = 0;
-series_ = 0;
-cdTime_ = 0;
-}
-bool SBeatMove::decode(CBufferReader &reader) {
-if(!fromPoint_.decode(reader)){return false;}
-if(!toPoint_.decode(reader)){return false;}
-return true;}
-bool SBeatMove::encode(CBufferWriter &writer) const {
-if(!fromPoint_.encode(writer)){return false;}
-if(!toPoint_.encode(writer)){return false;}
-return true;}
-void SBeatMove::clear(){
-fromPoint_.clear();
-toPoint_.clear();
-}
-bool SFightInfo::decode(CBufferReader &reader) {
-if(!fromEntityId_.decode(reader)){return false;}
-PACKET_DECODE(Int32,skillId_);
-PACKET_DECODE(Bool,isFirst_);
-PACKET_DECODE(Int32,attackId_);
-extra_ = MsgPool::Instance()->DecodeMsg(reader);
-extraAttrs_ = MsgPool::Instance()->DecodeMsg(reader);
-return true;}
-bool SFightInfo::encode(CBufferWriter &writer) const {
-if(!fromEntityId_.encode(writer)){return false;}
-PACKET_ENCODE(Int32,skillId_);
-PACKET_ENCODE(Bool,isFirst_);
-PACKET_ENCODE(Int32,attackId_);
-if(!MsgPool::Instance()->EncodeMsg(writer, extra_)){return false;}
-if(!MsgPool::Instance()->EncodeMsg(writer, extraAttrs_)){return false;}
-return true;}
-void SFightInfo::clear(){
-fromEntityId_.clear();
-skillId_ = 0;
-isFirst_ = 0;
-attackId_ = 0;
-extra_ = NULL;
-extraAttrs_ = NULL;
-}
-bool SDoFight::decode(CBufferReader &reader) {
-PACKET_DECODE(Int16,attackId_);
-PACKET_DECODE(Int32,skillId_);
-if(!fromEntity_.decode(reader)){return false;}
-if(!entity_.decode(reader)){return false;}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SFightUpdate item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}propertyUpdates_.push_back(item);}}
-return true;}
-bool SDoFight::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int16,attackId_);
-PACKET_ENCODE(Int32,skillId_);
-if(!fromEntity_.encode(writer)){return false;}
-if(!entity_.encode(writer)){return false;}
-PACKET_ENCODE(UVar32,propertyUpdates_.size());
-for(vector<SFightUpdate>::const_iterator vit=propertyUpdates_.begin();vit!=propertyUpdates_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SDoFight::clear(){
-attackId_ = 0;
-skillId_ = 0;
-fromEntity_.clear();
-entity_.clear();
-propertyUpdates_.clear();
-}
-bool SDoFights::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SDoFight item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}doFights_.push_back(item);}}
-return true;}
-bool SDoFights::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,doFights_.size());
-for(vector<SDoFight>::const_iterator vit=doFights_.begin();vit!=doFights_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SDoFights::clear(){
-doFights_.clear();
-}
-bool SPlayerBuffInfo::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SBuffInfo item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}buffs_.push_back(item);}}
-return true;}
-bool SPlayerBuffInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,buffs_.size());
-for(vector<msgs::SBuffInfo>::const_iterator vit=buffs_.begin();vit!=buffs_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SPlayerBuffInfo::clear(){
-buffs_.clear();
-}
-bool SUpdateBuff::decode(CBufferReader &reader) {
-PACKET_DECODE(Byte,op_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SBuffInfo item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}buffs_.push_back(item);}}
-return true;}
-bool SUpdateBuff::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Byte,op_);
-PACKET_ENCODE(UVar32,buffs_.size());
-for(vector<msgs::SBuffInfo>::const_iterator vit=buffs_.begin();vit!=buffs_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SUpdateBuff::clear(){
-op_ = 0;
-buffs_.clear();
-}
-bool SBroadBuffInfo::decode(CBufferReader &reader) {
-if(!buffs_.decode(reader)){return false;}
-if(!toEntityId_.decode(reader)){return false;}
-if(!fromEntityId_.decode(reader)){return false;}
-return true;}
-bool SBroadBuffInfo::encode(CBufferWriter &writer) const {
-if(!buffs_.encode(writer)){return false;}
-if(!toEntityId_.encode(writer)){return false;}
-if(!fromEntityId_.encode(writer)){return false;}
-return true;}
-void SBroadBuffInfo::clear(){
-buffs_.clear();
-toEntityId_.clear();
-fromEntityId_.clear();
-}
-bool SUpdateSkillCd::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,roleId_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);updateCds_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);updateCdPers_[k] = v;}}
-return true;}
-bool SUpdateSkillCd::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(UVar32,updateCds_.size());
-for(map<int32_t, int32_t>::const_iterator it=updateCds_.begin();it!=updateCds_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,updateCdPers_.size());
-for(map<int32_t, int32_t>::const_iterator it=updateCdPers_.begin();it!=updateCdPers_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SUpdateSkillCd::clear(){
-roleId_ = 0;
-updateCds_.clear();
-updateCdPers_.clear();
-}
-bool SRoleUpdateRune::decode(CBufferReader &reader) {
-PACKET_DECODE(Byte,op_);
-PACKET_DECODE(Int32,roleId_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);runes_.push_back(item);}}
-return true;}
-bool SRoleUpdateRune::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Byte,op_);
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(UVar32,runes_.size());
-for(vector<int32_t>::const_iterator vit=runes_.begin();vit!=runes_.end();++vit){PACKET_ENCODE(Int32,*vit);}
-return true;}
-void SRoleUpdateRune::clear(){
-op_ = 0;
-roleId_ = 0;
-runes_.clear();
-}
-bool SEntityPoint::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-if(!point_.decode(reader)){return false;}
-return true;}
-bool SEntityPoint::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-if(!point_.encode(writer)){return false;}
-return true;}
-void SEntityPoint::clear(){
-entityId_.clear();
-point_.clear();
-}
-bool SCleanSkill::decode(CBufferReader &reader) {
-PACKET_DECODE(Int16,skillUid_);
-return true;}
-bool SCleanSkill::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int16,skillUid_);
-return true;}
-void SCleanSkill::clear(){
-skillUid_ = 0;
-}
-bool SPlayerGodMagicSkill::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,roleId_);
-PACKET_DECODE(Int32,selectType_);
-return true;}
-bool SPlayerGodMagicSkill::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,roleId_);
-PACKET_ENCODE(Int32,selectType_);
-return true;}
-void SPlayerGodMagicSkill::clear(){
-roleId_ = 0;
-selectType_ = 0;
+void SElementInfo::clear(){
+elementMap_.clear();
 }
 bool SChildInfo::decode(CBufferReader &reader) {
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;bool v;PACKET_DECODE(Int32,k);PACKET_DECODE(Bool,v);unlockMap_[k] = v;}}
@@ -6452,6 +5890,70 @@ return true;}
 void SWorshipRank::clear(){
 list_.clear();
 }
+bool SCompleteDujieHeart::decode(CBufferReader &reader) {
+if(!SCompleteCopy::decode(reader)){return false;}
+PACKET_DECODE(Int32,completeTime_);
+PACKET_DECODE(Int32,layer_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewards_[k] = v;}}
+return true;}
+bool SCompleteDujieHeart::encode(CBufferWriter &writer) const {
+if(!SCompleteCopy::encode(writer)){return false;}
+PACKET_ENCODE(Int32,completeTime_);
+PACKET_ENCODE(Int32,layer_);
+PACKET_ENCODE(UVar32,rewards_.size());
+for(map<int32_t, int32_t>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SCompleteDujieHeart::clear(){
+completeTime_ = 0;
+layer_ = 0;
+rewards_.clear();
+}
+bool SDujieHeartInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,copyCode_);
+PACKET_DECODE(Int32,layer_);
+return true;}
+bool SDujieHeartInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,copyCode_);
+PACKET_ENCODE(Int32,layer_);
+return true;}
+void SDujieHeartInfo::clear(){
+copyCode_ = 0;
+layer_ = 0;
+}
+bool SRoleDujieHeart::decode(CBufferReader &reader) {
+PACKET_DECODE(Int64,combat_);
+PACKET_DECODE(String,entityAttrs_);
+if(!skills_.decode(reader)){return false;}
+PACKET_DECODE(Int32,zhanLing_);
+PACKET_DECODE(Int32,wsAttackLevel_);
+PACKET_DECODE(Int32,wsDefenseLevel_);
+return true;}
+bool SRoleDujieHeart::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int64,combat_);
+PACKET_ENCODE(String,entityAttrs_);
+if(!skills_.encode(writer)){return false;}
+PACKET_ENCODE(Int32,zhanLing_);
+PACKET_ENCODE(Int32,wsAttackLevel_);
+PACKET_ENCODE(Int32,wsDefenseLevel_);
+return true;}
+void SRoleDujieHeart::clear(){
+combat_ = 0;
+entityAttrs_.clear();
+skills_.clear();
+zhanLing_ = 0;
+wsAttackLevel_ = 0;
+wsDefenseLevel_ = 0;
+}
+bool SPlayerDujieHeart::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SRoleDujieHeart v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}roleMap_[k] = v;}}
+return true;}
+bool SPlayerDujieHeart::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,roleMap_.size());
+for(map<int32_t, SRoleDujieHeart>::const_iterator it=roleMap_.begin();it!=roleMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SPlayerDujieHeart::clear(){
+roleMap_.clear();
+}
 bool SFirstArenaMatchPlayer::decode(CBufferReader &reader) {
 if(!playerId_.decode(reader)){return false;}
 PACKET_DECODE(String,name_);
@@ -6899,6 +6401,18 @@ for(vector<SYaoChongPlayer>::const_iterator vit=list_.begin();vit!=list_.end();+
 return true;}
 void SYaoChongPlayerList::clear(){
 list_.clear();
+}
+bool SYaoChongHistoryInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,yaochongNum_);
+PACKET_DECODE(Int32,yaochongGrabNum_);
+return true;}
+bool SYaoChongHistoryInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,yaochongNum_);
+PACKET_ENCODE(Int32,yaochongGrabNum_);
+return true;}
+void SYaoChongHistoryInfo::clear(){
+yaochongNum_ = 0;
+yaochongGrabNum_ = 0;
 }
 bool SServerInfo::decode(CBufferReader &reader) {
 PACKET_DECODE(Int64,nowDt_);
@@ -9055,6 +8569,7 @@ PACKET_DECODE(Int32,activeId_);
 PACKET_DECODE(Int32,totalRecharge_);
 PACKET_DECODE(Int32,count_);
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;bool v;PACKET_DECODE(Int32,k);PACKET_DECODE(Bool,v);recordMap_[k] = v;}}
+PACKET_DECODE(Int32,useFreeCount_);
 return true;}
 bool SActiveRechargeTurntable::encode(CBufferWriter &writer) const {
 PACKET_ENCODE(Int32,activeId_);
@@ -9062,12 +8577,14 @@ PACKET_ENCODE(Int32,totalRecharge_);
 PACKET_ENCODE(Int32,count_);
 PACKET_ENCODE(UVar32,recordMap_.size());
 for(map<int32_t, bool>::const_iterator it=recordMap_.begin();it!=recordMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Bool,it->second);}
+PACKET_ENCODE(Int32,useFreeCount_);
 return true;}
 void SActiveRechargeTurntable::clear(){
 activeId_ = 0;
 totalRecharge_ = 0;
 count_ = 0;
 recordMap_.clear();
+useFreeCount_ = 0;
 }
 bool SActiveConsumeTurntable::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,activeId_);
@@ -9524,6 +9041,7 @@ PACKET_DECODE(Int32,activeId_);
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dayRewardMap_[k] = v;}}
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);discountMoney_[k] = v;}}
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dayRewardTotal_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);buyGroup_[k] = v;}}
 return true;}
 bool SDirectBuyGift::encode(CBufferWriter &writer) const {
 PACKET_ENCODE(Int32,activeId_);
@@ -9537,6 +9055,8 @@ PACKET_ENCODE(UVar32,discountMoney_.size());
 for(map<int32_t, int32_t>::const_iterator it=discountMoney_.begin();it!=discountMoney_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
 PACKET_ENCODE(UVar32,dayRewardTotal_.size());
 for(map<int32_t, int32_t>::const_iterator it=dayRewardTotal_.begin();it!=dayRewardTotal_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,buyGroup_.size());
+for(map<int32_t, int32_t>::const_iterator it=buyGroup_.begin();it!=buyGroup_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
 return true;}
 void SDirectBuyGift::clear(){
 activeId_ = 0;
@@ -9545,6 +9065,7 @@ gotRewardMap_.clear();
 dayRewardMap_.clear();
 discountMoney_.clear();
 dayRewardTotal_.clear();
+buyGroup_.clear();
 }
 bool SGroupBuyGift::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,activeId_);
@@ -9871,20 +9392,61 @@ void SActiveTripleTreasure::clear(){
 activeId_ = 0;
 activeMap_.clear();
 }
+bool SActiveHappyWeekend::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,activeId_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);joinMap_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewardMap_[k] = v;}}
+return true;}
+bool SActiveHappyWeekend::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,activeId_);
+PACKET_ENCODE(UVar32,joinMap_.size());
+for(map<int32_t, int32_t>::const_iterator it=joinMap_.begin();it!=joinMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,rewardMap_.size());
+for(map<int32_t, int32_t>::const_iterator it=rewardMap_.begin();it!=rewardMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SActiveHappyWeekend::clear(){
+activeId_ = 0;
+joinMap_.clear();
+rewardMap_.clear();
+}
 bool SPlayerDujieInfo::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,level_);
 PACKET_DECODE(Int32,rewardCount_);
-PACKET_DECODE(Int32,timeCount_);
+PACKET_DECODE(Int64,updateTime_);
 return true;}
 bool SPlayerDujieInfo::encode(CBufferWriter &writer) const {
 PACKET_ENCODE(Int32,level_);
 PACKET_ENCODE(Int32,rewardCount_);
-PACKET_ENCODE(Int32,timeCount_);
+PACKET_ENCODE(Int64,updateTime_);
 return true;}
 void SPlayerDujieInfo::clear(){
 level_ = 0;
 rewardCount_ = 0;
-timeCount_ = 0;
+updateTime_ = 0;
+}
+bool SPlayerDujieTalent::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,selectType_);
+return true;}
+bool SPlayerDujieTalent::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,selectType_);
+return true;}
+void SPlayerDujieTalent::clear(){
+selectType_ = 0;
+}
+bool SPlayerDujieBaGua::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,isActive_);
+PACKET_DECODE(Int32,advance_);
+PACKET_DECODE(Int32,bless_);
+return true;}
+bool SPlayerDujieBaGua::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,isActive_);
+PACKET_ENCODE(Int32,advance_);
+PACKET_ENCODE(Int32,bless_);
+return true;}
+void SPlayerDujieBaGua::clear(){
+isActive_ = 0;
+advance_ = 0;
+bless_ = 0;
 }
 bool SPlayerBag::decode(CBufferReader &reader) {
 PACKET_DECODE(Int16,type_);
@@ -10855,84 +10417,6 @@ return true;}
 void STotemInfo::clear(){
 totemMap_.clear();
 }
-bool SPlayerHolyBeast::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerHolyBeast item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}list_.push_back(item);}}
-return true;}
-bool SPlayerHolyBeast::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,list_.size());
-for(vector<dbs::TPlayerHolyBeast>::const_iterator vit=list_.begin();vit!=list_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SPlayerHolyBeast::clear(){
-list_.clear();
-}
-bool SPlayerHolyBeastGoOut::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);goOuts_[k] = v;}}
-PACKET_DECODE(Bool,isGoOut_);
-return true;}
-bool SPlayerHolyBeastGoOut::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,goOuts_.size());
-for(map<int32_t, int32_t>::const_iterator it=goOuts_.begin();it!=goOuts_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(Bool,isGoOut_);
-return true;}
-void SPlayerHolyBeastGoOut::clear(){
-goOuts_.clear();
-isGoOut_ = 0;
-}
-bool SApplyHolyBeastBreed::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,applyPlayerId_);
-PACKET_DECODE(String,applyName_);
-PACKET_DECODE(Int32,applyModelId_);
-PACKET_DECODE(Int32,applyTalent_);
-PACKET_DECODE(Int32,applyLevel_);
-PACKET_DECODE(Int32,applyRaitry_);
-return true;}
-bool SApplyHolyBeastBreed::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,applyPlayerId_);
-PACKET_ENCODE(String,applyName_);
-PACKET_ENCODE(Int32,applyModelId_);
-PACKET_ENCODE(Int32,applyTalent_);
-PACKET_ENCODE(Int32,applyLevel_);
-PACKET_ENCODE(Int32,applyRaitry_);
-return true;}
-void SApplyHolyBeastBreed::clear(){
-applyPlayerId_ = 0;
-applyName_.clear();
-applyModelId_ = 0;
-applyTalent_ = 0;
-applyLevel_ = 0;
-applyRaitry_ = 0;
-}
-bool SConfirmHolyBeastBreed::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,otherPlayerId_);
-PACKET_DECODE(Int32,otherModelId_);
-PACKET_DECODE(String,otherName_);
-PACKET_DECODE(Int32,otherTalent_);
-PACKET_DECODE(Int32,beastId_);
-return true;}
-bool SConfirmHolyBeastBreed::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,otherPlayerId_);
-PACKET_ENCODE(Int32,otherModelId_);
-PACKET_ENCODE(String,otherName_);
-PACKET_ENCODE(Int32,otherTalent_);
-PACKET_ENCODE(Int32,beastId_);
-return true;}
-void SConfirmHolyBeastBreed::clear(){
-otherPlayerId_ = 0;
-otherModelId_ = 0;
-otherName_.clear();
-otherTalent_ = 0;
-beastId_ = 0;
-}
-bool SBreedHolyBeastPlayers::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SMiniPlayer item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}list_.push_back(item);}}
-return true;}
-bool SBreedHolyBeastPlayers::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,list_.size());
-for(vector<msgs::SMiniPlayer>::const_iterator vit=list_.begin();vit!=list_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SBreedHolyBeastPlayers::clear(){
-list_.clear();
-}
 bool SRedPacketInfo::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,grabNum_);
 PACKET_DECODE(Int32,grabNumPrivate_);
@@ -11172,6 +10656,454 @@ for(map<int32_t, int32_t>::const_iterator it=copyInfo_.begin();it!=copyInfo_.end
 return true;}
 void SAchievementCopy::clear(){
 copyInfo_.clear();
+}
+bool SMarket::decode(CBufferReader &reader) {
+if(!dbs::TDbMarket::decode(reader)){return false;}
+if(!entityId_.decode(reader)){return false;}
+return true;}
+bool SMarket::encode(CBufferWriter &writer) const {
+if(!dbs::TDbMarket::encode(writer)){return false;}
+if(!entityId_.encode(writer)){return false;}
+return true;}
+void SMarket::clear(){
+entityId_.clear();
+}
+bool SMarketInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,page_);
+PACKET_DECODE(Int32,totalPage_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SMarket item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}seq_.push_back(item);}}
+return true;}
+bool SMarketInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,page_);
+PACKET_ENCODE(Int32,totalPage_);
+PACKET_ENCODE(UVar32,seq_.size());
+for(vector<SMarket>::const_iterator vit=seq_.begin();vit!=seq_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SMarketInfo::clear(){
+page_ = 0;
+totalPage_ = 0;
+seq_.clear();
+}
+bool SMarketHis::decode(CBufferReader &reader) {
+if(!dbs::TMarketHis::decode(reader)){return false;}
+if(!entityId_.decode(reader)){return false;}
+return true;}
+bool SMarketHis::encode(CBufferWriter &writer) const {
+if(!dbs::TMarketHis::encode(writer)){return false;}
+if(!entityId_.encode(writer)){return false;}
+return true;}
+void SMarketHis::clear(){
+entityId_.clear();
+}
+bool SMarketHisInfo::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SMarketHis item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}seq_.push_back(item);}}
+return true;}
+bool SMarketHisInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,seq_.size());
+for(vector<SMarketHis>::const_iterator vit=seq_.begin();vit!=seq_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SMarketHisInfo::clear(){
+seq_.clear();
+}
+bool SEntityUpdate::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+PACKET_DECODE(Int16,updateType_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int64_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int64,item);updateData_.push_back(item);}}
+PACKET_DECODE(String,updateStr_);
+return true;}
+bool SEntityUpdate::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(Int16,updateType_);
+PACKET_ENCODE(UVar32,updateData_.size());
+for(vector<int64_t>::const_iterator vit=updateData_.begin();vit!=updateData_.end();++vit){PACKET_ENCODE(Int64,*vit);}
+PACKET_ENCODE(String,updateStr_);
+return true;}
+void SEntityUpdate::clear(){
+entityId_.clear();
+updateType_ = 0;
+updateData_.clear();
+updateStr_.clear();
+}
+bool SUpdateDiffAttr::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int64,combat_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);diffAttr_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);diffCopyAttr_[k] = v;}}
+return true;}
+bool SUpdateDiffAttr::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int64,combat_);
+PACKET_ENCODE(UVar32,diffAttr_.size());
+for(map<int16_t, int64_t>::const_iterator it=diffAttr_.begin();it!=diffAttr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+PACKET_ENCODE(UVar32,diffCopyAttr_.size());
+for(map<int16_t, int64_t>::const_iterator it=diffCopyAttr_.begin();it!=diffCopyAttr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+return true;}
+void SUpdateDiffAttr::clear(){
+roleId_ = 0;
+combat_ = 0;
+diffAttr_.clear();
+diffCopyAttr_.clear();
+}
+bool SUpdateTotalAttrDiff::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);attr_[k] = v;}}
+return true;}
+bool SUpdateTotalAttrDiff::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,attr_.size());
+for(map<int16_t, int64_t>::const_iterator it=attr_.begin();it!=attr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+return true;}
+void SUpdateTotalAttrDiff::clear(){
+attr_.clear();
+}
+bool SEntityUpdateEntityShows::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);shows_[k] = v;}}
+return true;}
+bool SEntityUpdateEntityShows::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(UVar32,shows_.size());
+for(map<int16_t, int32_t>::const_iterator it=shows_.begin();it!=shows_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SEntityUpdateEntityShows::clear(){
+entityId_.clear();
+shows_.clear();
+}
+bool SEntityUpdateEntityValues::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);values_[k] = v;}}
+return true;}
+bool SEntityUpdateEntityValues::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(UVar32,values_.size());
+for(map<int16_t, int32_t>::const_iterator it=values_.begin();it!=values_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SEntityUpdateEntityValues::clear(){
+entityId_.clear();
+values_.clear();
+}
+bool SEntityUpdateExtraAttr::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);attrMap_[k] = v;}}
+return true;}
+bool SEntityUpdateExtraAttr::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(UVar32,attrMap_.size());
+for(map<int16_t, int64_t>::const_iterator it=attrMap_.begin();it!=attrMap_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+return true;}
+void SEntityUpdateExtraAttr::clear(){
+roleId_ = 0;
+attrMap_.clear();
+}
+bool SEntityTotalAttr::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,code_);
+if(!entityId_.decode(reader)){return false;}
+if(!totalAttr_.decode(reader)){return false;}
+return true;}
+bool SEntityTotalAttr::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,code_);
+if(!entityId_.encode(writer)){return false;}
+if(!totalAttr_.encode(writer)){return false;}
+return true;}
+void SEntityTotalAttr::clear(){
+code_ = 0;
+entityId_.clear();
+totalAttr_.clear();
+}
+bool SBuffInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,buffId_);
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,overlay_);
+PACKET_DECODE(Int32,count_);
+PACKET_DECODE(Int64,value_);
+PACKET_DECODE(Int64,endDt_);
+PACKET_DECODE(Int64,extend_);
+return true;}
+bool SBuffInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,buffId_);
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,overlay_);
+PACKET_ENCODE(Int32,count_);
+PACKET_ENCODE(Int64,value_);
+PACKET_ENCODE(Int64,endDt_);
+PACKET_ENCODE(Int64,extend_);
+return true;}
+void SBuffInfo::clear(){
+buffId_ = 0;
+roleId_ = 0;
+overlay_ = 0;
+count_ = 0;
+value_ = 0;
+endDt_ = 0;
+extend_ = 0;
+}
+bool SFightData::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+PACKET_DECODE(String,name_);
+PACKET_DECODE(Int16,sex_);
+PACKET_DECODE(Int16,career_);
+PACKET_DECODE(Int16,careerLevel_);
+PACKET_DECODE(Int64,combat_);
+PACKET_DECODE(Int16,status_);
+PACKET_DECODE(Int64,statusEnd_);
+if(!spacePos_.decode(reader)){return false;}
+PACKET_DECODE(Int16,direction_);
+PACKET_DECODE(Int16,speed_);
+PACKET_DECODE(Int16,bodySize_);
+PACKET_DECODE(Int16,camp_);
+PACKET_DECODE(Int16,force_);
+PACKET_DECODE(Int16,level_);
+PACKET_DECODE(Int32,vipLevel_);
+PACKET_DECODE(Int64,curLife_);
+PACKET_DECODE(Int64,inPower_);
+PACKET_DECODE(Int32,avaLife_);
+PACKET_DECODE(Int32,curMagic_);
+PACKET_DECODE(Int16,fightMode_);
+PACKET_DECODE(Int32,touxian_);
+PACKET_DECODE(Int32,statusMask_);
+PACKET_DECODE(Bool,isRide_);
+if(!warHorse_.decode(reader)){return false;}
+PACKET_DECODE(Bool,isHide_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);entityShows_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);entityValues_[k] = v;}}
+if(!fightAttr_.decode(reader)){return false;}
+if(!totalAttr_.decode(reader)){return false;}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int64_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int64,v);copyAttr_[k] = v;}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);skills_.push_back(item);}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SBuffInfo item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}buffs_.push_back(item);}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);runes_.push_back(item);}}
+teamData_ = MsgPool::Instance()->DecodeMsg(reader);
+guildData_ = MsgPool::Instance()->DecodeMsg(reader);
+return true;}
+bool SFightData::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(String,name_);
+PACKET_ENCODE(Int16,sex_);
+PACKET_ENCODE(Int16,career_);
+PACKET_ENCODE(Int16,careerLevel_);
+PACKET_ENCODE(Int64,combat_);
+PACKET_ENCODE(Int16,status_);
+PACKET_ENCODE(Int64,statusEnd_);
+if(!spacePos_.encode(writer)){return false;}
+PACKET_ENCODE(Int16,direction_);
+PACKET_ENCODE(Int16,speed_);
+PACKET_ENCODE(Int16,bodySize_);
+PACKET_ENCODE(Int16,camp_);
+PACKET_ENCODE(Int16,force_);
+PACKET_ENCODE(Int16,level_);
+PACKET_ENCODE(Int32,vipLevel_);
+PACKET_ENCODE(Int64,curLife_);
+PACKET_ENCODE(Int64,inPower_);
+PACKET_ENCODE(Int32,avaLife_);
+PACKET_ENCODE(Int32,curMagic_);
+PACKET_ENCODE(Int16,fightMode_);
+PACKET_ENCODE(Int32,touxian_);
+PACKET_ENCODE(Int32,statusMask_);
+PACKET_ENCODE(Bool,isRide_);
+if(!warHorse_.encode(writer)){return false;}
+PACKET_ENCODE(Bool,isHide_);
+PACKET_ENCODE(UVar32,entityShows_.size());
+for(map<int16_t, int32_t>::const_iterator it=entityShows_.begin();it!=entityShows_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,entityValues_.size());
+for(map<int16_t, int32_t>::const_iterator it=entityValues_.begin();it!=entityValues_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
+if(!fightAttr_.encode(writer)){return false;}
+if(!totalAttr_.encode(writer)){return false;}
+PACKET_ENCODE(UVar32,copyAttr_.size());
+for(map<int16_t, int64_t>::const_iterator it=copyAttr_.begin();it!=copyAttr_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int64,it->second);}
+PACKET_ENCODE(UVar32,skills_.size());
+for(vector<int32_t>::const_iterator vit=skills_.begin();vit!=skills_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+PACKET_ENCODE(UVar32,buffs_.size());
+for(vector<SBuffInfo>::const_iterator vit=buffs_.begin();vit!=buffs_.end();++vit){if(!vit->encode(writer)){return false;}}
+PACKET_ENCODE(UVar32,runes_.size());
+for(vector<int32_t>::const_iterator vit=runes_.begin();vit!=runes_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+if(!MsgPool::Instance()->EncodeMsg(writer, teamData_)){return false;}
+if(!MsgPool::Instance()->EncodeMsg(writer, guildData_)){return false;}
+return true;}
+void SFightData::clear(){
+entityId_.clear();
+name_.clear();
+sex_ = 0;
+career_ = 0;
+careerLevel_ = 0;
+combat_ = 0;
+status_ = 0;
+statusEnd_ = 0;
+spacePos_.clear();
+direction_ = 0;
+speed_ = 0;
+bodySize_ = 0;
+camp_ = 0;
+force_ = 0;
+level_ = 0;
+vipLevel_ = 0;
+curLife_ = 0;
+inPower_ = 0;
+avaLife_ = 0;
+curMagic_ = 0;
+fightMode_ = 0;
+touxian_ = 0;
+statusMask_ = 0;
+isRide_ = 0;
+warHorse_.clear();
+isHide_ = 0;
+entityShows_.clear();
+entityValues_.clear();
+fightAttr_.clear();
+totalAttr_.clear();
+copyAttr_.clear();
+skills_.clear();
+buffs_.clear();
+runes_.clear();
+teamData_ = NULL;
+guildData_ = NULL;
+}
+bool SFightPlayer::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+PACKET_DECODE(Int16,cellLine_);
+PACKET_DECODE(Int32,spaceId_);
+if(!spacePos_.decode(reader)){return false;}
+PACKET_DECODE(Int32,copyCode_);
+PACKET_DECODE(String,name_);
+PACKET_DECODE(Int16,career_);
+PACKET_DECODE(Int16,careerLevel_);
+PACKET_DECODE(Int16,camp_);
+PACKET_DECODE(Int16,level_);
+PACKET_DECODE(Int32,vipLevel_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int16_t k;int32_t v;PACKET_DECODE(Int16,k);PACKET_DECODE(Int32,v);ornaments_[k] = v;}}
+PACKET_DECODE(Int64,combat_);
+PACKET_DECODE(Int16,fightMode_);
+PACKET_DECODE(Int32,hangLevel_);
+PACKET_DECODE(Int16,nuqi_);
+PACKET_DECODE(Int16,nuqiRecover_);
+PACKET_DECODE(Int32,zhanling_);
+PACKET_DECODE(Int32,godRingAttackLevel_);
+PACKET_DECODE(Int32,godRingDefenseLevel_);
+teamData_ = MsgPool::Instance()->DecodeMsg(reader);
+guildData_ = MsgPool::Instance()->DecodeMsg(reader);
+mateData_ = MsgPool::Instance()->DecodeMsg(reader);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SFightData item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}fightDatas_.push_back(item);}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dragonSoulAttr_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);addCopyDropRate_[k] = v;}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);flyUpSkills_.push_back(item);}}
+PACKET_DECODE(Int32,zhanqiAtkPer_);
+PACKET_DECODE(Int32,zhanqiHurtPer_);
+PACKET_DECODE(Int32,officialId_);
+PACKET_DECODE(Int32,crossOfficialId_);
+PACKET_DECODE(String,jiebaiId_);
+PACKET_DECODE(Bool,isBeCaller_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);roleZhanWei_[k] = v;}}
+PACKET_DECODE(Int16,oldServerId_);
+return true;}
+bool SFightPlayer::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(Int16,cellLine_);
+PACKET_ENCODE(Int32,spaceId_);
+if(!spacePos_.encode(writer)){return false;}
+PACKET_ENCODE(Int32,copyCode_);
+PACKET_ENCODE(String,name_);
+PACKET_ENCODE(Int16,career_);
+PACKET_ENCODE(Int16,careerLevel_);
+PACKET_ENCODE(Int16,camp_);
+PACKET_ENCODE(Int16,level_);
+PACKET_ENCODE(Int32,vipLevel_);
+PACKET_ENCODE(UVar32,ornaments_.size());
+for(map<int16_t, int32_t>::const_iterator it=ornaments_.begin();it!=ornaments_.end();++it){PACKET_ENCODE(Int16,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(Int64,combat_);
+PACKET_ENCODE(Int16,fightMode_);
+PACKET_ENCODE(Int32,hangLevel_);
+PACKET_ENCODE(Int16,nuqi_);
+PACKET_ENCODE(Int16,nuqiRecover_);
+PACKET_ENCODE(Int32,zhanling_);
+PACKET_ENCODE(Int32,godRingAttackLevel_);
+PACKET_ENCODE(Int32,godRingDefenseLevel_);
+if(!MsgPool::Instance()->EncodeMsg(writer, teamData_)){return false;}
+if(!MsgPool::Instance()->EncodeMsg(writer, guildData_)){return false;}
+if(!MsgPool::Instance()->EncodeMsg(writer, mateData_)){return false;}
+PACKET_ENCODE(UVar32,fightDatas_.size());
+for(vector<SFightData>::const_iterator vit=fightDatas_.begin();vit!=fightDatas_.end();++vit){if(!vit->encode(writer)){return false;}}
+PACKET_ENCODE(UVar32,dragonSoulAttr_.size());
+for(map<int32_t, int32_t>::const_iterator it=dragonSoulAttr_.begin();it!=dragonSoulAttr_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,addCopyDropRate_.size());
+for(map<int32_t, int32_t>::const_iterator it=addCopyDropRate_.begin();it!=addCopyDropRate_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,flyUpSkills_.size());
+for(vector<int32_t>::const_iterator vit=flyUpSkills_.begin();vit!=flyUpSkills_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+PACKET_ENCODE(Int32,zhanqiAtkPer_);
+PACKET_ENCODE(Int32,zhanqiHurtPer_);
+PACKET_ENCODE(Int32,officialId_);
+PACKET_ENCODE(Int32,crossOfficialId_);
+PACKET_ENCODE(String,jiebaiId_);
+PACKET_ENCODE(Bool,isBeCaller_);
+PACKET_ENCODE(UVar32,roleZhanWei_.size());
+for(map<int32_t, int32_t>::const_iterator it=roleZhanWei_.begin();it!=roleZhanWei_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(Int16,oldServerId_);
+return true;}
+void SFightPlayer::clear(){
+entityId_.clear();
+cellLine_ = 0;
+spaceId_ = 0;
+spacePos_.clear();
+copyCode_ = 0;
+name_.clear();
+career_ = 0;
+careerLevel_ = 0;
+camp_ = 0;
+level_ = 0;
+vipLevel_ = 0;
+ornaments_.clear();
+combat_ = 0;
+fightMode_ = 0;
+hangLevel_ = 0;
+nuqi_ = 0;
+nuqiRecover_ = 0;
+zhanling_ = 0;
+godRingAttackLevel_ = 0;
+godRingDefenseLevel_ = 0;
+teamData_ = NULL;
+guildData_ = NULL;
+mateData_ = NULL;
+fightDatas_.clear();
+dragonSoulAttr_.clear();
+addCopyDropRate_.clear();
+flyUpSkills_.clear();
+zhanqiAtkPer_ = 0;
+zhanqiHurtPer_ = 0;
+officialId_ = 0;
+crossOfficialId_ = 0;
+jiebaiId_.clear();
+isBeCaller_ = 0;
+roleZhanWei_.clear();
+oldServerId_ = 0;
+}
+bool SDisplayData::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+PACKET_DECODE(String,name_);
+PACKET_DECODE(Int16,status_);
+PACKET_DECODE(Int64,statusEnd_);
+PACKET_DECODE(Int32,spaceId_);
+if(!spacePos_.decode(reader)){return false;}
+PACKET_DECODE(Int32,copyCode_);
+PACKET_DECODE(Int16,direction_);
+PACKET_DECODE(Int16,speed_);
+return true;}
+bool SDisplayData::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(String,name_);
+PACKET_ENCODE(Int16,status_);
+PACKET_ENCODE(Int64,statusEnd_);
+PACKET_ENCODE(Int32,spaceId_);
+if(!spacePos_.encode(writer)){return false;}
+PACKET_ENCODE(Int32,copyCode_);
+PACKET_ENCODE(Int16,direction_);
+PACKET_ENCODE(Int16,speed_);
+return true;}
+void SDisplayData::clear(){
+entityId_.clear();
+name_.clear();
+status_ = 0;
+statusEnd_ = 0;
+spaceId_ = 0;
+spacePos_.clear();
+copyCode_ = 0;
+direction_ = 0;
+speed_ = 0;
 }
 bool SFlyChessSingle::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,pos_);
@@ -11424,28 +11356,6 @@ return true;}
 void SAdvanceDayInfo::clear(){
 isGotRewards_.clear();
 }
-bool SZhanlingInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,dai_);
-PACKET_DECODE(Int32,mission_);
-PACKET_DECODE(Int64,deadline_);
-PACKET_DECODE(Int32,adv_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);advance_[k] = v;}}
-return true;}
-bool SZhanlingInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,dai_);
-PACKET_ENCODE(Int32,mission_);
-PACKET_ENCODE(Int64,deadline_);
-PACKET_ENCODE(Int32,adv_);
-PACKET_ENCODE(UVar32,advance_.size());
-for(map<int32_t, int32_t>::const_iterator it=advance_.begin();it!=advance_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SZhanlingInfo::clear(){
-dai_ = 0;
-mission_ = 0;
-deadline_ = 0;
-adv_ = 0;
-advance_.clear();
-}
 bool SFashion::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,level_);
 PACKET_DECODE(Int32,promoteLevel_);
@@ -11523,6 +11433,84 @@ fromId_.clear();
 fromName_.clear();
 fashionId_ = 0;
 }
+bool SPlayerHolyBeast::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerHolyBeast item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}list_.push_back(item);}}
+return true;}
+bool SPlayerHolyBeast::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,list_.size());
+for(vector<dbs::TPlayerHolyBeast>::const_iterator vit=list_.begin();vit!=list_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SPlayerHolyBeast::clear(){
+list_.clear();
+}
+bool SPlayerHolyBeastGoOut::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);goOuts_[k] = v;}}
+PACKET_DECODE(Bool,isGoOut_);
+return true;}
+bool SPlayerHolyBeastGoOut::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,goOuts_.size());
+for(map<int32_t, int32_t>::const_iterator it=goOuts_.begin();it!=goOuts_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(Bool,isGoOut_);
+return true;}
+void SPlayerHolyBeastGoOut::clear(){
+goOuts_.clear();
+isGoOut_ = 0;
+}
+bool SApplyHolyBeastBreed::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,applyPlayerId_);
+PACKET_DECODE(String,applyName_);
+PACKET_DECODE(Int32,applyModelId_);
+PACKET_DECODE(Int32,applyTalent_);
+PACKET_DECODE(Int32,applyLevel_);
+PACKET_DECODE(Int32,applyRaitry_);
+return true;}
+bool SApplyHolyBeastBreed::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,applyPlayerId_);
+PACKET_ENCODE(String,applyName_);
+PACKET_ENCODE(Int32,applyModelId_);
+PACKET_ENCODE(Int32,applyTalent_);
+PACKET_ENCODE(Int32,applyLevel_);
+PACKET_ENCODE(Int32,applyRaitry_);
+return true;}
+void SApplyHolyBeastBreed::clear(){
+applyPlayerId_ = 0;
+applyName_.clear();
+applyModelId_ = 0;
+applyTalent_ = 0;
+applyLevel_ = 0;
+applyRaitry_ = 0;
+}
+bool SConfirmHolyBeastBreed::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,otherPlayerId_);
+PACKET_DECODE(Int32,otherModelId_);
+PACKET_DECODE(String,otherName_);
+PACKET_DECODE(Int32,otherTalent_);
+PACKET_DECODE(Int32,beastId_);
+return true;}
+bool SConfirmHolyBeastBreed::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,otherPlayerId_);
+PACKET_ENCODE(Int32,otherModelId_);
+PACKET_ENCODE(String,otherName_);
+PACKET_ENCODE(Int32,otherTalent_);
+PACKET_ENCODE(Int32,beastId_);
+return true;}
+void SConfirmHolyBeastBreed::clear(){
+otherPlayerId_ = 0;
+otherModelId_ = 0;
+otherName_.clear();
+otherTalent_ = 0;
+beastId_ = 0;
+}
+bool SBreedHolyBeastPlayers::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SMiniPlayer item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}list_.push_back(item);}}
+return true;}
+bool SBreedHolyBeastPlayers::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,list_.size());
+for(vector<msgs::SMiniPlayer>::const_iterator vit=list_.begin();vit!=list_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SBreedHolyBeastPlayers::clear(){
+list_.clear();
+}
 bool SPlayerSignFourteenDay::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,index_);
 PACKET_DECODE(Int32,gotIndex_);
@@ -11591,6 +11579,75 @@ isMarry_ = 0;
 playerA_.clear();
 playerB_.clear();
 }
+bool SOpenServerTargetInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);isGetReward_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;bool v;PACKET_DECODE(Int32,k);PACKET_DECODE(Bool,v);bossKill_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);godPlaneKill_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);vipBossKill_[k] = v;}}
+return true;}
+bool SOpenServerTargetInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,isGetReward_.size());
+for(map<int32_t, int32_t>::const_iterator it=isGetReward_.begin();it!=isGetReward_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,bossKill_.size());
+for(map<int32_t, bool>::const_iterator it=bossKill_.begin();it!=bossKill_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Bool,it->second);}
+PACKET_ENCODE(UVar32,godPlaneKill_.size());
+for(map<int32_t, int32_t>::const_iterator it=godPlaneKill_.begin();it!=godPlaneKill_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,vipBossKill_.size());
+for(map<int32_t, int32_t>::const_iterator it=vipBossKill_.begin();it!=vipBossKill_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SOpenServerTargetInfo::clear(){
+isGetReward_.clear();
+bossKill_.clear();
+godPlaneKill_.clear();
+vipBossKill_.clear();
+}
+bool SOpenServerTreasure::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);treasureCount_[k] = v;}}
+return true;}
+bool SOpenServerTreasure::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,treasureCount_.size());
+for(map<int32_t, int32_t>::const_iterator it=treasureCount_.begin();it!=treasureCount_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SOpenServerTreasure::clear(){
+treasureCount_.clear();
+}
+bool SOpenServerTargetCounter::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewardCounter_[k] = v;}}
+return true;}
+bool SOpenServerTargetCounter::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,rewardCounter_.size());
+for(map<int32_t, int32_t>::const_iterator it=rewardCounter_.begin();it!=rewardCounter_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SOpenServerTargetCounter::clear(){
+rewardCounter_.clear();
+}
+bool SOpenServerAdvanceCounter::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);counter_[k] = v;}}
+return true;}
+bool SOpenServerAdvanceCounter::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,counter_.size());
+for(map<int32_t, int32_t>::const_iterator it=counter_.begin();it!=counter_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SOpenServerAdvanceCounter::clear(){
+counter_.clear();
+}
+bool SZeroGiftInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dayRecharge_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;map<int32_t, bool> v;PACKET_DECODE(Int32,k);{uint32_t len1=0;PACKET_DECODE(UVar32,len1);for(uint32_t i1=0;i1<len1;++i1){int32_t k1;bool v1;PACKET_DECODE(Int32,k1);PACKET_DECODE(Bool,v1);v[k1] = v1;}}
+gotRewards_[k] = v;}}
+return true;}
+bool SZeroGiftInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,dayRecharge_.size());
+for(map<int32_t, int32_t>::const_iterator it=dayRecharge_.begin();it!=dayRecharge_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,gotRewards_.size());
+for(map<int32_t, map<int32_t, bool> >::const_iterator it=gotRewards_.begin();it!=gotRewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(UVar32,it->second.size());
+for(map<int32_t, bool>::const_iterator it1=it->second.begin();it1!=it->second.end();++it1){PACKET_ENCODE(Int32,it1->first);PACKET_ENCODE(Bool,it1->second);}
+}
+return true;}
+void SZeroGiftInfo::clear(){
+dayRecharge_.clear();
+gotRewards_.clear();
+}
 bool SDailyActivityInfo::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,activity_);
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hadGetRewards_[k] = v;}}
@@ -11650,53 +11707,27 @@ void SMagicInfo::clear(){
 roleHole_.clear();
 magicCopyLayer_ = 0;
 }
-bool SHorcruxeSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Bool,isActive_);
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,subtype_);
-PACKET_DECODE(Int32,star_);
-PACKET_DECODE(Int32,level_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);fulPer_[k] = v;}}
-PACKET_DECODE(Int32,fulNum_);
+bool SZhanlingInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,dai_);
+PACKET_DECODE(Int32,mission_);
+PACKET_DECODE(Int64,deadline_);
+PACKET_DECODE(Int32,adv_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);advance_[k] = v;}}
 return true;}
-bool SHorcruxeSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Bool,isActive_);
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,subtype_);
-PACKET_ENCODE(Int32,star_);
-PACKET_ENCODE(Int32,level_);
-PACKET_ENCODE(UVar32,fulPer_.size());
-for(map<int32_t, int32_t>::const_iterator it=fulPer_.begin();it!=fulPer_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(Int32,fulNum_);
+bool SZhanlingInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,dai_);
+PACKET_ENCODE(Int32,mission_);
+PACKET_ENCODE(Int64,deadline_);
+PACKET_ENCODE(Int32,adv_);
+PACKET_ENCODE(UVar32,advance_.size());
+for(map<int32_t, int32_t>::const_iterator it=advance_.begin();it!=advance_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
 return true;}
-void SHorcruxeSingle::clear(){
-isActive_ = 0;
-type_ = 0;
-subtype_ = 0;
-star_ = 0;
-level_ = 0;
-fulPer_.clear();
-fulNum_ = 0;
-}
-bool SHorcruxeTypeMap::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SHorcruxeSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}horcruxeMap_[k] = v;}}
-return true;}
-bool SHorcruxeTypeMap::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,horcruxeMap_.size());
-for(map<int32_t, SHorcruxeSingle>::const_iterator it=horcruxeMap_.begin();it!=horcruxeMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SHorcruxeTypeMap::clear(){
-horcruxeMap_.clear();
-}
-bool SHorcruxeInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SHorcruxeTypeMap v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}horcruxeTypeMap_[k] = v;}}
-return true;}
-bool SHorcruxeInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,horcruxeTypeMap_.size());
-for(map<int32_t, SHorcruxeTypeMap>::const_iterator it=horcruxeTypeMap_.begin();it!=horcruxeTypeMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SHorcruxeInfo::clear(){
-horcruxeTypeMap_.clear();
+void SZhanlingInfo::clear(){
+dai_ = 0;
+mission_ = 0;
+deadline_ = 0;
+adv_ = 0;
+advance_.clear();
 }
 bool SMiniMail::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,id_);
@@ -11771,145 +11802,53 @@ updateStr_.clear();
 entityId_.clear();
 mail_.clear();
 }
-bool SChatMsg::decode(CBufferReader &reader) {
-PACKET_DECODE(Int16,channel_);
-if(!fromPlayer_.decode(reader)){return false;}
-PACKET_DECODE(String,content_);
-PACKET_DECODE(String,extend_);
-return true;}
-bool SChatMsg::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int16,channel_);
-if(!fromPlayer_.encode(writer)){return false;}
-PACKET_ENCODE(String,content_);
-PACKET_ENCODE(String,extend_);
-return true;}
-void SChatMsg::clear(){
-channel_ = 0;
-fromPlayer_.clear();
-content_.clear();
-extend_.clear();
-}
-bool SChatInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,freeHorn_);
-PACKET_DECODE(Int32,hornNum_);
-PACKET_DECODE(Int64,feedbackDt_);
-return true;}
-bool SChatInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,freeHorn_);
-PACKET_ENCODE(Int32,hornNum_);
-PACKET_ENCODE(Int64,feedbackDt_);
-return true;}
-void SChatInfo::clear(){
-freeHorn_ = 0;
-hornNum_ = 0;
-feedbackDt_ = 0;
-}
-bool SOpenServerTargetInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);isGetReward_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;bool v;PACKET_DECODE(Int32,k);PACKET_DECODE(Bool,v);bossKill_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);godPlaneKill_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);vipBossKill_[k] = v;}}
-return true;}
-bool SOpenServerTargetInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,isGetReward_.size());
-for(map<int32_t, int32_t>::const_iterator it=isGetReward_.begin();it!=isGetReward_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,bossKill_.size());
-for(map<int32_t, bool>::const_iterator it=bossKill_.begin();it!=bossKill_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Bool,it->second);}
-PACKET_ENCODE(UVar32,godPlaneKill_.size());
-for(map<int32_t, int32_t>::const_iterator it=godPlaneKill_.begin();it!=godPlaneKill_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,vipBossKill_.size());
-for(map<int32_t, int32_t>::const_iterator it=vipBossKill_.begin();it!=vipBossKill_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SOpenServerTargetInfo::clear(){
-isGetReward_.clear();
-bossKill_.clear();
-godPlaneKill_.clear();
-vipBossKill_.clear();
-}
-bool SOpenServerTreasure::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);treasureCount_[k] = v;}}
-return true;}
-bool SOpenServerTreasure::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,treasureCount_.size());
-for(map<int32_t, int32_t>::const_iterator it=treasureCount_.begin();it!=treasureCount_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SOpenServerTreasure::clear(){
-treasureCount_.clear();
-}
-bool SOpenServerTargetCounter::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewardCounter_[k] = v;}}
-return true;}
-bool SOpenServerTargetCounter::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,rewardCounter_.size());
-for(map<int32_t, int32_t>::const_iterator it=rewardCounter_.begin();it!=rewardCounter_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SOpenServerTargetCounter::clear(){
-rewardCounter_.clear();
-}
-bool SOpenServerAdvanceCounter::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);counter_[k] = v;}}
-return true;}
-bool SOpenServerAdvanceCounter::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,counter_.size());
-for(map<int32_t, int32_t>::const_iterator it=counter_.begin();it!=counter_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SOpenServerAdvanceCounter::clear(){
-counter_.clear();
-}
-bool SZeroGiftInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dayRecharge_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;map<int32_t, bool> v;PACKET_DECODE(Int32,k);{uint32_t len1=0;PACKET_DECODE(UVar32,len1);for(uint32_t i1=0;i1<len1;++i1){int32_t k1;bool v1;PACKET_DECODE(Int32,k1);PACKET_DECODE(Bool,v1);v[k1] = v1;}}
-gotRewards_[k] = v;}}
-return true;}
-bool SZeroGiftInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,dayRecharge_.size());
-for(map<int32_t, int32_t>::const_iterator it=dayRecharge_.begin();it!=dayRecharge_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,gotRewards_.size());
-for(map<int32_t, map<int32_t, bool> >::const_iterator it=gotRewards_.begin();it!=gotRewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(UVar32,it->second.size());
-for(map<int32_t, bool>::const_iterator it1=it->second.begin();it1!=it->second.end();++it1){PACKET_ENCODE(Int32,it1->first);PACKET_ENCODE(Bool,it1->second);}
-}
-return true;}
-void SZeroGiftInfo::clear(){
-dayRecharge_.clear();
-gotRewards_.clear();
-}
-bool SBroadcastContent::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,broadcastId_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);params_.push_back(item);}}
-PACKET_DECODE(Int32,proxyId_);
-return true;}
-bool SBroadcastContent::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,broadcastId_);
-PACKET_ENCODE(UVar32,params_.size());
-for(vector<string>::const_iterator vit=params_.begin();vit!=params_.end();++vit){PACKET_ENCODE(String,*vit);}
-PACKET_ENCODE(Int32,proxyId_);
-return true;}
-void SBroadcastContent::clear(){
-broadcastId_ = 0;
-params_.clear();
-proxyId_ = 0;
-}
-bool SSystemNotify::decode(CBufferReader &reader) {
+bool SHorcruxeSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Bool,isActive_);
 PACKET_DECODE(Int32,type_);
-PACKET_DECODE(String,content_);
-PACKET_DECODE(Bool,isFloat_);
-PACKET_DECODE(Int16,minLevel_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);gameChannels_.push_back(item);}}
+PACKET_DECODE(Int32,subtype_);
+PACKET_DECODE(Int32,star_);
+PACKET_DECODE(Int32,level_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);fulPer_[k] = v;}}
+PACKET_DECODE(Int32,fulNum_);
 return true;}
-bool SSystemNotify::encode(CBufferWriter &writer) const {
+bool SHorcruxeSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Bool,isActive_);
 PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(String,content_);
-PACKET_ENCODE(Bool,isFloat_);
-PACKET_ENCODE(Int16,minLevel_);
-PACKET_ENCODE(UVar32,gameChannels_.size());
-for(vector<string>::const_iterator vit=gameChannels_.begin();vit!=gameChannels_.end();++vit){PACKET_ENCODE(String,*vit);}
+PACKET_ENCODE(Int32,subtype_);
+PACKET_ENCODE(Int32,star_);
+PACKET_ENCODE(Int32,level_);
+PACKET_ENCODE(UVar32,fulPer_.size());
+for(map<int32_t, int32_t>::const_iterator it=fulPer_.begin();it!=fulPer_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(Int32,fulNum_);
 return true;}
-void SSystemNotify::clear(){
+void SHorcruxeSingle::clear(){
+isActive_ = 0;
 type_ = 0;
-content_.clear();
-isFloat_ = 0;
-minLevel_ = 0;
-gameChannels_.clear();
+subtype_ = 0;
+star_ = 0;
+level_ = 0;
+fulPer_.clear();
+fulNum_ = 0;
+}
+bool SHorcruxeTypeMap::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SHorcruxeSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}horcruxeMap_[k] = v;}}
+return true;}
+bool SHorcruxeTypeMap::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,horcruxeMap_.size());
+for(map<int32_t, SHorcruxeSingle>::const_iterator it=horcruxeMap_.begin();it!=horcruxeMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SHorcruxeTypeMap::clear(){
+horcruxeMap_.clear();
+}
+bool SHorcruxeInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SHorcruxeTypeMap v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}horcruxeTypeMap_[k] = v;}}
+return true;}
+bool SHorcruxeInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,horcruxeTypeMap_.size());
+for(map<int32_t, SHorcruxeTypeMap>::const_iterator it=horcruxeTypeMap_.begin();it!=horcruxeTypeMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SHorcruxeInfo::clear(){
+horcruxeTypeMap_.clear();
 }
 bool SPlayerHelp::decode(CBufferReader &reader) {
 if(!entityId_.decode(reader)){return false;}
@@ -12021,53 +11960,37 @@ copyCount_ = 0;
 helpCount_ = 0;
 helpName_.clear();
 }
-bool SMarket::decode(CBufferReader &reader) {
-if(!dbs::TDbMarket::decode(reader)){return false;}
-if(!entityId_.decode(reader)){return false;}
+bool SZhiBaoSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,level_);
+PACKET_DECODE(Int32,star_);
+PACKET_DECODE(Int32,bless_);
+PACKET_DECODE(Int32,target_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);danMap_[k] = v;}}
 return true;}
-bool SMarket::encode(CBufferWriter &writer) const {
-if(!dbs::TDbMarket::encode(writer)){return false;}
-if(!entityId_.encode(writer)){return false;}
+bool SZhiBaoSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,level_);
+PACKET_ENCODE(Int32,star_);
+PACKET_ENCODE(Int32,bless_);
+PACKET_ENCODE(Int32,target_);
+PACKET_ENCODE(UVar32,danMap_.size());
+for(map<int32_t, int32_t>::const_iterator it=danMap_.begin();it!=danMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
 return true;}
-void SMarket::clear(){
-entityId_.clear();
+void SZhiBaoSingle::clear(){
+level_ = 0;
+star_ = 0;
+bless_ = 0;
+target_ = 0;
+danMap_.clear();
 }
-bool SMarketInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,page_);
-PACKET_DECODE(Int32,totalPage_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SMarket item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}seq_.push_back(item);}}
+bool SZhiBaoInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SZhiBaoSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}maps_[k] = v;}}
 return true;}
-bool SMarketInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,page_);
-PACKET_ENCODE(Int32,totalPage_);
-PACKET_ENCODE(UVar32,seq_.size());
-for(vector<SMarket>::const_iterator vit=seq_.begin();vit!=seq_.end();++vit){if(!vit->encode(writer)){return false;}}
+bool SZhiBaoInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,maps_.size());
+for(map<int32_t, SZhiBaoSingle>::const_iterator it=maps_.begin();it!=maps_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
 return true;}
-void SMarketInfo::clear(){
-page_ = 0;
-totalPage_ = 0;
-seq_.clear();
-}
-bool SMarketHis::decode(CBufferReader &reader) {
-if(!dbs::TMarketHis::decode(reader)){return false;}
-if(!entityId_.decode(reader)){return false;}
-return true;}
-bool SMarketHis::encode(CBufferWriter &writer) const {
-if(!dbs::TMarketHis::encode(writer)){return false;}
-if(!entityId_.encode(writer)){return false;}
-return true;}
-void SMarketHis::clear(){
-entityId_.clear();
-}
-bool SMarketHisInfo::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SMarketHis item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}seq_.push_back(item);}}
-return true;}
-bool SMarketHisInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,seq_.size());
-for(vector<SMarketHis>::const_iterator vit=seq_.begin();vit!=seq_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SMarketHisInfo::clear(){
-seq_.clear();
+void SZhiBaoInfo::clear(){
+maps_.clear();
 }
 bool SPlayerAutoDrop::decode(CBufferReader &reader) {
 if(!belongEntityId_.decode(reader)){return false;}
@@ -12087,6 +12010,25 @@ belongEntityId_.clear();
 dropPoint_.clear();
 items_.clear();
 type_ = 0;
+}
+bool SSyncThreeWorldInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,proxy_);
+PACKET_DECODE(Int32,server_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SFightPlayer item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}players_.push_back(item);}}
+PACKET_DECODE(Int32,totalNum_);
+return true;}
+bool SSyncThreeWorldInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,proxy_);
+PACKET_ENCODE(Int32,server_);
+PACKET_ENCODE(UVar32,players_.size());
+for(vector<msgs::SFightPlayer>::const_iterator vit=players_.begin();vit!=players_.end();++vit){if(!vit->encode(writer)){return false;}}
+PACKET_ENCODE(Int32,totalNum_);
+return true;}
+void SSyncThreeWorldInfo::clear(){
+proxy_ = 0;
+server_ = 0;
+players_.clear();
+totalNum_ = 0;
 }
 bool SLianYao::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,id_);
@@ -12283,6 +12225,801 @@ for(map<int32_t, bool>::const_iterator it=getReward_.begin();it!=getReward_.end(
 return true;}
 void SFeaturesReward::clear(){
 getReward_.clear();
+}
+bool SPlayerTitle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,titleId_);
+PACKET_DECODE(Int64,indateTime_);
+return true;}
+bool SPlayerTitle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,titleId_);
+PACKET_ENCODE(Int64,indateTime_);
+return true;}
+void SPlayerTitle::clear(){
+titleId_ = 0;
+indateTime_ = 0;
+}
+bool SPlayerTitleInfo::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SPlayerTitle item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}titles_.push_back(item);}}
+return true;}
+bool SPlayerTitleInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,titles_.size());
+for(vector<SPlayerTitle>::const_iterator vit=titles_.begin();vit!=titles_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SPlayerTitleInfo::clear(){
+titles_.clear();
+}
+bool SPlayerTouxianInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,touxianId_);
+PACKET_DECODE(Int32,feat_);
+return true;}
+bool SPlayerTouxianInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,touxianId_);
+PACKET_ENCODE(Int32,feat_);
+return true;}
+void SPlayerTouxianInfo::clear(){
+touxianId_ = 0;
+feat_ = 0;
+}
+bool SFourGod::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,status_);
+PACKET_DECODE(Int32,advance_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dan_[k] = v;}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);suitLevel_.push_back(item);}}
+return true;}
+bool SFourGod::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,status_);
+PACKET_ENCODE(Int32,advance_);
+PACKET_ENCODE(UVar32,dan_.size());
+for(map<int32_t, int32_t>::const_iterator it=dan_.begin();it!=dan_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,suitLevel_.size());
+for(vector<int32_t>::const_iterator vit=suitLevel_.begin();vit!=suitLevel_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+return true;}
+void SFourGod::clear(){
+status_ = 0;
+advance_ = 0;
+dan_.clear();
+suitLevel_.clear();
+}
+bool SFourGodInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SFourGod v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}fgs_[k] = v;}}
+return true;}
+bool SFourGodInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,fgs_.size());
+for(map<int32_t, SFourGod>::const_iterator it=fgs_.begin();it!=fgs_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SFourGodInfo::clear(){
+fgs_.clear();
+}
+bool SOneYuanTreasureSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,activeType_);
+PACKET_DECODE(Int32,id_);
+PACKET_DECODE(Int32,status_);
+PACKET_DECODE(Int64,startTime_);
+PACKET_DECODE(Int64,endTime_);
+PACKET_DECODE(Int32,hadBuyCount_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){string k;int32_t v;PACKET_DECODE(String,k);PACKET_DECODE(Int32,v);buyCountMap_[k] = v;}}
+PACKET_DECODE(String,winPlayerName_);
+return true;}
+bool SOneYuanTreasureSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,activeType_);
+PACKET_ENCODE(Int32,id_);
+PACKET_ENCODE(Int32,status_);
+PACKET_ENCODE(Int64,startTime_);
+PACKET_ENCODE(Int64,endTime_);
+PACKET_ENCODE(Int32,hadBuyCount_);
+PACKET_ENCODE(UVar32,buyCountMap_.size());
+for(map<string, int32_t>::const_iterator it=buyCountMap_.begin();it!=buyCountMap_.end();++it){PACKET_ENCODE(String,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(String,winPlayerName_);
+return true;}
+void SOneYuanTreasureSingle::clear(){
+activeType_ = 0;
+id_ = 0;
+status_ = 0;
+startTime_ = 0;
+endTime_ = 0;
+hadBuyCount_ = 0;
+buyCountMap_.clear();
+winPlayerName_.clear();
+}
+bool SOneYuanTreasure::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,activeType_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SOneYuanTreasureSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}statusMap_[k] = v;}}
+return true;}
+bool SOneYuanTreasure::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,activeType_);
+PACKET_ENCODE(UVar32,statusMap_.size());
+for(map<int32_t, SOneYuanTreasureSingle>::const_iterator it=statusMap_.begin();it!=statusMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SOneYuanTreasure::clear(){
+activeType_ = 0;
+statusMap_.clear();
+}
+bool SOneYuanTreasureRecordSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int64,openTime_);
+PACKET_DECODE(String,name_);
+PACKET_DECODE(Bool,spike_);
+PACKET_DECODE(Int32,itemId_);
+PACKET_DECODE(Int32,itemNum_);
+PACKET_DECODE(Int32,buyNum_);
+PACKET_DECODE(Bool,isWinner_);
+return true;}
+bool SOneYuanTreasureRecordSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int64,openTime_);
+PACKET_ENCODE(String,name_);
+PACKET_ENCODE(Bool,spike_);
+PACKET_ENCODE(Int32,itemId_);
+PACKET_ENCODE(Int32,itemNum_);
+PACKET_ENCODE(Int32,buyNum_);
+PACKET_ENCODE(Bool,isWinner_);
+return true;}
+void SOneYuanTreasureRecordSingle::clear(){
+openTime_ = 0;
+name_.clear();
+spike_ = 0;
+itemId_ = 0;
+itemNum_ = 0;
+buyNum_ = 0;
+isWinner_ = 0;
+}
+bool SOneYuanTreasureRecord::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SOneYuanTreasureRecordSingle item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}records_.push_back(item);}}
+return true;}
+bool SOneYuanTreasureRecord::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,records_.size());
+for(vector<SOneYuanTreasureRecordSingle>::const_iterator vit=records_.begin();vit!=records_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SOneYuanTreasureRecord::clear(){
+records_.clear();
+}
+bool SOneYuanTreasureTarget::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;bool v;PACKET_DECODE(Int32,k);PACKET_DECODE(Bool,v);gotRewardMap_[k] = v;}}
+PACKET_DECODE(Int32,totalCount_);
+return true;}
+bool SOneYuanTreasureTarget::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,gotRewardMap_.size());
+for(map<int32_t, bool>::const_iterator it=gotRewardMap_.begin();it!=gotRewardMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Bool,it->second);}
+PACKET_ENCODE(Int32,totalCount_);
+return true;}
+void SOneYuanTreasureTarget::clear(){
+gotRewardMap_.clear();
+totalCount_ = 0;
+}
+bool SOneYuanTreasurePlayer::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+PACKET_DECODE(Int32,historyCount_);
+PACKET_DECODE(String,playerName_);
+return true;}
+bool SOneYuanTreasurePlayer::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+PACKET_ENCODE(Int32,historyCount_);
+PACKET_ENCODE(String,playerName_);
+return true;}
+void SOneYuanTreasurePlayer::clear(){
+entityId_.clear();
+historyCount_ = 0;
+playerName_.clear();
+}
+bool SOneYuanTreasureEndInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){Identity k;bool v;if(!k.decode(reader)){return false;}PACKET_DECODE(Bool,v);spikeMap_[k] = v;}}
+PACKET_DECODE(Int32,itemId_);
+PACKET_DECODE(Int32,itemNum_);
+PACKET_DECODE(Int64,endTime_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){Identity k;int32_t v;if(!k.decode(reader)){return false;}PACKET_DECODE(Int32,v);buyCountMap_[k] = v;}}
+if(!winEntityId_.decode(reader)){return false;}
+return true;}
+bool SOneYuanTreasureEndInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,spikeMap_.size());
+for(map<Identity, bool>::const_iterator it=spikeMap_.begin();it!=spikeMap_.end();++it){if(!it->first.encode(writer)){return false;}PACKET_ENCODE(Bool,it->second);}
+PACKET_ENCODE(Int32,itemId_);
+PACKET_ENCODE(Int32,itemNum_);
+PACKET_ENCODE(Int64,endTime_);
+PACKET_ENCODE(UVar32,buyCountMap_.size());
+for(map<Identity, int32_t>::const_iterator it=buyCountMap_.begin();it!=buyCountMap_.end();++it){if(!it->first.encode(writer)){return false;}PACKET_ENCODE(Int32,it->second);}
+if(!winEntityId_.encode(writer)){return false;}
+return true;}
+void SOneYuanTreasureEndInfo::clear(){
+spikeMap_.clear();
+itemId_ = 0;
+itemNum_ = 0;
+endTime_ = 0;
+buyCountMap_.clear();
+winEntityId_.clear();
+}
+bool SPlayerSkillInfo::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerSkill item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}skills_.push_back(item);}}
+return true;}
+bool SPlayerSkillInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,skills_.size());
+for(vector<dbs::TPlayerSkill>::const_iterator vit=skills_.begin();vit!=skills_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SPlayerSkillInfo::clear(){
+skills_.clear();
+}
+bool SUpdateSkill::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);dbs::TPlayerSkill item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}skills_.push_back(item);}}
+PACKET_DECODE(Byte,oper_);
+return true;}
+bool SUpdateSkill::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,skills_.size());
+for(vector<dbs::TPlayerSkill>::const_iterator vit=skills_.begin();vit!=skills_.end();++vit){if(!vit->encode(writer)){return false;}}
+PACKET_ENCODE(Byte,oper_);
+return true;}
+void SUpdateSkill::clear(){
+skills_.clear();
+oper_ = 0;
+}
+bool SFightUpdate::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,updateType_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int64_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int64,item);updateData_.push_back(item);}}
+return true;}
+bool SFightUpdate::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,updateType_);
+PACKET_ENCODE(UVar32,updateData_.size());
+for(vector<int64_t>::const_iterator vit=updateData_.begin();vit!=updateData_.end();++vit){PACKET_ENCODE(Int64,*vit);}
+return true;}
+void SFightUpdate::clear(){
+updateType_ = 0;
+updateData_.clear();
+}
+bool SBeginFight::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,attackId_);
+PACKET_DECODE(Int32,skillId_);
+if(!fromEntity_.decode(reader)){return false;}
+if(!centerPoint_.decode(reader)){return false;}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);Identity item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}toEntitys_.push_back(item);}}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SFightUpdate item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}propertyUpdates_.push_back(item);}}
+return true;}
+bool SBeginFight::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,attackId_);
+PACKET_ENCODE(Int32,skillId_);
+if(!fromEntity_.encode(writer)){return false;}
+if(!centerPoint_.encode(writer)){return false;}
+PACKET_ENCODE(UVar32,toEntitys_.size());
+for(vector<Identity>::const_iterator vit=toEntitys_.begin();vit!=toEntitys_.end();++vit){if(!vit->encode(writer)){return false;}}
+PACKET_ENCODE(UVar32,propertyUpdates_.size());
+for(vector<SFightUpdate>::const_iterator vit=propertyUpdates_.begin();vit!=propertyUpdates_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SBeginFight::clear(){
+attackId_ = 0;
+skillId_ = 0;
+fromEntity_.clear();
+centerPoint_.clear();
+toEntitys_.clear();
+propertyUpdates_.clear();
+}
+bool SSkillCast::decode(CBufferReader &reader) {
+if(!beginFight_.decode(reader)){return false;}
+PACKET_DECODE(Int64,endTime_);
+return true;}
+bool SSkillCast::encode(CBufferWriter &writer) const {
+if(!beginFight_.encode(writer)){return false;}
+PACKET_ENCODE(Int64,endTime_);
+return true;}
+void SSkillCast::clear(){
+beginFight_.clear();
+endTime_ = 0;
+}
+bool SSkillStopLead::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,skillId_);
+PACKET_DECODE(Int32,series_);
+PACKET_DECODE(Int64,cdTime_);
+return true;}
+bool SSkillStopLead::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,skillId_);
+PACKET_ENCODE(Int32,series_);
+PACKET_ENCODE(Int64,cdTime_);
+return true;}
+void SSkillStopLead::clear(){
+skillId_ = 0;
+series_ = 0;
+cdTime_ = 0;
+}
+bool SBeatMove::decode(CBufferReader &reader) {
+if(!fromPoint_.decode(reader)){return false;}
+if(!toPoint_.decode(reader)){return false;}
+return true;}
+bool SBeatMove::encode(CBufferWriter &writer) const {
+if(!fromPoint_.encode(writer)){return false;}
+if(!toPoint_.encode(writer)){return false;}
+return true;}
+void SBeatMove::clear(){
+fromPoint_.clear();
+toPoint_.clear();
+}
+bool SFightInfo::decode(CBufferReader &reader) {
+if(!fromEntityId_.decode(reader)){return false;}
+PACKET_DECODE(Int32,skillId_);
+PACKET_DECODE(Bool,isFirst_);
+PACKET_DECODE(Int32,attackId_);
+extra_ = MsgPool::Instance()->DecodeMsg(reader);
+extraAttrs_ = MsgPool::Instance()->DecodeMsg(reader);
+return true;}
+bool SFightInfo::encode(CBufferWriter &writer) const {
+if(!fromEntityId_.encode(writer)){return false;}
+PACKET_ENCODE(Int32,skillId_);
+PACKET_ENCODE(Bool,isFirst_);
+PACKET_ENCODE(Int32,attackId_);
+if(!MsgPool::Instance()->EncodeMsg(writer, extra_)){return false;}
+if(!MsgPool::Instance()->EncodeMsg(writer, extraAttrs_)){return false;}
+return true;}
+void SFightInfo::clear(){
+fromEntityId_.clear();
+skillId_ = 0;
+isFirst_ = 0;
+attackId_ = 0;
+extra_ = NULL;
+extraAttrs_ = NULL;
+}
+bool SDoFight::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,attackId_);
+PACKET_DECODE(Int32,skillId_);
+if(!fromEntity_.decode(reader)){return false;}
+if(!entity_.decode(reader)){return false;}
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SFightUpdate item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}propertyUpdates_.push_back(item);}}
+return true;}
+bool SDoFight::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,attackId_);
+PACKET_ENCODE(Int32,skillId_);
+if(!fromEntity_.encode(writer)){return false;}
+if(!entity_.encode(writer)){return false;}
+PACKET_ENCODE(UVar32,propertyUpdates_.size());
+for(vector<SFightUpdate>::const_iterator vit=propertyUpdates_.begin();vit!=propertyUpdates_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SDoFight::clear(){
+attackId_ = 0;
+skillId_ = 0;
+fromEntity_.clear();
+entity_.clear();
+propertyUpdates_.clear();
+}
+bool SDoFights::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SDoFight item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}doFights_.push_back(item);}}
+return true;}
+bool SDoFights::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,doFights_.size());
+for(vector<SDoFight>::const_iterator vit=doFights_.begin();vit!=doFights_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SDoFights::clear(){
+doFights_.clear();
+}
+bool SPlayerBuffInfo::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SBuffInfo item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}buffs_.push_back(item);}}
+return true;}
+bool SPlayerBuffInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,buffs_.size());
+for(vector<msgs::SBuffInfo>::const_iterator vit=buffs_.begin();vit!=buffs_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SPlayerBuffInfo::clear(){
+buffs_.clear();
+}
+bool SUpdateBuff::decode(CBufferReader &reader) {
+PACKET_DECODE(Byte,op_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SBuffInfo item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}buffs_.push_back(item);}}
+return true;}
+bool SUpdateBuff::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Byte,op_);
+PACKET_ENCODE(UVar32,buffs_.size());
+for(vector<msgs::SBuffInfo>::const_iterator vit=buffs_.begin();vit!=buffs_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SUpdateBuff::clear(){
+op_ = 0;
+buffs_.clear();
+}
+bool SBroadBuffInfo::decode(CBufferReader &reader) {
+if(!buffs_.decode(reader)){return false;}
+if(!toEntityId_.decode(reader)){return false;}
+if(!fromEntityId_.decode(reader)){return false;}
+return true;}
+bool SBroadBuffInfo::encode(CBufferWriter &writer) const {
+if(!buffs_.encode(writer)){return false;}
+if(!toEntityId_.encode(writer)){return false;}
+if(!fromEntityId_.encode(writer)){return false;}
+return true;}
+void SBroadBuffInfo::clear(){
+buffs_.clear();
+toEntityId_.clear();
+fromEntityId_.clear();
+}
+bool SUpdateSkillCd::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);updateCds_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);updateCdPers_[k] = v;}}
+return true;}
+bool SUpdateSkillCd::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(UVar32,updateCds_.size());
+for(map<int32_t, int32_t>::const_iterator it=updateCds_.begin();it!=updateCds_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,updateCdPers_.size());
+for(map<int32_t, int32_t>::const_iterator it=updateCdPers_.begin();it!=updateCdPers_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SUpdateSkillCd::clear(){
+roleId_ = 0;
+updateCds_.clear();
+updateCdPers_.clear();
+}
+bool SRoleUpdateRune::decode(CBufferReader &reader) {
+PACKET_DECODE(Byte,op_);
+PACKET_DECODE(Int32,roleId_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);runes_.push_back(item);}}
+return true;}
+bool SRoleUpdateRune::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Byte,op_);
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(UVar32,runes_.size());
+for(vector<int32_t>::const_iterator vit=runes_.begin();vit!=runes_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+return true;}
+void SRoleUpdateRune::clear(){
+op_ = 0;
+roleId_ = 0;
+runes_.clear();
+}
+bool SEntityPoint::decode(CBufferReader &reader) {
+if(!entityId_.decode(reader)){return false;}
+if(!point_.decode(reader)){return false;}
+return true;}
+bool SEntityPoint::encode(CBufferWriter &writer) const {
+if(!entityId_.encode(writer)){return false;}
+if(!point_.encode(writer)){return false;}
+return true;}
+void SEntityPoint::clear(){
+entityId_.clear();
+point_.clear();
+}
+bool SCleanSkill::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,skillUid_);
+return true;}
+bool SCleanSkill::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,skillUid_);
+return true;}
+void SCleanSkill::clear(){
+skillUid_ = 0;
+}
+bool SPlayerGodMagicSkill::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,selectType_);
+return true;}
+bool SPlayerGodMagicSkill::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,selectType_);
+return true;}
+void SPlayerGodMagicSkill::clear(){
+roleId_ = 0;
+selectType_ = 0;
+}
+bool SBroadcastContent::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,broadcastId_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);params_.push_back(item);}}
+PACKET_DECODE(Int32,proxyId_);
+return true;}
+bool SBroadcastContent::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,broadcastId_);
+PACKET_ENCODE(UVar32,params_.size());
+for(vector<string>::const_iterator vit=params_.begin();vit!=params_.end();++vit){PACKET_ENCODE(String,*vit);}
+PACKET_ENCODE(Int32,proxyId_);
+return true;}
+void SBroadcastContent::clear(){
+broadcastId_ = 0;
+params_.clear();
+proxyId_ = 0;
+}
+bool SSystemNotify::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(String,content_);
+PACKET_DECODE(Bool,isFloat_);
+PACKET_DECODE(Int16,minLevel_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);gameChannels_.push_back(item);}}
+return true;}
+bool SSystemNotify::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(String,content_);
+PACKET_ENCODE(Bool,isFloat_);
+PACKET_ENCODE(Int16,minLevel_);
+PACKET_ENCODE(UVar32,gameChannels_.size());
+for(vector<string>::const_iterator vit=gameChannels_.begin();vit!=gameChannels_.end();++vit){PACKET_ENCODE(String,*vit);}
+return true;}
+void SSystemNotify::clear(){
+type_ = 0;
+content_.clear();
+isFloat_ = 0;
+minLevel_ = 0;
+gameChannels_.clear();
+}
+bool SSoulSingle::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);isOpenHole_[k] = v;}}
+return true;}
+bool SSoulSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,isOpenHole_.size());
+for(map<int32_t, int32_t>::const_iterator it=isOpenHole_.begin();it!=isOpenHole_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SSoulSingle::clear(){
+isOpenHole_.clear();
+}
+bool SSoulInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SSoulSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}roleHole_[k] = v;}}
+return true;}
+bool SSoulInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,roleHole_.size());
+for(map<int32_t, SSoulSingle>::const_iterator it=roleHole_.begin();it!=roleHole_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SSoulInfo::clear(){
+roleHole_.clear();
+}
+bool SCheats::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,itemId_);
+PACKET_DECODE(Int32,isLock_);
+return true;}
+bool SCheats::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,itemId_);
+PACKET_ENCODE(Int32,isLock_);
+return true;}
+void SCheats::clear(){
+itemId_ = 0;
+isLock_ = 0;
+}
+bool SPlayerCheats::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SCheats item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}cheats_.push_back(item);}}
+PACKET_DECODE(Int32,roleId_);
+return true;}
+bool SPlayerCheats::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,cheats_.size());
+for(vector<SCheats>::const_iterator vit=cheats_.begin();vit!=cheats_.end();++vit){if(!vit->encode(writer)){return false;}}
+PACKET_ENCODE(Int32,roleId_);
+return true;}
+void SPlayerCheats::clear(){
+cheats_.clear();
+roleId_ = 0;
+}
+bool SUpdateCheats::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,index_);
+PACKET_DECODE(Int32,itemId_);
+PACKET_DECODE(Int32,isLock_);
+PACKET_DECODE(Int32,roleId_);
+return true;}
+bool SUpdateCheats::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,index_);
+PACKET_ENCODE(Int32,itemId_);
+PACKET_ENCODE(Int32,isLock_);
+PACKET_ENCODE(Int32,roleId_);
+return true;}
+void SUpdateCheats::clear(){
+index_ = 0;
+itemId_ = 0;
+isLock_ = 0;
+roleId_ = 0;
+}
+bool SChatMsg::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,channel_);
+if(!fromPlayer_.decode(reader)){return false;}
+PACKET_DECODE(String,content_);
+PACKET_DECODE(String,extend_);
+return true;}
+bool SChatMsg::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,channel_);
+if(!fromPlayer_.encode(writer)){return false;}
+PACKET_ENCODE(String,content_);
+PACKET_ENCODE(String,extend_);
+return true;}
+void SChatMsg::clear(){
+channel_ = 0;
+fromPlayer_.clear();
+content_.clear();
+extend_.clear();
+}
+bool SChatInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,freeHorn_);
+PACKET_DECODE(Int32,hornNum_);
+PACKET_DECODE(Int64,feedbackDt_);
+return true;}
+bool SChatInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,freeHorn_);
+PACKET_ENCODE(Int32,hornNum_);
+PACKET_ENCODE(Int64,feedbackDt_);
+return true;}
+void SChatInfo::clear(){
+freeHorn_ = 0;
+hornNum_ = 0;
+feedbackDt_ = 0;
+}
+bool SShenqiInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,cur_shenqi_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);actived_pieces_.push_back(item);}}
+return true;}
+bool SShenqiInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,cur_shenqi_);
+PACKET_ENCODE(UVar32,actived_pieces_.size());
+for(vector<int32_t>::const_iterator vit=actived_pieces_.begin();vit!=actived_pieces_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+return true;}
+void SShenqiInfo::clear(){
+cur_shenqi_ = 0;
+actived_pieces_.clear();
+}
+bool SVersionReward::decode(CBufferReader &reader) {
+PACKET_DECODE(Bool,isGotReward_);
+return true;}
+bool SVersionReward::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Bool,isGotReward_);
+return true;}
+void SVersionReward::clear(){
+isGotReward_ = 0;
+}
+bool SPlayerOnlineReward::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,onlineTime_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGotReward_[k] = v;}}
+return true;}
+bool SPlayerOnlineReward::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,onlineTime_);
+PACKET_ENCODE(UVar32,hasGotReward_.size());
+for(map<int32_t, int32_t>::const_iterator it=hasGotReward_.begin();it!=hasGotReward_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SPlayerOnlineReward::clear(){
+onlineTime_ = 0;
+hasGotReward_.clear();
+}
+bool SPlayerCallInfo::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,isBeCall_);
+PACKET_DECODE(Int32,isSetCaller_);
+PACKET_DECODE(Int64,backDt_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGotReward_[k] = v;}}
+return true;}
+bool SPlayerCallInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,isBeCall_);
+PACKET_ENCODE(Int32,isSetCaller_);
+PACKET_ENCODE(Int64,backDt_);
+PACKET_ENCODE(UVar32,hasGotReward_.size());
+for(map<int32_t, int32_t>::const_iterator it=hasGotReward_.begin();it!=hasGotReward_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SPlayerCallInfo::clear(){
+isBeCall_ = 0;
+isSetCaller_ = 0;
+backDt_ = 0;
+hasGotReward_.clear();
+}
+bool SCountryGold::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,countryGold_);
+PACKET_DECODE(Int32,point0Gold_);
+if(!serverId_.decode(reader)){return false;}
+return true;}
+bool SCountryGold::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,countryGold_);
+PACKET_ENCODE(Int32,point0Gold_);
+if(!serverId_.encode(writer)){return false;}
+return true;}
+void SCountryGold::clear(){
+countryGold_ = 0;
+point0Gold_ = 0;
+serverId_.clear();
+}
+bool SAddCountryGold::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,gold_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);params_.push_back(item);}}
+return true;}
+bool SAddCountryGold::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,gold_);
+PACKET_ENCODE(UVar32,params_.size());
+for(vector<string>::const_iterator vit=params_.begin();vit!=params_.end();++vit){PACKET_ENCODE(String,*vit);}
+return true;}
+void SAddCountryGold::clear(){
+type_ = 0;
+gold_ = 0;
+params_.clear();
+}
+bool SDelCountryGold::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,gold_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);params_.push_back(item);}}
+return true;}
+bool SDelCountryGold::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,gold_);
+PACKET_ENCODE(UVar32,params_.size());
+for(vector<string>::const_iterator vit=params_.begin();vit!=params_.end();++vit){PACKET_ENCODE(String,*vit);}
+return true;}
+void SDelCountryGold::clear(){
+type_ = 0;
+gold_ = 0;
+params_.clear();
+}
+bool SPlayerCountryGold::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,hasGotSalary_);
+return true;}
+bool SPlayerCountryGold::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,hasGotSalary_);
+return true;}
+void SPlayerCountryGold::clear(){
+hasGotSalary_ = 0;
+}
+bool SCutTree::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,itemId_);
+PACKET_DECODE(Int32,life_);
+PACKET_DECODE(Int32,maxLife_);
+if(!belongId_.decode(reader)){return false;}
+PACKET_DECODE(String,belongName_);
+PACKET_DECODE(Int64,refreshTime_);
+return true;}
+bool SCutTree::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,itemId_);
+PACKET_ENCODE(Int32,life_);
+PACKET_ENCODE(Int32,maxLife_);
+if(!belongId_.encode(writer)){return false;}
+PACKET_ENCODE(String,belongName_);
+PACKET_ENCODE(Int64,refreshTime_);
+return true;}
+void SCutTree::clear(){
+type_ = 0;
+itemId_ = 0;
+life_ = 0;
+maxLife_ = 0;
+belongId_.clear();
+belongName_.clear();
+refreshTime_ = 0;
+}
+bool SCutTreeInfo::decode(CBufferReader &reader) {
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SCutTree item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}trees_.push_back(item);}}
+return true;}
+bool SCutTreeInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,trees_.size());
+for(vector<SCutTree>::const_iterator vit=trees_.begin();vit!=trees_.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SCutTreeInfo::clear(){
+trees_.clear();
+}
+bool SBless::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,targetCount_);
+PACKET_DECODE(Int64,freeCd_);
+PACKET_DECODE(Int32,useMoneyCount_);
+return true;}
+bool SBless::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,targetCount_);
+PACKET_ENCODE(Int64,freeCd_);
+PACKET_ENCODE(Int32,useMoneyCount_);
+return true;}
+void SBless::clear(){
+type_ = 0;
+targetCount_ = 0;
+freeCd_ = 0;
+useMoneyCount_ = 0;
+}
+bool SPlayerBless::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SBless v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}blesses_[k] = v;}}
+return true;}
+bool SPlayerBless::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,blesses_.size());
+for(map<int32_t, SBless>::const_iterator it=blesses_.begin();it!=blesses_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SPlayerBless::clear(){
+blesses_.clear();
+}
+bool SLunHuiBook::decode(CBufferReader &reader) {
+PACKET_DECODE(Int64,preDt_);
+PACKET_DECODE(Int32,preSeqDays_);
+PACKET_DECODE(Int64,beginDt_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGot_[k] = v;}}
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGotMulCount_[k] = v;}}
+PACKET_DECODE(Int32,useVipCount_);
+return true;}
+bool SLunHuiBook::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int64,preDt_);
+PACKET_ENCODE(Int32,preSeqDays_);
+PACKET_ENCODE(Int64,beginDt_);
+PACKET_ENCODE(UVar32,hasGot_.size());
+for(map<int32_t, int32_t>::const_iterator it=hasGot_.begin();it!=hasGot_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(UVar32,hasGotMulCount_.size());
+for(map<int32_t, int32_t>::const_iterator it=hasGotMulCount_.begin();it!=hasGotMulCount_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+PACKET_ENCODE(Int32,useVipCount_);
+return true;}
+void SLunHuiBook::clear(){
+preDt_ = 0;
+preSeqDays_ = 0;
+beginDt_ = 0;
+hasGot_.clear();
+hasGotMulCount_.clear();
+useVipCount_ = 0;
 }
 bool SGuildWarGuildInfo::decode(CBufferReader &reader) {
 PACKET_DECODE(String,guildName_);
@@ -12838,70 +13575,6 @@ career_ = 0;
 ornaments_.clear();
 killNum_ = 0;
 }
-bool SPlayerTitle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,titleId_);
-PACKET_DECODE(Int64,indateTime_);
-return true;}
-bool SPlayerTitle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,titleId_);
-PACKET_ENCODE(Int64,indateTime_);
-return true;}
-void SPlayerTitle::clear(){
-titleId_ = 0;
-indateTime_ = 0;
-}
-bool SPlayerTitleInfo::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SPlayerTitle item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}titles_.push_back(item);}}
-return true;}
-bool SPlayerTitleInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,titles_.size());
-for(vector<SPlayerTitle>::const_iterator vit=titles_.begin();vit!=titles_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SPlayerTitleInfo::clear(){
-titles_.clear();
-}
-bool SPlayerTouxianInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,touxianId_);
-PACKET_DECODE(Int32,feat_);
-return true;}
-bool SPlayerTouxianInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,touxianId_);
-PACKET_ENCODE(Int32,feat_);
-return true;}
-void SPlayerTouxianInfo::clear(){
-touxianId_ = 0;
-feat_ = 0;
-}
-bool SFourGod::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,status_);
-PACKET_DECODE(Int32,advance_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);dan_[k] = v;}}
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);suitLevel_.push_back(item);}}
-return true;}
-bool SFourGod::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,status_);
-PACKET_ENCODE(Int32,advance_);
-PACKET_ENCODE(UVar32,dan_.size());
-for(map<int32_t, int32_t>::const_iterator it=dan_.begin();it!=dan_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,suitLevel_.size());
-for(vector<int32_t>::const_iterator vit=suitLevel_.begin();vit!=suitLevel_.end();++vit){PACKET_ENCODE(Int32,*vit);}
-return true;}
-void SFourGod::clear(){
-status_ = 0;
-advance_ = 0;
-dan_.clear();
-suitLevel_.clear();
-}
-bool SFourGodInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SFourGod v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}fgs_[k] = v;}}
-return true;}
-bool SFourGodInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,fgs_.size());
-for(map<int32_t, SFourGod>::const_iterator it=fgs_.begin();it!=fgs_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SFourGodInfo::clear(){
-fgs_.clear();
-}
 bool SPlayerVipInfo::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,level_);
 {uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);gotReward_[k] = v;}}
@@ -12925,140 +13598,90 @@ weekReward_ = 0;
 fakeGotReward_.clear();
 isFake_ = 0;
 }
-bool SOneYuanTreasureSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,activeType_);
-PACKET_DECODE(Int32,id_);
-PACKET_DECODE(Int32,status_);
-PACKET_DECODE(Int64,startTime_);
-PACKET_DECODE(Int64,endTime_);
-PACKET_DECODE(Int32,hadBuyCount_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){string k;int32_t v;PACKET_DECODE(String,k);PACKET_DECODE(Int32,v);buyCountMap_[k] = v;}}
-PACKET_DECODE(String,winPlayerName_);
+bool STransport::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,missionCount_);
+PACKET_DECODE(Int32,refreshCount_);
+PACKET_DECODE(Int32,leftCount_);
+PACKET_DECODE(Int32,fightEscort_);
 return true;}
-bool SOneYuanTreasureSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,activeType_);
-PACKET_ENCODE(Int32,id_);
-PACKET_ENCODE(Int32,status_);
-PACKET_ENCODE(Int64,startTime_);
-PACKET_ENCODE(Int64,endTime_);
-PACKET_ENCODE(Int32,hadBuyCount_);
-PACKET_ENCODE(UVar32,buyCountMap_.size());
-for(map<string, int32_t>::const_iterator it=buyCountMap_.begin();it!=buyCountMap_.end();++it){PACKET_ENCODE(String,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(String,winPlayerName_);
+bool STransport::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,missionCount_);
+PACKET_ENCODE(Int32,refreshCount_);
+PACKET_ENCODE(Int32,leftCount_);
+PACKET_ENCODE(Int32,fightEscort_);
 return true;}
-void SOneYuanTreasureSingle::clear(){
-activeType_ = 0;
-id_ = 0;
-status_ = 0;
-startTime_ = 0;
-endTime_ = 0;
-hadBuyCount_ = 0;
-buyCountMap_.clear();
-winPlayerName_.clear();
+void STransport::clear(){
+type_ = 0;
+missionCount_ = 0;
+refreshCount_ = 0;
+leftCount_ = 0;
+fightEscort_ = 0;
 }
-bool SOneYuanTreasure::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,activeType_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SOneYuanTreasureSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}statusMap_[k] = v;}}
-return true;}
-bool SOneYuanTreasure::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,activeType_);
-PACKET_ENCODE(UVar32,statusMap_.size());
-for(map<int32_t, SOneYuanTreasureSingle>::const_iterator it=statusMap_.begin();it!=statusMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SOneYuanTreasure::clear(){
-activeType_ = 0;
-statusMap_.clear();
-}
-bool SOneYuanTreasureRecordSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int64,openTime_);
-PACKET_DECODE(String,name_);
-PACKET_DECODE(Bool,spike_);
-PACKET_DECODE(Int32,itemId_);
-PACKET_DECODE(Int32,itemNum_);
-PACKET_DECODE(Int32,buyNum_);
-PACKET_DECODE(Bool,isWinner_);
-return true;}
-bool SOneYuanTreasureRecordSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int64,openTime_);
-PACKET_ENCODE(String,name_);
-PACKET_ENCODE(Bool,spike_);
-PACKET_ENCODE(Int32,itemId_);
-PACKET_ENCODE(Int32,itemNum_);
-PACKET_ENCODE(Int32,buyNum_);
-PACKET_ENCODE(Bool,isWinner_);
-return true;}
-void SOneYuanTreasureRecordSingle::clear(){
-openTime_ = 0;
-name_.clear();
-spike_ = 0;
-itemId_ = 0;
-itemNum_ = 0;
-buyNum_ = 0;
-isWinner_ = 0;
-}
-bool SOneYuanTreasureRecord::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SOneYuanTreasureRecordSingle item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}records_.push_back(item);}}
-return true;}
-bool SOneYuanTreasureRecord::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,records_.size());
-for(vector<SOneYuanTreasureRecordSingle>::const_iterator vit=records_.begin();vit!=records_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SOneYuanTreasureRecord::clear(){
-records_.clear();
-}
-bool SOneYuanTreasureTarget::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;bool v;PACKET_DECODE(Int32,k);PACKET_DECODE(Bool,v);gotRewardMap_[k] = v;}}
-PACKET_DECODE(Int32,totalCount_);
-return true;}
-bool SOneYuanTreasureTarget::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,gotRewardMap_.size());
-for(map<int32_t, bool>::const_iterator it=gotRewardMap_.begin();it!=gotRewardMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Bool,it->second);}
-PACKET_ENCODE(Int32,totalCount_);
-return true;}
-void SOneYuanTreasureTarget::clear(){
-gotRewardMap_.clear();
-totalCount_ = 0;
-}
-bool SOneYuanTreasurePlayer::decode(CBufferReader &reader) {
+bool SEscortMissionFailed::decode(CBufferReader &reader) {
 if(!entityId_.decode(reader)){return false;}
-PACKET_DECODE(Int32,historyCount_);
-PACKET_DECODE(String,playerName_);
+PACKET_DECODE(String,fightName_);
+PACKET_DECODE(Int32,configId_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewards_[k] = v;}}
 return true;}
-bool SOneYuanTreasurePlayer::encode(CBufferWriter &writer) const {
+bool SEscortMissionFailed::encode(CBufferWriter &writer) const {
 if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(Int32,historyCount_);
-PACKET_ENCODE(String,playerName_);
+PACKET_ENCODE(String,fightName_);
+PACKET_ENCODE(Int32,configId_);
+PACKET_ENCODE(UVar32,rewards_.size());
+for(map<int32_t, int32_t>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
 return true;}
-void SOneYuanTreasurePlayer::clear(){
+void SEscortMissionFailed::clear(){
 entityId_.clear();
-historyCount_ = 0;
-playerName_.clear();
+fightName_.clear();
+configId_ = 0;
+rewards_.clear();
 }
-bool SOneYuanTreasureEndInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){Identity k;bool v;if(!k.decode(reader)){return false;}PACKET_DECODE(Bool,v);spikeMap_[k] = v;}}
-PACKET_DECODE(Int32,itemId_);
-PACKET_DECODE(Int32,itemNum_);
-PACKET_DECODE(Int64,endTime_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){Identity k;int32_t v;if(!k.decode(reader)){return false;}PACKET_DECODE(Int32,v);buyCountMap_[k] = v;}}
-if(!winEntityId_.decode(reader)){return false;}
+bool SFightEscortSuccess::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,configId_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewards_[k] = v;}}
 return true;}
-bool SOneYuanTreasureEndInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,spikeMap_.size());
-for(map<Identity, bool>::const_iterator it=spikeMap_.begin();it!=spikeMap_.end();++it){if(!it->first.encode(writer)){return false;}PACKET_ENCODE(Bool,it->second);}
-PACKET_ENCODE(Int32,itemId_);
-PACKET_ENCODE(Int32,itemNum_);
-PACKET_ENCODE(Int64,endTime_);
-PACKET_ENCODE(UVar32,buyCountMap_.size());
-for(map<Identity, int32_t>::const_iterator it=buyCountMap_.begin();it!=buyCountMap_.end();++it){if(!it->first.encode(writer)){return false;}PACKET_ENCODE(Int32,it->second);}
-if(!winEntityId_.encode(writer)){return false;}
+bool SFightEscortSuccess::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,configId_);
+PACKET_ENCODE(UVar32,rewards_.size());
+for(map<int32_t, int32_t>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
 return true;}
-void SOneYuanTreasureEndInfo::clear(){
-spikeMap_.clear();
-itemId_ = 0;
-itemNum_ = 0;
-endTime_ = 0;
-buyCountMap_.clear();
-winEntityId_.clear();
+void SFightEscortSuccess::clear(){
+configId_ = 0;
+rewards_.clear();
+}
+bool STreasureAdvanceSingle::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,level_);
+PACKET_DECODE(Int32,star_);
+PACKET_DECODE(Int32,bless_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);danMap_[k] = v;}}
+return true;}
+bool STreasureAdvanceSingle::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,level_);
+PACKET_ENCODE(Int32,star_);
+PACKET_ENCODE(Int32,bless_);
+PACKET_ENCODE(UVar32,danMap_.size());
+for(map<int32_t, int32_t>::const_iterator it=danMap_.begin();it!=danMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void STreasureAdvanceSingle::clear(){
+type_ = 0;
+level_ = 0;
+star_ = 0;
+bless_ = 0;
+danMap_.clear();
+}
+bool STreasureAdvanceInfo::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;STreasureAdvanceSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}treasureMap_[k] = v;}}
+return true;}
+bool STreasureAdvanceInfo::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,treasureMap_.size());
+for(map<int32_t, STreasureAdvanceSingle>::const_iterator it=treasureMap_.begin();it!=treasureMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void STreasureAdvanceInfo::clear(){
+treasureMap_.clear();
 }
 bool SNearEnemy::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,playerId_);
@@ -13122,452 +13745,6 @@ succ_ = 0;
 hangLevel_ = 0;
 enemyId_ = 0;
 rewards_.clear();
-}
-bool SSoulSingle::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);isOpenHole_[k] = v;}}
-return true;}
-bool SSoulSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,isOpenHole_.size());
-for(map<int32_t, int32_t>::const_iterator it=isOpenHole_.begin();it!=isOpenHole_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SSoulSingle::clear(){
-isOpenHole_.clear();
-}
-bool SSoulInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SSoulSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}roleHole_[k] = v;}}
-return true;}
-bool SSoulInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,roleHole_.size());
-for(map<int32_t, SSoulSingle>::const_iterator it=roleHole_.begin();it!=roleHole_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SSoulInfo::clear(){
-roleHole_.clear();
-}
-bool SCheats::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,itemId_);
-PACKET_DECODE(Int32,isLock_);
-return true;}
-bool SCheats::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,itemId_);
-PACKET_ENCODE(Int32,isLock_);
-return true;}
-void SCheats::clear(){
-itemId_ = 0;
-isLock_ = 0;
-}
-bool SPlayerCheats::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SCheats item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}cheats_.push_back(item);}}
-PACKET_DECODE(Int32,roleId_);
-return true;}
-bool SPlayerCheats::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,cheats_.size());
-for(vector<SCheats>::const_iterator vit=cheats_.begin();vit!=cheats_.end();++vit){if(!vit->encode(writer)){return false;}}
-PACKET_ENCODE(Int32,roleId_);
-return true;}
-void SPlayerCheats::clear(){
-cheats_.clear();
-roleId_ = 0;
-}
-bool SUpdateCheats::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,index_);
-PACKET_DECODE(Int32,itemId_);
-PACKET_DECODE(Int32,isLock_);
-PACKET_DECODE(Int32,roleId_);
-return true;}
-bool SUpdateCheats::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,index_);
-PACKET_ENCODE(Int32,itemId_);
-PACKET_ENCODE(Int32,isLock_);
-PACKET_ENCODE(Int32,roleId_);
-return true;}
-void SUpdateCheats::clear(){
-index_ = 0;
-itemId_ = 0;
-isLock_ = 0;
-roleId_ = 0;
-}
-bool SShenqiInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,cur_shenqi_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);actived_pieces_.push_back(item);}}
-return true;}
-bool SShenqiInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,cur_shenqi_);
-PACKET_ENCODE(UVar32,actived_pieces_.size());
-for(vector<int32_t>::const_iterator vit=actived_pieces_.begin();vit!=actived_pieces_.end();++vit){PACKET_ENCODE(Int32,*vit);}
-return true;}
-void SShenqiInfo::clear(){
-cur_shenqi_ = 0;
-actived_pieces_.clear();
-}
-bool SPlayerWsGodRing::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,attackLevel_);
-PACKET_DECODE(Int32,defenseLevel_);
-return true;}
-bool SPlayerWsGodRing::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,attackLevel_);
-PACKET_ENCODE(Int32,defenseLevel_);
-return true;}
-void SPlayerWsGodRing::clear(){
-attackLevel_ = 0;
-defenseLevel_ = 0;
-}
-bool SZhiBaoSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,level_);
-PACKET_DECODE(Int32,star_);
-PACKET_DECODE(Int32,bless_);
-PACKET_DECODE(Int32,target_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);danMap_[k] = v;}}
-return true;}
-bool SZhiBaoSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,level_);
-PACKET_ENCODE(Int32,star_);
-PACKET_ENCODE(Int32,bless_);
-PACKET_ENCODE(Int32,target_);
-PACKET_ENCODE(UVar32,danMap_.size());
-for(map<int32_t, int32_t>::const_iterator it=danMap_.begin();it!=danMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SZhiBaoSingle::clear(){
-level_ = 0;
-star_ = 0;
-bless_ = 0;
-target_ = 0;
-danMap_.clear();
-}
-bool SZhiBaoInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SZhiBaoSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}maps_[k] = v;}}
-return true;}
-bool SZhiBaoInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,maps_.size());
-for(map<int32_t, SZhiBaoSingle>::const_iterator it=maps_.begin();it!=maps_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SZhiBaoInfo::clear(){
-maps_.clear();
-}
-bool SVersionReward::decode(CBufferReader &reader) {
-PACKET_DECODE(Bool,isGotReward_);
-return true;}
-bool SVersionReward::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Bool,isGotReward_);
-return true;}
-void SVersionReward::clear(){
-isGotReward_ = 0;
-}
-bool SPlayerOnlineReward::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,onlineTime_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGotReward_[k] = v;}}
-return true;}
-bool SPlayerOnlineReward::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,onlineTime_);
-PACKET_ENCODE(UVar32,hasGotReward_.size());
-for(map<int32_t, int32_t>::const_iterator it=hasGotReward_.begin();it!=hasGotReward_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SPlayerOnlineReward::clear(){
-onlineTime_ = 0;
-hasGotReward_.clear();
-}
-bool SPlayerCallInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,isBeCall_);
-PACKET_DECODE(Int32,isSetCaller_);
-PACKET_DECODE(Int64,backDt_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGotReward_[k] = v;}}
-return true;}
-bool SPlayerCallInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,isBeCall_);
-PACKET_ENCODE(Int32,isSetCaller_);
-PACKET_ENCODE(Int64,backDt_);
-PACKET_ENCODE(UVar32,hasGotReward_.size());
-for(map<int32_t, int32_t>::const_iterator it=hasGotReward_.begin();it!=hasGotReward_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SPlayerCallInfo::clear(){
-isBeCall_ = 0;
-isSetCaller_ = 0;
-backDt_ = 0;
-hasGotReward_.clear();
-}
-bool SCountryGold::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,countryGold_);
-PACKET_DECODE(Int32,point0Gold_);
-if(!serverId_.decode(reader)){return false;}
-return true;}
-bool SCountryGold::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,countryGold_);
-PACKET_ENCODE(Int32,point0Gold_);
-if(!serverId_.encode(writer)){return false;}
-return true;}
-void SCountryGold::clear(){
-countryGold_ = 0;
-point0Gold_ = 0;
-serverId_.clear();
-}
-bool SAddCountryGold::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,gold_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);params_.push_back(item);}}
-return true;}
-bool SAddCountryGold::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,gold_);
-PACKET_ENCODE(UVar32,params_.size());
-for(vector<string>::const_iterator vit=params_.begin();vit!=params_.end();++vit){PACKET_ENCODE(String,*vit);}
-return true;}
-void SAddCountryGold::clear(){
-type_ = 0;
-gold_ = 0;
-params_.clear();
-}
-bool SDelCountryGold::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,gold_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);string item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(String,item);params_.push_back(item);}}
-return true;}
-bool SDelCountryGold::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,gold_);
-PACKET_ENCODE(UVar32,params_.size());
-for(vector<string>::const_iterator vit=params_.begin();vit!=params_.end();++vit){PACKET_ENCODE(String,*vit);}
-return true;}
-void SDelCountryGold::clear(){
-type_ = 0;
-gold_ = 0;
-params_.clear();
-}
-bool SPlayerCountryGold::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,hasGotSalary_);
-return true;}
-bool SPlayerCountryGold::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,hasGotSalary_);
-return true;}
-void SPlayerCountryGold::clear(){
-hasGotSalary_ = 0;
-}
-bool SCutTree::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,itemId_);
-PACKET_DECODE(Int32,life_);
-PACKET_DECODE(Int32,maxLife_);
-if(!belongId_.decode(reader)){return false;}
-PACKET_DECODE(String,belongName_);
-PACKET_DECODE(Int64,refreshTime_);
-return true;}
-bool SCutTree::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,itemId_);
-PACKET_ENCODE(Int32,life_);
-PACKET_ENCODE(Int32,maxLife_);
-if(!belongId_.encode(writer)){return false;}
-PACKET_ENCODE(String,belongName_);
-PACKET_ENCODE(Int64,refreshTime_);
-return true;}
-void SCutTree::clear(){
-type_ = 0;
-itemId_ = 0;
-life_ = 0;
-maxLife_ = 0;
-belongId_.clear();
-belongName_.clear();
-refreshTime_ = 0;
-}
-bool SCutTreeInfo::decode(CBufferReader &reader) {
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);SCutTree item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}trees_.push_back(item);}}
-return true;}
-bool SCutTreeInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,trees_.size());
-for(vector<SCutTree>::const_iterator vit=trees_.begin();vit!=trees_.end();++vit){if(!vit->encode(writer)){return false;}}
-return true;}
-void SCutTreeInfo::clear(){
-trees_.clear();
-}
-bool SBless::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,targetCount_);
-PACKET_DECODE(Int64,freeCd_);
-PACKET_DECODE(Int32,useMoneyCount_);
-return true;}
-bool SBless::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,targetCount_);
-PACKET_ENCODE(Int64,freeCd_);
-PACKET_ENCODE(Int32,useMoneyCount_);
-return true;}
-void SBless::clear(){
-type_ = 0;
-targetCount_ = 0;
-freeCd_ = 0;
-useMoneyCount_ = 0;
-}
-bool SPlayerBless::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SBless v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}blesses_[k] = v;}}
-return true;}
-bool SPlayerBless::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,blesses_.size());
-for(map<int32_t, SBless>::const_iterator it=blesses_.begin();it!=blesses_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SPlayerBless::clear(){
-blesses_.clear();
-}
-bool SLunHuiBook::decode(CBufferReader &reader) {
-PACKET_DECODE(Int64,preDt_);
-PACKET_DECODE(Int32,preSeqDays_);
-PACKET_DECODE(Int64,beginDt_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGot_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);hasGotMulCount_[k] = v;}}
-PACKET_DECODE(Int32,useVipCount_);
-return true;}
-bool SLunHuiBook::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int64,preDt_);
-PACKET_ENCODE(Int32,preSeqDays_);
-PACKET_ENCODE(Int64,beginDt_);
-PACKET_ENCODE(UVar32,hasGot_.size());
-for(map<int32_t, int32_t>::const_iterator it=hasGot_.begin();it!=hasGot_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,hasGotMulCount_.size());
-for(map<int32_t, int32_t>::const_iterator it=hasGotMulCount_.begin();it!=hasGotMulCount_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(Int32,useVipCount_);
-return true;}
-void SLunHuiBook::clear(){
-preDt_ = 0;
-preSeqDays_ = 0;
-beginDt_ = 0;
-hasGot_.clear();
-hasGotMulCount_.clear();
-useVipCount_ = 0;
-}
-bool STransport::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,missionCount_);
-PACKET_DECODE(Int32,refreshCount_);
-PACKET_DECODE(Int32,leftCount_);
-PACKET_DECODE(Int32,fightEscort_);
-return true;}
-bool STransport::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,missionCount_);
-PACKET_ENCODE(Int32,refreshCount_);
-PACKET_ENCODE(Int32,leftCount_);
-PACKET_ENCODE(Int32,fightEscort_);
-return true;}
-void STransport::clear(){
-type_ = 0;
-missionCount_ = 0;
-refreshCount_ = 0;
-leftCount_ = 0;
-fightEscort_ = 0;
-}
-bool SEscortMissionFailed::decode(CBufferReader &reader) {
-if(!entityId_.decode(reader)){return false;}
-PACKET_DECODE(String,fightName_);
-PACKET_DECODE(Int32,configId_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewards_[k] = v;}}
-return true;}
-bool SEscortMissionFailed::encode(CBufferWriter &writer) const {
-if(!entityId_.encode(writer)){return false;}
-PACKET_ENCODE(String,fightName_);
-PACKET_ENCODE(Int32,configId_);
-PACKET_ENCODE(UVar32,rewards_.size());
-for(map<int32_t, int32_t>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SEscortMissionFailed::clear(){
-entityId_.clear();
-fightName_.clear();
-configId_ = 0;
-rewards_.clear();
-}
-bool SFightEscortSuccess::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,configId_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);rewards_[k] = v;}}
-return true;}
-bool SFightEscortSuccess::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,configId_);
-PACKET_ENCODE(UVar32,rewards_.size());
-for(map<int32_t, int32_t>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void SFightEscortSuccess::clear(){
-configId_ = 0;
-rewards_.clear();
-}
-bool SGetBackRewardSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,round_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);items_[k] = v;}}
-PACKET_DECODE(Int64,exp_);
-return true;}
-bool SGetBackRewardSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,round_);
-PACKET_ENCODE(UVar32,items_.size());
-for(map<int32_t, int32_t>::const_iterator it=items_.begin();it!=items_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(Int64,exp_);
-return true;}
-void SGetBackRewardSingle::clear(){
-round_ = 0;
-items_.clear();
-exp_ = 0;
-}
-bool SGetBackRewardInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);counts_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SGetBackRewardSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}rewards_[k] = v;}}
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SGetBackRewardSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}halfRewards_[k] = v;}}
-return true;}
-bool SGetBackRewardInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,counts_.size());
-for(map<int32_t, int32_t>::const_iterator it=counts_.begin();it!=counts_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-PACKET_ENCODE(UVar32,rewards_.size());
-for(map<int32_t, SGetBackRewardSingle>::const_iterator it=rewards_.begin();it!=rewards_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-PACKET_ENCODE(UVar32,halfRewards_.size());
-for(map<int32_t, SGetBackRewardSingle>::const_iterator it=halfRewards_.begin();it!=halfRewards_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SGetBackRewardInfo::clear(){
-counts_.clear();
-rewards_.clear();
-halfRewards_.clear();
-}
-bool SSyncThreeWorldInfo::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,proxy_);
-PACKET_DECODE(Int32,server_);
-{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);msgs::SFightPlayer item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}players_.push_back(item);}}
-PACKET_DECODE(Int32,totalNum_);
-return true;}
-bool SSyncThreeWorldInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,proxy_);
-PACKET_ENCODE(Int32,server_);
-PACKET_ENCODE(UVar32,players_.size());
-for(vector<msgs::SFightPlayer>::const_iterator vit=players_.begin();vit!=players_.end();++vit){if(!vit->encode(writer)){return false;}}
-PACKET_ENCODE(Int32,totalNum_);
-return true;}
-void SSyncThreeWorldInfo::clear(){
-proxy_ = 0;
-server_ = 0;
-players_.clear();
-totalNum_ = 0;
-}
-bool STreasureAdvanceSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,type_);
-PACKET_DECODE(Int32,level_);
-PACKET_DECODE(Int32,star_);
-PACKET_DECODE(Int32,bless_);
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int32_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int32,v);danMap_[k] = v;}}
-return true;}
-bool STreasureAdvanceSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,type_);
-PACKET_ENCODE(Int32,level_);
-PACKET_ENCODE(Int32,star_);
-PACKET_ENCODE(Int32,bless_);
-PACKET_ENCODE(UVar32,danMap_.size());
-for(map<int32_t, int32_t>::const_iterator it=danMap_.begin();it!=danMap_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int32,it->second);}
-return true;}
-void STreasureAdvanceSingle::clear(){
-type_ = 0;
-level_ = 0;
-star_ = 0;
-bless_ = 0;
-danMap_.clear();
-}
-bool STreasureAdvanceInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;STreasureAdvanceSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}treasureMap_[k] = v;}}
-return true;}
-bool STreasureAdvanceInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,treasureMap_.size());
-for(map<int32_t, STreasureAdvanceSingle>::const_iterator it=treasureMap_.begin();it!=treasureMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void STreasureAdvanceInfo::clear(){
-treasureMap_.clear();
 }
 bool SMapEntity::decode(CBufferReader &reader) {
 if(!entityId_.decode(reader)){return false;}
@@ -14264,26 +14441,16 @@ level_ = 0;
 fightType_ = 0;
 activeMap_.clear();
 }
-bool SElementSingle::decode(CBufferReader &reader) {
-PACKET_DECODE(Int32,level_);
-PACKET_DECODE(Int32,exp_);
+bool SPlayerWsGodRing::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,attackLevel_);
+PACKET_DECODE(Int32,defenseLevel_);
 return true;}
-bool SElementSingle::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(Int32,level_);
-PACKET_ENCODE(Int32,exp_);
+bool SPlayerWsGodRing::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,attackLevel_);
+PACKET_ENCODE(Int32,defenseLevel_);
 return true;}
-void SElementSingle::clear(){
-level_ = 0;
-exp_ = 0;
-}
-bool SElementInfo::decode(CBufferReader &reader) {
-{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;SElementSingle v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}elementMap_[k] = v;}}
-return true;}
-bool SElementInfo::encode(CBufferWriter &writer) const {
-PACKET_ENCODE(UVar32,elementMap_.size());
-for(map<int32_t, SElementSingle>::const_iterator it=elementMap_.begin();it!=elementMap_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
-return true;}
-void SElementInfo::clear(){
-elementMap_.clear();
+void SPlayerWsGodRing::clear(){
+attackLevel_ = 0;
+defenseLevel_ = 0;
 }
 }

@@ -32,6 +32,7 @@ public:
 	bool getRole(uint32_t fd, uint32_t time, uint32_t microTime, uint32_t& rid);
 	bool getFdInfo(uint32_t rid, FDINFO& fdInfo);
 	bool getAllFd(vector<FDINFO>& vecFd);
+	bool getAllUid(vector<uint32_t> &uids);
 private:
 	map<string, uint32_t> fdMap;
 	map<uint32_t, FDINFO> roleMap;

@@ -74,9 +74,8 @@ bool MapManager::init() {
 	for (int i = 0; i < map_cfg.maps_size(); ++i) {
 		const CfgMap::Map &cfg = map_cfg.maps(i);
 		const CfgMap::Scene &item = sceneCfgwrap.Get(cfg.mapscene());
-
 		mapType = item.instancetype();
-		if (mapType != SceneCfgWrap::SCENE_TYPE_HANG&&mapType != 3&& item.id() != DEFAULT_MAP_ID&&item.mapid()!=200403) {
+		if (mapType != SceneCfgWrap::SCENE_TYPE_HANG&&mapType != SceneCfgWrap::SCENE_TYPE_COPY && item.id() != DEFAULT_MAP_ID&&item.mapid()!=200403) {
 			continue;
 		}
 
@@ -87,11 +86,41 @@ bool MapManager::init() {
 		m_mapFiles[mapId] = mapFile;
 		m_mapNames[mapId] = mapName;
 		m_mapwwmFiles[mapId] = wwmFile;
+		if(cfg.copytype()!=0){
+			if(cfg.copytype()==1){
+				pMap = new MapHang();
+			}
+			else{
+				pMap = new MapCopy();
+			}
+//			try {
+//				//伙伴岛
+//				if(mapId==200501||mapId==200502||mapId==200503||mapId==200504||mapId==200505){
+//					pMap = new MapHang();
+//				}
+//				//符文塔
+//				else if(mapId==200401||mapId==200401||mapId==200401||mapId==200401||mapId==200401){
+//					pMap = new MapHang();
+//				}
+//				else{
+//					const CfgCopy::Copy& copyCfg =  CopyWrap().GetCopyByMapId(mapId);
+//					if(copyCfg.type()==TYPE_COPY_WORLDBOSS||copyCfg.type()==TYPE_COPY_GODPLANET||copyCfg.copyid()==901||copyCfg.type()==TYPE_IMMORTALROAD_COPY){
+//						pMap = new MapCopy();
+//					}else{
+//						pMap = new MapHang();
+//					}
+//				}
+//			} catch (...) {
+//				continue;
+//			}
 
-		if (mapType == SceneCfgWrap::SCENE_TYPE_HANG||mapType == SceneCfgWrap::SCENE_TYPE_BOSS||item.mapid()==200403) {
-			pMap = new MapHang();
-		} else {
-			pMap = new Map();
+		}
+		else{
+			if (mapType == SceneCfgWrap::SCENE_TYPE_HANG) {
+				pMap = new MapHang();
+			} else {
+				pMap = new Map();
+			}
 		}
 
 		if (pMap == NULL) {
@@ -164,7 +193,6 @@ int MapManager::Process(uint32_t uid, logins::SEnterHang *req) {
 	if (!actorChangeMap(uid, base.role_num, info)) {
 		return false;
 	}
-
 	enterMapSync();
 	debug_log("enter hang %u %u", uid, des_map);
 	return 0;
@@ -261,29 +289,23 @@ int MapManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerEnterMap
 	SceneCfgWrap sceneCfgwrap;
 	const CfgMap::Map &mapCfg = mapCfgWrap.Get(map_id);
 	const CfgMap::Scene &sceneCfg = sceneCfgwrap.Get(mapCfg.mapscene());
-
 	resp->incId_ = 1;
 	resp->cellLine_ = 0;
-	uint32_t mapType = sceneCfg.instancetype();
-	if (mapType == SceneCfgWrap::SCENE_TYPE_HANG) {
-		resp->copyCode_=0;
-		resp->fightMode_ = map_id == 10000 ? 1 : 2;
-		resp->enterCellId_.type_ = 1;
-	}else if (mapType == SceneCfgWrap::SCENE_TYPE_BOSS){
-		resp->copyCode_ = mapCfg.copyid();
-		resp->fightMode_ = sceneCfg.fightmodel();
-		resp->enterCellId_.type_ = 128;
+	if(mapCfg.copytype()!=0){
+		const CfgCopy::Copy &copyCfg = CopyWrap().GetCopy(pHuman->getRealFbId());
+		resp->copyCode_ = copyCfg.copyid();
+		resp->fightMode_ = 1;
+		resp->enterCellId_.type_ = copyCfg.type();
 	}else{
 		resp->copyCode_=0;
 		resp->fightMode_ = map_id == 10000 ? 1 : 2;
 		resp->enterCellId_.type_ = 1;
 	}
-
 	resp->useUninterested_ = false;
 	resp->enterCellId_.id_ = 1;
 	resp->enterCellId_.server_ = 0;
 	resp->enterCellId_.proxy_ = 0;
-	resp->spaceId_ = map_id;
+	resp->spaceId_ = sceneCfg.id();
 	pHuman->getPos(resp->spacePos_.x, resp->spacePos_.y);
 	if (!LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp)) {
 		return R_ERROR;
@@ -484,7 +506,7 @@ bool MapManager::ActorLogin(uint32_t uid) {
 	pCurMap->addMainActor(pHuman);
 	m_humans[uid] = pHuman;
 	m_allObjects[uid] = pHuman;
-
+	ZhanLingManager::Instance()->onChangeMap(uid);
 	return true;
 }
 
@@ -538,6 +560,7 @@ bool MapManager::actorChangeMap(uint32_t uid, byte role_num, const MapChangeInfo
 		if (race == RACE_HUMAN) {
 			Human *pHuman = static_cast<Human*>(pMo);
 			pDesMap->addMainActor(pHuman);
+			ZhanLingManager::Instance()->onChangeMap(uid);
 			//savePos(dynamic_cast<Human*>(pMo));
 		} else {
 			pDesMap->addObject(pMo);
@@ -750,6 +773,32 @@ MapMoveObject* MapManager::getObject(uint32_t id, int16_t race) {
 	return itr != m_allObjects.end() ? dynamic_cast<MapMoveObject *>(itr->second) : NULL;
 }
 
+
+MapMoveObject* MapManager::getMonster(uint32_t monsterId) {
+	map<uint32_t, MapDisplayObject*>::iterator itr;
+	for(itr=m_allObjects.begin();itr!=m_allObjects.end();itr++){
+		if(dynamic_cast<MapMoveObject *>(itr->second)->checkEntityId(monsterId)){
+			return dynamic_cast<MapMoveObject *>(itr->second);
+		}
+	}
+	return NULL;
+}
+
+MapMoveObject* MapManager::getMoveObject(uint32_t id) {
+	map<uint32_t, MapDisplayObject*>::iterator itr = m_allObjects.find(id);
+	if (itr == m_allObjects.end()) {
+		return NULL;
+	}
+	MapDisplayObject *pDo = itr->second;
+	if (pDo == NULL) {
+		return NULL;
+	}
+	if (pDo->getRace() != RACE_HUMAN && pDo->getRace() != RACE_MONSTER) {
+		return NULL;
+	}
+	return dynamic_cast<MapMoveObject*>(pDo);
+}
+
 Human* MapManager::getHuman(uint32_t uid) {
 	map<uint32_t, Human*>::iterator itr = m_humans.find(uid);
 	return (itr != m_humans.end() ? itr->second : NULL);
@@ -868,7 +917,11 @@ void MapManager::mapRemoveObject(uint32_t id) {
 		return;
 	}
 
-	pMap->delObject(itr->second);
+	if (pDo->getRace() == RACE_MONSTER) {
+		pMap->objectDie(dynamic_cast<MapMoveObject*>(pDo));
+	} else {
+		pMap->delObject(pDo);
+	}
 
 	m_allObjects.erase(id);
 }

@@ -111,6 +111,116 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new CSEnterWorldBoss();}
 };
+class CSEnterTaskCopy: public Msg {
+public:
+int32_t copyCode;
+virtual inline int32_t msgId() const {return 2001;}
+static int32_t MsgId() {return 2001;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSEnterTaskCopy();}
+};
+class CSSavePlayerConfig: public Msg {
+public:
+string configString;
+virtual inline int32_t msgId() const {return 1799;}
+static int32_t MsgId() {return 1799;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSSavePlayerConfig();}
+};
+class CSGetWorldBossList: public Msg {
+public:
+virtual inline int32_t msgId() const {return 1315;}
+static int32_t MsgId() {return 1315;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSGetWorldBossList();}
+};
+class CSGetGodPlaneList: public Msg {
+public:
+virtual inline int32_t msgId() const {return 1856;}
+static int32_t MsgId() {return 1856;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSGetGodPlaneList();}
+};
+class CSEnterGodPlane: public Msg {
+public:
+int32_t copyCode;
+virtual inline int32_t msgId() const {return 1857;}
+static int32_t MsgId() {return 1857;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSEnterGodPlane();}
+};
+class CSFightRevive: public Msg {
+public:
+int32_t type;
+virtual inline int32_t msgId() const {return 949;}
+static int32_t MsgId() {return 949;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSFightRevive();}
+};
+class CSEnterImmortalroadCopy: public Msg {
+public:
+int32_t copyCode;
+virtual inline int32_t msgId() const {return 2711;}
+static int32_t MsgId() {return 2711;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSEnterImmortalroadCopy();}
+};
+class CSEnterExpCopy: public Msg {
+public:
+int32_t copyCode;
+int32_t count;
+virtual inline int32_t msgId() const {return 969;}
+static int32_t MsgId() {return 969;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSEnterExpCopy();}
+};
+class CSEncourageExpCopy: public Msg {
+public:
+int32_t type;
+int32_t count;
+virtual inline int32_t msgId() const {return 981;}
+static int32_t MsgId() {return 981;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSEncourageExpCopy();}
+};
+class CSBuyExtraExpCopy: public Msg {
+public:
+int32_t type;
+virtual inline int32_t msgId() const {return 4149;}
+static int32_t MsgId() {return 4149;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSBuyExtraExpCopy();}
+};
+class CSEnterPartnerIslandCopy: public Msg {
+public:
+int32_t type;
+virtual inline int32_t msgId() const {return 2877;}
+static int32_t MsgId() {return 2877;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSEnterPartnerIslandCopy();}
+};
 }
 
 #endif

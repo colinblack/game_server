@@ -11,6 +11,49 @@
 #define _DATA_SUIT_H_
 #include "Kernel.h"
 
+struct DataDevilAngel {
+	uint32_t uid;
+	uint32_t rid;
+	uint32_t type;
+	uint32_t id;
+	uint64_t ms;
+	uint32_t reseve[8];
+	DataDevilAngel() {
+		memset(this, 0, sizeof(*this));
+	}
+	bool init(uint32_t Uid, uint32_t Rid, uint32_t Type, uint32_t Id) {
+		memset(this,0,sizeof(*this));
+		uid = Uid;
+		rid = Rid;
+		type = Type;
+		id = Id;
+		return true;
+	}
+};
+
+struct DataZhuLing {
+	uint32_t uid;
+	uint32_t rid;
+	uint32_t type;
+	uint32_t part;
+	uint32_t advance;
+	uint32_t level;
+	uint32_t reseve[8];
+
+	DataZhuLing() {
+		memset(this,0,sizeof(*this));
+	}
+
+	bool init(uint32_t Uid, uint32_t Rid, uint32_t Type, uint32_t Part){
+		memset(this,0,sizeof(*this));
+		uid = Uid;
+		rid = Rid;
+		type = Type;
+		part = Part;
+		return true;
+	}
+};
+
 struct DataRoleSuit {
 	uint32_t uid;
 	uint32_t rid;
@@ -31,48 +74,66 @@ struct DataRoleSuit {
 		memset(this,0,sizeof(*this));
 	}
 
-	bool init(uint32_t p_uid, uint32_t p_rid, uint32_t p_type, uint32_t p_id){
+	bool init(uint32_t Uid, uint32_t Rid, uint32_t Type, uint32_t Id){
 		memset(this,0,sizeof(*this));
-		uid = p_uid;
-		rid = p_rid;
-		type = p_type;
-		id = p_id;
+		uid = Uid;
+		rid = Rid;
+		type = Type;
+		id = Id;
 		return true;
 	}
 };
 
-
-// 称号
-struct DataTitle {
+// 时装
+struct DataRoleFashion {
 	uint32_t uid;
 	uint32_t rid;
 	uint32_t type;
 	uint32_t id;
-	uint32_t slot_1;
-	uint32_t slot_2;
-	uint32_t slot_3;
-	uint32_t slot_4;
-	uint32_t slot_5;
-	uint32_t slot_6;
-	uint32_t slot_7;
-	uint32_t slot_8;
-	uint32_t flag;
-	uint32_t reseve;
+	uint32_t isWear;
+	uint32_t level;
+	uint32_t fashionType;
+	uint32_t reseve[7];
 
-	DataTitle() {
+	DataRoleFashion() {
 		memset(this,0,sizeof(*this));
 	}
 
-	bool init(uint32_t p_uid,uint32_t p_rid, uint32_t p_type, uint32_t p_id){
-		memset(this,0,sizeof(*this));
-		uid = p_uid;
-		type = p_type;
-		id = p_id;
-		rid = p_rid;
+	bool init(uint32_t Uid, uint32_t Rid, uint32_t Type, uint32_t Id,uint32_t FashionType){
+		uid = Uid;
+		rid = Rid;
+		type = Type;
+		fashionType = FashionType;
+		id = Id;
 		return true;
 	}
 };
 
+// 时装-套装
+struct DataRoleFashionSuit {
+	uint32_t uid;
+	uint32_t rid;
+	uint32_t type;
+	uint32_t id;
+	uint32_t suitId;
+	uint32_t num;
+	uint32_t reseve[8];
+
+//	uint32_t active[3];
+	DataRoleFashionSuit() {
+		memset(this,0,sizeof(*this));
+	}
+
+	bool init(uint32_t Uid, uint32_t Rid,uint32_t Type,uint32_t KeyId,uint32_t SuitId,uint32_t Num){
+		uid = Uid;
+		rid = Rid;
+		type = Type;
+		id = KeyId;
+		suitId = SuitId;
+		num = Num;
+		return true;
+	}
+};
 
 //符文
 struct DataRoleRune{

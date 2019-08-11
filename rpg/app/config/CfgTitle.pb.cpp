@@ -39,9 +39,9 @@ void protobuf_AssignDesc_CfgTitle_2eproto() {
   Title_descriptor_ = file->message_type(0);
   static const int Title_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, item_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, title_name_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, limit_time_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, itemid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, limittime_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Title, attr_),
   };
   Title_reflection_ =
@@ -57,7 +57,7 @@ void protobuf_AssignDesc_CfgTitle_2eproto() {
       sizeof(Title));
   Titles_descriptor_ = file->message_type(1);
   static const int Titles_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Titles, titles_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Titles, title_),
   };
   Titles_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -106,10 +106,10 @@ void protobuf_AddDesc_CfgTitle_2eproto() {
   ::CfgCommon::protobuf_AddDesc_CfgCommon_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\016CfgTitle.proto\022\010CfgTitle\032\017CfgCommon.pr"
-    "oto\"p\n\005Title\022\n\n\002id\030\001 \002(\r\022\017\n\007item_id\030\002 \002("
-    "\r\022\022\n\ntitle_name\030\003 \002(\t\022\022\n\nlimit_time\030\004 \002("
-    "\r\022\"\n\004attr\030\005 \003(\0132\024.CfgCommon.Attribute\")\n"
-    "\006Titles\022\037\n\006Titles\030\001 \003(\0132\017.CfgTitle.Title", 200);
+    "oto\"h\n\005Title\022\n\n\002id\030\001 \002(\r\022\016\n\006itemId\030\002 \002(\r"
+    "\022\014\n\004name\030\003 \002(\t\022\021\n\tlimitTime\030\004 \002(\r\022\"\n\004att"
+    "r\030\005 \003(\0132\024.CfgCommon.Attribute\"(\n\006Titles\022"
+    "\036\n\005title\030\001 \003(\0132\017.CfgTitle.Title", 191);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgTitle.proto", &protobuf_RegisterTypes);
   Title::default_instance_ = new Title();
@@ -131,7 +131,7 @@ struct StaticDescriptorInitializer_CfgTitle_2eproto {
 #ifndef _MSC_VER
 const int Title::kIdFieldNumber;
 const int Title::kItemIdFieldNumber;
-const int Title::kTitleNameFieldNumber;
+const int Title::kNameFieldNumber;
 const int Title::kLimitTimeFieldNumber;
 const int Title::kAttrFieldNumber;
 #endif  // !_MSC_VER
@@ -156,9 +156,9 @@ void Title::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   id_ = 0u;
-  item_id_ = 0u;
-  title_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  limit_time_ = 0u;
+  itemid_ = 0u;
+  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  limittime_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -168,8 +168,8 @@ Title::~Title() {
 }
 
 void Title::SharedDtor() {
-  if (title_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete title_name_;
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete name_;
   }
   if (this != default_instance_) {
   }
@@ -208,13 +208,13 @@ void Title::Clear() {
   } while (0)
 
   if (_has_bits_[0 / 32] & 15) {
-    ZR_(id_, item_id_);
-    if (has_title_name()) {
-      if (title_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-        title_name_->clear();
+    ZR_(id_, itemid_);
+    if (has_name()) {
+      if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        name_->clear();
       }
     }
-    limit_time_ = 0u;
+    limittime_ = 0u;
   }
 
 #undef OFFSET_OF_FIELD_
@@ -245,50 +245,50 @@ bool Title::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_item_id;
+        if (input->ExpectTag(16)) goto parse_itemId;
         break;
       }
 
-      // required uint32 item_id = 2;
+      // required uint32 itemId = 2;
       case 2: {
         if (tag == 16) {
-         parse_item_id:
+         parse_itemId:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &item_id_)));
-          set_has_item_id();
+                 input, &itemid_)));
+          set_has_itemid();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(26)) goto parse_title_name;
+        if (input->ExpectTag(26)) goto parse_name;
         break;
       }
 
-      // required string title_name = 3;
+      // required string name = 3;
       case 3: {
         if (tag == 26) {
-         parse_title_name:
+         parse_name:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_title_name()));
+                input, this->mutable_name()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->title_name().data(), this->title_name().length(),
+            this->name().data(), this->name().length(),
             ::google::protobuf::internal::WireFormat::PARSE,
-            "title_name");
+            "name");
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_limit_time;
+        if (input->ExpectTag(32)) goto parse_limitTime;
         break;
       }
 
-      // required uint32 limit_time = 4;
+      // required uint32 limitTime = 4;
       case 4: {
         if (tag == 32) {
-         parse_limit_time:
+         parse_limitTime:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &limit_time_)));
-          set_has_limit_time();
+                 input, &limittime_)));
+          set_has_limittime();
         } else {
           goto handle_unusual;
         }
@@ -340,24 +340,24 @@ void Title::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
   }
 
-  // required uint32 item_id = 2;
-  if (has_item_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->item_id(), output);
+  // required uint32 itemId = 2;
+  if (has_itemid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->itemid(), output);
   }
 
-  // required string title_name = 3;
-  if (has_title_name()) {
+  // required string name = 3;
+  if (has_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->title_name().data(), this->title_name().length(),
+      this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "title_name");
+      "name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->title_name(), output);
+      3, this->name(), output);
   }
 
-  // required uint32 limit_time = 4;
-  if (has_limit_time()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->limit_time(), output);
+  // required uint32 limitTime = 4;
+  if (has_limittime()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->limittime(), output);
   }
 
   // repeated .CfgCommon.Attribute attr = 5;
@@ -381,25 +381,25 @@ void Title::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
   }
 
-  // required uint32 item_id = 2;
-  if (has_item_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->item_id(), target);
+  // required uint32 itemId = 2;
+  if (has_itemid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->itemid(), target);
   }
 
-  // required string title_name = 3;
-  if (has_title_name()) {
+  // required string name = 3;
+  if (has_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->title_name().data(), this->title_name().length(),
+      this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "title_name");
+      "name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->title_name(), target);
+        3, this->name(), target);
   }
 
-  // required uint32 limit_time = 4;
-  if (has_limit_time()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->limit_time(), target);
+  // required uint32 limitTime = 4;
+  if (has_limittime()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->limittime(), target);
   }
 
   // repeated .CfgCommon.Attribute attr = 5;
@@ -428,25 +428,25 @@ int Title::ByteSize() const {
           this->id());
     }
 
-    // required uint32 item_id = 2;
-    if (has_item_id()) {
+    // required uint32 itemId = 2;
+    if (has_itemid()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->item_id());
+          this->itemid());
     }
 
-    // required string title_name = 3;
-    if (has_title_name()) {
+    // required string name = 3;
+    if (has_name()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->title_name());
+          this->name());
     }
 
-    // required uint32 limit_time = 4;
-    if (has_limit_time()) {
+    // required uint32 limitTime = 4;
+    if (has_limittime()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->limit_time());
+          this->limittime());
     }
 
   }
@@ -488,14 +488,14 @@ void Title::MergeFrom(const Title& from) {
     if (from.has_id()) {
       set_id(from.id());
     }
-    if (from.has_item_id()) {
-      set_item_id(from.item_id());
+    if (from.has_itemid()) {
+      set_itemid(from.itemid());
     }
-    if (from.has_title_name()) {
-      set_title_name(from.title_name());
+    if (from.has_name()) {
+      set_name(from.name());
     }
-    if (from.has_limit_time()) {
-      set_limit_time(from.limit_time());
+    if (from.has_limittime()) {
+      set_limittime(from.limittime());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -523,9 +523,9 @@ bool Title::IsInitialized() const {
 void Title::Swap(Title* other) {
   if (other != this) {
     std::swap(id_, other->id_);
-    std::swap(item_id_, other->item_id_);
-    std::swap(title_name_, other->title_name_);
-    std::swap(limit_time_, other->limit_time_);
+    std::swap(itemid_, other->itemid_);
+    std::swap(name_, other->name_);
+    std::swap(limittime_, other->limittime_);
     attr_.Swap(&other->attr_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -545,7 +545,7 @@ void Title::Swap(Title* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Titles::kTitlesFieldNumber;
+const int Titles::kTitleFieldNumber;
 #endif  // !_MSC_VER
 
 Titles::Titles()
@@ -601,7 +601,7 @@ Titles* Titles::New() const {
 }
 
 void Titles::Clear() {
-  titles_.Clear();
+  title_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -616,16 +616,16 @@ bool Titles::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .CfgTitle.Title Titles = 1;
+      // repeated .CfgTitle.Title title = 1;
       case 1: {
         if (tag == 10) {
-         parse_Titles:
+         parse_title:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_titles()));
+                input, add_title()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(10)) goto parse_Titles;
+        if (input->ExpectTag(10)) goto parse_title;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -655,10 +655,10 @@ failure:
 void Titles::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:CfgTitle.Titles)
-  // repeated .CfgTitle.Title Titles = 1;
-  for (int i = 0; i < this->titles_size(); i++) {
+  // repeated .CfgTitle.Title title = 1;
+  for (int i = 0; i < this->title_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->titles(i), output);
+      1, this->title(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -671,11 +671,11 @@ void Titles::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Titles::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:CfgTitle.Titles)
-  // repeated .CfgTitle.Title Titles = 1;
-  for (int i = 0; i < this->titles_size(); i++) {
+  // repeated .CfgTitle.Title title = 1;
+  for (int i = 0; i < this->title_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        1, this->titles(i), target);
+        1, this->title(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -689,12 +689,12 @@ void Titles::SerializeWithCachedSizes(
 int Titles::ByteSize() const {
   int total_size = 0;
 
-  // repeated .CfgTitle.Title Titles = 1;
-  total_size += 1 * this->titles_size();
-  for (int i = 0; i < this->titles_size(); i++) {
+  // repeated .CfgTitle.Title title = 1;
+  total_size += 1 * this->title_size();
+  for (int i = 0; i < this->title_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->titles(i));
+        this->title(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -722,7 +722,7 @@ void Titles::MergeFrom(const ::google::protobuf::Message& from) {
 
 void Titles::MergeFrom(const Titles& from) {
   GOOGLE_CHECK_NE(&from, this);
-  titles_.MergeFrom(from.titles_);
+  title_.MergeFrom(from.title_);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -740,13 +740,13 @@ void Titles::CopyFrom(const Titles& from) {
 
 bool Titles::IsInitialized() const {
 
-  if (!::google::protobuf::internal::AllAreInitialized(this->titles())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->title())) return false;
   return true;
 }
 
 void Titles::Swap(Titles* other) {
   if (other != this) {
-    titles_.Swap(&other->titles_);
+    title_.Swap(&other->title_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -17,7 +17,6 @@ SkillSprint::~SkillSprint() {
 
 bool SkillSprint::doSkillHit(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target, AttackInfo &ainfo) {
 	const CfgSkill::Skill &cfg = SkillCfgWrap().GetById(sinfo.skillId);
-	cfg.range();
 
 	Point tpos;
 	Point cpos;

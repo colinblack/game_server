@@ -18,8 +18,9 @@ struct SkillInfo {
 enum SKILL_TYPE {
 	SKILL_UNKNOW = 0,
 	SKILL_NORMAL = 1,		//普通攻击
-	SKILL_SPRINT = 2,		//冲锋
+	SKILL_SPRINT = 2,		//冲刺
 	SKILL_SUMMON = 3,		//召唤
+	SKILL_RUSH = 4,			//冲锋
 	SKILL_MAX
 };
 
@@ -31,9 +32,9 @@ public:
 	virtual bool doSkillHit(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target, AttackInfo &ainfo);
 	virtual bool caculateHurt(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target, AttackInfo &ainfo);
 	virtual void getTargets(const SkillUseInfo &sinfo, MapMoveObject *caster, vector<uint32_t> &targets);
-	virtual void doActorEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, const vector<uint32_t> &vecTargets);
-	virtual void doSceneEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, const vector<uint32_t> &vecTargets);
-	virtual void doEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, const vector<uint32_t> &vecTargets);
+	virtual void doActorEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target);
+	virtual void doSceneEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target);
+	virtual void doEffect(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target);
 	virtual int getType() const;
 	virtual int getMaxLevel() const;
 

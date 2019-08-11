@@ -99,31 +99,31 @@ class Title : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
 
-  // required uint32 item_id = 2;
-  inline bool has_item_id() const;
-  inline void clear_item_id();
+  // required uint32 itemId = 2;
+  inline bool has_itemid() const;
+  inline void clear_itemid();
   static const int kItemIdFieldNumber = 2;
-  inline ::google::protobuf::uint32 item_id() const;
-  inline void set_item_id(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 itemid() const;
+  inline void set_itemid(::google::protobuf::uint32 value);
 
-  // required string title_name = 3;
-  inline bool has_title_name() const;
-  inline void clear_title_name();
-  static const int kTitleNameFieldNumber = 3;
-  inline const ::std::string& title_name() const;
-  inline void set_title_name(const ::std::string& value);
-  inline void set_title_name(const char* value);
-  inline void set_title_name(const char* value, size_t size);
-  inline ::std::string* mutable_title_name();
-  inline ::std::string* release_title_name();
-  inline void set_allocated_title_name(::std::string* title_name);
+  // required string name = 3;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 3;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  inline void set_allocated_name(::std::string* name);
 
-  // required uint32 limit_time = 4;
-  inline bool has_limit_time() const;
-  inline void clear_limit_time();
+  // required uint32 limitTime = 4;
+  inline bool has_limittime() const;
+  inline void clear_limittime();
   static const int kLimitTimeFieldNumber = 4;
-  inline ::google::protobuf::uint32 limit_time() const;
-  inline void set_limit_time(::google::protobuf::uint32 value);
+  inline ::google::protobuf::uint32 limittime() const;
+  inline void set_limittime(::google::protobuf::uint32 value);
 
   // repeated .CfgCommon.Attribute attr = 5;
   inline int attr_size() const;
@@ -141,22 +141,22 @@ class Title : public ::google::protobuf::Message {
  private:
   inline void set_has_id();
   inline void clear_has_id();
-  inline void set_has_item_id();
-  inline void clear_has_item_id();
-  inline void set_has_title_name();
-  inline void clear_has_title_name();
-  inline void set_has_limit_time();
-  inline void clear_has_limit_time();
+  inline void set_has_itemid();
+  inline void clear_has_itemid();
+  inline void set_has_name();
+  inline void clear_has_name();
+  inline void set_has_limittime();
+  inline void clear_has_limittime();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 id_;
-  ::google::protobuf::uint32 item_id_;
-  ::std::string* title_name_;
+  ::google::protobuf::uint32 itemid_;
+  ::std::string* name_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Attribute > attr_;
-  ::google::protobuf::uint32 limit_time_;
+  ::google::protobuf::uint32 limittime_;
   friend void  protobuf_AddDesc_CfgTitle_2eproto();
   friend void protobuf_AssignDesc_CfgTitle_2eproto();
   friend void protobuf_ShutdownFile_CfgTitle_2eproto();
@@ -219,17 +219,17 @@ class Titles : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .CfgTitle.Title Titles = 1;
-  inline int titles_size() const;
-  inline void clear_titles();
-  static const int kTitlesFieldNumber = 1;
-  inline const ::CfgTitle::Title& titles(int index) const;
-  inline ::CfgTitle::Title* mutable_titles(int index);
-  inline ::CfgTitle::Title* add_titles();
+  // repeated .CfgTitle.Title title = 1;
+  inline int title_size() const;
+  inline void clear_title();
+  static const int kTitleFieldNumber = 1;
+  inline const ::CfgTitle::Title& title(int index) const;
+  inline ::CfgTitle::Title* mutable_title(int index);
+  inline ::CfgTitle::Title* add_title();
   inline const ::google::protobuf::RepeatedPtrField< ::CfgTitle::Title >&
-      titles() const;
+      title() const;
   inline ::google::protobuf::RepeatedPtrField< ::CfgTitle::Title >*
-      mutable_titles();
+      mutable_title();
 
   // @@protoc_insertion_point(class_scope:CfgTitle.Titles)
  private:
@@ -238,7 +238,7 @@ class Titles : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::CfgTitle::Title > titles_;
+  ::google::protobuf::RepeatedPtrField< ::CfgTitle::Title > title_;
   friend void  protobuf_AddDesc_CfgTitle_2eproto();
   friend void protobuf_AssignDesc_CfgTitle_2eproto();
   friend void protobuf_ShutdownFile_CfgTitle_2eproto();
@@ -277,128 +277,128 @@ inline void Title::set_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:CfgTitle.Title.id)
 }
 
-// required uint32 item_id = 2;
-inline bool Title::has_item_id() const {
+// required uint32 itemId = 2;
+inline bool Title::has_itemid() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Title::set_has_item_id() {
+inline void Title::set_has_itemid() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Title::clear_has_item_id() {
+inline void Title::clear_has_itemid() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Title::clear_item_id() {
-  item_id_ = 0u;
-  clear_has_item_id();
+inline void Title::clear_itemid() {
+  itemid_ = 0u;
+  clear_has_itemid();
 }
-inline ::google::protobuf::uint32 Title::item_id() const {
-  // @@protoc_insertion_point(field_get:CfgTitle.Title.item_id)
-  return item_id_;
+inline ::google::protobuf::uint32 Title::itemid() const {
+  // @@protoc_insertion_point(field_get:CfgTitle.Title.itemId)
+  return itemid_;
 }
-inline void Title::set_item_id(::google::protobuf::uint32 value) {
-  set_has_item_id();
-  item_id_ = value;
-  // @@protoc_insertion_point(field_set:CfgTitle.Title.item_id)
+inline void Title::set_itemid(::google::protobuf::uint32 value) {
+  set_has_itemid();
+  itemid_ = value;
+  // @@protoc_insertion_point(field_set:CfgTitle.Title.itemId)
 }
 
-// required string title_name = 3;
-inline bool Title::has_title_name() const {
+// required string name = 3;
+inline bool Title::has_name() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Title::set_has_title_name() {
+inline void Title::set_has_name() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Title::clear_has_title_name() {
+inline void Title::clear_has_name() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void Title::clear_title_name() {
-  if (title_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    title_name_->clear();
+inline void Title::clear_name() {
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_->clear();
   }
-  clear_has_title_name();
+  clear_has_name();
 }
-inline const ::std::string& Title::title_name() const {
-  // @@protoc_insertion_point(field_get:CfgTitle.Title.title_name)
-  return *title_name_;
+inline const ::std::string& Title::name() const {
+  // @@protoc_insertion_point(field_get:CfgTitle.Title.name)
+  return *name_;
 }
-inline void Title::set_title_name(const ::std::string& value) {
-  set_has_title_name();
-  if (title_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    title_name_ = new ::std::string;
+inline void Title::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
   }
-  title_name_->assign(value);
-  // @@protoc_insertion_point(field_set:CfgTitle.Title.title_name)
+  name_->assign(value);
+  // @@protoc_insertion_point(field_set:CfgTitle.Title.name)
 }
-inline void Title::set_title_name(const char* value) {
-  set_has_title_name();
-  if (title_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    title_name_ = new ::std::string;
+inline void Title::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
   }
-  title_name_->assign(value);
-  // @@protoc_insertion_point(field_set_char:CfgTitle.Title.title_name)
+  name_->assign(value);
+  // @@protoc_insertion_point(field_set_char:CfgTitle.Title.name)
 }
-inline void Title::set_title_name(const char* value, size_t size) {
-  set_has_title_name();
-  if (title_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    title_name_ = new ::std::string;
+inline void Title::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
   }
-  title_name_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:CfgTitle.Title.title_name)
+  name_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:CfgTitle.Title.name)
 }
-inline ::std::string* Title::mutable_title_name() {
-  set_has_title_name();
-  if (title_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    title_name_ = new ::std::string;
+inline ::std::string* Title::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:CfgTitle.Title.title_name)
-  return title_name_;
+  // @@protoc_insertion_point(field_mutable:CfgTitle.Title.name)
+  return name_;
 }
-inline ::std::string* Title::release_title_name() {
-  clear_has_title_name();
-  if (title_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline ::std::string* Title::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
-    ::std::string* temp = title_name_;
-    title_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void Title::set_allocated_title_name(::std::string* title_name) {
-  if (title_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete title_name_;
+inline void Title::set_allocated_name(::std::string* name) {
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete name_;
   }
-  if (title_name) {
-    set_has_title_name();
-    title_name_ = title_name;
+  if (name) {
+    set_has_name();
+    name_ = name;
   } else {
-    clear_has_title_name();
-    title_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    clear_has_name();
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:CfgTitle.Title.title_name)
+  // @@protoc_insertion_point(field_set_allocated:CfgTitle.Title.name)
 }
 
-// required uint32 limit_time = 4;
-inline bool Title::has_limit_time() const {
+// required uint32 limitTime = 4;
+inline bool Title::has_limittime() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Title::set_has_limit_time() {
+inline void Title::set_has_limittime() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void Title::clear_has_limit_time() {
+inline void Title::clear_has_limittime() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void Title::clear_limit_time() {
-  limit_time_ = 0u;
-  clear_has_limit_time();
+inline void Title::clear_limittime() {
+  limittime_ = 0u;
+  clear_has_limittime();
 }
-inline ::google::protobuf::uint32 Title::limit_time() const {
-  // @@protoc_insertion_point(field_get:CfgTitle.Title.limit_time)
-  return limit_time_;
+inline ::google::protobuf::uint32 Title::limittime() const {
+  // @@protoc_insertion_point(field_get:CfgTitle.Title.limitTime)
+  return limittime_;
 }
-inline void Title::set_limit_time(::google::protobuf::uint32 value) {
-  set_has_limit_time();
-  limit_time_ = value;
-  // @@protoc_insertion_point(field_set:CfgTitle.Title.limit_time)
+inline void Title::set_limittime(::google::protobuf::uint32 value) {
+  set_has_limittime();
+  limittime_ = value;
+  // @@protoc_insertion_point(field_set:CfgTitle.Title.limitTime)
 }
 
 // repeated .CfgCommon.Attribute attr = 5;
@@ -435,34 +435,34 @@ Title::mutable_attr() {
 
 // Titles
 
-// repeated .CfgTitle.Title Titles = 1;
-inline int Titles::titles_size() const {
-  return titles_.size();
+// repeated .CfgTitle.Title title = 1;
+inline int Titles::title_size() const {
+  return title_.size();
 }
-inline void Titles::clear_titles() {
-  titles_.Clear();
+inline void Titles::clear_title() {
+  title_.Clear();
 }
-inline const ::CfgTitle::Title& Titles::titles(int index) const {
-  // @@protoc_insertion_point(field_get:CfgTitle.Titles.Titles)
-  return titles_.Get(index);
+inline const ::CfgTitle::Title& Titles::title(int index) const {
+  // @@protoc_insertion_point(field_get:CfgTitle.Titles.title)
+  return title_.Get(index);
 }
-inline ::CfgTitle::Title* Titles::mutable_titles(int index) {
-  // @@protoc_insertion_point(field_mutable:CfgTitle.Titles.Titles)
-  return titles_.Mutable(index);
+inline ::CfgTitle::Title* Titles::mutable_title(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgTitle.Titles.title)
+  return title_.Mutable(index);
 }
-inline ::CfgTitle::Title* Titles::add_titles() {
-  // @@protoc_insertion_point(field_add:CfgTitle.Titles.Titles)
-  return titles_.Add();
+inline ::CfgTitle::Title* Titles::add_title() {
+  // @@protoc_insertion_point(field_add:CfgTitle.Titles.title)
+  return title_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::CfgTitle::Title >&
-Titles::titles() const {
-  // @@protoc_insertion_point(field_list:CfgTitle.Titles.Titles)
-  return titles_;
+Titles::title() const {
+  // @@protoc_insertion_point(field_list:CfgTitle.Titles.title)
+  return title_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::CfgTitle::Title >*
-Titles::mutable_titles() {
-  // @@protoc_insertion_point(field_mutable_list:CfgTitle.Titles.Titles)
-  return &titles_;
+Titles::mutable_title() {
+  // @@protoc_insertion_point(field_mutable_list:CfgTitle.Titles.title)
+  return &title_;
 }
 
 

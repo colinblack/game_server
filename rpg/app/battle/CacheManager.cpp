@@ -6,6 +6,7 @@
  */
 
 #include "CacheManager.h"
+#include "BattleInc.h"
 
 CacheManager::CacheManager() {
 }
@@ -13,8 +14,13 @@ CacheManager::CacheManager() {
 CacheManager::~CacheManager() {
 }
 
+
 bool CacheManager::ActorLogin(uint32_t uid) {
 	m_offline.erase(uid);
+//	if()// 当天第一次登录
+//	{
+//		m_online.erase(uid);
+//	}
 
 	map<uint32_t, UserCache>::iterator itr = m_mapUser.find(uid);
 	if (itr != m_mapUser.end() && itr->second.init_) {
@@ -69,6 +75,13 @@ bool CacheManager::ActorLogin(uint32_t uid) {
 		return false;
 	}
 
+	if(!LoadSign(cache)){
+		return false;
+	}
+	if(!LoadTrump(cache)){
+		return false;
+	}
+
 	cache.init_ = true;
 	debug_log("cache init uid=%u", uid);
 	return true;
@@ -76,9 +89,27 @@ bool CacheManager::ActorLogin(uint32_t uid) {
 
 bool CacheManager::ActorOffline(uint32_t uid) {
 	UserCache &cache = m_mapUser[uid];
-	cache.base_.offline_time =
+	cache.base_.offline_time = Time::GetGlobalTime();
 	DataBaseManager::Instance()->Set(cache.base_);
 	m_offline[uid] = Time::GetGlobalTime();
+	return true;
+}
+
+static uint32_t i = 0;
+// 获取指定user的当天在线时长 缓存起来
+bool CacheManager::ActorOnline(uint32_t uid) {
+	if(uid !=0){
+		UserCache &cache = m_mapUser[uid];
+		// 在线时长 = （当前时刻 - 登录时刻）+ 已在线时长（数据库存储）
+		OnlineRewardManager::Instance()->DailyReset(cache);
+		cache.base_.online_time++;
+
+		// 一分钟更新一次数据库
+		if (i++ % 60 == 0) {
+			DataBaseManager::Instance()->Set(cache.base_);
+		}
+		m_online[uid] = cache.base_.online_time;
+	}
 	return true;
 }
 
@@ -98,6 +129,20 @@ UserCache& CacheManager::GetUser(uint32_t uid) {
 	UserCache &cache = m_mapUser[uid];
 	cache.uid_ = uid;
 	return cache;
+}
+
+uint32_t CacheManager::GetUserOnlineTime(uint32_t uid) {
+	UserCache &cache = m_mapUser[uid];
+	return cache.base_.online_time;
+}
+
+
+bool CacheManager::GetAllUser(vector<uint32_t>& uids){
+	uids.clear();
+	for(map<uint32_t, UserCache>::iterator it = m_mapUser.begin();it!=m_mapUser.end();it++){
+		uids.push_back(it->first);
+	}
+	return true;
 }
 
 bool CacheManager::LoadBase(UserCache &cache) {
@@ -272,30 +317,49 @@ bool CacheManager::LoadAttr(UserCache &cache) {
 	for (uint32_t i = 0; i < datas.size(); i++) {
 		if (datas[i].type == TYPE_ATTR_CARD) {
 			CardInfo cardInfo;
-			memcpy((void*)&cardInfo,(const void*)&datas[i],sizeof(DataAttr));
-			cache.m_cards.insert(make_pair(cardInfo.id,cardInfo));
-		}
-		else if(datas[i].type ==TYPE_ATTR_REINCARN){
-			memcpy((void*)&cache.m_reinCarnInfo,(const void*)&datas[i],sizeof(DataAttr));
-		}
-		else if(datas[i].type ==TYPE_ATTR_COPY){
+			memcpy((void*) &cardInfo, (const void*) &datas[i], sizeof(DataAttr));
+			cache.m_cards.insert(make_pair(cardInfo.id, cardInfo));
+		} else if (datas[i].type == TYPE_ATTR_REINCARN) {
+			memcpy((void*) &cache.m_reinCarnInfo, (const void*) &datas[i], sizeof(DataAttr));
+		} else if (datas[i].type == TYPE_ATTR_COPY) {
 			CopyInfo copyInfo;
-			memcpy((void*)&copyInfo,(const void*)&datas[i],sizeof(DataAttr));
-			cache.m_copyInfo.insert(make_pair(copyInfo.id,copyInfo));
-		}else if (datas[i].type == TYPE_ATTR_TREASURE_HUNT) {
+			memcpy((void*) &copyInfo, (const void*) &datas[i], sizeof(DataAttr));
+			cache.m_copyInfo.insert(make_pair(copyInfo.id, copyInfo));
+		} else if (datas[i].type == TYPE_ATTR_TREASURE_HUNT) {
 			TreasureHunt draw;
 			draw.FromAttr(datas[i]);
 			cache.m_treasure_hunt[draw.id] = draw;
-		}
-		else if(datas[i].type == TYPE_ATTR_ACTIVITY_INFO) {
+		} else if (datas[i].type == TYPE_ATTR_ACTIVITY_INFO) {
 			DataActivity act_info;
-			memcpy((void*)&act_info, (const void*)&datas[i], sizeof(DataAttr));
+			memcpy((void*) &act_info, (const void*) &datas[i], sizeof(DataAttr));
 			cache.act_info_.insert(make_pair(act_info.id, act_info));
-		}
-		else if(datas[i].type == TYPE_ATTR_ACT_CNT) {
+		} else if (datas[i].type == TYPE_ATTR_ACT_CNT) {
 			DataActivity act_cnt;
-			memcpy((void*)&act_cnt, (const void*)&datas[i], sizeof(DataAttr));
+			memcpy((void*) &act_cnt, (const void*) &datas[i], sizeof(DataAttr));
 			cache.act_cnt_.insert(make_pair(act_cnt.id, act_cnt));
+		} else if (datas[i].type == TYPE_ATTR_ZHAN_LING) {
+			cache.zhanling_.FromAttr(datas[i]);
+		}
+		// 从DataAttr数据库中获取到类型为称号的数据拷贝到titleInfo中并且存放到user_title_字典
+		else if(datas[i].type ==TYPE_ROLE_TITLE){
+			DataTitle titleInfo;
+			memcpy((void*)&titleInfo,(const void*)&datas[i],sizeof(DataAttr));
+			cache.user_title_.insert(make_pair(titleInfo.id, titleInfo));
+		}
+		else if(datas[i].type ==TYPE_ATTR_ONLINT_REWARD){
+			DataOnlineReward OnlineRewardInfo;
+			memcpy((void*)&OnlineRewardInfo,(const void*)&datas[i],sizeof(DataAttr));
+			cache.user_onlineReward_.insert(make_pair(OnlineRewardInfo.id, OnlineRewardInfo));
+		}
+		else if(datas[i].type ==TYPE_ADVANCE_TARGET){
+			DataAdvanceTarget targetInfo;
+			memcpy((void*)&targetInfo,(const void*)&datas[i],sizeof(DataAdvanceTarget));
+			cache.advance_target_.insert(make_pair(targetInfo.advance_type, targetInfo));
+		}
+		else if(datas[i].type ==TYPE_ATTR_SHOP_MALL){
+			DataShop shopInfo;
+			memcpy((void*)&shopInfo,(const void*)&datas[i],sizeof(DataShop));
+			cache.shop_.insert(make_pair(shopInfo.id, shopInfo));
 		}
 	}
 	return true;
@@ -320,10 +384,26 @@ bool CacheManager::LoadRoleSuit(UserCache &cache) {
 			memcpy((void*)&runeInfo,(const void*)&datas[i],sizeof(DataRoleAttr));
 			cache.m_runeInfo.insert(make_pair(runeInfo.rid, runeInfo));
 		}
-		if(datas[i].type ==TYPE_ROLE_TITLE){
-			DataTitle titleInfo;
-			memcpy((void*)&titleInfo,(const void*)&datas[i],sizeof(DataTitle));
-			cache.role_title_[titleInfo.rid].insert(make_pair(titleInfo.id, titleInfo));
+		if(datas[i].type ==TYPE_ROLE_ZHULING){
+			DataZhuLing zhuLingInfo;
+			memcpy((void*)&zhuLingInfo,(const void*)&datas[i],sizeof(DataZhuLing));
+			cache.role_zhuLing[zhuLingInfo.rid].insert(make_pair(zhuLingInfo.part, zhuLingInfo));
+		}
+		if(datas[i].type == TYPE_ROLE_ANGEL) {
+			DataDevilAngel davilAngel;
+			memcpy((void*)&davilAngel,(const void*)&datas[i],sizeof(DataDevilAngel));
+			cache.devilAngelDate[davilAngel.id].insert(make_pair(davilAngel.rid, davilAngel));
+		}
+		if(datas[i].type == TYPE_ROLE_FASHION) {
+			DataRoleFashion fashion;
+			memcpy((void*)&fashion,(const void*)&datas[i],sizeof(DataRoleFashion));
+			cache.role_fashion_[fashion.rid][fashion.fashionType].insert(make_pair(fashion.id, fashion));
+		}
+		if(datas[i].type == TYPE_ROLE_FASHION_SUIT) {
+			DataRoleFashionSuit fashionSuit;
+			memcpy((void*)&fashionSuit,(const void*)&datas[i],sizeof(DataRoleFashionSuit));
+			uint32_t key = fashionSuit.id * 1000 + fashionSuit.num;
+			cache.role_fashion_suit_[key] = fashionSuit;
 		}
 	}
 	return true;
@@ -340,3 +420,25 @@ bool CacheManager::LoadActive(UserCache &cache) {
 	}
 	return true;
 }
+
+
+bool CacheManager::LoadSign(UserCache &cache) {
+	int ret = DataSignManager::Instance()->Get(cache.uid_, cache.reward_);
+	if (0 != ret && R_ERR_NO_DATA != ret) {
+		error_log("load sign error ret=%d uid=%u", ret, cache.uid_);
+		return false;
+	}
+	return true;
+}
+
+bool CacheManager::LoadTrump(UserCache &cache) {
+	int ret = DataTrumpManager::Instance()->Get(cache.uid_, cache.trump_);
+
+	if (0 != ret && R_ERR_NO_DATA != ret) {
+		error_log("load trump error ret=%d uid=%u", ret, cache.uid_);
+		return false;
+	}
+
+	return true;
+}
+

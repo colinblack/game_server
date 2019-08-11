@@ -116,8 +116,12 @@ bool LogicManager::Init() {
 		error_log("busi log init failed");
 		return false;
 	}
-
 	MissionManager::Instance()->Init();
+
+	if(!CopyManager::Instance()->Init()){
+		error_log("copy init failed");
+		return false;
+	}
 
 	/**
 	 if (!StringFilter::Init(Config::GetValue("string_filter_data"))) {
@@ -159,7 +163,7 @@ bool LogicManager::Init() {
 		return false;
 	}
 	//启动异步DB连接
-	if (!AsyncDBManager::getInstance()->init(BattleServer::Instance())) {
+	if (!AsyncDBManager::Instance()->init(BattleServer::Instance())) {
 		error_log("async db init failed");
 		return false;
 	}
@@ -175,11 +179,13 @@ bool LogicManager::Init() {
 
 bool LogicManager::InitLocalData() {
 	TreasureRecordManager::Instance()->Init();
+	LevelRewardRecordManager::Instance()->Init();
 	return true;
 }
 
 bool LogicManager::SaveLocalData() {
 	TreasureRecordManager::Instance()->Save();
+	LevelRewardRecordManager::Instance()->Save();
 	return true;
 }
 
@@ -297,8 +303,8 @@ void LogicManager::OfflineProcess(CFirePacket* packet, const string &reason) {
 
 	if (uid != 0) {
 		//TODO Human offline logic
-
 		UserManager::Instance()->ActorOffline(uid);
+		CacheManager::Instance()->ActorOffline(uid);
 		MapManager::Instance()->actorOffline(uid);
 	}
 	debug_log("role offline uid=%u", uid);
@@ -325,11 +331,17 @@ void LogicManager::TimerProcess(CFirePacket* packet) {
 		if(Time::GetHour(Time::GetGlobalTime()) != lastHour){
 			lastHour = Time::GetHour(Time::GetGlobalTime());
 			CopyManager::Instance()->onHour(lastHour);
+			ActivityManager::Instance()->onHour(lastHour);
 		}
 		OnSecondTimer();
-		AsyncDBManager::getInstance()->onSecondTimer();
+		DevilAngelManager::Instance()->onSecondTimer();
+		AsyncDBManager::Instance()->onSecondTimer();
 		DestoryManager::Instance()->onSecondTimer();
 		PropertyManager::Instance()->onSecondTimer();
+		ZhanLingManager::Instance()->onSecondTimer();
+		CopyManager::Instance()->onSecondTimer();
+		BuffControler::Instance()->onSecondTimer();
+		NearEnemyManager::Instance()->onSecondTimer();
 	}
 
 	gettimeofday(&tv, NULL);
@@ -365,6 +377,14 @@ void LogicManager::OnSecondTimer() {
 		} else {
 			break;
 		}
+	}
+
+	// 存储当天累计在线时长
+//	uint32_t uid = GetUid();
+	vector<uint32_t> uids;
+	FdManager::Instance()->getAllUid(uids);
+	for (vector<uint32_t>::iterator itr = uids.begin(); itr != uids.end(); ++itr) {
+		CacheManager::Instance()->ActorOnline(*itr);
 	}
 }
 
@@ -456,6 +476,7 @@ bool LogicManager::SetSession(uint32_t uid, int &verifycode, int &relogincode) {
 void LogicManager::RegProto() {
 	dispatcher_.reg(CMD_RPC_LOGIN_QUERY, ProcessAndReply<logins::SQuery, logins::SQueryResult, UserManager>);
 	dispatcher_.reg(CMD_RPC_LOGIN_LOGIN, ProcessAndReply<logins::SLogin, logins::SLoginResult, UserManager>);
+	dispatcher_.reg(CMD_RPC_GAME_SAVECONFIG, ProcessNoReply<copy::CSSavePlayerConfig, UserManager>);
 
 	dispatcher_.reg(CMD_RPC_LOGIN_LOGINGAME, ProcessNoReply<igameapp::SLoginGame, LogicManager>);
 	dispatcher_.reg(CMD_RPC_GAME_QUERYGAMEDATA, ProcessNoReply<logins::SQueryGameData, LogicManager>);
@@ -503,11 +524,14 @@ void LogicManager::RegProto() {
 	dispatcher_.reg(CMD_RPC_EQUIP_PURIFY,ProcessAndReply<logins::SPurifyReq,logins::SPurifyResp,PurifyManager>);
 	// 称号
 	dispatcher_.reg(CMD_RPC_TITLE_DRESSTITLE,ProcessNoReply<logins::STitleReq, TitleManager>);
+	// 在线奖励
+	dispatcher_.reg(CMD_RPC_WEAL_GETONLINEREWARD,ProcessNoReply<logins::COnlineRewardReq, OnlineRewardManager>);
 
 	dispatcher_.reg(CMD_RPC_CHAT_CHAT, ProcessNoReply<chat::CSChatProxy, ChatManager>);
 	dispatcher_.reg(CMD_RPC_EQUIP_STRENGTHEN, ProcessAndReply<logins::SStrengthenReq, logins::SStrengthenResp, ForgeManager>);
 	//图鉴
 	dispatcher_.reg(CMD_RPC_CARD_ACTIVECARD, ProcessNoReply<card::CSCardActiveCard, CardManager>);
+	dispatcher_.reg(CMD_RPC_CARD_UPSTAR, ProcessNoReply<logins::SCardUpStarReq, CardManager>);
 	//境界，转生
 	dispatcher_.reg(CMD_RPC_RING_ACTIVATE, ProcessNoReply<reincarn::CSRingActive, ReinCarnManager>);
 	dispatcher_.reg(CMD_RPC_REINCARN_REINCARN, ProcessNoReply<reincarn::CSReinCarn, ReinCarnManager>);
@@ -522,24 +546,101 @@ void LogicManager::RegProto() {
 	dispatcher_.reg(CMD_RPC_EQUIP_ACTIVESUITCOLLECT, ProcessNoReply<logins::SActiveSuitReq, RoleSuitManager>);
 	dispatcher_.reg(CMD_RPC_EQUIP_UNLOCKSUITCOLLECT, ProcessNoReply<logins::SUnlockSuitReq, RoleSuitManager>);
 	dispatcher_.reg(CMD_RPC_EQUIP_DRESSSUITCOLLECT, ProcessNoReply<logins::SDressSuitReq, RoleSuitManager>);
+
+	// 时装
+	dispatcher_.reg(CMD_RPC_FASHION_ACTIVEFASHION, ProcessAndReply<logins::CActiveFashionReq, msgs::SFashion, FashionManager>);
+	dispatcher_.reg(CMD_RPC_FASHION_PUTON_FASHION, ProcessAndReply<logins::CPutOnFashionReq, logins::SPutOnFashionResp, FashionManager>);
+	dispatcher_.reg(CMD_RPC_FASHION_GETOFF_FASHION, ProcessAndReply<logins::CGetOffFashionReq, logins::SGetOffFashionResp, FashionManager>);
+	dispatcher_.reg(CMD_RPC_FASHION_ADVANCEFASHION, ProcessAndReply<logins::CAdvanceFashionReq, msgs::SFashion, FashionManager>);
+	dispatcher_.reg(CMD_RPC_FASHION_ACTIVEFASHIONSUIT, ProcessAndReply<logins::CActiveFashionSuitReq, logins::SActiveFashionSuitResp, FashionManager>);
+
+	// 宝石
+	dispatcher_.reg(CMD_RPC_EQUIP_EMBEDGEM, ProcessAndReply<logins::CEmbedGemReq, logins::SEmbedGemResp, GemManager>);
+	dispatcher_.reg(CMD_RPC_EQUIP_REMOVEGEM, ProcessAndReply<logins::CRemoveGemReq, logins::SRemoveGemResp, GemManager>);
+	dispatcher_.reg(CMD_RPC_EQUIP_UPGRADEGEM, ProcessAndReply<logins::CUpgradeGemReq, logins::SUpgradeGemResp, GemManager>);
+	dispatcher_.reg(CMD_RPC_EQUIP_ACTIVATEGEMTARGET, ProcessNoReply<logins::CctivateGemTargetReq, GemManager>);
+
 	//副本，BOSS
-	dispatcher_.reg(CMD_RPC_COPY_ENTERREINCARNCOPY, ProcessNoReply<boss::CSEnterReincarnCopy, CopyManager>);
-	dispatcher_.reg(CMD_RPC_COPY_ENTERMAGICTOWERCOPY, ProcessNoReply<boss::CSEnterMagicTowerCopy, CopyManager>);
-	dispatcher_.reg(CMD_RPC_COPY_ENTERMATERIALCOPY, ProcessNoReply<boss::CSEnterMaterialCopy, CopyManager>);
-	dispatcher_.reg(CMD_RPC_COPY_LEAVECOPY, ProcessNoReply<boss::CSLeaveCopy, CopyManager>);
-	dispatcher_.reg(CMD_RPC_COPY_QUICKFINISHREINCARNCOPY, ProcessNoReply<boss::CSQuickFinish, CopyManager>);
-	dispatcher_.reg(CMD_RPC_COPY_GOTREINCARNREWARDS, ProcessNoReply<boss::CSGotReward, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_ENTERREINCARNCOPY, ProcessNoReply<copy::CSEnterReincarnCopy, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_ENTERMAGICTOWERCOPY, ProcessNoReply<copy::CSEnterMagicTowerCopy, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_LEAVECOPY, ProcessNoReply<copy::CSLeaveCopy, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_QUICKFINISHREINCARNCOPY, ProcessNoReply<copy::CSQuickFinish, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_GOTREINCARNREWARDS, ProcessNoReply<copy::CSGotReward, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_LOTTERYMAGICTOWER, ProcessAndReply<copy::CSLotteryMagicTower,copy::SCLotteryMagicTowerResp, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_ENTERMATERIALCOPY, ProcessNoReply<copy::CSEnterMaterialCopy, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_QUICKFINISHMATERIALCOPY, ProcessNoReply<copy::CSQuickFinishMaterial, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_MOPMATERIALCOPY, ProcessNoReply<copy::CSMopMaterial, CopyManager>);
+	dispatcher_.reg(CMD_RPC_BOSS_ENTERWORLDBOSS, ProcessNoReply<copy::CSEnterWorldBoss, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_ENTERTASKCOPY, ProcessNoReply<copy::CSEnterTaskCopy, CopyManager>);
+	dispatcher_.reg(CMD_RPC_BOSS_GETWORLDBOSSLIST, ProcessNoReply<copy::CSGetWorldBossList, CopyManager>);
+	dispatcher_.reg(CMD_RPC_BOSS_GETGODPLANELIST, ProcessNoReply<copy::CSGetGodPlaneList, CopyManager>);
+	dispatcher_.reg(CMD_RPC_BOSS_ENTERGODPLANE, ProcessNoReply<copy::CSEnterGodPlane, CopyManager>);
+	dispatcher_.reg(CMD_RPC_FIGHT_REVIVE, ProcessNoReply<copy::CSFightRevive, CopyManager>);
+	dispatcher_.reg(CMD_RPC_COPY_ENTEREXPCOPY, ProcessNoReply<copy::CSEnterExpCopy, CopyManager>);
+
+	dispatcher_.reg(CMD_RPC_COPY_ENTERPARTNERISLAND, ProcessNoReply<copy::CSEnterPartnerIslandCopy, CopyManager>);
+
+
+	//组队
+	dispatcher_.reg(CMD_RPC_TEAM_CREATETEAM, ProcessNoReply<team::CSCreateTeam, TeamManager>);
+	dispatcher_.reg(CMD_RPC_TEAM_LEAVETEAM, ProcessNoReply<team::CSLeaveTeam, TeamManager>);
+	dispatcher_.reg(CMD_RPC_TEAM_DISBANDTEAM, ProcessNoReply<team::CSDisBandTeam, TeamManager>);
+	dispatcher_.reg(CMD_RPC_TEAM_CHECKMEMBERCOPY, ProcessAndReply<team::CSCheckMemCopy, team::SCCheckMemCopyResponse, TeamManager>);
+
+	dispatcher_.reg(CMD_RPC_COPY_ENTERIMMORTALROADCOPY, ProcessNoReply<copy::CSEnterImmortalroadCopy, CopyManager>);
 
 	//日常活动
 	dispatcher_.reg(CMD_RPC_DAILYACTIVITY_GETACTIVITY, ProcessNoReply<logins::SGetActivityReq, ActivityManager>);
 	dispatcher_.reg(CMD_RPC_DAILYACTIVITY_GETACTIVITYREWARD, ProcessNoReply<logins::SGetActivityRewardReq, ActivityManager>);
+	//铸灵
+	dispatcher_.reg(CMD_RPC_EQUIP_ZHULINGUPLEVEL, ProcessAndReply<logins::SzhulingUpLevelReq, logins::SzhulingUpLevelResp, ZhuLingManager>);
+	dispatcher_.reg(CMD_RPC_EQUIP_ZHULINGUPADVANCE, ProcessAndReply<logins::SzhulingUpAdvanceReq, logins::SzhulingUpAdvanceResp, ZhuLingManager>);
+	dispatcher_.reg(CMD_RPC_EQUIP_OPENZHULING, ProcessNoReply<logins::SopenZhulingReq, ZhuLingManager>);
+	//战灵
+	dispatcher_.reg(CMD_RPC_SKILL_CLEANNUQI, ProcessNoReply<logins::SSkillCleanNuQi, ZhanLingManager>);
+	dispatcher_.reg(CMD_RPC_ZHANLING_EQUIP_ZHANLING, ProcessNoReply<logins::SEquipZhanlingReq, ZhanLingManager>);
+	dispatcher_.reg(CMD_RPC_ZHANLING_ADVANCEZHANLING, ProcessNoReply<logins::SAdvanceZhanlingReq, ZhanLingManager>);
+	dispatcher_.reg(CMD_RPC_ZHANLING_LEARN_ZHANLING_SKILL, ProcessNoReply<logins::SLearnZhanlingSkillReq, ZhanLingManager>);
+	//恶魔天使
+	dispatcher_.reg(CMD_RPC_DEVILANGEL_DEVILANGELEQUIP, ProcessNoReply<logins::SDevilAngelequipReq, DevilAngelManager>);
 
+	//每日签到
+	dispatcher_.reg(CMD_RPC_SIGN_SIGNEVERYDAY, ProcessNoReply<logins::SPlayerSignEveryDayReq, RewardManager>);
+	dispatcher_.reg(CMD_RPC_SIGN_GETSIGNEVERYDAYTARGETREWARD, ProcessNoReply<logins::SGetSignEverydayRwardReq, RewardManager>);
+
+	//等级礼包
+	dispatcher_.reg(CMD_RPC_LEVELREWARD_GETLEVELREWARD, ProcessNoReply<logins::SGetLevelRwardReq, RewardManager>);
+	//圣装
+	dispatcher_.reg(CMD_RPC_REINCARN_COMMITSHENGMISSION, ProcessNoReply<logins::SCommitShengMissionReq, ReinCarnShengManager>);
+	dispatcher_.reg(CMD_RPC_REINCARN_REQUESTSHENGMISSION, ProcessNoReply<logins::SRequestShengMissionReq, ReinCarnShengManager>);
+
+	//暗器
+	dispatcher_.reg(CMD_RPC_TRUMP_ACTIVE, ProcessNoReply<logins::STrumpActiveReq, TrumpManager>);
+	dispatcher_.reg(CMD_RPC_TRUMP_UPGRADE, ProcessNoReply<logins::STrumpUpgradeReq, TrumpManager>);
+	dispatcher_.reg(CMD_RPC_TRUMP_ACTIVETRUMPSKILL, ProcessNoReply<logins::SActiveTrumpSkillReq, TrumpManager>);
+	dispatcher_.reg(CMD_RPC_TRUMP_REQUESTMISSION, ProcessNoReply<logins::STrumpRequestMissionReq, TrumpManager>);
+	dispatcher_.reg(CMD_RPC_TRUMP_UNLOCKTRUMP, ProcessNoReply<logins::SUnlockTrumpReq, TrumpManager>);
+	//进阶
+	dispatcher_.reg(CMD_RPC_ADVANCE_ONEKEYDRESS, ProcessNoReply<logins::SOneKeyDressReq, AdvanceManager>);
+	dispatcher_.reg(CMD_RPC_ADVANCE_DRESS, ProcessNoReply<logins::SDressReq, AdvanceManager>);
+	dispatcher_.reg(CMD_RPC_ADVANCE_STRENGTHEQUIP, ProcessNoReply<logins::SStrengthEquipReq, AdvanceManager>);
+	dispatcher_.reg(CMD_RPC_SHOP_RECYCLE, ProcessNoReply<logins::SRecycleReq, AdvanceManager>);
+	dispatcher_.reg(CMD_RPC_ADVANCE_LEARNSKILL, ProcessNoReply<logins::SLearnSkillReq, AdvanceManager>);
+	dispatcher_.reg(CMD_RPC_ADVANCE_ADVANCEAWAKEN, ProcessNoReply<logins::SAdvanceAwakenReq, AdvanceManager>);
+	dispatcher_.reg(CMD_RPC_ADVANCE_ACTIVEADVANCETARGET, ProcessNoReply<logins::SActiveAdvanceTargetReq, AdvanceManager>);
+
+	dispatcher_.reg(CMD_RPC_NEARENMEY_FIGHTENEMY, ProcessNoReply<logins::SNearenmeyFightenemyReq, NearEnemyManager>);
+    dispatcher_.reg(CMD_RPC_NEARENMEY_BACKTOHANG, ProcessNoReply<logins::SNearenemyBacktoHangReq, NearEnemyManager>);
+	dispatcher_.reg(CMD_RPC_TOPLIST_GETTOPLIST, ProcessAndReply<logins::SGetTopListReq, msgs::SToplist, ToplistManager>);
+	//商城
+	dispatcher_.reg(CMD_RPC_SHOP_BUY, ProcessNoReply<logins::SBuyReq, ShopManager>);
 }
 
 void LogicManager::RegSync() {
 	synchronizer_.reg(CMD_PLAYER_LOGIN_DATA, MsgSend<msgs::SPlayerLoginData, UserManager>);
 	synchronizer_.reg(CMD_PLAYER_PLAYER, MsgSend<dbs::TPlayer, UserManager>);
 	synchronizer_.reg(CMD_SEND_PLAYER_MONEY_LIST, MsgSend<msgs::SPlayerMoneyList, UserManager>);
+	synchronizer_.reg(CMD_PLAYER_CONFIG, MsgSend<dbs::TPlayerConfig, UserManager>);
 	synchronizer_.reg(CMD_PLAYER_ROLE_LIST, MsgSend<msgs::SPlayerRoleList, RoleManager>);
 	synchronizer_.reg(CMD_SERVER_INFO, MsgSend<msgs::SServerInfo, LogicManager>);
 	synchronizer_.reg(CMD_PLAYER_ENTER_MAP, MsgSend<msgs::SPlayerEnterMap, MapManager>);
@@ -555,6 +656,8 @@ void LogicManager::RegSync() {
 	synchronizer_.reg(CMD_SEND_PLAYER_BAG_ITEM_LIST, MsgSend<msgs::SPlayerBagItemList, EquipsManager>);
 	synchronizer_.reg(CMD_SEND_PLAYER_MISSION_LIST, MsgSend<msgs::SPlayerMissionList, MissionManager>);
 	synchronizer_.reg(CMD_PLAYER_ADVANCE_INFO, MsgSend<msgs::SPlayerAdvanceInfo, AdvanceManager>);
+	synchronizer_.reg(CMD_PLAYER_ADVANCE_AWAKEN, MsgSend<msgs::SPlayerAdvanceAwakenInfo, AdvanceManager>);
+	synchronizer_.reg(CMD_PLAYER_ADVANCE_TARGETS, MsgSend<msgs::SIntIntMap, AdvanceManager>);
 	synchronizer_.reg(CMD_SHENQI_INFO, MsgSend<msgs::SShenqiInfo, ShenQiManager>);
 	synchronizer_.reg(CMD_TREASURE_ADVANCE_INFO, MsgSend<msgs::STreasureAdvanceInfo, TreasureManager>);
 	synchronizer_.reg(CMD_PLAYER_TREASURE_INFO, MsgSend<msgs::SPlayerTreasureInfo, TreasureManager>);
@@ -566,11 +669,37 @@ void LogicManager::RegSync() {
 	synchronizer_.reg(CMD_PLAYER_CAREER_LEVEL, MsgSend<msgs::SInt, ReinCarnManager>);
 	synchronizer_.reg(CMD_PLAYER_SUIT_COLLECTS, MsgSend<msgs::SPlayerSuitCollects, RoleSuitManager>);
 	synchronizer_.reg(CMD_MAGIC_INFO, MsgSend<msgs::SMagicInfo, RuneManager>);
+	synchronizer_.reg(CMD_ZHANLING_INFO, MsgSend<msgs::SZhanlingInfo, ZhanLingManager>);
+	// 称号
+	synchronizer_.reg(CMD_PLAYER_TITLE_INFO, MsgSend<msgs::SPlayerTitleInfo, TitleManager>);
+	synchronizer_.reg(CMD_PLAYER_WEAR_TITLE, MsgSend<msgs::SIntIntMap, TitleManager>);
+	// 在线奖励
+	synchronizer_.reg(CMD_PLAYER_ONLINE_REWARD, MsgSend<msgs::SPlayerOnlineReward, OnlineRewardManager>);
+	// 时装
+	synchronizer_.reg(CMD_PLAYER_FASHION, MsgSend<msgs::SPlayerFashionInfo, FashionManager>);
+
+
 	//副本，BOSS
 	synchronizer_.reg(CMD_PLAYER_COPY_DATA_LIST, MsgSend<msgs::SPlayerCopyDataList, CopyManager>);
-
+	synchronizer_.reg(CMD_LOTTERY_MAGIC_TOWER, MsgSend<msgs::SLotteryMagicTower, CopyManager>);
+	synchronizer_.reg(CMD_BOSS_INFO, MsgSend<msgs::SBossList, CopyManager>);
+	synchronizer_.reg(CMD_ENTITY_UPDATE, MsgSend<msgs::SEntityUpdate, CopyManager>);
 
 	synchronizer_.reg(CMD_DAILY_ACTIVITY_INFO, MsgSend<msgs::SDailyActivityInfo, ActivityManager>);
+
+	//铸灵
+	synchronizer_.reg(CMD_PLAYER_ZHULING_OPEN_IFNO, MsgSend<msgs::SInts, ZhuLingManager>);
+	//恶魔天使
+	synchronizer_.reg(CMD_PLAYER_DEVILANGEL_DATE, MsgSend<msgs::SDevilAngelDate, DevilAngelManager>);
+	synchronizer_.reg(CMD_PLAYER_SIGNEVERYDAY, MsgSend<msgs::SPlayerSignEveryDay, RewardManager>);
+	synchronizer_.reg(CMD_PLAYER_LEVELREWARD, MsgSend<msgs::SPlayerLevelReward, RewardManager>);
+	//圣装任务
+	synchronizer_.reg(CMD_SHENG_INFO, MsgSend<msgs::SShengInfo, ReinCarnShengManager>);
+	//暗器
+	synchronizer_.reg(CMD_TRUMP_INFO, MsgSend<msgs::STrumpInfo, TrumpManager>);
+	synchronizer_.reg(CMD_NEARENEMY_INFO, MsgSend<msgs::SNearEnemyInfo, NearEnemyManager>);
+	//商城
+	synchronizer_.reg(CMD_PLAYER_SHOP_INFO, MsgSend<msgs::SShopInfo, ShopManager>);
 }
 
 bool LogicManager::ActorLogin(uint32_t uid) {
@@ -579,12 +708,15 @@ bool LogicManager::ActorLogin(uint32_t uid) {
 	EquipsManager::Instance()->ActorLogin(uid);
 	TreasureManager::Instance()->ActorLogin(uid);
 	UserManager::Instance()->onLogin(uid);
+	ZhanLingManager::Instance()->ActorLogin(uid);
+
 	MapManager::Instance()->ActorLogin(uid);
 
 	return true;
 }
 
 bool LogicManager::AfterLogin(uint32_t uid) {
+	HangManager::Instance()->AfterLogin(uid);
 	return true;
 }
 
@@ -658,6 +790,7 @@ int LogicManager::Process(uint32_t uid, igameapp::SLoginGame *req) {
 	AddSync(CMD_PLAYER_ROLE_LIST);
 	AddSync(CMD_SEND_PLAYER_BAG_LIST);
 	AddSync(CMD_SEND_PLAYER_MONEY_LIST);
+	AddSync(CMD_PLAYER_CONFIG);
 	AddSync(CMD_SEND_PLAYER_BAG_ITEM_LIST);
 	AddSync(CMD_ROLE_COMBAT_DATA);
 	AddSync(CMD_PLAYER_COMBAT_DATA);
@@ -671,12 +804,34 @@ int LogicManager::Process(uint32_t uid, igameapp::SLoginGame *req) {
 	AddSync(CMD_ACHIEVEMENT);
 	AddSync(CMD_ACHIEVEMENT_CHAPTER);
 	AddSync(CMD_REINCARN_INFO);
+	AddSync(CMD_ZHANLING_INFO);
 	AddSync(CMD_SEND_PLAYER_MISSION_LIST);
 	AddSync(CMD_PLAYER_SUIT_COLLECTS);
 	AddSync(CMD_MAGIC_INFO);
 	AddSync(CMD_PLAYER_COPY_DATA_LIST);
+	AddSync(CMD_BOSS_INFO);
+	AddSync(CMD_LOTTERY_MAGIC_TOWER);
 	AddSync(CMD_DAILY_ACTIVITY_INFO);
+	AddSync(CMD_HANG_POWER);
+	AddSync(CMD_PLAYER_TITLE_INFO); // 用户称号信息
+	AddSync(CMD_PLAYER_WEAR_TITLE);
+	AddSync(CMD_PLAYER_ONLINE_REWARD);// 在线奖励 4072
+	AddSync(CMD_PLAYER_FASHION);// 时装
+
+	AddSync(CMD_PLAYER_ZHULING_OPEN_IFNO);
+	AddSync(CMD_PLAYER_DEVILANGEL_DATE);
+
+	AddSync(CMD_SHENG_INFO);	//圣装任务
+
+	AddSync(CMD_PLAYER_ADVANCE_AWAKEN); //进阶 觉醒
+	AddSync(CMD_PLAYER_ADVANCE_TARGETS); //进阶羁绊
+
+
+	//xxx 登录同步消息先发给客户端，然后处理AfterLogin
+	UpdateManager::Instance()->Send(uid);
+	DoSync();
 	AfterLogin(cache.uid_);
+
 	return 0;
 }
 

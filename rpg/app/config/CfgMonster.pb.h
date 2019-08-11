@@ -563,6 +563,20 @@ class Plan : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::CfgMonster::Point >*
       mutable_pos();
 
+  // required uint32 count = 6;
+  inline bool has_count() const;
+  inline void clear_count();
+  static const int kCountFieldNumber = 6;
+  inline ::google::protobuf::uint32 count() const;
+  inline void set_count(::google::protobuf::uint32 value);
+
+  // required int32 index = 7;
+  inline bool has_index() const;
+  inline void clear_index();
+  static const int kIndexFieldNumber = 7;
+  inline ::google::protobuf::int32 index() const;
+  inline void set_index(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:CfgMonster.Plan)
  private:
   inline void set_has_id();
@@ -573,6 +587,10 @@ class Plan : public ::google::protobuf::Message {
   inline void clear_has_boss();
   inline void set_has_plan();
   inline void clear_has_plan();
+  inline void set_has_count();
+  inline void clear_has_count();
+  inline void set_has_index();
+  inline void clear_has_index();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -583,6 +601,8 @@ class Plan : public ::google::protobuf::Message {
   ::google::protobuf::uint32 boss_;
   ::google::protobuf::uint32 plan_;
   ::google::protobuf::RepeatedPtrField< ::CfgMonster::Point > pos_;
+  ::google::protobuf::uint32 count_;
+  ::google::protobuf::int32 index_;
   friend void  protobuf_AddDesc_CfgMonster_2eproto();
   friend void protobuf_AssignDesc_CfgMonster_2eproto();
   friend void protobuf_ShutdownFile_CfgMonster_2eproto();
@@ -1383,6 +1403,54 @@ inline ::google::protobuf::RepeatedPtrField< ::CfgMonster::Point >*
 Plan::mutable_pos() {
   // @@protoc_insertion_point(field_mutable_list:CfgMonster.Plan.pos)
   return &pos_;
+}
+
+// required uint32 count = 6;
+inline bool Plan::has_count() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Plan::set_has_count() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Plan::clear_has_count() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Plan::clear_count() {
+  count_ = 0u;
+  clear_has_count();
+}
+inline ::google::protobuf::uint32 Plan::count() const {
+  // @@protoc_insertion_point(field_get:CfgMonster.Plan.count)
+  return count_;
+}
+inline void Plan::set_count(::google::protobuf::uint32 value) {
+  set_has_count();
+  count_ = value;
+  // @@protoc_insertion_point(field_set:CfgMonster.Plan.count)
+}
+
+// required int32 index = 7;
+inline bool Plan::has_index() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Plan::set_has_index() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Plan::clear_has_index() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void Plan::clear_index() {
+  index_ = 0;
+  clear_has_index();
+}
+inline ::google::protobuf::int32 Plan::index() const {
+  // @@protoc_insertion_point(field_get:CfgMonster.Plan.index)
+  return index_;
+}
+inline void Plan::set_index(::google::protobuf::int32 value) {
+  set_has_index();
+  index_ = value;
+  // @@protoc_insertion_point(field_set:CfgMonster.Plan.index)
 }
 
 // -------------------------------------------------------------------

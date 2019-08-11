@@ -40,7 +40,7 @@ int MapHang::objectDie(MapMoveObject *pMo) {
 		return 0;
 	}
 
-	//挂机地图，人死后，清理怪物，然人恢复。
+	//挂机地图，人死后，清理怪物，然后人恢复。
 	vector<MapDisplayObject*> dels;
 	MapDisplayObject *pDo = NULL;
 	map<unsigned, MapDisplayObject*> &field = m_curField[pMo->getId()];
@@ -57,6 +57,7 @@ int MapHang::objectDie(MapMoveObject *pMo) {
 		pDo = *dItr;
 		delObject(pDo);
 		if (pDo != NULL) {
+			MapManager::Instance()->eraseObject(pDo);
 			DestoryManager::Instance()->addObject((MapMoveObject*)pDo);
 			msg.entityIds_.push_back(pDo->getEntityMsg());
 		}
@@ -65,9 +66,9 @@ int MapHang::objectDie(MapMoveObject *pMo) {
 	if (!msg.entityIds_.empty()) {
 		syncFieldMsg(pMo, CMD_MAP_LEAVES, &msg, true);
 	}
-
 	HangManager::Instance()->OnHumanDie(pMo->getId());
 	CopyManager::Instance()->OnHumanDie(pMo->getId());
+	NearEnemyManager::Instance()->OnHumanDie(pMo->getId());
 	pMo->doRecover();
 
 	return 0;

@@ -16,6 +16,7 @@ public:
 	StdMonster();
 	virtual ~StdMonster();
 	bool init(uint32_t id, uint32_t fbId, uint32_t mapId, const Point &p);
+	bool init(uint32_t id, uint32_t fbId, uint32_t mapId, const Point &p,uint64_t hp);
 	virtual bool initSkill();
 	virtual bool getSceneMsg();
 	virtual bool getMoveMsg();
@@ -34,9 +35,11 @@ public:
 	virtual void onSetPath();
 	void setCanMove(bool flag);
 	void setActively(bool flag);
+	bool setHurtSkill(uint32_t skillid);
 
 private:
 	bool findTarget();
+	bool getMasterTarget();
 
 private:
 	bool m_canMove;					//是否可移动

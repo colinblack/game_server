@@ -1,0 +1,11 @@
+package CfgMoney;
+
+message ItemMoney {
+	required uint32 id = 1;
+	required uint32 limit = 2;
+
+}
+
+message ItemMoneys {
+	repeated ItemMoney item_money = 1;
+}

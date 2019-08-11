@@ -11,6 +11,7 @@
 struct SkillUseInfo {
 	uint32_t skillId;
 	uint16_t skillLevel;
+	uint32_t hurtSkillId;
 	uint32_t nextUseTime;
 	uint32_t cdTime;
 	uint32_t allCdTime;
@@ -20,6 +21,7 @@ struct SkillUseInfo {
 	SkillUseInfo() {
 		skillId = 0;
 		skillLevel = 0;
+		hurtSkillId = 0;
 		nextUseTime = 0;
 		cdTime = 0;
 		allCdTime = 0;
@@ -47,7 +49,7 @@ struct AttackInfo {
 
 	AttackInfo() {
 		addHurt = 0;
-		hurtType = HURT_TYPE_MAGIC | HURT_TYPE_PHYSICAL | HURT_TYPE_WIZARD;
+		hurtType = 0;
 		addHurtRate = 0.0;
 		holyFlag = false;
 	}
@@ -87,15 +89,6 @@ enum MOVE_TYPE {
 	MOVE_TYPE_MAX
 };
 
-enum MOVE_OBJECT_STATE {
-	MO_STATE_UNKNOW = 0,
-	MO_STATE_NORMAL = 1,
-	MO_STATE_DIE = 2,
-	MO_STATE_REST = 3,
-
-	MO_STATE_MAX
-};
-
 class MapMoveObject: public MapDisplayObject {
 public:
 	MapMoveObject();
@@ -115,7 +108,6 @@ protected:
 	bool need_recove_;
 	bool is_active_;
 	bool pathing_flag_;
-	bool ride_;
 	float dis_;
 	float dis_left_;
 	float dis_move_;
@@ -151,7 +143,6 @@ public:
 	static uint32_t getDistance(const MapMoveObject *pMoA, const MapMoveObject *pMoB);
 	static uint32_t getDistance(Point p1, Point p2);
 	static uint32_t getDistance(int sx, int sy, int ex, int ey);
-
 public:
 	virtual Msg* doAppear();
 	virtual bool propsCalc();
@@ -189,14 +180,15 @@ public:
 	virtual uint32_t calcCombat();
 	virtual void setProps(const PropertySets &props);
 	virtual void getDiffProps(map<int16_t, int64_t> &diff, map<int16_t, int64_t> &fix);
-
+	virtual void setFirstAttacker(MapMoveObject *pMo);
+	virtual void addHp(int32_t hp);
 public:
 	void setLastAttacker(uint32_t race, uint32_t id);
 	void setLastAttacker(MapMoveObject *pAttacker);
 	bool isAttackAble(MapMoveObject *destObj);
 	bool getTargetPoint(int &x, int &y);
 	bool addTargetPoint(int &x, int &y);
-
+	bool checkEntityId(uint32_t entityid);
 public:
 	// inline get and set
 	void setPosIdx(uint32_t id) {
@@ -268,7 +260,7 @@ public:
 	}
 	bool isDie() {
 		if (props_[AP_HP].pl == 0) {
-			state_ = MO_STATE_DIE;
+			state_ |= AP_STAT_DIE;
 			return true;
 		}
 		return false;
@@ -277,8 +269,11 @@ public:
 		props_[type].pi = theProp.pi;
 	}
 	void setState(uint32_t state) {
-		state_ = state;
+		state_ |= state;
 		onSetState();
+	}
+	void delState(uint32_t state) {
+		state_ &= ~state;
 	}
 	uint32_t getLastMoveTime() {
 		return last_move_time_;
@@ -345,13 +340,17 @@ public:
 		return career_;
 	}
 	bool getRide() {
-		return ride_;
+		return (state_ & AP_STAT_RIDE) != 0;
 	}
 	void setMoveId(uint16_t id) {
 		move_id_ = id;
 	}
 	void setRide(bool v) {
-		ride_ = v;
+		if (v) {
+			setState(AP_STAT_RIDE);
+		} else {
+			delState(AP_STAT_RIDE);
+		}
 		onUpdate(ATTR_UPDATE_RIDE);
 	}
 	uint16_t getMoveId() {

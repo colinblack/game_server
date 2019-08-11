@@ -270,12 +270,30 @@ class Mission : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 exp() const;
   inline void set_exp(::google::protobuf::uint32 value);
 
+  // required uint32 type = 5;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 5;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
+  // required uint32 shengId = 6;
+  inline bool has_shengid() const;
+  inline void clear_shengid();
+  static const int kShengIdFieldNumber = 6;
+  inline ::google::protobuf::uint32 shengid() const;
+  inline void set_shengid(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:CfgMission.Mission)
  private:
   inline void set_has_id();
   inline void clear_has_id();
   inline void set_has_exp();
   inline void clear_has_exp();
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_shengid();
+  inline void clear_has_shengid();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -285,6 +303,8 @@ class Mission : public ::google::protobuf::Message {
   ::google::protobuf::uint32 id_;
   ::google::protobuf::uint32 exp_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > reward_;
+  ::google::protobuf::uint32 type_;
+  ::google::protobuf::uint32 shengid_;
   friend void  protobuf_AddDesc_CfgMission_2eproto();
   friend void protobuf_AssignDesc_CfgMission_2eproto();
   friend void protobuf_ShutdownFile_CfgMission_2eproto();
@@ -659,6 +679,54 @@ inline void Mission::set_exp(::google::protobuf::uint32 value) {
   set_has_exp();
   exp_ = value;
   // @@protoc_insertion_point(field_set:CfgMission.Mission.exp)
+}
+
+// required uint32 type = 5;
+inline bool Mission::has_type() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Mission::set_has_type() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Mission::clear_has_type() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Mission::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 Mission::type() const {
+  // @@protoc_insertion_point(field_get:CfgMission.Mission.type)
+  return type_;
+}
+inline void Mission::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:CfgMission.Mission.type)
+}
+
+// required uint32 shengId = 6;
+inline bool Mission::has_shengid() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Mission::set_has_shengid() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Mission::clear_has_shengid() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Mission::clear_shengid() {
+  shengid_ = 0u;
+  clear_has_shengid();
+}
+inline ::google::protobuf::uint32 Mission::shengid() const {
+  // @@protoc_insertion_point(field_get:CfgMission.Mission.shengId)
+  return shengid_;
+}
+inline void Mission::set_shengid(::google::protobuf::uint32 value) {
+  set_has_shengid();
+  shengid_ = value;
+  // @@protoc_insertion_point(field_set:CfgMission.Mission.shengId)
 }
 
 // -------------------------------------------------------------------

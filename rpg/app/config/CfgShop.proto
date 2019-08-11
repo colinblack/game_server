@@ -1,0 +1,15 @@
+package CfgShop;
+
+message ShopCell {
+	required uint32 id = 1;
+	required uint32 item_id = 2;
+	required uint32 buy_limit = 3;
+	required uint32 num = 4;
+	required uint32 real_price = 5;
+	required uint32 money_type = 6;
+	required uint32 limit_type = 7;
+}
+
+message ShopCells {
+	repeated ShopCell shop_cell = 1;
+}

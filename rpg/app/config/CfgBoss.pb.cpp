@@ -37,10 +37,11 @@ void protobuf_AssignDesc_CfgBoss_2eproto() {
       "CfgBoss.proto");
   GOOGLE_CHECK(file != NULL);
   Boss_descriptor_ = file->message_type(0);
-  static const int Boss_offsets_[4] = {
+  static const int Boss_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Boss, reincarnlevel_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Boss, bossid_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Boss, bosstype_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Boss, copyid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Boss, usetype_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Boss, reward_),
   };
   Boss_reflection_ =
@@ -105,10 +106,10 @@ void protobuf_AddDesc_CfgBoss_2eproto() {
   ::CfgCommon::protobuf_AddDesc_CfgCommon_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\rCfgBoss.proto\022\007CfgBoss\032\017CfgCommon.prot"
-    "o\"b\n\004Boss\022\025\n\rreincarnLevel\030\001 \002(\r\022\016\n\006boss"
-    "id\030\002 \002(\r\022\020\n\010bossType\030\003 \002(\r\022!\n\006reward\030\004 \003"
-    "(\0132\021.CfgCommon.Reward\"%\n\006Bosses\022\033\n\004boss\030"
-    "\001 \003(\0132\r.CfgBoss.Boss", 180);
+    "o\"q\n\004Boss\022\025\n\rreincarnLevel\030\001 \002(\r\022\016\n\006boss"
+    "id\030\002 \002(\r\022\016\n\006copyId\030\003 \002(\r\022\017\n\007useType\030\004 \002("
+    "\r\022!\n\006reward\030\005 \003(\0132\021.CfgCommon.Reward\"%\n\006"
+    "Bosses\022\033\n\004boss\030\001 \003(\0132\r.CfgBoss.Boss", 195);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgBoss.proto", &protobuf_RegisterTypes);
   Boss::default_instance_ = new Boss();
@@ -130,7 +131,8 @@ struct StaticDescriptorInitializer_CfgBoss_2eproto {
 #ifndef _MSC_VER
 const int Boss::kReincarnLevelFieldNumber;
 const int Boss::kBossidFieldNumber;
-const int Boss::kBossTypeFieldNumber;
+const int Boss::kCopyIdFieldNumber;
+const int Boss::kUseTypeFieldNumber;
 const int Boss::kRewardFieldNumber;
 #endif  // !_MSC_VER
 
@@ -154,7 +156,8 @@ void Boss::SharedCtor() {
   _cached_size_ = 0;
   reincarnlevel_ = 0u;
   bossid_ = 0u;
-  bosstype_ = 0u;
+  copyid_ = 0u;
+  usetype_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -200,10 +203,7 @@ void Boss::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 7) {
-    ZR_(reincarnlevel_, bossid_);
-    bosstype_ = 0u;
-  }
+  ZR_(reincarnlevel_, usetype_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -248,35 +248,50 @@ bool Boss::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_bossType;
+        if (input->ExpectTag(24)) goto parse_copyId;
         break;
       }
 
-      // required uint32 bossType = 3;
+      // required uint32 copyId = 3;
       case 3: {
         if (tag == 24) {
-         parse_bossType:
+         parse_copyId:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &bosstype_)));
-          set_has_bosstype();
+                 input, &copyid_)));
+          set_has_copyid();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_reward;
+        if (input->ExpectTag(32)) goto parse_useType;
         break;
       }
 
-      // repeated .CfgCommon.Reward reward = 4;
+      // required uint32 useType = 4;
       case 4: {
-        if (tag == 34) {
+        if (tag == 32) {
+         parse_useType:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &usetype_)));
+          set_has_usetype();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_reward;
+        break;
+      }
+
+      // repeated .CfgCommon.Reward reward = 5;
+      case 5: {
+        if (tag == 42) {
          parse_reward:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_reward()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_reward;
+        if (input->ExpectTag(42)) goto parse_reward;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -316,15 +331,20 @@ void Boss::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->bossid(), output);
   }
 
-  // required uint32 bossType = 3;
-  if (has_bosstype()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->bosstype(), output);
+  // required uint32 copyId = 3;
+  if (has_copyid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->copyid(), output);
   }
 
-  // repeated .CfgCommon.Reward reward = 4;
+  // required uint32 useType = 4;
+  if (has_usetype()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->usetype(), output);
+  }
+
+  // repeated .CfgCommon.Reward reward = 5;
   for (int i = 0; i < this->reward_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->reward(i), output);
+      5, this->reward(i), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -347,16 +367,21 @@ void Boss::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->bossid(), target);
   }
 
-  // required uint32 bossType = 3;
-  if (has_bosstype()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->bosstype(), target);
+  // required uint32 copyId = 3;
+  if (has_copyid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->copyid(), target);
   }
 
-  // repeated .CfgCommon.Reward reward = 4;
+  // required uint32 useType = 4;
+  if (has_usetype()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->usetype(), target);
+  }
+
+  // repeated .CfgCommon.Reward reward = 5;
   for (int i = 0; i < this->reward_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, this->reward(i), target);
+        5, this->reward(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -385,15 +410,22 @@ int Boss::ByteSize() const {
           this->bossid());
     }
 
-    // required uint32 bossType = 3;
-    if (has_bosstype()) {
+    // required uint32 copyId = 3;
+    if (has_copyid()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->bosstype());
+          this->copyid());
+    }
+
+    // required uint32 useType = 4;
+    if (has_usetype()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->usetype());
     }
 
   }
-  // repeated .CfgCommon.Reward reward = 4;
+  // repeated .CfgCommon.Reward reward = 5;
   total_size += 1 * this->reward_size();
   for (int i = 0; i < this->reward_size(); i++) {
     total_size +=
@@ -434,8 +466,11 @@ void Boss::MergeFrom(const Boss& from) {
     if (from.has_bossid()) {
       set_bossid(from.bossid());
     }
-    if (from.has_bosstype()) {
-      set_bosstype(from.bosstype());
+    if (from.has_copyid()) {
+      set_copyid(from.copyid());
+    }
+    if (from.has_usetype()) {
+      set_usetype(from.usetype());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -454,7 +489,7 @@ void Boss::CopyFrom(const Boss& from) {
 }
 
 bool Boss::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->reward())) return false;
   return true;
@@ -464,7 +499,8 @@ void Boss::Swap(Boss* other) {
   if (other != this) {
     std::swap(reincarnlevel_, other->reincarnlevel_);
     std::swap(bossid_, other->bossid_);
-    std::swap(bosstype_, other->bosstype_);
+    std::swap(copyid_, other->copyid_);
+    std::swap(usetype_, other->usetype_);
     reward_.Swap(&other->reward_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

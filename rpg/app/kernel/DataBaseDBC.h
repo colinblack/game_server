@@ -44,6 +44,7 @@ public:
 #define DBCREQ_SET_INT(data, field)		req.Set(#field, data.field)
 #define DBCREQ_SET_BIN(dd, field)		req.Set(#field, dd.field.data(), dd.field.length())
 #define DBCREQ_SET_STR(data, field)		req.Set(#field, data.field.c_str())
+#define DBCREQ_SET_CHAR(dd, field, len)	req.Set(#field, dd.field, len)
 #define DBCREQ_SET_INT_V(field)			req.Set(#field, field);DBCREQ_EXEC
 #define DBCREQ_SET_STR_V(field)			req.Set(#field, field.c_str());DBCREQ_EXEC
 #define DBCREQ_ADD_INT_V(field)			req.Add(#field, field);DBCREQ_EXEC
@@ -58,6 +59,7 @@ public:
 #define DBCREQ_GET_FLOAT(data, field)	data.field = m_dbcret.FloatValue(++reqItemIndex)
 #define DBCREQ_GET_BIN(data, field)     {int len;const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex,&len);data.field.append(pTmp,len);}
 #define DBCREQ_GET_STR(data, field)		data.field = m_dbcret.StringValue(++reqItemIndex)
+#define DBCREQ_GET_CHAR(data, field, len) {const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(data.field,pTmp,len);}
 #define DBCREQ_GET_INT_S(field)			field = m_dbcret.IntValue(++reqItemIndex)
 #define DBCREQ_GET_STR_S(field)			field = m_dbcret.StringValue(++reqItemIndex)
 
@@ -89,6 +91,7 @@ public:
 #define DBCREQ_ARRAY_GET_END()					}
 #define DBCREQ_ARRAY_GET_INT_S(array, field)	array[i] = m_dbcret.IntValue(++reqItemIndex)
 #define DBCREQ_ARRAY_GET_STR_S(array, field)	array[i] = m_dbcret.StringValue(++reqItemIndex)
+#define DBCREQ_ARRAY_GET_CHAR(array, field, len)	{const char* pTmp = m_dbcret.BinaryValue(++reqItemIndex);strncpy(array[i].field,pTmp,len);}
 
 #define DECLARE_DBC_DATA_CLASS(ClassName, TableId)	\
 class ClassName: public CDataBaseDBC ,public AsyncDBInterface\

@@ -62,6 +62,25 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new CSEnterMaterialCopy();}
 };
+class CSLotteryMagicTower: public Msg {
+public:
+virtual inline int32_t msgId() const {return 2050;}
+static int32_t MsgId() {return 2050;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CSLotteryMagicTower();}
+};
+class SCLotteryMagicTowerResp: public Msg {
+public:
+int32_t pos;
+virtual inline int32_t msgId() const {return 2050;}
+static int32_t MsgId() {return 2050;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCLotteryMagicTowerResp();}
+};
 }
 
 #endif

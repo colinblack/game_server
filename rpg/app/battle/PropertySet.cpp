@@ -213,6 +213,8 @@ void PropertyCfg::getPropsMsg(const PropertySets &props, msgs::SFightAttribute &
 	msg.comboBreak_ = getInt32(props, AP_COMBOBREAK);
 	msg.maxMagic_ = getInt32(props, AP_MAXMAGIC);
 	msg.attackSpeed_ = getInt32(props, AP_ATTACKSPEED);
+	msg.xpMonsterDmgAdd_=0;
+	msg.xpPlayerDmgAdd_=0;
 }
 
 int64_t PropertyCfg::getInt64(const PropertySets &props, int ap) {

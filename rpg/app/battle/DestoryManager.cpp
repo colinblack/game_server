@@ -49,10 +49,9 @@ void DestoryManager::onSecondTimer() {
 		if (pMo == NULL) {
 			m_alives.erase(itr++);
 		} else if (!pMo->isAlive()) {
-			MapManager::Instance()->mapRemoveObject(pMo->getId());
-			m_objects.push_back(pMo);
-			MapMoveManager::Instance()->DelObj(pMo);
 			m_alives.erase(itr++);
+			MapManager::Instance()->mapRemoveObject(pMo->getId());
+			MapMoveManager::Instance()->DelObj(pMo);
 		} else {
 			++itr;
 		}

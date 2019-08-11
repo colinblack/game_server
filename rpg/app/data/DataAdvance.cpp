@@ -21,6 +21,8 @@ int CDataAdvance::AddData(const DataAdvance &data) {
 	DBCREQ_SET_INT(data, dan2);
 	DBCREQ_SET_INT(data, dan3);
 	DBCREQ_SET_INT(data, dan4);
+	DBCREQ_SET_INT(data, awaken_level);
+	DBCREQ_SET_INT(data, awaken_star);
 
 	DBCREQ_EXEC;
 
@@ -42,6 +44,8 @@ int CDataAdvance::SetData(const DataAdvance &data) {
 	DBCREQ_SET_INT(data, dan2);
 	DBCREQ_SET_INT(data, dan3);
 	DBCREQ_SET_INT(data, dan4);
+	DBCREQ_SET_INT(data, awaken_level);
+	DBCREQ_SET_INT(data, awaken_star);
 
 	DBCREQ_EXEC;
 
@@ -82,6 +86,8 @@ int CDataAdvance::GetData(uint32_t uid, DataAdvance &data) {
 	DBCREQ_NEED(dan2);
 	DBCREQ_NEED(dan3);
 	DBCREQ_NEED(dan4);
+	DBCREQ_NEED(awaken_level);
+	DBCREQ_NEED(awaken_star);
 
 	DBCREQ_EXEC;
 	DBCREQ_IFNULLROW;
@@ -100,6 +106,8 @@ int CDataAdvance::GetData(uint32_t uid, DataAdvance &data) {
 	DBCREQ_GET_INT(data, dan2);
 	DBCREQ_GET_INT(data, dan3);
 	DBCREQ_GET_INT(data, dan4);
+	DBCREQ_GET_INT(data, awaken_level);
+	DBCREQ_GET_INT(data, awaken_star);
 
 	return 0;
 }
@@ -121,6 +129,8 @@ int CDataAdvance::GetData(uint32_t uid, vector<DataAdvance> &datas) {
 	DBCREQ_NEED(dan2);
 	DBCREQ_NEED(dan3);
 	DBCREQ_NEED(dan4);
+	DBCREQ_NEED(awaken_level);
+	DBCREQ_NEED(awaken_star);
 
 	DBCREQ_EXEC;
 	DBCREQ_IFNULLROW;
@@ -138,6 +148,8 @@ int CDataAdvance::GetData(uint32_t uid, vector<DataAdvance> &datas) {
 	DBCREQ_ARRAY_GET_INT(datas, dan2);
 	DBCREQ_ARRAY_GET_INT(datas, dan3);
 	DBCREQ_ARRAY_GET_INT(datas, dan4);
+	DBCREQ_ARRAY_GET_INT(datas, awaken_level);
+	DBCREQ_ARRAY_GET_INT(datas, awaken_star);
 	DBCREQ_ARRAY_GET_END();
 
 	return 0;

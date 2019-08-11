@@ -22,7 +22,8 @@ public:
 	bool init();
 	bool initSkill(const CfgSkill::Skill &cfg);
 	bool doUseSkill(MapMoveObject *caster, const vector<uint32_t> &targets, const SkillUseInfo &info, const Point &cen);
-	bool objectHurt(MapMoveObject *caster, MapMoveObject *target, int32_t skid, const PropertySets &hurt);
+	bool doBuffHurt(MapMoveObject *caster, MapMoveObject *target, const AttackInfo &hurt);
+	bool objectHurt(MapMoveObject *caster, MapMoveObject *target, const PropertySets &hurt);
 	void caculateHurt(MapMoveObject *caster, MapMoveObject *target, AttackInfo &attackInfo, PropertySets &hurtProps);
 	const SkillBase* getEntity(int id);
 
@@ -31,7 +32,6 @@ public:
 private:
 	map<int32_t, SkillBase*> m_mapSkillEntities;            // map<skillid,entity>
 	uint32_t m_attackId;
-	msgs::SDoFights m_doFights;
 };
 
 #endif /* SKILL_CONTROLER_H_ */

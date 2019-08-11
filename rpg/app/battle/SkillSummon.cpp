@@ -13,7 +13,6 @@ SkillSummon::SkillSummon() {
 }
 
 SkillSummon::~SkillSummon() {
-
 }
 
 bool SkillSummon::doSkillHit(const SkillUseInfo &sinfo, MapMoveObject *caster, MapMoveObject *target, AttackInfo &ainfo) {
@@ -35,7 +34,12 @@ bool SkillSummon::doSkillHit(const SkillUseInfo &sinfo, MapMoveObject *caster, M
 		return false;
 	}
 
+	PropertySets &marster_props = caster->getProps();
+
 	dog->setActive(true);
+	PropertySets &props = dog->getProps();
+	props[AP_ATTACK].pi = marster_props[AP_ATTACK].pi;
+	dog->setHurtSkill(sinfo.skillId);
 
 	return true;
 }

@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-
 def _parse_reward(v):
     arr = v.split(r'&')
     obj = list()
@@ -14,6 +13,8 @@ def _parse_reward(v):
         item[r'num'] = int(arr1[1])
         if len(arr1) > 2:
             item[r'rate'] = int(arr1[2])
+        if len(arr1) > 3:
+            item[r'career'] = int(arr1[3])
         obj.append(item)
     return obj
 
@@ -24,6 +25,13 @@ def _parse_skills(v):
         item = {}
         item[r'item'] = int(i[0])
         obj.append(item)
+    return obj
+
+def _parse_skills_type(v):
+    arr1 = v.split(r'&')
+    obj = list()
+    for i in arr1:
+        obj.append(int(i))
     return obj
 
 def _parse_attribut(v):

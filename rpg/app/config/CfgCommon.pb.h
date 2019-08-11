@@ -112,6 +112,13 @@ class Reward : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 rate() const;
   inline void set_rate(::google::protobuf::uint32 value);
 
+  // optional uint32 career = 4;
+  inline bool has_career() const;
+  inline void clear_career();
+  static const int kCareerFieldNumber = 4;
+  inline ::google::protobuf::uint32 career() const;
+  inline void set_career(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:CfgCommon.Reward)
  private:
   inline void set_has_item();
@@ -120,6 +127,8 @@ class Reward : public ::google::protobuf::Message {
   inline void clear_has_num();
   inline void set_has_rate();
   inline void clear_has_rate();
+  inline void set_has_career();
+  inline void clear_has_career();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -128,6 +137,7 @@ class Reward : public ::google::protobuf::Message {
   ::google::protobuf::uint32 item_;
   ::google::protobuf::uint32 num_;
   ::google::protobuf::uint32 rate_;
+  ::google::protobuf::uint32 career_;
   friend void  protobuf_AddDesc_CfgCommon_2eproto();
   friend void protobuf_AssignDesc_CfgCommon_2eproto();
   friend void protobuf_ShutdownFile_CfgCommon_2eproto();
@@ -311,6 +321,30 @@ inline void Reward::set_rate(::google::protobuf::uint32 value) {
   set_has_rate();
   rate_ = value;
   // @@protoc_insertion_point(field_set:CfgCommon.Reward.rate)
+}
+
+// optional uint32 career = 4;
+inline bool Reward::has_career() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Reward::set_has_career() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Reward::clear_has_career() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Reward::clear_career() {
+  career_ = 0u;
+  clear_has_career();
+}
+inline ::google::protobuf::uint32 Reward::career() const {
+  // @@protoc_insertion_point(field_get:CfgCommon.Reward.career)
+  return career_;
+}
+inline void Reward::set_career(::google::protobuf::uint32 value) {
+  set_has_career();
+  career_ = value;
+  // @@protoc_insertion_point(field_set:CfgCommon.Reward.career)
 }
 
 // -------------------------------------------------------------------

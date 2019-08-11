@@ -22,17 +22,24 @@ private:
 	ZhanLingManager();
 	~ZhanLingManager();
 	map<uint32_t, uint16_t> m_recover;
+	map<uint32_t, uint16_t> m_speed;
 
 public:
 	bool ActorLogin(uint32_t uid);
 	bool checkUnlock(uint32_t uid);
 	bool onChangeMap(uint32_t uid);
 	bool onSecondTimer();
+	bool resetNuQi(uint32_t uid);
 	bool setNuQi(uint32_t uid, uint32_t nuqi);
 	bool updateNuQi(uint32_t uid, uint32_t nuqi);
 	bool useNuQi(uint32_t uid);
+	bool useZhanlingItem(UserCache& cache, DataEquip equip, uint32_t cost, const string &code);
+	bool CalcProperty(const UserCache &cache, PropertySets &props);
 public:
 	int Process(uint32_t uid, logins::SSkillCleanNuQi *req);
+	int Process(uint32_t uid, logins::SEquipZhanlingReq *req);
+	int Process(uint32_t uid, logins::SAdvanceZhanlingReq *req);
+	int Process(uint32_t uid, logins::SLearnZhanlingSkillReq *req);
 
 public:
 	int Sync(const UserCache &cache, uint32_t cmd, msgs::SZhanlingInfo *resp);

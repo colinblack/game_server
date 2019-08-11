@@ -24,6 +24,16 @@ def is_suit_skill(i):
     if i[43] == 41:
         return True
     return False
+    
+def is_zhanling_skill(i):
+    if i[43] == 4:
+        return True
+    return False
+
+def is_advance_skill(i):
+    if i[43] == 210 or i[43] == 211:
+        return True
+    return False
 
 def parse_skill():
     fd = open("src/preloadData.json", "r")
@@ -34,7 +44,7 @@ def parse_skill():
     for i in data["t_skill_base"]:
         base_skill[i[7]] = i[5]
     for i in data["t_skill"]:
-        if is_career_skill(i) or is_shenqi_skill(i) or is_suit_skill(i):
+        if is_career_skill(i) or is_shenqi_skill(i) or is_suit_skill(i) or is_zhanling_skill(i) or is_advance_skill(i):
             item = {}
             item["buff"] = i[0]
             item["career"] = i[3]
@@ -47,17 +57,20 @@ def parse_skill():
             item["type"] = i[42]
             item["type2"] = i[43]
             item["hurt"] = i[11]
+            try:
+                item["hurtAdd"] = int(i[15])
+            except:
+                item["hurtAdd"] = 0
             item["level"] = i[32]
             item["unlock"] = i[16]
             item["cost"] = i[17]
             item["careerlevel"] = i[4]
+            item["zhanlinghurt"] = i[19]
             attrs = list()
             attr = i[9].split(r'#')
             if len(attr) == 3:
                 attrs.append(attr)
-            print(attrs)
             item["attr"] = _parse_attribut(attrs)
-            print(i[9])
             skills["skills"].append(item)
     fd.close()
 

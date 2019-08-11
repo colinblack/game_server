@@ -108,7 +108,7 @@ void protobuf_AddDesc_CfgOnlineReward_2eproto() {
     "\032\017CfgCommon.proto\"h\n\014OnlineReward\022\n\n\002id\030"
     "\001 \002(\r\022\025\n\rregisteredDay\030\002 \002(\r\022\022\n\nonlineTi"
     "me\030\003 \002(\r\022!\n\006reward\030\004 \003(\0132\021.CfgCommon.Rew"
-    "ard\"E\n\rOnlineRewards\0224\n\rOnlineRewards\030\001 "
+    "ard\"E\n\rOnlineRewards\0224\n\ronlineRewards\030\001 "
     "\003(\0132\035.CfgOnlineReward.OnlineReward", 234);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgOnlineReward.proto", &protobuf_RegisterTypes);
@@ -556,16 +556,16 @@ bool OnlineRewards::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .CfgOnlineReward.OnlineReward OnlineRewards = 1;
+      // repeated .CfgOnlineReward.OnlineReward onlineRewards = 1;
       case 1: {
         if (tag == 10) {
-         parse_OnlineRewards:
+         parse_onlineRewards:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                 input, add_onlinerewards()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(10)) goto parse_OnlineRewards;
+        if (input->ExpectTag(10)) goto parse_onlineRewards;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -595,7 +595,7 @@ failure:
 void OnlineRewards::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:CfgOnlineReward.OnlineRewards)
-  // repeated .CfgOnlineReward.OnlineReward OnlineRewards = 1;
+  // repeated .CfgOnlineReward.OnlineReward onlineRewards = 1;
   for (int i = 0; i < this->onlinerewards_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->onlinerewards(i), output);
@@ -611,7 +611,7 @@ void OnlineRewards::SerializeWithCachedSizes(
 ::google::protobuf::uint8* OnlineRewards::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:CfgOnlineReward.OnlineRewards)
-  // repeated .CfgOnlineReward.OnlineReward OnlineRewards = 1;
+  // repeated .CfgOnlineReward.OnlineReward onlineRewards = 1;
   for (int i = 0; i < this->onlinerewards_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -629,7 +629,7 @@ void OnlineRewards::SerializeWithCachedSizes(
 int OnlineRewards::ByteSize() const {
   int total_size = 0;
 
-  // repeated .CfgOnlineReward.OnlineReward OnlineRewards = 1;
+  // repeated .CfgOnlineReward.OnlineReward onlineRewards = 1;
   total_size += 1 * this->onlinerewards_size();
   for (int i = 0; i < this->onlinerewards_size(); i++) {
     total_size +=

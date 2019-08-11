@@ -1,0 +1,23 @@
+package CfgFashion;
+import "CfgCommon.proto";
+
+message SkillAndLevel{
+	required uint32 SkillId = 1;
+	required uint32 level = 2;
+}
+
+message Fashion {
+	required uint32 id = 1;
+	required uint32 itemId = 2;
+	required uint32 itemCount = 3;
+	required uint32 level = 4;
+	required uint32 limitTime = 5;
+	required uint32 skillID = 6;
+	required uint32 modelID = 7;
+	repeated CfgCommon.Attribute attr = 8;
+ 	repeated SkillAndLevel skillAndLevel = 9;
+}
+
+message Fashions{
+	repeated Fashion fashions = 1;
+}

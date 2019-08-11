@@ -33,20 +33,6 @@ RoleSuitManager::RoleSuitManager() {
 RoleSuitManager::~RoleSuitManager() {
 }
 
-bool RoleSuitManager::FormatSkills(uint32_t uid, uint32_t roleId, const CfgSuit::Suit& suit, vector<dbs::TPlayerSkill> &msg) {
-	for(int index = 0; index < suit.skills_size(); ++index) {
-		const CfgSkill::Skill &cfg = SkillCfgWrap().GetById(suit.skills(index));
-
-		dbs::TPlayerSkill skill;
-		skill.playerId_ = uid;
-		skill.roleId_ = roleId;
-		skill.skillSeries_ = cfg.serial();
-		skill.skillId_ = suit.skills(index);
-		msg.push_back(skill);
-	}
-	return true;
-}
-
 bool RoleSuitManager::AddRoleSuit(uint32_t uid, uint32_t roleId, uint32_t suitId) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
 	DataRoleSuit suit;
@@ -116,7 +102,7 @@ bool RoleSuitManager::CalcProperty(const UserCache &cache, byte rid, PropertySet
 		for(; item != itr->second.end(); ++item) {
 			const CfgSuit::Suit &cfg = RoleSuitWrap().GetSuit(item->first);
 				PropertyCfg::setProps(cfg.attr(), 1.0, props);
-				for (uint32_t index = 0; index < cfg.skills_size(); ++index) {
+				for (int index = 0; index < cfg.skills_size(); ++index) {
 					const CfgSkill::Skill& skill = SkillCfgWrap().GetById(cfg.skills(index));
 					PropertyCfg::setProps(skill.attr(), 1.0, props);
 				}
@@ -253,13 +239,26 @@ int RoleSuitManager::Process(uint32_t uid, logins::SUnlockSuitReq *req) {
 
 	suit.flag = true;
 	DataRoleAttr attr;
+	vector<DataSkill> skills;
 	memcpy((void*)&attr, (const void*)&suit, sizeof(suit));
 	DataRoleAttrManager::Instance()->Set(attr);
 	const CfgSuit::Suit& suit_cfg = RoleSuitWrap().GetSuit(req->suitId_);
+	for(int i = 0; i < suit_cfg.skills_size(); ++i) {
+		const CfgSkill::Skill& skill_cfg = SkillCfgWrap().GetById(suit_cfg.skills(i));
+		DataSkill data;
+		data.uid = uid;
+		data.rid = 0;
+		data.lv = 1;
+		data.id = skill_cfg.serial();
+		data.skill_id = skill_cfg.id();
+		DataSkillManager::Instance()->Add(data);
+		cache.skill_.push_back(data);
+		skills.push_back(data);
+	}
 
 	UpdateManager::Instance()->roleUnlock(uid, req->roleId_, req->suitId_);
 	UpdateManager::Instance()->roleDress(uid, req->roleId_, req->suitId_);
-	UpdateManager::Instance()->roleSkills(uid,suit_cfg, req->suitId_ -1, req->roleId_);
+	UpdateManager::Instance()->skills(uid, req->suitId_ -1, skills);
 
 	return 0;
 }

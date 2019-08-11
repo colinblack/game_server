@@ -58,6 +58,9 @@ int TreasureManager::Process(uint32_t uid, logins::SActiveTreasure *req) {
 
 int TreasureManager::Process(uint32_t uid, logins::STreasureAdvance *req) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
 	if(cache.treasure_.count(req->type_) == 0) {
 		error_log("this type:%d Treasure not active", req->type_);
 		return R_ERROR;
@@ -103,13 +106,20 @@ int TreasureManager::Process(uint32_t uid, logins::STreasureAdvance *req) {
 		return R_ERROR;
 	}
 
+	PropertyManager::Instance()->AddUser(uid);
+
 	DataTreasureManager::Instance()->Set(data);
 	UpdateManager::Instance()->Treasure(uid, data);
+	MissionManager::Instance()->onSubMission(uid, MT_ACTIVATE_TREASURE, req->type_, 1);
+	MissionManager::Instance()->onSubMission(uid, MT_TREASURE_UPGRADE, req->type_, data.level);
 	return 0;
 }
 
 int TreasureManager::Process(uint32_t uid, logins::STreasureEatDan *req) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
 	if(cache.treasure_.count(req->type_) == 0) {
 		error_log("this type:%d Treasure not active", req->type_);
 		return R_ERROR;
@@ -139,16 +149,21 @@ int TreasureManager::Process(uint32_t uid, logins::STreasureEatDan *req) {
 			*ptr = *ptr + cost;
 		}
 		UpdateManager::Instance()->SetCode(UC_TreasureEatDan);
-		UserManager::Instance()->UseItem(uid, dan_id, cost, "treasure EatDan");
+		if(!UserManager::Instance()->UseItem(uid, dan_id, cost, "treasure EatDan")) {
+			return R_ERROR;
+		}
 		DataTreasureManager::Instance()->Set(treasure);
 	}
+	PropertyManager::Instance()->AddUser(uid);
 	UpdateManager::Instance()->Treasure(uid, treasure);
-
 	return 0;
 }
 
 int TreasureManager::Process(uint32_t uid, logins::STreasureDrawReq *req, logins::STreasureDrawResp *resp) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
 	map<uint32_t, TreasureHunt>::iterator itr = cache.m_treasure_hunt.find(req->type_);
 	if (itr == cache.m_treasure_hunt.end()) {
 		error_log("type not init uid=%u type=%u", uid, req->type_);
@@ -187,12 +202,14 @@ int TreasureManager::Process(uint32_t uid, logins::STreasureDrawReq *req, logins
 	SendHunt(hunt);
 
 	debug_log("uid=%u,type=%u,num=%u", uid, req->type_, req->drewNum_);
-
 	return 0;
 }
 
 int TreasureManager::Process(uint32_t uid, logins::STreasureGetRewardHisReq *req, logins::STreasureGetRewardHisResp *resp) {
 	UserCache& cache = CacheManager::Instance()->GetUser(uid);
+	if (!cache.init_) {
+		return false;
+	}
 	map<uint32_t, TreasureHunt>::iterator itr = cache.m_treasure_hunt.find(req->type_);
 	if (itr == cache.m_treasure_hunt.end()) {
 		error_log("type not init %u", req->type_);
@@ -444,7 +461,18 @@ bool TreasureManager::CalcProperty(const UserCache &cache, PropertySets &props) 
 		uint32_t id = TreasureCfgWrap().GetIdByType(it->second.type, it->second.level, it->second.star);
 		const CfgTreasure::Treasure& cfg =TreasureCfgWrap().GetById(id);
 		PropertyCfg::setProps(cfg.attr(), 1.0, props);
+
+		for(uint32_t index = 0; index < DAN_MAX_CNT; ++index) {
+			if(0 == it->second.star && 1 == it->second.level) {
+				continue;
+			}
+			uint32_t dan_id = TreasureCfgWrap().GetDanId(it->second.type, it->second.level, it->second.star, index);
+			const CfgItem::Item& dan_cfg = ItemCfgWrap().GetItem(dan_id);
+			PropertyCfg::setProps(dan_cfg.attr(), (double)(*it->second.GetDan(index)), props);
+		}
 	}
+
 	PropertyCfg::showProps(cache.uid_, -1, props, "Treasure");
 	return true;
 }
+

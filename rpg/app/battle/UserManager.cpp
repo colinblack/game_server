@@ -8,6 +8,8 @@
 #include "UserManager.h"
 #include "BattleInc.h"
 
+const char* UserManager::m_player_config_key[] = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n" };
+
 UserManager::UserManager() {
 }
 
@@ -94,6 +96,39 @@ int UserManager::Process(uint32_t uid, logins::SLogin *req, logins::SLoginResult
 	return R_SUCCESS;
 }
 
+int UserManager::Process(uint32_t uid, copy::CSSavePlayerConfig *resp) {
+	Json::Value value;
+	Json::Reader reader;
+	if (!reader.parse(resp->configString, value)) {
+		return R_ERROR;
+	}
+	unsigned int max_size = sizeof(m_player_config_key) / sizeof(char*);
+
+	Json::Value::Members members(value.getMemberNames());
+	Json::Value::Members::iterator itr = members.begin();
+	for (; itr != members.end(); ++itr) {
+		string key = *itr;
+		DataPlayerConfig data;
+		data.uid = uid;
+		for (uint32_t id = 0; id < max_size; ++id) {
+			if (key == m_player_config_key[id]) {
+				data.id = id + 1;
+				break;
+			}
+		}
+		if (data.id == 0) {
+			continue;
+		}
+		data.data = Json::ToString(value[key]);
+		int ret = DataPlayerConfigManager::Instance()->Rep(data);
+		if (0 != ret) {
+			error_log("replace data error uid=%u id=%u data=%s ret=%d", data.uid, data.id, data.data.c_str(), ret);
+		}
+	}
+	debug_log("save player config uid=%u", uid);
+	return 0;
+}
+
 int UserManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerLoginData *resp) {
 	resp->clear();
 	resp->playerId_ = cache.uid_;
@@ -124,7 +159,34 @@ int UserManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerMoneyLi
 		const DataPay &pay = itr->second;
 		resp->moneys_[pay.id] = pay.num;
 	}
+	if (!LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp)) {
+		return R_ERROR;
+	}
+	return R_SUCCESS;
+}
 
+int UserManager::Sync(const UserCache &cache, uint32_t cmd, dbs::TPlayerConfig *resp) {
+	resp->clear();
+	resp->playerId_ = cache.uid_;
+	resp->extend_ = "{";
+	unsigned int max_size = sizeof(m_player_config_key) / sizeof(char*);
+	vector<DataPlayerConfig> datas;
+	DataPlayerConfigManager::Instance()->Get(cache.uid_, datas);
+	vector<DataPlayerConfig>::iterator itr = datas.begin();
+	for (; itr != datas.end(); ++itr) {
+		if (itr->id == 0 || itr->id > max_size || itr->data.empty()) {
+			continue;
+		}
+		resp->extend_.append("\"");
+		resp->extend_.append(m_player_config_key[itr->id - 1]);
+		resp->extend_.append("\":");
+		resp->extend_.append(itr->data);
+		resp->extend_.append(",");
+	}
+	if (resp->extend_.length() > 1) {
+		resp->extend_.erase(resp->extend_.length() - 1);
+	}
+	resp->extend_.append("}");
 	if (!LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp)) {
 		return R_ERROR;
 	}
@@ -136,6 +198,10 @@ bool UserManager::onLogin(uint32_t uid) {
 }
 
 bool UserManager::ActorOffline(uint32_t uid) {
+	return true;
+}
+
+bool UserManager::ActorOnline(uint32_t uid) {
 	return true;
 }
 
@@ -408,7 +474,7 @@ bool UserManager::UseItem(uint32_t uid, uint32_t id, uint32_t num, const string 
 	}
 	map<uint32_t, uint32_t> cost_map;
 	map<uint32_t, DataEquip>::iterator itr = cache.equip_.begin();
-	for (; itr != cache.equip_.end(); ++itr) {
+	for (; itr != cache.equip_.end() && num > 0; ++itr) {
 		DataEquip &equip = itr->second;
 		if(equip.bag!=1) continue;
 		if (equip.id == id) {
@@ -455,7 +521,7 @@ uint32_t UserManager::TryUseItem(uint32_t uid, uint32_t id, uint32_t num, const 
 	uint32_t use = 0;
 	map<uint32_t, uint32_t> cost_map;
 	map<uint32_t, DataEquip>::iterator itr = cache.equip_.begin();
-	for (; itr != cache.equip_.end(); ++itr) {
+	for (; itr != cache.equip_.end() && num > 0; ++itr) {
 		DataEquip &equip = itr->second;
 		if (equip.id == id) {
 			if (equip.num >= num) {
@@ -499,17 +565,17 @@ uint32_t UserManager::TryUseItemMulti(uint32_t uid, uint32_t id, uint32_t num, u
 	uint32_t hold = 0;
 	map<uint32_t, uint32_t> cost_map;
 	map<uint32_t, DataEquip>::iterator itr = cache.equip_.begin();
-	for (; itr != cache.equip_.end(); ++itr) {
+	for (; itr != cache.equip_.end() && need > 0; ++itr) {
 		DataEquip &equip = itr->second;
 		if (equip.id == id) {
 			if (equip.num >= need) {
 				cost_map[equip.ud] = need;
-				need = 0;
 				hold += need;
+				need = 0;
 			} else {
 				cost_map[equip.ud] = equip.num;
-				need -= equip.num;
 				hold += equip.num;
+				need -= equip.num;
 			}
 		}
 	}
@@ -554,7 +620,7 @@ bool UserManager::Reward(uint32_t uid, const Award &v, const string &code, uint3
 		num = itr->second;
 		if (item == MONEY_EXP) {
 			AddExp(uid, num);
-		} else if (IS_MONEY(item)) {
+		} else if (MoneyCfgWrap().isMoneyType(item)) {
 			AddMoney(uid, item, num, code);
 		} else {
 			AddItem(uid, item, num, code, bag);
@@ -595,14 +661,22 @@ bool UserManager::CalcProperty(const UserCache &cache, byte rid, PropertySets &p
 	EquipsManager::Instance()->CalcProperty(cache, rid, group);
 	ForgeManager::Instance()->CalcProperty(cache, rid, group);
 	CardManager::Instance()->CalcProperty(cache, rid, group);
+//	GemManager::Instance()->CalcProperty(cache, rid, group);
 	PurifyManager::Instance()->CalcProperty(cache, rid, group);
 	ReinCarnManager::Instance()->CalcProperty(cache, rid, group);
 	RuneManager::Instance()->CalcProperty(cache, rid, group);
-	PropertyCfg::calcGroupBase(group, props);
-	PropertyCfg::calcGroupBasePercent(group, props);
+	TrumpManager::Instance()->CalcProperty(cache, rid, group);
 	RoleSuitManager::Instance()->CalcProperty(cache, rid, group);
 	TitleManager::Instance()->CalcProperty(cache, rid, group);
+	ZhuLingManager::Instance()->CalcProperty(cache, rid, group);
+	DevilAngelManager::Instance()->CalcProperty(cache, rid, group);
+	ReinCarnShengManager::Instance()->CalcProperty(cache, rid, group);
 	TreasureManager::Instance()->CalcProperty(cache, group);
+	FashionManager::Instance()->CalcProperty(cache, rid, group);
+//	ZhanLingManager::Instance()->CalcProperty(cache, group);
+
+	PropertyCfg::calcGroupBase(group, props);
+	PropertyCfg::calcGroupBasePercent(group, props);
 
 	return true;
 }
@@ -632,8 +706,9 @@ void UserManager::GetPlayerMsg(const UserCache &data, dbs::TPlayer *msg) {
 		msg->exp_ = data.base_.exp;
 		msg->careerLevel_ = data.m_reinCarnInfo.reinCarnLevel;
 		msg->offlineDt_ = data.base_.offline_time * 1000LL;
-		msg->gameDt_ = LogicManager::SecOpenTime * 1000LL;
+		msg->gameDt_ = data.base_.register_time * 1000LL;; // LogicManager::SecOpenTime * 1000LL; fix by memory
 		msg->hangLevel_ = data.base_.hang;
+		msg->nuqi_ = data.zhanling_.nuqi;
 		break;
 	}
 }

@@ -16,6 +16,8 @@ message Mission {
 	repeated Condition condition = 2;
 	repeated CfgCommon.Reward reward = 3;
 	required uint32 exp = 4;
+	required uint32 type = 5;
+	required uint32 shengId = 6;
 }
 
 message Missions {

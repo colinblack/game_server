@@ -55,10 +55,6 @@ public:
 	bool actorTransfer(CFirePacket* pPacket);
 	bool actorChangeMap(uint32_t uid, byte role_num, const MapChangeInfo &info);
 
-
-
-
-
 	void actorOffline(uint32_t uid);
 	void enterMapSync();
 
@@ -97,6 +93,7 @@ public:
 	bool addObject(MapDisplayObject *object);
 	MapDisplayObject *getObject(uint32_t id);
 	MapMoveObject *getObject(uint32_t id, int16_t race);
+	MapMoveObject *getMonster(uint32_t monsterId);
 	MapMoveObject *getMoveObject(uint32_t id);
 	void reclaimBirthPoint(uint32_t fbInstanceId, uint32_t mapId, int zoneId, const Point &point);
 	bool canMoveTo(Human *pHuman, Map *pMap, const Point &endPoint, const Point &curPoint, Point &desPoint);

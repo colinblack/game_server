@@ -92,4 +92,103 @@ return true;}
 void CSEnterWorldBoss::clear(){
 copyCode = 0;
 }
+bool CSEnterTaskCopy::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,copyCode);
+return true;}
+bool CSEnterTaskCopy::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,copyCode);
+return true;}
+void CSEnterTaskCopy::clear(){
+copyCode = 0;
+}
+bool CSSavePlayerConfig::decode(CBufferReader &reader) {
+PACKET_DECODE(String,configString);
+return true;}
+bool CSSavePlayerConfig::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(String,configString);
+return true;}
+void CSSavePlayerConfig::clear(){
+configString.clear();
+}
+bool CSGetWorldBossList::decode(CBufferReader &reader) {
+return true;}
+bool CSGetWorldBossList::encode(CBufferWriter &writer) const {
+return true;}
+void CSGetWorldBossList::clear(){
+}
+bool CSGetGodPlaneList::decode(CBufferReader &reader) {
+return true;}
+bool CSGetGodPlaneList::encode(CBufferWriter &writer) const {
+return true;}
+void CSGetGodPlaneList::clear(){
+}
+bool CSEnterGodPlane::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,copyCode);
+return true;}
+bool CSEnterGodPlane::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,copyCode);
+return true;}
+void CSEnterGodPlane::clear(){
+copyCode = 0;
+}
+bool CSFightRevive::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type);
+return true;}
+bool CSFightRevive::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type);
+return true;}
+void CSFightRevive::clear(){
+type = 0;
+}
+bool CSEnterImmortalroadCopy::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,copyCode);
+return true;}
+bool CSEnterImmortalroadCopy::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,copyCode);
+return true;}
+void CSEnterImmortalroadCopy::clear(){
+copyCode = 0;
+}
+bool CSEnterExpCopy::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,copyCode);
+PACKET_DECODE(Int32,count);
+return true;}
+bool CSEnterExpCopy::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,copyCode);
+PACKET_ENCODE(Int32,count);
+return true;}
+void CSEnterExpCopy::clear(){
+copyCode = 0;
+count = 0;
+}
+bool CSEncourageExpCopy::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type);
+PACKET_DECODE(Int32,count);
+return true;}
+bool CSEncourageExpCopy::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type);
+PACKET_ENCODE(Int32,count);
+return true;}
+void CSEncourageExpCopy::clear(){
+type = 0;
+count = 0;
+}
+bool CSBuyExtraExpCopy::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type);
+return true;}
+bool CSBuyExtraExpCopy::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type);
+return true;}
+void CSBuyExtraExpCopy::clear(){
+type = 0;
+}
+bool CSEnterPartnerIslandCopy::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type);
+return true;}
+bool CSEnterPartnerIslandCopy::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type);
+return true;}
+void CSEnterPartnerIslandCopy::clear(){
+type = 0;
+}
 }

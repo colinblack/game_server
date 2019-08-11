@@ -34,6 +34,8 @@ void protobuf_AssignDesc_MsgLocal_2eproto();
 void protobuf_ShutdownFile_MsgLocal_2eproto();
 
 class TreasureHuntRecord;
+class LevelRewardRecord;
+class LevelRewardRecords;
 class TreasureHuntRecords;
 
 // ===================================================================
@@ -199,6 +201,187 @@ class TreasureHuntRecord : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static TreasureHuntRecord* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class LevelRewardRecord : public ::google::protobuf::Message {
+ public:
+  LevelRewardRecord();
+  virtual ~LevelRewardRecord();
+
+  LevelRewardRecord(const LevelRewardRecord& from);
+
+  inline LevelRewardRecord& operator=(const LevelRewardRecord& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LevelRewardRecord& default_instance();
+
+  void Swap(LevelRewardRecord* other);
+
+  // implements Message ----------------------------------------------
+
+  LevelRewardRecord* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LevelRewardRecord& from);
+  void MergeFrom(const LevelRewardRecord& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 careerLevel = 1;
+  inline bool has_careerlevel() const;
+  inline void clear_careerlevel();
+  static const int kCareerLevelFieldNumber = 1;
+  inline ::google::protobuf::int32 careerlevel() const;
+  inline void set_careerlevel(::google::protobuf::int32 value);
+
+  // required int32 level = 2;
+  inline bool has_level() const;
+  inline void clear_level();
+  static const int kLevelFieldNumber = 2;
+  inline ::google::protobuf::int32 level() const;
+  inline void set_level(::google::protobuf::int32 value);
+
+  // required int32 leftCount = 3;
+  inline bool has_leftcount() const;
+  inline void clear_leftcount();
+  static const int kLeftCountFieldNumber = 3;
+  inline ::google::protobuf::int32 leftcount() const;
+  inline void set_leftcount(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:MsgLocal.LevelRewardRecord)
+ private:
+  inline void set_has_careerlevel();
+  inline void clear_has_careerlevel();
+  inline void set_has_level();
+  inline void clear_has_level();
+  inline void set_has_leftcount();
+  inline void clear_has_leftcount();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 careerlevel_;
+  ::google::protobuf::int32 level_;
+  ::google::protobuf::int32 leftcount_;
+  friend void  protobuf_AddDesc_MsgLocal_2eproto();
+  friend void protobuf_AssignDesc_MsgLocal_2eproto();
+  friend void protobuf_ShutdownFile_MsgLocal_2eproto();
+
+  void InitAsDefaultInstance();
+  static LevelRewardRecord* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class LevelRewardRecords : public ::google::protobuf::Message {
+ public:
+  LevelRewardRecords();
+  virtual ~LevelRewardRecords();
+
+  LevelRewardRecords(const LevelRewardRecords& from);
+
+  inline LevelRewardRecords& operator=(const LevelRewardRecords& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LevelRewardRecords& default_instance();
+
+  void Swap(LevelRewardRecords* other);
+
+  // implements Message ----------------------------------------------
+
+  LevelRewardRecords* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LevelRewardRecords& from);
+  void MergeFrom(const LevelRewardRecords& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .MsgLocal.LevelRewardRecord records = 1;
+  inline int records_size() const;
+  inline void clear_records();
+  static const int kRecordsFieldNumber = 1;
+  inline const ::MsgLocal::LevelRewardRecord& records(int index) const;
+  inline ::MsgLocal::LevelRewardRecord* mutable_records(int index);
+  inline ::MsgLocal::LevelRewardRecord* add_records();
+  inline const ::google::protobuf::RepeatedPtrField< ::MsgLocal::LevelRewardRecord >&
+      records() const;
+  inline ::google::protobuf::RepeatedPtrField< ::MsgLocal::LevelRewardRecord >*
+      mutable_records();
+
+  // @@protoc_insertion_point(class_scope:MsgLocal.LevelRewardRecords)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::MsgLocal::LevelRewardRecord > records_;
+  friend void  protobuf_AddDesc_MsgLocal_2eproto();
+  friend void protobuf_AssignDesc_MsgLocal_2eproto();
+  friend void protobuf_ShutdownFile_MsgLocal_2eproto();
+
+  void InitAsDefaultInstance();
+  static LevelRewardRecords* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -555,6 +738,116 @@ inline void TreasureHuntRecord::set_drawdt(::google::protobuf::int32 value) {
   set_has_drawdt();
   drawdt_ = value;
   // @@protoc_insertion_point(field_set:MsgLocal.TreasureHuntRecord.drawDt)
+}
+
+// -------------------------------------------------------------------
+
+// LevelRewardRecord
+
+// required int32 careerLevel = 1;
+inline bool LevelRewardRecord::has_careerlevel() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void LevelRewardRecord::set_has_careerlevel() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void LevelRewardRecord::clear_has_careerlevel() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void LevelRewardRecord::clear_careerlevel() {
+  careerlevel_ = 0;
+  clear_has_careerlevel();
+}
+inline ::google::protobuf::int32 LevelRewardRecord::careerlevel() const {
+  // @@protoc_insertion_point(field_get:MsgLocal.LevelRewardRecord.careerLevel)
+  return careerlevel_;
+}
+inline void LevelRewardRecord::set_careerlevel(::google::protobuf::int32 value) {
+  set_has_careerlevel();
+  careerlevel_ = value;
+  // @@protoc_insertion_point(field_set:MsgLocal.LevelRewardRecord.careerLevel)
+}
+
+// required int32 level = 2;
+inline bool LevelRewardRecord::has_level() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void LevelRewardRecord::set_has_level() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void LevelRewardRecord::clear_has_level() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void LevelRewardRecord::clear_level() {
+  level_ = 0;
+  clear_has_level();
+}
+inline ::google::protobuf::int32 LevelRewardRecord::level() const {
+  // @@protoc_insertion_point(field_get:MsgLocal.LevelRewardRecord.level)
+  return level_;
+}
+inline void LevelRewardRecord::set_level(::google::protobuf::int32 value) {
+  set_has_level();
+  level_ = value;
+  // @@protoc_insertion_point(field_set:MsgLocal.LevelRewardRecord.level)
+}
+
+// required int32 leftCount = 3;
+inline bool LevelRewardRecord::has_leftcount() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void LevelRewardRecord::set_has_leftcount() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void LevelRewardRecord::clear_has_leftcount() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void LevelRewardRecord::clear_leftcount() {
+  leftcount_ = 0;
+  clear_has_leftcount();
+}
+inline ::google::protobuf::int32 LevelRewardRecord::leftcount() const {
+  // @@protoc_insertion_point(field_get:MsgLocal.LevelRewardRecord.leftCount)
+  return leftcount_;
+}
+inline void LevelRewardRecord::set_leftcount(::google::protobuf::int32 value) {
+  set_has_leftcount();
+  leftcount_ = value;
+  // @@protoc_insertion_point(field_set:MsgLocal.LevelRewardRecord.leftCount)
+}
+
+// -------------------------------------------------------------------
+
+// LevelRewardRecords
+
+// repeated .MsgLocal.LevelRewardRecord records = 1;
+inline int LevelRewardRecords::records_size() const {
+  return records_.size();
+}
+inline void LevelRewardRecords::clear_records() {
+  records_.Clear();
+}
+inline const ::MsgLocal::LevelRewardRecord& LevelRewardRecords::records(int index) const {
+  // @@protoc_insertion_point(field_get:MsgLocal.LevelRewardRecords.records)
+  return records_.Get(index);
+}
+inline ::MsgLocal::LevelRewardRecord* LevelRewardRecords::mutable_records(int index) {
+  // @@protoc_insertion_point(field_mutable:MsgLocal.LevelRewardRecords.records)
+  return records_.Mutable(index);
+}
+inline ::MsgLocal::LevelRewardRecord* LevelRewardRecords::add_records() {
+  // @@protoc_insertion_point(field_add:MsgLocal.LevelRewardRecords.records)
+  return records_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::MsgLocal::LevelRewardRecord >&
+LevelRewardRecords::records() const {
+  // @@protoc_insertion_point(field_list:MsgLocal.LevelRewardRecords.records)
+  return records_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::MsgLocal::LevelRewardRecord >*
+LevelRewardRecords::mutable_records() {
+  // @@protoc_insertion_point(field_mutable_list:MsgLocal.LevelRewardRecords.records)
+  return &records_;
 }
 
 // -------------------------------------------------------------------

@@ -10,8 +10,8 @@
 
 #include "BattleBaseInc.h"
 
-#define DEFAULT_HANG_X 984
-#define DEFAULT_HANG_Y 528
+#define DEFAULT_HANG_X 206
+#define DEFAULT_HANG_Y 400
 #define DEFAULT_HANG_MAP 10001
 
 class HangManager: public CSingleton<HangManager> {
@@ -30,6 +30,8 @@ public:
 	bool OnHumanDie(uint32_t uid);
 	bool MonsterDrop(uint32_t uid, uint32_t monster_id, const Point &diePos);
 	bool GetHangMap(uint16_t hang, uint32_t &des_map, Point &des_pos);
+	bool OfflineReward(uint32_t uid, uint32_t hang, uint32_t offlineTs);
+	bool AfterLogin(uint32_t uid);
 };
 
 #endif /* HANG_MANAGER_H_ */

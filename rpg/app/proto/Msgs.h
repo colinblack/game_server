@@ -95,6 +95,8 @@ int32_t combo_;
 int32_t comboBreak_;
 int32_t maxMagic_;
 int32_t attackSpeed_;
+int32_t xpMonsterDmgAdd_;
+int32_t xpPlayerDmgAdd_;
 virtual inline int32_t msgId() const {return 319;}
 static int32_t MsgId() {return 319;}
 virtual bool decode(CBufferReader &reader);
@@ -863,7 +865,7 @@ virtual Msg* New() const {return new SSendFlowerBroadcast();}
 };
 class SFriendZanData: public Msg {
 public:
-vector<int32_t> friendIds_;
+vector<Identity> friendIds_;
 int32_t expNum_;
 virtual inline int32_t msgId() const {return 2945;}
 static int32_t MsgId() {return 2945;}
@@ -883,6 +885,32 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SFriendBeZan();}
+};
+class SCrossFriend: public Msg {
+public:
+Identity playerId_;
+Identity friendId_;
+int32_t relation_;
+int32_t intimacy_;
+int32_t lastChatTime_;
+int64_t offlineDt_;
+msgs::SMiniPlayer miniPlayer_;
+virtual inline int32_t msgId() const {return 5484;}
+static int32_t MsgId() {return 5484;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCrossFriend();}
+};
+class SCrossFriendList: public Msg {
+public:
+vector<SCrossFriend> friends_;
+virtual inline int32_t msgId() const {return 5483;}
+static int32_t MsgId() {return 5483;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCrossFriendList();}
 };
 class SPlayerMrRight: public Msg {
 public:
@@ -1498,418 +1526,50 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SMissionMonsterPlan();}
 };
-class SEntityUpdate: public Msg {
+class SGetBackRewardSingle: public Msg {
 public:
-Identity entityId_;
-int16_t updateType_;
-vector<int64_t> updateData_;
-string updateStr_;
-virtual inline int32_t msgId() const {return 284;}
-static int32_t MsgId() {return 284;}
+int32_t round_;
+map<int32_t, int32_t> items_;
+int64_t exp_;
+virtual inline int32_t msgId() const {return 1306;}
+static int32_t MsgId() {return 1306;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SEntityUpdate();}
+virtual Msg* New() const {return new SGetBackRewardSingle();}
 };
-class SUpdateDiffAttr: public Msg {
+class SGetBackRewardInfo: public Msg {
 public:
-int32_t roleId_;
-int64_t combat_;
-map<int16_t, int64_t> diffAttr_;
-map<int16_t, int64_t> diffCopyAttr_;
-virtual inline int32_t msgId() const {return 1719;}
-static int32_t MsgId() {return 1719;}
+map<int32_t, int32_t> counts_;
+map<int32_t, SGetBackRewardSingle> rewards_;
+map<int32_t, SGetBackRewardSingle> halfRewards_;
+virtual inline int32_t msgId() const {return 1160;}
+static int32_t MsgId() {return 1160;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SUpdateDiffAttr();}
+virtual Msg* New() const {return new SGetBackRewardInfo();}
 };
-class SUpdateTotalAttrDiff: public Msg {
+class SElementSingle: public Msg {
 public:
-map<int16_t, int64_t> attr_;
-virtual inline int32_t msgId() const {return 930;}
-static int32_t MsgId() {return 930;}
+int32_t level_;
+int32_t exp_;
+virtual inline int32_t msgId() const {return 2551;}
+static int32_t MsgId() {return 2551;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SUpdateTotalAttrDiff();}
+virtual Msg* New() const {return new SElementSingle();}
 };
-class SEntityUpdateEntityShows: public Msg {
+class SElementInfo: public Msg {
 public:
-Identity entityId_;
-map<int16_t, int32_t> shows_;
-virtual inline int32_t msgId() const {return 956;}
-static int32_t MsgId() {return 956;}
+map<int32_t, SElementSingle> elementMap_;
+virtual inline int32_t msgId() const {return 1438;}
+static int32_t MsgId() {return 1438;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SEntityUpdateEntityShows();}
-};
-class SEntityUpdateEntityValues: public Msg {
-public:
-Identity entityId_;
-map<int16_t, int32_t> values_;
-virtual inline int32_t msgId() const {return 1332;}
-static int32_t MsgId() {return 1332;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SEntityUpdateEntityValues();}
-};
-class SEntityUpdateExtraAttr: public Msg {
-public:
-int32_t roleId_;
-map<int16_t, int64_t> attrMap_;
-virtual inline int32_t msgId() const {return 2691;}
-static int32_t MsgId() {return 2691;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SEntityUpdateExtraAttr();}
-};
-class SEntityTotalAttr: public Msg {
-public:
-int32_t code_;
-Identity entityId_;
-msgs::SFightAttribute totalAttr_;
-virtual inline int32_t msgId() const {return 2976;}
-static int32_t MsgId() {return 2976;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SEntityTotalAttr();}
-};
-class SBuffInfo: public Msg {
-public:
-int32_t buffId_;
-int32_t roleId_;
-int32_t overlay_;
-int32_t count_;
-int64_t value_;
-int64_t endDt_;
-int64_t extend_;
-virtual inline int32_t msgId() const {return 281;}
-static int32_t MsgId() {return 281;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBuffInfo();}
-};
-class SFightData: public Msg {
-public:
-Identity entityId_;
-string name_;
-int16_t sex_;
-int16_t career_;
-int16_t careerLevel_;
-int64_t combat_;
-int16_t status_;
-int64_t statusEnd_;
-Point spacePos_;
-int16_t direction_;
-int16_t speed_;
-int16_t bodySize_;
-int16_t camp_;
-int16_t force_;
-int16_t level_;
-int32_t vipLevel_;
-int64_t curLife_;
-int64_t inPower_;
-int32_t avaLife_;
-int32_t curMagic_;
-int16_t fightMode_;
-int32_t touxian_;
-int32_t statusMask_;
-bool isRide_;
-Identity warHorse_;
-bool isHide_;
-map<int16_t, int32_t> entityShows_;
-map<int16_t, int32_t> entityValues_;
-msgs::SFightAttribute fightAttr_;
-msgs::SFightAttribute totalAttr_;
-map<int16_t, int64_t> copyAttr_;
-vector<int32_t> skills_;
-vector<SBuffInfo> buffs_;
-vector<int32_t> runes_;
-Msg* teamData_;
-Msg* guildData_;
-virtual inline int32_t msgId() const {return 282;}
-static int32_t MsgId() {return 282;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFightData();}
-};
-class SFightPlayer: public Msg {
-public:
-Identity entityId_;
-int16_t cellLine_;
-int32_t spaceId_;
-Point spacePos_;
-int32_t copyCode_;
-string name_;
-int16_t career_;
-int16_t careerLevel_;
-int16_t camp_;
-int16_t level_;
-int32_t vipLevel_;
-map<int16_t, int32_t> ornaments_;
-int64_t combat_;
-int16_t fightMode_;
-int32_t hangLevel_;
-int16_t nuqi_;
-int16_t nuqiRecover_;
-int32_t zhanling_;
-int32_t godRingAttackLevel_;
-int32_t godRingDefenseLevel_;
-Msg* teamData_;
-Msg* guildData_;
-Msg* mateData_;
-vector<SFightData> fightDatas_;
-map<int32_t, int32_t> dragonSoulAttr_;
-map<int32_t, int32_t> addCopyDropRate_;
-vector<int32_t> flyUpSkills_;
-int32_t zhanqiAtkPer_;
-int32_t zhanqiHurtPer_;
-int32_t officialId_;
-int32_t crossOfficialId_;
-string jiebaiId_;
-bool isBeCaller_;
-map<int32_t, int32_t> roleZhanWei_;
-int16_t oldServerId_;
-virtual inline int32_t msgId() const {return 1697;}
-static int32_t MsgId() {return 1697;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFightPlayer();}
-};
-class SDisplayData: public Msg {
-public:
-Identity entityId_;
-string name_;
-int16_t status_;
-int64_t statusEnd_;
-int32_t spaceId_;
-Point spacePos_;
-int32_t copyCode_;
-int16_t direction_;
-int16_t speed_;
-virtual inline int32_t msgId() const {return 283;}
-static int32_t MsgId() {return 283;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SDisplayData();}
-};
-class SPlayerSkillInfo: public Msg {
-public:
-vector<dbs::TPlayerSkill> skills_;
-virtual inline int32_t msgId() const {return 311;}
-static int32_t MsgId() {return 311;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerSkillInfo();}
-};
-class SUpdateSkill: public Msg {
-public:
-vector<dbs::TPlayerSkill> skills_;
-uint8_t oper_;
-virtual inline int32_t msgId() const {return 312;}
-static int32_t MsgId() {return 312;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SUpdateSkill();}
-};
-class SFightUpdate: public Msg {
-public:
-int16_t updateType_;
-vector<int64_t> updateData_;
-virtual inline int32_t msgId() const {return 1918;}
-static int32_t MsgId() {return 1918;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFightUpdate();}
-};
-class SBeginFight: public Msg {
-public:
-int16_t attackId_;
-int32_t skillId_;
-Identity fromEntity_;
-Point centerPoint_;
-vector<Identity> toEntitys_;
-vector<SFightUpdate> propertyUpdates_;
-virtual inline int32_t msgId() const {return 313;}
-static int32_t MsgId() {return 313;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBeginFight();}
-};
-class SSkillCast: public Msg {
-public:
-SBeginFight beginFight_;
-int64_t endTime_;
-virtual inline int32_t msgId() const {return 1122;}
-static int32_t MsgId() {return 1122;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SSkillCast();}
-};
-class SSkillStopLead: public Msg {
-public:
-int32_t skillId_;
-int32_t series_;
-int64_t cdTime_;
-virtual inline int32_t msgId() const {return 1125;}
-static int32_t MsgId() {return 1125;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SSkillStopLead();}
-};
-class SBeatMove: public Msg {
-public:
-Point fromPoint_;
-Point toPoint_;
-virtual inline int32_t msgId() const {return 1788;}
-static int32_t MsgId() {return 1788;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBeatMove();}
-};
-class SFightInfo: public Msg {
-public:
-Identity fromEntityId_;
-int32_t skillId_;
-bool isFirst_;
-int32_t attackId_;
-Msg* extra_;
-Msg* extraAttrs_;
-virtual inline int32_t msgId() const {return 380;}
-static int32_t MsgId() {return 380;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFightInfo();}
-};
-class SDoFight: public Msg {
-public:
-int16_t attackId_;
-int32_t skillId_;
-Identity fromEntity_;
-Identity entity_;
-vector<SFightUpdate> propertyUpdates_;
-virtual inline int32_t msgId() const {return 314;}
-static int32_t MsgId() {return 314;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SDoFight();}
-};
-class SDoFights: public Msg {
-public:
-vector<SDoFight> doFights_;
-virtual inline int32_t msgId() const {return 315;}
-static int32_t MsgId() {return 315;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SDoFights();}
-};
-class SPlayerBuffInfo: public Msg {
-public:
-vector<msgs::SBuffInfo> buffs_;
-virtual inline int32_t msgId() const {return 316;}
-static int32_t MsgId() {return 316;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerBuffInfo();}
-};
-class SUpdateBuff: public Msg {
-public:
-uint8_t op_;
-vector<msgs::SBuffInfo> buffs_;
-virtual inline int32_t msgId() const {return 317;}
-static int32_t MsgId() {return 317;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SUpdateBuff();}
-};
-class SBroadBuffInfo: public Msg {
-public:
-SUpdateBuff buffs_;
-Identity toEntityId_;
-Identity fromEntityId_;
-virtual inline int32_t msgId() const {return 318;}
-static int32_t MsgId() {return 318;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBroadBuffInfo();}
-};
-class SUpdateSkillCd: public Msg {
-public:
-int32_t roleId_;
-map<int32_t, int32_t> updateCds_;
-map<int32_t, int32_t> updateCdPers_;
-virtual inline int32_t msgId() const {return 1907;}
-static int32_t MsgId() {return 1907;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SUpdateSkillCd();}
-};
-class SRoleUpdateRune: public Msg {
-public:
-uint8_t op_;
-int32_t roleId_;
-vector<int32_t> runes_;
-virtual inline int32_t msgId() const {return 1985;}
-static int32_t MsgId() {return 1985;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SRoleUpdateRune();}
-};
-class SEntityPoint: public Msg {
-public:
-Identity entityId_;
-Point point_;
-virtual inline int32_t msgId() const {return 2422;}
-static int32_t MsgId() {return 2422;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SEntityPoint();}
-};
-class SCleanSkill: public Msg {
-public:
-int16_t skillUid_;
-virtual inline int32_t msgId() const {return 2955;}
-static int32_t MsgId() {return 2955;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SCleanSkill();}
-};
-class SPlayerGodMagicSkill: public Msg {
-public:
-int32_t roleId_;
-int32_t selectType_;
-virtual inline int32_t msgId() const {return 5017;}
-static int32_t MsgId() {return 5017;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerGodMagicSkill();}
+virtual Msg* New() const {return new SElementInfo();}
 };
 class SChildInfo: public Msg {
 public:
@@ -4596,6 +4256,54 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SWorshipRank();}
 };
+class SCompleteDujieHeart: public SCompleteCopy {
+public:
+int32_t completeTime_;
+int32_t layer_;
+map<int32_t, int32_t> rewards_;
+virtual inline int32_t msgId() const {return 5497;}
+static int32_t MsgId() {return 5497;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCompleteDujieHeart();}
+};
+class SDujieHeartInfo: public Msg {
+public:
+int32_t copyCode_;
+int32_t layer_;
+virtual inline int32_t msgId() const {return 5498;}
+static int32_t MsgId() {return 5498;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDujieHeartInfo();}
+};
+class SRoleDujieHeart: public Msg {
+public:
+int64_t combat_;
+string entityAttrs_;
+msgs::SInts skills_;
+int32_t zhanLing_;
+int32_t wsAttackLevel_;
+int32_t wsDefenseLevel_;
+virtual inline int32_t msgId() const {return 5505;}
+static int32_t MsgId() {return 5505;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SRoleDujieHeart();}
+};
+class SPlayerDujieHeart: public Msg {
+public:
+map<int32_t, SRoleDujieHeart> roleMap_;
+virtual inline int32_t msgId() const {return 5504;}
+static int32_t MsgId() {return 5504;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerDujieHeart();}
+};
 class SFirstArenaMatchPlayer: public Msg {
 public:
 Identity playerId_;
@@ -4912,6 +4620,17 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SYaoChongPlayerList();}
+};
+class SYaoChongHistoryInfo: public Msg {
+public:
+int32_t yaochongNum_;
+int32_t yaochongGrabNum_;
+virtual inline int32_t msgId() const {return 5519;}
+static int32_t MsgId() {return 5519;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SYaoChongHistoryInfo();}
 };
 class SServerInfo: public Msg {
 public:
@@ -6519,6 +6238,7 @@ int32_t activeId_;
 int32_t totalRecharge_;
 int32_t count_;
 map<int32_t, bool> recordMap_;
+int32_t useFreeCount_;
 virtual inline int32_t msgId() const {return 3183;}
 static int32_t MsgId() {return 3183;}
 virtual bool decode(CBufferReader &reader);
@@ -6870,6 +6590,7 @@ map<int32_t, int32_t> gotRewardMap_;
 map<int32_t, int32_t> dayRewardMap_;
 map<int32_t, int32_t> discountMoney_;
 map<int32_t, int32_t> dayRewardTotal_;
+map<int32_t, int32_t> buyGroup_;
 virtual inline int32_t msgId() const {return 4292;}
 static int32_t MsgId() {return 4292;}
 virtual bool decode(CBufferReader &reader);
@@ -7085,17 +6806,51 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SActiveTripleTreasure();}
 };
+class SActiveHappyWeekend: public Msg {
+public:
+int32_t activeId_;
+map<int32_t, int32_t> joinMap_;
+map<int32_t, int32_t> rewardMap_;
+virtual inline int32_t msgId() const {return 5512;}
+static int32_t MsgId() {return 5512;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SActiveHappyWeekend();}
+};
 class SPlayerDujieInfo: public Msg {
 public:
 int32_t level_;
 int32_t rewardCount_;
-int32_t timeCount_;
+int64_t updateTime_;
 virtual inline int32_t msgId() const {return 5444;}
 static int32_t MsgId() {return 5444;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SPlayerDujieInfo();}
+};
+class SPlayerDujieTalent: public Msg {
+public:
+int32_t selectType_;
+virtual inline int32_t msgId() const {return 5501;}
+static int32_t MsgId() {return 5501;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerDujieTalent();}
+};
+class SPlayerDujieBaGua: public Msg {
+public:
+int32_t isActive_;
+int32_t advance_;
+int32_t bless_;
+virtual inline int32_t msgId() const {return 5514;}
+static int32_t MsgId() {return 5514;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerDujieBaGua();}
 };
 class SPlayerBag: public Msg {
 public:
@@ -7866,66 +7621,6 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new STotemInfo();}
 };
-class SPlayerHolyBeast: public Msg {
-public:
-vector<dbs::TPlayerHolyBeast> list_;
-virtual inline int32_t msgId() const {return 4908;}
-static int32_t MsgId() {return 4908;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerHolyBeast();}
-};
-class SPlayerHolyBeastGoOut: public Msg {
-public:
-map<int32_t, int32_t> goOuts_;
-bool isGoOut_;
-virtual inline int32_t msgId() const {return 4943;}
-static int32_t MsgId() {return 4943;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerHolyBeastGoOut();}
-};
-class SApplyHolyBeastBreed: public Msg {
-public:
-int32_t applyPlayerId_;
-string applyName_;
-int32_t applyModelId_;
-int32_t applyTalent_;
-int32_t applyLevel_;
-int32_t applyRaitry_;
-virtual inline int32_t msgId() const {return 5003;}
-static int32_t MsgId() {return 5003;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SApplyHolyBeastBreed();}
-};
-class SConfirmHolyBeastBreed: public Msg {
-public:
-int32_t otherPlayerId_;
-int32_t otherModelId_;
-string otherName_;
-int32_t otherTalent_;
-int32_t beastId_;
-virtual inline int32_t msgId() const {return 5009;}
-static int32_t MsgId() {return 5009;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SConfirmHolyBeastBreed();}
-};
-class SBreedHolyBeastPlayers: public Msg {
-public:
-vector<msgs::SMiniPlayer> list_;
-virtual inline int32_t msgId() const {return 5027;}
-static int32_t MsgId() {return 5027;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBreedHolyBeastPlayers();}
-};
 class SRedPacketInfo: public Msg {
 public:
 int32_t grabNum_;
@@ -8110,6 +7805,252 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SAchievementCopy();}
+};
+class SMarket: public dbs::TDbMarket {
+public:
+Identity entityId_;
+virtual inline int32_t msgId() const {return 709;}
+static int32_t MsgId() {return 709;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SMarket();}
+};
+class SMarketInfo: public Msg {
+public:
+int32_t page_;
+int32_t totalPage_;
+vector<SMarket> seq_;
+virtual inline int32_t msgId() const {return 710;}
+static int32_t MsgId() {return 710;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SMarketInfo();}
+};
+class SMarketHis: public dbs::TMarketHis {
+public:
+Identity entityId_;
+virtual inline int32_t msgId() const {return 2665;}
+static int32_t MsgId() {return 2665;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SMarketHis();}
+};
+class SMarketHisInfo: public Msg {
+public:
+vector<SMarketHis> seq_;
+virtual inline int32_t msgId() const {return 1204;}
+static int32_t MsgId() {return 1204;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SMarketHisInfo();}
+};
+class SEntityUpdate: public Msg {
+public:
+Identity entityId_;
+int16_t updateType_;
+vector<int64_t> updateData_;
+string updateStr_;
+virtual inline int32_t msgId() const {return 284;}
+static int32_t MsgId() {return 284;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEntityUpdate();}
+};
+class SUpdateDiffAttr: public Msg {
+public:
+int32_t roleId_;
+int64_t combat_;
+map<int16_t, int64_t> diffAttr_;
+map<int16_t, int64_t> diffCopyAttr_;
+virtual inline int32_t msgId() const {return 1719;}
+static int32_t MsgId() {return 1719;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpdateDiffAttr();}
+};
+class SUpdateTotalAttrDiff: public Msg {
+public:
+map<int16_t, int64_t> attr_;
+virtual inline int32_t msgId() const {return 930;}
+static int32_t MsgId() {return 930;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpdateTotalAttrDiff();}
+};
+class SEntityUpdateEntityShows: public Msg {
+public:
+Identity entityId_;
+map<int16_t, int32_t> shows_;
+virtual inline int32_t msgId() const {return 956;}
+static int32_t MsgId() {return 956;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEntityUpdateEntityShows();}
+};
+class SEntityUpdateEntityValues: public Msg {
+public:
+Identity entityId_;
+map<int16_t, int32_t> values_;
+virtual inline int32_t msgId() const {return 1332;}
+static int32_t MsgId() {return 1332;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEntityUpdateEntityValues();}
+};
+class SEntityUpdateExtraAttr: public Msg {
+public:
+int32_t roleId_;
+map<int16_t, int64_t> attrMap_;
+virtual inline int32_t msgId() const {return 2691;}
+static int32_t MsgId() {return 2691;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEntityUpdateExtraAttr();}
+};
+class SEntityTotalAttr: public Msg {
+public:
+int32_t code_;
+Identity entityId_;
+msgs::SFightAttribute totalAttr_;
+virtual inline int32_t msgId() const {return 2976;}
+static int32_t MsgId() {return 2976;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEntityTotalAttr();}
+};
+class SBuffInfo: public Msg {
+public:
+int32_t buffId_;
+int32_t roleId_;
+int32_t overlay_;
+int32_t count_;
+int64_t value_;
+int64_t endDt_;
+int64_t extend_;
+virtual inline int32_t msgId() const {return 281;}
+static int32_t MsgId() {return 281;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBuffInfo();}
+};
+class SFightData: public Msg {
+public:
+Identity entityId_;
+string name_;
+int16_t sex_;
+int16_t career_;
+int16_t careerLevel_;
+int64_t combat_;
+int16_t status_;
+int64_t statusEnd_;
+Point spacePos_;
+int16_t direction_;
+int16_t speed_;
+int16_t bodySize_;
+int16_t camp_;
+int16_t force_;
+int16_t level_;
+int32_t vipLevel_;
+int64_t curLife_;
+int64_t inPower_;
+int32_t avaLife_;
+int32_t curMagic_;
+int16_t fightMode_;
+int32_t touxian_;
+int32_t statusMask_;
+bool isRide_;
+Identity warHorse_;
+bool isHide_;
+map<int16_t, int32_t> entityShows_;
+map<int16_t, int32_t> entityValues_;
+msgs::SFightAttribute fightAttr_;
+msgs::SFightAttribute totalAttr_;
+map<int16_t, int64_t> copyAttr_;
+vector<int32_t> skills_;
+vector<SBuffInfo> buffs_;
+vector<int32_t> runes_;
+Msg* teamData_;
+Msg* guildData_;
+virtual inline int32_t msgId() const {return 282;}
+static int32_t MsgId() {return 282;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SFightData();}
+};
+class SFightPlayer: public Msg {
+public:
+Identity entityId_;
+int16_t cellLine_;
+int32_t spaceId_;
+Point spacePos_;
+int32_t copyCode_;
+string name_;
+int16_t career_;
+int16_t careerLevel_;
+int16_t camp_;
+int16_t level_;
+int32_t vipLevel_;
+map<int16_t, int32_t> ornaments_;
+int64_t combat_;
+int16_t fightMode_;
+int32_t hangLevel_;
+int16_t nuqi_;
+int16_t nuqiRecover_;
+int32_t zhanling_;
+int32_t godRingAttackLevel_;
+int32_t godRingDefenseLevel_;
+Msg* teamData_;
+Msg* guildData_;
+Msg* mateData_;
+vector<SFightData> fightDatas_;
+map<int32_t, int32_t> dragonSoulAttr_;
+map<int32_t, int32_t> addCopyDropRate_;
+vector<int32_t> flyUpSkills_;
+int32_t zhanqiAtkPer_;
+int32_t zhanqiHurtPer_;
+int32_t officialId_;
+int32_t crossOfficialId_;
+string jiebaiId_;
+bool isBeCaller_;
+map<int32_t, int32_t> roleZhanWei_;
+int16_t oldServerId_;
+virtual inline int32_t msgId() const {return 1697;}
+static int32_t MsgId() {return 1697;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SFightPlayer();}
+};
+class SDisplayData: public Msg {
+public:
+Identity entityId_;
+string name_;
+int16_t status_;
+int64_t statusEnd_;
+int32_t spaceId_;
+Point spacePos_;
+int32_t copyCode_;
+int16_t direction_;
+int16_t speed_;
+virtual inline int32_t msgId() const {return 283;}
+static int32_t MsgId() {return 283;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDisplayData();}
 };
 class SFlyChessSingle: public Msg {
 public:
@@ -8297,20 +8238,6 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SAdvanceDayInfo();}
 };
-class SZhanlingInfo: public Msg {
-public:
-int32_t dai_;
-int32_t mission_;
-int64_t deadline_;
-int32_t adv_;
-map<int32_t, int32_t> advance_;
-virtual inline int32_t msgId() const {return 1896;}
-static int32_t MsgId() {return 1896;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SZhanlingInfo();}
-};
 class SFashion: public Msg {
 public:
 int32_t level_;
@@ -8370,6 +8297,66 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SSendFashion();}
 };
+class SPlayerHolyBeast: public Msg {
+public:
+vector<dbs::TPlayerHolyBeast> list_;
+virtual inline int32_t msgId() const {return 4908;}
+static int32_t MsgId() {return 4908;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerHolyBeast();}
+};
+class SPlayerHolyBeastGoOut: public Msg {
+public:
+map<int32_t, int32_t> goOuts_;
+bool isGoOut_;
+virtual inline int32_t msgId() const {return 4943;}
+static int32_t MsgId() {return 4943;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerHolyBeastGoOut();}
+};
+class SApplyHolyBeastBreed: public Msg {
+public:
+int32_t applyPlayerId_;
+string applyName_;
+int32_t applyModelId_;
+int32_t applyTalent_;
+int32_t applyLevel_;
+int32_t applyRaitry_;
+virtual inline int32_t msgId() const {return 5003;}
+static int32_t MsgId() {return 5003;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SApplyHolyBeastBreed();}
+};
+class SConfirmHolyBeastBreed: public Msg {
+public:
+int32_t otherPlayerId_;
+int32_t otherModelId_;
+string otherName_;
+int32_t otherTalent_;
+int32_t beastId_;
+virtual inline int32_t msgId() const {return 5009;}
+static int32_t MsgId() {return 5009;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SConfirmHolyBeastBreed();}
+};
+class SBreedHolyBeastPlayers: public Msg {
+public:
+vector<msgs::SMiniPlayer> list_;
+virtual inline int32_t msgId() const {return 5027;}
+static int32_t MsgId() {return 5027;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBreedHolyBeastPlayers();}
+};
 class SPlayerSignFourteenDay: public Msg {
 public:
 int32_t index_;
@@ -8427,6 +8414,60 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SMarryTrialStatusUpdate();}
 };
+class SOpenServerTargetInfo: public Msg {
+public:
+map<int32_t, int32_t> isGetReward_;
+map<int32_t, bool> bossKill_;
+map<int32_t, int32_t> godPlaneKill_;
+map<int32_t, int32_t> vipBossKill_;
+virtual inline int32_t msgId() const {return 1598;}
+static int32_t MsgId() {return 1598;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOpenServerTargetInfo();}
+};
+class SOpenServerTreasure: public Msg {
+public:
+map<int32_t, int32_t> treasureCount_;
+virtual inline int32_t msgId() const {return 3380;}
+static int32_t MsgId() {return 3380;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOpenServerTreasure();}
+};
+class SOpenServerTargetCounter: public Msg {
+public:
+map<int32_t, int32_t> rewardCounter_;
+virtual inline int32_t msgId() const {return 2958;}
+static int32_t MsgId() {return 2958;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOpenServerTargetCounter();}
+};
+class SOpenServerAdvanceCounter: public Msg {
+public:
+map<int32_t, int32_t> counter_;
+virtual inline int32_t msgId() const {return 3075;}
+static int32_t MsgId() {return 3075;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOpenServerAdvanceCounter();}
+};
+class SZeroGiftInfo: public Msg {
+public:
+map<int32_t, int32_t> dayRecharge_;
+map<int32_t, map<int32_t, bool> > gotRewards_;
+virtual inline int32_t msgId() const {return 3740;}
+static int32_t MsgId() {return 3740;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SZeroGiftInfo();}
+};
 class SDailyActivityInfo: public Msg {
 public:
 int32_t activity_;
@@ -8466,41 +8507,19 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SMagicInfo();}
 };
-class SHorcruxeSingle: public Msg {
+class SZhanlingInfo: public Msg {
 public:
-bool isActive_;
-int32_t type_;
-int32_t subtype_;
-int32_t star_;
-int32_t level_;
-map<int32_t, int32_t> fulPer_;
-int32_t fulNum_;
-virtual inline int32_t msgId() const {return 2402;}
-static int32_t MsgId() {return 2402;}
+int32_t dai_;
+int32_t mission_;
+int64_t deadline_;
+int32_t adv_;
+map<int32_t, int32_t> advance_;
+virtual inline int32_t msgId() const {return 1896;}
+static int32_t MsgId() {return 1896;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SHorcruxeSingle();}
-};
-class SHorcruxeTypeMap: public Msg {
-public:
-map<int32_t, SHorcruxeSingle> horcruxeMap_;
-virtual inline int32_t msgId() const {return 2497;}
-static int32_t MsgId() {return 2497;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SHorcruxeTypeMap();}
-};
-class SHorcruxeInfo: public Msg {
-public:
-map<int32_t, SHorcruxeTypeMap> horcruxeTypeMap_;
-virtual inline int32_t msgId() const {return 2403;}
-static int32_t MsgId() {return 2403;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SHorcruxeInfo();}
+virtual Msg* New() const {return new SZhanlingInfo();}
 };
 class SMiniMail: public Msg {
 public:
@@ -8561,110 +8580,41 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SAddMail();}
 };
-class SChatMsg: public Msg {
+class SHorcruxeSingle: public Msg {
 public:
-int16_t channel_;
-msgs::SMiniPlayer fromPlayer_;
-string content_;
-string extend_;
-virtual inline int32_t msgId() const {return 594;}
-static int32_t MsgId() {return 594;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SChatMsg();}
-};
-class SChatInfo: public Msg {
-public:
-int32_t freeHorn_;
-int32_t hornNum_;
-int64_t feedbackDt_;
-virtual inline int32_t msgId() const {return 1897;}
-static int32_t MsgId() {return 1897;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SChatInfo();}
-};
-class SOpenServerTargetInfo: public Msg {
-public:
-map<int32_t, int32_t> isGetReward_;
-map<int32_t, bool> bossKill_;
-map<int32_t, int32_t> godPlaneKill_;
-map<int32_t, int32_t> vipBossKill_;
-virtual inline int32_t msgId() const {return 1598;}
-static int32_t MsgId() {return 1598;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOpenServerTargetInfo();}
-};
-class SOpenServerTreasure: public Msg {
-public:
-map<int32_t, int32_t> treasureCount_;
-virtual inline int32_t msgId() const {return 3380;}
-static int32_t MsgId() {return 3380;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOpenServerTreasure();}
-};
-class SOpenServerTargetCounter: public Msg {
-public:
-map<int32_t, int32_t> rewardCounter_;
-virtual inline int32_t msgId() const {return 2958;}
-static int32_t MsgId() {return 2958;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOpenServerTargetCounter();}
-};
-class SOpenServerAdvanceCounter: public Msg {
-public:
-map<int32_t, int32_t> counter_;
-virtual inline int32_t msgId() const {return 3075;}
-static int32_t MsgId() {return 3075;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOpenServerAdvanceCounter();}
-};
-class SZeroGiftInfo: public Msg {
-public:
-map<int32_t, int32_t> dayRecharge_;
-map<int32_t, map<int32_t, bool> > gotRewards_;
-virtual inline int32_t msgId() const {return 3740;}
-static int32_t MsgId() {return 3740;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SZeroGiftInfo();}
-};
-class SBroadcastContent: public Msg {
-public:
-int32_t broadcastId_;
-vector<string> params_;
-int32_t proxyId_;
-virtual inline int32_t msgId() const {return 1105;}
-static int32_t MsgId() {return 1105;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBroadcastContent();}
-};
-class SSystemNotify: public Msg {
-public:
+bool isActive_;
 int32_t type_;
-string content_;
-bool isFloat_;
-int16_t minLevel_;
-vector<string> gameChannels_;
-virtual inline int32_t msgId() const {return 1106;}
-static int32_t MsgId() {return 1106;}
+int32_t subtype_;
+int32_t star_;
+int32_t level_;
+map<int32_t, int32_t> fulPer_;
+int32_t fulNum_;
+virtual inline int32_t msgId() const {return 2402;}
+static int32_t MsgId() {return 2402;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SSystemNotify();}
+virtual Msg* New() const {return new SHorcruxeSingle();}
+};
+class SHorcruxeTypeMap: public Msg {
+public:
+map<int32_t, SHorcruxeSingle> horcruxeMap_;
+virtual inline int32_t msgId() const {return 2497;}
+static int32_t MsgId() {return 2497;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SHorcruxeTypeMap();}
+};
+class SHorcruxeInfo: public Msg {
+public:
+map<int32_t, SHorcruxeTypeMap> horcruxeTypeMap_;
+virtual inline int32_t msgId() const {return 2403;}
+static int32_t MsgId() {return 2403;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SHorcruxeInfo();}
 };
 class SPlayerHelp: public Msg {
 public:
@@ -8744,47 +8694,29 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SMiracleBossPlayerData();}
 };
-class SMarket: public dbs::TDbMarket {
+class SZhiBaoSingle: public Msg {
 public:
-Identity entityId_;
-virtual inline int32_t msgId() const {return 709;}
-static int32_t MsgId() {return 709;}
+int32_t level_;
+int32_t star_;
+int32_t bless_;
+int32_t target_;
+map<int32_t, int32_t> danMap_;
+virtual inline int32_t msgId() const {return 4625;}
+static int32_t MsgId() {return 4625;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SMarket();}
+virtual Msg* New() const {return new SZhiBaoSingle();}
 };
-class SMarketInfo: public Msg {
+class SZhiBaoInfo: public Msg {
 public:
-int32_t page_;
-int32_t totalPage_;
-vector<SMarket> seq_;
-virtual inline int32_t msgId() const {return 710;}
-static int32_t MsgId() {return 710;}
+map<int32_t, SZhiBaoSingle> maps_;
+virtual inline int32_t msgId() const {return 4626;}
+static int32_t MsgId() {return 4626;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SMarketInfo();}
-};
-class SMarketHis: public dbs::TMarketHis {
-public:
-Identity entityId_;
-virtual inline int32_t msgId() const {return 2665;}
-static int32_t MsgId() {return 2665;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SMarketHis();}
-};
-class SMarketHisInfo: public Msg {
-public:
-vector<SMarketHis> seq_;
-virtual inline int32_t msgId() const {return 1204;}
-static int32_t MsgId() {return 1204;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SMarketHisInfo();}
+virtual Msg* New() const {return new SZhiBaoInfo();}
 };
 class SPlayerAutoDrop: public Msg {
 public:
@@ -8798,6 +8730,19 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SPlayerAutoDrop();}
+};
+class SSyncThreeWorldInfo: public Msg {
+public:
+int32_t proxy_;
+int32_t server_;
+vector<msgs::SFightPlayer> players_;
+int32_t totalNum_;
+virtual inline int32_t msgId() const {return 3961;}
+static int32_t MsgId() {return 3961;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSyncThreeWorldInfo();}
 };
 class SLianYao: public Msg {
 public:
@@ -8965,6 +8910,623 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SFeaturesReward();}
+};
+class SPlayerTitle: public Msg {
+public:
+int32_t titleId_;
+int64_t indateTime_;
+virtual inline int32_t msgId() const {return 1075;}
+static int32_t MsgId() {return 1075;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerTitle();}
+};
+class SPlayerTitleInfo: public Msg {
+public:
+vector<SPlayerTitle> titles_;
+virtual inline int32_t msgId() const {return 1076;}
+static int32_t MsgId() {return 1076;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerTitleInfo();}
+};
+class SPlayerTouxianInfo: public Msg {
+public:
+int32_t touxianId_;
+int32_t feat_;
+virtual inline int32_t msgId() const {return 1086;}
+static int32_t MsgId() {return 1086;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerTouxianInfo();}
+};
+class SFourGod: public Msg {
+public:
+int32_t status_;
+int32_t advance_;
+map<int32_t, int32_t> dan_;
+vector<int32_t> suitLevel_;
+virtual inline int32_t msgId() const {return 3963;}
+static int32_t MsgId() {return 3963;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SFourGod();}
+};
+class SFourGodInfo: public Msg {
+public:
+map<int32_t, SFourGod> fgs_;
+virtual inline int32_t msgId() const {return 3964;}
+static int32_t MsgId() {return 3964;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SFourGodInfo();}
+};
+class SOneYuanTreasureSingle: public Msg {
+public:
+int32_t activeType_;
+int32_t id_;
+int32_t status_;
+int64_t startTime_;
+int64_t endTime_;
+int32_t hadBuyCount_;
+map<string, int32_t> buyCountMap_;
+string winPlayerName_;
+virtual inline int32_t msgId() const {return 3826;}
+static int32_t MsgId() {return 3826;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasureSingle();}
+};
+class SOneYuanTreasure: public Msg {
+public:
+int32_t activeType_;
+map<int32_t, SOneYuanTreasureSingle> statusMap_;
+virtual inline int32_t msgId() const {return 3827;}
+static int32_t MsgId() {return 3827;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasure();}
+};
+class SOneYuanTreasureRecordSingle: public Msg {
+public:
+int64_t openTime_;
+string name_;
+bool spike_;
+int32_t itemId_;
+int32_t itemNum_;
+int32_t buyNum_;
+bool isWinner_;
+virtual inline int32_t msgId() const {return 3828;}
+static int32_t MsgId() {return 3828;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasureRecordSingle();}
+};
+class SOneYuanTreasureRecord: public Msg {
+public:
+vector<SOneYuanTreasureRecordSingle> records_;
+virtual inline int32_t msgId() const {return 3829;}
+static int32_t MsgId() {return 3829;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasureRecord();}
+};
+class SOneYuanTreasureTarget: public Msg {
+public:
+map<int32_t, bool> gotRewardMap_;
+int32_t totalCount_;
+virtual inline int32_t msgId() const {return 3830;}
+static int32_t MsgId() {return 3830;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasureTarget();}
+};
+class SOneYuanTreasurePlayer: public Msg {
+public:
+Identity entityId_;
+int32_t historyCount_;
+string playerName_;
+virtual inline int32_t msgId() const {return 3955;}
+static int32_t MsgId() {return 3955;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasurePlayer();}
+};
+class SOneYuanTreasureEndInfo: public Msg {
+public:
+map<Identity, bool> spikeMap_;
+int32_t itemId_;
+int32_t itemNum_;
+int64_t endTime_;
+map<Identity, int32_t> buyCountMap_;
+Identity winEntityId_;
+virtual inline int32_t msgId() const {return 3958;}
+static int32_t MsgId() {return 3958;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneYuanTreasureEndInfo();}
+};
+class SPlayerSkillInfo: public Msg {
+public:
+vector<dbs::TPlayerSkill> skills_;
+virtual inline int32_t msgId() const {return 311;}
+static int32_t MsgId() {return 311;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerSkillInfo();}
+};
+class SUpdateSkill: public Msg {
+public:
+vector<dbs::TPlayerSkill> skills_;
+uint8_t oper_;
+virtual inline int32_t msgId() const {return 312;}
+static int32_t MsgId() {return 312;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpdateSkill();}
+};
+class SFightUpdate: public Msg {
+public:
+int16_t updateType_;
+vector<int64_t> updateData_;
+virtual inline int32_t msgId() const {return 1918;}
+static int32_t MsgId() {return 1918;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SFightUpdate();}
+};
+class SBeginFight: public Msg {
+public:
+int16_t attackId_;
+int32_t skillId_;
+Identity fromEntity_;
+Point centerPoint_;
+vector<Identity> toEntitys_;
+vector<SFightUpdate> propertyUpdates_;
+virtual inline int32_t msgId() const {return 313;}
+static int32_t MsgId() {return 313;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBeginFight();}
+};
+class SSkillCast: public Msg {
+public:
+SBeginFight beginFight_;
+int64_t endTime_;
+virtual inline int32_t msgId() const {return 1122;}
+static int32_t MsgId() {return 1122;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSkillCast();}
+};
+class SSkillStopLead: public Msg {
+public:
+int32_t skillId_;
+int32_t series_;
+int64_t cdTime_;
+virtual inline int32_t msgId() const {return 1125;}
+static int32_t MsgId() {return 1125;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSkillStopLead();}
+};
+class SBeatMove: public Msg {
+public:
+Point fromPoint_;
+Point toPoint_;
+virtual inline int32_t msgId() const {return 1788;}
+static int32_t MsgId() {return 1788;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBeatMove();}
+};
+class SFightInfo: public Msg {
+public:
+Identity fromEntityId_;
+int32_t skillId_;
+bool isFirst_;
+int32_t attackId_;
+Msg* extra_;
+Msg* extraAttrs_;
+virtual inline int32_t msgId() const {return 380;}
+static int32_t MsgId() {return 380;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SFightInfo();}
+};
+class SDoFight: public Msg {
+public:
+int16_t attackId_;
+int32_t skillId_;
+Identity fromEntity_;
+Identity entity_;
+vector<SFightUpdate> propertyUpdates_;
+virtual inline int32_t msgId() const {return 314;}
+static int32_t MsgId() {return 314;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDoFight();}
+};
+class SDoFights: public Msg {
+public:
+vector<SDoFight> doFights_;
+virtual inline int32_t msgId() const {return 315;}
+static int32_t MsgId() {return 315;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDoFights();}
+};
+class SPlayerBuffInfo: public Msg {
+public:
+vector<msgs::SBuffInfo> buffs_;
+virtual inline int32_t msgId() const {return 316;}
+static int32_t MsgId() {return 316;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerBuffInfo();}
+};
+class SUpdateBuff: public Msg {
+public:
+uint8_t op_;
+vector<msgs::SBuffInfo> buffs_;
+virtual inline int32_t msgId() const {return 317;}
+static int32_t MsgId() {return 317;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpdateBuff();}
+};
+class SBroadBuffInfo: public Msg {
+public:
+SUpdateBuff buffs_;
+Identity toEntityId_;
+Identity fromEntityId_;
+virtual inline int32_t msgId() const {return 318;}
+static int32_t MsgId() {return 318;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBroadBuffInfo();}
+};
+class SUpdateSkillCd: public Msg {
+public:
+int32_t roleId_;
+map<int32_t, int32_t> updateCds_;
+map<int32_t, int32_t> updateCdPers_;
+virtual inline int32_t msgId() const {return 1907;}
+static int32_t MsgId() {return 1907;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpdateSkillCd();}
+};
+class SRoleUpdateRune: public Msg {
+public:
+uint8_t op_;
+int32_t roleId_;
+vector<int32_t> runes_;
+virtual inline int32_t msgId() const {return 1985;}
+static int32_t MsgId() {return 1985;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SRoleUpdateRune();}
+};
+class SEntityPoint: public Msg {
+public:
+Identity entityId_;
+Point point_;
+virtual inline int32_t msgId() const {return 2422;}
+static int32_t MsgId() {return 2422;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEntityPoint();}
+};
+class SCleanSkill: public Msg {
+public:
+int16_t skillUid_;
+virtual inline int32_t msgId() const {return 2955;}
+static int32_t MsgId() {return 2955;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCleanSkill();}
+};
+class SPlayerGodMagicSkill: public Msg {
+public:
+int32_t roleId_;
+int32_t selectType_;
+virtual inline int32_t msgId() const {return 5017;}
+static int32_t MsgId() {return 5017;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerGodMagicSkill();}
+};
+class SBroadcastContent: public Msg {
+public:
+int32_t broadcastId_;
+vector<string> params_;
+int32_t proxyId_;
+virtual inline int32_t msgId() const {return 1105;}
+static int32_t MsgId() {return 1105;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBroadcastContent();}
+};
+class SSystemNotify: public Msg {
+public:
+int32_t type_;
+string content_;
+bool isFloat_;
+int16_t minLevel_;
+vector<string> gameChannels_;
+virtual inline int32_t msgId() const {return 1106;}
+static int32_t MsgId() {return 1106;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSystemNotify();}
+};
+class SSoulSingle: public Msg {
+public:
+map<int32_t, int32_t> isOpenHole_;
+virtual inline int32_t msgId() const {return 2230;}
+static int32_t MsgId() {return 2230;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSoulSingle();}
+};
+class SSoulInfo: public Msg {
+public:
+map<int32_t, SSoulSingle> roleHole_;
+virtual inline int32_t msgId() const {return 2231;}
+static int32_t MsgId() {return 2231;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSoulInfo();}
+};
+class SCheats: public Msg {
+public:
+int32_t itemId_;
+int32_t isLock_;
+virtual inline int32_t msgId() const {return 3483;}
+static int32_t MsgId() {return 3483;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCheats();}
+};
+class SPlayerCheats: public Msg {
+public:
+vector<SCheats> cheats_;
+int32_t roleId_;
+virtual inline int32_t msgId() const {return 3484;}
+static int32_t MsgId() {return 3484;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerCheats();}
+};
+class SUpdateCheats: public Msg {
+public:
+int32_t index_;
+int32_t itemId_;
+int32_t isLock_;
+int32_t roleId_;
+virtual inline int32_t msgId() const {return 3738;}
+static int32_t MsgId() {return 3738;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpdateCheats();}
+};
+class SChatMsg: public Msg {
+public:
+int16_t channel_;
+msgs::SMiniPlayer fromPlayer_;
+string content_;
+string extend_;
+virtual inline int32_t msgId() const {return 594;}
+static int32_t MsgId() {return 594;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SChatMsg();}
+};
+class SChatInfo: public Msg {
+public:
+int32_t freeHorn_;
+int32_t hornNum_;
+int64_t feedbackDt_;
+virtual inline int32_t msgId() const {return 1897;}
+static int32_t MsgId() {return 1897;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SChatInfo();}
+};
+class SShenqiInfo: public Msg {
+public:
+int32_t cur_shenqi_;
+vector<int32_t> actived_pieces_;
+virtual inline int32_t msgId() const {return 1768;}
+static int32_t MsgId() {return 1768;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SShenqiInfo();}
+};
+class SVersionReward: public Msg {
+public:
+bool isGotReward_;
+virtual inline int32_t msgId() const {return 2202;}
+static int32_t MsgId() {return 2202;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SVersionReward();}
+};
+class SPlayerOnlineReward: public Msg {
+public:
+int32_t onlineTime_;
+map<int32_t, int32_t> hasGotReward_;
+virtual inline int32_t msgId() const {return 1568;}
+static int32_t MsgId() {return 1568;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerOnlineReward();}
+};
+class SPlayerCallInfo: public Msg {
+public:
+int32_t isBeCall_;
+int32_t isSetCaller_;
+int64_t backDt_;
+map<int32_t, int32_t> hasGotReward_;
+virtual inline int32_t msgId() const {return 4255;}
+static int32_t MsgId() {return 4255;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerCallInfo();}
+};
+class SCountryGold: public Msg {
+public:
+int32_t countryGold_;
+int32_t point0Gold_;
+Identity serverId_;
+virtual inline int32_t msgId() const {return 4497;}
+static int32_t MsgId() {return 4497;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCountryGold();}
+};
+class SAddCountryGold: public Msg {
+public:
+int32_t type_;
+int32_t gold_;
+vector<string> params_;
+virtual inline int32_t msgId() const {return 4486;}
+static int32_t MsgId() {return 4486;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SAddCountryGold();}
+};
+class SDelCountryGold: public Msg {
+public:
+int32_t type_;
+int32_t gold_;
+vector<string> params_;
+virtual inline int32_t msgId() const {return 4492;}
+static int32_t MsgId() {return 4492;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDelCountryGold();}
+};
+class SPlayerCountryGold: public Msg {
+public:
+int32_t hasGotSalary_;
+virtual inline int32_t msgId() const {return 4491;}
+static int32_t MsgId() {return 4491;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerCountryGold();}
+};
+class SCutTree: public Msg {
+public:
+int32_t type_;
+int32_t itemId_;
+int32_t life_;
+int32_t maxLife_;
+Identity belongId_;
+string belongName_;
+int64_t refreshTime_;
+virtual inline int32_t msgId() const {return 4589;}
+static int32_t MsgId() {return 4589;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCutTree();}
+};
+class SCutTreeInfo: public Msg {
+public:
+vector<SCutTree> trees_;
+virtual inline int32_t msgId() const {return 4590;}
+static int32_t MsgId() {return 4590;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCutTreeInfo();}
+};
+class SBless: public Msg {
+public:
+int32_t type_;
+int32_t targetCount_;
+int64_t freeCd_;
+int32_t useMoneyCount_;
+virtual inline int32_t msgId() const {return 4707;}
+static int32_t MsgId() {return 4707;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBless();}
+};
+class SPlayerBless: public Msg {
+public:
+map<int32_t, SBless> blesses_;
+virtual inline int32_t msgId() const {return 4708;}
+static int32_t MsgId() {return 4708;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerBless();}
+};
+class SLunHuiBook: public Msg {
+public:
+int64_t preDt_;
+int32_t preSeqDays_;
+int64_t beginDt_;
+map<int32_t, int32_t> hasGot_;
+map<int32_t, int32_t> hasGotMulCount_;
+int32_t useVipCount_;
+virtual inline int32_t msgId() const {return 5436;}
+static int32_t MsgId() {return 5436;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SLunHuiBook();}
 };
 class SGuildWarGuildInfo: public Msg {
 public:
@@ -9359,61 +9921,6 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SShuraWarSeqKill();}
 };
-class SPlayerTitle: public Msg {
-public:
-int32_t titleId_;
-int64_t indateTime_;
-virtual inline int32_t msgId() const {return 1075;}
-static int32_t MsgId() {return 1075;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerTitle();}
-};
-class SPlayerTitleInfo: public Msg {
-public:
-vector<SPlayerTitle> titles_;
-virtual inline int32_t msgId() const {return 1076;}
-static int32_t MsgId() {return 1076;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerTitleInfo();}
-};
-class SPlayerTouxianInfo: public Msg {
-public:
-int32_t touxianId_;
-int32_t feat_;
-virtual inline int32_t msgId() const {return 1086;}
-static int32_t MsgId() {return 1086;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerTouxianInfo();}
-};
-class SFourGod: public Msg {
-public:
-int32_t status_;
-int32_t advance_;
-map<int32_t, int32_t> dan_;
-vector<int32_t> suitLevel_;
-virtual inline int32_t msgId() const {return 3963;}
-static int32_t MsgId() {return 3963;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFourGod();}
-};
-class SFourGodInfo: public Msg {
-public:
-map<int32_t, SFourGod> fgs_;
-virtual inline int32_t msgId() const {return 3964;}
-static int32_t MsgId() {return 3964;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFourGodInfo();}
-};
 class SPlayerVipInfo: public Msg {
 public:
 int32_t level_;
@@ -9428,97 +9935,67 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SPlayerVipInfo();}
 };
-class SOneYuanTreasureSingle: public Msg {
+class STransport: public Msg {
 public:
-int32_t activeType_;
-int32_t id_;
-int32_t status_;
-int64_t startTime_;
-int64_t endTime_;
-int32_t hadBuyCount_;
-map<string, int32_t> buyCountMap_;
-string winPlayerName_;
-virtual inline int32_t msgId() const {return 3826;}
-static int32_t MsgId() {return 3826;}
+int32_t type_;
+int32_t missionCount_;
+int32_t refreshCount_;
+int32_t leftCount_;
+int32_t fightEscort_;
+virtual inline int32_t msgId() const {return 2663;}
+static int32_t MsgId() {return 2663;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasureSingle();}
+virtual Msg* New() const {return new STransport();}
 };
-class SOneYuanTreasure: public Msg {
-public:
-int32_t activeType_;
-map<int32_t, SOneYuanTreasureSingle> statusMap_;
-virtual inline int32_t msgId() const {return 3827;}
-static int32_t MsgId() {return 3827;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasure();}
-};
-class SOneYuanTreasureRecordSingle: public Msg {
-public:
-int64_t openTime_;
-string name_;
-bool spike_;
-int32_t itemId_;
-int32_t itemNum_;
-int32_t buyNum_;
-bool isWinner_;
-virtual inline int32_t msgId() const {return 3828;}
-static int32_t MsgId() {return 3828;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasureRecordSingle();}
-};
-class SOneYuanTreasureRecord: public Msg {
-public:
-vector<SOneYuanTreasureRecordSingle> records_;
-virtual inline int32_t msgId() const {return 3829;}
-static int32_t MsgId() {return 3829;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasureRecord();}
-};
-class SOneYuanTreasureTarget: public Msg {
-public:
-map<int32_t, bool> gotRewardMap_;
-int32_t totalCount_;
-virtual inline int32_t msgId() const {return 3830;}
-static int32_t MsgId() {return 3830;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasureTarget();}
-};
-class SOneYuanTreasurePlayer: public Msg {
+class SEscortMissionFailed: public Msg {
 public:
 Identity entityId_;
-int32_t historyCount_;
-string playerName_;
-virtual inline int32_t msgId() const {return 3955;}
-static int32_t MsgId() {return 3955;}
+string fightName_;
+int32_t configId_;
+map<int32_t, int32_t> rewards_;
+virtual inline int32_t msgId() const {return 4753;}
+static int32_t MsgId() {return 4753;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasurePlayer();}
+virtual Msg* New() const {return new SEscortMissionFailed();}
 };
-class SOneYuanTreasureEndInfo: public Msg {
+class SFightEscortSuccess: public Msg {
 public:
-map<Identity, bool> spikeMap_;
-int32_t itemId_;
-int32_t itemNum_;
-int64_t endTime_;
-map<Identity, int32_t> buyCountMap_;
-Identity winEntityId_;
-virtual inline int32_t msgId() const {return 3958;}
-static int32_t MsgId() {return 3958;}
+int32_t configId_;
+map<int32_t, int32_t> rewards_;
+virtual inline int32_t msgId() const {return 4754;}
+static int32_t MsgId() {return 4754;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SOneYuanTreasureEndInfo();}
+virtual Msg* New() const {return new SFightEscortSuccess();}
+};
+class STreasureAdvanceSingle: public Msg {
+public:
+int32_t type_;
+int32_t level_;
+int32_t star_;
+int32_t bless_;
+map<int32_t, int32_t> danMap_;
+virtual inline int32_t msgId() const {return 1772;}
+static int32_t MsgId() {return 1772;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new STreasureAdvanceSingle();}
+};
+class STreasureAdvanceInfo: public Msg {
+public:
+map<int32_t, STreasureAdvanceSingle> treasureMap_;
+virtual inline int32_t msgId() const {return 1762;}
+static int32_t MsgId() {return 1762;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new STreasureAdvanceInfo();}
 };
 class SNearEnemy: public Msg {
 public:
@@ -9560,350 +10037,6 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SNearEnemyResult();}
-};
-class SSoulSingle: public Msg {
-public:
-map<int32_t, int32_t> isOpenHole_;
-virtual inline int32_t msgId() const {return 2230;}
-static int32_t MsgId() {return 2230;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SSoulSingle();}
-};
-class SSoulInfo: public Msg {
-public:
-map<int32_t, SSoulSingle> roleHole_;
-virtual inline int32_t msgId() const {return 2231;}
-static int32_t MsgId() {return 2231;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SSoulInfo();}
-};
-class SCheats: public Msg {
-public:
-int32_t itemId_;
-int32_t isLock_;
-virtual inline int32_t msgId() const {return 3483;}
-static int32_t MsgId() {return 3483;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SCheats();}
-};
-class SPlayerCheats: public Msg {
-public:
-vector<SCheats> cheats_;
-int32_t roleId_;
-virtual inline int32_t msgId() const {return 3484;}
-static int32_t MsgId() {return 3484;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerCheats();}
-};
-class SUpdateCheats: public Msg {
-public:
-int32_t index_;
-int32_t itemId_;
-int32_t isLock_;
-int32_t roleId_;
-virtual inline int32_t msgId() const {return 3738;}
-static int32_t MsgId() {return 3738;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SUpdateCheats();}
-};
-class SShenqiInfo: public Msg {
-public:
-int32_t cur_shenqi_;
-vector<int32_t> actived_pieces_;
-virtual inline int32_t msgId() const {return 1768;}
-static int32_t MsgId() {return 1768;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SShenqiInfo();}
-};
-class SPlayerWsGodRing: public Msg {
-public:
-int32_t attackLevel_;
-int32_t defenseLevel_;
-virtual inline int32_t msgId() const {return 2775;}
-static int32_t MsgId() {return 2775;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerWsGodRing();}
-};
-class SZhiBaoSingle: public Msg {
-public:
-int32_t level_;
-int32_t star_;
-int32_t bless_;
-int32_t target_;
-map<int32_t, int32_t> danMap_;
-virtual inline int32_t msgId() const {return 4625;}
-static int32_t MsgId() {return 4625;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SZhiBaoSingle();}
-};
-class SZhiBaoInfo: public Msg {
-public:
-map<int32_t, SZhiBaoSingle> maps_;
-virtual inline int32_t msgId() const {return 4626;}
-static int32_t MsgId() {return 4626;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SZhiBaoInfo();}
-};
-class SVersionReward: public Msg {
-public:
-bool isGotReward_;
-virtual inline int32_t msgId() const {return 2202;}
-static int32_t MsgId() {return 2202;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SVersionReward();}
-};
-class SPlayerOnlineReward: public Msg {
-public:
-int32_t onlineTime_;
-map<int32_t, int32_t> hasGotReward_;
-virtual inline int32_t msgId() const {return 1568;}
-static int32_t MsgId() {return 1568;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerOnlineReward();}
-};
-class SPlayerCallInfo: public Msg {
-public:
-int32_t isBeCall_;
-int32_t isSetCaller_;
-int64_t backDt_;
-map<int32_t, int32_t> hasGotReward_;
-virtual inline int32_t msgId() const {return 4255;}
-static int32_t MsgId() {return 4255;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerCallInfo();}
-};
-class SCountryGold: public Msg {
-public:
-int32_t countryGold_;
-int32_t point0Gold_;
-Identity serverId_;
-virtual inline int32_t msgId() const {return 4497;}
-static int32_t MsgId() {return 4497;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SCountryGold();}
-};
-class SAddCountryGold: public Msg {
-public:
-int32_t type_;
-int32_t gold_;
-vector<string> params_;
-virtual inline int32_t msgId() const {return 4486;}
-static int32_t MsgId() {return 4486;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SAddCountryGold();}
-};
-class SDelCountryGold: public Msg {
-public:
-int32_t type_;
-int32_t gold_;
-vector<string> params_;
-virtual inline int32_t msgId() const {return 4492;}
-static int32_t MsgId() {return 4492;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SDelCountryGold();}
-};
-class SPlayerCountryGold: public Msg {
-public:
-int32_t hasGotSalary_;
-virtual inline int32_t msgId() const {return 4491;}
-static int32_t MsgId() {return 4491;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerCountryGold();}
-};
-class SCutTree: public Msg {
-public:
-int32_t type_;
-int32_t itemId_;
-int32_t life_;
-int32_t maxLife_;
-Identity belongId_;
-string belongName_;
-int64_t refreshTime_;
-virtual inline int32_t msgId() const {return 4589;}
-static int32_t MsgId() {return 4589;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SCutTree();}
-};
-class SCutTreeInfo: public Msg {
-public:
-vector<SCutTree> trees_;
-virtual inline int32_t msgId() const {return 4590;}
-static int32_t MsgId() {return 4590;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SCutTreeInfo();}
-};
-class SBless: public Msg {
-public:
-int32_t type_;
-int32_t targetCount_;
-int64_t freeCd_;
-int32_t useMoneyCount_;
-virtual inline int32_t msgId() const {return 4707;}
-static int32_t MsgId() {return 4707;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SBless();}
-};
-class SPlayerBless: public Msg {
-public:
-map<int32_t, SBless> blesses_;
-virtual inline int32_t msgId() const {return 4708;}
-static int32_t MsgId() {return 4708;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SPlayerBless();}
-};
-class SLunHuiBook: public Msg {
-public:
-int64_t preDt_;
-int32_t preSeqDays_;
-int64_t beginDt_;
-map<int32_t, int32_t> hasGot_;
-map<int32_t, int32_t> hasGotMulCount_;
-int32_t useVipCount_;
-virtual inline int32_t msgId() const {return 5436;}
-static int32_t MsgId() {return 5436;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SLunHuiBook();}
-};
-class STransport: public Msg {
-public:
-int32_t type_;
-int32_t missionCount_;
-int32_t refreshCount_;
-int32_t leftCount_;
-int32_t fightEscort_;
-virtual inline int32_t msgId() const {return 2663;}
-static int32_t MsgId() {return 2663;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new STransport();}
-};
-class SEscortMissionFailed: public Msg {
-public:
-Identity entityId_;
-string fightName_;
-int32_t configId_;
-map<int32_t, int32_t> rewards_;
-virtual inline int32_t msgId() const {return 4753;}
-static int32_t MsgId() {return 4753;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SEscortMissionFailed();}
-};
-class SFightEscortSuccess: public Msg {
-public:
-int32_t configId_;
-map<int32_t, int32_t> rewards_;
-virtual inline int32_t msgId() const {return 4754;}
-static int32_t MsgId() {return 4754;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SFightEscortSuccess();}
-};
-class SGetBackRewardSingle: public Msg {
-public:
-int32_t round_;
-map<int32_t, int32_t> items_;
-int64_t exp_;
-virtual inline int32_t msgId() const {return 1306;}
-static int32_t MsgId() {return 1306;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SGetBackRewardSingle();}
-};
-class SGetBackRewardInfo: public Msg {
-public:
-map<int32_t, int32_t> counts_;
-map<int32_t, SGetBackRewardSingle> rewards_;
-map<int32_t, SGetBackRewardSingle> halfRewards_;
-virtual inline int32_t msgId() const {return 1160;}
-static int32_t MsgId() {return 1160;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SGetBackRewardInfo();}
-};
-class SSyncThreeWorldInfo: public Msg {
-public:
-int32_t proxy_;
-int32_t server_;
-vector<msgs::SFightPlayer> players_;
-int32_t totalNum_;
-virtual inline int32_t msgId() const {return 3961;}
-static int32_t MsgId() {return 3961;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SSyncThreeWorldInfo();}
-};
-class STreasureAdvanceSingle: public Msg {
-public:
-int32_t type_;
-int32_t level_;
-int32_t star_;
-int32_t bless_;
-map<int32_t, int32_t> danMap_;
-virtual inline int32_t msgId() const {return 1772;}
-static int32_t MsgId() {return 1772;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new STreasureAdvanceSingle();}
-};
-class STreasureAdvanceInfo: public Msg {
-public:
-map<int32_t, STreasureAdvanceSingle> treasureMap_;
-virtual inline int32_t msgId() const {return 1762;}
-static int32_t MsgId() {return 1762;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new STreasureAdvanceInfo();}
 };
 class SMapEntity: public Msg {
 public:
@@ -10333,26 +10466,16 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SYuanshenInfo();}
 };
-class SElementSingle: public Msg {
+class SPlayerWsGodRing: public Msg {
 public:
-int32_t level_;
-int32_t exp_;
-virtual inline int32_t msgId() const {return 2551;}
-static int32_t MsgId() {return 2551;}
+int32_t attackLevel_;
+int32_t defenseLevel_;
+virtual inline int32_t msgId() const {return 2775;}
+static int32_t MsgId() {return 2775;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
-virtual Msg* New() const {return new SElementSingle();}
-};
-class SElementInfo: public Msg {
-public:
-map<int32_t, SElementSingle> elementMap_;
-virtual inline int32_t msgId() const {return 1438;}
-static int32_t MsgId() {return 1438;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new SElementInfo();}
+virtual Msg* New() const {return new SPlayerWsGodRing();}
 };
 }
 

@@ -1,12 +1,19 @@
 package CfgZhanLing;
 import "CfgCommon.proto";
 
+message Equips {
+	required uint32 pos = 1;
+	required uint32 id = 2;
+}
+
 message Base {
 	required uint32 level = 1;
-	required uint32 model = 2;
-	required uint32 speed = 3;
-	required uint32 skill = 4;
-	repeated CfgCommon.Attribute attr = 5;
+	repeated Equips equips = 2;
+	required uint32 model = 3;
+	required uint32 speed = 4;
+	required uint32 skill = 5;
+	repeated CfgCommon.Attribute attr = 6;
+	repeated uint32 skill_mode = 7;
 }
 
 message Bases {

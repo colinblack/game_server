@@ -80,8 +80,10 @@ enum PROPS_TYPE {
 	AP_COMBOBREAK        = 60,	//
 	AP_MAXMAGIC          = 61,	//
 	AP_ATTACKSPEED       = 62,	//
-	AP_HP                = 63,
-	AP_MAX_HURTPERCENT   = 64,
+	AP_HP                = 63,	//
+	AP_MAX_HURTPERCENT   = 64,	//
+	AP_FIXDMGPERCENT     = 65,	//免伤百分比
+	AP_FIXDMGMAX         = 66,	//免伤上限
 	AP_VALUE_MAX
 };
 

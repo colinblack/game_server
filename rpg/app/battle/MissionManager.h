@@ -23,27 +23,27 @@ enum CONDITION_TYPE {
 	MT_REINCARNATION = 13,				//转生
 	MT_HANG_LEVEL = 14,					//通关关卡
 	MT_UNKNOW_3 = 15,
-	MT_UNKNOW_4 = 16,
+	MT_FORGE_LEVEL = 16,				//强化总等级
 	MT_ACTIVATE_SHENQI_PIECES = 19,		//激活神器碎片
 	MT_REACTIVE_SHENQI = 20,			//激活神器
 	MT_UPGRADE_STATE = 21,				//境界提示
 	MT_UNKNOW_8 = 23,
 	MT_UNKNOW_9 = 24,
-	MT_UNKNOW_10 = 25,
+	MT_TREASURE_UPGRADE = 25,
 	MT_UNKNOW_11 = 26,
 	MT_UNKNOW_12 = 27,
 	MT_UNKNOW_13 = 28,
 	MT_UNKNOW_14 = 29,
-	MT_UNKNOW_15 = 31,
-	MT_CHALLANGE_BOSS = 32,				//挑战BOSS
-	MT_UNKNOW_17 = 33,
+	MT_MAGIC_LEARN = 31,				//符文装备
+	MT_KILL_BOSS = 32,					//击杀转生BOSS
+	MT_RUNE_TOWER = 33,					//符文塔闯关
 	MT_UNKNOW_18 = 34,
 	MT_UNKNOW_19 = 35,
-	MT_UNKNOW_20 = 36,
+	MT_EQUIP_EQUIP = 36,				//穿戴装备
 	MT_UNKNOW_21 = 37,
 	MT_UNKNOW_22 = 38,
 	MT_UNKNOW_23 = 39,
-	MT_UNKNOW_24 = 40,
+	MT_WORLD_BOSS = 40,
 	MT_UNKNOW_25 = 41,
 	MT_UNKNOW_26 = 42,
 	MT_UNKNOW_27 = 43,
@@ -112,7 +112,7 @@ enum CONDITION_TYPE {
 	MT_KILL_HANG_MONSTER = 1006,			//击杀关卡怪物
 	MT_SMELT_EQUIP = 1007,					//熔炼装备
 	MT_STRENGTH_EQUIP = 1008,				//强化装备
-	MT_UNKNOW_93 = 1009,
+	MT_TASK_COPY = 1009,					//进入引导副本
 	MT_ACTIVATE_TREASURE = 1010,			//激活宝物
 	MT_UPGRADE = 1011,						//激活和提升进阶系统
 	MT_UNKNOW_96 = 1019,
@@ -155,13 +155,20 @@ public:
 	bool TestCheck(uint32_t uid);
 	uint32_t AddIv(string &str, uint32_t t, uint32_t n);
 	uint32_t AddMv(string &str, uint32_t t, uint32_t st, uint32_t n);
+	uint32_t GetEquipCntByLimit(const UserCache &cache,uint32_t color);
 
 public:
 	bool OnKillHangMonster(uint32_t uid, uint32_t id, uint32_t num);
 	bool OnHangLevel(uint32_t uid);
 	bool onUpgrade(uint32_t uid,uint32_t advanceType,uint32_t num);
 	bool onActivateShenqi(uint32_t uid,uint32_t itemId);
+	bool onEquipEquip(uint32_t uid, uint32_t star, uint32_t reincarnLevel, uint32_t career);
+	bool onColorEquip(uint32_t uid, uint32_t color, uint32_t star, uint32_t reincarnLevel, uint32_t career);
+	//bool onUpgradeSkill(uint32_t uid,uint32_t num);
+	bool onMission(uint32_t uid, uint32_t type,uint32_t num);
+	bool onSubMission(uint32_t uid, uint32_t type,uint32_t subType, uint32_t num);
 	bool onUpgradeSkill(uint32_t uid,uint32_t num);
+	bool onEnterCopy(uint32_t uid,uint32_t type,uint32_t copyCode);
 
 public:
 	int Process(uint32_t uid, logins::SMissionReq *req);

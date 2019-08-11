@@ -34,10 +34,7 @@ bool PurifyManager::CalcProperty(const UserCache &cache, byte rid,PropertySets &
 			props[1001].pui += floor(50 * cfg.level()); // 攻击
 		}
 	}
-//	PropertyCfg::setProps(cache.uid_, rid, props, "purify");
 	PropertyCfg::showProps(cache.uid_, rid, props, "purify");
-
-
 	return true;
 }
 
@@ -55,6 +52,7 @@ int PurifyManager::Process(uint32_t uid, logins::SPurifyReq *req,logins::SPurify
 	bool is_new = false;
 	bool cost_error = false;
 	bool is_chg = false;
+	uint32_t purify_cnt = 0;
 
 	DataForge item; // 数据库类的对象
 	item.uid = uid; // 玩家UID
@@ -94,6 +92,8 @@ int PurifyManager::Process(uint32_t uid, logins::SPurifyReq *req,logins::SPurify
 			DataForge data;
 			data.uid = uid;
 			data.rid = req->roleId_;
+			data.zhulingLevel = 0;
+			data.zhulingAdvance = 0;
 			data.type = *itr;
 			data.purify = 1;
 			DataForgeManager::Instance()->Add(data); // 向数据库中写入数据
@@ -110,14 +110,14 @@ int PurifyManager::Process(uint32_t uid, logins::SPurifyReq *req,logins::SPurify
 			resp->equip_.push_back(msg);
 			is_chg = true;
 		}
+		purify_cnt++;
 	}
 
 	// 触发UserManagerz 中的属性增加
 	if (is_chg) {
 		PropertyManager::Instance()->AddUser(uid);
 	}
-	//日常活动同步
-	ActivityManager::Instance()->SyncActivity(cache, PURIFY_ACTIVITY_TYPE);
+	ActivityManager::Instance()->SyncActivity(cache, PURIFY_ACTIVITY_TYPE, purify_cnt);
 	LogicManager::Instance()->AddSync(CMD_DAILY_ACTIVITY_INFO);
 	return 0;
 }

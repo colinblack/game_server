@@ -4,6 +4,7 @@
 #include "Dbs.h"
 #include "GameApps.h"
 #include "MsgDef.h"
+#include "Msgs.h"
 namespace logins{
 class SQuery: public Msg {
 public:
@@ -264,8 +265,8 @@ int32_t roleId_;
 int32_t type_;
 int32_t itemId_;
 bool autoBuy_;
-virtual inline int32_t msgId() const {return 372;}
-static int32_t MsgId() {return 372;}
+virtual inline int32_t msgId() const {return 519;}
+static int32_t MsgId() {return 519;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
@@ -454,6 +455,83 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SPurifyResp();}
 };
+class CEmbedGemReq: public Msg {
+public:
+int32_t roleId_;
+int32_t equipType_;
+map<int32_t, int64_t> gemUidSlot_;
+virtual inline int32_t msgId() const {return 1037;}
+static int32_t MsgId() {return 1037;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CEmbedGemReq();}
+};
+class SEmbedGemResp: public Msg {
+public:
+dbs::TPlayerEquip tPlayerEquip_;
+virtual inline int32_t msgId() const {return 1037;}
+static int32_t MsgId() {return 1037;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEmbedGemResp();}
+};
+class CRemoveGemReq: public Msg {
+public:
+int32_t roleId_;
+int32_t equipType_;
+int32_t gemSlot_;
+virtual inline int32_t msgId() const {return 1056;}
+static int32_t MsgId() {return 1056;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CRemoveGemReq();}
+};
+class SRemoveGemResp: public Msg {
+public:
+dbs::TPlayerEquip tPlayerEquip_;
+virtual inline int32_t msgId() const {return 1056;}
+static int32_t MsgId() {return 1056;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SRemoveGemResp();}
+};
+class CctivateGemTargetReq: public Msg {
+public:
+int32_t roleId_;
+int32_t targetId_;
+virtual inline int32_t msgId() const {return 1057;}
+static int32_t MsgId() {return 1057;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CctivateGemTargetReq();}
+};
+class CUpgradeGemReq: public Msg {
+public:
+int32_t roleId_;
+int32_t equipType_;
+vector<int32_t> gemSlot_;
+virtual inline int32_t msgId() const {return 1120;}
+static int32_t MsgId() {return 1120;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CUpgradeGemReq();}
+};
+class SUpgradeGemResp: public Msg {
+public:
+dbs::TPlayerEquip tPlayerEquip_;
+virtual inline int32_t msgId() const {return 1120;}
+static int32_t MsgId() {return 1120;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUpgradeGemResp();}
+};
 class STitleReq: public Msg {
 public:
 int32_t roleId_;
@@ -464,6 +542,106 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new STitleReq();}
+};
+class COnlineRewardReq: public Msg {
+public:
+int32_t onlineTime_;
+virtual inline int32_t msgId() const {return 4071;}
+static int32_t MsgId() {return 4071;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new COnlineRewardReq();}
+};
+class CActiveFashionReq: public Msg {
+public:
+int32_t roleId_;
+int32_t type_;
+int32_t fashionId_;
+virtual inline int32_t msgId() const {return 1418;}
+static int32_t MsgId() {return 1418;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CActiveFashionReq();}
+};
+class CAdvanceFashionReq: public Msg {
+public:
+int32_t roleId_;
+int32_t type_;
+int32_t fashionId_;
+virtual inline int32_t msgId() const {return 2046;}
+static int32_t MsgId() {return 2046;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CAdvanceFashionReq();}
+};
+class CPutOnFashionReq: public Msg {
+public:
+int32_t roleId_;
+int32_t type_;
+int32_t fashionId_;
+virtual inline int32_t msgId() const {return 2047;}
+static int32_t MsgId() {return 2047;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CPutOnFashionReq();}
+};
+class SPutOnFashionResp: public Msg {
+public:
+int32_t fashionId_;
+virtual inline int32_t msgId() const {return 2047;}
+static int32_t MsgId() {return 2047;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPutOnFashionResp();}
+};
+class CGetOffFashionReq: public Msg {
+public:
+int32_t roleId_;
+int32_t type_;
+int32_t fashionId_;
+virtual inline int32_t msgId() const {return 2048;}
+static int32_t MsgId() {return 2048;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CGetOffFashionReq();}
+};
+class SGetOffFashionResp: public Msg {
+public:
+int32_t fashionId_;
+virtual inline int32_t msgId() const {return 2048;}
+static int32_t MsgId() {return 2048;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SGetOffFashionResp();}
+};
+class CActiveFashionSuitReq: public Msg {
+public:
+int32_t roleId_;
+int32_t suitId_;
+int32_t num_;
+virtual inline int32_t msgId() const {return 3742;}
+static int32_t MsgId() {return 3742;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new CActiveFashionSuitReq();}
+};
+class SActiveFashionSuitResp: public Msg {
+public:
+map<int32_t, msgs::SInts> suits_;
+virtual inline int32_t msgId() const {return 3742;}
+static int32_t MsgId() {return 3742;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SActiveFashionSuitResp();}
 };
 class SActiveSuitReq: public Msg {
 public:
@@ -579,12 +757,347 @@ virtual Msg* New() const {return new SGetActivityReq();}
 class SGetActivityRewardReq: public Msg {
 public:
 int32_t id_;
-virtual inline int32_t msgId() const {return 2809;}
-static int32_t MsgId() {return 2809;}
+virtual inline int32_t msgId() const {return 1127;}
+static int32_t MsgId() {return 1127;}
 virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new SGetActivityRewardReq();}
+};
+class SzhulingUpLevelReq: public Msg {
+public:
+int32_t roleId_;
+int32_t equipType_;
+bool isAuto_;
+virtual inline int32_t msgId() const {return 2577;}
+static int32_t MsgId() {return 2577;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SzhulingUpLevelReq();}
+};
+class SzhulingUpLevelResp: public Msg {
+public:
+dbs::TPlayerEquip plyerEquip;
+virtual inline int32_t msgId() const {return 2577;}
+static int32_t MsgId() {return 2577;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SzhulingUpLevelResp();}
+};
+class SzhulingUpAdvanceReq: public Msg {
+public:
+int32_t roleId_;
+int32_t equipType_;
+virtual inline int32_t msgId() const {return 2585;}
+static int32_t MsgId() {return 2585;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SzhulingUpAdvanceReq();}
+};
+class SzhulingUpAdvanceResp: public Msg {
+public:
+dbs::TPlayerEquip PlayerEquip;
+virtual inline int32_t msgId() const {return 2585;}
+static int32_t MsgId() {return 2585;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SzhulingUpAdvanceResp();}
+};
+class SopenZhulingReq: public Msg {
+public:
+int32_t roleId_;
+virtual inline int32_t msgId() const {return 3493;}
+static int32_t MsgId() {return 3493;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SopenZhulingReq();}
+};
+class SSkillCleanNuQi: public Msg {
+public:
+virtual inline int32_t msgId() const {return 2069;}
+static int32_t MsgId() {return 2069;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SSkillCleanNuQi();}
+};
+class SBuyReq: public Msg {
+public:
+int32_t id;
+int32_t itemId;
+int32_t realPrice;
+int32_t num;
+virtual inline int32_t msgId() const {return 481;}
+static int32_t MsgId() {return 481;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SBuyReq();}
+};
+class SDevilAngelequipReq: public Msg {
+public:
+int32_t uid;
+int32_t roleId;
+virtual inline int32_t msgId() const {return 2244;}
+static int32_t MsgId() {return 2244;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDevilAngelequipReq();}
+};
+class SPlayerSignEveryDayReq: public Msg {
+public:
+int16_t flag_;
+virtual inline int32_t msgId() const {return 1407;}
+static int32_t MsgId() {return 1407;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SPlayerSignEveryDayReq();}
+};
+class SGetSignEverydayRwardReq: public Msg {
+public:
+int16_t day_;
+virtual inline int32_t msgId() const {return 1884;}
+static int32_t MsgId() {return 1884;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SGetSignEverydayRwardReq();}
+};
+class SGetLevelRwardReq: public Msg {
+public:
+int32_t careerLevel;
+int32_t level;
+virtual inline int32_t msgId() const {return 1360;}
+static int32_t MsgId() {return 1360;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SGetLevelRwardReq();}
+};
+class STrumpActiveReq: public Msg {
+public:
+int32_t subtype;
+int32_t id;
+virtual inline int32_t msgId() const {return 1898;}
+static int32_t MsgId() {return 1898;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new STrumpActiveReq();}
+};
+class SCommitShengMissionReq: public Msg {
+public:
+int32_t missionId;
+virtual inline int32_t msgId() const {return 4405;}
+static int32_t MsgId() {return 4405;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCommitShengMissionReq();}
+};
+class SRequestShengMissionReq: public Msg {
+public:
+virtual inline int32_t msgId() const {return 4404;}
+static int32_t MsgId() {return 4404;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SRequestShengMissionReq();}
+};
+class STrumpUpgradeReq: public Msg {
+public:
+int32_t count;
+virtual inline int32_t msgId() const {return 1899;}
+static int32_t MsgId() {return 1899;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new STrumpUpgradeReq();}
+};
+class SActiveTrumpSkillReq: public Msg {
+public:
+int32_t level;
+virtual inline int32_t msgId() const {return 1992;}
+static int32_t MsgId() {return 1992;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SActiveTrumpSkillReq();}
+};
+class STrumpRequestMissionReq: public Msg {
+public:
+int32_t missionId;
+virtual inline int32_t msgId() const {return 3507;}
+static int32_t MsgId() {return 3507;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new STrumpRequestMissionReq();}
+};
+class SUnlockTrumpReq: public Msg {
+public:
+virtual inline int32_t msgId() const {return 1965;}
+static int32_t MsgId() {return 1965;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SUnlockTrumpReq();}
+};
+class SDressReq: public Msg {
+public:
+int32_t roleId;
+int64_t uid;
+virtual inline int32_t msgId() const {return 571;}
+static int32_t MsgId() {return 571;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SDressReq();}
+};
+class SStrengthEquipReq: public Msg {
+public:
+int32_t roleId;
+int32_t type;
+int64_t uid;
+virtual inline int32_t msgId() const {return 1889;}
+static int32_t MsgId() {return 1889;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SStrengthEquipReq();}
+};
+class SOneKeyDressReq: public Msg {
+public:
+int32_t roleId;
+int32_t type;
+vector<int64_t> uids;
+virtual inline int32_t msgId() const {return 2586;}
+static int32_t MsgId() {return 2586;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SOneKeyDressReq();}
+};
+class SRecycleReq: public Msg {
+public:
+map<int64_t, int32_t> items;
+virtual inline int32_t msgId() const {return 883;}
+static int32_t MsgId() {return 883;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SRecycleReq();}
+};
+class SLearnSkillReq: public Msg {
+public:
+int32_t roleId;
+int32_t type;
+int32_t skillId;
+virtual inline int32_t msgId() const {return 1891;}
+static int32_t MsgId() {return 1891;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SLearnSkillReq();}
+};
+class SAdvanceAwakenReq: public Msg {
+public:
+int32_t roleId;
+int32_t type;
+bool autoBuy;
+virtual inline int32_t msgId() const {return 3106;}
+static int32_t MsgId() {return 3106;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SAdvanceAwakenReq();}
+};
+class SActiveAdvanceTargetReq: public Msg {
+public:
+int32_t type;
+int32_t targetLevel;
+virtual inline int32_t msgId() const {return 3340;}
+static int32_t MsgId() {return 3340;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SActiveAdvanceTargetReq();}
+};
+class SCardUpStarReq: public Msg {
+public:
+int64_t uid;
+virtual inline int32_t msgId() const {return 1922;}
+static int32_t MsgId() {return 1922;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SCardUpStarReq();}
+};
+class SEquipZhanlingReq: public Msg {
+public:
+int64_t uid;
+virtual inline int32_t msgId() const {return 1894;}
+static int32_t MsgId() {return 1894;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SEquipZhanlingReq();}
+};
+class SAdvanceZhanlingReq: public Msg {
+public:
+virtual inline int32_t msgId() const {return 1893;}
+static int32_t MsgId() {return 1893;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SAdvanceZhanlingReq();}
+};
+class SLearnZhanlingSkillReq: public Msg {
+public:
+int32_t skillId;
+virtual inline int32_t msgId() const {return 3506;}
+static int32_t MsgId() {return 3506;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SLearnZhanlingSkillReq();}
+};
+class SNearenmeyFightenemyReq: public Msg {
+public:
+int32_t playerId;
+vector<Point> oldPoints;
+virtual inline int32_t msgId() const {return 2152;}
+static int32_t MsgId() {return 2152;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SNearenmeyFightenemyReq();}
+};
+class SNearenemyBacktoHangReq: public Msg {
+public:
+virtual inline int32_t msgId() const {return 2191;}
+static int32_t MsgId() {return 2191;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SNearenemyBacktoHangReq();}
+};
+class SGetTopListReq: public Msg {
+public:
+int32_t toplistType;
+virtual inline int32_t msgId() const {return 747;}
+static int32_t MsgId() {return 747;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new SGetTopListReq();}
 };
 }
 

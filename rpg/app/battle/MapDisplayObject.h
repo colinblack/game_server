@@ -25,6 +25,7 @@ enum ATTR_UPDATE_TYPE {
 	ATTR_UPDATE_HURT = 300,
 	ATTR_UPDATE_HP = 301,
 	ATTR_UPDATE_POINT = 309,
+	ATTR_UPDATE_NUQI = 312,
 	ATTR_UPDATE_MAX
 };
 
@@ -40,6 +41,8 @@ public:
 	virtual ~MapDisplayObject();
 	virtual void getPos(int& x, int& y);
 	virtual uint32_t getId();
+	virtual uint32_t getRid();
+	virtual uint32_t getRealFbId();
 	virtual uint32_t getMapId();
 	virtual uint32_t getFbId();
 	virtual uint32_t getLastFbId();
@@ -53,6 +56,7 @@ public:
 	virtual void setPos(int x, int y);
 	virtual void setMapId(uint32_t id);
 	virtual void setFbId(uint32_t id);
+	virtual void setRealFbId(uint32_t id);
 	virtual void setBelong(uint32_t id);
 	virtual void setOwner(uint32_t id);
 	virtual void setForce(int16_t v);
@@ -82,6 +86,7 @@ protected:
 	uint32_t belong_id_;
 	uint32_t owner_id_;
 	int16_t force_;
+	uint32_t real_fb_id;
 	double recog_;
 	Identity entity_msg_;
 	static list<uint32_t> idList;

@@ -204,7 +204,7 @@ class OnlineRewards : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .CfgOnlineReward.OnlineReward OnlineRewards = 1;
+  // repeated .CfgOnlineReward.OnlineReward onlineRewards = 1;
   inline int onlinerewards_size() const;
   inline void clear_onlinerewards();
   static const int kOnlineRewardsFieldNumber = 1;
@@ -344,7 +344,7 @@ OnlineReward::mutable_reward() {
 
 // OnlineRewards
 
-// repeated .CfgOnlineReward.OnlineReward OnlineRewards = 1;
+// repeated .CfgOnlineReward.OnlineReward onlineRewards = 1;
 inline int OnlineRewards::onlinerewards_size() const {
   return onlinerewards_.size();
 }
@@ -352,25 +352,25 @@ inline void OnlineRewards::clear_onlinerewards() {
   onlinerewards_.Clear();
 }
 inline const ::CfgOnlineReward::OnlineReward& OnlineRewards::onlinerewards(int index) const {
-  // @@protoc_insertion_point(field_get:CfgOnlineReward.OnlineRewards.OnlineRewards)
+  // @@protoc_insertion_point(field_get:CfgOnlineReward.OnlineRewards.onlineRewards)
   return onlinerewards_.Get(index);
 }
 inline ::CfgOnlineReward::OnlineReward* OnlineRewards::mutable_onlinerewards(int index) {
-  // @@protoc_insertion_point(field_mutable:CfgOnlineReward.OnlineRewards.OnlineRewards)
+  // @@protoc_insertion_point(field_mutable:CfgOnlineReward.OnlineRewards.onlineRewards)
   return onlinerewards_.Mutable(index);
 }
 inline ::CfgOnlineReward::OnlineReward* OnlineRewards::add_onlinerewards() {
-  // @@protoc_insertion_point(field_add:CfgOnlineReward.OnlineRewards.OnlineRewards)
+  // @@protoc_insertion_point(field_add:CfgOnlineReward.OnlineRewards.onlineRewards)
   return onlinerewards_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::CfgOnlineReward::OnlineReward >&
 OnlineRewards::onlinerewards() const {
-  // @@protoc_insertion_point(field_list:CfgOnlineReward.OnlineRewards.OnlineRewards)
+  // @@protoc_insertion_point(field_list:CfgOnlineReward.OnlineRewards.onlineRewards)
   return onlinerewards_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::CfgOnlineReward::OnlineReward >*
 OnlineRewards::mutable_onlinerewards() {
-  // @@protoc_insertion_point(field_mutable_list:CfgOnlineReward.OnlineRewards.OnlineRewards)
+  // @@protoc_insertion_point(field_mutable_list:CfgOnlineReward.OnlineRewards.onlineRewards)
   return &onlinerewards_;
 }
 

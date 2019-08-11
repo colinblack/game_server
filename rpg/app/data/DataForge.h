@@ -18,6 +18,7 @@ struct DataForge {
 	uint32_t purify;
 	uint32_t zhulingLevel;
 	uint32_t zhulingAdvance;
+	string extend;
 
 	DataForge() {
 		uid = 0;
@@ -27,6 +28,7 @@ struct DataForge {
 		purify = 0;
 		zhulingLevel = 0;
 		zhulingAdvance = 0;
+		extend.clear();
 	}
 
 	bool operator ==(const DataForge &oth) {
@@ -42,6 +44,7 @@ struct DataForge {
 		PACKET_ENCODE(UInt32, purify);
 		PACKET_ENCODE(UInt32, zhulingLevel);
 		PACKET_ENCODE(UInt32, zhulingAdvance);
+		PACKET_ENCODE(String, extend);
 		return true;
 	}
 
@@ -54,6 +57,7 @@ struct DataForge {
 		PACKET_DECODE(UInt32, purify);
 		PACKET_DECODE(UInt32, zhulingLevel);
 		PACKET_DECODE(UInt32, zhulingAdvance);
+		PACKET_DECODE(String, extend);
 		return true;
 	}
 };

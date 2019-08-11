@@ -9,6 +9,7 @@
 #define PROPERTY_MANAGER_H_
 
 #include "BattleBaseInc.h"
+#include "MapMoveObject.h"
 
 class PropertyManager: public CSingleton<PropertyManager> {
 private:
@@ -20,6 +21,8 @@ private:
 public:
 	bool AddUser(uint32_t uid);
 	void onSecondTimer();
+	void calcFightProps(MapMoveObject *pMo, PropertySets &props);
+	void addProps(const PropertySets &item, PropertySets &total);
 };
 
 #endif /* PROPERTY_MANAGER_H_ */

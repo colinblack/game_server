@@ -10,5 +10,6 @@
 #include "Card.h"
 #include "Reincarn.h"
 #include "Rune.h"
-#include "Boss.h"
+#include "Copy.h"
+#include "Team.h"
 #endif

@@ -37,10 +37,11 @@ void protobuf_AssignDesc_CfgCommon_2eproto() {
       "CfgCommon.proto");
   GOOGLE_CHECK(file != NULL);
   Reward_descriptor_ = file->message_type(0);
-  static const int Reward_offsets_[3] = {
+  static const int Reward_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reward, item_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reward, num_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reward, rate_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Reward, career_),
   };
   Reward_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -104,10 +105,10 @@ void protobuf_AddDesc_CfgCommon_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\017CfgCommon.proto\022\tCfgCommon\"1\n\006Reward\022\014"
-    "\n\004item\030\001 \002(\r\022\013\n\003num\030\002 \002(\r\022\014\n\004rate\030\003 \001(\r\""
-    "5\n\tAttribute\022\r\n\005group\030\001 \002(\005\022\014\n\004type\030\002 \002("
-    "\005\022\013\n\003num\030\003 \002(\003", 134);
+    "\n\017CfgCommon.proto\022\tCfgCommon\"A\n\006Reward\022\014"
+    "\n\004item\030\001 \002(\r\022\013\n\003num\030\002 \002(\r\022\014\n\004rate\030\003 \001(\r\022"
+    "\016\n\006career\030\004 \001(\r\"5\n\tAttribute\022\r\n\005group\030\001 "
+    "\002(\005\022\014\n\004type\030\002 \002(\005\022\013\n\003num\030\003 \002(\003", 150);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgCommon.proto", &protobuf_RegisterTypes);
   Reward::default_instance_ = new Reward();
@@ -130,6 +131,7 @@ struct StaticDescriptorInitializer_CfgCommon_2eproto {
 const int Reward::kItemFieldNumber;
 const int Reward::kNumFieldNumber;
 const int Reward::kRateFieldNumber;
+const int Reward::kCareerFieldNumber;
 #endif  // !_MSC_VER
 
 Reward::Reward()
@@ -153,6 +155,7 @@ void Reward::SharedCtor() {
   item_ = 0u;
   num_ = 0u;
   rate_ = 0u;
+  career_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -198,7 +201,7 @@ void Reward::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  ZR_(item_, rate_);
+  ZR_(item_, career_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -257,6 +260,21 @@ bool Reward::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(32)) goto parse_career;
+        break;
+      }
+
+      // optional uint32 career = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_career:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &career_)));
+          set_has_career();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -301,6 +319,11 @@ void Reward::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->rate(), output);
   }
 
+  // optional uint32 career = 4;
+  if (has_career()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->career(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -324,6 +347,11 @@ void Reward::SerializeWithCachedSizes(
   // optional uint32 rate = 3;
   if (has_rate()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->rate(), target);
+  }
+
+  // optional uint32 career = 4;
+  if (has_career()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->career(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -357,6 +385,13 @@ int Reward::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->rate());
+    }
+
+    // optional uint32 career = 4;
+    if (has_career()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->career());
     }
 
   }
@@ -395,6 +430,9 @@ void Reward::MergeFrom(const Reward& from) {
     if (from.has_rate()) {
       set_rate(from.rate());
     }
+    if (from.has_career()) {
+      set_career(from.career());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -422,6 +460,7 @@ void Reward::Swap(Reward* other) {
     std::swap(item_, other->item_);
     std::swap(num_, other->num_);
     std::swap(rate_, other->rate_);
+    std::swap(career_, other->career_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

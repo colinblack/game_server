@@ -12,6 +12,20 @@ message TreasureHuntRecord {
 	required int32 drawDt = 9;
 }
 
+message LevelRewardRecord{
+	required int32 careerLevel 		= 1;
+	required int32 level 			= 2;
+	required int32 leftCount		= 3;
+}
+
+message LevelRewardRecords{
+	repeated LevelRewardRecord	records = 1;
+}
+
 message TreasureHuntRecords {
 	repeated TreasureHuntRecord records = 1;
 }
+
+
+
+

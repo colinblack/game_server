@@ -46,6 +46,11 @@ bool Award::Format(const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Rewa
 	return true;
 }
 
+bool Award::Format(const CfgCommon::Reward &v, uint32_t multiple) {
+	Add(v.item(), v.num() * multiple);
+	return true;
+}
+
 bool Award::Get(vector<msgs::SItemAmount> &v) {
 	map<uint32_t, uint32_t>::iterator itr = m_data.begin();
 	for (; itr != m_data.end(); ++itr) {
@@ -87,3 +92,9 @@ bool Award::IsExist(uint32_t item) const {
 	map<uint32_t, uint32_t>::const_iterator itr = m_data.find(item);
 	return itr != m_data.end();
 }
+
+void Award::Clear() {
+	m_data.clear();
+}
+
+

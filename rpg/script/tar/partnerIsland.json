@@ -1,0 +1,9979 @@
+{
+  "partner_islands": [
+    {
+      "layer": 1, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 4
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 2, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 4
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 3, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 4
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 4, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 4
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 5, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 4
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 6, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 5
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 7, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 5
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 8, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 5
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 9, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 5
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 10, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 5
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 11, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 6
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 12, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 6
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 13, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 6
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 14, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 6
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 15, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 8
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 16, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 8
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 17, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 8
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 18, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 8
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 19, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 10
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 20, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 10
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 21, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 10
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 22, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 10
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 23, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 12
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 24, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 12
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 25, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 12
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 26, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 12
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 27, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 14
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 28, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 14
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 29, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 14
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 30, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 14
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 31, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 16
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 32, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 16
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 33, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 16
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 34, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 16
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 35, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 18
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 36, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 18
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 37, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 18
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 38, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 18
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 39, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 40, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 41, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 42, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 43, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 44, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 45, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 46, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 47, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 48, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 49, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 50, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 51, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 20
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 52, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 21
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 53, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 21
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 54, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 22
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 55, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 22
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 56, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 23
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 57, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 23
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 58, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 24
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 59, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 24
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 60, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 61, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 62, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 63, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 64, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 65, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 66, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 67, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 68, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 69, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 70, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 71, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 72, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 73, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 74, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 75, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 76, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 77, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 78, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 79, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 80, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 81, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 82, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 83, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 84, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 85, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 86, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 87, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 88, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 89, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 90, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 91, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 92, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 93, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 94, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 95, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 96, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 97, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 98, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 99, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 100, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 25
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 101, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 26
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 102, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 27
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 103, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 28
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 104, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 29
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 105, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 30
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 106, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 31
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 107, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 32
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 108, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 33
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 109, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 34
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 110, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 35
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 111, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 36
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 112, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 37
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 113, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 38
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 114, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 39
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 115, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 40
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 116, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 41
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 117, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 42
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 118, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 43
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 119, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 44
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 120, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 45
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 121, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 46
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 122, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 47
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 123, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 48
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 124, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 49
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 125, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 50
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 126, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 51
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 127, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 52
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 128, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 53
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 129, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 54
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 130, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 55
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 131, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 56
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 132, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 57
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 133, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 58
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 134, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 59
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 135, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 60
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 136, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 61
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 137, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 62
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 138, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 63
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 139, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 64
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 140, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 65
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 141, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 66
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 142, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 67
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 143, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 68
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 144, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 69
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 145, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 70
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 146, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 71
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 147, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 72
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 148, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 73
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 149, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 74
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 150, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 75
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 151, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 76
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 152, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 77
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 153, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 78
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 154, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 79
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 155, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 156, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 157, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 158, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 159, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 160, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 161, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 162, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 163, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 164, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 165, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 166, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 167, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 168, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 169, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 170, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 171, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 172, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 173, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 174, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 175, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 176, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 177, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 178, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 179, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 180, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 181, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 182, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 183, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 184, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 185, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 186, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 187, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 188, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 189, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 190, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 191, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 192, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 193, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 194, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 195, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 196, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 197, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 198, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 199, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 200, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 201, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 202, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 203, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 204, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 205, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 206, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 207, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 208, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 209, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 210, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 211, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 212, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 213, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 214, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 215, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 216, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 217, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 218, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 219, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 220, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 221, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 222, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 223, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 224, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 225, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 226, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 227, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 228, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 229, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 230, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 231, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 232, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 233, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 234, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 235, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 236, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 237, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 238, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 239, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 240, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 241, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 242, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 243, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 244, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 245, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 246, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 247, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 248, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 249, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 250, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 251, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 252, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 253, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 254, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 255, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 256, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 257, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 258, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 259, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 260, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 261, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 262, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 263, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 264, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 265, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 266, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 267, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 268, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 269, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 270, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 271, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 272, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 273, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 274, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 275, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 276, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 277, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 278, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 279, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 280, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 281, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 282, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 283, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 284, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 285, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 286, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 287, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 288, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 289, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 290, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 291, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 292, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 293, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 294, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 295, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 296, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 297, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 298, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 299, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 300, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 301, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 26
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 302, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 27
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 303, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 28
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 304, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 29
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 305, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 30
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 306, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 31
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 307, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 32
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 308, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 33
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 309, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 34
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 310, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 35
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 311, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 36
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 312, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 37
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 313, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 38
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 314, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 39
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 315, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 40
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 316, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 41
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 317, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 42
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 318, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 43
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 319, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 44
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 320, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 45
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 321, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 46
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 322, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 47
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 323, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 48
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 324, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 49
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 325, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 50
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 326, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 51
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 327, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 52
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 328, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 53
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 329, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 54
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 330, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 55
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 331, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 56
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 332, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 57
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 333, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 58
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 334, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 59
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 335, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 60
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 336, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 61
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 337, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 62
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 338, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 63
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 339, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 64
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 340, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 65
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 341, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 66
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 342, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 67
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 343, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 68
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 344, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 69
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 345, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 70
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 346, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 71
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 347, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 72
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 348, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 73
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 349, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 74
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 350, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 75
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 351, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 76
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 352, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 77
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 353, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 78
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 354, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 79
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 355, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 356, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 357, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 358, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 359, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 360, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 361, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 362, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 363, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 364, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 365, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 366, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 367, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 368, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 369, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 370, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 371, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 372, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 373, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 374, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 375, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 376, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 377, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 378, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 379, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 380, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 381, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 382, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 383, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 384, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 385, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 386, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 387, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 388, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 389, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 390, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 391, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 392, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 393, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 394, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 395, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 396, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 397, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 398, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 399, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 400, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 401, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 402, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 403, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 404, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 405, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 406, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 407, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 408, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 409, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 410, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 411, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 412, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 413, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 414, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 415, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 416, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 417, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 418, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 419, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 420, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 421, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 422, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 423, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 424, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 425, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 426, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 427, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 428, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 429, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 430, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 431, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 432, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 433, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 434, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 435, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 436, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 437, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 438, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 439, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 440, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 441, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 442, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 443, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 444, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 445, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 446, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 447, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 448, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 449, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 450, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 451, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 452, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 453, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 454, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 455, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 456, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 457, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 458, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 459, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 460, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 461, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 462, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 463, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 464, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 465, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 466, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 467, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 468, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 469, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 470, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 471, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 472, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 473, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 474, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 475, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 476, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 477, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 478, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 479, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 480, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 481, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 482, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 483, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 484, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 485, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 486, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 487, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 488, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 489, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 490, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 491, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 492, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 493, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 494, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 495, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 496, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 497, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 498, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 499, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 500, 
+      "reward": [
+        {
+          "item": 210290001, 
+          "num": 80
+        }
+      ], 
+      "type": 0, 
+      "exReward": []
+    }, 
+    {
+      "layer": 1, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 12
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 2, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 12
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 3, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 12
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 4, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 12
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 5, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 12
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 6, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 12
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 7, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 19
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 8, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 19
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 9, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 19
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 10, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 19
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 11, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 19
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 12, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 20
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 13, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 27
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 14, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 27
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 15, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 27
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 16, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 27
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 17, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 28
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 18, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 19, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 20, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }, 
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 21, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 22, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 23, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 24, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 25, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 26, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 27, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 28, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 53
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 29, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 54
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 30, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 54
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 31, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 32, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 33, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 34, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 35, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 36, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 37, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 38, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 39, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 58
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 40, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 58
+        }, 
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 41, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 29
+        }, 
+        {
+          "item": 210730002, 
+          "num": 29
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 42, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 29
+        }, 
+        {
+          "item": 210730002, 
+          "num": 29
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 43, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 30
+        }, 
+        {
+          "item": 210730002, 
+          "num": 30
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 44, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 30
+        }, 
+        {
+          "item": 210730002, 
+          "num": 30
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 45, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 30
+        }, 
+        {
+          "item": 210730002, 
+          "num": 30
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 46, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 30
+        }, 
+        {
+          "item": 210730002, 
+          "num": 30
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 47, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 30
+        }, 
+        {
+          "item": 210730002, 
+          "num": 30
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 48, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 31
+        }, 
+        {
+          "item": 210730002, 
+          "num": 31
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 49, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 31
+        }, 
+        {
+          "item": 210730002, 
+          "num": 31
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 50, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 31
+        }, 
+        {
+          "item": 210730002, 
+          "num": 31
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 51, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 31
+        }, 
+        {
+          "item": 210730002, 
+          "num": 31
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 52, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 31
+        }, 
+        {
+          "item": 210730002, 
+          "num": 31
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 53, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 32
+        }, 
+        {
+          "item": 210730002, 
+          "num": 32
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 54, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 32
+        }, 
+        {
+          "item": 210730002, 
+          "num": 32
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 55, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 32
+        }, 
+        {
+          "item": 210730002, 
+          "num": 32
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 56, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 32
+        }, 
+        {
+          "item": 210730002, 
+          "num": 32
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 57, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 32
+        }, 
+        {
+          "item": 210730002, 
+          "num": 32
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 58, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 33
+        }, 
+        {
+          "item": 210730002, 
+          "num": 33
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 59, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 33
+        }, 
+        {
+          "item": 210730002, 
+          "num": 33
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 60, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 33
+        }, 
+        {
+          "item": 210730002, 
+          "num": 33
+        }, 
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 61, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 33
+        }, 
+        {
+          "item": 210730002, 
+          "num": 33
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 62, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 34
+        }, 
+        {
+          "item": 210730002, 
+          "num": 34
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 63, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 34
+        }, 
+        {
+          "item": 210730002, 
+          "num": 34
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 64, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 34
+        }, 
+        {
+          "item": 210730002, 
+          "num": 34
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 65, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 34
+        }, 
+        {
+          "item": 210730002, 
+          "num": 34
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 66, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 34
+        }, 
+        {
+          "item": 210730002, 
+          "num": 34
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 67, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }, 
+        {
+          "item": 210730002, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 68, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }, 
+        {
+          "item": 210730002, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 69, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }, 
+        {
+          "item": 210730002, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 70, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }, 
+        {
+          "item": 210730002, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 71, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 35
+        }, 
+        {
+          "item": 210730002, 
+          "num": 35
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 72, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }, 
+        {
+          "item": 210730002, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 73, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }, 
+        {
+          "item": 210730002, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 74, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }, 
+        {
+          "item": 210730002, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 75, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }, 
+        {
+          "item": 210730002, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 76, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 36
+        }, 
+        {
+          "item": 210730002, 
+          "num": 36
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 77, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 37
+        }, 
+        {
+          "item": 210730002, 
+          "num": 37
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 78, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 37
+        }, 
+        {
+          "item": 210730002, 
+          "num": 37
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 79, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 37
+        }, 
+        {
+          "item": 210730002, 
+          "num": 37
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 80, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 37
+        }, 
+        {
+          "item": 210730002, 
+          "num": 37
+        }, 
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 81, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 38
+        }, 
+        {
+          "item": 210730002, 
+          "num": 38
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 82, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 38
+        }, 
+        {
+          "item": 210730002, 
+          "num": 38
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 83, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 38
+        }, 
+        {
+          "item": 210730002, 
+          "num": 38
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 84, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 38
+        }, 
+        {
+          "item": 210730002, 
+          "num": 38
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 85, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 38
+        }, 
+        {
+          "item": 210730002, 
+          "num": 38
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 86, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 39
+        }, 
+        {
+          "item": 210730002, 
+          "num": 39
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 87, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 39
+        }, 
+        {
+          "item": 210730002, 
+          "num": 39
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 88, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 39
+        }, 
+        {
+          "item": 210730002, 
+          "num": 39
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 89, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 39
+        }, 
+        {
+          "item": 210730002, 
+          "num": 39
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 90, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 39
+        }, 
+        {
+          "item": 210730002, 
+          "num": 39
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 91, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 40
+        }, 
+        {
+          "item": 210730002, 
+          "num": 40
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 92, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 40
+        }, 
+        {
+          "item": 210730002, 
+          "num": 40
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 93, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 40
+        }, 
+        {
+          "item": 210730002, 
+          "num": 40
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 94, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 40
+        }, 
+        {
+          "item": 210730002, 
+          "num": 40
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 95, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 40
+        }, 
+        {
+          "item": 210730002, 
+          "num": 40
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 96, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 41
+        }, 
+        {
+          "item": 210730002, 
+          "num": 41
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 97, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 41
+        }, 
+        {
+          "item": 210730002, 
+          "num": 41
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 98, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 41
+        }, 
+        {
+          "item": 210730002, 
+          "num": 41
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 99, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 41
+        }, 
+        {
+          "item": 210730002, 
+          "num": 41
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 100, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 42
+        }, 
+        {
+          "item": 210730002, 
+          "num": 42
+        }, 
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710001, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 101, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 42
+        }, 
+        {
+          "item": 210730002, 
+          "num": 42
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 102, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 42
+        }, 
+        {
+          "item": 210730002, 
+          "num": 42
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 103, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 42
+        }, 
+        {
+          "item": 210730002, 
+          "num": 42
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 104, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 42
+        }, 
+        {
+          "item": 210730002, 
+          "num": 42
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 105, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 43
+        }, 
+        {
+          "item": 210730002, 
+          "num": 43
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 106, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 43
+        }, 
+        {
+          "item": 210730002, 
+          "num": 43
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 107, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 43
+        }, 
+        {
+          "item": 210730002, 
+          "num": 43
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 108, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 43
+        }, 
+        {
+          "item": 210730002, 
+          "num": 43
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 109, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 43
+        }, 
+        {
+          "item": 210730002, 
+          "num": 43
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 110, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }, 
+        {
+          "item": 210730002, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 111, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }, 
+        {
+          "item": 210730002, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 112, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }, 
+        {
+          "item": 210730002, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 113, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }, 
+        {
+          "item": 210730002, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 114, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 44
+        }, 
+        {
+          "item": 210730002, 
+          "num": 44
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 115, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }, 
+        {
+          "item": 210730002, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 116, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }, 
+        {
+          "item": 210730002, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 117, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }, 
+        {
+          "item": 210730002, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 118, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }, 
+        {
+          "item": 210730002, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 119, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 45
+        }, 
+        {
+          "item": 210730002, 
+          "num": 45
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 120, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 46
+        }, 
+        {
+          "item": 210730002, 
+          "num": 46
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 121, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 46
+        }, 
+        {
+          "item": 210730002, 
+          "num": 46
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 122, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 46
+        }, 
+        {
+          "item": 210730002, 
+          "num": 46
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 123, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 46
+        }, 
+        {
+          "item": 210730002, 
+          "num": 46
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 124, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 47
+        }, 
+        {
+          "item": 210730002, 
+          "num": 47
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 125, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 47
+        }, 
+        {
+          "item": 210730002, 
+          "num": 47
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 126, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 47
+        }, 
+        {
+          "item": 210730002, 
+          "num": 47
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 127, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 47
+        }, 
+        {
+          "item": 210730002, 
+          "num": 47
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 128, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 47
+        }, 
+        {
+          "item": 210730002, 
+          "num": 47
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 129, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 48
+        }, 
+        {
+          "item": 210730002, 
+          "num": 48
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 130, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 48
+        }, 
+        {
+          "item": 210730002, 
+          "num": 48
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 131, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 48
+        }, 
+        {
+          "item": 210730002, 
+          "num": 48
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 132, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 48
+        }, 
+        {
+          "item": 210730002, 
+          "num": 48
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 133, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 48
+        }, 
+        {
+          "item": 210730002, 
+          "num": 48
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 134, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 49
+        }, 
+        {
+          "item": 210730002, 
+          "num": 49
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 135, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 49
+        }, 
+        {
+          "item": 210730002, 
+          "num": 49
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 136, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 49
+        }, 
+        {
+          "item": 210730002, 
+          "num": 49
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 137, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 49
+        }, 
+        {
+          "item": 210730002, 
+          "num": 49
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 138, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 49
+        }, 
+        {
+          "item": 210730002, 
+          "num": 49
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 139, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 50
+        }, 
+        {
+          "item": 210730002, 
+          "num": 50
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 140, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 50
+        }, 
+        {
+          "item": 210730002, 
+          "num": 50
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 141, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 50
+        }, 
+        {
+          "item": 210730002, 
+          "num": 50
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 142, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 50
+        }, 
+        {
+          "item": 210730002, 
+          "num": 50
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 143, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 51
+        }, 
+        {
+          "item": 210730002, 
+          "num": 51
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 144, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 51
+        }, 
+        {
+          "item": 210730002, 
+          "num": 51
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 145, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 51
+        }, 
+        {
+          "item": 210730002, 
+          "num": 51
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 146, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 51
+        }, 
+        {
+          "item": 210730002, 
+          "num": 51
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 147, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 51
+        }, 
+        {
+          "item": 210730002, 
+          "num": 51
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 148, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 52
+        }, 
+        {
+          "item": 210730002, 
+          "num": 52
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 149, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 52
+        }, 
+        {
+          "item": 210730002, 
+          "num": 52
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 150, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 52
+        }, 
+        {
+          "item": 210730002, 
+          "num": 52
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 151, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 52
+        }, 
+        {
+          "item": 210730002, 
+          "num": 52
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 152, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 52
+        }, 
+        {
+          "item": 210730002, 
+          "num": 52
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 153, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 53
+        }, 
+        {
+          "item": 210730002, 
+          "num": 53
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 154, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 53
+        }, 
+        {
+          "item": 210730002, 
+          "num": 53
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 155, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 53
+        }, 
+        {
+          "item": 210730002, 
+          "num": 53
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 156, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 53
+        }, 
+        {
+          "item": 210730002, 
+          "num": 53
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 157, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 53
+        }, 
+        {
+          "item": 210730002, 
+          "num": 53
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 158, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 54
+        }, 
+        {
+          "item": 210730002, 
+          "num": 54
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 159, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 54
+        }, 
+        {
+          "item": 210730002, 
+          "num": 54
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 160, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 54
+        }, 
+        {
+          "item": 210730002, 
+          "num": 54
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 161, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 54
+        }, 
+        {
+          "item": 210730002, 
+          "num": 54
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 162, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }, 
+        {
+          "item": 210730002, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 163, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }, 
+        {
+          "item": 210730002, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 164, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }, 
+        {
+          "item": 210730002, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 165, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }, 
+        {
+          "item": 210730002, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 166, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 55
+        }, 
+        {
+          "item": 210730002, 
+          "num": 55
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 167, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }, 
+        {
+          "item": 210730002, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 168, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }, 
+        {
+          "item": 210730002, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 169, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }, 
+        {
+          "item": 210730002, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 170, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }, 
+        {
+          "item": 210730002, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 171, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 56
+        }, 
+        {
+          "item": 210730002, 
+          "num": 56
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 172, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }, 
+        {
+          "item": 210730002, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 173, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }, 
+        {
+          "item": 210730002, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 174, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }, 
+        {
+          "item": 210730002, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 175, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }, 
+        {
+          "item": 210730002, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 176, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 57
+        }, 
+        {
+          "item": 210730002, 
+          "num": 57
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 177, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 58
+        }, 
+        {
+          "item": 210730002, 
+          "num": 58
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 178, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 58
+        }, 
+        {
+          "item": 210730002, 
+          "num": 58
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 179, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 58
+        }, 
+        {
+          "item": 210730002, 
+          "num": 58
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 180, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 58
+        }, 
+        {
+          "item": 210730002, 
+          "num": 58
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 181, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 59
+        }, 
+        {
+          "item": 210730002, 
+          "num": 59
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 182, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 59
+        }, 
+        {
+          "item": 210730002, 
+          "num": 59
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 183, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 59
+        }, 
+        {
+          "item": 210730002, 
+          "num": 59
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 184, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 59
+        }, 
+        {
+          "item": 210730002, 
+          "num": 59
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 185, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 59
+        }, 
+        {
+          "item": 210730002, 
+          "num": 59
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 186, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 60
+        }, 
+        {
+          "item": 210730002, 
+          "num": 60
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 187, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 60
+        }, 
+        {
+          "item": 210730002, 
+          "num": 60
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 188, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 60
+        }, 
+        {
+          "item": 210730002, 
+          "num": 60
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 189, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 60
+        }, 
+        {
+          "item": 210730002, 
+          "num": 60
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 190, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 60
+        }, 
+        {
+          "item": 210730002, 
+          "num": 60
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 191, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 61
+        }, 
+        {
+          "item": 210730002, 
+          "num": 61
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 192, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 61
+        }, 
+        {
+          "item": 210730002, 
+          "num": 61
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 193, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 61
+        }, 
+        {
+          "item": 210730002, 
+          "num": 61
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 194, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 61
+        }, 
+        {
+          "item": 210730002, 
+          "num": 61
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 195, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 61
+        }, 
+        {
+          "item": 210730002, 
+          "num": 61
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 196, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 62
+        }, 
+        {
+          "item": 210730002, 
+          "num": 62
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 197, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 62
+        }, 
+        {
+          "item": 210730002, 
+          "num": 62
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 198, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 62
+        }, 
+        {
+          "item": 210730002, 
+          "num": 62
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 199, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 62
+        }, 
+        {
+          "item": 210730002, 
+          "num": 62
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 200, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 63
+        }, 
+        {
+          "item": 210730002, 
+          "num": 63
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 201, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 63
+        }, 
+        {
+          "item": 210730002, 
+          "num": 63
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 202, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 64
+        }, 
+        {
+          "item": 210730002, 
+          "num": 64
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 203, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 64
+        }, 
+        {
+          "item": 210730002, 
+          "num": 64
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 204, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 65
+        }, 
+        {
+          "item": 210730002, 
+          "num": 65
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 205, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 65
+        }, 
+        {
+          "item": 210730002, 
+          "num": 65
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 206, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 66
+        }, 
+        {
+          "item": 210730002, 
+          "num": 66
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 207, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 66
+        }, 
+        {
+          "item": 210730002, 
+          "num": 66
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 208, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 67
+        }, 
+        {
+          "item": 210730002, 
+          "num": 67
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 209, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 67
+        }, 
+        {
+          "item": 210730002, 
+          "num": 67
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 210, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 68
+        }, 
+        {
+          "item": 210730002, 
+          "num": 68
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 211, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 68
+        }, 
+        {
+          "item": 210730002, 
+          "num": 68
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 212, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 69
+        }, 
+        {
+          "item": 210730002, 
+          "num": 69
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 213, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 69
+        }, 
+        {
+          "item": 210730002, 
+          "num": 69
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 214, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 70
+        }, 
+        {
+          "item": 210730002, 
+          "num": 70
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 215, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 70
+        }, 
+        {
+          "item": 210730002, 
+          "num": 70
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 216, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 71
+        }, 
+        {
+          "item": 210730002, 
+          "num": 71
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 217, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 71
+        }, 
+        {
+          "item": 210730002, 
+          "num": 71
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 218, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 72
+        }, 
+        {
+          "item": 210730002, 
+          "num": 72
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 219, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 72
+        }, 
+        {
+          "item": 210730002, 
+          "num": 72
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 220, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 73
+        }, 
+        {
+          "item": 210730002, 
+          "num": 73
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 221, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 73
+        }, 
+        {
+          "item": 210730002, 
+          "num": 73
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 222, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 74
+        }, 
+        {
+          "item": 210730002, 
+          "num": 74
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 223, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 74
+        }, 
+        {
+          "item": 210730002, 
+          "num": 74
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 224, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 75
+        }, 
+        {
+          "item": 210730002, 
+          "num": 75
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 225, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 75
+        }, 
+        {
+          "item": 210730002, 
+          "num": 75
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 226, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 76
+        }, 
+        {
+          "item": 210730002, 
+          "num": 76
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 227, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 76
+        }, 
+        {
+          "item": 210730002, 
+          "num": 76
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 228, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 77
+        }, 
+        {
+          "item": 210730002, 
+          "num": 77
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 229, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 77
+        }, 
+        {
+          "item": 210730002, 
+          "num": 77
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 230, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 78
+        }, 
+        {
+          "item": 210730002, 
+          "num": 78
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 231, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 78
+        }, 
+        {
+          "item": 210730002, 
+          "num": 78
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 232, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 79
+        }, 
+        {
+          "item": 210730002, 
+          "num": 79
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 233, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 79
+        }, 
+        {
+          "item": 210730002, 
+          "num": 79
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 234, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 80
+        }, 
+        {
+          "item": 210730002, 
+          "num": 80
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 235, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 80
+        }, 
+        {
+          "item": 210730002, 
+          "num": 80
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 236, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 81
+        }, 
+        {
+          "item": 210730002, 
+          "num": 81
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 237, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 81
+        }, 
+        {
+          "item": 210730002, 
+          "num": 81
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 238, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 82
+        }, 
+        {
+          "item": 210730002, 
+          "num": 82
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 239, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 82
+        }, 
+        {
+          "item": 210730002, 
+          "num": 82
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 240, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 83
+        }, 
+        {
+          "item": 210730002, 
+          "num": 83
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 241, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 83
+        }, 
+        {
+          "item": 210730002, 
+          "num": 83
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 242, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 84
+        }, 
+        {
+          "item": 210730002, 
+          "num": 84
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 243, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 84
+        }, 
+        {
+          "item": 210730002, 
+          "num": 84
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 244, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 85
+        }, 
+        {
+          "item": 210730002, 
+          "num": 85
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 245, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 85
+        }, 
+        {
+          "item": 210730002, 
+          "num": 85
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 246, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 86
+        }, 
+        {
+          "item": 210730002, 
+          "num": 86
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 247, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 86
+        }, 
+        {
+          "item": 210730002, 
+          "num": 86
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 248, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 87
+        }, 
+        {
+          "item": 210730002, 
+          "num": 87
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 249, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 87
+        }, 
+        {
+          "item": 210730002, 
+          "num": 87
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 250, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 88
+        }, 
+        {
+          "item": 210730002, 
+          "num": 88
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 251, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 88
+        }, 
+        {
+          "item": 210730002, 
+          "num": 88
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 252, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 89
+        }, 
+        {
+          "item": 210730002, 
+          "num": 89
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 253, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 89
+        }, 
+        {
+          "item": 210730002, 
+          "num": 89
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 254, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 90
+        }, 
+        {
+          "item": 210730002, 
+          "num": 90
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 255, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 90
+        }, 
+        {
+          "item": 210730002, 
+          "num": 90
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 256, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 91
+        }, 
+        {
+          "item": 210730002, 
+          "num": 91
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 257, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 91
+        }, 
+        {
+          "item": 210730002, 
+          "num": 91
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 258, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 92
+        }, 
+        {
+          "item": 210730002, 
+          "num": 92
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 259, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 92
+        }, 
+        {
+          "item": 210730002, 
+          "num": 92
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 260, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 93
+        }, 
+        {
+          "item": 210730002, 
+          "num": 93
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 261, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 93
+        }, 
+        {
+          "item": 210730002, 
+          "num": 93
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 262, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 94
+        }, 
+        {
+          "item": 210730002, 
+          "num": 94
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 263, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 94
+        }, 
+        {
+          "item": 210730002, 
+          "num": 94
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 264, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 95
+        }, 
+        {
+          "item": 210730002, 
+          "num": 95
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 265, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 95
+        }, 
+        {
+          "item": 210730002, 
+          "num": 95
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 266, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 96
+        }, 
+        {
+          "item": 210730002, 
+          "num": 96
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 267, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 96
+        }, 
+        {
+          "item": 210730002, 
+          "num": 96
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 268, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 97
+        }, 
+        {
+          "item": 210730002, 
+          "num": 97
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 269, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 97
+        }, 
+        {
+          "item": 210730002, 
+          "num": 97
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 270, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 98
+        }, 
+        {
+          "item": 210730002, 
+          "num": 98
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 271, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 98
+        }, 
+        {
+          "item": 210730002, 
+          "num": 98
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 272, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 99
+        }, 
+        {
+          "item": 210730002, 
+          "num": 99
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 273, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 99
+        }, 
+        {
+          "item": 210730002, 
+          "num": 99
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 274, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 100
+        }, 
+        {
+          "item": 210730002, 
+          "num": 100
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 275, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 100
+        }, 
+        {
+          "item": 210730002, 
+          "num": 100
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 276, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 101
+        }, 
+        {
+          "item": 210730002, 
+          "num": 101
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 277, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 101
+        }, 
+        {
+          "item": 210730002, 
+          "num": 101
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 278, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 102
+        }, 
+        {
+          "item": 210730002, 
+          "num": 102
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 279, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 102
+        }, 
+        {
+          "item": 210730002, 
+          "num": 102
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 280, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 103
+        }, 
+        {
+          "item": 210730002, 
+          "num": 103
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }, 
+    {
+      "layer": 281, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 103
+        }, 
+        {
+          "item": 210730002, 
+          "num": 103
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 282, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 104
+        }, 
+        {
+          "item": 210730002, 
+          "num": 104
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 283, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 104
+        }, 
+        {
+          "item": 210730002, 
+          "num": 104
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 284, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 105
+        }, 
+        {
+          "item": 210730002, 
+          "num": 105
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 285, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 105
+        }, 
+        {
+          "item": 210730002, 
+          "num": 105
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 286, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 106
+        }, 
+        {
+          "item": 210730002, 
+          "num": 106
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 287, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 106
+        }, 
+        {
+          "item": 210730002, 
+          "num": 106
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 288, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 107
+        }, 
+        {
+          "item": 210730002, 
+          "num": 107
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 289, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 107
+        }, 
+        {
+          "item": 210730002, 
+          "num": 107
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 290, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 108
+        }, 
+        {
+          "item": 210730002, 
+          "num": 108
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 291, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 108
+        }, 
+        {
+          "item": 210730002, 
+          "num": 108
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 292, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 109
+        }, 
+        {
+          "item": 210730002, 
+          "num": 109
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 293, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 109
+        }, 
+        {
+          "item": 210730002, 
+          "num": 109
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 294, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 110
+        }, 
+        {
+          "item": 210730002, 
+          "num": 110
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 295, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 110
+        }, 
+        {
+          "item": 210730002, 
+          "num": 110
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 296, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 111
+        }, 
+        {
+          "item": 210730002, 
+          "num": 111
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 297, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 111
+        }, 
+        {
+          "item": 210730002, 
+          "num": 111
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 298, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 112
+        }, 
+        {
+          "item": 210730002, 
+          "num": 112
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 299, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 112
+        }, 
+        {
+          "item": 210730002, 
+          "num": 112
+        }
+      ], 
+      "type": 1, 
+      "exReward": []
+    }, 
+    {
+      "layer": 300, 
+      "reward": [
+        {
+          "item": 210730001, 
+          "num": 113
+        }, 
+        {
+          "item": 210730002, 
+          "num": 113
+        }, 
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ], 
+      "type": 1, 
+      "exReward": [
+        {
+          "item": 210710002, 
+          "num": 2
+        }
+      ]
+    }
+  ]
+}

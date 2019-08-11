@@ -15,65 +15,92 @@ TitleManager::~TitleManager() {
 }
 
 // 背包激活称号 注意：  称号获得后，三个角色都可佩戴、同一个称号同时只能有一个角色可佩戴；
-bool TitleManager::ActiveTitle(uint32_t uid, uint32_t rid, uint32_t id) {
+bool TitleManager::ActiveTitle(uint32_t uid, uint32_t rid, uint32_t titleId) {
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
 	if (!cache.init_) {
 		return false;
 	}
 
-	DataTitle title;
-	title.init(uid, rid,TYPE_ROLE_TITLE, id);
+	// bool TitleManager::Process
+	// 激活之前先判断role1身上是否穿戴了称号 如果穿戴了就脱下
+	map<uint32_t, DataTitle>::iterator it = cache.user_title_.begin();
+	for (; it != cache.user_title_.end(); ++it) {
+		// 一个角色人只能穿戴一个称号
+		// 一个称号只能属于一个角色
+		if( 1 == it->second.rid && it->second.isWear) {
+			DataTitle& title = it->second;
+			title.isWear = false;
+			title.rid = 0;
+			ATTR_DB_SET(title);
+			break;
+		}
+	}
 
-	DataRoleAttr attr;
-	memcpy((void*) &attr, (const void*) &title, sizeof(title));
-	DataRoleAttrManager::Instance()->Add(attr);
-
-	if (0 == cache.role_title_.count(rid)) {
-		map<uint32_t, DataTitle> titleMap;
-		titleMap.insert(make_pair(id, title));
-		cache.role_title_.insert(make_pair(rid, titleMap));
-	} else {
-		map<uint32_t, DataTitle> &titleMap = cache.role_title_[rid];
-		titleMap.insert(make_pair(id, title));
+	// 一个称号在数据库中只有一条  titleID
+	if (cache.user_title_.count(titleId) == 0) {
+		DataTitle title;
+		title.init(uid, rid,TYPE_ROLE_TITLE, titleId,true);
+		cache.user_title_[titleId] = title;
+		ATTR_DB_ADD(title);
 	}
 	return true;
 }
+
 // 处理客户端消息 1077 佩戴或卸下称号
 bool TitleManager::Process(uint32_t uid, logins::STitleReq *req) {
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
 	if (!cache.init_) {
 		return R_ERROR;
 	}
-	// 1、服务器收到客户端的消息后  1、去数据库验证合法性
-	if(cache.role_.count(req->roleId_))
+	// 1、服务器收到客户端的消息后  1、去数据库验证合法性 - 是否有该roleId
+	if(!cache.role_.count(req->roleId_))
 	{
 		error_log("role_id:%d not exist", req->roleId_);
 		return R_ERROR;
 	}
-	// 2、到配置表中查看是否有该称号id
-	if(!TitleCfgWrap().isTitleExist(req->titleId_))
-	{
-		error_log("title_id:%d not exist", req->titleId_);
-		return R_ERROR;
-	}
-	// 3、查看是否有该key存在(roleId & titleId 不存在就添加一条)
-	if(cache.role_title_.count(req->roleId_) == 0 || cache.role_title_[req->roleId_].count(req->titleId_) == 0)
-	{
-		ActiveTitle(uid, req->roleId_, req->titleId_);
-	}
-	// 4、对数据进行更新并且存入数据库
-	DataTitle title;
-	title.init(uid, req->roleId_,TYPE_ROLE_TITLE, req->titleId_);
+	// 2、客户端推送消息 titleID == 0 时卸下、反之亦然
+	uint32_t isWear = req->titleId_ == 0 ? 0 : 1;
 
-	DataAttr attr;
-	memcpy((void*)&attr, (const void*)&title, sizeof(title));
-	DataAttrManager::Instance()->Set(attr);
+	// 穿戴消息
+	if(isWear){
+		// 1 、下面判断玩家身上是否穿戴了其他称号、先卸下其他称号在进行穿戴  2、判断改称号是否被其他角色穿戴
+		// 找到该roleId 先取消掉其佩戴的称号  找到该titleId 取消掉其佩戴
+		map<uint32_t, DataTitle>::iterator it = cache.user_title_.begin();
+		for(; it != cache.user_title_.end(); ++it) {
+			if( (req->roleId_ == it->second.rid && it->second.isWear) ||
+				(req->titleId_ == it->second.id && it->second.isWear)) {
+				DataTitle& title = it->second;
+				title.isWear = false;
+				title.rid = 0;
+				ATTR_DB_SET(title);
+				break;
+			}
+		}
+
+		DataTitle& title = cache.user_title_[req->titleId_];	  // 重点  指针引用的数据修改
+		title.isWear = true;
+		title.rid = req->roleId_;
+		ATTR_DB_SET(title);
+	}
+	else
+	{
+		map<uint32_t, DataTitle>::iterator it = cache.user_title_.begin();
+		for(; it != cache.user_title_.end(); ++it) {
+			if(req->roleId_ == it->second.rid && it->second.isWear) {
+				DataTitle& title = it->second;
+				title.isWear = false;
+				title.rid = 0;
+				ATTR_DB_SET(title);
+				break;
+			}
+		}
+	}
+
 	// 更新消息  1167-1904
-	UpdateManager::Instance()->roleTitle(uid, req->roleId_, req->titleId_);
+	LogicManager::Instance()->AddSync(CMD_PLAYER_WEAR_TITLE);
 	// 更新消息  952-956
 	uint32_t showId = GetShowId();
-	uint32_t isDress = req->titleId_ == 0 ? 0 : 1;
-	UpdateManager::Instance()->roleShows(uid, req->titleId_, isDress, showId);
+	UpdateManager::Instance()->roleShows(uid, req->titleId_, isWear, showId);
 	return 0;
 }
 
@@ -84,31 +111,61 @@ uint32_t TitleManager::GetShowId() {
 
 // 激活称号时增加角色属性
 bool TitleManager::CalcProperty(const UserCache &cache, byte rid,PropertySets &props) {
-	map<uint32_t, map<uint32_t, DataTitle> >::const_iterator itr = cache.role_title_.begin();
-	for (; itr != cache.role_title_.end(); ++itr) {
-		if (itr->first != rid) {
+	map<uint32_t, DataTitle>::const_iterator itr = cache.user_title_.begin();
+	for (; itr != cache.user_title_.end(); ++itr) {
+		if (itr->second.rid != rid) {
 			continue;
 		}
-		map<uint32_t, DataTitle>::const_iterator item = itr->second.begin();
-		for(; item != itr->second.end(); ++item) {
-			const CfgTitle::Title &cfg = TitleCfgWrap().Get(item->first);
-			PropertyCfg::setProps(cfg.attr(), 1.0, props);
-		}
+		const CfgTitle::Title &cfg = TitleCfgWrap().Get(itr->first);
+		PropertyCfg::setProps(cfg.attr(), 1.0, props);
 	}
+
 	PropertyCfg::showProps(cache.uid_, rid, props, "RoleTitle");
 	return true;
 }
 
-// 服务器主动推送的消息
-int TitleManager::Sync(const UserCache &cache, uint32_t cmd,msgs::SIntIntMap *resp) {
-	if (!cache.init_) {
-		return false;
-	}
+// 背包使用称号道具
+bool TitleManager::BagUseTitleItem(uint32_t uid ,uint32_t equipId)
+{
+	const CfgItem::Item &cfg = ItemCfgWrap().GetItem(equipId); // 通过id去获取单条数据
+	uint32_t titleID  = cfg.data(); // 称号ID
 
-	if (!LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp)) {
-		return R_ERROR;
+	if(UpdateManager::Instance()->S2CPlayerTitle(uid,titleID)){ // 1168-1075
+		TitleManager::Instance()->ActiveTitle(uid, 1, titleID); // 激活称号，存入数据库
+		PropertyManager::Instance()->AddUser(uid);	// 触发添加称号属性函数 CalcProperty
+		LogicManager::Instance()->AddSync(CMD_PLAYER_WEAR_TITLE);
+		UpdateManager::Instance()->roleShows(uid, titleID,true, TitleManager::Instance()->GetShowId()); // 952-956
 	}
-
-	return R_SUCCESS;
+	return true;
 }
 
+// 服务器主动推送的消息  s2c:1074,1076  上线的时候推送，称号的集合
+int TitleManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerTitleInfo *resp) {
+	// 遍历下数据库 从中获取玩家所拥有的称号集合
+	vector<msgs::SPlayerTitle> titles;
+	map<uint32_t, DataTitle>::const_iterator itr = cache.user_title_.begin();
+	for (; itr != cache.user_title_.end(); ++itr) {
+		msgs::SPlayerTitle playerTitle;
+		playerTitle.titleId_ =itr->second.id;
+		playerTitle.indateTime_ =itr->second.indateTime;
+
+		titles.push_back(playerTitle);
+	}
+	resp->titles_ = titles;
+	LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp);
+	return 0;
+}
+
+// 服务器主动推送的消息  s2c:更新消息  1167-1904  上线的时候推送，称号的佩戴信息
+int TitleManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SIntIntMap *resp) {
+	// 遍历下数据库 从中获取玩家所拥有的称号集合
+	map<uint32_t, DataTitle>::const_iterator itr = cache.user_title_.begin();
+	for (; itr != cache.user_title_.end(); ++itr) {
+		uint32_t titleId = itr->second.isWear ? itr->second.id : 0;
+		resp->maps_.insert(make_pair(itr->second.rid, titleId));
+//		resp->maps_[itr->second.rid] = itr->second.isWear ? itr->second.id : 0; //佩戴 roleID : titleID
+	}
+
+	LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp);
+	return 0;
+}

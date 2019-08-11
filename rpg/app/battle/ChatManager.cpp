@@ -45,7 +45,7 @@ int ChatManager::Process(uint32_t uid, chat::CSChatProxy *req) {
 			if (type == 0) {
 				if (id == MONEY_EXP) {
 					UserManager::Instance()->AddExp(uid, count);
-				} else if (IS_MONEY(id)) {
+				} else if (MoneyCfgWrap().isMoneyType(id)) {
 					UserManager::Instance()->AddMoney(uid, id, count, "admin");
 				}
 			} else if (type == 1) {

@@ -100,6 +100,8 @@ uint32_t RuneManager::getLevel(const string &str) {
 	}
 }
 
+
+
 uint32_t RuneManager::getPos(string &str) {
 	static Json::Reader reader;
 	Json::Value value;
@@ -183,6 +185,7 @@ int RuneManager::Process(uint32_t uid, rune::CSMagicLearn *req){
 		return R_ERROR;
 	}
 
+	uint32_t Learn_cnt = 0;
 	if(req->holeId<=NORMAL_RUNE_COUNT&&req->holeId>0){
 		if(it->second.normalRune[req->holeId-1]!=0&&it->second.normalRune[req->holeId-1]!=100000){
 			//卸下
@@ -209,6 +212,7 @@ int RuneManager::Process(uint32_t uid, rune::CSMagicLearn *req){
 			DataEquipManager::Instance()->Set(itp->second);
 			UpdateManager::Instance()->ChgBag(uid, BAG_ALL, itp->second.bag, itp->second);
 			it->second.normalRune[req->holeId-1] = req->magicUid;
+			Learn_cnt++;
 		}
 
 	}else if(req->holeId==100||req->holeId==101){
@@ -237,10 +241,13 @@ int RuneManager::Process(uint32_t uid, rune::CSMagicLearn *req){
 			DataEquipManager::Instance()->Set(itp->second);
 			UpdateManager::Instance()->ChgBag(uid, BAG_ALL, itp->second.bag, itp->second);
 			it->second.specialRune[req->holeId-SPECIAL_RUNE_ID_BASE] = req->magicUid;
+			Learn_cnt++;
 		}
 	}
 	ROLE_ATTR_DB_SET(it->second);
 	PropertyManager::Instance()->AddUser(uid);
+	MissionManager::Instance()->onSubMission(uid, MT_MAGIC_LEARN, 1, 1);
+	ReinCarnShengManager::Instance()->onShengSubMission(uid, MT_MAGIC_LEARN, 6, 1);
 	return 0;
 }
 

@@ -37,6 +37,7 @@ void protobuf_ShutdownFile_CfgItem_2eproto();
 class Item;
 class Items;
 class StarRate;
+class Sundry;
 class Equip;
 class Equips;
 class Attr;
@@ -386,6 +387,95 @@ class StarRate : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class Sundry : public ::google::protobuf::Message {
+ public:
+  Sundry();
+  virtual ~Sundry();
+
+  Sundry(const Sundry& from);
+
+  inline Sundry& operator=(const Sundry& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Sundry& default_instance();
+
+  void Swap(Sundry* other);
+
+  // implements Message ----------------------------------------------
+
+  Sundry* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Sundry& from);
+  void MergeFrom(const Sundry& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required uint32 num = 2;
+  inline bool has_num() const;
+  inline void clear_num();
+  static const int kNumFieldNumber = 2;
+  inline ::google::protobuf::uint32 num() const;
+  inline void set_num(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:CfgItem.Sundry)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_num();
+  inline void clear_has_num();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 num_;
+  friend void  protobuf_AddDesc_CfgItem_2eproto();
+  friend void protobuf_AssignDesc_CfgItem_2eproto();
+  friend void protobuf_ShutdownFile_CfgItem_2eproto();
+
+  void InitAsDefaultInstance();
+  static Sundry* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class Equip : public ::google::protobuf::Message {
  public:
   Equip();
@@ -517,6 +607,29 @@ class Equip : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 changelevel() const;
   inline void set_changelevel(::google::protobuf::uint32 value);
 
+  // required uint32 active_min = 10;
+  inline bool has_active_min() const;
+  inline void clear_active_min();
+  static const int kActiveMinFieldNumber = 10;
+  inline ::google::protobuf::uint32 active_min() const;
+  inline void set_active_min(::google::protobuf::uint32 value);
+
+  // optional .CfgItem.Sundry sundry = 11;
+  inline bool has_sundry() const;
+  inline void clear_sundry();
+  static const int kSundryFieldNumber = 11;
+  inline const ::CfgItem::Sundry& sundry() const;
+  inline ::CfgItem::Sundry* mutable_sundry();
+  inline ::CfgItem::Sundry* release_sundry();
+  inline void set_allocated_sundry(::CfgItem::Sundry* sundry);
+
+  // required uint32 type = 12;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 12;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:CfgItem.Equip)
  private:
   inline void set_has_id();
@@ -531,6 +644,12 @@ class Equip : public ::google::protobuf::Message {
   inline void clear_has_sub();
   inline void set_has_changelevel();
   inline void clear_has_changelevel();
+  inline void set_has_active_min();
+  inline void clear_has_active_min();
+  inline void set_has_sundry();
+  inline void clear_has_sundry();
+  inline void set_has_type();
+  inline void clear_has_type();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -545,6 +664,9 @@ class Equip : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::CfgItem::StarRate > starrate_;
   ::google::protobuf::uint32 sub_;
   ::google::protobuf::uint32 changelevel_;
+  ::CfgItem::Sundry* sundry_;
+  ::google::protobuf::uint32 active_min_;
+  ::google::protobuf::uint32 type_;
   friend void  protobuf_AddDesc_CfgItem_2eproto();
   friend void protobuf_AssignDesc_CfgItem_2eproto();
   friend void protobuf_ShutdownFile_CfgItem_2eproto();
@@ -1309,12 +1431,54 @@ class Drop : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >*
       mutable_randomreward();
 
+  // optional uint32 ownRewardCount = 6;
+  inline bool has_ownrewardcount() const;
+  inline void clear_ownrewardcount();
+  static const int kOwnRewardCountFieldNumber = 6;
+  inline ::google::protobuf::uint32 ownrewardcount() const;
+  inline void set_ownrewardcount(::google::protobuf::uint32 value);
+
+  // repeated .CfgCommon.Reward ownReward = 7;
+  inline int ownreward_size() const;
+  inline void clear_ownreward();
+  static const int kOwnRewardFieldNumber = 7;
+  inline const ::CfgCommon::Reward& ownreward(int index) const;
+  inline ::CfgCommon::Reward* mutable_ownreward(int index);
+  inline ::CfgCommon::Reward* add_ownreward();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >&
+      ownreward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >*
+      mutable_ownreward();
+
+  // optional uint32 killRewardCount = 8;
+  inline bool has_killrewardcount() const;
+  inline void clear_killrewardcount();
+  static const int kKillRewardCountFieldNumber = 8;
+  inline ::google::protobuf::uint32 killrewardcount() const;
+  inline void set_killrewardcount(::google::protobuf::uint32 value);
+
+  // repeated .CfgCommon.Reward killReward = 9;
+  inline int killreward_size() const;
+  inline void clear_killreward();
+  static const int kKillRewardFieldNumber = 9;
+  inline const ::CfgCommon::Reward& killreward(int index) const;
+  inline ::CfgCommon::Reward* mutable_killreward(int index);
+  inline ::CfgCommon::Reward* add_killreward();
+  inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >&
+      killreward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >*
+      mutable_killreward();
+
   // @@protoc_insertion_point(class_scope:CfgItem.Drop)
  private:
   inline void set_has_id();
   inline void clear_has_id();
   inline void set_has_randomcount();
   inline void clear_has_randomcount();
+  inline void set_has_ownrewardcount();
+  inline void clear_has_ownrewardcount();
+  inline void set_has_killrewardcount();
+  inline void clear_has_killrewardcount();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1324,6 +1488,10 @@ class Drop : public ::google::protobuf::Message {
   ::google::protobuf::uint32 randomcount_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > fixedreward_;
   ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > randomreward_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > ownreward_;
+  ::google::protobuf::uint32 ownrewardcount_;
+  ::google::protobuf::uint32 killrewardcount_;
+  ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > killreward_;
   friend void  protobuf_AddDesc_CfgItem_2eproto();
   friend void protobuf_AssignDesc_CfgItem_2eproto();
   friend void protobuf_ShutdownFile_CfgItem_2eproto();
@@ -1736,6 +1904,58 @@ inline void StarRate::set_rate(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// Sundry
+
+// required uint32 id = 1;
+inline bool Sundry::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Sundry::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Sundry::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Sundry::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 Sundry::id() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Sundry.id)
+  return id_;
+}
+inline void Sundry::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:CfgItem.Sundry.id)
+}
+
+// required uint32 num = 2;
+inline bool Sundry::has_num() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Sundry::set_has_num() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Sundry::clear_has_num() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Sundry::clear_num() {
+  num_ = 0u;
+  clear_has_num();
+}
+inline ::google::protobuf::uint32 Sundry::num() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Sundry.num)
+  return num_;
+}
+inline void Sundry::set_num(::google::protobuf::uint32 value) {
+  set_has_num();
+  num_ = value;
+  // @@protoc_insertion_point(field_set:CfgItem.Sundry.num)
+}
+
+// -------------------------------------------------------------------
+
 // Equip
 
 // required uint32 id = 1;
@@ -1970,6 +2190,95 @@ inline void Equip::set_changelevel(::google::protobuf::uint32 value) {
   set_has_changelevel();
   changelevel_ = value;
   // @@protoc_insertion_point(field_set:CfgItem.Equip.changeLevel)
+}
+
+// required uint32 active_min = 10;
+inline bool Equip::has_active_min() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Equip::set_has_active_min() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Equip::clear_has_active_min() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Equip::clear_active_min() {
+  active_min_ = 0u;
+  clear_has_active_min();
+}
+inline ::google::protobuf::uint32 Equip::active_min() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Equip.active_min)
+  return active_min_;
+}
+inline void Equip::set_active_min(::google::protobuf::uint32 value) {
+  set_has_active_min();
+  active_min_ = value;
+  // @@protoc_insertion_point(field_set:CfgItem.Equip.active_min)
+}
+
+// optional .CfgItem.Sundry sundry = 11;
+inline bool Equip::has_sundry() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void Equip::set_has_sundry() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void Equip::clear_has_sundry() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void Equip::clear_sundry() {
+  if (sundry_ != NULL) sundry_->::CfgItem::Sundry::Clear();
+  clear_has_sundry();
+}
+inline const ::CfgItem::Sundry& Equip::sundry() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Equip.sundry)
+  return sundry_ != NULL ? *sundry_ : *default_instance_->sundry_;
+}
+inline ::CfgItem::Sundry* Equip::mutable_sundry() {
+  set_has_sundry();
+  if (sundry_ == NULL) sundry_ = new ::CfgItem::Sundry;
+  // @@protoc_insertion_point(field_mutable:CfgItem.Equip.sundry)
+  return sundry_;
+}
+inline ::CfgItem::Sundry* Equip::release_sundry() {
+  clear_has_sundry();
+  ::CfgItem::Sundry* temp = sundry_;
+  sundry_ = NULL;
+  return temp;
+}
+inline void Equip::set_allocated_sundry(::CfgItem::Sundry* sundry) {
+  delete sundry_;
+  sundry_ = sundry;
+  if (sundry) {
+    set_has_sundry();
+  } else {
+    clear_has_sundry();
+  }
+  // @@protoc_insertion_point(field_set_allocated:CfgItem.Equip.sundry)
+}
+
+// required uint32 type = 12;
+inline bool Equip::has_type() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void Equip::set_has_type() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void Equip::clear_has_type() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void Equip::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 Equip::type() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Equip.type)
+  return type_;
+}
+inline void Equip::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:CfgItem.Equip.type)
 }
 
 // -------------------------------------------------------------------
@@ -2536,6 +2845,114 @@ inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >*
 Drop::mutable_randomreward() {
   // @@protoc_insertion_point(field_mutable_list:CfgItem.Drop.randomReward)
   return &randomreward_;
+}
+
+// optional uint32 ownRewardCount = 6;
+inline bool Drop::has_ownrewardcount() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Drop::set_has_ownrewardcount() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Drop::clear_has_ownrewardcount() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Drop::clear_ownrewardcount() {
+  ownrewardcount_ = 0u;
+  clear_has_ownrewardcount();
+}
+inline ::google::protobuf::uint32 Drop::ownrewardcount() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Drop.ownRewardCount)
+  return ownrewardcount_;
+}
+inline void Drop::set_ownrewardcount(::google::protobuf::uint32 value) {
+  set_has_ownrewardcount();
+  ownrewardcount_ = value;
+  // @@protoc_insertion_point(field_set:CfgItem.Drop.ownRewardCount)
+}
+
+// repeated .CfgCommon.Reward ownReward = 7;
+inline int Drop::ownreward_size() const {
+  return ownreward_.size();
+}
+inline void Drop::clear_ownreward() {
+  ownreward_.Clear();
+}
+inline const ::CfgCommon::Reward& Drop::ownreward(int index) const {
+  // @@protoc_insertion_point(field_get:CfgItem.Drop.ownReward)
+  return ownreward_.Get(index);
+}
+inline ::CfgCommon::Reward* Drop::mutable_ownreward(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgItem.Drop.ownReward)
+  return ownreward_.Mutable(index);
+}
+inline ::CfgCommon::Reward* Drop::add_ownreward() {
+  // @@protoc_insertion_point(field_add:CfgItem.Drop.ownReward)
+  return ownreward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >&
+Drop::ownreward() const {
+  // @@protoc_insertion_point(field_list:CfgItem.Drop.ownReward)
+  return ownreward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >*
+Drop::mutable_ownreward() {
+  // @@protoc_insertion_point(field_mutable_list:CfgItem.Drop.ownReward)
+  return &ownreward_;
+}
+
+// optional uint32 killRewardCount = 8;
+inline bool Drop::has_killrewardcount() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Drop::set_has_killrewardcount() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Drop::clear_has_killrewardcount() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void Drop::clear_killrewardcount() {
+  killrewardcount_ = 0u;
+  clear_has_killrewardcount();
+}
+inline ::google::protobuf::uint32 Drop::killrewardcount() const {
+  // @@protoc_insertion_point(field_get:CfgItem.Drop.killRewardCount)
+  return killrewardcount_;
+}
+inline void Drop::set_killrewardcount(::google::protobuf::uint32 value) {
+  set_has_killrewardcount();
+  killrewardcount_ = value;
+  // @@protoc_insertion_point(field_set:CfgItem.Drop.killRewardCount)
+}
+
+// repeated .CfgCommon.Reward killReward = 9;
+inline int Drop::killreward_size() const {
+  return killreward_.size();
+}
+inline void Drop::clear_killreward() {
+  killreward_.Clear();
+}
+inline const ::CfgCommon::Reward& Drop::killreward(int index) const {
+  // @@protoc_insertion_point(field_get:CfgItem.Drop.killReward)
+  return killreward_.Get(index);
+}
+inline ::CfgCommon::Reward* Drop::mutable_killreward(int index) {
+  // @@protoc_insertion_point(field_mutable:CfgItem.Drop.killReward)
+  return killreward_.Mutable(index);
+}
+inline ::CfgCommon::Reward* Drop::add_killreward() {
+  // @@protoc_insertion_point(field_add:CfgItem.Drop.killReward)
+  return killreward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >&
+Drop::killreward() const {
+  // @@protoc_insertion_point(field_list:CfgItem.Drop.killReward)
+  return killreward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward >*
+Drop::mutable_killreward() {
+  // @@protoc_insertion_point(field_mutable_list:CfgItem.Drop.killReward)
+  return &killreward_;
 }
 
 // -------------------------------------------------------------------

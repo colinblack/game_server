@@ -61,11 +61,13 @@ void protobuf_AssignDesc_CfgMission_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Condition));
   Mission_descriptor_ = file->message_type(1);
-  static const int Mission_offsets_[4] = {
+  static const int Mission_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mission, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mission, condition_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mission, reward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mission, exp_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mission, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Mission, shengid_),
   };
   Mission_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -135,11 +137,12 @@ void protobuf_AddDesc_CfgMission_2eproto() {
     "\n\020CfgMission.proto\022\nCfgMission\032\017CfgCommo"
     "n.proto\"_\n\tCondition\022\n\n\002v0\030\001 \002(\r\022\n\n\002v1\030\002"
     " \002(\r\022\n\n\002v2\030\003 \001(\r\022\n\n\002v3\030\004 \001(\r\022\n\n\002v4\030\005 \001(\r"
-    "\022\n\n\002v5\030\006 \001(\r\022\n\n\002v6\030\007 \001(\r\"o\n\007Mission\022\n\n\002i"
-    "d\030\001 \002(\r\022(\n\tcondition\030\002 \003(\0132\025.CfgMission."
-    "Condition\022!\n\006reward\030\003 \003(\0132\021.CfgCommon.Re"
-    "ward\022\013\n\003exp\030\004 \002(\r\"1\n\010Missions\022%\n\010mission"
-    "s\030\001 \003(\0132\023.CfgMission.Mission", 308);
+    "\022\n\n\002v5\030\006 \001(\r\022\n\n\002v6\030\007 \001(\r\"\216\001\n\007Mission\022\n\n\002"
+    "id\030\001 \002(\r\022(\n\tcondition\030\002 \003(\0132\025.CfgMission"
+    ".Condition\022!\n\006reward\030\003 \003(\0132\021.CfgCommon.R"
+    "eward\022\013\n\003exp\030\004 \002(\r\022\014\n\004type\030\005 \002(\r\022\017\n\007shen"
+    "gId\030\006 \002(\r\"1\n\010Missions\022%\n\010missions\030\001 \003(\0132"
+    "\023.CfgMission.Mission", 340);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgMission.proto", &protobuf_RegisterTypes);
   Condition::default_instance_ = new Condition();
@@ -632,6 +635,8 @@ const int Mission::kIdFieldNumber;
 const int Mission::kConditionFieldNumber;
 const int Mission::kRewardFieldNumber;
 const int Mission::kExpFieldNumber;
+const int Mission::kTypeFieldNumber;
+const int Mission::kShengIdFieldNumber;
 #endif  // !_MSC_VER
 
 Mission::Mission()
@@ -654,6 +659,8 @@ void Mission::SharedCtor() {
   _cached_size_ = 0;
   id_ = 0u;
   exp_ = 0u;
+  type_ = 0u;
+  shengid_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -700,6 +707,7 @@ void Mission::Clear() {
   } while (0)
 
   ZR_(id_, exp_);
+  ZR_(type_, shengid_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -773,6 +781,36 @@ bool Mission::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(40)) goto parse_type;
+        break;
+      }
+
+      // required uint32 type = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_type:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &type_)));
+          set_has_type();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_shengId;
+        break;
+      }
+
+      // required uint32 shengId = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_shengId:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &shengid_)));
+          set_has_shengid();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -824,6 +862,16 @@ void Mission::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->exp(), output);
   }
 
+  // required uint32 type = 5;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->type(), output);
+  }
+
+  // required uint32 shengId = 6;
+  if (has_shengid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->shengid(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -858,6 +906,16 @@ void Mission::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->exp(), target);
   }
 
+  // required uint32 type = 5;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->type(), target);
+  }
+
+  // required uint32 shengId = 6;
+  if (has_shengid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(6, this->shengid(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -882,6 +940,20 @@ int Mission::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->exp());
+    }
+
+    // required uint32 type = 5;
+    if (has_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->type());
+    }
+
+    // required uint32 shengId = 6;
+    if (has_shengid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->shengid());
     }
 
   }
@@ -935,6 +1007,12 @@ void Mission::MergeFrom(const Mission& from) {
     if (from.has_exp()) {
       set_exp(from.exp());
     }
+    if (from.has_type()) {
+      set_type(from.type());
+    }
+    if (from.has_shengid()) {
+      set_shengid(from.shengid());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -952,7 +1030,7 @@ void Mission::CopyFrom(const Mission& from) {
 }
 
 bool Mission::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000009) != 0x00000009) return false;
+  if ((_has_bits_[0] & 0x00000039) != 0x00000039) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->condition())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->reward())) return false;
@@ -965,6 +1043,8 @@ void Mission::Swap(Mission* other) {
     condition_.Swap(&other->condition_);
     reward_.Swap(&other->reward_);
     std::swap(exp_, other->exp_);
+    std::swap(type_, other->type_);
+    std::swap(shengid_, other->shengid_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

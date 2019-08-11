@@ -21,6 +21,8 @@ def parse_plan():
 		item['mapid'] = int(sheet.cell_value(i, 0))
 		item['boss'] = int(sheet.cell_value(i, 2))
 		item['plan'] = int(sheet.cell_value(i, 1))
+		item['index'] = int(sheet.cell_value(i, 3))
+		item['count'] = int(sheet.cell_value(i, 5))
 		item['pos']=[]
 		str_tmp= str(sheet.cell_value(i, 4)).split('&')
 		if(len(str_tmp)>=1):

@@ -109,12 +109,14 @@ void protobuf_AssignDesc_CfgMonster_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Monsters));
   Plan_descriptor_ = file->message_type(3);
-  static const int Plan_offsets_[5] = {
+  static const int Plan_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, mapid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, boss_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, plan_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, pos_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Plan, index_),
   };
   Plan_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -200,10 +202,11 @@ void protobuf_AddDesc_CfgMonster_2eproto() {
     "\r\022\021\n\tfixDmgDec\030\017 \002(\r\022\016\n\006dmgDec\030\020 \002(\r\022\025\n\r"
     "critBreakRate\030\021 \002(\r\022\021\n\tcritBreak\030\022 \002(\r\"1"
     "\n\010Monsters\022%\n\010monsters\030\001 \003(\0132\023.CfgMonste"
-    "r.Monster\"]\n\004Plan\022\n\n\002id\030\001 \002(\r\022\r\n\005mapid\030\002"
+    "r.Monster\"{\n\004Plan\022\n\n\002id\030\001 \002(\r\022\r\n\005mapid\030\002"
     " \002(\r\022\014\n\004boss\030\003 \002(\r\022\014\n\004plan\030\004 \002(\r\022\036\n\003pos\030"
-    "\005 \003(\0132\021.CfgMonster.Point\"(\n\005Plans\022\037\n\005pla"
-    "ns\030\001 \003(\0132\020.CfgMonster.Plan", 586);
+    "\005 \003(\0132\021.CfgMonster.Point\022\r\n\005count\030\006 \002(\r\022"
+    "\r\n\005index\030\007 \002(\005\"(\n\005Plans\022\037\n\005plans\030\001 \003(\0132\020"
+    ".CfgMonster.Plan", 616);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "CfgMonster.proto", &protobuf_RegisterTypes);
   Point::default_instance_ = new Point();
@@ -1652,6 +1655,8 @@ const int Plan::kMapidFieldNumber;
 const int Plan::kBossFieldNumber;
 const int Plan::kPlanFieldNumber;
 const int Plan::kPosFieldNumber;
+const int Plan::kCountFieldNumber;
+const int Plan::kIndexFieldNumber;
 #endif  // !_MSC_VER
 
 Plan::Plan()
@@ -1676,6 +1681,8 @@ void Plan::SharedCtor() {
   mapid_ = 0u;
   boss_ = 0u;
   plan_ = 0u;
+  count_ = 0u;
+  index_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1721,7 +1728,10 @@ void Plan::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  ZR_(id_, plan_);
+  if (_has_bits_[0 / 32] & 111) {
+    ZR_(id_, plan_);
+    ZR_(count_, index_);
+  }
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -1810,6 +1820,36 @@ bool Plan::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(42)) goto parse_pos;
+        if (input->ExpectTag(48)) goto parse_count;
+        break;
+      }
+
+      // required uint32 count = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &count_)));
+          set_has_count();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(56)) goto parse_index;
+        break;
+      }
+
+      // required int32 index = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_index:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &index_)));
+          set_has_index();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1865,6 +1905,16 @@ void Plan::SerializeWithCachedSizes(
       5, this->pos(i), output);
   }
 
+  // required uint32 count = 6;
+  if (has_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->count(), output);
+  }
+
+  // required int32 index = 7;
+  if (has_index()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->index(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1900,6 +1950,16 @@ void Plan::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         5, this->pos(i), target);
+  }
+
+  // required uint32 count = 6;
+  if (has_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(6, this->count(), target);
+  }
+
+  // required int32 index = 7;
+  if (has_index()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->index(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1940,6 +2000,20 @@ int Plan::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->plan());
+    }
+
+    // required uint32 count = 6;
+    if (has_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->count());
+    }
+
+    // required int32 index = 7;
+    if (has_index()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->index());
     }
 
   }
@@ -1990,6 +2064,12 @@ void Plan::MergeFrom(const Plan& from) {
     if (from.has_plan()) {
       set_plan(from.plan());
     }
+    if (from.has_count()) {
+      set_count(from.count());
+    }
+    if (from.has_index()) {
+      set_index(from.index());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2007,7 +2087,7 @@ void Plan::CopyFrom(const Plan& from) {
 }
 
 bool Plan::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x0000006f) != 0x0000006f) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->pos())) return false;
   return true;
@@ -2020,6 +2100,8 @@ void Plan::Swap(Plan* other) {
     std::swap(boss_, other->boss_);
     std::swap(plan_, other->plan_);
     pos_.Swap(&other->pos_);
+    std::swap(count_, other->count_);
+    std::swap(index_, other->index_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

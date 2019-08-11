@@ -321,18 +321,6 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new TFirstArenaBet();}
 };
-class TPlayerOnlineSkill: public Msg {
-public:
-int32_t playerId_;
-int32_t roleId_;
-string skills_;
-virtual inline int32_t msgId() const {return 3574;}
-static int32_t MsgId() {return 3574;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new TPlayerOnlineSkill();}
-};
 class TFirstArenaRank: public Msg {
 public:
 int64_t id_;
@@ -386,17 +374,6 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new TBossKillRecord();}
-};
-class TForbidIp: public Msg {
-public:
-string ip_;
-string reason_;
-virtual inline int32_t msgId() const {return 4818;}
-static int32_t MsgId() {return 4818;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new TForbidIp();}
 };
 class TActive: public Msg {
 public:
@@ -511,25 +488,6 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new TToplist();}
 };
-class TMail: public Msg {
-public:
-int32_t id_;
-int32_t playerId_;
-int32_t code_;
-int32_t isRead_;
-int32_t isFetched_;
-string sender_;
-string title_;
-string content_;
-string attachments_;
-int64_t mailDt_;
-virtual inline int32_t msgId() const {return 137;}
-static int32_t MsgId() {return 137;}
-virtual bool decode(CBufferReader &reader);
-virtual bool encode(CBufferWriter &writer) const;
-virtual void clear();
-virtual Msg* New() const {return new TMail();}
-};
 class TDbMarket: public Msg {
 public:
 string uid_;
@@ -565,6 +523,25 @@ virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new TMarketHis();}
 };
+class TMail: public Msg {
+public:
+int32_t id_;
+int32_t playerId_;
+int32_t code_;
+int32_t isRead_;
+int32_t isFetched_;
+string sender_;
+string title_;
+string content_;
+string attachments_;
+int64_t mailDt_;
+virtual inline int32_t msgId() const {return 137;}
+static int32_t MsgId() {return 137;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new TMail();}
+};
 class TTip: public Msg {
 public:
 int32_t playerId_;
@@ -577,6 +554,29 @@ virtual bool decode(CBufferReader &reader);
 virtual bool encode(CBufferWriter &writer) const;
 virtual void clear();
 virtual Msg* New() const {return new TTip();}
+};
+class TPlayerOnlineSkill: public Msg {
+public:
+int32_t playerId_;
+int32_t roleId_;
+string skills_;
+virtual inline int32_t msgId() const {return 3574;}
+static int32_t MsgId() {return 3574;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new TPlayerOnlineSkill();}
+};
+class TForbidIp: public Msg {
+public:
+string ip_;
+string reason_;
+virtual inline int32_t msgId() const {return 4818;}
+static int32_t MsgId() {return 4818;}
+virtual bool decode(CBufferReader &reader);
+virtual bool encode(CBufferWriter &writer) const;
+virtual void clear();
+virtual Msg* New() const {return new TForbidIp();}
 };
 class TTreasureCrossCount: public Msg {
 public:

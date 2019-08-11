@@ -32,7 +32,7 @@ def parse_grid():
 		item["time"] = int(i[10])
 		#
 		item["num"] = int(i[13])
-		item["type"] = int(i[14])
+		item["type"] = int(i[26])
 		item["mapId"] = int(i[15])
 		item["needLevel"] = int(i[20])
 		item["quickDay"] = int(i[22])

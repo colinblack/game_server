@@ -9,5 +9,5 @@ message OnlineReward {
 }
 
 message OnlineRewards {
-	repeated OnlineReward OnlineRewards = 1;
+	repeated OnlineReward onlineRewards = 1;
 }

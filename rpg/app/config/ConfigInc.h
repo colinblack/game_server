@@ -33,5 +33,17 @@
 #include "CfgActivity.pb.h"
 #include "CfgTitle.pb.h"
 #include "MsgLocal.pb.h"
+#include "CfgZhuLing.pb.h"
+#include "CfgZhanLing.pb.h"
+#include "CfgOnlineReward.pb.h"
+#include "CfgSignRewards.pb.h"
+#include "CfgReinCarnSheng.pb.h"
+#include "CfgTrump.pb.h"
+#include "CfgFashion.pb.h"
+#include "CfgFashionSuit.pb.h"
+#include "CfgPartnerIsland.pb.h"
+#include "CfgShop.pb.h"
+#include "CfgMoney.pb.h"
+#include "CfgConst.pb.h"
 
 #endif /* CONFIGINC_H_ */

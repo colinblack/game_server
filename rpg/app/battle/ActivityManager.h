@@ -28,7 +28,9 @@ public:
 	bool addActInfo(uint32_t uid, uint32_t id);
 	bool addActCnt(uint32_t uid, uint32_t id);
 	bool ReflashActive(uint32_t uid);
-	bool SyncActivity(UserCache& cache, uint32_t actId);
+	bool SyncActivity(UserCache& cache, uint32_t actId, uint32_t num);
+	bool ActorLogin(uint32_t uid);
+	bool onHour(uint32_t lastHour);
 public:
 	int Process(uint32_t uid, logins::SGetActivityReq *req);
 	int Process(uint32_t uid, logins::SGetActivityRewardReq *req);

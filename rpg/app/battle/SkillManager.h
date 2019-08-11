@@ -10,8 +10,6 @@
 
 #include "BattleBaseInc.h"
 
-#define SHENQI_SKILL_BEGIN	(40000)
-
 enum SKILL_OP {
 	SKILL_ADD = 0,	//解锁
 	SKILL_DEL = 1,	//删除
@@ -29,6 +27,8 @@ public:
 	bool ActorLogin(uint32_t uid);
 	bool AutoUnlock(UserCache &cache, bool sync);
 	bool UnlockShenQi(UserCache &cache);
+	bool UnlockZhanLing(UserCache &cache);
+	bool UnlockAdvance(UserCache &cache, uint32_t rid, uint32_t id);
 	bool SendChange(uint32_t uid);
 	bool UpgradeSkill(const UserCache &cache, DataSkill &data);
 	bool CalcProperty(const UserCache &cache, byte rid, PropertySets &props);

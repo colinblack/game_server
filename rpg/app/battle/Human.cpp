@@ -70,7 +70,7 @@ bool Human::init(const UserCache &cache, byte rid) {
 	list<DataSkill>::const_iterator skItr = cache.skill_.begin();
 	SkillCfgWrap cfgWrap;
 	for (; skItr != cache.skill_.end(); ++skItr) {
-		if (skItr->rid != rid) {
+		if (skItr->rid != rid && skItr->rid != 0) {
 			continue;
 		}
 		const CfgSkill::Skill &cfg = cfgWrap.GetByLv(skItr->id, skItr->lv, skItr->skill_id);
@@ -226,6 +226,10 @@ bool Human::doUseSkill(int32_t skillId, vector<uint32_t> &tar, const Point &cen)
 		error_log("skill is cool down id=%u skillid=%d", id_, skillId);
 		return false;
 	}
+	if (!doSkillCost(info)) {
+		error_log("skill cost error id=%u skillid=%d", id_, skillId);
+		return false;
+	}
 	if (!SkillControler::Instance()->doUseSkill(this, tar, info, cen)) {
 		error_log("skill hurt error id=%u skillid=%d", id_, skillId);
 		return false;
@@ -264,6 +268,15 @@ bool Human::doAddSkill(const DataSkill &skill) {
 	return true;
 }
 
+bool Human::doSkillCost(const SkillUseInfo &info) {
+	SkillCfgWrap cfg_warp;
+	const CfgSkill::Skill &cfg = cfg_warp.GetById(info.skillId);
+	if (cfg_warp.IsZhanLing(cfg)) {
+		return ZhanLingManager::Instance()->useNuQi(id_);
+	}
+	return true;
+}
+
 Msg* Human::doAppear() {
 	msgs::SMapRole *ptr = MsgPool::Instance()->GetMsg<msgs::SMapRole>();
 	if (ptr == NULL) {
@@ -286,7 +299,7 @@ Msg* Human::doAppear() {
 	ptr->maxLife_ = props_[AP_MAXLIFE].pl;
 	ptr->curLife_ = props_[AP_HP].pl;;
 	ptr->entityShows_ = shows_;
-	ptr->isRide_ = ride_;
+	ptr->isRide_ = getRide();
 	ptr->careerLevel_ = cache.m_reinCarnInfo.reinCarnLevel;
 
 	return ptr;

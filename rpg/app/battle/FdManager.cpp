@@ -71,3 +71,10 @@ bool FdManager::getAllFd(vector<FDINFO>& vecFd) {
 	return true;
 }
 
+bool FdManager::getAllUid(vector<uint32_t> &uids) {
+	for (map<uint32_t, FDINFO>::iterator it = roleMap.begin(); it != roleMap.end(); ++it) {
+		uids.push_back(it->first);
+	}
+	return true;
+}
+

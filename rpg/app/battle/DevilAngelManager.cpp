@@ -27,13 +27,20 @@ bool DevilAngelManager::DevilAngelTimeEnd(UserCache &cache) {
 	return true;
 }
 
-int DevilAngelManager::Process(uint32_t uid, logins::SBuyReq *req) {
-	if(!ItemCfgWrap().IsEquip(req->itemId)) {
-		error_log("itemId:%u is not exist", req->itemId);
-		return R_ERROR;
+bool DevilAngelManager::CalcProperty(const UserCache &cache, byte rid, PropertySets &props) {
+	map<uint32_t, map<uint32_t, DataDevilAngel> >::const_iterator it = cache.devilAngelDate.begin();
+	for(; it != cache.devilAngelDate.end(); ++it) {
+		map<uint32_t, DataDevilAngel>::const_iterator item = it->second.begin();
+		for(; item != it->second.end(); ++item) {
+			if(item->second.ms > Time::GetGlobalTime() * 1000 && item->first == rid) {
+				const CfgItem::Equip& cfg = ItemCfgWrap().GetEquip(item->second.id);
+				PropertyCfg::setProps(cfg.attr(), 1.0, props);
+			}
+		}
 	}
-	UserManager::Instance()->AddItem(uid, req->itemId, req->num, "admin");
-	return R_SUCCESS;
+
+	PropertyCfg::showProps(cache.uid_, rid, props, "equip");
+	return true;
 }
 
 bool DevilAngelManager::addDevilAngeleInfo(UserCache& cache, uint32_t equipId, uint32_t rid) {

@@ -22,6 +22,11 @@ message StarRate {
 	required uint32 rate = 2;
 }
 
+message Sundry {
+	required uint32 id = 1;
+	required uint32 num = 2;
+}
+
 message Equip {
 	required uint32 id = 1;
 	repeated CfgCommon.Reward smeltAward = 2;
@@ -32,6 +37,9 @@ message Equip {
 	required uint32 color = 7;	//品质
 	required uint32 sub = 8;	//传奇属性group
 	required uint32 changeLevel = 9; //转生等级
+	required uint32 active_min = 10; //有效时间 分钟
+	optional Sundry sundry = 11; //杂项
+	required uint32 type = 12; //装备类型
 }
 
 message Equips {
@@ -77,6 +85,11 @@ message Drop {
 	required uint32 randomCount = 2;
 	repeated CfgCommon.Reward fixedReward = 3;
 	repeated CfgCommon.Reward randomReward = 4;
+	optional uint32 ownRewardCount = 6;
+	repeated CfgCommon.Reward ownReward = 7;
+	optional uint32 killRewardCount = 8;
+	repeated CfgCommon.Reward killReward = 9;
+	
 }
 
 message Drops {

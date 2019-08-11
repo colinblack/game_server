@@ -1,6 +1,6 @@
 {
 	"namespace": "logins",
-	"include": ["Kernel", "Dbs", "GameApps", "MsgDef"],
+	"include": ["Kernel", "Dbs", "GameApps", "MsgDef","Msgs"],
 	"filename": "Logins",
 	"msgs": [{
 		"id": "342",
@@ -338,7 +338,7 @@
 			{"name": "skillId_", "id":1, "type":"int32_t"}
 		]
 	}, {
-		"id": "372",
+		"id": "519",
 		"name": "SAdvanceReq",
 		"msg": [
 			{"name":"roleId_", "id":1, "type": "int32_t"},
@@ -460,13 +460,134 @@
 		"msg": [
 			{"name":"equip_", "id":1, "type": "vector<dbs::TPlayerEquip>"}
 		]
+	}
+	, {
+		"id": "1037",
+		"name": "CEmbedGemReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"equipType_", "id":2, "type": "int32_t"},
+			{"name": "gemUidSlot_", "id":3, "type": "map<int32_t, int64_t>"}
+		]
 	}, {
+		"id": "1037",
+		"name": "SEmbedGemResp",
+		"msg": [
+			{"name":"tPlayerEquip_", "id":1, "type": "dbs::TPlayerEquip"}
+		]
+	}
+	, {
+		"id": "1056",
+		"name": "CRemoveGemReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"equipType_", "id":2, "type": "int32_t"},
+			{"name":"gemSlot_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "1056",
+		"name": "SRemoveGemResp",
+		"msg": [
+			{"name":"tPlayerEquip_", "id":1, "type": "dbs::TPlayerEquip"}
+		]
+	}
+	, {
+		"id": "1057",
+		"name": "CctivateGemTargetReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"targetId_", "id":2, "type": "int32_t"}
+		]
+	}
+	, {
+		"id": "1120",
+		"name": "CUpgradeGemReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"equipType_", "id":2, "type": "int32_t"},
+			{"name":"gemSlot_", "id":3, "type": "vector<int32_t>"}
+		]
+	}, {
+		"id": "1120",
+		"name": "SUpgradeGemResp",
+		"msg": [
+			{"name":"tPlayerEquip_", "id":1, "type": "dbs::TPlayerEquip"}
+		]
+	}
+	, {
 		"id": "1077",
 		"name": "STitleReq",
 		"msg": [
 			{"name":"roleId_", "id":1, "type": "int32_t"},
 			{"name":"titleId_", "id":2, "type": "int32_t"}
 		]
+	}, {
+		"id": "4071",
+		"name": "COnlineRewardReq",
+		"msg": [
+			{"name":"onlineTime_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "1418",
+		"name": "CActiveFashionReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"type_", "id":2, "type": "int32_t"},
+			{"name":"fashionId_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "2046",
+		"name": "CAdvanceFashionReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"type_", "id":2, "type": "int32_t"},
+			{"name":"fashionId_", "id":3, "type": "int32_t"}
+		]
+	}, 
+	{
+		"id": "2047",
+		"name": "CPutOnFashionReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"type_", "id":2, "type": "int32_t"},
+			{"name":"fashionId_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "2047",
+		"name": "SPutOnFashionResp",
+		"msg": [
+			{"name":"fashionId_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "2048",
+		"name": "CGetOffFashionReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"type_", "id":2, "type": "int32_t"},
+			{"name":"fashionId_", "id":3, "type": "int32_t"}
+		]
+	}, {
+		"id": "2048",
+		"name": "SGetOffFashionResp",
+		"msg": [
+			{"name":"fashionId_", "id":1, "type": "int32_t"}
+		]
+	}
+	, {
+		"id": "3742",
+		"name": "CActiveFashionSuitReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"},
+			{"name":"suitId_", "id":2, "type": "int32_t"},
+			{"name":"num_", "id":3, "type": "int32_t"}
+		]
+	}
+	, {
+		"id": "3742",
+		"name": "SActiveFashionSuitResp",
+		"msg": [{
+			"name": "suits_","id": 1,"type": "map<int32_t, msgs::SInts>"
+		}]
 	}
 	, {
 		"id": "3077",
@@ -540,12 +661,218 @@
 			{"name":"count_", "id":2, "type": "int32_t"}
 		]
 	}, {
-		"id": "2809",
+		"id": "1127",
 		"name": "SGetActivityRewardReq",
 		"msg": [
 			{"name":"id_", "id":1, "type": "int32_t"}
 		]
-	}
+	}, {
+		"id": "2577",
+		"name": "SzhulingUpLevelReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"}, 
+			{"name":"equipType_", "id":2, "type": "int32_t"},
+			{"name":"isAuto_", "id":3, "type": "bool"}
+		]
+	}, {
+		"id": "2577",
+		"name": "SzhulingUpLevelResp",
+		"msg": [
+			{"name":"plyerEquip", "id":1, "type": "dbs::TPlayerEquip"}
+		]
+	}, {
+		"id": "2585",
+		"name": "SzhulingUpAdvanceReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"}, 
+			{"name":"equipType_", "id":2, "type": "int32_t"}
+		]
+	}, {
+		"id": "2585",
+		"name": "SzhulingUpAdvanceResp",
+		"msg": [
+			{"name":"PlayerEquip", "id":1, "type": "dbs::TPlayerEquip"}
+		]
+	}, {
+		"id": "3493",
+		"name": "SopenZhulingReq",
+		"msg": [
+			{"name":"roleId_", "id":1, "type": "int32_t"}
+		]
+	}, {
+		"id": "2069",
+		"name": "SSkillCleanNuQi",
+		"msg": []
+	}, {
+		"id": "481",
+		"name": "SBuyReq",
+		"msg": [
+			{"name":"id", "id":1, "type": "int32_t"},
+			{"name":"itemId", "id":2, "type": "int32_t"},
+			{"name":"realPrice", "id":3, "type": "int32_t"},
+			{"name":"num", "id":4, "type": "int32_t"}
+		]
+	}, {
+		"id": "2244",
+		"name": "SDevilAngelequipReq",
+		"msg": [
+			{"name":"uid", "id":1, "type": "int32_t"},
+			{"name":"roleId", "id":2, "type": "int32_t"}
+		]
+	},{
+		"id": "1407",	
+		"name": "SPlayerSignEveryDayReq", 
+		"msg" :[
+			{"name":"flag_", "id":1, "type":"int16_t"}		
+		]
+	},{
+		"id": "1884",
+		"name": "SGetSignEverydayRwardReq",
+		"msg" :[
+			{"name":"day_", "id":1, "type":"int16_t"}		
+		]		
+	},{
+		"id": "1360",
+		"name": "SGetLevelRwardReq",
+		"msg" :[
+			{"name":"careerLevel", "id":1, "type":"int32_t"},	
+			{"name":"level", "id":2, "type":"int32_t"}		
+		]
+	},{
+		"id":"1898",
+		"name": "STrumpActiveReq",
+		"msg" : [
+			{"name": "subtype", "id":1, "type":"int32_t"},
+			{"name": "id", "id": 1, "type": "int32_t"}	
+		]
+	},{
+		"id":"4405",
+		"name": "SCommitShengMissionReq",
+		"msg" : [
+			{"name": "missionId", "id": 1, "type": "int32_t"}	
+		]
+	},{
+		"id":"4404",
+		"name": "SRequestShengMissionReq",
+		"msg" : [	
+		]
+	},{
+		"id":"1899",
+		"name": "STrumpUpgradeReq",
+		"msg" : [
+			{"name": "count", "id":1, "type":"int32_t" }
+		]
+	},{
+		"id":"1992",
+		"name": "SActiveTrumpSkillReq",
+		"msg" : [
+			{"name": "level", "id":1, "type":"int32_t" }
+		]
+	},{
+		"id":"3507",
+		"name": "STrumpRequestMissionReq",
+		"msg" : [
+			{"name": "missionId", "id":1, "type":"int32_t" }
+		]
+	},{
+		"id":"1965",
+		"name": "SUnlockTrumpReq",
+		"msg" : [
+		]
+	},{
+		"id":"571",
+		"name": "SDressReq",
+		"msg" : [
+			{"name": "roleId", "id":1, "type":"int32_t" },
+			{"name": "uid", "id":2, "type":"int64_t" }
+		]
+	},{
+		"id":"1889",
+		"name": "SStrengthEquipReq",
+		"msg" : [
+			{"name": "roleId", "id":1, "type":"int32_t" },
+			{"name": "type", "id":2, "type":"int32_t" },
+			{"name": "uid", "id":3, "type":"int64_t" }
+		]
+	},{
+		"id":"2586",
+		"name": "SOneKeyDressReq",
+		"msg" : [
+			{"name": "roleId", "id":1, "type":"int32_t" },
+			{"name": "type", "id":2, "type":"int32_t" },
+			{"name":"uids", "id":3, "type": "vector<int64_t>"}
+		]
+	},{
+		"id":"883",
+		"name": "SRecycleReq",
+		"msg" : [
+			{"name": "items", "id":1, "type": "map<int64_t, int32_t>"}
+		]
+	},{
+		"id":"1891",
+		"name": "SLearnSkillReq",
+		"msg" : [
+			{"name": "roleId", "id":1, "type":"int32_t" },
+			{"name": "type", "id":2, "type":"int32_t" },
+			{"name": "skillId", "id":3, "type":"int32_t" }
+		]
+	},{
+		"id":"3106",
+		"name": "SAdvanceAwakenReq",
+		"msg" : [
+			{"name": "roleId", "id":1, "type": "int32_t"},
+			{"name": "type", "id":2, "type": "int32_t"},
+			{"name": "autoBuy", "id":4, "type": "bool"}
+		]
+	},{
+		"id":"3340",
+		"name": "SActiveAdvanceTargetReq",
+		"msg" : [
+			{"name": "type", "id":1, "type": "int32_t"},
+			{"name": "targetLevel", "id":2, "type": "int32_t"}
+		]
+	},{
+		"id":"1922",
+		"name": "SCardUpStarReq",
+		"msg" : [
+			{"name": "uid", "id":1, "type": "int64_t"}
+		]
+	},{
+		"id":"1894",
+		"name": "SEquipZhanlingReq",
+		"msg" : [
+			{"name": "uid", "id":1, "type": "int64_t"}
+		]
+	},{
+		"id":"1893",
+		"name": "SAdvanceZhanlingReq",
+		"msg" : [
+		]
+	},{
+		"id":"3506",
+		"name": "SLearnZhanlingSkillReq",
+		"msg" : [
+			{"name": "skillId", "id":1, "type": "int32_t"}
+		]
+	},{
+        "id":"2152",
+		"name": "SNearenmeyFightenemyReq",
+		"msg" : [
+			{"name": "playerId", "id":1, "type": "int32_t"},
+            {"name": "oldPoints", "id":1, "type": "vector<Point>"}
+        ]
+    },{
+		"id":"2191",
+		"name": "SNearenemyBacktoHangReq",
+		"msg" : [
+		]    
+    },{
+		"id":"747",
+		"name": "SGetTopListReq",
+		"msg" : [
+			{"name": "toplistType", "id":1, "type": "int32_t"}
+		]    
+    }
 	
 	]
 }

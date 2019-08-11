@@ -2,7 +2,7 @@
 #include "AsyncDBManager.h"
 
 bool DBLogic::init() {
-	if (!AsyncDBManager::getInstance()->initThread()) {
+	if (!AsyncDBManager::Instance()->initThread()) {
 		error_log("DBLogic init failed");
 		return false;
 	}

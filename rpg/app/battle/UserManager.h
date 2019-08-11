@@ -19,15 +19,18 @@ private:
 public:
 	int Process(uint32_t uid, logins::SQuery *req, logins::SQueryResult *resp);
 	int Process(uint32_t uid, logins::SLogin *req, logins::SLoginResult *resp);
+	int Process(uint32_t uid, copy::CSSavePlayerConfig *resp);
 
 public:
 	int Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerLoginData *resp);
 	int Sync(const UserCache &cache, uint32_t cmd, dbs::TPlayer *resp);
 	int Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerMoneyList *resp);
+	int Sync(const UserCache &cache, uint32_t cmd, dbs::TPlayerConfig *resp);
 
 public:
 	bool onLogin(uint32_t uid);
 	bool ActorOffline(uint32_t uid);
+	bool ActorOnline(uint32_t uid);
 	bool AddBase(UserCache &cache, const string &open_id);
 	bool GetUid(const string &open_id, uint32_t &uid, bool &is_new);
 	bool GetNextUid(uint32_t &uid);
@@ -48,6 +51,7 @@ public:
 
 public:
 	static void GetPlayerMsg(const UserCache &data, dbs::TPlayer *msg);
+	static const char* m_player_config_key[];
 };
 
 #endif /* APP_BATTLE_USERMANAGER_H_ */

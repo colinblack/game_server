@@ -1,0 +1,15 @@
+package CfgConst;
+
+message Item {
+	required string id = 1;
+	required string a = 2;  //array
+	required string m = 3;  //map
+	required string s = 4;  //string
+	required int32 v1 = 5;
+	required int32 v2 = 6;
+	required int32 v3 = 7;
+}
+
+message Items {
+	repeated Item consts = 1;
+}

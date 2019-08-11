@@ -33,11 +33,39 @@ MonsterCfgWrap::MonsterCfgWrap() :
 const CfgMonster::Monster& MonsterCfgWrap::Get(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->monster_cfg_Index;
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
-	if (itr == indexs.end()) {
-		error_log("monster id not exists %u", id);
-		throw runtime_error("monster id not exists");
+	if (itr != indexs.end()) {
+		return cfg_.monsters(itr->second);
 	}
-	return cfg_.monsters(itr->second);
+	if (id > HANG_LOOP_BASE + HANG_MONSTER_ID_BASE && id <= HANG_MONSTER_ID_MAX) {
+		int lv = id % HANG_MONSTER_ID_BASE;
+		int index = (lv - 1) % HANG_LOOP_BASE;
+		int idbase = HANG_MONSTER_ID_BASE + index + 1;
+		itr = indexs.find(idbase);
+		if (itr == indexs.end()) {
+			error_log("monster id not exists %u", idbase);
+			throw runtime_error("monster id not exists");
+		}
+		CfgMonster::Monster item;
+		item.CopyFrom(cfg_.monsters(itr->second));
+		int id56 = HANG_LOOP_BASE + HANG_MONSTER_ID_BASE;
+		itr = indexs.find(id56);
+		if (itr == indexs.end()) {
+			error_log("monster id not exists %u", id56);
+			throw runtime_error("monster id not exists");
+		}
+		const CfgMonster::Monster &cfg = cfg_.monsters(itr->second);
+		item.set_id(id);
+		item.set_attack(cfg.attack() + floor((id - HANG_LOOP_BASE) * 50));
+		item.set_hp(cfg.hp() * pow(1.002, id - HANG_LOOP_BASE));
+		item.set_defence(cfg.defence() * pow(1.002, id - HANG_LOOP_BASE));
+		ConfigManager::Instance()->AddMonster(item);
+		itr = indexs.find(id);
+		if (itr != indexs.end()) {
+			return cfg_.monsters(itr->second);
+		}
+	}
+	error_log("monster id not exists %u", id);
+	throw runtime_error("monster id not exists");
 }
 const CfgMonster::Plan& MonsterCfgWrap::GetPlan(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->monster_plan_cfg_Index;
@@ -49,8 +77,46 @@ const CfgMonster::Plan& MonsterCfgWrap::GetPlan(uint32_t id) {
 	return plan_.plans(itr->second);
 }
 
+
+bool MonsterCfgWrap::GetPlansByMap(uint32_t mapId,vector<CfgMonster::Plan>& plans) {
+	plans.clear();
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->monster_plan_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr;
+
+	for(itr=indexs.begin();itr!=indexs.end();itr++){
+		if(plan_.plans(itr->second).mapid()==mapId){
+			plans.push_back(plan_.plans(itr->second));
+		}
+	}
+	return true;
+}
+
+
+bool MonsterCfgWrap::GetPlansByMap(uint32_t mapId,map<uint32_t,vector<CfgMonster::Plan> >& plans) {
+	plans.clear();
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->monster_plan_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr;
+	for(itr=indexs.begin();itr!=indexs.end();itr++){
+		if(plan_.plans(itr->second).mapid()==mapId){
+
+			map<uint32_t,vector<CfgMonster::Plan> >::iterator its = plans.find(plan_.plans(itr->second).index());
+			if(its == plans.end()){
+				vector<CfgMonster::Plan> tmp;
+				tmp.push_back(plan_.plans(itr->second));
+				plans.insert(make_pair(plan_.plans(itr->second).index(),tmp));
+			}else{
+				its->second.push_back(plan_.plans(itr->second));
+			}
+		}
+	}
+	return true;
+}
+
+
 SkillCfgWrap::SkillCfgWrap() :
-		cfg_(ConfigManager::Instance()->skill_cfg_.m_config), mon_cfg_(ConfigManager::Instance()->skill_monster_cfg_.m_config) {
+		cfg_(ConfigManager::Instance()->skill_cfg_.m_config),
+		mon_cfg_(ConfigManager::Instance()->skill_monster_cfg_.m_config),
+		buff_(ConfigManager::Instance()->buff_cfg_.m_config) {
 }
 bool SkillCfgWrap::IsExist(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs1 = ConfigManager::Instance()->skill_cfg_Index;
@@ -74,6 +140,20 @@ bool SkillCfgWrap::IsSprint(const CfgSkill::Skill &cfg) {
 }
 bool SkillCfgWrap::IsAddBuff(const CfgSkill::Skill &cfg) {
 	return cfg.buff().size() > 0;
+}
+bool SkillCfgWrap::IsZhanLing(const CfgSkill::Skill &cfg) {
+	return cfg.type2() == 4;
+}
+bool SkillCfgWrap::IsRush(const CfgSkill::Skill &cfg) {
+	return cfg.type() == 10;
+}
+
+bool SkillCfgWrap::GetBuffId(const CfgSkill::Skill &cfg, uint32_t &id) {
+	size_t epos = cfg.buff().find("#");
+	if (epos == string::npos) {
+		return Convert::StringToUInt(id, cfg.buff());
+	}
+	return Convert::StringToUInt(id, cfg.buff().substr(0, epos));
 }
 const CfgSkill::Skill& SkillCfgWrap::Get(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->skill_cfg_Index;
@@ -109,10 +189,11 @@ const CfgSkill::Skill& SkillCfgWrap::GetById(uint32_t id) {
 			item.set_level(level);
 			item.set_unlock(baseWrap.calcLevelLimit(base, level));
 			item.set_careerlevel(baseWrap.calcCareerLevel(level));
+			item.set_hurtadd(baseWrap.calcHurtAdd(base, level));
 			if (IsSummon(item)) {
 				item.set_hurt(90000000 + level);
 			} else {
-				item.set_hurt(item.hurt() + baseWrap.calcHurtAdd(base, level) * 1000);
+				item.set_hurt(base.hurt());
 			}
 			item.set_cost(baseWrap.calcCost(base, level));
 			ConfigManager::Instance()->AddSkill(item);
@@ -147,6 +228,14 @@ const CfgSkill::Skill& SkillCfgWrap::GetFirst(uint32_t serial) {
 		throw std::runtime_error("level not exist");
 	}
 	return cfg_.skills(it->second);
+}
+const CfgSkill::Buff& SkillCfgWrap::GetBuff(uint32_t id) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->buff_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr == indexs.end()) {
+		throw std::runtime_error("buff not exist");
+	}
+	return buff_.buffs(itr->second);
 }
 
 SkillBaseCfgWrap::SkillBaseCfgWrap() :
@@ -217,11 +306,31 @@ const CfgMap::Point& SceneCfgWrap::GetBossPoint(int32_t mapid, int32_t plan) {
 HangCfgWrap::HangCfgWrap() :
 		cfg_(ConfigManager::Instance()->hang_cfg_.m_config), plan_(ConfigManager::Instance()->hang_plan_cfg_.m_config) {
 }
-const CfgHang::Hang& HangCfgWrap::Get(int32_t id) {
-	if (id == 0)
-		id = 1;
+const CfgHang::Hang& HangCfgWrap::Get(int32_t id){
+	id = id == 0 ? 1 : id;
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->hang_cfg_Index;
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr != indexs.end()) {
+		return cfg_.hangs(itr->second);
+	}
+	int32_t base_id = GetBaseId(id);
+	itr = indexs.find(base_id);
+	if (itr == indexs.end()) {
+		error_log("hang id not exists %u", base_id);
+		throw runtime_error("hang id not exists");
+	}
+
+	int tempYu = (id - 1) % 5;
+	int plan = (100021000 + floor(static_cast<float>(id - 2) / 5.0f) * 10000) + (tempYu == 0 ? 5 : tempYu);
+	CfgHang::Hang item;
+	item.CopyFrom(cfg_.hangs(itr->second));
+	item.set_id(id);
+	item.set_plan(plan);
+	item.set_power(5);
+	item.set_exp(20000 + id * 768);
+	item.set_coin((200 + id) * (3600 / 30));
+	ConfigManager::Instance()->AddHang(item);
+	itr = indexs.find(id);
 	if (itr == indexs.end()) {
 		error_log("hang id not exists %u", id);
 		throw runtime_error("hang id not exists");
@@ -229,16 +338,56 @@ const CfgHang::Hang& HangCfgWrap::Get(int32_t id) {
 	return cfg_.hangs(itr->second);
 }
 const CfgHang::Plan& HangCfgWrap::GetPlan(int32_t id) {
-	if (id == 0)
-		id = 1;
+	id = id == 0 ? 1 : id;
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->hang_plan_cfg_Index;
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr != indexs.end()) {
+		return plan_.plans(itr->second);
+	}
+	int base_id = GetBaseId(id);
+	itr = indexs.find(base_id);
 	if (itr == indexs.end()) {
-		error_log("plan id not exists %u", id);
-		throw runtime_error("plan id not exists");
+		error_log("hang plan id not exists %u", base_id);
+		throw runtime_error("hang plan id not exists");
+	}
+	CfgHang::Plan item;
+	item.CopyFrom(plan_.plans(itr->second));
+	item.set_id(id);
+	ConfigManager::Instance()->AddHangPlan(item);
+	itr = indexs.find(id);
+	if (itr == indexs.end()) {
+		error_log("hang plan id not exists %u", id);
+		throw runtime_error("hang plan id not exists");
 	}
 	return plan_.plans(itr->second);
 }
+int32_t HangCfgWrap::GetBaseId(int32_t id) {
+	return id - floor((id - 7) / 50) * 50;
+}
+int32_t HangCfgWrap::GetOnlineRewrad(int32_t id) {
+	map<uint32_t, uint32_t> &cfg = ConfigManager::Instance()->hang_online_rewrad_;
+	if (cfg.empty()) {
+		ConstCfgWrap wrap;
+		string v;
+		if (!wrap.GetStr("HangOnlineEquipReward", v)) {
+			return 0;
+		}
+		if (!ConstCfgWrap::ParseMap(v, cfg)) {
+			return 0;
+		}
+	}
+	if (cfg.empty()) {
+		return 0;
+	}
+	map<uint32_t, uint32_t>::iterator itr = cfg.begin();
+	for (; itr != cfg.end(); ++itr) {
+		if (id <= itr->first) {
+			return itr->second;
+		}
+	}
+	return cfg.rbegin()->second;
+}
+
 
 LevelCfgWrap::LevelCfgWrap(): cfg_(ConfigManager::Instance()->level_cfg_.m_config),
 		attr_(ConfigManager::Instance()->level_attr_cfg_.m_config) {
@@ -273,6 +422,17 @@ bool MissionCfgWrap::IsExist(uint32_t id) {
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
 	return itr != indexs.end();
 }
+
+const CfgMission::Mission& MissionCfgWrap::GetByShengId(uint32_t shengId) {
+	for(int i = 0; i < cfg_.missions_size(); ++i) {
+		if(shengId == cfg_.missions(i).shengid()) {
+			return cfg_.missions(i);
+		}
+	}
+	error_log("mission shengId not exists %u", shengId);
+	throw runtime_error("mission shengId not exists");
+}
+
 const CfgMission::Mission& MissionCfgWrap::Get(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->mission_cfg_Index;
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
@@ -284,8 +444,12 @@ const CfgMission::Mission& MissionCfgWrap::Get(uint32_t id) {
 }
 
 AdvanceCfgWrap::AdvanceCfgWrap(): cfg_(ConfigManager::Instance()->advance_cfg_.m_config),
-		dan_(ConfigManager::Instance()->advance_dan_cfg_.m_config) {
+		dan_(ConfigManager::Instance()->advance_dan_cfg_.m_config),
+		strengths_(ConfigManager::Instance()->advance_strength_cfg_.m_config),
+		awakens_(ConfigManager::Instance()->advance_awaken_cfg_.m_config),
+		targets_(ConfigManager::Instance()->advance_target_cfg_.m_config){
 }
+
 const CfgAdvance::Advance& AdvanceCfgWrap::Get(uint32_t type, uint32_t group, uint32_t star) {
 	string key;
 	String::Format(key, "%u_%u_%u", type, group, star);
@@ -335,6 +499,66 @@ const CfgAdvance::Dan& AdvanceCfgWrap::GetDanById(uint32_t type, uint32_t level,
 	error_log("advance dan not exists %s %u", key.c_str(), id);
 	throw runtime_error("advance dan not exists");
 }
+
+const CfgAdvance::EquipStrength& AdvanceCfgWrap::getStrength(uint32_t type, uint32_t part, uint32_t level) {
+	for(int i = 0; i < strengths_.strength_size(); ++i) {
+		if(type == strengths_.strength(i).type() && part == strengths_.strength(i).part() && level == strengths_.strength(i).level()) {
+			return strengths_.strength(i);
+		}
+	}
+	error_log("advance strength not exists type:%u part:%u level:%u", type, part, level);
+	throw runtime_error("advance strength not exists ");
+}
+
+const CfgAdvance::Awaken& AdvanceCfgWrap::getAwaken(uint32_t advance, uint32_t star, uint32_t type) {
+	for(int i = 0; i < awakens_.awaken_size(); ++i) {
+		if(advance == awakens_.awaken(i).advance() && star == awakens_.awaken(i).star() && type == awakens_.awaken(i).type()) {
+			return awakens_.awaken(i);
+		}
+	}
+	error_log("advance awaken not exists advance:%u star:%u type:%u", advance, star, type);
+	throw runtime_error("advance awaken not exists ");
+}
+
+bool AdvanceCfgWrap::isExistAdvanceType(uint32_t type) {
+	for(int i = 0; i < awakens_.awaken_size(); ++i) {
+		if( type == awakens_.awaken(i).type()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+const CfgAdvance::Target& AdvanceCfgWrap::getTarget(uint32_t advance, uint32_t type) {
+	for(int i = 0; i < targets_.target_size(); ++i) {
+		if(advance == targets_.target(i).advance() && type == targets_.target(i).type()) {
+			return targets_.target(i);
+		}
+	}
+	error_log("advance target not exists advance:%u type:%u", advance, type);
+	throw runtime_error("advance target not exists ");
+}
+
+uint32_t AdvanceCfgWrap::GetMaxAwakenLevel() {
+	int data = 0;
+	for(int i = 0; i < awakens_.awaken_size(); ++i) {
+		if(data < awakens_.awaken(i).advance()) {
+			data = awakens_.awaken(i).advance();
+		}
+	}
+	return data;
+}
+
+uint32_t AdvanceCfgWrap::GetMaxAwakenStar() {
+	int data = 0;
+	for(int i = 0; i < awakens_.awaken_size(); ++i) {
+		if(data < awakens_.awaken(i).star()) {
+			data = awakens_.awaken(i).star();
+		}
+	}
+	return data;
+}
+
 uint32_t AdvanceCfgWrap::GetDanCount(uint32_t type, uint32_t level) {
 	string key;
 	String::Format(key, "%u_%u", type, level);
@@ -372,6 +596,17 @@ bool ItemCfgWrap::IsTitle(uint32_t id) {
 	if(indexs.find(id) != indexs.end()){
 		const CfgItem::Item &itemCfg = GetItem(id);
 		if(itemCfg.itemtype()==11  && itemCfg.subtype() == 15){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ItemCfgWrap::IsFashion(uint32_t id) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->item_cfg_Index;
+	if(indexs.find(id) != indexs.end()){
+		const CfgItem::Item &itemCfg = GetItem(id);
+		if(itemCfg.itemtype()==16){
 			return true;
 		}
 	}
@@ -448,11 +683,11 @@ const CfgTreasure::Treasure& TreasureCfgWrap::GetById(uint32_t id) {
 		uint32_t star = ((id - 100000) % 550)%11 - 1;
 
 		CfgTreasure::Treasure cfg;
-		//获取一阶 0 星配置
+		//鑾峰彇涓�闃� 0 鏄熼厤缃�
 		uint32_t id_0 = GetIdByType(type, 1, 0);
 		uint32_t id_1 = GetIdByType(type, 1, 1);
 		const CfgTreasure::Treasure& cfg_0 = GetById(id_0);
-		//获取一阶 1 星配置
+		//鑾峰彇涓�闃� 1 鏄熼厤缃�
 		const CfgTreasure::Treasure& cfg_1 = GetById(id_1);
 
 		cfg.CopyFrom(cfg_1);
@@ -531,7 +766,8 @@ const CfgItem::Drop& ItemCfgWrap::GetDrop(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->drop_cfg_Index;
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
 	if (itr == indexs.end()) {
-		throw std::runtime_error("attr id not exists");
+		error_log("drop id not exists %u", id);
+		throw std::runtime_error("drop id not exists");
 	}
 	return drop_.drops(itr->second);
 }
@@ -554,7 +790,7 @@ PurifyCfgWrap::PurifyCfgWrap(): cfg_(ConfigManager::Instance()->purify_cfg_.m_co
 }
 const CfgPurify::Purify& PurifyCfgWrap::Get(uint32_t level) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->purify_cfg_Index;
-	// 每10 级是取一个配置   比如 23级 取 21级
+	// 姣�10 绾ф槸鍙栦竴涓厤缃�   姣斿 23绾� 鍙� 21绾�
 	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(level);
 	if (itr == indexs.end()) {
 		error_log("purify indexId not exists %u", level);
@@ -562,29 +798,6 @@ const CfgPurify::Purify& PurifyCfgWrap::Get(uint32_t level) {
 	}
 	return cfg_.purifys(itr->second);
 }
-
-TitleCfgWrap::TitleCfgWrap(): cfg_(ConfigManager::Instance()->title_cfg_.m_config){
-}
-const CfgTitle::Title& TitleCfgWrap::Get(uint32_t id) {
-	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->title_cfg_Index;
-	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
-	if (itr == indexs.end()) {
-		error_log("title id not exists %u", id);
-		throw runtime_error("title id not exists");
-	}
-	return cfg_.titles(itr->second);
-}
-
-bool TitleCfgWrap::isTitleExist(uint32_t id) {
-	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->title_cfg_Index;
-	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
-	if (itr == indexs.end()) {
-		return false;
-	} else {
-		return true;
-	}
-}
-
 
 const CfgPurify::Purify& PurifyCfgWrap::GetByLevel(uint32_t level) {
 	if(isExist(level)) {
@@ -616,7 +829,79 @@ bool PurifyCfgWrap::isExist(uint32_t level) {
 	}
 }
 
-CardCfgWrap::CardCfgWrap(): cards_(ConfigManager::Instance()->card_cfg_.m_config) {
+TitleCfgWrap::TitleCfgWrap(): cfg_(ConfigManager::Instance()->title_cfg_.m_config){
+}
+const CfgTitle::Title& TitleCfgWrap::Get(uint32_t id) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->title_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr == indexs.end()) {
+		error_log("title id not exists %u", id);
+		throw runtime_error("title id not exists");
+	}
+	return cfg_.title(itr->second);
+}
+
+bool TitleCfgWrap::isTitleExist(uint32_t id) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->title_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr == indexs.end()) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+FashionCfgWrap::FashionCfgWrap(): cfg_(ConfigManager::Instance()->fashion_cfg_.m_config){
+}
+const CfgFashion::Fashion& FashionCfgWrap::GetFashionByIdAndLevel(uint32_t id,uint32_t level){
+	uint32_t key =CFG_MAKE_KEY(level,id);
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->fashion_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(key);
+	if (itr == indexs.end()) {
+		error_log("magic level = %u color = %u not exists %u", level,id,indexs.size());
+		throw std::runtime_error("fashion  id and level is not exists");
+	}
+	return cfg_.fashions(itr->second);
+}
+
+FashionSuitCfgWrap::FashionSuitCfgWrap(): cfg_(ConfigManager::Instance()->fashion_suit_cfg_.m_config){
+}
+const CfgFashionSuit::FashionSuit& FashionSuitCfgWrap::GetFashionSuitByIdAndCount(uint32_t id,uint32_t count){
+	uint32_t key =id * 1000 + count;
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->fashion_suit_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(key);
+	if (itr == indexs.end()) {
+		error_log("magic count = %u id = %u not exists %u", count,id,indexs.size());
+		throw std::runtime_error("fashionSuit  id and count is not exists");
+	}
+	return cfg_.fashion_suits(itr->second);
+}
+
+OnlineRewardCfgWrap::OnlineRewardCfgWrap():cfg_(ConfigManager::Instance()->online_reward_cfg_.m_config){
+}
+const CfgOnlineReward::OnlineReward& OnlineRewardCfgWrap::Get(uint32_t id) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->online_reward_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr == indexs.end()) {
+		error_log("online_reward id not exists %u", id);
+		throw runtime_error("online_reward id not exists");
+	}
+	return cfg_.onlinerewards(itr->second);
+}
+
+bool OnlineRewardCfgWrap::isOnlineRewardExist(uint32_t id) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->online_reward_cfg_Index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(id);
+	if (itr == indexs.end()) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+
+CardCfgWrap::CardCfgWrap(): cards_(ConfigManager::Instance()->card_cfg_.m_config),
+		stars_(ConfigManager::Instance()->card_stars_cfg_.m_config){
 }
 const CfgCard::Card& CardCfgWrap::GetCard(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->card_attr_cfg_Index;
@@ -626,6 +911,16 @@ const CfgCard::Card& CardCfgWrap::GetCard(uint32_t id) {
 		throw std::runtime_error("card attr id not exists");
 	}
 	return cards_.cards(itr->second);
+}
+
+const CfgCard::Star& CardCfgWrap::GetStar(uint32_t color, uint32_t level) {
+	for(int index = 0; index < stars_.star_size(); ++index) {
+		if(color == stars_.star(index).color() && level == stars_.star(index).level()) {
+			return stars_.star(index);
+		}
+	}
+	error_log("get star error %d %d", color, level);
+	throw std::runtime_error("get star error");
 }
 
 CardGroupWrap::CardGroupWrap(): cardGroups_(ConfigManager::Instance()->card_group_cfg_.m_config) {
@@ -641,7 +936,7 @@ const CfgCard::CardGroup& CardGroupWrap::GetCardGroup(uint32_t key) {
 }
 
 
-CardSuitWrap::CardSuitWrap(): suits_(ConfigManager::Instance()->card_suit_cfg_.m_config) {
+CardSuitWrap::CardSuitWrap(): suits_(ConfigManager::Instance()->card_suit_cfg_.m_config){
 }
 const CfgCard::Suit& CardSuitWrap::GetSuit(uint32_t id) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->card_suit_cfg_Index;
@@ -753,17 +1048,85 @@ const CfgCopy::Copy& CopyWrap::GetCopy(uint32_t copyId) {
 	return copys_.copys(itr->second);
 }
 
+
+bool CopyWrap::GetCopyListByType(uint32_t type,vector<uint32_t> & copyIds){
+	copyIds.clear();
+	if(type==130){
+		copyIds.push_back(901);
+		return true;
+	}
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->copy_Index;
+	map<uint32_t, uint32_t>::const_iterator itr;
+	for(itr=indexs.begin();itr!=indexs.end();itr++){
+		if(copys_.copys(itr->second).type()==type){
+			copyIds.push_back(copys_.copys(itr->second).copyid());
+		}
+	}
+	if(copyIds.empty()){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+
+const CfgCopy::Copy& CopyWrap::GetCopyByMapId(uint32_t mapId) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->copy_Index;
+	map<uint32_t, uint32_t>::const_iterator itr;
+	for(itr=indexs.begin();itr!=indexs.end();itr++){
+		if(copys_.copys(itr->second).mapid()==mapId){
+			return copys_.copys(itr->second);
+		}
+	}
+	error_log("mapId  = %u not exists %u", mapId, indexs.size());
+	throw std::runtime_error("copy id not exists");
+}
+
+
+bool CopyWrap::MapIsCopy(uint32_t mapId) {
+	//浼欎即宀�
+	if(mapId==200501||mapId==200502||mapId==200503||mapId==200504||mapId==200505){
+		return true;
+	}
+	//绗︽枃濉�
+	if(mapId==200401||mapId==200401||mapId==200401||mapId==200401||mapId==200401){
+		return true;
+	}
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->copy_Index;
+	map<uint32_t, uint32_t>::const_iterator itr;
+	for(itr=indexs.begin();itr!=indexs.end();itr++){
+		if(copys_.copys(itr->second).mapid()==mapId){
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
 BossWrap::BossWrap(): bosses_(ConfigManager::Instance()->boss_cfg_.m_config) {
 }
-const CfgBoss::Boss& BossWrap::GetBoss(uint32_t bossType) {
+const CfgBoss::Boss& BossWrap::GetBoss(uint32_t copyId) {
 	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->boss_Index;
-	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(bossType);
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(copyId);
 	if (itr == indexs.end()) {
-		error_log("bossType  = %u not exists %u", bossType, indexs.size());
+		error_log("copyId  = %u not exists %u", copyId, indexs.size());
 		throw std::runtime_error("boss id not exists");
 	}
 	return bosses_.boss(itr->second);
 }
+
+const CfgBoss::Boss& BossWrap::GetBossById(uint32_t bossId) {
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->boss_Index;
+	for(map<uint32_t, uint32_t>::const_iterator itr =indexs.begin();itr!=indexs.end();itr++){
+		if(bosses_.boss(itr->second).bossid()==bossId){
+			return bosses_.boss(itr->second);
+		}
+	}
+	error_log("bossId  = %u not exists %u", bossId, indexs.size());
+	throw std::runtime_error("boss id not exists");
+}
+
 
 ActivityCfgWrap::ActivityCfgWrap(): daliyAct_(ConfigManager::Instance()->daily_act_cfg_.m_config),
 	actives_(ConfigManager::Instance()->actives_cfg_.m_config){
@@ -821,4 +1184,254 @@ const CfgActivity::Active& ActivityCfgWrap::GetActive(uint32_t active, uint32_t 
 	}
 	uint32_t index = ConfigManager::Instance()->active_index[level][active];
 	return actives_.active(index);
+}
+
+ZhuLingCfgWrap::ZhuLingCfgWrap(): zhuLings_(ConfigManager::Instance()->zhuLing_cfg.m_config),
+		spets_(ConfigManager::Instance()->spet_cfg.m_config){
+}
+
+uint32_t ZhuLingCfgWrap::GetMaxZhuLinglevel() {
+	uint32_t max_level = 0;
+	for(int i = 0; i < zhuLings_.zhuling_size(); ++i) {
+		max_level = (max_level > zhuLings_.zhuling(i).level()) ? max_level : zhuLings_.zhuling(i).level();
+	}
+	return max_level;
+}
+
+uint32_t ZhuLingCfgWrap::GetMaxZhuLingAdvance() {
+	uint32_t max_advance = 0;
+	for(int i = 0; i < zhuLings_.zhuling_size(); ++i) {
+		max_advance = (max_advance > zhuLings_.zhuling(i).level()) ? max_advance : zhuLings_.zhuling(i).level();
+	}
+	return max_advance;
+}
+
+const CfgZhuLing::zhuLing& ZhuLingCfgWrap::GetZhuLing(uint32_t advance, uint32_t level) {
+	map<uint32_t, map<uint32_t, uint32_t> >::iterator it = ConfigManager::Instance()->zhuLing_index.find(advance);
+	if(it != ConfigManager::Instance()->zhuLing_index.end()) {
+		map<uint32_t, uint32_t>::iterator item = it->second.find(level);
+		if(item != it->second.end()) {
+			return zhuLings_.zhuling(item->second);
+		}
+	}
+	error_log("zhuLing advance:%u level:%u is not exist", advance, level);
+	throw std::runtime_error("zhuLing advance&&level is not exist");
+}
+
+const CfgZhuLing::Spet& ZhuLingCfgWrap::GetSpet(uint32_t advance, uint32_t part) {
+	map<uint32_t, map<uint32_t, uint32_t> >::iterator it = ConfigManager::Instance()->spet_index.find(advance);
+	if(it != ConfigManager::Instance()->spet_index.end()) {
+		map<uint32_t, uint32_t>::iterator item = it->second.find(part);
+		if(item != it->second.end()) {
+			return spets_.spets(item->second);
+		}
+	}
+	error_log("spet advance:%u && part:%d is not exist", advance, part);
+	throw std::runtime_error("spet id is not exist");
+}
+
+ZhanLingCfgWrap::ZhanLingCfgWrap(): cfg_(ConfigManager::Instance()->zhanling_base_cfg_.m_config) {
+}
+const CfgZhanLing::Base ZhanLingCfgWrap::GetBase(uint32_t lv) {
+	for (int i = 0; i < cfg_.bases_size(); ++i) {
+		if (lv == cfg_.bases(i).level()) {
+			return cfg_.bases(i);
+		}
+	}
+	throw std::runtime_error("zhan ling level not exists");
+}
+
+
+SignRewardsCfgWrap::SignRewardsCfgWrap() :
+		signRwards_(ConfigManager::Instance()->sign_rewards_cfg_.m_config) {
+}
+
+const CfgSignRewards::signDaliyReward& SignRewardsCfgWrap::GetRewardsByIndex(
+		uint32_t index) {
+	if (index >= signRwards_.signdaliyrewards_size()) {
+		error_log("signrewards index:%u is not exist", index);
+		throw std::runtime_error("signrewards cfg index is not eixst");
+	}
+
+	return signRwards_.signdaliyrewards(index);
+}
+
+LevelRewardsCfgWrap::LevelRewardsCfgWrap() :
+		levelRwards_(ConfigManager::Instance()->level_rewards_cfg_.m_config) {
+}
+
+const CfgSignRewards::levelTargetRewards& LevelRewardsCfgWrap::GetRewardByLevel(
+		uint32_t careerLevel, uint32_t level) {
+	if (ConfigManager::Instance()->level_reward_index.count(careerLevel) == 0
+			|| ConfigManager::Instance()->level_reward_index[careerLevel].count(
+					level) == 0) {
+		error_log("level reward  careerlevel:%u or level: %u is not exist",
+				careerLevel, level);
+		throw std::runtime_error("level reward is not exist");
+	}
+
+	uint32_t index =
+			ConfigManager::Instance()->level_reward_index[careerLevel][level];
+
+	return levelRwards_.levelreward(index);
+}
+
+TrumpCfgWrap::TrumpCfgWrap() :
+		trumps_(ConfigManager::Instance()->trump_info_cfg_.m_config) {
+
+}
+
+
+const CfgTrump::TrumpInfo& TrumpCfgWrap::GetTrumpsByLevel(uint32_t level) {
+	if (ConfigManager::Instance()->trump_index.count(level) == 0) {
+		error_log("trump cfg level=%u not exist", level);
+		throw std::runtime_error("trump cfg level not exist");
+	}
+
+	uint32_t index = ConfigManager::Instance()->trump_index[level];
+
+	return trumps_.trump(index);
+}
+
+
+
+TrumpSkillCfgWrap::TrumpSkillCfgWrap() :
+		trump_skill_(ConfigManager::Instance()->trump_skill_cfg_.m_config) {
+}
+
+const CfgTrump::TrumpSkillInfo& TrumpSkillCfgWrap::GetTrumpsByStage(uint32_t stage)
+{
+	if (ConfigManager::Instance()->trump_skill_index.count(stage) == 0) {
+		error_log("trump skill cfg stage=%u not exist", stage);
+		throw std::runtime_error("trump skill cfg level not exist");
+	}
+
+	uint32_t index = ConfigManager::Instance()->trump_index[stage];
+
+	return trump_skill_.trump_skill(index);
+}
+
+ShengMissionCfgWrap::ShengMissionCfgWrap(): shengMissions_(ConfigManager::Instance()->sheng_missions_cfg_.m_config) {
+}
+
+bool ShengMissionCfgWrap::isExistMission(uint32_t id) {
+	return ConfigManager::Instance()->sheng_missions_index.count(id);
+}
+
+uint32_t ShengMissionCfgWrap::getLimitReinCarnLevel() {
+	uint32_t miniLevel = shengMissions_.sheng_mission(0).reincarnlevel();
+	for(int i = 0; i < shengMissions_.sheng_mission_size(); ++i) {
+		if(miniLevel > shengMissions_.sheng_mission(i).reincarnlevel()) {
+			miniLevel = shengMissions_.sheng_mission(i).reincarnlevel();
+		}
+	}
+	return miniLevel;
+}
+
+const CfgReinCarnSheng::ShengMission& ShengMissionCfgWrap::getShengMission(int32_t part, uint32_t reinCarnLevel) {
+	uint32_t miniLevel = shengMissions_.sheng_mission(0).reincarnlevel();
+	for(int i = 0; i < shengMissions_.sheng_mission_size(); ++i) {
+		if(part == shengMissions_.sheng_mission(i).part() &&
+				reinCarnLevel == shengMissions_.sheng_mission(i).reincarnlevel()) {
+			return shengMissions_.sheng_mission(i);
+		}
+	}
+	error_log("shengMission:part:%d, reinCarnLevel:%d not exist", part, reinCarnLevel);
+	throw std::runtime_error("shengMission is not exist");
+}
+
+const CfgReinCarnSheng::ShengMission& ShengMissionCfgWrap::getShengMission(uint32_t id) {
+	map<uint32_t, uint32_t> index = ConfigManager::Instance()->sheng_missions_index;
+	map<uint32_t, uint32_t>::iterator it = index.find(id);
+	if(it != index.end()) {
+		return shengMissions_.sheng_mission(it->second);
+	}
+	error_log("shengMission id is not exist");
+	throw std::runtime_error("shengMission id is not exist");
+}
+
+
+PartnerIslandWrap::PartnerIslandWrap(): partnerIslands(ConfigManager::Instance()->partnerIsland_cfg_.m_config) {
+}
+const CfgPartnerIsland::PartnerIsland& PartnerIslandWrap::GetPartnerIsland(uint32_t type,uint32_t layer) {
+	uint32_t key =CFG_MAKE_KEY(type,layer);
+	const map<uint32_t, uint32_t> &indexs = ConfigManager::Instance()->partnerIsland_index;
+	map<uint32_t, uint32_t>::const_iterator itr = indexs.find(key);
+	if (itr == indexs.end()) {
+		error_log("PartnerIslandWrap type = %u layer = %unot exists %u", type,layer,indexs.size());
+		throw std::runtime_error("PartnerIsland not exists");
+	}
+	return partnerIslands.partner_islands(itr->second);
+}
+
+ShopCfgWrap::ShopCfgWrap(): shop_cell_(ConfigManager::Instance()->shop_cell_cfg_.m_config){
+}
+
+const CfgShop::ShopCell& ShopCfgWrap::get(uint32_t id) {
+	map<uint32_t, uint32_t> &index = ConfigManager::Instance()->shop_cell_cfg_index;
+	map<uint32_t, uint32_t>::iterator it = index.find(id);
+	if(it != index.end()) {
+		return shop_cell_.shop_cell(it->second);
+	}
+	error_log("shop cell:%u not exist", id);
+	throw std::runtime_error("shop cell not exist");
+}
+
+MoneyCfgWrap::MoneyCfgWrap(): item_money_(ConfigManager::Instance()->item_money_cfg_.m_config){
+}
+
+bool MoneyCfgWrap::isMoneyType(uint32_t id) {
+	return ConfigManager::Instance()->item_money_cfg_index.count(id);
+}
+
+const CfgMoney::ItemMoney& MoneyCfgWrap::get(uint32_t id) {
+	map<uint32_t, uint32_t> &index = ConfigManager::Instance()->item_money_cfg_index;
+	map<uint32_t, uint32_t>::iterator it = index.find(id);
+	if(it != index.end()) {
+		return item_money_.item_money(it->second);
+	}
+	error_log("money item:%u not exist", id);
+	throw std::runtime_error("money item not exist");
+}
+
+ConstCfgWrap::ConstCfgWrap(): cfg_(ConfigManager::Instance()->const_cfg_.m_config) {
+}
+const CfgConst::Item& ConstCfgWrap::Get(const string &n) {
+	const map<string, uint32_t> &indexs = ConfigManager::Instance()->const_cfg_Index;
+	map<string, uint32_t>::const_iterator itr = indexs.find(n);
+	if (itr == indexs.end()) {
+		error_log("const id not exists %s", n.c_str());
+		throw std::runtime_error("const id not exists");
+	}
+	return cfg_.consts(itr->second);
+}
+bool ConstCfgWrap::GetStr(const string &n, string &v) {
+	try {
+		const CfgConst::Item &cfg = Get(n);
+		v = cfg.s();
+		return true;
+	} catch (...) {
+		return false;
+	}
+}
+bool ConstCfgWrap::ParseMap(const string &v, map<uint32_t, uint32_t> &m) {
+	vector<string> items;
+	CBasic::StringSplitTrim(v, "&", items);
+	vector<string>::iterator itr = items.begin();
+	for (; itr != items.end(); ++itr) {
+		vector<string> node;
+		CBasic::StringSplitTrim(*itr, "#", node);
+		if (node.size() != 2) {
+			continue;
+		}
+		uint32_t k = 0, v= 0;
+		if (!Convert::StringToUInt(k, node[0])) {
+			continue;
+		}
+		if (!Convert::StringToUInt(v, node[1])) {
+			continue;
+		}
+		m[k] = v;
+	}
+	return true;
 }

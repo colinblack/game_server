@@ -1,0 +1,13 @@
+package CfgFashionSuit;
+import "CfgCommon.proto";
+
+message FashionSuit {
+	required uint32 id = 1;
+	required uint32 count = 2;
+	required uint32 fashionType = 3;
+	repeated CfgCommon.Attribute attr = 4;
+	repeated uint32 needFashion = 5;
+}
+message FashionSuits{
+	repeated FashionSuit fashion_suits = 1;
+}

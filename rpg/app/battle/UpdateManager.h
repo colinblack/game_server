@@ -900,12 +900,12 @@ private:
 	map<uint32_t, msgs::SPlayerActiveSuitCollect> m_active_suit;
 	map<uint32_t, msgs::SPlayerUnlockSuitCollect> m_role_unlock;
 	map<uint32_t, msgs::SPlayerDressSuitCollect> m_role_dress;
-	map<uint32_t, msgs::SUpdateSkill> m_role_skills;
+	map<uint32_t, msgs::SUpdateSkill> m_skills;
 	map<uint32_t, msgs::SEntityUpdateEntityShows> m_role_shows;
-	map<uint32_t, msgs::SPlayerBagItemOperList> m_oper_list;
 	map<uint32_t, msgs::SIntIntMap> m_role_title;
 	map<uint32_t, msgs::SPlayerTitle> m_player_title;
-
+	map<uint32_t, msgs::SAdvanceAwakenUpdate> m_advance_awaken;
+	map<uint32_t, msgs::SIntIntPair> m_advance_target;
 
 public:
 	bool SetCode(int16_t code);
@@ -920,11 +920,13 @@ public:
 	bool ActiveSuit(uint32_t uid, uint32_t roleId, uint32_t suitId, vector<uint32_t> & slots);
 	bool roleUnlock(uint32_t uid, uint32_t roleId, uint32_t suitId);
 	bool roleDress(uint32_t uid, uint32_t roleId, uint32_t suitId);
-	bool roleSkills(uint32_t uid, const CfgSuit::Suit& suit, uint32_t oper, uint32_t roleId);
+	bool skills(uint32_t uid, uint32_t oper, vector<DataSkill> &skills);
 	bool roleShows(uint32_t uid, uint32_t modeId, uint32_t isDres, uint32_t showId);
-	bool roleTitle(uint32_t uid, uint32_t roleId, uint32_t titleId);
+	bool advanceAwaken(uint32_t uid, const DataAdvance &data);
+	bool advanceTarget(uint32_t uid, const DataAdvanceTarget &data);
 	bool S2CPlayerTitle(uint32_t uid, uint32_t titleId);
 	bool Send(uint32_t uid);
+	bool UpdateBagNow(uint32_t uid);
 };
 
 #endif /* _UPDATE_MANAGER_H_ */

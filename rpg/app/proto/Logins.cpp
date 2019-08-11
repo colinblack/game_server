@@ -540,6 +540,92 @@ return true;}
 void SPurifyResp::clear(){
 equip_.clear();
 }
+bool CEmbedGemReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,equipType_);
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;int64_t v;PACKET_DECODE(Int32,k);PACKET_DECODE(Int64,v);gemUidSlot_[k] = v;}}
+return true;}
+bool CEmbedGemReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,equipType_);
+PACKET_ENCODE(UVar32,gemUidSlot_.size());
+for(map<int32_t, int64_t>::const_iterator it=gemUidSlot_.begin();it!=gemUidSlot_.end();++it){PACKET_ENCODE(Int32,it->first);PACKET_ENCODE(Int64,it->second);}
+return true;}
+void CEmbedGemReq::clear(){
+roleId_ = 0;
+equipType_ = 0;
+gemUidSlot_.clear();
+}
+bool SEmbedGemResp::decode(CBufferReader &reader) {
+if(!tPlayerEquip_.decode(reader)){return false;}
+return true;}
+bool SEmbedGemResp::encode(CBufferWriter &writer) const {
+if(!tPlayerEquip_.encode(writer)){return false;}
+return true;}
+void SEmbedGemResp::clear(){
+tPlayerEquip_.clear();
+}
+bool CRemoveGemReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,equipType_);
+PACKET_DECODE(Int32,gemSlot_);
+return true;}
+bool CRemoveGemReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,equipType_);
+PACKET_ENCODE(Int32,gemSlot_);
+return true;}
+void CRemoveGemReq::clear(){
+roleId_ = 0;
+equipType_ = 0;
+gemSlot_ = 0;
+}
+bool SRemoveGemResp::decode(CBufferReader &reader) {
+if(!tPlayerEquip_.decode(reader)){return false;}
+return true;}
+bool SRemoveGemResp::encode(CBufferWriter &writer) const {
+if(!tPlayerEquip_.encode(writer)){return false;}
+return true;}
+void SRemoveGemResp::clear(){
+tPlayerEquip_.clear();
+}
+bool CctivateGemTargetReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,targetId_);
+return true;}
+bool CctivateGemTargetReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,targetId_);
+return true;}
+void CctivateGemTargetReq::clear(){
+roleId_ = 0;
+targetId_ = 0;
+}
+bool CUpgradeGemReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,equipType_);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int32_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int32,item);gemSlot_.push_back(item);}}
+return true;}
+bool CUpgradeGemReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,equipType_);
+PACKET_ENCODE(UVar32,gemSlot_.size());
+for(vector<int32_t>::const_iterator vit=gemSlot_.begin();vit!=gemSlot_.end();++vit){PACKET_ENCODE(Int32,*vit);}
+return true;}
+void CUpgradeGemReq::clear(){
+roleId_ = 0;
+equipType_ = 0;
+gemSlot_.clear();
+}
+bool SUpgradeGemResp::decode(CBufferReader &reader) {
+if(!tPlayerEquip_.decode(reader)){return false;}
+return true;}
+bool SUpgradeGemResp::encode(CBufferWriter &writer) const {
+if(!tPlayerEquip_.encode(writer)){return false;}
+return true;}
+void SUpgradeGemResp::clear(){
+tPlayerEquip_.clear();
+}
 bool STitleReq::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,roleId_);
 PACKET_DECODE(Int32,titleId_);
@@ -551,6 +637,118 @@ return true;}
 void STitleReq::clear(){
 roleId_ = 0;
 titleId_ = 0;
+}
+bool COnlineRewardReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,onlineTime_);
+return true;}
+bool COnlineRewardReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,onlineTime_);
+return true;}
+void COnlineRewardReq::clear(){
+onlineTime_ = 0;
+}
+bool CActiveFashionReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,fashionId_);
+return true;}
+bool CActiveFashionReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,fashionId_);
+return true;}
+void CActiveFashionReq::clear(){
+roleId_ = 0;
+type_ = 0;
+fashionId_ = 0;
+}
+bool CAdvanceFashionReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,fashionId_);
+return true;}
+bool CAdvanceFashionReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,fashionId_);
+return true;}
+void CAdvanceFashionReq::clear(){
+roleId_ = 0;
+type_ = 0;
+fashionId_ = 0;
+}
+bool CPutOnFashionReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,fashionId_);
+return true;}
+bool CPutOnFashionReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,fashionId_);
+return true;}
+void CPutOnFashionReq::clear(){
+roleId_ = 0;
+type_ = 0;
+fashionId_ = 0;
+}
+bool SPutOnFashionResp::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,fashionId_);
+return true;}
+bool SPutOnFashionResp::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,fashionId_);
+return true;}
+void SPutOnFashionResp::clear(){
+fashionId_ = 0;
+}
+bool CGetOffFashionReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,type_);
+PACKET_DECODE(Int32,fashionId_);
+return true;}
+bool CGetOffFashionReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,type_);
+PACKET_ENCODE(Int32,fashionId_);
+return true;}
+void CGetOffFashionReq::clear(){
+roleId_ = 0;
+type_ = 0;
+fashionId_ = 0;
+}
+bool SGetOffFashionResp::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,fashionId_);
+return true;}
+bool SGetOffFashionResp::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,fashionId_);
+return true;}
+void SGetOffFashionResp::clear(){
+fashionId_ = 0;
+}
+bool CActiveFashionSuitReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,suitId_);
+PACKET_DECODE(Int32,num_);
+return true;}
+bool CActiveFashionSuitReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,suitId_);
+PACKET_ENCODE(Int32,num_);
+return true;}
+void CActiveFashionSuitReq::clear(){
+roleId_ = 0;
+suitId_ = 0;
+num_ = 0;
+}
+bool SActiveFashionSuitResp::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int32_t k;msgs::SInts v;PACKET_DECODE(Int32,k);if(!v.decode(reader)){return false;}suits_[k] = v;}}
+return true;}
+bool SActiveFashionSuitResp::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,suits_.size());
+for(map<int32_t, msgs::SInts>::const_iterator it=suits_.begin();it!=suits_.end();++it){PACKET_ENCODE(Int32,it->first);if(!it->second.encode(writer)){return false;}}
+return true;}
+void SActiveFashionSuitResp::clear(){
+suits_.clear();
 }
 bool SActiveSuitReq::decode(CBufferReader &reader) {
 PACKET_DECODE(Int32,roleId_);
@@ -687,5 +885,339 @@ PACKET_ENCODE(Int32,id_);
 return true;}
 void SGetActivityRewardReq::clear(){
 id_ = 0;
+}
+bool SzhulingUpLevelReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,equipType_);
+PACKET_DECODE(Bool,isAuto_);
+return true;}
+bool SzhulingUpLevelReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,equipType_);
+PACKET_ENCODE(Bool,isAuto_);
+return true;}
+void SzhulingUpLevelReq::clear(){
+roleId_ = 0;
+equipType_ = 0;
+isAuto_ = 0;
+}
+bool SzhulingUpLevelResp::decode(CBufferReader &reader) {
+if(!plyerEquip.decode(reader)){return false;}
+return true;}
+bool SzhulingUpLevelResp::encode(CBufferWriter &writer) const {
+if(!plyerEquip.encode(writer)){return false;}
+return true;}
+void SzhulingUpLevelResp::clear(){
+plyerEquip.clear();
+}
+bool SzhulingUpAdvanceReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+PACKET_DECODE(Int32,equipType_);
+return true;}
+bool SzhulingUpAdvanceReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+PACKET_ENCODE(Int32,equipType_);
+return true;}
+void SzhulingUpAdvanceReq::clear(){
+roleId_ = 0;
+equipType_ = 0;
+}
+bool SzhulingUpAdvanceResp::decode(CBufferReader &reader) {
+if(!PlayerEquip.decode(reader)){return false;}
+return true;}
+bool SzhulingUpAdvanceResp::encode(CBufferWriter &writer) const {
+if(!PlayerEquip.encode(writer)){return false;}
+return true;}
+void SzhulingUpAdvanceResp::clear(){
+PlayerEquip.clear();
+}
+bool SopenZhulingReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId_);
+return true;}
+bool SopenZhulingReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId_);
+return true;}
+void SopenZhulingReq::clear(){
+roleId_ = 0;
+}
+bool SSkillCleanNuQi::decode(CBufferReader &reader) {
+return true;}
+bool SSkillCleanNuQi::encode(CBufferWriter &writer) const {
+return true;}
+void SSkillCleanNuQi::clear(){
+}
+bool SBuyReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,id);
+PACKET_DECODE(Int32,itemId);
+PACKET_DECODE(Int32,realPrice);
+PACKET_DECODE(Int32,num);
+return true;}
+bool SBuyReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,id);
+PACKET_ENCODE(Int32,itemId);
+PACKET_ENCODE(Int32,realPrice);
+PACKET_ENCODE(Int32,num);
+return true;}
+void SBuyReq::clear(){
+id = 0;
+itemId = 0;
+realPrice = 0;
+num = 0;
+}
+bool SDevilAngelequipReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,uid);
+PACKET_DECODE(Int32,roleId);
+return true;}
+bool SDevilAngelequipReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,uid);
+PACKET_ENCODE(Int32,roleId);
+return true;}
+void SDevilAngelequipReq::clear(){
+uid = 0;
+roleId = 0;
+}
+bool SPlayerSignEveryDayReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,flag_);
+return true;}
+bool SPlayerSignEveryDayReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,flag_);
+return true;}
+void SPlayerSignEveryDayReq::clear(){
+flag_ = 0;
+}
+bool SGetSignEverydayRwardReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int16,day_);
+return true;}
+bool SGetSignEverydayRwardReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int16,day_);
+return true;}
+void SGetSignEverydayRwardReq::clear(){
+day_ = 0;
+}
+bool SGetLevelRwardReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,careerLevel);
+PACKET_DECODE(Int32,level);
+return true;}
+bool SGetLevelRwardReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,careerLevel);
+PACKET_ENCODE(Int32,level);
+return true;}
+void SGetLevelRwardReq::clear(){
+careerLevel = 0;
+level = 0;
+}
+bool STrumpActiveReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,subtype);
+PACKET_DECODE(Int32,id);
+return true;}
+bool STrumpActiveReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,subtype);
+PACKET_ENCODE(Int32,id);
+return true;}
+void STrumpActiveReq::clear(){
+subtype = 0;
+id = 0;
+}
+bool SCommitShengMissionReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,missionId);
+return true;}
+bool SCommitShengMissionReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,missionId);
+return true;}
+void SCommitShengMissionReq::clear(){
+missionId = 0;
+}
+bool SRequestShengMissionReq::decode(CBufferReader &reader) {
+return true;}
+bool SRequestShengMissionReq::encode(CBufferWriter &writer) const {
+return true;}
+void SRequestShengMissionReq::clear(){
+}
+bool STrumpUpgradeReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,count);
+return true;}
+bool STrumpUpgradeReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,count);
+return true;}
+void STrumpUpgradeReq::clear(){
+count = 0;
+}
+bool SActiveTrumpSkillReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,level);
+return true;}
+bool SActiveTrumpSkillReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,level);
+return true;}
+void SActiveTrumpSkillReq::clear(){
+level = 0;
+}
+bool STrumpRequestMissionReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,missionId);
+return true;}
+bool STrumpRequestMissionReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,missionId);
+return true;}
+void STrumpRequestMissionReq::clear(){
+missionId = 0;
+}
+bool SUnlockTrumpReq::decode(CBufferReader &reader) {
+return true;}
+bool SUnlockTrumpReq::encode(CBufferWriter &writer) const {
+return true;}
+void SUnlockTrumpReq::clear(){
+}
+bool SDressReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId);
+PACKET_DECODE(Int64,uid);
+return true;}
+bool SDressReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId);
+PACKET_ENCODE(Int64,uid);
+return true;}
+void SDressReq::clear(){
+roleId = 0;
+uid = 0;
+}
+bool SStrengthEquipReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId);
+PACKET_DECODE(Int32,type);
+PACKET_DECODE(Int64,uid);
+return true;}
+bool SStrengthEquipReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId);
+PACKET_ENCODE(Int32,type);
+PACKET_ENCODE(Int64,uid);
+return true;}
+void SStrengthEquipReq::clear(){
+roleId = 0;
+type = 0;
+uid = 0;
+}
+bool SOneKeyDressReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId);
+PACKET_DECODE(Int32,type);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);int64_t item;for(uint32_t vi=0;vi<vlen;++vi){PACKET_DECODE(Int64,item);uids.push_back(item);}}
+return true;}
+bool SOneKeyDressReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId);
+PACKET_ENCODE(Int32,type);
+PACKET_ENCODE(UVar32,uids.size());
+for(vector<int64_t>::const_iterator vit=uids.begin();vit!=uids.end();++vit){PACKET_ENCODE(Int64,*vit);}
+return true;}
+void SOneKeyDressReq::clear(){
+roleId = 0;
+type = 0;
+uids.clear();
+}
+bool SRecycleReq::decode(CBufferReader &reader) {
+{uint32_t len=0;PACKET_DECODE(UVar32,len);for(uint32_t i=0;i<len;++i){int64_t k;int32_t v;PACKET_DECODE(Int64,k);PACKET_DECODE(Int32,v);items[k] = v;}}
+return true;}
+bool SRecycleReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(UVar32,items.size());
+for(map<int64_t, int32_t>::const_iterator it=items.begin();it!=items.end();++it){PACKET_ENCODE(Int64,it->first);PACKET_ENCODE(Int32,it->second);}
+return true;}
+void SRecycleReq::clear(){
+items.clear();
+}
+bool SLearnSkillReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId);
+PACKET_DECODE(Int32,type);
+PACKET_DECODE(Int32,skillId);
+return true;}
+bool SLearnSkillReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId);
+PACKET_ENCODE(Int32,type);
+PACKET_ENCODE(Int32,skillId);
+return true;}
+void SLearnSkillReq::clear(){
+roleId = 0;
+type = 0;
+skillId = 0;
+}
+bool SAdvanceAwakenReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,roleId);
+PACKET_DECODE(Int32,type);
+return true;}
+bool SAdvanceAwakenReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,roleId);
+PACKET_ENCODE(Int32,type);
+return true;}
+void SAdvanceAwakenReq::clear(){
+roleId = 0;
+type = 0;
+autoBuy = 0;
+}
+bool SActiveAdvanceTargetReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,type);
+PACKET_DECODE(Int32,targetLevel);
+return true;}
+bool SActiveAdvanceTargetReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,type);
+PACKET_ENCODE(Int32,targetLevel);
+return true;}
+void SActiveAdvanceTargetReq::clear(){
+type = 0;
+targetLevel = 0;
+}
+bool SCardUpStarReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int64,uid);
+return true;}
+bool SCardUpStarReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int64,uid);
+return true;}
+void SCardUpStarReq::clear(){
+uid = 0;
+}
+bool SEquipZhanlingReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int64,uid);
+return true;}
+bool SEquipZhanlingReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int64,uid);
+return true;}
+void SEquipZhanlingReq::clear(){
+uid = 0;
+}
+bool SAdvanceZhanlingReq::decode(CBufferReader &reader) {
+return true;}
+bool SAdvanceZhanlingReq::encode(CBufferWriter &writer) const {
+return true;}
+void SAdvanceZhanlingReq::clear(){
+}
+bool SLearnZhanlingSkillReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,skillId);
+return true;}
+bool SLearnZhanlingSkillReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,skillId);
+return true;}
+void SLearnZhanlingSkillReq::clear(){
+skillId = 0;
+}
+bool SNearenmeyFightenemyReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,playerId);
+{uint32_t vlen=0;PACKET_DECODE(UVar32,vlen);Point item;for(uint32_t vi=0;vi<vlen;++vi){if(!item.decode(reader)){return false;}oldPoints.push_back(item);}}
+return true;}
+bool SNearenmeyFightenemyReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,playerId);
+PACKET_ENCODE(UVar32,oldPoints.size());
+for(vector<Point>::const_iterator vit=oldPoints.begin();vit!=oldPoints.end();++vit){if(!vit->encode(writer)){return false;}}
+return true;}
+void SNearenmeyFightenemyReq::clear(){
+playerId = 0;
+oldPoints.clear();
+}
+bool SNearenemyBacktoHangReq::decode(CBufferReader &reader) {
+return true;}
+bool SNearenemyBacktoHangReq::encode(CBufferWriter &writer) const {
+return true;}
+void SNearenemyBacktoHangReq::clear(){
+}
+bool SGetTopListReq::decode(CBufferReader &reader) {
+PACKET_DECODE(Int32,toplistType);
+return true;}
+bool SGetTopListReq::encode(CBufferWriter &writer) const {
+PACKET_ENCODE(Int32,toplistType);
+return true;}
+void SGetTopListReq::clear(){
+toplistType = 0;
 }
 }

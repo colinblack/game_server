@@ -117,6 +117,18 @@ bool EquipsManager::CalcProperty(const UserCache &cache, byte rid, PropertySets 
 			PropertyCfg::setProps(attr.attr(), 1.0, props);
 		}
 	}
+
+	map<uint32_t, map<uint32_t, DataDevilAngel> >::const_iterator it = cache.devilAngelDate.begin();
+	for(; it != cache.devilAngelDate.end(); ++it) {
+		map<uint32_t, DataDevilAngel>::const_iterator item = it->second.begin();
+		for(; item != it->second.end(); ++item) {
+			if(item->second.ms > Time::GetGlobalTime() * 1000) {
+				const CfgItem::Equip& cfg = ItemCfgWrap().GetEquip(item->second.id);
+				PropertyCfg::setProps(cfg.attr(), 1.0, props);
+			}
+		}
+	}
+
 	PropertyCfg::showProps(cache.uid_, rid, props, "equip");
 	return true;
 }
@@ -145,17 +157,31 @@ bool EquipsManager::RandomAttr(DataEquip &equip) {
 		error_log("random sub error uid=%u ud=%u ext=%s", equip.uid, equip.ud, equip.ext.c_str());
 		return false;
 	}
-	if (ids.empty()) {
-		return true;
+
+	if (!ids.empty()) {
+		if (!value.isMember("attr")) {
+			value["attrs"] = Json::Value(Json::arrayValue);
+		}
+		set<uint32_t>::iterator itr = ids.begin();
+		for (; itr != ids.end(); ++itr) {
+			value["attrs"].append(*itr);
+		}
 	}
 
-	if (!value.isMember("attr")) {
-		value["attrs"] = Json::Value(Json::arrayValue);
+	//暗器
+	if(IS_TRUMP(equip.id)){
+		value["cjl"] = 1;
 	}
-	set<uint32_t>::iterator itr = ids.begin();
-	for (; itr != ids.end(); ++itr) {
-		value["attrs"].append(*itr);
+
+	uint32_t skill = 0;
+	if(!RandomSkill(cfg, skill)) {
+		error_log("random skill error uid=%u ud=%u ext=%s", equip.uid, equip.ud, equip.ext.c_str());
+		return false;
 	}
+	if(skill > 0) {
+		value["sk"] = skill;
+	}
+
 	equip.ext = Json::ToString(value);
 
 	return true;
@@ -181,6 +207,21 @@ bool EquipsManager::RandomStar(const CfgItem::Equip &cfg, uint32_t &star) {
 			star = cfg.starrate(i).star();
 			break;
 		}
+	}
+	return true;
+}
+
+bool EquipsManager::RandomSkill(const CfgItem::Equip &cfg, uint32_t &skill) {
+	skill = 0;
+	if(!cfg.has_sundry()) {
+		return true;
+	}
+	if(30 != cfg.type() && 31 != cfg.type()) {
+		return true;
+	}
+	uint32_t rate = Math::GetRandomInt(10000);
+	if(rate < cfg.sundry().num()) {
+		skill = cfg.sundry().id();
 	}
 	return true;
 }
@@ -257,18 +298,23 @@ bool EquipsManager::RandomSub(const CfgItem::Equip &cfg, uint32_t star, set<uint
 	return true;
 }
 
-bool EquipsManager::OpenGift(uint32_t id, uint32_t num, uint32_t select, Award &data) {
+bool EquipsManager::OpenGift(const UserCache &cache, uint32_t id, uint32_t num, uint32_t select, Award &data) {
 	ItemCfgWrap cfg_wrap;
 	const CfgItem::Gift &cfg = cfg_wrap.GetGift(id);
+
+	::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > v;
+	GetGiftReward(cache, cfg, v);
+
 	if (cfg_wrap.IsFixedGift(cfg)) {
-		return data.Format(cfg.reward(), num);
+
+		return data.Format(v, num);
 	}
 	if (cfg_wrap.IsRandomGift(cfg)) {
-		return RandomGift(cfg, num, data);
+		return RandomGift(v, num, data);
 	}
 	if (cfg_wrap.IsFixedRandomGift(cfg)) {
 		data.Format(cfg.reward(), num);
-		RandomExtend(cfg, num, data);
+		RandomExtend(v, num, data);
 	}
 	if (cfg_wrap.IsSelectGift(cfg)) {
 		for (int i = 0; i < cfg.reward_size(); ++i) {
@@ -283,18 +329,18 @@ bool EquipsManager::OpenGift(uint32_t id, uint32_t num, uint32_t select, Award &
 	return true;
 }
 
-bool EquipsManager::RandomGift(const CfgItem::Gift &cfg, uint32_t num, Award &data) {
+bool EquipsManager::RandomGift(const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > &v, uint32_t num, Award &data) {
 	uint32_t rate_sum = 0;
 	vector<uint32_t> rates;
-	for (int i = 0; i < cfg.reward_size(); ++i) {
-		rate_sum += cfg.reward(i).rate();
+	for (int i = 0; i < v.size(); ++i) {
+		rate_sum += v.Get(i).rate();
 		rates.push_back(rate_sum);
 	}
 	while (num > 0) {
 		uint32_t rate = Math::GetRandomInt(rate_sum == 0 ? 1 : rate_sum);
 		for (size_t i = 0; i < rates.size(); ++i) {
 			if (rate < rates[i]) {
-				data.Add(cfg.reward(i).item(), cfg.reward(i).num());
+				data.Add( v.Get(i).item(),  v.Get(i).num());
 				break;
 			}
 		}
@@ -303,18 +349,18 @@ bool EquipsManager::RandomGift(const CfgItem::Gift &cfg, uint32_t num, Award &da
 	return true;
 }
 
-bool EquipsManager::RandomExtend(const CfgItem::Gift &cfg, uint32_t num, Award &data) {
+bool EquipsManager::RandomExtend(const ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > &v, uint32_t num, Award &data) {
 	uint32_t rate_sum = 0;
 	vector<uint32_t> rates;
-	for (int i = 0; i < cfg.extend_size(); ++i) {
-		rate_sum += cfg.extend(i).rate();
+	for (int i = 0; i < v.size(); ++i) {
+		rate_sum +=  v.Get(i).rate();
 		rates.push_back(rate_sum);
 	}
 	while (num > 0) {
 		uint32_t rate = Math::GetRandomInt(rate_sum == 0 ? 1 : rate_sum);
 		for (size_t i = 0; i < rates.size(); ++i) {
 			if (rate < rates[i]) {
-				data.Add(cfg.extend(i).item(), cfg.extend(i).num());
+				data.Add( v.Get(i).item(),  v.Get(i).num());
 				break;
 			}
 		}
@@ -335,19 +381,27 @@ bool EquipsManager::IsWear(const UserCache &cache, byte rid, byte type) {
 	return true;
 }
 
-const DataEquip& EquipsManager::GetEquipById(const UserCache &cache, uint32_t itemId) {
-	map<uint32_t, DataEquip>::const_iterator it = cache.equip_.begin();
-	for(; it != cache.equip_.end(); ++it) {
-		if(it->second.id == itemId) {
-			return it->second;
+bool EquipsManager::GetGiftReward(const UserCache& cache, const CfgItem::Gift& cfg, ::google::protobuf::RepeatedPtrField< ::CfgCommon::Reward > &v) {
+	map<uint32_t, uint32_t> carre_list;
+	map<byte, DataRole>::const_iterator it = cache.role_.begin();
+	for(; it != cache.role_.end(); ++it) {
+		carre_list.insert(make_pair(it->second.career, 1));
+	}
+	for(int i = 0; i < cfg.reward_size(); ++i) {
+		if(carre_list.count(cfg.reward(i).career())) {
+			const CfgCommon::Reward reward = cfg.reward(i);
+			::CfgCommon::Reward* data = v.Add();
+			data->CopyFrom(reward);
 		}
 	}
-	error_log("user has not own item id:%d ", itemId);
-	throw std::runtime_error("use not own this item");
+	return true;
 }
 
 int EquipsManager::Process(uint32_t uid, logins::SBagDecompose *req) {
 	UserCache &cache = CacheManager::Instance()->GetUser(uid);
+	if(!cache.init_) {
+		return false;
+	}
 	vector<int64_t>::iterator it = req->uidList.begin();
 	for(; it != req->uidList.end(); ++it) {
 		if(cache.equip_.count(*it) == 0) {
@@ -358,7 +412,13 @@ int EquipsManager::Process(uint32_t uid, logins::SBagDecompose *req) {
 	//装备ID和装备数量映射
 	map<uint32_t, uint32_t> idMap;
 	it = req->uidList.begin();
+	map<uint32_t, uint32_t> usered;
 	for(; it != req->uidList.end(); ++it) {
+		if(usered.count(*it) == 0) {
+			usered.insert(make_pair(*it, 1));
+		} else {
+			continue;
+		}
 		if(!idMap.count(cache.equip_[*it].id)) {
 			idMap.insert(make_pair(cache.equip_[*it].id, 1));
 		} else {
@@ -369,7 +429,9 @@ int EquipsManager::Process(uint32_t uid, logins::SBagDecompose *req) {
 	map<uint32_t, uint32_t>::iterator iter = idMap.begin();
 	for(; iter != idMap.end(); ++iter) {
 		UpdateManager::Instance()->SetCode(UC_EquipDecompose);
-		UserManager::Instance()->UseItem(uid, iter->first, iter->second, "Equip smelt");
+		if(!UserManager::Instance()->UseItem(uid, iter->first, iter->second, "Equip smelt")) {
+			return R_ERROR;
+		}
 	}
 	Award SmeltRward;
 	ItemCfgWrap cfg_wrap;
@@ -378,7 +440,7 @@ int EquipsManager::Process(uint32_t uid, logins::SBagDecompose *req) {
 		const CfgItem::Equip &cfg = cfg_wrap.GetEquip(iter->first);
 		SmeltRward.Format(cfg.smeltaward(), iter->second);
 	}
-
+	MissionManager::Instance()->onMission(uid, MT_SMELT_EQUIP, 1);
 	UserManager::Instance()->Reward(uid, SmeltRward, "equip Smelt Rward");
 	return R_SUCCESS;
 }
@@ -392,6 +454,11 @@ int EquipsManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerBagLi
 	GetBagList(cache, BAG_TREASURE_EQUIP, false, resp->bags_);
 	GetBagList(cache, BAG_TREASURE_DIANFENG, false, resp->bags_);
 	GetBagList(cache, BAG_TREASURE_SANJIE, false, resp->bags_);
+	GetBagList(cache, BAG_ADVANCE_HORSE, true, resp->bags_);
+	GetBagList(cache, BAG_ADVANCE_WING, true, resp->bags_);
+	GetBagList(cache, BAG_ZHANLING_EQUIP, false, resp->bags_);
+	GetBagList(cache, BAG_ROLE_GEM, true, resp->bags_);
+
 
 	if (!LogicManager::Instance()->SendMsg(cache.uid_, cmd, resp)) {
 		return R_ERROR;
@@ -453,7 +520,7 @@ int EquipsManager::Process(uint32_t uid, logins::SEquipEquip *req) {
 	if (chg) {
 		PropertyManager::Instance()->AddUser(uid);
 	}
-
+	MissionManager::Instance()->onEquipEquip(uid, 0, 0, 0);
 	return 0;
 }
 
@@ -533,19 +600,15 @@ int EquipsManager::Process(uint32_t uid, logins::SBagUse *req) {
 
 	// fix by memory 背包中使用道具 判断了类型是不是称号  如果是发送消息激活
 	if(cfg_wrap.IsTitle(equip.id)){
-		const CfgItem::Item &cfg = ItemCfgWrap().GetItem(equip.id); // 通过id去获取单条数据
-		uint32_t titleID  = cfg.data(); //称号限时
+		TitleManager::Instance()->BagUseTitleItem(uid,equip.id);
+	}
+	// 时装
+	if(cfg_wrap.IsFashion(equip.id)){
 
-		if(UpdateManager::Instance()->S2CPlayerTitle(uid,titleID)){ // 1168-1075
-			TitleManager::Instance()->ActiveTitle(uid, 1, titleID); // 激活称号，存入数据库
-			PropertyManager::Instance()->AddUser(uid);	// 触发添加称号属性函数 CalcProperty
-			UpdateManager::Instance()->roleTitle(uid, 1, titleID);  // 1167-1904
-			UpdateManager::Instance()->roleShows(uid, titleID,true, TitleManager::Instance()->GetShowId()); // 952-956
-		}
 	}
 
 	if (cfg_wrap.IsGift(equip.id)) {
-		if (!OpenGift(equip.id, req->itemNum_, req->value_, reward)) {
+		if (!OpenGift(cache, equip.id, req->itemNum_, req->value_, reward)) {
 			error_log("open gift error uid=%u ud=%u id=%u", uid, req->itemUid_, equip.id);
 			return R_ERROR;
 		}
@@ -555,6 +618,11 @@ int EquipsManager::Process(uint32_t uid, logins::SBagUse *req) {
 	String::Format(code, "bag_use_%u_%u", equip.id, req->itemNum_);
 	if (!UserManager::Instance()->UseItem(uid, equip.id, req->itemNum_, code)){
 		return R_ERROR;
+	}
+
+
+	if(ItemCfgWrap().IsGift(equip.id)) {
+		UpdateManager::Instance()->UpdateBagNow(uid);
 	}
 	UserManager::Instance()->Reward(uid, reward, code);
 	debug_log("uid=%u", uid);
@@ -666,4 +734,3 @@ int EquipsManager::Sync(const UserCache &cache, uint32_t cmd, msgs::SPlayerBagIt
 	}
 	return 0;
 }
-
