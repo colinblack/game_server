@@ -7,6 +7,7 @@ struct DataBase{
 	char name[BASE_NAME_LEN];//名字
 	char fig[BASE_FIG_LEN];//头像url
 	uint32_t level;//等级
+	uint32_t cash;//二级货币
 	uint32_t blue_info; // 蓝钻信息
 	uint32_t flag;	// 标志位
 	uint32_t prosperity;//繁荣度
@@ -17,6 +18,7 @@ struct DataBase{
 	DataBase(){
 		uid = 0;
 		level = 0;
+		cash = 0;
 		blue_info = 0;
 		flag = 0;
 		prosperity = 0;

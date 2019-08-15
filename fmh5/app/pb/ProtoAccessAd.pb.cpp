@@ -252,6 +252,7 @@ void protobuf_AssignDesc_ProtoAccessAd_2eproto() {
       sizeof(GetScarecrowInfoResp));
   ScarecrowViewAdReq_descriptor_ = file->message_type(12);
   static const int ScarecrowViewAdReq_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ScarecrowViewAdReq, iscostdimaond_),
   };
   ScarecrowViewAdReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -265,9 +266,10 @@ void protobuf_AssignDesc_ProtoAccessAd_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ScarecrowViewAdReq));
   ScarecrowViewAdResp_descriptor_ = file->message_type(13);
-  static const int ScarecrowViewAdResp_offsets_[2] = {
+  static const int ScarecrowViewAdResp_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ScarecrowViewAdResp, scarecrow_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ScarecrowViewAdResp, cropland_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ScarecrowViewAdResp, commons_),
   };
   ScarecrowViewAdResp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -380,11 +382,12 @@ void protobuf_AddDesc_ProtoAccessAd_2eproto() {
     "remainCnt\030\001 \002(\r\022\021\n\tworkEndTs\030\002 \002(\r\022\022\n\nne"
     "xtShowTs\030\003 \002(\r\"\025\n\023GetScarecrowInfoReq\"F\n"
     "\024GetScarecrowInfoResp\022.\n\tscarecrow\030\001 \002(\013"
-    "2\033.ProtoAccessAd.ScarecrowCPP\"\024\n\022Scarecr"
-    "owViewAdReq\"r\n\023ScarecrowViewAdResp\022.\n\tsc"
-    "arecrow\030\001 \002(\0132\033.ProtoAccessAd.ScarecrowC"
-    "PP\022+\n\010cropland\030\002 \003(\0132\031.ProtoProduce.Crop"
-    "LandCPP", 807);
+    "2\033.ProtoAccessAd.ScarecrowCPP\"+\n\022Scarecr"
+    "owViewAdReq\022\025\n\risCostDimaond\030\001 \001(\r\"\237\001\n\023S"
+    "carecrowViewAdResp\022.\n\tscarecrow\030\001 \002(\0132\033."
+    "ProtoAccessAd.ScarecrowCPP\022+\n\010cropland\030\002"
+    " \003(\0132\031.ProtoProduce.CropLandCPP\022+\n\007commo"
+    "ns\030\003 \001(\0132\032.DataCommon.CommonItemsCPP", 876);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ProtoAccessAd.proto", &protobuf_RegisterTypes);
   RewardViewAdReq::default_instance_ = new RewardViewAdReq();
@@ -2953,6 +2956,7 @@ void GetScarecrowInfoResp::Swap(GetScarecrowInfoResp* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int ScarecrowViewAdReq::kIsCostDimaondFieldNumber;
 #endif  // !_MSC_VER
 
 ScarecrowViewAdReq::ScarecrowViewAdReq()
@@ -2971,6 +2975,7 @@ ScarecrowViewAdReq::ScarecrowViewAdReq(const ScarecrowViewAdReq& from)
 
 void ScarecrowViewAdReq::SharedCtor() {
   _cached_size_ = 0;
+  iscostdimaond_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3004,6 +3009,9 @@ ScarecrowViewAdReq* ScarecrowViewAdReq::New() const {
 }
 
 void ScarecrowViewAdReq::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    iscostdimaond_ = 0u;
+  }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -3013,12 +3021,33 @@ bool ScarecrowViewAdReq::MergePartialFromCodedStream(
 #define DO_(EXPRESSION) if (!(EXPRESSION)) return false
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
-    if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      return true;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional uint32 isCostDimaond = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &iscostdimaond_)));
+          set_has_iscostdimaond();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormat::SkipField(
-          input, tag, mutable_unknown_fields()));
   }
   return true;
 #undef DO_
@@ -3026,6 +3055,11 @@ bool ScarecrowViewAdReq::MergePartialFromCodedStream(
 
 void ScarecrowViewAdReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
+  // optional uint32 isCostDimaond = 1;
+  if (has_iscostdimaond()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->iscostdimaond(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3034,6 +3068,11 @@ void ScarecrowViewAdReq::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* ScarecrowViewAdReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
+  // optional uint32 isCostDimaond = 1;
+  if (has_iscostdimaond()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->iscostdimaond(), target);
+  }
+  
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -3044,6 +3083,15 @@ void ScarecrowViewAdReq::SerializeWithCachedSizes(
 int ScarecrowViewAdReq::ByteSize() const {
   int total_size = 0;
   
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // optional uint32 isCostDimaond = 1;
+    if (has_iscostdimaond()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->iscostdimaond());
+    }
+    
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -3069,6 +3117,11 @@ void ScarecrowViewAdReq::MergeFrom(const ::google::protobuf::Message& from) {
 
 void ScarecrowViewAdReq::MergeFrom(const ScarecrowViewAdReq& from) {
   GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_iscostdimaond()) {
+      set_iscostdimaond(from.iscostdimaond());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -3091,6 +3144,8 @@ bool ScarecrowViewAdReq::IsInitialized() const {
 
 void ScarecrowViewAdReq::Swap(ScarecrowViewAdReq* other) {
   if (other != this) {
+    std::swap(iscostdimaond_, other->iscostdimaond_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
@@ -3110,6 +3165,7 @@ void ScarecrowViewAdReq::Swap(ScarecrowViewAdReq* other) {
 #ifndef _MSC_VER
 const int ScarecrowViewAdResp::kScarecrowFieldNumber;
 const int ScarecrowViewAdResp::kCroplandFieldNumber;
+const int ScarecrowViewAdResp::kCommonsFieldNumber;
 #endif  // !_MSC_VER
 
 ScarecrowViewAdResp::ScarecrowViewAdResp()
@@ -3119,6 +3175,7 @@ ScarecrowViewAdResp::ScarecrowViewAdResp()
 
 void ScarecrowViewAdResp::InitAsDefaultInstance() {
   scarecrow_ = const_cast< ::ProtoAccessAd::ScarecrowCPP*>(&::ProtoAccessAd::ScarecrowCPP::default_instance());
+  commons_ = const_cast< ::DataCommon::CommonItemsCPP*>(&::DataCommon::CommonItemsCPP::default_instance());
 }
 
 ScarecrowViewAdResp::ScarecrowViewAdResp(const ScarecrowViewAdResp& from)
@@ -3130,6 +3187,7 @@ ScarecrowViewAdResp::ScarecrowViewAdResp(const ScarecrowViewAdResp& from)
 void ScarecrowViewAdResp::SharedCtor() {
   _cached_size_ = 0;
   scarecrow_ = NULL;
+  commons_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3140,6 +3198,7 @@ ScarecrowViewAdResp::~ScarecrowViewAdResp() {
 void ScarecrowViewAdResp::SharedDtor() {
   if (this != default_instance_) {
     delete scarecrow_;
+    delete commons_;
   }
 }
 
@@ -3167,6 +3226,9 @@ void ScarecrowViewAdResp::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (has_scarecrow()) {
       if (scarecrow_ != NULL) scarecrow_->::ProtoAccessAd::ScarecrowCPP::Clear();
+    }
+    if (has_commons()) {
+      if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
     }
   }
   cropland_.Clear();
@@ -3204,6 +3266,20 @@ bool ScarecrowViewAdResp::MergePartialFromCodedStream(
           goto handle_uninterpreted;
         }
         if (input->ExpectTag(18)) goto parse_cropland;
+        if (input->ExpectTag(26)) goto parse_commons;
+        break;
+      }
+      
+      // optional .DataCommon.CommonItemsCPP commons = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_commons:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_commons()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -3238,6 +3314,12 @@ void ScarecrowViewAdResp::SerializeWithCachedSizes(
       2, this->cropland(i), output);
   }
   
+  // optional .DataCommon.CommonItemsCPP commons = 3;
+  if (has_commons()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->commons(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3260,6 +3342,13 @@ void ScarecrowViewAdResp::SerializeWithCachedSizes(
         2, this->cropland(i), target);
   }
   
+  // optional .DataCommon.CommonItemsCPP commons = 3;
+  if (has_commons()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->commons(), target);
+  }
+  
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -3276,6 +3365,13 @@ int ScarecrowViewAdResp::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->scarecrow());
+    }
+    
+    // optional .DataCommon.CommonItemsCPP commons = 3;
+    if (has_commons()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->commons());
     }
     
   }
@@ -3317,6 +3413,9 @@ void ScarecrowViewAdResp::MergeFrom(const ScarecrowViewAdResp& from) {
     if (from.has_scarecrow()) {
       mutable_scarecrow()->::ProtoAccessAd::ScarecrowCPP::MergeFrom(from.scarecrow());
     }
+    if (from.has_commons()) {
+      mutable_commons()->::DataCommon::CommonItemsCPP::MergeFrom(from.commons());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3342,6 +3441,9 @@ bool ScarecrowViewAdResp::IsInitialized() const {
   for (int i = 0; i < cropland_size(); i++) {
     if (!this->cropland(i).IsInitialized()) return false;
   }
+  if (has_commons()) {
+    if (!this->commons().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -3349,6 +3451,7 @@ void ScarecrowViewAdResp::Swap(ScarecrowViewAdResp* other) {
   if (other != this) {
     std::swap(scarecrow_, other->scarecrow_);
     cropland_.Swap(&other->cropland_);
+    std::swap(commons_, other->commons_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

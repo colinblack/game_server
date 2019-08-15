@@ -71,7 +71,7 @@ int LogicPetManager::Process(unsigned uid, ProtoPet::UnlockPetReq* req, ProtoPet
 	DataPet & pet = DataPetManager::Instance()->GetData(uid,petid);
 	pet.normalEndts = Time::GetGlobalTime() + petcfg.normal_cd();
 	memset(pet.name, 0, BASE_NAME_LEN);
-	memcpy(pet.name, petcfg.comment().c_str(), BASE_NAME_LEN);
+	strncpy(pet.name, petcfg.comment().c_str(), BASE_NAME_LEN-1);
 	DataPetManager::Instance()->UpdateItem(pet);
 	pet.SetMessage(resp->mutable_pet());
 
@@ -97,7 +97,7 @@ int LogicPetManager::InviteUnlockPet(unsigned uid)
 	DataPet & pet = DataPetManager::Instance()->GetData(uid,petid);
 	pet.normalEndts = Time::GetGlobalTime() + petcfg.normal_cd();
 	memset(pet.name, 0, BASE_NAME_LEN);
-	memcpy(pet.name, petcfg.comment().c_str(), BASE_NAME_LEN);
+	strncpy(pet.name, petcfg.comment().c_str(), BASE_NAME_LEN-1);
 	DataPetManager::Instance()->UpdateItem(pet);
 
 	if(UserManager::Instance()->IsOnline(uid))
@@ -232,7 +232,7 @@ int LogicPetManager::Process(unsigned uid, ProtoPet::ChangePetNameReq* req, Prot
 
 	DataPet & pet = DataPetManager::Instance()->GetData(uid,petid);
 	memset(pet.name, 0, BASE_NAME_LEN);
-	memcpy(pet.name, name.c_str(), BASE_NAME_LEN);
+	strncpy(pet.name, name.c_str(), BASE_NAME_LEN-1);
 	DataPetManager::Instance()->UpdateItem(pet);
 	pet.SetMessage(resp->mutable_pet());
 

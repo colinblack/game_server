@@ -45,7 +45,7 @@ struct DataOrder
 		storage_id = msg->storageid();
 		level_id = msg->levelid();
 		memset(order_id, 0, sizeof(order_id));
-		memcpy(order_id, msg->orderid().c_str(), sizeof(order_id));
+		strncpy(order_id, msg->orderid().c_str(), sizeof(order_id)-1);
 	}
 
 	void reset_time()

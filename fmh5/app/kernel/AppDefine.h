@@ -108,6 +108,7 @@ enum PlatformType
 	PT_XMFOUR       = 49,   //小米4
 	PT_XMZZ           = 50,   //小米赚赚
 	PT_VIVO          = 51,  //vivo
+	PT_OPPO          = 52,//oppo
 
 	PT_MAX,
 };
@@ -341,6 +342,10 @@ enum ASYN_TYPE
 #define PER_USER_MAX_FRIEND_ORDER 30
 #define SOURCE_FO_DELETE_TIME 10*86400
 
+//cdKey
+#define MEMORY_CD_KEY 312
+#define MEMORY_CD_KEY_MAX 50000
+
 //留言板
 #define MEMORY_MESSAGE_BOARD 310
 #define PER_USER_MAX_LEAVE_MSG 30
@@ -412,6 +417,8 @@ enum ActivityID
 	e_Activity_Theme  = 10, 	//付费主题
 	e_Activity_UserData_1  = 11,//为避免base表过大,用户有些个人数据存档在这里(注:现阶段只用到此15个字段中的中的前13个)
 	e_Activity_New_Share   = 12,//新的分享活动
+	e_Activity_4399_Recharge = 13,//4399平台首冲翻倍活动
+	e_Activity_4399_Daily = 15,//4399平台每日充值活动
 	e_Activity_max
 };
 enum SigNum

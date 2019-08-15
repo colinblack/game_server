@@ -35,6 +35,8 @@ void protobuf_ShutdownFile_ConfigActivity_2eproto();
 
 class DailyFundCPP;
 class NewShareCPP;
+class Recharge4399CPP;
+class Daily4399CPP;
 class ActivityCfg;
 
 // ===================================================================
@@ -246,6 +248,224 @@ class NewShareCPP : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class Recharge4399CPP : public ::google::protobuf::Message {
+ public:
+  Recharge4399CPP();
+  virtual ~Recharge4399CPP();
+  
+  Recharge4399CPP(const Recharge4399CPP& from);
+  
+  inline Recharge4399CPP& operator=(const Recharge4399CPP& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Recharge4399CPP& default_instance();
+  
+  void Swap(Recharge4399CPP* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Recharge4399CPP* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Recharge4399CPP& from);
+  void MergeFrom(const Recharge4399CPP& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated uint32 limit = 1;
+  inline int limit_size() const;
+  inline void clear_limit();
+  static const int kLimitFieldNumber = 1;
+  inline ::google::protobuf::uint32 limit(int index) const;
+  inline void set_limit(int index, ::google::protobuf::uint32 value);
+  inline void add_limit(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      limit() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_limit();
+  
+  // repeated .CommonGiftConfig.CommonModifyItem reward = 3;
+  inline int reward_size() const;
+  inline void clear_reward();
+  static const int kRewardFieldNumber = 3;
+  inline const ::CommonGiftConfig::CommonModifyItem& reward(int index) const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_reward(int index);
+  inline ::CommonGiftConfig::CommonModifyItem* add_reward();
+  inline const ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >&
+      reward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >*
+      mutable_reward();
+  
+  // @@protoc_insertion_point(class_scope:ConfigActivity.Recharge4399CPP)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > limit_;
+  ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem > reward_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Recharge4399CPP* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Daily4399CPP : public ::google::protobuf::Message {
+ public:
+  Daily4399CPP();
+  virtual ~Daily4399CPP();
+  
+  Daily4399CPP(const Daily4399CPP& from);
+  
+  inline Daily4399CPP& operator=(const Daily4399CPP& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Daily4399CPP& default_instance();
+  
+  void Swap(Daily4399CPP* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Daily4399CPP* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Daily4399CPP& from);
+  void MergeFrom(const Daily4399CPP& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // repeated uint32 limit = 1;
+  inline int limit_size() const;
+  inline void clear_limit();
+  static const int kLimitFieldNumber = 1;
+  inline ::google::protobuf::uint32 limit(int index) const;
+  inline void set_limit(int index, ::google::protobuf::uint32 value);
+  inline void add_limit(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      limit() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_limit();
+  
+  // repeated .CommonGiftConfig.CommonModifyItem reward = 2;
+  inline int reward_size() const;
+  inline void clear_reward();
+  static const int kRewardFieldNumber = 2;
+  inline const ::CommonGiftConfig::CommonModifyItem& reward(int index) const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_reward(int index);
+  inline ::CommonGiftConfig::CommonModifyItem* add_reward();
+  inline const ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >&
+      reward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >*
+      mutable_reward();
+  
+  // required .CommonGiftConfig.CommonModifyItem month_card = 3;
+  inline bool has_month_card() const;
+  inline void clear_month_card();
+  static const int kMonthCardFieldNumber = 3;
+  inline const ::CommonGiftConfig::CommonModifyItem& month_card() const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_month_card();
+  inline ::CommonGiftConfig::CommonModifyItem* release_month_card();
+  
+  // required .CommonGiftConfig.CommonModifyItem life_card = 4;
+  inline bool has_life_card() const;
+  inline void clear_life_card();
+  static const int kLifeCardFieldNumber = 4;
+  inline const ::CommonGiftConfig::CommonModifyItem& life_card() const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_life_card();
+  inline ::CommonGiftConfig::CommonModifyItem* release_life_card();
+  
+  // @@protoc_insertion_point(class_scope:ConfigActivity.Daily4399CPP)
+ private:
+  inline void set_has_month_card();
+  inline void clear_has_month_card();
+  inline void set_has_life_card();
+  inline void clear_has_life_card();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > limit_;
+  ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem > reward_;
+  ::CommonGiftConfig::CommonModifyItem* month_card_;
+  ::CommonGiftConfig::CommonModifyItem* life_card_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Daily4399CPP* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ActivityCfg : public ::google::protobuf::Message {
  public:
   ActivityCfg();
@@ -316,20 +536,42 @@ class ActivityCfg : public ::google::protobuf::Message {
   inline ::ConfigActivity::NewShareCPP* mutable_new_share();
   inline ::ConfigActivity::NewShareCPP* release_new_share();
   
+  // required .ConfigActivity.Recharge4399CPP charge_4399 = 3;
+  inline bool has_charge_4399() const;
+  inline void clear_charge_4399();
+  static const int kCharge4399FieldNumber = 3;
+  inline const ::ConfigActivity::Recharge4399CPP& charge_4399() const;
+  inline ::ConfigActivity::Recharge4399CPP* mutable_charge_4399();
+  inline ::ConfigActivity::Recharge4399CPP* release_charge_4399();
+  
+  // required .ConfigActivity.Daily4399CPP daily_4399 = 4;
+  inline bool has_daily_4399() const;
+  inline void clear_daily_4399();
+  static const int kDaily4399FieldNumber = 4;
+  inline const ::ConfigActivity::Daily4399CPP& daily_4399() const;
+  inline ::ConfigActivity::Daily4399CPP* mutable_daily_4399();
+  inline ::ConfigActivity::Daily4399CPP* release_daily_4399();
+  
   // @@protoc_insertion_point(class_scope:ConfigActivity.ActivityCfg)
  private:
   inline void set_has_daily_fund();
   inline void clear_has_daily_fund();
   inline void set_has_new_share();
   inline void clear_has_new_share();
+  inline void set_has_charge_4399();
+  inline void clear_has_charge_4399();
+  inline void set_has_daily_4399();
+  inline void clear_has_daily_4399();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::ConfigActivity::DailyFundCPP* daily_fund_;
   ::ConfigActivity::NewShareCPP* new_share_;
+  ::ConfigActivity::Recharge4399CPP* charge_4399_;
+  ::ConfigActivity::Daily4399CPP* daily_4399_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_ConfigActivity_2eproto();
   friend void protobuf_AssignDesc_ConfigActivity_2eproto();
@@ -480,6 +722,172 @@ NewShareCPP::mutable_reward() {
 
 // -------------------------------------------------------------------
 
+// Recharge4399CPP
+
+// repeated uint32 limit = 1;
+inline int Recharge4399CPP::limit_size() const {
+  return limit_.size();
+}
+inline void Recharge4399CPP::clear_limit() {
+  limit_.Clear();
+}
+inline ::google::protobuf::uint32 Recharge4399CPP::limit(int index) const {
+  return limit_.Get(index);
+}
+inline void Recharge4399CPP::set_limit(int index, ::google::protobuf::uint32 value) {
+  limit_.Set(index, value);
+}
+inline void Recharge4399CPP::add_limit(::google::protobuf::uint32 value) {
+  limit_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Recharge4399CPP::limit() const {
+  return limit_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Recharge4399CPP::mutable_limit() {
+  return &limit_;
+}
+
+// repeated .CommonGiftConfig.CommonModifyItem reward = 3;
+inline int Recharge4399CPP::reward_size() const {
+  return reward_.size();
+}
+inline void Recharge4399CPP::clear_reward() {
+  reward_.Clear();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& Recharge4399CPP::reward(int index) const {
+  return reward_.Get(index);
+}
+inline ::CommonGiftConfig::CommonModifyItem* Recharge4399CPP::mutable_reward(int index) {
+  return reward_.Mutable(index);
+}
+inline ::CommonGiftConfig::CommonModifyItem* Recharge4399CPP::add_reward() {
+  return reward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >&
+Recharge4399CPP::reward() const {
+  return reward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >*
+Recharge4399CPP::mutable_reward() {
+  return &reward_;
+}
+
+// -------------------------------------------------------------------
+
+// Daily4399CPP
+
+// repeated uint32 limit = 1;
+inline int Daily4399CPP::limit_size() const {
+  return limit_.size();
+}
+inline void Daily4399CPP::clear_limit() {
+  limit_.Clear();
+}
+inline ::google::protobuf::uint32 Daily4399CPP::limit(int index) const {
+  return limit_.Get(index);
+}
+inline void Daily4399CPP::set_limit(int index, ::google::protobuf::uint32 value) {
+  limit_.Set(index, value);
+}
+inline void Daily4399CPP::add_limit(::google::protobuf::uint32 value) {
+  limit_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Daily4399CPP::limit() const {
+  return limit_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Daily4399CPP::mutable_limit() {
+  return &limit_;
+}
+
+// repeated .CommonGiftConfig.CommonModifyItem reward = 2;
+inline int Daily4399CPP::reward_size() const {
+  return reward_.size();
+}
+inline void Daily4399CPP::clear_reward() {
+  reward_.Clear();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& Daily4399CPP::reward(int index) const {
+  return reward_.Get(index);
+}
+inline ::CommonGiftConfig::CommonModifyItem* Daily4399CPP::mutable_reward(int index) {
+  return reward_.Mutable(index);
+}
+inline ::CommonGiftConfig::CommonModifyItem* Daily4399CPP::add_reward() {
+  return reward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >&
+Daily4399CPP::reward() const {
+  return reward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::CommonGiftConfig::CommonModifyItem >*
+Daily4399CPP::mutable_reward() {
+  return &reward_;
+}
+
+// required .CommonGiftConfig.CommonModifyItem month_card = 3;
+inline bool Daily4399CPP::has_month_card() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Daily4399CPP::set_has_month_card() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Daily4399CPP::clear_has_month_card() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Daily4399CPP::clear_month_card() {
+  if (month_card_ != NULL) month_card_->::CommonGiftConfig::CommonModifyItem::Clear();
+  clear_has_month_card();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& Daily4399CPP::month_card() const {
+  return month_card_ != NULL ? *month_card_ : *default_instance_->month_card_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* Daily4399CPP::mutable_month_card() {
+  set_has_month_card();
+  if (month_card_ == NULL) month_card_ = new ::CommonGiftConfig::CommonModifyItem;
+  return month_card_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* Daily4399CPP::release_month_card() {
+  clear_has_month_card();
+  ::CommonGiftConfig::CommonModifyItem* temp = month_card_;
+  month_card_ = NULL;
+  return temp;
+}
+
+// required .CommonGiftConfig.CommonModifyItem life_card = 4;
+inline bool Daily4399CPP::has_life_card() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Daily4399CPP::set_has_life_card() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Daily4399CPP::clear_has_life_card() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Daily4399CPP::clear_life_card() {
+  if (life_card_ != NULL) life_card_->::CommonGiftConfig::CommonModifyItem::Clear();
+  clear_has_life_card();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& Daily4399CPP::life_card() const {
+  return life_card_ != NULL ? *life_card_ : *default_instance_->life_card_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* Daily4399CPP::mutable_life_card() {
+  set_has_life_card();
+  if (life_card_ == NULL) life_card_ = new ::CommonGiftConfig::CommonModifyItem;
+  return life_card_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* Daily4399CPP::release_life_card() {
+  clear_has_life_card();
+  ::CommonGiftConfig::CommonModifyItem* temp = life_card_;
+  life_card_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
 // ActivityCfg
 
 // required .ConfigActivity.DailyFundCPP daily_fund = 1;
@@ -537,6 +945,64 @@ inline ::ConfigActivity::NewShareCPP* ActivityCfg::release_new_share() {
   clear_has_new_share();
   ::ConfigActivity::NewShareCPP* temp = new_share_;
   new_share_ = NULL;
+  return temp;
+}
+
+// required .ConfigActivity.Recharge4399CPP charge_4399 = 3;
+inline bool ActivityCfg::has_charge_4399() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ActivityCfg::set_has_charge_4399() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ActivityCfg::clear_has_charge_4399() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ActivityCfg::clear_charge_4399() {
+  if (charge_4399_ != NULL) charge_4399_->::ConfigActivity::Recharge4399CPP::Clear();
+  clear_has_charge_4399();
+}
+inline const ::ConfigActivity::Recharge4399CPP& ActivityCfg::charge_4399() const {
+  return charge_4399_ != NULL ? *charge_4399_ : *default_instance_->charge_4399_;
+}
+inline ::ConfigActivity::Recharge4399CPP* ActivityCfg::mutable_charge_4399() {
+  set_has_charge_4399();
+  if (charge_4399_ == NULL) charge_4399_ = new ::ConfigActivity::Recharge4399CPP;
+  return charge_4399_;
+}
+inline ::ConfigActivity::Recharge4399CPP* ActivityCfg::release_charge_4399() {
+  clear_has_charge_4399();
+  ::ConfigActivity::Recharge4399CPP* temp = charge_4399_;
+  charge_4399_ = NULL;
+  return temp;
+}
+
+// required .ConfigActivity.Daily4399CPP daily_4399 = 4;
+inline bool ActivityCfg::has_daily_4399() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ActivityCfg::set_has_daily_4399() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ActivityCfg::clear_has_daily_4399() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ActivityCfg::clear_daily_4399() {
+  if (daily_4399_ != NULL) daily_4399_->::ConfigActivity::Daily4399CPP::Clear();
+  clear_has_daily_4399();
+}
+inline const ::ConfigActivity::Daily4399CPP& ActivityCfg::daily_4399() const {
+  return daily_4399_ != NULL ? *daily_4399_ : *default_instance_->daily_4399_;
+}
+inline ::ConfigActivity::Daily4399CPP* ActivityCfg::mutable_daily_4399() {
+  set_has_daily_4399();
+  if (daily_4399_ == NULL) daily_4399_ = new ::ConfigActivity::Daily4399CPP;
+  return daily_4399_;
+}
+inline ::ConfigActivity::Daily4399CPP* ActivityCfg::release_daily_4399() {
+  clear_has_daily_4399();
+  ::ConfigActivity::Daily4399CPP* temp = daily_4399_;
+  daily_4399_ = NULL;
   return temp;
 }
 

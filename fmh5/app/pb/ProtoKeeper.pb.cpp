@@ -127,8 +127,9 @@ void protobuf_AssignDesc_ProtoKeeper_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(KeeperBuyTime));
   KeeperWatchAds_descriptor_ = file->message_type(4);
-  static const int KeeperWatchAds_offsets_[1] = {
+  static const int KeeperWatchAds_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KeeperWatchAds, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(KeeperWatchAds, iscostdimaond_),
   };
   KeeperWatchAds_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -293,14 +294,14 @@ void protobuf_AddDesc_ProtoKeeper_2eproto() {
     "\003exp\030\003 \002(\r\022\016\n\006overTs\030\004 \002(\r\022\014\n\004flag\030\005 \002(\r"
     "\022+\n\007commons\030\006 \001(\0132\032.DataCommon.CommonIte"
     "msCPP\022%\n\004task\030\007 \003(\0132\027.ProtoKeeper.Keeper"
-    "Task\"\033\n\rKeeperBuyTime\022\n\n\002id\030\001 \002(\r\"\034\n\016Kee"
-    "perWatchAds\022\n\n\002id\030\001 \002(\r\"\033\n\rKeeperUpgrade"
-    "\022\n\n\002id\030\001 \002(\r\".\n\016KeeperTaskItem\022\016\n\006taskId"
-    "\030\001 \002(\r\022\014\n\004need\030\002 \002(\r\"L\n\rKeeperSetTask\022\020\n"
-    "\010keeperId\030\001 \002(\r\022)\n\004task\030\002 \003(\0132\033.ProtoKee"
-    "per.KeeperTaskItem\"%\n\021KeeperSetAutoFeed\022"
-    "\020\n\010autoFeed\030\001 \002(\r\"$\n\025KeeperSetAutoFeedRe"
-    "sp\022\013\n\003ret\030\001 \002(\r", 615);
+    "Task\"\033\n\rKeeperBuyTime\022\n\n\002id\030\001 \002(\r\"3\n\016Kee"
+    "perWatchAds\022\n\n\002id\030\001 \002(\r\022\025\n\risCostDimaond"
+    "\030\002 \001(\r\"\033\n\rKeeperUpgrade\022\n\n\002id\030\001 \002(\r\".\n\016K"
+    "eeperTaskItem\022\016\n\006taskId\030\001 \002(\r\022\014\n\004need\030\002 "
+    "\002(\r\"L\n\rKeeperSetTask\022\020\n\010keeperId\030\001 \002(\r\022)"
+    "\n\004task\030\002 \003(\0132\033.ProtoKeeper.KeeperTaskIte"
+    "m\"%\n\021KeeperSetAutoFeed\022\020\n\010autoFeed\030\001 \002(\r"
+    "\"$\n\025KeeperSetAutoFeedResp\022\013\n\003ret\030\001 \002(\r", 638);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ProtoKeeper.proto", &protobuf_RegisterTypes);
   KeeperTask::default_instance_ = new KeeperTask();
@@ -1541,6 +1542,7 @@ void KeeperBuyTime::Swap(KeeperBuyTime* other) {
 
 #ifndef _MSC_VER
 const int KeeperWatchAds::kIdFieldNumber;
+const int KeeperWatchAds::kIsCostDimaondFieldNumber;
 #endif  // !_MSC_VER
 
 KeeperWatchAds::KeeperWatchAds()
@@ -1560,6 +1562,7 @@ KeeperWatchAds::KeeperWatchAds(const KeeperWatchAds& from)
 void KeeperWatchAds::SharedCtor() {
   _cached_size_ = 0;
   id_ = 0u;
+  iscostdimaond_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1595,6 +1598,7 @@ KeeperWatchAds* KeeperWatchAds::New() const {
 void KeeperWatchAds::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     id_ = 0u;
+    iscostdimaond_ = 0u;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -1614,6 +1618,22 @@ bool KeeperWatchAds::MergePartialFromCodedStream(
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &id_)));
           set_has_id();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(16)) goto parse_isCostDimaond;
+        break;
+      }
+      
+      // optional uint32 isCostDimaond = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_isCostDimaond:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &iscostdimaond_)));
+          set_has_iscostdimaond();
         } else {
           goto handle_uninterpreted;
         }
@@ -1644,6 +1664,11 @@ void KeeperWatchAds::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
   }
   
+  // optional uint32 isCostDimaond = 2;
+  if (has_iscostdimaond()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->iscostdimaond(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1655,6 +1680,11 @@ void KeeperWatchAds::SerializeWithCachedSizes(
   // required uint32 id = 1;
   if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
+  }
+  
+  // optional uint32 isCostDimaond = 2;
+  if (has_iscostdimaond()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->iscostdimaond(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1673,6 +1703,13 @@ int KeeperWatchAds::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->id());
+    }
+    
+    // optional uint32 isCostDimaond = 2;
+    if (has_iscostdimaond()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->iscostdimaond());
     }
     
   }
@@ -1705,6 +1742,9 @@ void KeeperWatchAds::MergeFrom(const KeeperWatchAds& from) {
     if (from.has_id()) {
       set_id(from.id());
     }
+    if (from.has_iscostdimaond()) {
+      set_iscostdimaond(from.iscostdimaond());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1730,6 +1770,7 @@ bool KeeperWatchAds::IsInitialized() const {
 void KeeperWatchAds::Swap(KeeperWatchAds* other) {
   if (other != this) {
     std::swap(id_, other->id_);
+    std::swap(iscostdimaond_, other->iscostdimaond_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

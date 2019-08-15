@@ -1,6 +1,8 @@
 #ifndef APP_BATTLE_LOGICFUNDACTIVITY_H_
 #define APP_BATTLE_LOGICFUNDACTIVITY_H_
 
+#include "ServerInc.h"
+
 class LogicFundActivityManager :public ActivitySingleton<e_Activity_Fund>, public CSingleton<LogicFundActivityManager>
 {
 private:

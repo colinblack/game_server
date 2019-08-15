@@ -49,7 +49,7 @@ struct DataPet
     	normalEndts=msg->normalendts();
     	teaseFlag=msg->teaseflag();
     	memset(name, 0, sizeof(name));
-    	memcpy(name, msg->name().c_str(), sizeof(name));
+    	strncpy(name, msg->name().c_str(), sizeof(name)-1);
     }
 
 };

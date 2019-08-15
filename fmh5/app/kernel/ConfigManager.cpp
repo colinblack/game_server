@@ -330,6 +330,20 @@ void ConfigManager::Init()
 		unsigned petid = pet.m_config.pet(i).petid();
 		m_petmap[petid] = i;
 	}
+
+	//4399首冲翻倍活动配置
+	m_4399_recharge.clear();
+	for(uint8_t idx = 0; idx < activitydata.m_config.charge_4399().limit_size(); idx++)
+	{
+		m_4399_recharge.push_back(activitydata.m_config.charge_4399().limit(idx));
+	}
+
+	//4399每日充值活动配置
+	m_4399_daily.clear();
+	for(uint8_t idx = 0; idx < activitydata.m_config.daily_4399().limit_size(); idx++)
+	{
+		m_4399_daily.push_back(activitydata.m_config.daily_4399().limit(idx));
+	}
 }
 
 

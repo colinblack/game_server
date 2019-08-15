@@ -27,6 +27,15 @@ int CLogicUserMapping::GetUid(unsigned &uid, PlatformType platform, const string
 	return ret;
 }
 
+unsigned CLogicUserMapping::GetUid(const string &openid,PlatformType platform,unsigned & uid)
+{
+	int ret = 0;
+	CDataUserMapping dbUserMapping;
+
+	ret = dbUserMapping.GetUIDByPlatform(openid, platform, uid);
+	return ret;
+}
+
 int CLogicUserMapping::LoginPlatformUser(
 		PlatformType platform,
 		OPUserInfo &userInfo,

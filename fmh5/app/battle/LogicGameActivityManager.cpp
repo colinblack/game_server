@@ -11,6 +11,8 @@ void LogicGameActivityManager::FullMessage(unsigned uid, ProtoActivity::GameAcit
 	OrderActivity::Instance()->SetMessage(uid, msg);
 	CropsActivity::Instance()->SetMessage(uid, msg);
 	LogicFundActivityManager::Instance()->SetMessage(uid,msg);
+	Recharge4399ActivityManager::Instance()->SetMessage(uid,msg);
+	Daily4399ActivityManager::Instance()->SetMessage(uid,msg);
 }
 
 unsigned LogicGameActivityManager::FullStatusMarks(unsigned uid)

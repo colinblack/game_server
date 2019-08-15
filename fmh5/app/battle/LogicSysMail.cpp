@@ -380,8 +380,8 @@ int LogicSysMailManager::AddMail(unsigned uid,string title,string content,string
 	}
 	//2.添加邮件信息
 	DataSysmail &mail = DataSysmailManager::Instance()->GetData(uid,Time::GetGlobalTime());
-	memcpy(mail.sys, sys.c_str(), sizeof(mail.sys));
-	memcpy(mail.reward, reward.c_str(), sizeof(mail.reward));
+	strncpy(mail.sys, sys.c_str(), sizeof(mail.sys)-1);
+	strncpy(mail.reward, reward.c_str(), sizeof(mail.reward)-1);
 	mail.stat = e_mail_stat_unread;
 
 	//3.发送邮件

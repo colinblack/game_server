@@ -76,12 +76,14 @@ message GetScarecrowInfoResp
 //稻草人看广告
 message ScarecrowViewAdReq
 {
+	optional uint32 isCostDimaond    = 1;//(1:表示需要花钻,非1不需要)
 }
 
 message ScarecrowViewAdResp
 {
 	required ScarecrowCPP scarecrow  = 1;
 	repeated ProtoProduce.CropLandCPP cropland    = 2; //农地信息
+	optional DataCommon.CommonItemsCPP commons  =  3;  
 }
 
 

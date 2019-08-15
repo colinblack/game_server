@@ -702,6 +702,19 @@ const ConfigNPCSeller::NPCSellerCfg & NPCSellerCfgWrap::GetNPCSellerCfg() const
 	return cfg_;
 }
 
+/*-----------------cdkey--------------------------------*/
+
+CdKeyCfgWrap::CdKeyCfgWrap()
+	:cfg_(ConfigManager::Instance()->cdkey.m_config)
+{
+
+}
+
+const CdKey::CdKeyCfg & CdKeyCfgWrap::GetCfg() const
+{
+	return cfg_;
+}
+
 /*-----------------LevelupUnlock--------------------------------*/
 
 LevelupUnlockCfgWrap::LevelupUnlockCfgWrap()

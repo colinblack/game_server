@@ -341,6 +341,15 @@ private:
 	const ConfigNPCSeller::NPCSellerCfg & cfg_;
 };
 
+//cdkey配置
+class CdKeyCfgWrap{
+public:
+	CdKeyCfgWrap();
+	const CdKey::CdKeyCfg & GetCfg() const;
+private:
+	const CdKey::CdKeyCfg & cfg_;
+};
+
 //等级解锁配置
 class LevelupUnlockCfgWrap{
 public:

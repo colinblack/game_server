@@ -53,6 +53,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* XMUserRewardCfg_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   XMUserRewardCfg_reflection_ = NULL;
+const ::google::protobuf::Descriptor* CostDiamondCfg_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  CostDiamondCfg_reflection_ = NULL;
 const ::google::protobuf::Descriptor* User_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   User_reflection_ = NULL;
@@ -266,8 +269,25 @@ void protobuf_AssignDesc_UserConfig_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(XMUserRewardCfg));
-  User_descriptor_ = file->message_type(12);
-  static const int User_offsets_[11] = {
+  CostDiamondCfg_descriptor_ = file->message_type(12);
+  static const int CostDiamondCfg_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CostDiamondCfg, xianren_open_cost_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CostDiamondCfg, zhushou_open_cost_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CostDiamondCfg, daocaoren_open_cost_),
+  };
+  CostDiamondCfg_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      CostDiamondCfg_descriptor_,
+      CostDiamondCfg::default_instance_,
+      CostDiamondCfg_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CostDiamondCfg, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CostDiamondCfg, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(CostDiamondCfg));
+  User_descriptor_ = file->message_type(13);
+  static const int User_offsets_[12] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, user_init_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, user_exp_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, builds_),
@@ -279,6 +299,7 @@ void protobuf_AssignDesc_UserConfig_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, fairyspeedup_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, newuserguideshare_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, xmuserreward_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(User, diamondcost_),
   };
   User_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -328,6 +349,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     XMUserRewardCfg_descriptor_, &XMUserRewardCfg::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    CostDiamondCfg_descriptor_, &CostDiamondCfg::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     User_descriptor_, &User::default_instance());
 }
 
@@ -358,6 +381,8 @@ void protobuf_ShutdownFile_UserConfig_2eproto() {
   delete XMUserReward_reflection_;
   delete XMUserRewardCfg::default_instance_;
   delete XMUserRewardCfg_reflection_;
+  delete CostDiamondCfg::default_instance_;
+  delete CostDiamondCfg_reflection_;
   delete User::default_instance_;
   delete User_reflection_;
 }
@@ -397,18 +422,25 @@ void protobuf_AddDesc_UserConfig_2eproto() {
     "rdCfg\022\021\n\tMailTitle\030\001 \002(\014\022\024\n\014FirstMailMsg"
     "\030\002 \002(\014\022\032\n\022FirstChargeMailMsg\030\003 \002(\014\022/\n\020Re"
     "wardDiamondCnt\030\004 \003(\0132\025.UserCfg.XMUserRew"
-    "ard\"\332\003\n\004User\022$\n\tuser_init\030\001 \002(\0132\021.UserCf"
-    "g.UserBase\022\020\n\010user_exp\030\002 \003(\004\022\036\n\006builds\030\003"
-    " \003(\0132\016.UserCfg.Build\0225\n\tinitprops\030\004 \002(\0132"
-    "\".CommonGiftConfig.CommonModifyItem\022,\n\rc"
-    "riticalPoint\030\005 \003(\0132\025.UserCfg.CriticalInf"
-    "o\022+\n\tsharegift\030\006 \002(\0132\030.UserCfg.DailyShar"
-    "eGifts\022+\n\014coinpurchase\030\007 \003(\0132\025.UserCfg.C"
-    "oinPurchase\022$\n\006SignIn\030\010 \003(\0132\024.UserCfg.Si"
-    "gnInGifts\022+\n\014fairySpeedUp\030\t \002(\0132\025.UserCf"
-    "g.FairySpeedUp\0228\n\021newUserGuideShare\030\n \003("
-    "\0132\035.UserCfg.NewUserGuideShareCPP\022.\n\014xmUs"
-    "erReward\030\013 \002(\0132\030.UserCfg.XMUserRewardCfg", 1560);
+    "ard\"\317\001\n\016CostDiamondCfg\022=\n\021xianren_open_c"
+    "ost\030\001 \002(\0132\".CommonGiftConfig.CommonModif"
+    "yItem\022=\n\021zhushou_open_cost\030\002 \002(\0132\".Commo"
+    "nGiftConfig.CommonModifyItem\022\?\n\023daocaore"
+    "n_open_cost\030\003 \002(\0132\".CommonGiftConfig.Com"
+    "monModifyItem\"\210\004\n\004User\022$\n\tuser_init\030\001 \002("
+    "\0132\021.UserCfg.UserBase\022\020\n\010user_exp\030\002 \003(\004\022\036"
+    "\n\006builds\030\003 \003(\0132\016.UserCfg.Build\0225\n\tinitpr"
+    "ops\030\004 \002(\0132\".CommonGiftConfig.CommonModif"
+    "yItem\022,\n\rcriticalPoint\030\005 \003(\0132\025.UserCfg.C"
+    "riticalInfo\022+\n\tsharegift\030\006 \002(\0132\030.UserCfg"
+    ".DailyShareGifts\022+\n\014coinpurchase\030\007 \003(\0132\025"
+    ".UserCfg.CoinPurchase\022$\n\006SignIn\030\010 \003(\0132\024."
+    "UserCfg.SignInGifts\022+\n\014fairySpeedUp\030\t \002("
+    "\0132\025.UserCfg.FairySpeedUp\0228\n\021newUserGuide"
+    "Share\030\n \003(\0132\035.UserCfg.NewUserGuideShareC"
+    "PP\022.\n\014xmUserReward\030\013 \002(\0132\030.UserCfg.XMUse"
+    "rRewardCfg\022,\n\013diamondCost\030\014 \002(\0132\027.UserCf"
+    "g.CostDiamondCfg", 1816);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "UserConfig.proto", &protobuf_RegisterTypes);
   UserBase::default_instance_ = new UserBase();
@@ -423,6 +455,7 @@ void protobuf_AddDesc_UserConfig_2eproto() {
   NewUserGuideShareCPP::default_instance_ = new NewUserGuideShareCPP();
   XMUserReward::default_instance_ = new XMUserReward();
   XMUserRewardCfg::default_instance_ = new XMUserRewardCfg();
+  CostDiamondCfg::default_instance_ = new CostDiamondCfg();
   User::default_instance_ = new User();
   UserBase::default_instance_->InitAsDefaultInstance();
   Build::default_instance_->InitAsDefaultInstance();
@@ -436,6 +469,7 @@ void protobuf_AddDesc_UserConfig_2eproto() {
   NewUserGuideShareCPP::default_instance_->InitAsDefaultInstance();
   XMUserReward::default_instance_->InitAsDefaultInstance();
   XMUserRewardCfg::default_instance_->InitAsDefaultInstance();
+  CostDiamondCfg::default_instance_->InitAsDefaultInstance();
   User::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_UserConfig_2eproto);
 }
@@ -3828,6 +3862,318 @@ void XMUserRewardCfg::Swap(XMUserRewardCfg* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int CostDiamondCfg::kXianrenOpenCostFieldNumber;
+const int CostDiamondCfg::kZhushouOpenCostFieldNumber;
+const int CostDiamondCfg::kDaocaorenOpenCostFieldNumber;
+#endif  // !_MSC_VER
+
+CostDiamondCfg::CostDiamondCfg()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void CostDiamondCfg::InitAsDefaultInstance() {
+  xianren_open_cost_ = const_cast< ::CommonGiftConfig::CommonModifyItem*>(&::CommonGiftConfig::CommonModifyItem::default_instance());
+  zhushou_open_cost_ = const_cast< ::CommonGiftConfig::CommonModifyItem*>(&::CommonGiftConfig::CommonModifyItem::default_instance());
+  daocaoren_open_cost_ = const_cast< ::CommonGiftConfig::CommonModifyItem*>(&::CommonGiftConfig::CommonModifyItem::default_instance());
+}
+
+CostDiamondCfg::CostDiamondCfg(const CostDiamondCfg& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void CostDiamondCfg::SharedCtor() {
+  _cached_size_ = 0;
+  xianren_open_cost_ = NULL;
+  zhushou_open_cost_ = NULL;
+  daocaoren_open_cost_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+CostDiamondCfg::~CostDiamondCfg() {
+  SharedDtor();
+}
+
+void CostDiamondCfg::SharedDtor() {
+  if (this != default_instance_) {
+    delete xianren_open_cost_;
+    delete zhushou_open_cost_;
+    delete daocaoren_open_cost_;
+  }
+}
+
+void CostDiamondCfg::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* CostDiamondCfg::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return CostDiamondCfg_descriptor_;
+}
+
+const CostDiamondCfg& CostDiamondCfg::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_UserConfig_2eproto();  return *default_instance_;
+}
+
+CostDiamondCfg* CostDiamondCfg::default_instance_ = NULL;
+
+CostDiamondCfg* CostDiamondCfg::New() const {
+  return new CostDiamondCfg;
+}
+
+void CostDiamondCfg::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_xianren_open_cost()) {
+      if (xianren_open_cost_ != NULL) xianren_open_cost_->::CommonGiftConfig::CommonModifyItem::Clear();
+    }
+    if (has_zhushou_open_cost()) {
+      if (zhushou_open_cost_ != NULL) zhushou_open_cost_->::CommonGiftConfig::CommonModifyItem::Clear();
+    }
+    if (has_daocaoren_open_cost()) {
+      if (daocaoren_open_cost_ != NULL) daocaoren_open_cost_->::CommonGiftConfig::CommonModifyItem::Clear();
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool CostDiamondCfg::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .CommonGiftConfig.CommonModifyItem xianren_open_cost = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_xianren_open_cost()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_zhushou_open_cost;
+        break;
+      }
+      
+      // required .CommonGiftConfig.CommonModifyItem zhushou_open_cost = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_zhushou_open_cost:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_zhushou_open_cost()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_daocaoren_open_cost;
+        break;
+      }
+      
+      // required .CommonGiftConfig.CommonModifyItem daocaoren_open_cost = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_daocaoren_open_cost:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_daocaoren_open_cost()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+      
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void CostDiamondCfg::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required .CommonGiftConfig.CommonModifyItem xianren_open_cost = 1;
+  if (has_xianren_open_cost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->xianren_open_cost(), output);
+  }
+  
+  // required .CommonGiftConfig.CommonModifyItem zhushou_open_cost = 2;
+  if (has_zhushou_open_cost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->zhushou_open_cost(), output);
+  }
+  
+  // required .CommonGiftConfig.CommonModifyItem daocaoren_open_cost = 3;
+  if (has_daocaoren_open_cost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->daocaoren_open_cost(), output);
+  }
+  
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* CostDiamondCfg::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required .CommonGiftConfig.CommonModifyItem xianren_open_cost = 1;
+  if (has_xianren_open_cost()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->xianren_open_cost(), target);
+  }
+  
+  // required .CommonGiftConfig.CommonModifyItem zhushou_open_cost = 2;
+  if (has_zhushou_open_cost()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->zhushou_open_cost(), target);
+  }
+  
+  // required .CommonGiftConfig.CommonModifyItem daocaoren_open_cost = 3;
+  if (has_daocaoren_open_cost()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->daocaoren_open_cost(), target);
+  }
+  
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int CostDiamondCfg::ByteSize() const {
+  int total_size = 0;
+  
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .CommonGiftConfig.CommonModifyItem xianren_open_cost = 1;
+    if (has_xianren_open_cost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->xianren_open_cost());
+    }
+    
+    // required .CommonGiftConfig.CommonModifyItem zhushou_open_cost = 2;
+    if (has_zhushou_open_cost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->zhushou_open_cost());
+    }
+    
+    // required .CommonGiftConfig.CommonModifyItem daocaoren_open_cost = 3;
+    if (has_daocaoren_open_cost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->daocaoren_open_cost());
+    }
+    
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void CostDiamondCfg::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const CostDiamondCfg* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CostDiamondCfg*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void CostDiamondCfg::MergeFrom(const CostDiamondCfg& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_xianren_open_cost()) {
+      mutable_xianren_open_cost()->::CommonGiftConfig::CommonModifyItem::MergeFrom(from.xianren_open_cost());
+    }
+    if (from.has_zhushou_open_cost()) {
+      mutable_zhushou_open_cost()->::CommonGiftConfig::CommonModifyItem::MergeFrom(from.zhushou_open_cost());
+    }
+    if (from.has_daocaoren_open_cost()) {
+      mutable_daocaoren_open_cost()->::CommonGiftConfig::CommonModifyItem::MergeFrom(from.daocaoren_open_cost());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void CostDiamondCfg::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void CostDiamondCfg::CopyFrom(const CostDiamondCfg& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CostDiamondCfg::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  
+  if (has_xianren_open_cost()) {
+    if (!this->xianren_open_cost().IsInitialized()) return false;
+  }
+  if (has_zhushou_open_cost()) {
+    if (!this->zhushou_open_cost().IsInitialized()) return false;
+  }
+  if (has_daocaoren_open_cost()) {
+    if (!this->daocaoren_open_cost().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void CostDiamondCfg::Swap(CostDiamondCfg* other) {
+  if (other != this) {
+    std::swap(xianren_open_cost_, other->xianren_open_cost_);
+    std::swap(zhushou_open_cost_, other->zhushou_open_cost_);
+    std::swap(daocaoren_open_cost_, other->daocaoren_open_cost_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata CostDiamondCfg::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = CostDiamondCfg_descriptor_;
+  metadata.reflection = CostDiamondCfg_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int User::kUserInitFieldNumber;
 const int User::kUserExpFieldNumber;
 const int User::kBuildsFieldNumber;
@@ -3839,6 +4185,7 @@ const int User::kSignInFieldNumber;
 const int User::kFairySpeedUpFieldNumber;
 const int User::kNewUserGuideShareFieldNumber;
 const int User::kXmUserRewardFieldNumber;
+const int User::kDiamondCostFieldNumber;
 #endif  // !_MSC_VER
 
 User::User()
@@ -3852,6 +4199,7 @@ void User::InitAsDefaultInstance() {
   sharegift_ = const_cast< ::UserCfg::DailyShareGifts*>(&::UserCfg::DailyShareGifts::default_instance());
   fairyspeedup_ = const_cast< ::UserCfg::FairySpeedUp*>(&::UserCfg::FairySpeedUp::default_instance());
   xmuserreward_ = const_cast< ::UserCfg::XMUserRewardCfg*>(&::UserCfg::XMUserRewardCfg::default_instance());
+  diamondcost_ = const_cast< ::UserCfg::CostDiamondCfg*>(&::UserCfg::CostDiamondCfg::default_instance());
 }
 
 User::User(const User& from)
@@ -3867,6 +4215,7 @@ void User::SharedCtor() {
   sharegift_ = NULL;
   fairyspeedup_ = NULL;
   xmuserreward_ = NULL;
+  diamondcost_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3881,6 +4230,7 @@ void User::SharedDtor() {
     delete sharegift_;
     delete fairyspeedup_;
     delete xmuserreward_;
+    delete diamondcost_;
   }
 }
 
@@ -3922,6 +4272,9 @@ void User::Clear() {
     }
     if (has_xmuserreward()) {
       if (xmuserreward_ != NULL) xmuserreward_->::UserCfg::XMUserRewardCfg::Clear();
+    }
+    if (has_diamondcost()) {
+      if (diamondcost_ != NULL) diamondcost_->::UserCfg::CostDiamondCfg::Clear();
     }
   }
   user_exp_.Clear();
@@ -4102,6 +4455,20 @@ bool User::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(98)) goto parse_diamondCost;
+        break;
+      }
+      
+      // required .UserCfg.CostDiamondCfg diamondCost = 12;
+      case 12: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_diamondCost:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_diamondcost()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -4190,6 +4557,12 @@ void User::SerializeWithCachedSizes(
       11, this->xmuserreward(), output);
   }
   
+  // required .UserCfg.CostDiamondCfg diamondCost = 12;
+  if (has_diamondcost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      12, this->diamondcost(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -4274,6 +4647,13 @@ void User::SerializeWithCachedSizes(
         11, this->xmuserreward(), target);
   }
   
+  // required .UserCfg.CostDiamondCfg diamondCost = 12;
+  if (has_diamondcost()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        12, this->diamondcost(), target);
+  }
+  
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -4320,6 +4700,13 @@ int User::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->xmuserreward());
+    }
+    
+    // required .UserCfg.CostDiamondCfg diamondCost = 12;
+    if (has_diamondcost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->diamondcost());
     }
     
   }
@@ -4422,6 +4809,9 @@ void User::MergeFrom(const User& from) {
     if (from.has_xmuserreward()) {
       mutable_xmuserreward()->::UserCfg::XMUserRewardCfg::MergeFrom(from.xmuserreward());
     }
+    if (from.has_diamondcost()) {
+      mutable_diamondcost()->::UserCfg::CostDiamondCfg::MergeFrom(from.diamondcost());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -4439,7 +4829,7 @@ void User::CopyFrom(const User& from) {
 }
 
 bool User::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000529) != 0x00000529) return false;
+  if ((_has_bits_[0] & 0x00000d29) != 0x00000d29) return false;
   
   if (has_user_init()) {
     if (!this->user_init().IsInitialized()) return false;
@@ -4471,6 +4861,9 @@ bool User::IsInitialized() const {
   if (has_xmuserreward()) {
     if (!this->xmuserreward().IsInitialized()) return false;
   }
+  if (has_diamondcost()) {
+    if (!this->diamondcost().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -4487,6 +4880,7 @@ void User::Swap(User* other) {
     std::swap(fairyspeedup_, other->fairyspeedup_);
     newuserguideshare_.Swap(&other->newuserguideshare_);
     std::swap(xmuserreward_, other->xmuserreward_);
+    std::swap(diamondcost_, other->diamondcost_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -159,8 +159,8 @@ int LogicFriendlyTreeManager::Process(ProtoFriendlyTree::CSWaterFriendlyTreeReq*
 		maxud = DataFriendlyTreeManager::Instance()->GetNextWaterUd(othuid);
 	DataFriendlyTree & tree = DataFriendlyTreeManager::Instance()->GetData(othuid,maxud);
 	//1.往对方友情树档里添加记录
-	memcpy(tree.fig, req->myhead().c_str(), BASE_FIG_LEN);
-	memcpy(tree.name, req->myname().c_str(), BASE_NAME_LEN);
+	strncpy(tree.fig, req->myhead().c_str(), BASE_FIG_LEN-1);
+	strncpy(tree.name, req->myname().c_str(), BASE_NAME_LEN-1);
 	tree.othuid = uid;
 	tree.ts = Time::GetGlobalTime() + treecfg.treecdtime();
 	DataFriendlyTreeManager::Instance()->UpdateItem(tree);

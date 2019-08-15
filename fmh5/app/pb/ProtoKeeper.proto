@@ -28,6 +28,7 @@ message KeeperBuyTime{
 // 看广告奖励
 message KeeperWatchAds{
 		required uint32 id 					= 1;	// 助手ID
+		optional uint32 isCostDimaond       = 2;//(1:表示需要花钻,非1不需要)
 }
 // 升级
 message KeeperUpgrade{

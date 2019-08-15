@@ -206,14 +206,28 @@ int CLogicQQPay::v3_buy_goods(
 		const string &userip,
 		const string &itemid,
 		string &appid,
-		string &url_params)
+		string &url_params,
+		unsigned playerId,
+		string zoneid)
 {
 	int ret = 0;
+
 	unsigned uid = 0;
 	CDataUserMapping dbUserMapping;
 	ret = dbUserMapping.GetMapping(openid, PT_TEST, uid);
-	if (ret != 0)
+	if(ret == R_ERR_NO_DATA && IsValidUid(playerId))
+	{
+		uid = playerId;
+	}
+	else if(ret == 0)
+	{
+
+	}
+	else
+	{
 		return ret;
+	}
+
 	QQItemInfo itemInfo;
 	ret = GetItemInfo(itemid, itemInfo);
 	if (ret != 0)
@@ -249,9 +263,7 @@ int CLogicQQPay::v3_buy_goods(
 	qsig += ts + "&userip=" + userip;
 	qstr += ts + "&userip=" + Crypt::UrlEncodeForTX(userip);
 
-	string zoneid;
-	if(!Config::GetValue(zoneid, CONFIG_ZONE_ID))
-		zoneid = "0";
+
 	qsig += "&zoneid=" + zoneid;
 	qstr += "&zoneid=" + Crypt::UrlEncodeForTX(zoneid);
 
@@ -297,8 +309,20 @@ int CLogicQQPay::v3_pay_get_token(const string &pfkey,
 {
 	int ret = 0;
 	string ts = CTrans::UTOS((unsigned)time(NULL));
+	/*
 	if(!Config::GetValue(zoneid, CONFIG_ZONE_ID))
 		zoneid = "0";
+	*/
+	zoneid = "1";
+	CLogicUserMapping LogicUserMapping;
+	unsigned uid = 0;
+	ret = LogicUserMapping.GetUid(openid,PT_qqgame,uid);
+	if(ret == 0 && IsValidUid(uid))
+	{
+		//表明为老服玩家
+		zoneid = "0";
+	}
+
 
 	appid = OpenPlatform::GetPlatform()->GetAppId();
 	string appkey = OpenPlatform::GetPlatform()->GetAppKey();

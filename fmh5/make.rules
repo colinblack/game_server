@@ -47,6 +47,10 @@ PENGYOU_LIB		= -L$(PATH_PLATFORM_PRJ)/outerlib/pengyou/lib -lsg17openapi -lcurl 
 XSG_INC         = -I$(PATH_PLATFORM_PRJ)/outerlib/xsg/include
 XSG_LIB         =  -L$(PATH_PLATFORM_PRJ)/outerlib/xsg/lib -lxsg
 
+### OPENSSL
+OPENSSL_INC     = -I$(PATH_PLATFORM_PRJ)/outerlib/openssl/include
+OPENSSL_LIB     = -L$(PATH_PLATFORM_PRJ)/outerlib/openssl/lib -lssl
+
 ### PROTO
 PROTO_INC       = -I$(PATH_PLATFORM_PRJ)/proto
 PROTO_LIB		= -L$(PATH_PLATFORM_PRJ)/proto -lsg17proto

@@ -529,17 +529,27 @@ class KeeperWatchAds : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
   
+  // optional uint32 isCostDimaond = 2;
+  inline bool has_iscostdimaond() const;
+  inline void clear_iscostdimaond();
+  static const int kIsCostDimaondFieldNumber = 2;
+  inline ::google::protobuf::uint32 iscostdimaond() const;
+  inline void set_iscostdimaond(::google::protobuf::uint32 value);
+  
   // @@protoc_insertion_point(class_scope:ProtoKeeper.KeeperWatchAds)
  private:
   inline void set_has_id();
   inline void clear_has_id();
+  inline void set_has_iscostdimaond();
+  inline void clear_has_iscostdimaond();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 iscostdimaond_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_ProtoKeeper_2eproto();
   friend void protobuf_AssignDesc_ProtoKeeper_2eproto();
@@ -1320,6 +1330,28 @@ inline ::google::protobuf::uint32 KeeperWatchAds::id() const {
 inline void KeeperWatchAds::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
+}
+
+// optional uint32 isCostDimaond = 2;
+inline bool KeeperWatchAds::has_iscostdimaond() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void KeeperWatchAds::set_has_iscostdimaond() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void KeeperWatchAds::clear_has_iscostdimaond() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void KeeperWatchAds::clear_iscostdimaond() {
+  iscostdimaond_ = 0u;
+  clear_has_iscostdimaond();
+}
+inline ::google::protobuf::uint32 KeeperWatchAds::iscostdimaond() const {
+  return iscostdimaond_;
+}
+inline void KeeperWatchAds::set_iscostdimaond(::google::protobuf::uint32 value) {
+  set_has_iscostdimaond();
+  iscostdimaond_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -26,6 +26,8 @@ public:
 	//autoAlt: 是否自动从互通平台查找用户
 	int GetUid(unsigned &uid, PlatformType platform, const string &openid, bool autoAlt = true);
 
+	unsigned GetUid(const string &openid,PlatformType platform,unsigned & uid);
+
 	int LoginPlatformUser(
 			PlatformType platform,
 			OPUserInfo &userInfo,

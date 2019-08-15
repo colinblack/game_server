@@ -34,9 +34,9 @@ public:
 	{
 		string postdata = "";
 		if(ret)
-			postdata += "{\"respCode\":200,\"respMsg\":\"success\" }";
+			postdata += "success";
 		else
-			postdata += "{\"respCode\":200,\"respMsg\":\"fail\" }";
+			postdata += "fail";
 		CgiUtil::PrintText(postdata);
 		return 0;
 	}
@@ -59,7 +59,7 @@ public:
 		string cpId = OpenPlatform::GetPlatform()->GetConfig("cpid");
 		string appId = OpenPlatform::GetPlatform()->GetConfig("appid");
 		string AppKey = OpenPlatform::GetPlatform()->GetConfig("appkey");
-		if(respCode != "200" || respMsg != "success")
+		if(respCode != "200" || respMsg != "SUCCESS")
 		{
 			error_log("resp_error:respcode=%s,respmsg=%s",respCode.c_str(),respMsg.c_str());
 			responeXMFourMsg(false);
@@ -88,7 +88,7 @@ public:
 
 		//根据cpOrderNumber获取openid，itemid
 		vector<string>strlist;
-		SplitString(cpOrderNumber,strlist,"_");
+		SplitString(cpOrderNumber,strlist,",");
 		string openid = strlist[0];
 		string itemid = strlist[1];
 
@@ -104,6 +104,18 @@ public:
 		}
 		int serverid = Config::GetZoneByUID(uid);
 		ConfigManager::Instance()->SetServer(serverid);
+
+		//校验订单是否已存在
+		DataPayHistory payChcekHistory;
+		CDataPayHistory dbCheckPayHistory;
+		ret = dbCheckPayHistory.GetPayHistory(uid, PT_VIVO,vivoOrderNumber, payChcekHistory);
+		if(ret == 0 && payChcekHistory.status == PST_OK)			//订单已充值,重复订单
+		{
+			error_log("order_alreay_exsit:openid=%s",openid.c_str());
+			responeXMFourMsg(true);
+			return 0;
+		}
+
 
 		//读取物品配置
 		QQItemInfo itemInfo;
@@ -124,6 +136,9 @@ public:
 		msg->set_cash(cash);
 		msg->set_itemid(CTrans::STOI(itemid));
 		msg->set_ts(Time::GetGlobalTime());
+		msg->set_currency(CTrans::STOI(factAmount) * 100);
+		msg->set_tradeno(vivoOrderNumber);
+		msg->set_channeltradeno(vivoOrderNumber);
 		packet.m_msg = msg;
 
 		bool f = true;
@@ -172,7 +187,7 @@ public:
 						ret,openid.c_str(),vivoOrderNumber.c_str(),cash,cash);
 			}
 			CGI_SEND_LOG("openid=%s&billno=%s&cash=%u&cost=%u&itemids=%s&uid=%u&ret=%d",
-					openid.c_str(),vivoOrderNumber.c_str(),cash,cash,itemid.c_str(),uid,ret);
+					openid.c_str(),vivoOrderNumber.c_str(),cash,CTrans::STOI(factAmount) * 100,itemid.c_str(),uid,ret);
 			responeXMFourMsg(true);
 			return R_SUCCESS;
 		}

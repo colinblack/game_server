@@ -113,6 +113,10 @@ class ViewAdGetSpeedUpCardReq;
 class ViewAdGetSpeedUpCardResp;
 class NewUserGuideShareReq;
 class NewUserGuideShareResp;
+class UseCdKeyReq;
+class UseCdKeyResp;
+class HeartBeatReq;
+class HeartBeatResp;
 
 // ===================================================================
 
@@ -4171,17 +4175,27 @@ class SetFlag : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 flagid() const;
   inline void set_flagid(::google::protobuf::uint32 value);
   
+  // optional uint32 isCostDimaond = 2;
+  inline bool has_iscostdimaond() const;
+  inline void clear_iscostdimaond();
+  static const int kIsCostDimaondFieldNumber = 2;
+  inline ::google::protobuf::uint32 iscostdimaond() const;
+  inline void set_iscostdimaond(::google::protobuf::uint32 value);
+  
   // @@protoc_insertion_point(class_scope:User.SetFlag)
  private:
   inline void set_has_flagid();
   inline void clear_has_flagid();
+  inline void set_has_iscostdimaond();
+  inline void clear_has_iscostdimaond();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::google::protobuf::uint32 flagid_;
+  ::google::protobuf::uint32 iscostdimaond_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
@@ -4253,17 +4267,28 @@ class GetFlagResp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 flag() const;
   inline void set_flag(::google::protobuf::uint32 value);
   
+  // optional .DataCommon.CommonItemsCPP commons = 2;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 2;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  
   // @@protoc_insertion_point(class_scope:User.GetFlagResp)
  private:
   inline void set_has_flag();
   inline void clear_has_flag();
+  inline void set_has_commons();
+  inline void clear_has_commons();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::DataCommon::CommonItemsCPP* commons_;
   ::google::protobuf::uint32 flag_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
   
   friend void  protobuf_AddDesc_User_2eproto();
   friend void protobuf_AssignDesc_User_2eproto();
@@ -6975,6 +7000,319 @@ class NewUserGuideShareResp : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static NewUserGuideShareResp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UseCdKeyReq : public ::google::protobuf::Message {
+ public:
+  UseCdKeyReq();
+  virtual ~UseCdKeyReq();
+  
+  UseCdKeyReq(const UseCdKeyReq& from);
+  
+  inline UseCdKeyReq& operator=(const UseCdKeyReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UseCdKeyReq& default_instance();
+  
+  void Swap(UseCdKeyReq* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UseCdKeyReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UseCdKeyReq& from);
+  void MergeFrom(const UseCdKeyReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required string number = 1;
+  inline bool has_number() const;
+  inline void clear_number();
+  static const int kNumberFieldNumber = 1;
+  inline const ::std::string& number() const;
+  inline void set_number(const ::std::string& value);
+  inline void set_number(const char* value);
+  inline void set_number(const char* value, size_t size);
+  inline ::std::string* mutable_number();
+  inline ::std::string* release_number();
+  
+  // @@protoc_insertion_point(class_scope:User.UseCdKeyReq)
+ private:
+  inline void set_has_number();
+  inline void clear_has_number();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* number_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UseCdKeyReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UseCdKeyResp : public ::google::protobuf::Message {
+ public:
+  UseCdKeyResp();
+  virtual ~UseCdKeyResp();
+  
+  UseCdKeyResp(const UseCdKeyResp& from);
+  
+  inline UseCdKeyResp& operator=(const UseCdKeyResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UseCdKeyResp& default_instance();
+  
+  void Swap(UseCdKeyResp* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UseCdKeyResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UseCdKeyResp& from);
+  void MergeFrom(const UseCdKeyResp& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .DataCommon.CommonItemsCPP commons = 1;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 1;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  
+  // @@protoc_insertion_point(class_scope:User.UseCdKeyResp)
+ private:
+  inline void set_has_commons();
+  inline void clear_has_commons();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::DataCommon::CommonItemsCPP* commons_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UseCdKeyResp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class HeartBeatReq : public ::google::protobuf::Message {
+ public:
+  HeartBeatReq();
+  virtual ~HeartBeatReq();
+  
+  HeartBeatReq(const HeartBeatReq& from);
+  
+  inline HeartBeatReq& operator=(const HeartBeatReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const HeartBeatReq& default_instance();
+  
+  void Swap(HeartBeatReq* other);
+  
+  // implements Message ----------------------------------------------
+  
+  HeartBeatReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const HeartBeatReq& from);
+  void MergeFrom(const HeartBeatReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // @@protoc_insertion_point(class_scope:User.HeartBeatReq)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+  
+  void InitAsDefaultInstance();
+  static HeartBeatReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class HeartBeatResp : public ::google::protobuf::Message {
+ public:
+  HeartBeatResp();
+  virtual ~HeartBeatResp();
+  
+  HeartBeatResp(const HeartBeatResp& from);
+  
+  inline HeartBeatResp& operator=(const HeartBeatResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const HeartBeatResp& default_instance();
+  
+  void Swap(HeartBeatResp* other);
+  
+  // implements Message ----------------------------------------------
+  
+  HeartBeatResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const HeartBeatResp& from);
+  void MergeFrom(const HeartBeatResp& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // @@protoc_insertion_point(class_scope:User.HeartBeatResp)
+ private:
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[1];
+  
+  friend void  protobuf_AddDesc_User_2eproto();
+  friend void protobuf_AssignDesc_User_2eproto();
+  friend void protobuf_ShutdownFile_User_2eproto();
+  
+  void InitAsDefaultInstance();
+  static HeartBeatResp* default_instance_;
 };
 // ===================================================================
 
@@ -10513,6 +10851,28 @@ inline void SetFlag::set_flagid(::google::protobuf::uint32 value) {
   flagid_ = value;
 }
 
+// optional uint32 isCostDimaond = 2;
+inline bool SetFlag::has_iscostdimaond() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void SetFlag::set_has_iscostdimaond() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void SetFlag::clear_has_iscostdimaond() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void SetFlag::clear_iscostdimaond() {
+  iscostdimaond_ = 0u;
+  clear_has_iscostdimaond();
+}
+inline ::google::protobuf::uint32 SetFlag::iscostdimaond() const {
+  return iscostdimaond_;
+}
+inline void SetFlag::set_iscostdimaond(::google::protobuf::uint32 value) {
+  set_has_iscostdimaond();
+  iscostdimaond_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // GetFlagResp
@@ -10537,6 +10897,35 @@ inline ::google::protobuf::uint32 GetFlagResp::flag() const {
 inline void GetFlagResp::set_flag(::google::protobuf::uint32 value) {
   set_has_flag();
   flag_ = value;
+}
+
+// optional .DataCommon.CommonItemsCPP commons = 2;
+inline bool GetFlagResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GetFlagResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GetFlagResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GetFlagResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& GetFlagResp::commons() const {
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* GetFlagResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* GetFlagResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
 }
 
 // -------------------------------------------------------------------
@@ -11832,6 +12221,109 @@ inline ::DataCommon::CommonItemsCPP* NewUserGuideShareResp::release_commons() {
   commons_ = NULL;
   return temp;
 }
+
+// -------------------------------------------------------------------
+
+// UseCdKeyReq
+
+// required string number = 1;
+inline bool UseCdKeyReq::has_number() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UseCdKeyReq::set_has_number() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UseCdKeyReq::clear_has_number() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UseCdKeyReq::clear_number() {
+  if (number_ != &::google::protobuf::internal::kEmptyString) {
+    number_->clear();
+  }
+  clear_has_number();
+}
+inline const ::std::string& UseCdKeyReq::number() const {
+  return *number_;
+}
+inline void UseCdKeyReq::set_number(const ::std::string& value) {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  number_->assign(value);
+}
+inline void UseCdKeyReq::set_number(const char* value) {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  number_->assign(value);
+}
+inline void UseCdKeyReq::set_number(const char* value, size_t size) {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  number_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* UseCdKeyReq::mutable_number() {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  return number_;
+}
+inline ::std::string* UseCdKeyReq::release_number() {
+  clear_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = number_;
+    number_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// -------------------------------------------------------------------
+
+// UseCdKeyResp
+
+// required .DataCommon.CommonItemsCPP commons = 1;
+inline bool UseCdKeyResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UseCdKeyResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UseCdKeyResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UseCdKeyResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& UseCdKeyResp::commons() const {
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* UseCdKeyResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* UseCdKeyResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// HeartBeatReq
+
+// -------------------------------------------------------------------
+
+// HeartBeatResp
 
 
 // @@protoc_insertion_point(namespace_scope)

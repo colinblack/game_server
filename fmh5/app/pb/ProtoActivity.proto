@@ -62,6 +62,54 @@ message PushAutoRewardFundMsg
 	repeated DataCommon.CommonItemsCPP commons  = 1; //领取奖励
 }
 
+//---------------4399首冲翻倍
+//领取礼包
+message Reward4399RechargeGiftReq
+{
+	required uint32 index = 1;//领取的索引(从1开始，共6档)
+}
+
+message Reward4399RechargeGiftResp
+{
+	required GameAcitivityCPP rechargeActivity  = 1;//活动数据
+	required DataCommon.CommonItemsCPP commons  = 2; //领取奖励
+}
+
+//首冲一定金额成功后后端返回
+message GameAcitivity4399Recharge
+{
+    required GameAcitivityCPP    data = 1;   //记录奖励标志和奖励数据
+}
+
+//---------------4399每日充值
+//领取礼包
+message Reward4399DailyGiftReq
+{
+	required uint32 index = 1;//领取的索引(从1开始，共n档)
+}
+
+message Reward4399DailyGiftResp
+{
+	required GameAcitivityCPP rechargeActivity  = 1;//活动数据
+	required DataCommon.CommonItemsCPP commons  = 2; //领取奖励
+}
+
+//后端返回时机：1.充值一定金额 2.每日0点在线跨天重置奖励
+message GameAcitivity4399Daily
+{
+    required GameAcitivityCPP    data = 1;   //记录奖励标志和奖励数据
+}
+
+//使用月卡令或者终身卡令
+message UseCardReq
+{
+	required uint32 type = 1;//1:月卡令 2：终身卡令
+}
+message UseCardResp
+{
+	required DataCommon.CommonItemsCPP commons  = 1; //消耗
+}
+
 //------------新分享活动
 
 //好友信息

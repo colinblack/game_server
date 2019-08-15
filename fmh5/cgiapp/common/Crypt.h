@@ -38,8 +38,9 @@ namespace Crypt
 	string HmacSha256(const string &text, const string &key);
 
 	//RSA-SHA
-	bool RsaSha1Signature(const string &text, const string &key, string &sign);
-	bool RsaSha1Verify(const string &text, const string &key, const string &sign);
+	bool RsaSignature(const string &text, const string &key, string &sign,string type);
+	bool RsaVerify(const string &text, const string &key, const string &sign,string type);
+	bool RsaWithSha1Verify(const string &text, const string &key, const string &sign);
 
 	//Dawx Crypt
 	bool DawxEncode(string &result, const string &text, const string &key);

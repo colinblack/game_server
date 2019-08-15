@@ -12,6 +12,7 @@ int CDataBase::Get(DataBase &data)
 	DBCREQ_NEED(name);
 	DBCREQ_NEED(fig);
 	DBCREQ_NEED(level);
+	DBCREQ_NEED(cash);
 	DBCREQ_NEED(blue_info);
 	DBCREQ_NEED(flag);
 	DBCREQ_NEED(prosperity);
@@ -29,6 +30,7 @@ int CDataBase::Get(DataBase &data)
 	DBCREQ_GET_CHAR(data, name, BASE_NAME_LEN);
 	DBCREQ_GET_CHAR(data, fig, BASE_FIG_LEN);
 	DBCREQ_GET_INT(data, level);
+	DBCREQ_GET_INT(data, cash);
 	DBCREQ_GET_INT(data, blue_info);
 	DBCREQ_GET_INT(data, flag);
 	DBCREQ_GET_INT(data, prosperity);
@@ -48,6 +50,7 @@ int CDataBase::Add(DataBase &data)
 	DBCREQ_SET_CHAR(data, name, BASE_NAME_LEN);
 	DBCREQ_SET_CHAR(data, fig, BASE_FIG_LEN);
 	DBCREQ_SET_INT(data, level);
+	DBCREQ_SET_INT(data, cash);
 	DBCREQ_SET_INT(data, blue_info);
 	DBCREQ_SET_INT(data, flag);
 	DBCREQ_SET_INT(data, prosperity);
@@ -66,6 +69,7 @@ int CDataBase::Set(DataBase &data)
 	DBCREQ_SET_CHAR(data, name, BASE_NAME_LEN);
 	DBCREQ_SET_CHAR(data, fig, BASE_FIG_LEN);
 	DBCREQ_SET_INT(data, level);
+	DBCREQ_SET_INT(data, cash);
 	DBCREQ_SET_INT(data, blue_info);
 	DBCREQ_SET_INT(data, flag);
 	DBCREQ_SET_INT(data, prosperity);

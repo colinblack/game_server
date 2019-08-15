@@ -45,4 +45,5 @@
 #include "ConfigLanguage.pb.h"
 #include "ConfigFriendWorker.pb.h"
 #include "ConfigPet.pb.h"
+#include "CdKey.pb.h"
 #endif /* CONFIGINC_H_ */

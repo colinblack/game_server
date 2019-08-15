@@ -940,6 +940,8 @@ void LogicManager::RegProto()
 	dispatcher.registerMessageCallback<User::SetFlag>(ProtoManager::ProcessNoReply<User::SetFlag, UserManager>);
 	//请求是否有新消息
 	dispatcher.registerMessageCallback<User::ReqNewMsg>(ProtoManager::Process<User::ReqNewMsg, User::ReplyNewMsg, UserManager>);
+	//心跳请求
+	dispatcher.registerMessageCallback<User::HeartBeatReq>(ProtoManager::Process<User::HeartBeatReq, User::HeartBeatResp, UserManager>);
 
 	//获取点赞信息
 	dispatcher.registerMessageCallback<User::GetThumbsUpReq>(ProtoManager::Process<User::GetThumbsUpReq, User::GetThumbsUpResp, LogicUserManager>);
@@ -957,6 +959,8 @@ void LogicManager::RegProto()
 	dispatcher.registerMessageCallback<User::NewUserGuideShareReq>(ProtoManager::Process<User::NewUserGuideShareReq, User::NewUserGuideShareResp, LogicUserManager>);
 	//升级领取奖励
 	dispatcher.registerMessageCallback<ProtoPush::RewardLevelUpReq>(ProtoManager::Process<ProtoPush::RewardLevelUpReq, ProtoPush::RewardLevelUpResp, LogicUserManager>);
+	//cdkey
+	dispatcher.registerMessageCallback<User::UseCdKeyReq>(ProtoManager::Process<User::UseCdKeyReq, User::UseCdKeyResp, LogicUserManager>);
 
 	//导出
 	dispatcher.registerMessageCallback<ProtoArchive::ExportReq>(ProtoManager::ProcessNoUID<ProtoArchive::ExportReq, ProtoArchive::ExportResp, UserManager>);
@@ -1527,6 +1531,15 @@ void LogicManager::RegProto()
 	dispatcher.registerMessageCallback<ProtoActivity::FundPurchaseReq>(ProtoManager::Process<ProtoActivity::FundPurchaseReq, ProtoActivity::FundPurchaseResp, LogicFundActivityManager>);
 	//每日领取奖励
 	dispatcher.registerMessageCallback<ProtoActivity::RewardFundGiftReq>(ProtoManager::Process<ProtoActivity::RewardFundGiftReq, ProtoActivity::RewardFundGiftResp, LogicFundActivityManager>);
+
+	//-------------4399首冲翻倍活动
+	//领取翻倍奖励
+	dispatcher.registerMessageCallback<ProtoActivity::Reward4399RechargeGiftReq>(ProtoManager::Process<ProtoActivity::Reward4399RechargeGiftReq, ProtoActivity::Reward4399RechargeGiftResp, Recharge4399ActivityManager>);
+	//-------------4399每日充值活动
+	//领取奖励
+	dispatcher.registerMessageCallback<ProtoActivity::Reward4399DailyGiftReq>(ProtoManager::Process<ProtoActivity::Reward4399DailyGiftReq, ProtoActivity::Reward4399DailyGiftResp, Daily4399ActivityManager>);
+	dispatcher.registerMessageCallback<ProtoActivity::UseCardReq>(ProtoManager::Process<ProtoActivity::UseCardReq, ProtoActivity::UseCardResp, Daily4399ActivityManager>);
+
 	//----------月卡与终生卡
 	//获取月卡信息
 	dispatcher.registerMessageCallback<ProtoCard::GetCardReq>(ProtoManager::Process<ProtoCard::GetCardReq, ProtoCard::GetCardResp, LogicCardManager>);
@@ -1625,7 +1638,7 @@ void LogicManager::RegMemoryManager()
 	m_memoryManager.push_back(FriendOrderManager::Instance());
 
 	m_memoryManager.push_back(MessageBoardManager::Instance());
-
+	m_memoryManager.push_back(CDKeyManager::Instance());
 	m_memoryManager.push_back(MemorySysMailManager::Instance());
 
 }
@@ -1733,6 +1746,8 @@ void LogicManager::RegActivityManager()
 	m_activityManager.push_back(OrderActivity::Instance());
 	m_activityManager.push_back(SignInActivity::Instance());
 	m_activityManager.push_back(LogicFundActivityManager::Instance());
+	m_activityManager.push_back(Recharge4399ActivityManager::Instance());
+	m_activityManager.push_back(Daily4399ActivityManager::Instance());
 }
 
 bool LogicManager::IsDataManagerWorking()
@@ -2010,6 +2025,9 @@ void LogicManager::CheckDay()
 	LogicMessageBoardManager::Instance()->UpdateFeedbackTimes();
 	//商会竞赛看广告任务每日更新
 	LogicAllianceManager::Instance()->UpdateWatchAd();
+
+	//4399每日充值活动0点定时重置数据
+	Daily4399ActivityManager::Instance()->CheckDaily();
 }
 
 void LogicManager::OnReload()

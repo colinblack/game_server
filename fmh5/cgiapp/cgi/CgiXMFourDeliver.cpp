@@ -145,6 +145,10 @@ public:
 		msg->set_uid(uid);
 		msg->set_cash(cash);
 		msg->set_ts(Time::GetGlobalTime());
+		msg->set_itemid(CTrans::STOI(itemid));
+		msg->set_currency(itemInfo.price * itemcnt);
+		msg->set_tradeno(billno);
+		msg->set_channeltradeno(billno);
 		packet.m_msg = msg;
 
 		bool f = true;

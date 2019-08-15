@@ -32,6 +32,19 @@ int LogicKeeperManager::Process(unsigned uid, ProtoKeeper::KeeperBuyTime* req, P
 //看广告奖励
 int LogicKeeperManager::Process(unsigned uid, ProtoKeeper::KeeperWatchAds* req, ProtoKeeper::KeeperInfoResp* resp)
 {
+	//如果为钻石消耗、校验钻石是否足够
+	DBCUserBaseWrap userwrap(uid);
+	bool isNeedCost = false;
+	if(req->has_iscostdimaond() && req->iscostdimaond() == 1)
+	{
+		int needCash = UserCfgWrap().User().diamondcost().zhushou_open_cost().based().cash();
+		if(userwrap.Obj().cash < -needCash)
+		{
+			throw std::runtime_error("diamond_not_enough");
+		}
+		isNeedCost = true;
+	}
+
 	uint32_t keeperId = req->id();
 	DataKeeper& keeper = DataKeeperManager::Instance()->GetData(uid, keeperId);
 	uint32_t now = Time::GetGlobalTime();
@@ -55,6 +68,9 @@ int LogicKeeperManager::Process(unsigned uid, ProtoKeeper::KeeperWatchAds* req, 
 		keeper.exp += 1;	// 没有超过上限才加经验值
 	}
 	DataKeeperManager::Instance()->UpdateItem(keeper);
+
+	if(isNeedCost)
+		LogicUserManager::Instance()->CommonProcess(uid,UserCfgWrap().User().diamondcost().zhushou_open_cost(),"zhushou_open_cost",resp->mutable_commons());
 	FillKeeperInfo(uid, req->id(), resp);
 
 	LogicKeeperManager::Instance()->OnAddAnimalHungry(uid);

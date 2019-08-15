@@ -45,10 +45,10 @@ struct DataFriendlyTree
 	   ts = msg->ts();
 	   othuid = msg->othuid();
 	   memset(name, 0, sizeof(name));
-	   memcpy(name, msg->name().c_str(), sizeof(name));
+	   strncpy(name, msg->name().c_str(), sizeof(name)-1);
 
 	   memset(fig, 0, sizeof(fig));
-	   memcpy(fig, msg->head().c_str(), sizeof(fig));
+	   strncpy(fig, msg->head().c_str(), sizeof(fig)-1);
    }
 };
 

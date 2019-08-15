@@ -76,6 +76,7 @@ private:
 		,friendworker("friendworker.json")
 		,language("language.json")
 		,pet("pet.json")
+		,cdkey("cdKey.json")
 	{
 		Init();
 	}
@@ -124,6 +125,7 @@ public:
 	const ConfigPB<ConfigLanguage::LanguageCfg> language;
 	const ConfigPB<ConfigFriendWorker::FriendWorkerCfg> friendworker;
 	const ConfigPB<ConfigPet::PetGardenCfg> pet;
+	const ConfigPB<CdKey::CdKeyCfg> cdkey;
 
 	map<unsigned, unsigned> m_actmap;
 	map<unsigned, unsigned > buildsFootIndex;  //id->index
@@ -150,6 +152,8 @@ public:
 	map<unsigned, set<unsigned> > m_productProduce;	// buildId->productId
 	map<unsigned, set<unsigned> > m_animalProduce;	// buildId->produceId
 	map<unsigned, unsigned > m_petmap;	// petid->index
+	vector<unsigned> m_4399_recharge;//index->cash
+	vector<unsigned> m_4399_daily;//index->cash
 
 
 	bool GetActivity(unsigned id, User::ActivityItem& act);

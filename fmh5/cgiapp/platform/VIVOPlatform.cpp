@@ -32,14 +32,14 @@ int VIVOPlatform::formatUrl(const map<string, string> &param,
 	{
 		if (!qstr.empty())
 		{
-			qstr.append("&").append(itr->first).append("=").append(Crypt::UrlEncodeForTX(itr->second));
+			qstr.append("&").append(itr->first).append("=").append(itr->second);
 		}
 		else
 		{
-			qstr.append(itr->first).append("=").append(Crypt::UrlEncodeForTX(itr->second));
+			qstr.append(itr->first).append("=").append(itr->second);
 		}
 	}
-	url = qstr + "&signature=" + Crypt::UrlEncodeForTX(appkey);
+	url = qstr + "&signature=" + appkey;
 	return 0;
 }
 
@@ -87,7 +87,6 @@ string VIVOPlatform::GetSigStr(map<string,string> param,const string key)
 
 	//1.to_lower(md5_hex(key))
 	string crypt_key= Crypt::Md5Encode(key);
-	transform(crypt_key.begin(), crypt_key.end(), crypt_key.begin(), ::tolower);
 
 	//2.签名按照请求参数名ASCII码从小到大排序（字典序）
 	map<string,string>::iterator it = param.begin();
@@ -95,15 +94,11 @@ string VIVOPlatform::GetSigStr(map<string,string> param,const string key)
 	{
 		sig += it->first + "=" + it->second + "&";
 	}
-
 	//拼接crypt_key
 	sig += crypt_key;
 
 	//进行md5运算
 	sig = Crypt::Md5Encode(sig);
-
-	//将签名中小写转大写
-	transform(sig.begin(), sig.end(), sig.begin(), ::tolower);
 	return sig;
 }
 

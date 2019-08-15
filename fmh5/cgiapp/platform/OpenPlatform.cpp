@@ -11,6 +11,8 @@
 #include "XMFourPlatform.h"
 #include "XMZZPlatform.h"
 #include "VIVOPlatform.h"
+#include "OPPOPlatform.h"
+#include "New4399Platform.h"
 
 
 static map<int,bool> g_bInitPlatform;
@@ -111,6 +113,12 @@ IOpenPlatform *InitPlatform(const string &configPath)
     case PT_VIVO:
     	pPlatform = new VIVOPlatform();
     	break;
+    case PT_OPPO:
+       	pPlatform = new OPPOPlatform();
+       	break;
+    case PT_4399:
+        pPlatform = new CNew4399Platform();
+        break;
 	default:
 		fatal_log("[parse platform config fail][path=%s, error=unknow_platform, platform=%s]",
 				configPath.c_str(), config["platform"].c_str());
@@ -155,6 +163,7 @@ bool OpenPlatform::IsOurPlatform()
 		|| g_currPlatformType == PT_XMFOUR
 		|| g_currPlatformType == PT_XMZZ
 		|| g_currPlatformType == PT_VIVO
+		|| g_currPlatformType == PT_OPPO
 		|| IsQQPlatform()
 		|| IsLY_ALL_Platform();
 }

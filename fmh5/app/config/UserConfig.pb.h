@@ -45,6 +45,7 @@ class FairySpeedUp;
 class NewUserGuideShareCPP;
 class XMUserReward;
 class XMUserRewardCfg;
+class CostDiamondCfg;
 class User;
 
 // ===================================================================
@@ -1280,6 +1281,111 @@ class XMUserRewardCfg : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class CostDiamondCfg : public ::google::protobuf::Message {
+ public:
+  CostDiamondCfg();
+  virtual ~CostDiamondCfg();
+  
+  CostDiamondCfg(const CostDiamondCfg& from);
+  
+  inline CostDiamondCfg& operator=(const CostDiamondCfg& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CostDiamondCfg& default_instance();
+  
+  void Swap(CostDiamondCfg* other);
+  
+  // implements Message ----------------------------------------------
+  
+  CostDiamondCfg* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CostDiamondCfg& from);
+  void MergeFrom(const CostDiamondCfg& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .CommonGiftConfig.CommonModifyItem xianren_open_cost = 1;
+  inline bool has_xianren_open_cost() const;
+  inline void clear_xianren_open_cost();
+  static const int kXianrenOpenCostFieldNumber = 1;
+  inline const ::CommonGiftConfig::CommonModifyItem& xianren_open_cost() const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_xianren_open_cost();
+  inline ::CommonGiftConfig::CommonModifyItem* release_xianren_open_cost();
+  
+  // required .CommonGiftConfig.CommonModifyItem zhushou_open_cost = 2;
+  inline bool has_zhushou_open_cost() const;
+  inline void clear_zhushou_open_cost();
+  static const int kZhushouOpenCostFieldNumber = 2;
+  inline const ::CommonGiftConfig::CommonModifyItem& zhushou_open_cost() const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_zhushou_open_cost();
+  inline ::CommonGiftConfig::CommonModifyItem* release_zhushou_open_cost();
+  
+  // required .CommonGiftConfig.CommonModifyItem daocaoren_open_cost = 3;
+  inline bool has_daocaoren_open_cost() const;
+  inline void clear_daocaoren_open_cost();
+  static const int kDaocaorenOpenCostFieldNumber = 3;
+  inline const ::CommonGiftConfig::CommonModifyItem& daocaoren_open_cost() const;
+  inline ::CommonGiftConfig::CommonModifyItem* mutable_daocaoren_open_cost();
+  inline ::CommonGiftConfig::CommonModifyItem* release_daocaoren_open_cost();
+  
+  // @@protoc_insertion_point(class_scope:UserCfg.CostDiamondCfg)
+ private:
+  inline void set_has_xianren_open_cost();
+  inline void clear_has_xianren_open_cost();
+  inline void set_has_zhushou_open_cost();
+  inline void clear_has_zhushou_open_cost();
+  inline void set_has_daocaoren_open_cost();
+  inline void clear_has_daocaoren_open_cost();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::CommonGiftConfig::CommonModifyItem* xianren_open_cost_;
+  ::CommonGiftConfig::CommonModifyItem* zhushou_open_cost_;
+  ::CommonGiftConfig::CommonModifyItem* daocaoren_open_cost_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_UserConfig_2eproto();
+  friend void protobuf_AssignDesc_UserConfig_2eproto();
+  friend void protobuf_ShutdownFile_UserConfig_2eproto();
+  
+  void InitAsDefaultInstance();
+  static CostDiamondCfg* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class User : public ::google::protobuf::Message {
  public:
   User();
@@ -1446,6 +1552,14 @@ class User : public ::google::protobuf::Message {
   inline ::UserCfg::XMUserRewardCfg* mutable_xmuserreward();
   inline ::UserCfg::XMUserRewardCfg* release_xmuserreward();
   
+  // required .UserCfg.CostDiamondCfg diamondCost = 12;
+  inline bool has_diamondcost() const;
+  inline void clear_diamondcost();
+  static const int kDiamondCostFieldNumber = 12;
+  inline const ::UserCfg::CostDiamondCfg& diamondcost() const;
+  inline ::UserCfg::CostDiamondCfg* mutable_diamondcost();
+  inline ::UserCfg::CostDiamondCfg* release_diamondcost();
+  
   // @@protoc_insertion_point(class_scope:UserCfg.User)
  private:
   inline void set_has_user_init();
@@ -1458,6 +1572,8 @@ class User : public ::google::protobuf::Message {
   inline void clear_has_fairyspeedup();
   inline void set_has_xmuserreward();
   inline void clear_has_xmuserreward();
+  inline void set_has_diamondcost();
+  inline void clear_has_diamondcost();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -1472,9 +1588,10 @@ class User : public ::google::protobuf::Message {
   ::UserCfg::FairySpeedUp* fairyspeedup_;
   ::google::protobuf::RepeatedPtrField< ::UserCfg::NewUserGuideShareCPP > newuserguideshare_;
   ::UserCfg::XMUserRewardCfg* xmuserreward_;
+  ::UserCfg::CostDiamondCfg* diamondcost_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
   
   friend void  protobuf_AddDesc_UserConfig_2eproto();
   friend void protobuf_AssignDesc_UserConfig_2eproto();
@@ -2465,6 +2582,97 @@ XMUserRewardCfg::mutable_rewarddiamondcnt() {
 
 // -------------------------------------------------------------------
 
+// CostDiamondCfg
+
+// required .CommonGiftConfig.CommonModifyItem xianren_open_cost = 1;
+inline bool CostDiamondCfg::has_xianren_open_cost() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CostDiamondCfg::set_has_xianren_open_cost() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CostDiamondCfg::clear_has_xianren_open_cost() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CostDiamondCfg::clear_xianren_open_cost() {
+  if (xianren_open_cost_ != NULL) xianren_open_cost_->::CommonGiftConfig::CommonModifyItem::Clear();
+  clear_has_xianren_open_cost();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& CostDiamondCfg::xianren_open_cost() const {
+  return xianren_open_cost_ != NULL ? *xianren_open_cost_ : *default_instance_->xianren_open_cost_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* CostDiamondCfg::mutable_xianren_open_cost() {
+  set_has_xianren_open_cost();
+  if (xianren_open_cost_ == NULL) xianren_open_cost_ = new ::CommonGiftConfig::CommonModifyItem;
+  return xianren_open_cost_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* CostDiamondCfg::release_xianren_open_cost() {
+  clear_has_xianren_open_cost();
+  ::CommonGiftConfig::CommonModifyItem* temp = xianren_open_cost_;
+  xianren_open_cost_ = NULL;
+  return temp;
+}
+
+// required .CommonGiftConfig.CommonModifyItem zhushou_open_cost = 2;
+inline bool CostDiamondCfg::has_zhushou_open_cost() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void CostDiamondCfg::set_has_zhushou_open_cost() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void CostDiamondCfg::clear_has_zhushou_open_cost() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void CostDiamondCfg::clear_zhushou_open_cost() {
+  if (zhushou_open_cost_ != NULL) zhushou_open_cost_->::CommonGiftConfig::CommonModifyItem::Clear();
+  clear_has_zhushou_open_cost();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& CostDiamondCfg::zhushou_open_cost() const {
+  return zhushou_open_cost_ != NULL ? *zhushou_open_cost_ : *default_instance_->zhushou_open_cost_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* CostDiamondCfg::mutable_zhushou_open_cost() {
+  set_has_zhushou_open_cost();
+  if (zhushou_open_cost_ == NULL) zhushou_open_cost_ = new ::CommonGiftConfig::CommonModifyItem;
+  return zhushou_open_cost_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* CostDiamondCfg::release_zhushou_open_cost() {
+  clear_has_zhushou_open_cost();
+  ::CommonGiftConfig::CommonModifyItem* temp = zhushou_open_cost_;
+  zhushou_open_cost_ = NULL;
+  return temp;
+}
+
+// required .CommonGiftConfig.CommonModifyItem daocaoren_open_cost = 3;
+inline bool CostDiamondCfg::has_daocaoren_open_cost() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void CostDiamondCfg::set_has_daocaoren_open_cost() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void CostDiamondCfg::clear_has_daocaoren_open_cost() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void CostDiamondCfg::clear_daocaoren_open_cost() {
+  if (daocaoren_open_cost_ != NULL) daocaoren_open_cost_->::CommonGiftConfig::CommonModifyItem::Clear();
+  clear_has_daocaoren_open_cost();
+}
+inline const ::CommonGiftConfig::CommonModifyItem& CostDiamondCfg::daocaoren_open_cost() const {
+  return daocaoren_open_cost_ != NULL ? *daocaoren_open_cost_ : *default_instance_->daocaoren_open_cost_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* CostDiamondCfg::mutable_daocaoren_open_cost() {
+  set_has_daocaoren_open_cost();
+  if (daocaoren_open_cost_ == NULL) daocaoren_open_cost_ = new ::CommonGiftConfig::CommonModifyItem;
+  return daocaoren_open_cost_;
+}
+inline ::CommonGiftConfig::CommonModifyItem* CostDiamondCfg::release_daocaoren_open_cost() {
+  clear_has_daocaoren_open_cost();
+  ::CommonGiftConfig::CommonModifyItem* temp = daocaoren_open_cost_;
+  daocaoren_open_cost_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
 // User
 
 // required .UserCfg.UserBase user_init = 1;
@@ -2759,6 +2967,35 @@ inline ::UserCfg::XMUserRewardCfg* User::release_xmuserreward() {
   clear_has_xmuserreward();
   ::UserCfg::XMUserRewardCfg* temp = xmuserreward_;
   xmuserreward_ = NULL;
+  return temp;
+}
+
+// required .UserCfg.CostDiamondCfg diamondCost = 12;
+inline bool User::has_diamondcost() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void User::set_has_diamondcost() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void User::clear_has_diamondcost() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void User::clear_diamondcost() {
+  if (diamondcost_ != NULL) diamondcost_->::UserCfg::CostDiamondCfg::Clear();
+  clear_has_diamondcost();
+}
+inline const ::UserCfg::CostDiamondCfg& User::diamondcost() const {
+  return diamondcost_ != NULL ? *diamondcost_ : *default_instance_->diamondcost_;
+}
+inline ::UserCfg::CostDiamondCfg* User::mutable_diamondcost() {
+  set_has_diamondcost();
+  if (diamondcost_ == NULL) diamondcost_ = new ::UserCfg::CostDiamondCfg;
+  return diamondcost_;
+}
+inline ::UserCfg::CostDiamondCfg* User::release_diamondcost() {
+  clear_has_diamondcost();
+  ::UserCfg::CostDiamondCfg* temp = diamondcost_;
+  diamondcost_ = NULL;
   return temp;
 }
 

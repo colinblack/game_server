@@ -49,6 +49,10 @@
 //activity ts & type & version
 #define CONFIG_OPEN_TS         "open_ts"
 
+#define CONFIG_4399_LOGIN_KEY "4399_login_key"
+#define CONFIG_4399_PAY_KEY "4399_pay_key"
+#define CONFIG_4399_OTHER_KEY "4399_other_key"
+
 //DB
 //对应DBC端口号和共享内存号为39100+ID
 #define DB_USER_MAPPING		1

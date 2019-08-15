@@ -396,8 +396,8 @@ int LogicShopManager::Process(unsigned uid, ProtoShop::PurchaseReq* req)
 		//---------修改对方商店信息
 		shop.sell_flag = 1;
 		shop.buyer_uid = uid;
-		memcpy(shop.fig, buyerfig.c_str(), BASE_FIG_LEN);
-		memcpy(shop.name, buyername.c_str(), BASE_NAME_LEN);
+		strncpy(shop.fig, buyerfig.c_str(), BASE_FIG_LEN-1);
+		strncpy(shop.name, buyername.c_str(), BASE_NAME_LEN-1);
 
 		DataShopManager::Instance()->UpdateItem(shop);
 
@@ -586,8 +586,8 @@ int LogicShopManager::Process(ProtoShop::CSPurchaseReq* req)
 	//修改商店信息
 	shop.sell_flag = 1;
 	shop.buyer_uid = req->buyeruid();
-	memcpy(shop.fig, req->buyerfig().c_str(), BASE_FIG_LEN);
-	memcpy(shop.name, req->buyername().c_str(), BASE_NAME_LEN);
+	strncpy(shop.fig, req->buyerfig().c_str(), BASE_FIG_LEN-1);
+	strncpy(shop.name, req->buyername().c_str(), BASE_NAME_LEN-1);
 	DataShopManager::Instance()->UpdateItem(shop);
 
 	//消息推送

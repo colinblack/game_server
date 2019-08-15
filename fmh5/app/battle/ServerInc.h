@@ -68,4 +68,6 @@
 #include "LogicNewShareActivity.h"
 #include "LogicXsgReportManager.h"
 
+#include "LogicRecharge4399Activity.h"
+#include "LogicDaily4399Activity.h"
 #endif

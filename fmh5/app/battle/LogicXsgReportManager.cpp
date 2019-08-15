@@ -25,8 +25,11 @@ void LogicXsgReportManager::CallDestroy()
 bool LogicXsgReportManager::IsWXPlatform(unsigned uid)
 {
 	DBCUserBaseWrap userwrap(uid);
-	return userwrap.Obj().register_platform == PT_WX || userwrap.Obj().register_platform == PT_XMFOUR || userwrap.Obj().register_platform == PT_XMZZ || userwrap.Obj().register_platform == PT_Mi2;
-	//return uid == 11000810;
+	bool IsValid = false;
+	//if(uid == 10000012)
+	if(userwrap.Obj().register_platform == PT_WX || userwrap.Obj().register_platform == PT_XMFOUR || userwrap.Obj().register_platform == PT_XMZZ || userwrap.Obj().register_platform == PT_Mi2 || userwrap.Obj().register_platform == PT_VIVO || userwrap.Obj().register_platform == PT_OPPO)
+		IsValid = true;
+	return IsValid;
 }
 
 
@@ -70,6 +73,17 @@ void LogicXsgReportManager::SetBaseParam(unsigned uid,string openid,T &base)
 		channel = "xiaomi2";
 		channelDesc = "小米2部";
 	}
+	else if(userwrap.Obj().register_platform == PT_VIVO)
+	{
+		channel = "vivo";
+		channelDesc = "vivo快游戏";
+	}
+	else if(userwrap.Obj().register_platform == PT_OPPO)
+	{
+		channel = "oppo";
+		channelDesc = "oppo快游戏";
+	}
+
 	base.channel = channel;
 	base.accountId = openid;
 	base.roleId = CTrans::UTOS(uid);

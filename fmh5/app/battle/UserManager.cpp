@@ -86,6 +86,9 @@ int UserManager::Process(unsigned uid, Common::ChangeName* msg, Common::ReplyCha
 	strncpy(base.name, name.c_str(), BASE_NAME_LEN-1);
 	strncpy(base.fig, fig.c_str(), BASE_FIG_LEN-1);
 	BaseManager::Instance()->m_data->MarkChange(index);
+
+	BaseManager::Instance()->DoSave(uid);	//存档以便cgi/user访问数据
+
 	memset(rmi.name, 0, sizeof(rmi.name));
 	memset(rmi.fig, 0, sizeof(rmi.fig));
 	strncpy(rmi.name, name.c_str(), BASE_NAME_LEN-1);
@@ -462,7 +465,7 @@ int UserManager::ProcessLogin(Common::Login* msg)
 /**************下面是写登录返回包的数据，数据处理应该在此前完成************************/
 	User::User* reply = new User::User;
 	reply->set_ts(Time::GetGlobalTime());
-	reply->set_opents(LMI->SecOpenTime);
+	reply->set_opents(base.register_time);
 	reply->set_hasnewdyinfo(DynamicInfoManager::Instance()->HasNewDyInfo(uid));
 	reply->set_hasnewmsginfo(MessageBoardManager::Instance()->HasNewMsgInfo(uid));
 	base.SetMessage(reply->mutable_base());
@@ -619,7 +622,7 @@ int UserManager::OnNewUser(unsigned uid, Common::Login* msg)
 		//报纸狗
 		LogicMailDogManager::Instance()->NewUser(uid);
 		// 系统邮件
-		LogicSysMailManager::Instance()->OnLogin(uid, base.last_off_time);
+		//LogicSysMailManager::Instance()->OnLogin(uid, base.last_off_time);
 	}
 	catch (const std::exception& e)
 	{
@@ -723,6 +726,9 @@ int UserManager::OnUserLogin(unsigned uid, Common::Login* msg)
 		SignInActivity::Instance()->LoginCheck(uid);
 		OrderActivity::Instance()->LoginCheck(uid);
 		CropsActivity::Instance()->LoginCheck(uid);
+
+		//4399每日充值活动
+		Daily4399ActivityManager::Instance()->CheckLogin(uid,base.last_off_time);
 
 		//首充主题
 		LogicThemeManager::Instance()->CheckLogin(uid);
@@ -909,8 +915,20 @@ int UserManager::Process(unsigned uid, User::SetFlag* msg)
 		error_log("already_set_flag uid=%u", uid);
 		throw std::runtime_error("already_set_flag");
 	}
+	bool isNeedCost = false;
+	if(msg->has_iscostdimaond() && msg->iscostdimaond() == 1)
+	{
+		int needCash = UserCfgWrap().User().diamondcost().xianren_open_cost().based().cash();
+		if(userwrap.Obj().cash < -needCash)
+		{
+			throw std::runtime_error("diamond_not_enough");
+		}
+		isNeedCost = true;
+	}
+
 	userwrap.SetBaseFlag(flagId);
-	SendFlagInfo(uid);
+
+	SendFlagInfo(uid,isNeedCost);
 	if(flagId == base_falg_id_fairy_speed_up_equip)
 	{
 		LogicQueueManager::Instance()->FinishInstant(uid, QUEUE_BUILD_TYPE_PRODUCT_LINE);
@@ -1458,10 +1476,14 @@ float UserManager::GetFairySpeedUpFarm(uint32_t uid)
 	}
 	return 1;
 }
-void UserManager::SendFlagInfo(uint32_t uid)
+void UserManager::SendFlagInfo(uint32_t uid,bool IsNeedCost)
 {
 	DBCUserBaseWrap userwrap(uid);
 	User::GetFlagResp* resp = new User::GetFlagResp;
+	if(IsNeedCost)
+	{
+		LogicUserManager::Instance()->CommonProcess(uid,UserCfgWrap().User().diamondcost().xianren_open_cost(),"xianren_open_cost",resp->mutable_commons());
+	}
 	resp->set_flag(userwrap.Obj().flag);
 	LMI->sendMsg(uid, resp);
 }
@@ -1476,4 +1498,9 @@ bool UserManager::SendNewMsgToAll(uint32_t type)
 	User::ReplyNewMsg* msg = new User::ReplyNewMsg;
 	msg->add_type(type);
 	return LMI->broadcastMsg(msg);
+}
+
+int UserManager::Process(unsigned uid, User::HeartBeatReq * req, User::HeartBeatResp * resp)
+{
+	return 0;
 }

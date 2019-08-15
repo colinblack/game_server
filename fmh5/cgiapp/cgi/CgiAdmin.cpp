@@ -336,6 +336,12 @@ public:
 		int count = CCGIIn::GetCGIInt("count",0,100000,10,10);
 		if(!count)
 			count = 10;
+		int beginTs = CCGIIn::GetCGIInt("begin");
+		if(!beginTs)
+			beginTs = Time::GetGlobalTime();
+		int endTs = CCGIIn::GetCGIInt("end");
+		if(!endTs)
+			endTs = beginTs + 86400 * 99;
 		int ret = 0;
 		DataExchangeCode dataExchangeCode;
 		CLogicExchangeCode logicExchangeCode;
@@ -343,8 +349,8 @@ public:
 		int i = 0;
 		dataExchangeCode.uid = ADMIN_UID;
 		dataExchangeCode.type = t;
-		dataExchangeCode.gentime = Time::GetGlobalTime();
-		dataExchangeCode.deadline = dataExchangeCode.gentime + (86400 * 99);
+		dataExchangeCode.gentime = beginTs;
+		dataExchangeCode.deadline = endTs;
 		dataExchangeCode.usetime = 0;
 		for(i = 0; i < count; i++)
 		{
@@ -355,7 +361,7 @@ public:
 			{
 				continue;
 			}
-			data[i]=type + code;
+			data[i]=code;
 		}
 		m_jsonResult["data"] = data;
 		return 0;

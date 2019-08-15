@@ -85,6 +85,14 @@ message XMUserRewardCfg
 	repeated XMUserReward RewardDiamondCnt    = 4;//奖励钻石数目 
 }
 
+//耗钻配置(针对某些功能新增的耗钻配置)
+message CostDiamondCfg
+{
+	required CommonGiftConfig.CommonModifyItem 	xianren_open_cost		= 1;//仙人开启消耗
+	required CommonGiftConfig.CommonModifyItem 	zhushou_open_cost		= 2;//助手开启消耗
+	required CommonGiftConfig.CommonModifyItem 	daocaoren_open_cost		= 3;//稻草人开启消耗
+}
+
 message User
 {
 	required UserBase   user_init 						= 1;  //玩家基本属性
@@ -98,5 +106,5 @@ message User
 	required FairySpeedUp   fairySpeedUp 					= 9;  //仙人加速
 	repeated NewUserGuideShareCPP   newUserGuideShare 	    = 10;  //新手引导分享
 	required XMUserRewardCfg xmUserReward                   = 11;//小米用户奖励
-	
+	required CostDiamondCfg diamondCost                    = 12;//针对某些功能新增的耗钻配置
 }

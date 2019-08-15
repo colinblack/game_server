@@ -24,8 +24,12 @@ public:
 		const string pf = CCGIIn::GetCGIStr("pf");
 		const string pfkey = CCGIIn::GetCGIStr("pfkey");
 		int serverid = CCGIIn::GetCGIInt("serverid", 0, 100000, 0, 0);
+		const string uid = CCGIIn::GetCGIStr("uid");
+		const string zoneid = CCGIIn::GetCGIStr("zoneid");
 		ConfigManager::Instance()->SetServer(serverid);
-		if (openid.empty() || openkey.empty() || itemid.empty())
+		unsigned playerId = CTrans::STOI(uid);
+
+		if (openid.empty() || openkey.empty() || itemid.empty() || !IsValidUid(playerId))
 		{
 			PARAM_ERROR_RETURN_MSG("param_error");
 		}
@@ -34,7 +38,7 @@ public:
 		string url_params;
 
 		CLogicQQPay logicPay;
-		int ret = logicPay.v3_buy_goods(pf, pfkey, openid, openkey, m_ipstr, itemid, appid, url_params);
+		int ret = logicPay.v3_buy_goods(pf, pfkey, openid, openkey, m_ipstr, itemid, appid, url_params,playerId,zoneid);
 		if (ret != 0)
 			return ret;
 //		int ret = logicPay.qz_buy_goods(openid, openkey, m_ipstr, itemid, appid, url_params);

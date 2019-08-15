@@ -249,6 +249,9 @@ public:
 	//升级奖励
 	int Process(unsigned uid, ProtoPush::RewardLevelUpReq* req, ProtoPush::RewardLevelUpResp* resp);
 
+	//cdkey 兑换码奖励
+	int Process(unsigned uid, User::UseCdKeyReq* req, User::UseCdKeyResp* resp);
+
 	//通用处理，包含通用消耗和通用奖励
 	int CommonProcess(unsigned uid, const CommonGiftConfig::CommonModifyItem& modifyitem, const std::string& reason,
 			DataCommon::CommonItemsCPP* obj, double multiple = 1.0);
@@ -270,6 +273,8 @@ private:
 	int thumbsup[daily_rank_thumbs_up_max];
 
 	int userActId;
+
+	CDataExchangeCode m_DbExchangeCode;
 };
 
 #endif /* LOGICUSERMANGAGER_H_ */

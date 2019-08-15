@@ -51,8 +51,9 @@ public:
 		ConfigManager::Instance()->SetServer(serverid);
 
 		//随机生成预支付订单号最长64位
-		string out_trade_no    = openid + "_" + itemid + "_" + CTrans::UTOS(Time::GetGlobalTime()) + "_" + CTrans::UTOS(Math::GetRandomInt());
-		unsigned fee = itemInfo.price * itemnum;
+		string out_trade_no    = openid + "," + itemid + "," + CTrans::UTOS(Time::GetGlobalTime());
+		out_trade_no.reserve(64);
+		unsigned fee = itemInfo.price * itemnum / 100;
 		char fee_str[10];
 		sprintf(fee_str,"%u.00",fee);
 
@@ -94,24 +95,34 @@ public:
 		//解析请求结果
 		Json::Value result;
 		Json::Reader reader;
-		int responsetRet = 0;
-		if (response.empty()
-		|| !reader.parse(response, result)
-		|| !Json::GetInt(result, "respCode", responsetRet))
+		string responsetRet;
+		if(response.empty())
 		{
-			if(responsetRet != 200)
+			ERROR_RETURN_MSG(R_ERR_NO_DATA, "http_request_fail");
+		}
+		info_log("response=%s,out_trade_no=%s",response.c_str(),out_trade_no.c_str());
+
+
+		if (!reader.parse(response, result)
+		|| !Json::GetString(result, "respCode", responsetRet))
+		{
+			error_log("param_response_error.");
+		}
+		else
+		{
+			unsigned ret = CTrans::STOI(responsetRet);
+			if(ret != 200)
 			{
 				string respMsg;
 				Json::GetString(result, "respMsg", respMsg);
-				error_log("response_error.ret=%d,respMsg=%s",responsetRet,respMsg.c_str());
+				error_log("response_error.ret=%s,respMsg=%s",responsetRet.c_str(),respMsg.c_str());
 				ERROR_RETURN_MSG(R_ERR_NO_DATA, "pay_request_fail");
 			}
 			else
 			{
-				m_jsonResult["orderInfo"] = result;
+				m_jsonResult["orderInfo"] = response;
 			}
 		}
-
 		CGI_SEND_LOG("openid=%s&itemid=%s", openid.c_str(),itemid.c_str());
 		return R_SUCCESS;
 	}

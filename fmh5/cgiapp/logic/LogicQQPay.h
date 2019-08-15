@@ -52,7 +52,9 @@ public:
 			const string &userip,
 			const string &itemid,
 			string &appid,
-			string &url_params);
+			string &url_params,
+			unsigned playerId = 0,
+			string zoneid = "0");
 	int v3_pay_get_token(const string &pfkey,
 			const string &pf,
 			const string &openkey,

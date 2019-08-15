@@ -74,6 +74,7 @@ bool LogicGM::HandleUserBase(const GMCmd& gm, DBCUserBaseWrap& user)
 	else if (gm.cmd() == string("accharge"))
 	{
 		user.Obj().acccharge += gm.get_arg<int>(0);
+		LogicUserManager::Instance()->NotifyRecharge(user.Obj().uid, gm.get_arg<int>(0));
 		user.RefreshVIPLevel(false);
 		user.Save();
 	}

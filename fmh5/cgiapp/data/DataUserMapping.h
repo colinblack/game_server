@@ -28,6 +28,7 @@ public:
 	int RemoveMapping(const string &openid, int platform);
 	int GetAllMapping(const string &openid, vector<unsigned> &uid);
 	int GetAllRegisterTime(const string &openid, vector<unsigned> &registertime);
+	int GetUIDByPlatform(const string &openid,int platform,unsigned &uid);
 	int GetUID(const string &openid, unsigned serverid, unsigned &uid);
 	int UpdateLastLogin(const string &openid, int platform);
 	int SetLastLogin(const string &openid, unsigned serverid, unsigned lastlogin);

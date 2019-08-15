@@ -277,16 +277,29 @@ void DBCUserBaseWrap::AddAsynItem(unsigned id, unsigned count, const std::string
 	if ((ASYN_TYPE)id == e_asyn_cash)
 	{
 		this->AddCash(count, op);
-	}
-	else if ((ASYN_TYPE)id == e_asyn_accrecharge)
-	{
-		data_.acccharge += count;
-		LogicUserManager::Instance()->NotifyRecharge(data_.uid, count);
 
 		Common::NoticePay* m = new Common::NoticePay;
 		m->set_cash(data_.cash);
 		m->set_viplevel(data_.viplevel);
 		m->set_accrecharge(data_.acccharge);
+		LogicManager::Instance()->sendMsg(data_.uid, m);
+
+		Recharge4399ActivityManager::Instance()->OnCharge(data_.uid,count);
+		Daily4399ActivityManager::Instance()->OnCharge(data_.uid,count);
+	}
+	else if ((ASYN_TYPE)id == e_asyn_accrecharge)
+	{
+		data_.acccharge += count;
+		//LogicUserManager::Instance()->NotifyRecharge(data_.uid, count);
+		Save();
+
+		RefreshVIPLevel();
+
+		Common::NoticePay* m = new Common::NoticePay;
+		m->set_cash(data_.cash);
+		m->set_viplevel(data_.viplevel);
+		m->set_accrecharge(data_.acccharge);
+		LogicManager::Instance()->sendMsg(data_.uid, m);
 	}
 	else if(id == e_asyn_month_card)
 	{
@@ -745,6 +758,8 @@ void DBCUserBaseWrap::RefreshVIPLevel(bool isPush)
 		msg->set_newlevel(data_.viplevel);
 		LogicManager::Instance()->sendMsg(data_.uid,msg);
 		LogicAllianceManager::Instance()->UpdateMemberNow(uid);
+
+		BaseManager::Instance()->DoSave(uid);	//存档以便聊天服务器访问到最新的vip信息
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////////
@@ -800,6 +815,10 @@ void LogicUserManager::OnTimer1()
 			if(record.itemid != MONTH_CARD_ID && record.itemid != LIFE_CARD_ID) {
 				//首充双倍活动
 				RechargeActivity::Instance()->AddDoubleCash(record.uid, record.cash);
+				//4399首冲翻倍
+				Recharge4399ActivityManager::Instance()->OnCharge(record.uid, record.cash);
+				//4399每日充值
+				Daily4399ActivityManager::Instance()->OnCharge(record.uid, record.cash);
 			}
 
 			user.RefreshVIPLevel();
@@ -1489,6 +1508,77 @@ int LogicUserManager::Process(User::CSPushLoginMsg* msg)
 	unsigned logints = msg->logints();
 	unsigned uid = msg->uid();
 	HandlePushLoginInfo(uid,inviteUid,logints);
+	return 0;
+}
+
+int LogicUserManager::Process(unsigned uid, User::UseCdKeyReq* req, User::UseCdKeyResp* resp)
+{
+
+	string str = req->number();
+
+	//敏感词过滤
+	String::Trim(str);
+
+	if (str.empty())
+	{
+		error_log("words empty. name=%s", str.c_str());
+		throw runtime_error("words_empty");
+	}
+
+	if(!StringFilter::Check(str))
+	{
+		error_log("sensitive words. name=%s", str.c_str());
+		throw runtime_error("sensitive_words");
+	}
+
+	//数据库查询
+	DataExchangeCode DbCode;
+	DbCode.code = str;
+	int ret = m_DbExchangeCode.GetExchageCode(DbCode);
+	if(ret != 0)
+	{
+		throw runtime_error("invalid_card");
+	}
+	unsigned type = DbCode.type;
+
+	if(DbCode.usetime > 0 || IsValidUid(DbCode.uid))
+	{
+		throw runtime_error("used_card");
+	}
+
+	if(CDKeyManager::Instance()->HasUseThisType(uid,type))	//个人数据查询
+	{
+		throw runtime_error("same_type_card");
+	}
+
+	uint32_t curr_ts = Time::GetGlobalTime();
+	if(curr_ts < DbCode.gentime || curr_ts > DbCode.deadline)
+	{
+		throw runtime_error("overtime_card");
+	}
+
+	//个人数据存档
+	CDKeyManager::Instance()->UseCard(uid,type);
+
+	//兑换码存档
+	DbCode.usetime = curr_ts;
+	DbCode.uid = uid;
+	m_DbExchangeCode.SetExchageCode(DbCode);
+
+	//派发奖励
+	DBCUserBaseWrap userwrap(uid);
+	CommonGiftConfig::CommonModifyItem common;
+	const CdKey::CdKeyCfg & cdkey = CdKeyCfgWrap().GetCfg();
+	for(int idx = 0; idx < cdkey.rewards_size(); idx++)
+	{
+		if(cdkey.rewards(idx).type() == type)
+		{
+			common.MergeFrom(cdkey.rewards(idx).prize(0));
+			break;
+		}
+	}
+	CommonProcess(uid,common,"cdkey_reward",resp->mutable_commons());
+
 	return 0;
 }
 

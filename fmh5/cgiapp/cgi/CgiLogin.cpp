@@ -30,7 +30,7 @@ public:
 		string itest  = CCGIIn::GetCGIStr("itest");
 		string token  = CCGIIn::GetCGIStr("token");//小米4部接入传入的token
 		ConfigManager::Instance()->SetServer(serverid);
-		int isWhite = (openkey.empty() && OpenPlatform::GetType() != PT_TEST && OpenPlatform::GetType() != PT_WX && OpenPlatform::GetType() != PT_XMFOUR && OpenPlatform::GetType() != PT_XMZZ && OpenPlatform::GetType() != PT_VIVO) ? 1 : 0;
+		int isWhite = (openkey.empty() && OpenPlatform::GetType() != PT_TEST && OpenPlatform::GetType() != PT_WX && OpenPlatform::GetType() != PT_XMFOUR && OpenPlatform::GetType() != PT_XMZZ && OpenPlatform::GetType() != PT_VIVO && OpenPlatform::GetType() != PT_OPPO) ? 1 : 0;
 		String::Trim(openid);
 		if (openid.empty())
 		{
@@ -106,6 +106,11 @@ public:
 			{
 				params["token"] = token;
 			}
+			else if(OpenPlatform::GetType() == PT_4399)
+			{
+				string site = CCGIIn::GetCGIStr("site");
+				params["site"] = site;
+			}
 			OpenPlatform::GetPlatform()->SetParameter(params);
 
 			ret = OpenPlatform::GetPlatform()->GetUserInfo(userinfo, openid, openkey);
@@ -163,6 +168,29 @@ public:
 		m_jsonResult["cur_pt"] = (int)OpenPlatform::GetType();
 		m_jsonResult["currenttime"] = Time::GetGlobalTime();
 		if(pf == "wechat")
+		{
+			if(itest == "1")
+			{
+				//表明需连测试服
+				m_jsonResult["tcp_server"] = "test.wx.tianyuan.dawx.net:7001";
+				m_jsonResult["access_host"] = "test.wx.tianyuan.dawx.net";
+			}
+			else
+			{
+				m_jsonResult["tcp_server"] = "wx.tianyuan.dawx.net:7001";
+				if(c.accesshost() == "118.89.27.97")
+					m_jsonResult["access_host"] = "g1.tianyuan.dawx.net";
+				else if(c.accesshost() == "111.230.140.229")
+					m_jsonResult["access_host"] = "g3.tianyuan.dawx.net";
+				else
+				{
+					REFUSE_RETURN_MSG("access_server_error");
+				}
+
+			}
+
+		}
+		else if(pf == "oppo")
 		{
 			if(itest == "1")
 			{

@@ -66,6 +66,7 @@ enum PlatformType
 	PT_XMFOUR       = 49,   //小米4部
 	PT_XMZZ         = 50,   //小米赚赚
 	PT_VIVO         = 51,   //vivo
+	PT_OPPO          = 52,//oppo
 
 	PT_MAX,
 };

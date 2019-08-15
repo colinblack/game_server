@@ -146,6 +146,32 @@ int CDataUserMapping::GetAllMapping(const string &openid, vector<unsigned> &uid)
 	return 0;
 }
 
+int CDataUserMapping::GetUIDByPlatform(const string &openid,int platform,unsigned &uid)
+{
+	unsigned crc = CCRC::GetCrc32(openid);
+	if (crc > UID_MAX) {
+		crc %= UID_MAX;
+		if (crc < UID_MIN) {
+			crc += UID_MIN;
+		}
+	}
+
+	DBCREQ_DECLARE(DBC::GetRequest, crc);
+	DBCREQ_SET_KEY(openid.c_str());
+	DBCREQ_SET_CONDITION(EQ, platform, platform);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(uid);
+
+	DBCREQ_EXEC;
+	DBCREQ_IFNULLROW;
+	DBCREQ_IFFETCHROW;
+
+	DBCREQ_GET_BEGIN();
+	DBCREQ_GET_INT_S(uid);
+	return 0;
+}
+
 int CDataUserMapping::GetAllRegisterTime(const string &openid, vector<unsigned> &registertime) {
 	unsigned crc = CCRC::GetCrc32(openid);
 	if (crc > UID_MAX) {

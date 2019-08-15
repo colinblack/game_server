@@ -44,6 +44,8 @@ public:
 	int Process(unsigned uid, User::SetFlag* msg);
 	int Process(unsigned uid, Common::ShutDown* msg);
 
+	int Process(unsigned uid, User::HeartBeatReq * req, User::HeartBeatResp * resp);
+
 	int Process(uint32_t uid, User::ReqNewMsg* req, User::ReplyNewMsg* resp);
 
 	//存档的导出
@@ -100,7 +102,7 @@ public:
 	float GetFairySpeedUpCrop(uint32_t uid);
 	float GetFairySpeedUpEquip(uint32_t uid);
 	float GetFairySpeedUpFarm(uint32_t uid);
-	void SendFlagInfo(uint32_t uid);
+	void SendFlagInfo(uint32_t uid,bool IsNeedCost = false);
 	bool SendNewMsgToUser(uint32_t uid, uint32_t type);
 	bool SendNewMsgToAll(uint32_t type);
 };

@@ -294,11 +294,13 @@ message SetVersion
 message SetFlag
 {
 	required uint32 flagId	= 1;  //标志位ID(8:设备加速,9:仙人加速)
+	optional uint32 isCostDimaond    = 2;//(1:表示需要花钻,非1不需要)
 }
 //获取标志位
 message GetFlagResp
 {
 	required uint32 flag	= 1;  //标志位(8:设备加速,9:仙人加速)
+	optional DataCommon.CommonItemsCPP commons  =  2; 
 }
 
 //点赞信息
@@ -477,4 +479,24 @@ message NewUserGuideShareReq
 message NewUserGuideShareResp
 {
 	required DataCommon.CommonItemsCPP       commons  = 1;//奖励
+}
+
+//cdkey
+message UseCdKeyReq
+{
+	required string number = 1;
+}
+
+message UseCdKeyResp
+{
+	required DataCommon.CommonItemsCPP       commons  = 1;//奖励
+}
+
+//心跳包
+message HeartBeatReq
+{
+}
+
+message HeartBeatResp
+{
 }

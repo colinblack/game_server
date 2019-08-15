@@ -157,7 +157,7 @@ namespace OAuth
 		else if(oauthParam.SignMethod == RSA_SHA1)
 		{
 			string rawSignature;
-			if(!Crypt::RsaSha1Signature(baseString, key, rawSignature))
+			if(!Crypt::RsaSignature(baseString, key, rawSignature,"sha1"))
 			{
 				response = "signature_fail";
 				return false;
@@ -348,7 +348,7 @@ namespace OAuth
 		}
 		else if(oauthParam.SignMethod == RSA_SHA1)
 		{
-			if(!Crypt::RsaSha1Signature(baseString, key, rawSignature))
+			if(!Crypt::RsaSignature(baseString, key, rawSignature,"sha1"))
 			{
 				return false;
 			}

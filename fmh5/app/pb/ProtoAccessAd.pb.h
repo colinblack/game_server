@@ -1104,14 +1104,24 @@ class ScarecrowViewAdReq : public ::google::protobuf::Message {
   
   // accessors -------------------------------------------------------
   
+  // optional uint32 isCostDimaond = 1;
+  inline bool has_iscostdimaond() const;
+  inline void clear_iscostdimaond();
+  static const int kIsCostDimaondFieldNumber = 1;
+  inline ::google::protobuf::uint32 iscostdimaond() const;
+  inline void set_iscostdimaond(::google::protobuf::uint32 value);
+  
   // @@protoc_insertion_point(class_scope:ProtoAccessAd.ScarecrowViewAdReq)
  private:
+  inline void set_has_iscostdimaond();
+  inline void clear_has_iscostdimaond();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
+  ::google::protobuf::uint32 iscostdimaond_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[1];
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
   
   friend void  protobuf_AddDesc_ProtoAccessAd_2eproto();
   friend void protobuf_AssignDesc_ProtoAccessAd_2eproto();
@@ -1196,18 +1206,29 @@ class ScarecrowViewAdResp : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP >*
       mutable_cropland();
   
+  // optional .DataCommon.CommonItemsCPP commons = 3;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 3;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  
   // @@protoc_insertion_point(class_scope:ProtoAccessAd.ScarecrowViewAdResp)
  private:
   inline void set_has_scarecrow();
   inline void clear_has_scarecrow();
+  inline void set_has_commons();
+  inline void clear_has_commons();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
   ::ProtoAccessAd::ScarecrowCPP* scarecrow_;
   ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP > cropland_;
+  ::DataCommon::CommonItemsCPP* commons_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
   
   friend void  protobuf_AddDesc_ProtoAccessAd_2eproto();
   friend void protobuf_AssignDesc_ProtoAccessAd_2eproto();
@@ -1592,6 +1613,28 @@ inline ::ProtoAccessAd::ScarecrowCPP* GetScarecrowInfoResp::release_scarecrow() 
 
 // ScarecrowViewAdReq
 
+// optional uint32 isCostDimaond = 1;
+inline bool ScarecrowViewAdReq::has_iscostdimaond() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ScarecrowViewAdReq::set_has_iscostdimaond() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ScarecrowViewAdReq::clear_has_iscostdimaond() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ScarecrowViewAdReq::clear_iscostdimaond() {
+  iscostdimaond_ = 0u;
+  clear_has_iscostdimaond();
+}
+inline ::google::protobuf::uint32 ScarecrowViewAdReq::iscostdimaond() const {
+  return iscostdimaond_;
+}
+inline void ScarecrowViewAdReq::set_iscostdimaond(::google::protobuf::uint32 value) {
+  set_has_iscostdimaond();
+  iscostdimaond_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // ScarecrowViewAdResp
@@ -1648,6 +1691,35 @@ ScarecrowViewAdResp::cropland() const {
 inline ::google::protobuf::RepeatedPtrField< ::ProtoProduce::CropLandCPP >*
 ScarecrowViewAdResp::mutable_cropland() {
   return &cropland_;
+}
+
+// optional .DataCommon.CommonItemsCPP commons = 3;
+inline bool ScarecrowViewAdResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ScarecrowViewAdResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ScarecrowViewAdResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ScarecrowViewAdResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& ScarecrowViewAdResp::commons() const {
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* ScarecrowViewAdResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* ScarecrowViewAdResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
 }
 
 

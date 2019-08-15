@@ -43,6 +43,14 @@ class FundPurchaseResp;
 class RewardFundGiftReq;
 class RewardFundGiftResp;
 class PushAutoRewardFundMsg;
+class Reward4399RechargeGiftReq;
+class Reward4399RechargeGiftResp;
+class GameAcitivity4399Recharge;
+class Reward4399DailyGiftReq;
+class Reward4399DailyGiftResp;
+class GameAcitivity4399Daily;
+class UseCardReq;
+class UseCardResp;
 class ShareFriendCPP;
 class NewShareCPP;
 class GetNewShareInfoReq;
@@ -915,6 +923,689 @@ class PushAutoRewardFundMsg : public ::google::protobuf::Message {
   
   void InitAsDefaultInstance();
   static PushAutoRewardFundMsg* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Reward4399RechargeGiftReq : public ::google::protobuf::Message {
+ public:
+  Reward4399RechargeGiftReq();
+  virtual ~Reward4399RechargeGiftReq();
+  
+  Reward4399RechargeGiftReq(const Reward4399RechargeGiftReq& from);
+  
+  inline Reward4399RechargeGiftReq& operator=(const Reward4399RechargeGiftReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Reward4399RechargeGiftReq& default_instance();
+  
+  void Swap(Reward4399RechargeGiftReq* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Reward4399RechargeGiftReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Reward4399RechargeGiftReq& from);
+  void MergeFrom(const Reward4399RechargeGiftReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required uint32 index = 1;
+  inline bool has_index() const;
+  inline void clear_index();
+  static const int kIndexFieldNumber = 1;
+  inline ::google::protobuf::uint32 index() const;
+  inline void set_index(::google::protobuf::uint32 value);
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.Reward4399RechargeGiftReq)
+ private:
+  inline void set_has_index();
+  inline void clear_has_index();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 index_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Reward4399RechargeGiftReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Reward4399RechargeGiftResp : public ::google::protobuf::Message {
+ public:
+  Reward4399RechargeGiftResp();
+  virtual ~Reward4399RechargeGiftResp();
+  
+  Reward4399RechargeGiftResp(const Reward4399RechargeGiftResp& from);
+  
+  inline Reward4399RechargeGiftResp& operator=(const Reward4399RechargeGiftResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Reward4399RechargeGiftResp& default_instance();
+  
+  void Swap(Reward4399RechargeGiftResp* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Reward4399RechargeGiftResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Reward4399RechargeGiftResp& from);
+  void MergeFrom(const Reward4399RechargeGiftResp& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .ProtoActivity.GameAcitivityCPP rechargeActivity = 1;
+  inline bool has_rechargeactivity() const;
+  inline void clear_rechargeactivity();
+  static const int kRechargeActivityFieldNumber = 1;
+  inline const ::ProtoActivity::GameAcitivityCPP& rechargeactivity() const;
+  inline ::ProtoActivity::GameAcitivityCPP* mutable_rechargeactivity();
+  inline ::ProtoActivity::GameAcitivityCPP* release_rechargeactivity();
+  
+  // required .DataCommon.CommonItemsCPP commons = 2;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 2;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.Reward4399RechargeGiftResp)
+ private:
+  inline void set_has_rechargeactivity();
+  inline void clear_has_rechargeactivity();
+  inline void set_has_commons();
+  inline void clear_has_commons();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::ProtoActivity::GameAcitivityCPP* rechargeactivity_;
+  ::DataCommon::CommonItemsCPP* commons_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Reward4399RechargeGiftResp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GameAcitivity4399Recharge : public ::google::protobuf::Message {
+ public:
+  GameAcitivity4399Recharge();
+  virtual ~GameAcitivity4399Recharge();
+  
+  GameAcitivity4399Recharge(const GameAcitivity4399Recharge& from);
+  
+  inline GameAcitivity4399Recharge& operator=(const GameAcitivity4399Recharge& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameAcitivity4399Recharge& default_instance();
+  
+  void Swap(GameAcitivity4399Recharge* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GameAcitivity4399Recharge* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GameAcitivity4399Recharge& from);
+  void MergeFrom(const GameAcitivity4399Recharge& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .ProtoActivity.GameAcitivityCPP data = 1;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 1;
+  inline const ::ProtoActivity::GameAcitivityCPP& data() const;
+  inline ::ProtoActivity::GameAcitivityCPP* mutable_data();
+  inline ::ProtoActivity::GameAcitivityCPP* release_data();
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.GameAcitivity4399Recharge)
+ private:
+  inline void set_has_data();
+  inline void clear_has_data();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::ProtoActivity::GameAcitivityCPP* data_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GameAcitivity4399Recharge* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Reward4399DailyGiftReq : public ::google::protobuf::Message {
+ public:
+  Reward4399DailyGiftReq();
+  virtual ~Reward4399DailyGiftReq();
+  
+  Reward4399DailyGiftReq(const Reward4399DailyGiftReq& from);
+  
+  inline Reward4399DailyGiftReq& operator=(const Reward4399DailyGiftReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Reward4399DailyGiftReq& default_instance();
+  
+  void Swap(Reward4399DailyGiftReq* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Reward4399DailyGiftReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Reward4399DailyGiftReq& from);
+  void MergeFrom(const Reward4399DailyGiftReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required uint32 index = 1;
+  inline bool has_index() const;
+  inline void clear_index();
+  static const int kIndexFieldNumber = 1;
+  inline ::google::protobuf::uint32 index() const;
+  inline void set_index(::google::protobuf::uint32 value);
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.Reward4399DailyGiftReq)
+ private:
+  inline void set_has_index();
+  inline void clear_has_index();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 index_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Reward4399DailyGiftReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Reward4399DailyGiftResp : public ::google::protobuf::Message {
+ public:
+  Reward4399DailyGiftResp();
+  virtual ~Reward4399DailyGiftResp();
+  
+  Reward4399DailyGiftResp(const Reward4399DailyGiftResp& from);
+  
+  inline Reward4399DailyGiftResp& operator=(const Reward4399DailyGiftResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Reward4399DailyGiftResp& default_instance();
+  
+  void Swap(Reward4399DailyGiftResp* other);
+  
+  // implements Message ----------------------------------------------
+  
+  Reward4399DailyGiftResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Reward4399DailyGiftResp& from);
+  void MergeFrom(const Reward4399DailyGiftResp& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .ProtoActivity.GameAcitivityCPP rechargeActivity = 1;
+  inline bool has_rechargeactivity() const;
+  inline void clear_rechargeactivity();
+  static const int kRechargeActivityFieldNumber = 1;
+  inline const ::ProtoActivity::GameAcitivityCPP& rechargeactivity() const;
+  inline ::ProtoActivity::GameAcitivityCPP* mutable_rechargeactivity();
+  inline ::ProtoActivity::GameAcitivityCPP* release_rechargeactivity();
+  
+  // required .DataCommon.CommonItemsCPP commons = 2;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 2;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.Reward4399DailyGiftResp)
+ private:
+  inline void set_has_rechargeactivity();
+  inline void clear_has_rechargeactivity();
+  inline void set_has_commons();
+  inline void clear_has_commons();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::ProtoActivity::GameAcitivityCPP* rechargeactivity_;
+  ::DataCommon::CommonItemsCPP* commons_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static Reward4399DailyGiftResp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GameAcitivity4399Daily : public ::google::protobuf::Message {
+ public:
+  GameAcitivity4399Daily();
+  virtual ~GameAcitivity4399Daily();
+  
+  GameAcitivity4399Daily(const GameAcitivity4399Daily& from);
+  
+  inline GameAcitivity4399Daily& operator=(const GameAcitivity4399Daily& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameAcitivity4399Daily& default_instance();
+  
+  void Swap(GameAcitivity4399Daily* other);
+  
+  // implements Message ----------------------------------------------
+  
+  GameAcitivity4399Daily* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GameAcitivity4399Daily& from);
+  void MergeFrom(const GameAcitivity4399Daily& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .ProtoActivity.GameAcitivityCPP data = 1;
+  inline bool has_data() const;
+  inline void clear_data();
+  static const int kDataFieldNumber = 1;
+  inline const ::ProtoActivity::GameAcitivityCPP& data() const;
+  inline ::ProtoActivity::GameAcitivityCPP* mutable_data();
+  inline ::ProtoActivity::GameAcitivityCPP* release_data();
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.GameAcitivity4399Daily)
+ private:
+  inline void set_has_data();
+  inline void clear_has_data();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::ProtoActivity::GameAcitivityCPP* data_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static GameAcitivity4399Daily* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UseCardReq : public ::google::protobuf::Message {
+ public:
+  UseCardReq();
+  virtual ~UseCardReq();
+  
+  UseCardReq(const UseCardReq& from);
+  
+  inline UseCardReq& operator=(const UseCardReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UseCardReq& default_instance();
+  
+  void Swap(UseCardReq* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UseCardReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UseCardReq& from);
+  void MergeFrom(const UseCardReq& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required uint32 type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.UseCardReq)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::google::protobuf::uint32 type_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UseCardReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UseCardResp : public ::google::protobuf::Message {
+ public:
+  UseCardResp();
+  virtual ~UseCardResp();
+  
+  UseCardResp(const UseCardResp& from);
+  
+  inline UseCardResp& operator=(const UseCardResp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UseCardResp& default_instance();
+  
+  void Swap(UseCardResp* other);
+  
+  // implements Message ----------------------------------------------
+  
+  UseCardResp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UseCardResp& from);
+  void MergeFrom(const UseCardResp& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required .DataCommon.CommonItemsCPP commons = 1;
+  inline bool has_commons() const;
+  inline void clear_commons();
+  static const int kCommonsFieldNumber = 1;
+  inline const ::DataCommon::CommonItemsCPP& commons() const;
+  inline ::DataCommon::CommonItemsCPP* mutable_commons();
+  inline ::DataCommon::CommonItemsCPP* release_commons();
+  
+  // @@protoc_insertion_point(class_scope:ProtoActivity.UseCardResp)
+ private:
+  inline void set_has_commons();
+  inline void clear_has_commons();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::DataCommon::CommonItemsCPP* commons_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_ProtoActivity_2eproto();
+  friend void protobuf_AssignDesc_ProtoActivity_2eproto();
+  friend void protobuf_ShutdownFile_ProtoActivity_2eproto();
+  
+  void InitAsDefaultInstance();
+  static UseCardResp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1996,6 +2687,307 @@ PushAutoRewardFundMsg::commons() const {
 inline ::google::protobuf::RepeatedPtrField< ::DataCommon::CommonItemsCPP >*
 PushAutoRewardFundMsg::mutable_commons() {
   return &commons_;
+}
+
+// -------------------------------------------------------------------
+
+// Reward4399RechargeGiftReq
+
+// required uint32 index = 1;
+inline bool Reward4399RechargeGiftReq::has_index() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Reward4399RechargeGiftReq::set_has_index() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Reward4399RechargeGiftReq::clear_has_index() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Reward4399RechargeGiftReq::clear_index() {
+  index_ = 0u;
+  clear_has_index();
+}
+inline ::google::protobuf::uint32 Reward4399RechargeGiftReq::index() const {
+  return index_;
+}
+inline void Reward4399RechargeGiftReq::set_index(::google::protobuf::uint32 value) {
+  set_has_index();
+  index_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// Reward4399RechargeGiftResp
+
+// required .ProtoActivity.GameAcitivityCPP rechargeActivity = 1;
+inline bool Reward4399RechargeGiftResp::has_rechargeactivity() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Reward4399RechargeGiftResp::set_has_rechargeactivity() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Reward4399RechargeGiftResp::clear_has_rechargeactivity() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Reward4399RechargeGiftResp::clear_rechargeactivity() {
+  if (rechargeactivity_ != NULL) rechargeactivity_->::ProtoActivity::GameAcitivityCPP::Clear();
+  clear_has_rechargeactivity();
+}
+inline const ::ProtoActivity::GameAcitivityCPP& Reward4399RechargeGiftResp::rechargeactivity() const {
+  return rechargeactivity_ != NULL ? *rechargeactivity_ : *default_instance_->rechargeactivity_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* Reward4399RechargeGiftResp::mutable_rechargeactivity() {
+  set_has_rechargeactivity();
+  if (rechargeactivity_ == NULL) rechargeactivity_ = new ::ProtoActivity::GameAcitivityCPP;
+  return rechargeactivity_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* Reward4399RechargeGiftResp::release_rechargeactivity() {
+  clear_has_rechargeactivity();
+  ::ProtoActivity::GameAcitivityCPP* temp = rechargeactivity_;
+  rechargeactivity_ = NULL;
+  return temp;
+}
+
+// required .DataCommon.CommonItemsCPP commons = 2;
+inline bool Reward4399RechargeGiftResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Reward4399RechargeGiftResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Reward4399RechargeGiftResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Reward4399RechargeGiftResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& Reward4399RechargeGiftResp::commons() const {
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* Reward4399RechargeGiftResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* Reward4399RechargeGiftResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// GameAcitivity4399Recharge
+
+// required .ProtoActivity.GameAcitivityCPP data = 1;
+inline bool GameAcitivity4399Recharge::has_data() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GameAcitivity4399Recharge::set_has_data() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GameAcitivity4399Recharge::clear_has_data() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GameAcitivity4399Recharge::clear_data() {
+  if (data_ != NULL) data_->::ProtoActivity::GameAcitivityCPP::Clear();
+  clear_has_data();
+}
+inline const ::ProtoActivity::GameAcitivityCPP& GameAcitivity4399Recharge::data() const {
+  return data_ != NULL ? *data_ : *default_instance_->data_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* GameAcitivity4399Recharge::mutable_data() {
+  set_has_data();
+  if (data_ == NULL) data_ = new ::ProtoActivity::GameAcitivityCPP;
+  return data_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* GameAcitivity4399Recharge::release_data() {
+  clear_has_data();
+  ::ProtoActivity::GameAcitivityCPP* temp = data_;
+  data_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// Reward4399DailyGiftReq
+
+// required uint32 index = 1;
+inline bool Reward4399DailyGiftReq::has_index() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Reward4399DailyGiftReq::set_has_index() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Reward4399DailyGiftReq::clear_has_index() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Reward4399DailyGiftReq::clear_index() {
+  index_ = 0u;
+  clear_has_index();
+}
+inline ::google::protobuf::uint32 Reward4399DailyGiftReq::index() const {
+  return index_;
+}
+inline void Reward4399DailyGiftReq::set_index(::google::protobuf::uint32 value) {
+  set_has_index();
+  index_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// Reward4399DailyGiftResp
+
+// required .ProtoActivity.GameAcitivityCPP rechargeActivity = 1;
+inline bool Reward4399DailyGiftResp::has_rechargeactivity() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Reward4399DailyGiftResp::set_has_rechargeactivity() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Reward4399DailyGiftResp::clear_has_rechargeactivity() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Reward4399DailyGiftResp::clear_rechargeactivity() {
+  if (rechargeactivity_ != NULL) rechargeactivity_->::ProtoActivity::GameAcitivityCPP::Clear();
+  clear_has_rechargeactivity();
+}
+inline const ::ProtoActivity::GameAcitivityCPP& Reward4399DailyGiftResp::rechargeactivity() const {
+  return rechargeactivity_ != NULL ? *rechargeactivity_ : *default_instance_->rechargeactivity_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* Reward4399DailyGiftResp::mutable_rechargeactivity() {
+  set_has_rechargeactivity();
+  if (rechargeactivity_ == NULL) rechargeactivity_ = new ::ProtoActivity::GameAcitivityCPP;
+  return rechargeactivity_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* Reward4399DailyGiftResp::release_rechargeactivity() {
+  clear_has_rechargeactivity();
+  ::ProtoActivity::GameAcitivityCPP* temp = rechargeactivity_;
+  rechargeactivity_ = NULL;
+  return temp;
+}
+
+// required .DataCommon.CommonItemsCPP commons = 2;
+inline bool Reward4399DailyGiftResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Reward4399DailyGiftResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Reward4399DailyGiftResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Reward4399DailyGiftResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& Reward4399DailyGiftResp::commons() const {
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* Reward4399DailyGiftResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* Reward4399DailyGiftResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// GameAcitivity4399Daily
+
+// required .ProtoActivity.GameAcitivityCPP data = 1;
+inline bool GameAcitivity4399Daily::has_data() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GameAcitivity4399Daily::set_has_data() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GameAcitivity4399Daily::clear_has_data() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GameAcitivity4399Daily::clear_data() {
+  if (data_ != NULL) data_->::ProtoActivity::GameAcitivityCPP::Clear();
+  clear_has_data();
+}
+inline const ::ProtoActivity::GameAcitivityCPP& GameAcitivity4399Daily::data() const {
+  return data_ != NULL ? *data_ : *default_instance_->data_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* GameAcitivity4399Daily::mutable_data() {
+  set_has_data();
+  if (data_ == NULL) data_ = new ::ProtoActivity::GameAcitivityCPP;
+  return data_;
+}
+inline ::ProtoActivity::GameAcitivityCPP* GameAcitivity4399Daily::release_data() {
+  clear_has_data();
+  ::ProtoActivity::GameAcitivityCPP* temp = data_;
+  data_ = NULL;
+  return temp;
+}
+
+// -------------------------------------------------------------------
+
+// UseCardReq
+
+// required uint32 type = 1;
+inline bool UseCardReq::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UseCardReq::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UseCardReq::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UseCardReq::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 UseCardReq::type() const {
+  return type_;
+}
+inline void UseCardReq::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// UseCardResp
+
+// required .DataCommon.CommonItemsCPP commons = 1;
+inline bool UseCardResp::has_commons() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UseCardResp::set_has_commons() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UseCardResp::clear_has_commons() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UseCardResp::clear_commons() {
+  if (commons_ != NULL) commons_->::DataCommon::CommonItemsCPP::Clear();
+  clear_has_commons();
+}
+inline const ::DataCommon::CommonItemsCPP& UseCardResp::commons() const {
+  return commons_ != NULL ? *commons_ : *default_instance_->commons_;
+}
+inline ::DataCommon::CommonItemsCPP* UseCardResp::mutable_commons() {
+  set_has_commons();
+  if (commons_ == NULL) commons_ = new ::DataCommon::CommonItemsCPP;
+  return commons_;
+}
+inline ::DataCommon::CommonItemsCPP* UseCardResp::release_commons() {
+  clear_has_commons();
+  ::DataCommon::CommonItemsCPP* temp = commons_;
+  commons_ = NULL;
+  return temp;
 }
 
 // -------------------------------------------------------------------

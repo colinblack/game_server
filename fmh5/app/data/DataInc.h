@@ -52,4 +52,5 @@
 #include "DataFriendWorkerManager.h"
 #include "DataUserFeedbackManager.h"
 #include "DataPetManager.h"
+#include "MemoryCdKeyManager.h"
 #endif /* DATAINC_H_ */

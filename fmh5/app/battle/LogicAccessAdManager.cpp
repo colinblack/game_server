@@ -264,6 +264,12 @@ int LogicAccessAdManager::Process(unsigned uid, ProtoAccessAd::ScarecrowViewAdRe
 		throw std::runtime_error("scrare_is_working");
 	}
 
+	//表明需要扣钻处理
+	if(req->has_iscostdimaond() && req->iscostdimaond() == 1)
+	{
+		LogicUserManager::Instance()->CommonProcess(uid,UserCfgWrap().User().diamondcost().daocaoren_open_cost(),"xianren_open_cost",resp->mutable_commons());
+	}
+
 	//校验通过、进行处理
 	//1.更新数据
 	activity.actdata[e_Activity_UserData_1_index_5] = Time::GetGlobalTime() + accessad_cfg.scarecrow_ad().bonus_time();
@@ -293,6 +299,7 @@ int LogicAccessAdManager::Process(unsigned uid, ProtoAccessAd::ScarecrowViewAdRe
 			cropland.SetMessage(resp->add_cropland());
 		}
 	}
+
 
 	//3.设置返回
 	resp->mutable_scarecrow()->set_workendts(activity.actdata[e_Activity_UserData_1_index_5]);

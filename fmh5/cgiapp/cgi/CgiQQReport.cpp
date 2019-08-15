@@ -58,26 +58,6 @@ public:
 			if (ret != 0)
 				return ret;
 		}
-		else if (action == "alliance_registe")
-		{
-			//@add oulong 20160523
-			//腾讯 游戏联盟额外增加一次上报（不影响原先的上报）：
-			try
-			{
-				CLogicQQReport logicReport;
-				TxAllianceRegisterApi api;
-				int ret = logicReport.TxAlliance(api);
-				if (ret != 0)
-				{
-					return ret;
-				}
-			}
-			catch (const std::exception& e)
-			{
-				::SetError(R_ERROR, e.what());
-				return R_ERROR;
-			}
-		}
 		else
 		{
 			report = CCGIIn::GetCGIInt("report");
@@ -86,11 +66,15 @@ public:
 			const string userip = CCGIIn::GetCGIStr("userip");
 			const string pf = CCGIIn::GetCGIStr("pf");
 			const string zoneid = CCGIIn::GetCGIStr("zoneid");
+			const string pid = CCGIIn::GetCGIStr("pid");
 
 			CLogicQQReport logicReport;
-			int ret = logicReport.Report(report,openid,uid,fee,userip,pf,zoneid);
-			if (ret != 0)
-				return ret;
+//			logicReport.Report(report,openid,uid,fee,userip,pf,zoneid,pid);
+//
+//			if (report == QQREPORT_logout) {
+//				logicReport.ReportEx(QQREPORT_role_logout, openid, uid, userip, pf, zoneid);
+//			}
+			logicReport.ReportEx(report, openid, uid, userip, pf, zoneid);
 		}
 
 		CGI_SEND_LOG("openid=%s&report=%u", openid.c_str(),report);
