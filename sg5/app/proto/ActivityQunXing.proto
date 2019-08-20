@@ -1,0 +1,31 @@
+package ActivityQunXing;
+
+message User {
+	required uint32 uid = 1;
+	repeated uint32 heros = 2;
+}
+
+message Guest {
+	required uint32 uid = 1;
+	required uint32 hid = 2;
+	required uint32 power = 3;
+	required string name = 4;
+	required string smid = 5;
+	required string hname = 6;
+}
+
+message Table {
+	required uint32 id = 1;
+	required uint32 type = 2;
+	required uint32 uid = 3;
+	required uint32 point = 4;
+	required string name = 5;
+	repeated Guest  guests = 6;
+}
+
+message QunXing {
+	required uint32 ver = 1;
+	required uint32 ts = 2;
+	repeated Table  tables = 3;
+	repeated User   users = 4;
+}

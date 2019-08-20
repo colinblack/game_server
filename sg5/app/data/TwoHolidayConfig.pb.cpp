@@ -132,11 +132,9 @@ void protobuf_AssignDesc_TwoHolidayConfig_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(VipItem));
   TwoHolidayItmCfg_descriptor_ = file->message_type(5);
-  static const int TwoHolidayItmCfg_offsets_[4] = {
+  static const int TwoHolidayItmCfg_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TwoHolidayItmCfg, everyday_recharge_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TwoHolidayItmCfg, eveyday_online_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TwoHolidayItmCfg, recharge_buy_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TwoHolidayItmCfg, vip_reward_),
   };
   TwoHolidayItmCfg_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -216,13 +214,11 @@ void protobuf_AddDesc_TwoHolidayConfig_2eproto() {
     "\nreward_one\030\001 \003(\0132\033.RewardConfig.RewardI"
     "temCfg\022/\n\nreward_two\030\002 \003(\0132\033.RewardConfi"
     "g.RewardItemCfg\0221\n\014reward_three\030\003 \003(\0132\033."
-    "RewardConfig.RewardItemCfg\"\363\001\n\020TwoHolida"
+    "RewardConfig.RewardItemCfg\"\223\001\n\020TwoHolida"
     "yItmCfg\022A\n\021everyday_recharge\030\001 \002(\0132&.Two"
     "HolidayConfig.EveryDayRechargeItem\022<\n\016ev"
     "eyday_online\030\002 \002(\0132$.TwoHolidayConfig.Ev"
-    "eryDayOnlineItem\022/\n\014recharge_buy\030\003 \003(\0132\031"
-    ".TwoHolidayConfig.BuyItem\022-\n\nvip_reward\030"
-    "\004 \002(\0132\031.TwoHolidayConfig.VipItem", 912);
+    "eryDayOnlineItem", 816);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "TwoHolidayConfig.proto", &protobuf_RegisterTypes);
   EveryDayRechargeItem::default_instance_ = new EveryDayRechargeItem();
@@ -1695,8 +1691,6 @@ void VipItem::Swap(VipItem* other) {
 #ifndef _MSC_VER
 const int TwoHolidayItmCfg::kEverydayRechargeFieldNumber;
 const int TwoHolidayItmCfg::kEveydayOnlineFieldNumber;
-const int TwoHolidayItmCfg::kRechargeBuyFieldNumber;
-const int TwoHolidayItmCfg::kVipRewardFieldNumber;
 #endif  // !_MSC_VER
 
 TwoHolidayItmCfg::TwoHolidayItmCfg()
@@ -1708,7 +1702,6 @@ TwoHolidayItmCfg::TwoHolidayItmCfg()
 void TwoHolidayItmCfg::InitAsDefaultInstance() {
   everyday_recharge_ = const_cast< ::TwoHolidayConfig::EveryDayRechargeItem*>(&::TwoHolidayConfig::EveryDayRechargeItem::default_instance());
   eveyday_online_ = const_cast< ::TwoHolidayConfig::EveryDayOnlineItem*>(&::TwoHolidayConfig::EveryDayOnlineItem::default_instance());
-  vip_reward_ = const_cast< ::TwoHolidayConfig::VipItem*>(&::TwoHolidayConfig::VipItem::default_instance());
 }
 
 TwoHolidayItmCfg::TwoHolidayItmCfg(const TwoHolidayItmCfg& from)
@@ -1722,7 +1715,6 @@ void TwoHolidayItmCfg::SharedCtor() {
   _cached_size_ = 0;
   everyday_recharge_ = NULL;
   eveyday_online_ = NULL;
-  vip_reward_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1735,7 +1727,6 @@ void TwoHolidayItmCfg::SharedDtor() {
   if (this != default_instance_) {
     delete everyday_recharge_;
     delete eveyday_online_;
-    delete vip_reward_;
   }
 }
 
@@ -1761,18 +1752,14 @@ TwoHolidayItmCfg* TwoHolidayItmCfg::New() const {
 }
 
 void TwoHolidayItmCfg::Clear() {
-  if (_has_bits_[0 / 32] & 11) {
+  if (_has_bits_[0 / 32] & 3) {
     if (has_everyday_recharge()) {
       if (everyday_recharge_ != NULL) everyday_recharge_->::TwoHolidayConfig::EveryDayRechargeItem::Clear();
     }
     if (has_eveyday_online()) {
       if (eveyday_online_ != NULL) eveyday_online_->::TwoHolidayConfig::EveryDayOnlineItem::Clear();
     }
-    if (has_vip_reward()) {
-      if (vip_reward_ != NULL) vip_reward_->::TwoHolidayConfig::VipItem::Clear();
-    }
   }
-  recharge_buy_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1805,33 +1792,6 @@ bool TwoHolidayItmCfg::MergePartialFromCodedStream(
          parse_eveyday_online:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_eveyday_online()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_recharge_buy;
-        break;
-      }
-
-      // repeated .TwoHolidayConfig.BuyItem recharge_buy = 3;
-      case 3: {
-        if (tag == 26) {
-         parse_recharge_buy:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_recharge_buy()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_recharge_buy;
-        if (input->ExpectTag(34)) goto parse_vip_reward;
-        break;
-      }
-
-      // required .TwoHolidayConfig.VipItem vip_reward = 4;
-      case 4: {
-        if (tag == 34) {
-         parse_vip_reward:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_vip_reward()));
         } else {
           goto handle_unusual;
         }
@@ -1876,18 +1836,6 @@ void TwoHolidayItmCfg::SerializeWithCachedSizes(
       2, this->eveyday_online(), output);
   }
 
-  // repeated .TwoHolidayConfig.BuyItem recharge_buy = 3;
-  for (int i = 0; i < this->recharge_buy_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      3, this->recharge_buy(i), output);
-  }
-
-  // required .TwoHolidayConfig.VipItem vip_reward = 4;
-  if (has_vip_reward()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, this->vip_reward(), output);
-  }
-
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1910,20 +1858,6 @@ void TwoHolidayItmCfg::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         2, this->eveyday_online(), target);
-  }
-
-  // repeated .TwoHolidayConfig.BuyItem recharge_buy = 3;
-  for (int i = 0; i < this->recharge_buy_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        3, this->recharge_buy(i), target);
-  }
-
-  // required .TwoHolidayConfig.VipItem vip_reward = 4;
-  if (has_vip_reward()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteMessageNoVirtualToArray(
-        4, this->vip_reward(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1952,22 +1886,7 @@ int TwoHolidayItmCfg::ByteSize() const {
           this->eveyday_online());
     }
 
-    // required .TwoHolidayConfig.VipItem vip_reward = 4;
-    if (has_vip_reward()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->vip_reward());
-    }
-
   }
-  // repeated .TwoHolidayConfig.BuyItem recharge_buy = 3;
-  total_size += 1 * this->recharge_buy_size();
-  for (int i = 0; i < this->recharge_buy_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->recharge_buy(i));
-  }
-
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -1993,16 +1912,12 @@ void TwoHolidayItmCfg::MergeFrom(const ::google::protobuf::Message& from) {
 
 void TwoHolidayItmCfg::MergeFrom(const TwoHolidayItmCfg& from) {
   GOOGLE_CHECK_NE(&from, this);
-  recharge_buy_.MergeFrom(from.recharge_buy_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_everyday_recharge()) {
       mutable_everyday_recharge()->::TwoHolidayConfig::EveryDayRechargeItem::MergeFrom(from.everyday_recharge());
     }
     if (from.has_eveyday_online()) {
       mutable_eveyday_online()->::TwoHolidayConfig::EveryDayOnlineItem::MergeFrom(from.eveyday_online());
-    }
-    if (from.has_vip_reward()) {
-      mutable_vip_reward()->::TwoHolidayConfig::VipItem::MergeFrom(from.vip_reward());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -2021,17 +1936,13 @@ void TwoHolidayItmCfg::CopyFrom(const TwoHolidayItmCfg& from) {
 }
 
 bool TwoHolidayItmCfg::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000b) != 0x0000000b) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   if (has_everyday_recharge()) {
     if (!this->everyday_recharge().IsInitialized()) return false;
   }
   if (has_eveyday_online()) {
     if (!this->eveyday_online().IsInitialized()) return false;
-  }
-  if (!::google::protobuf::internal::AllAreInitialized(this->recharge_buy())) return false;
-  if (has_vip_reward()) {
-    if (!this->vip_reward().IsInitialized()) return false;
   }
   return true;
 }
@@ -2040,8 +1951,6 @@ void TwoHolidayItmCfg::Swap(TwoHolidayItmCfg* other) {
   if (other != this) {
     std::swap(everyday_recharge_, other->everyday_recharge_);
     std::swap(eveyday_online_, other->eveyday_online_);
-    recharge_buy_.Swap(&other->recharge_buy_);
-    std::swap(vip_reward_, other->vip_reward_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

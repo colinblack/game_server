@@ -1,0 +1,25 @@
+package ProtoAttackInfo;
+
+
+message ProtoAttackHero {
+	required uint32 ud  = 1;
+	required uint32 hp  = 2;
+};
+
+message ProtoAttackBuilding {
+	required uint32 ud   = 1;
+	required uint32 hp   = 2;
+	required uint32 res  = 3;
+};
+
+message ProtoAttackRes {
+	required uint32 id      = 1;
+	required uint32 count   = 2;
+}
+
+message ProtoAttackInfo {
+	repeated ProtoAttackHero hero         = 1;
+	repeated ProtoAttackBuilding building = 2;
+	repeated ProtoAttackRes res           = 3;
+	required uint32 attackts              = 4;
+}

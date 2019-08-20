@@ -382,11 +382,13 @@ int CDataXML::InitEquipIntensifys()
 		basicrate.erase(basicrate.find_last_not_of("]") + 1);
 		vector<string> intem_basicrates;
 		String::Split(basicrate, ',', intem_basicrates);
+		cout << "rate:" << endl;
 		for(int i =0;i < intem_basicrates.size();i++)
 		{
 			pdata->IntensifysItem[number].rate[i] = CTrans::STOI(intem_basicrates[i].c_str());
+			cout << pdata->IntensifysItem[number].rate[i] << ",";
 		}
-
+		cout << endl;
 		xmlConf.IntoElem();
 		if(!xmlConf.FindElem("addrate"))
 		{
@@ -405,15 +407,21 @@ int CDataXML::InitEquipIntensifys()
 		addrate.erase(addrate.find_last_not_of("]") + 1);
 		vector<string> item_addrates;
 		String::Split(addrate, ',', item_addrates);
+		cout << "addrate:" << endl;
 		for(int i =0;i < item_addrates.size();i++)
 		{
 			pdata->IntensifysItem[number].addrate[i] = CTrans::STOI(item_addrates[i].c_str());
+			cout << pdata->IntensifysItem[number].addrate[i] << ",";
 		}
-
+		cout << endl;
+		cout << "yijian:" << endl;
 		for(int i =0;i < item_addrates.size();i++)
 		{
-			pdata->IntensifysItem[number].yijian[i] = ceil(float((10000 - pdata->IntensifysItem[number].rate[i])) / float(pdata->IntensifysItem[number].addrate[i]));
+			pdata->IntensifysItem[number].yijian[i] = ceil((10000 - pdata->IntensifysItem[number].rate[i]) * 1.0 / pdata->IntensifysItem[number].addrate[i]);
+			cout << pdata->IntensifysItem[number].yijian[i] << ",";
+
 		}
+		cout << endl;
 
 		++number;
 		xmlConf.OutOfElem();
@@ -1202,6 +1210,7 @@ int CDataXML::GetShopItem(unsigned id, XMLShop &item)
 /**************worldBattleShop**********************/
 int CDataXML::InitWorldBattleShop()
 {
+	//把商店里的所的商品放进共享内存
 	DataXMLWorldBattleShop *pdata = (DataXMLWorldBattleShop *)m_shWorldBattleShop.GetAddress();
 	if(pdata == NULL)
 	{
@@ -1222,7 +1231,7 @@ int CDataXML::InitWorldBattleShop()
 		dataPath.append("/");
 	dataPath.append("worldRes.xml");
 	CMarkupSTL xmlConf;
-	if(!xmlConf.Load(dataPath.c_str()))
+	if(!xmlConf.Load(dataPath.c_str())) //把worldRes.xml的所的信息读进CMarkupSTL类中
 	{
 		cout<<("worldRes.xml path wrong")<<endl;
 		return 1;
@@ -1270,7 +1279,7 @@ int CDataXML::InitWorldBattleShop()
 	xmlConf.OutOfElem();
 	m_mapXMLWorldBattleShop.clear();
 	for(unsigned j=0;j<XML_WORLD_BATTLE_SHOP_ALL_ITEM;++j)
-	{
+	{//从共享内存里拿出商品并用id用键值放入map中一一对应方便读取
 		if(pdata->shop[j].id)
 		{
 			m_mapXMLWorldBattleShop[pdata->shop[j].id] = pdata->shop[j];
@@ -1312,7 +1321,7 @@ int CDataXML::GetWorldBattleShopItem(unsigned id, XMLWorldBattleShopItem &item, 
 	else
 		return R_ERR_DATA;
 
-	count = m_mapXMLWorldBattleShop.size();
+	count = m_mapXMLWorldBattleShop.size();  //商店总共有多少个商品
 	return 0;
 }
 
@@ -1715,7 +1724,7 @@ int CDataXML::GetEquipDismantling_taozhuang(unsigned level, unsigned part, unsig
 /*************powerup*****************/
 float CDataXML::GetRandomGradePoint(int type, int grade, int level)
 {
-	float point;
+	float point = 0;
 	int n = Math::GetRandomInt(100) + 1;
 	switch (type)
 	{//武将星级
@@ -3721,6 +3730,40 @@ int CDataXML::InitHeavenDaoist()
 		m_mapXMLHeavenDaoist[pdata->heavenDaoist[i].id] = i;
 	}
 
+	xmlConf.OutOfElem();
+
+	if (xmlConf.FindElem("heavenuplevel"))
+	{
+		xmlConf.IntoElem();
+		int num = 0;
+		while (xmlConf.FindElem("item"))
+		{
+			//strcpy(pdata->heavenup[i][num].name,bingzhongname[i]);
+			pdata->heavenup[num].level = Convert::StringToUInt(xmlConf.GetAttrib("level"));
+			pdata->heavenup[num].exp = Convert::StringToUInt(xmlConf.GetAttrib("exp"));
+			pdata->heavenup[num].eqid = Convert::StringToUInt(xmlConf.GetAttrib("eqid"));
+			pdata->heavenup[num].eqid2 = Convert::StringToUInt(xmlConf.GetAttrib("eqid2"));
+			pdata->heavenup[num].needeq = Convert::StringToUInt(xmlConf.GetAttrib("needeq"));
+			pdata->heavenup[num].needeq2 = Convert::StringToUInt(xmlConf.GetAttrib("needeq2"));
+			pdata->heavenup[num].per = Convert::StringToUInt(xmlConf.GetAttrib("per"));
+			res = xmlConf.GetAttrib("res");
+			n = res.find_last_of(',') - 1;
+			pdata->heavenup[num].res = CTrans::STOI(res.substr(4,n-4+1).c_str());
+			m_XMLHeavenUp[pdata->heavenup[num].exp] = pdata->heavenup[num];
+			cout << pdata->heavenup[num].level << " "
+				<< pdata->heavenup[num].exp << " "
+				<< pdata->heavenup[num].eqid << " "
+				<< pdata->heavenup[num].eqid2 << " "
+				<< pdata->heavenup[num].needeq << " "
+				<< pdata->heavenup[num].needeq2 << " "
+				<< pdata->heavenup[num].per << " "
+				<< pdata->heavenup[num].res << endl;
+			++num;
+		}
+		xmlConf.OutOfElem();
+	}
+
+
 	m_shHeavenDaoist.SetInitDone();
 
 	return R_SUCCESS;
@@ -3774,6 +3817,62 @@ int CDataXML::GetHeavenDaoistLv(unsigned id, unsigned exp, unsigned &lv)
 	return R_SUCCESS;
 }
 
+int CDataXML::GetHeavenUp( unsigned exp, XMLHeavenUp &data, int &needexp)
+{
+	map<unsigned,XMLHeavenUp>::iterator itr = m_XMLHeavenUp.begin();
+	while (itr != m_XMLHeavenUp.end())
+	{
+		map<unsigned,XMLHeavenUp>::iterator olditr = itr;
+		itr++;
+		if (itr == m_XMLHeavenUp.end())
+		{
+			return R_ERR_DATA;
+		}
+
+		if (exp >= olditr->first && exp < itr->first)
+		{
+			data = olditr->second;
+			needexp = itr->first - exp;
+			return 0;
+		}
+	}
+	return R_ERR_DATA;
+}
+
+int CDataXML::GetMaxHeavenUpExp(unsigned & exp)
+{
+	exp = 0;
+	for (map<unsigned,XMLHeavenUp>::iterator itr = m_XMLHeavenUp.begin();itr != m_XMLHeavenUp.end();++itr)
+	{
+		if (exp < itr->first)
+			exp = itr->first;
+	}
+	return 0;
+}
+
+int CDataXML::GetHeavenUpLevel(unsigned exp, unsigned &level)
+{
+	level = 0;
+	const map<unsigned, XMLHeavenUp> *pXMLTemp = NULL;
+		pXMLTemp = &(m_XMLHeavenUp);
+
+	map<unsigned,XMLHeavenUp>::const_iterator itr = pXMLTemp->begin();
+	while (itr != pXMLTemp->end())
+	{
+		map<unsigned,XMLHeavenUp>::const_iterator olditr = itr;
+		itr++;
+		if (itr == pXMLTemp->end())
+		{
+			return 0;
+		}
+		if (exp >= olditr->first && exp < itr->first)
+		{
+			return 0;
+		}
+		level++;
+	}
+	return 0;
+}
 
 int CDataXML::InitCostHeavenDaoist()
 {
@@ -3851,8 +3950,114 @@ int CDataXML::InitCostHeavenDaoist()
 		pdata->heavenDaoistCost[i].cash = CTrans::STOI(cash.c_str());
 	}
 
+	xmlConf.OutOfElem();
+
 	m_shCostHeavenDaoist.SetInitDone();
 
+	return R_SUCCESS;
+}
+
+int CDataXML::InitCostHeavenUp()
+{
+	DataXMLCostHeavenUp *pdata = (DataXMLCostHeavenUp *)m_shCostHeavenUp.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shCostHeavenUp),true,LOCK_MAX);
+
+	memset(pdata,0,sizeof(*pdata));
+
+	string dataPath;
+	int ret = GetFile("heavenConfig.xml",dataPath);
+	if(ret)
+	{
+		return ret;
+	}
+
+	CMarkupSTL xmlConf;
+
+	if(!xmlConf.Load(dataPath.c_str()))
+	{
+		error_log("InitCostHeavenUp dataPath loading wrong!");
+		return R_ERROR;
+	}
+
+	if(!xmlConf.FindElem("content"))
+	{
+		error_log("InitCostHeavenUp content node wrong!");
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	if (!xmlConf.FindElem("cost"))
+	{
+		cout << ("cost node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	string jie = "";
+	string cash = "";
+
+	//钻石
+	for(unsigned i = 0; i < HEAVENUP_JIE_NUM;++i)
+	{
+		xmlConf.FindElem("bingshuup");
+		jie = xmlConf.GetAttrib("jie");
+		cash = xmlConf.GetAttrib("cash");
+		if(jie.empty() || cash.empty())
+		{
+			error_log("heavenConf cost wrong!");
+			return R_ERROR;
+		}
+
+		pdata->heavenUpCost[i].id = i;
+		pdata->heavenUpCost[i].jie = CTrans::STOI(jie.c_str());
+		pdata->heavenUpCost[i].cash = CTrans::STOI(cash.c_str());
+	}
+
+	//兵书替换兵魂
+	string bshu_num = "";
+	string bhun_num = "";
+	string exchange_max_times = "";
+
+	bool flag = xmlConf.FindElem("bingshuupmax");
+	if(!flag)
+	{
+		cout << ("bingshuupmax node wrong") << endl;
+		return R_ERROR;
+	}
+
+	bshu_num = xmlConf.GetAttrib("shu");
+	bhun_num = xmlConf.GetAttrib("hun");
+	exchange_max_times = xmlConf.GetAttrib("huanmax");
+	
+	if(bshu_num.empty() || bhun_num.empty() || exchange_max_times.empty())
+	{
+		LOGIC_ERROR_RETURN_MSG("heavenConf cost bingshuupmax reading error");
+	}
+	
+	pdata->exBinghun.bingshuNum = CTrans::STOI(bshu_num.c_str());
+	pdata->exBinghun.binghunNum = CTrans::STOI(bhun_num.c_str());
+	pdata->exBinghun.maxTimes = CTrans::STOI(exchange_max_times.c_str());
+
+	xmlConf.OutOfElem();
+
+	m_shCostHeavenUp.SetInitDone();
+	return R_SUCCESS;
+}
+
+int CDataXML::GetCostHeavenUp(unsigned jie_index,unsigned &cash)
+{
+	if(!m_mapCostHeavenUp.count(jie_index))  
+	{
+		error_log("heavenXML to map wrong!");
+		return R_ERR_NO_DATA;
+	}
+
+	cash = m_mapCostHeavenUp[jie_index];
 	return R_SUCCESS;
 }
 
@@ -3866,6 +4071,18 @@ int CDataXML::GetCostHeavenDaoist(bool is_heaven, unsigned jie_index, unsigned &
 	}
 
 	cash = m_mapCostHeavenDaoist[real_index];
+	return R_SUCCESS;
+}
+
+int CDataXML::GetExchangeBinghuToBinghun(unsigned index,XMLCostHeavenUPToBinghun &data)
+{
+	if(m_mapCostBShuToBHun.size() == 0)
+	{
+		return R_ERR_NO_DATA;
+	}
+	memset(&data,0,sizeof(data));
+
+	data = m_mapCostBShuToBHun[index];
 	return R_SUCCESS;
 }
 
@@ -4984,5 +5201,112 @@ int CDataXML::ParseXMLProtectGoddess(void *data, CMarkupSTL & xmlConf)
 
 	xmlConf.OutOfElem();
 
+	return 0;
+}
+
+int CDataXML::_parse_activity_simple_reward(const Json::Value &reward, XMLActSimpleReward *data, int len)
+{
+	Json::Value::Members members(reward.getMemberNames());
+	int index = 0;
+	for (Json::Value::Members::iterator it=members.begin(); it!=members.end(); ++it)
+	{
+		string type = *it;
+		if (type.find("equip") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_EQUIP;
+			if (!Json::GetUInt(reward[type], "id", data[index].id)){
+				return R_ERR_DATA;
+			}
+			Json::GetUInt(reward[type], "c", data[index].count);
+			unsigned q,ch;
+			q=ch=0;
+			Json::GetUInt(reward[type], "ch", ch);
+			Json::GetUInt(reward[type], "q", q);
+			data[index].q = q;
+			data[index].ch = ch;
+			unsigned xs = 0;
+			Json::GetUInt(reward[type], "xs", xs);
+			if (xs)
+				data[index].xs = true;
+		}else if (type.find("hero") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_HERO;
+			if (!Json::GetUInt(reward[type], "id", data[index].id)){
+				return R_ERR_DATA;
+			}
+			Json::GetUInt(reward[type], "c", data[index].count);
+		}else if (type.find("gold") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_GOLD;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("explevel") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_EXP_LV;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("exp") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_EXP;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_1") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT1;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_2") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT2;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_3") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT3;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_4") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT4;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_5") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT5;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_6") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT6;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("mt_7") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT7;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("rs1") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_RES1;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("rs2") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_RES2;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("rs3") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_RES3;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("prosper") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_PROSPER;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else if (type.find("cash") != string::npos){
+			data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_CASH;
+			Json::GetUInt(reward, type.c_str(), data[index].count);
+		}else{
+			continue;
+		}
+		if (++index >= len){
+			break;
+		}
+	}
+	return 0;
+}
+
+int CDataXML::_get_xml(CMarkupSTL &xmlConf, const string &file_name)
+{
+	string dataPath = MainConfig::GetAllServerPath(CONFIG_XML_PATH);  //获得绝对路径
+	if (dataPath.empty())
+		return R_ERR_DATA;
+
+	if (dataPath[dataPath.length() - 1] != '/')
+		dataPath.append("/");
+	dataPath.append(file_name);  //加上文件名
+	if(!xmlConf.Load(dataPath.c_str()))
+	{
+		cout<<("data path wrong")<<endl;
+		return R_ERR_DATA;
+	}
+	if(!xmlConf.FindElem("content"))
+	{
+		cout<<("content node wrong")<<endl;
+		return R_ERR_DATA;
+	}
+	xmlConf.IntoElem();
 	return 0;
 }

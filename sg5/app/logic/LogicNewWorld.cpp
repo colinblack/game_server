@@ -7,8 +7,10 @@
 
 #include "LogicNewWorld.h"
 #include "LogicSyncLords.h"
+#include "LogicCmdUnits.h"
 
 #define LORD_EXPLOIT_PATH "../webroot/data/incrementExploit"
+#define ZHENGBASHADI_CHONGBANG_PATH "../webroot/data/zhengbashadi_chongbang"
 
 #define NEW_WORLD_PROCESS_CHANGE(pData,allresult) \
 	const NewWorldChangeMap &change = pData->GetChangeMap(); \
@@ -236,6 +238,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 			result["attacker1"]["type"]	 = city.city.vision[city.city.attacker.index].getType();
 			result["attacker1"]["heroID"] = CDataXML::Hero2Str(city.city.vision[city.city.attacker.index].hid);
 			result["attacker1"]["name"]	 = string(city.city.vision[city.city.attacker.index].name);
+			result["attacker1"]["icon"]	 = string(city.city.vision[city.city.attacker.index].icon);
 			result["attacker1"]["kingdom"]= city.city.vision[city.city.attacker.index].kingdom;
 			result["attacker1"]["level"]	 = city.city.vision[city.city.attacker.index].level;
 			result["attacker1"]["hp"]	 = city.city.vision[city.city.attacker.index].hp;
@@ -256,6 +259,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 				result["attacker1"]["type"]	 = hero.getType();
 				result["attacker1"]["heroID"] = CDataXML::Hero2Str(hero.hid);
 				result["attacker1"]["name"]	 = string(hero.name);
+				result["attacker1"]["icon"]	 = string(hero.icon);
 				result["attacker1"]["kingdom"]= hero.kingdom;
 				result["attacker1"]["level"]	 = hero.level;
 				result["attacker1"]["hp"]	 = hero.hp;
@@ -281,6 +285,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 			result["defender1"]["type"]	 = city.city.vision[city.city.defender.index].getType();
 			result["defender1"]["heroID"] = CDataXML::Hero2Str(city.city.vision[city.city.defender.index].hid);
 			result["defender1"]["name"]	 = string(city.city.vision[city.city.defender.index].name);
+			result["defender1"]["icon"]	 = string(city.city.vision[city.city.defender.index].icon);
 			result["defender1"]["kingdom"]= city.city.vision[city.city.defender.index].kingdom;
 			result["defender1"]["level"]	 = city.city.vision[city.city.defender.index].level;
 			result["defender1"]["hp"]	 = city.city.vision[city.city.defender.index].hp;
@@ -301,6 +306,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 				result["defender1"]["type"]	 = hero.getType();
 				result["defender1"]["heroID"] = CDataXML::Hero2Str(hero.hid);
 				result["defender1"]["name"]	 = string(hero.name);
+				result["defender1"]["icon"]	 = string(hero.icon);
 				result["defender1"]["kingdom"]= hero.kingdom;
 				result["defender1"]["level"]	 = hero.level;
 				result["defender1"]["hp"]	 = hero.hp;
@@ -327,6 +333,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 			result["attacker2"]["type"]	 = city.city.vision[it->second.index].getType();
 			result["attacker2"]["heroID"] = CDataXML::Hero2Str(city.city.vision[it->second.index].hid);
 			result["attacker2"]["name"]	 = string(city.city.vision[it->second.index].name);
+			result["attacker2"]["icon"]	 = string(city.city.vision[it->second.index].icon);
 			result["attacker2"]["kingdom"]= city.city.vision[it->second.index].kingdom;
 			result["attacker2"]["level"]	 = city.city.vision[it->second.index].level;
 			result["attacker2"]["hp"]	 = city.city.vision[it->second.index].hp;
@@ -347,6 +354,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 				result["attacker2"]["type"]	 = hero.getType();
 				result["attacker2"]["heroID"] = CDataXML::Hero2Str(hero.hid);
 				result["attacker2"]["name"]	 = string(hero.name);
+				result["attacker2"]["icon"]	 = string(hero.icon);
 				result["attacker2"]["kingdom"]= hero.kingdom;
 				result["attacker2"]["level"]	 = hero.level;
 				result["attacker2"]["hp"]	 = hero.hp;
@@ -373,6 +381,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 			result["defender2"]["type"]	 = city.city.vision[it->second.index].getType();
 			result["defender2"]["heroID"] = CDataXML::Hero2Str(city.city.vision[it->second.index].hid);
 			result["defender2"]["name"]	 = string(city.city.vision[it->second.index].name);
+			result["defender2"]["icon"]	 = string(city.city.vision[it->second.index].icon);
 			result["defender2"]["kingdom"]= city.city.vision[it->second.index].kingdom;
 			result["defender2"]["level"]	 = city.city.vision[it->second.index].level;
 			result["defender2"]["hp"]	 = city.city.vision[it->second.index].hp;
@@ -393,6 +402,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 				result["defender2"]["type"]	 = hero.getType();
 				result["defender2"]["heroID"] = CDataXML::Hero2Str(hero.hid);
 				result["defender2"]["name"]	 = string(hero.name);
+				result["defender2"]["icon"]	 = string(hero.icon);
 				result["defender2"]["kingdom"]= hero.kingdom;
 				result["defender2"]["level"]	 = hero.level;
 				result["defender2"]["hp"]	 = hero.hp;
@@ -436,6 +446,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 			result["attacker3"]["type"]	 = city.city.vision[it->second.index].getType();
 			result["attacker3"]["heroID"] = CDataXML::Hero2Str(city.city.vision[it->second.index].hid);
 			result["attacker3"]["name"]	 = string(city.city.vision[it->second.index].name);
+			result["attacker3"]["icon"]	 = string(city.city.vision[it->second.index].icon);
 			result["attacker3"]["kingdom"]= city.city.vision[it->second.index].kingdom;
 			result["attacker3"]["level"]	 = city.city.vision[it->second.index].level;
 			result["attacker3"]["hp"]	 = city.city.vision[it->second.index].hp;
@@ -456,6 +467,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 				result["attacker3"]["type"]	 = hero.getType();
 				result["attacker3"]["heroID"] = CDataXML::Hero2Str(hero.hid);
 				result["attacker3"]["name"]	 = string(hero.name);
+				result["attacker3"]["icon"]	 = string(hero.icon);
 				result["attacker3"]["kingdom"]= hero.kingdom;
 				result["attacker3"]["level"]	 = hero.level;
 				result["attacker3"]["hp"]	 = hero.hp;
@@ -483,6 +495,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 			result["defender3"]["type"]	 = city.city.vision[it->second.index].getType();
 			result["defender3"]["heroID"] = CDataXML::Hero2Str(city.city.vision[it->second.index].hid);
 			result["defender3"]["name"]	 = string(city.city.vision[it->second.index].name);
+			result["defender3"]["icon"]	 = string(city.city.vision[it->second.index].icon);
 			result["defender3"]["kingdom"]= city.city.vision[it->second.index].kingdom;
 			result["defender3"]["level"]	 = city.city.vision[it->second.index].level;
 			result["defender3"]["hp"]	 = city.city.vision[it->second.index].hp;
@@ -503,6 +516,7 @@ int CLogicNewWorld::GetBattle(unsigned cid, Json::Value &allresult)
 				result["defender3"]["type"]	 = hero.getType();
 				result["defender3"]["heroID"] = CDataXML::Hero2Str(hero.hid);
 				result["defender3"]["name"]	 = string(hero.name);
+				result["defender3"]["icon"]	 = string(hero.icon);
 				result["defender3"]["kingdom"]= hero.kingdom;
 				result["defender3"]["level"]	 = hero.level;
 				result["defender3"]["hp"]	 = hero.hp;
@@ -567,6 +581,7 @@ int CLogicNewWorld::GetBattleList(unsigned cid, unsigned camp, Json::Value &allr
 			temp["heroID"]		 = CDataXML::Hero2Str(hero.hid);
 			temp["kingdom"]		 = hero.kingdom;
 			temp["name"]		 = hero.name;
+			temp["icon"]		 = hero.icon;
 			temp["index"]		 = hero.index.index;
 			temp["hp"]			 = hero.hp;
 			temp["maxhp"]		 = hero.property[NewWorldProperty_hp];
@@ -584,6 +599,7 @@ int CLogicNewWorld::GetBattleList(unsigned cid, unsigned camp, Json::Value &allr
 			temp["heroID"]		 = CDataXML::Hero2Str(hero.hid);
 			temp["kingdom"]		 = hero.kingdom;
 			temp["name"]		 = hero.name;
+			temp["icon"]		 = hero.icon;
 			temp["index"]		 = hero.index.index;
 			temp["hp"]			 = hero.hp;
 			temp["maxhp"]		 = hero.property[NewWorldProperty_hp];
@@ -681,6 +697,15 @@ int CLogicNewWorld::SetHero(unsigned uid, unsigned index, const Json::Value &par
 {
 	Json::Value &result = allresult["SetHero"];
 
+	if (index > NEW_WORLD_HERO_FREE_INDEX) {
+		UserWrap user(uid, false);
+		NewWorldHeroPointUint cmd(user);
+		unsigned open_num = cmd.GetOpenNum();
+		if (open_num < index - NEW_WORLD_HERO_FREE_INDEX) {
+			return R_ERR_LOGIC;
+		}
+	}
+
 	int ret = 0;
 	CDataNewWorld *pData = GetDataNewWorld();
 	if (NULL == pData)
@@ -695,9 +720,10 @@ int CLogicNewWorld::SetHero(unsigned uid, unsigned index, const Json::Value &par
 	Json::GetUInt(para, "level", level);
 	unsigned job = 0;
 	Json::GetUInt(para, "job", job);
-	string name, heroid;
+	string name, heroid, icon;
 	Json::GetString(para, "name", name);
 	Json::GetString(para, "heroId", heroid);
+	Json::GetString(para, "icon", icon);
 
 	NewWorldHero hero;
 	hero.index.uid		= uid;
@@ -710,6 +736,8 @@ int CLogicNewWorld::SetHero(unsigned uid, unsigned index, const Json::Value &par
 		hero.hid		= CDataXML::Str2Hero(heroid);
 	if(!name.empty())
 		strncpy(hero.name, name.c_str(), sizeof(hero.name)-1);
+	if(!icon.empty())
+		strncpy(hero.icon, icon.c_str(), sizeof(hero.icon)-1);
 	if(para.isMember("property") && para["property"].isArray() && para["property"].size()<=NewWorldProperty_max)
 	{
 		for(unsigned i=0;i<para["property"].size();++i)
@@ -827,11 +855,11 @@ int CLogicNewWorld::Change(unsigned uid, unsigned index, unsigned type, Json::Va
 	NEW_WORLD_PROCESS_CHANGE(pData,allresult)
 	return 0;
 }
-int CLogicNewWorld::Clone(unsigned uid, unsigned index, unsigned equd, Json::Value &allresult)
+int CLogicNewWorld::Clone(unsigned uid, unsigned index, unsigned equd, Json::Value &allresult, bool issuper)
 {
 	int ret = 0;
 	CLogicEquipment equipment;
-	if(equipment.Try(uid, NEW_WORLD_CLONE_COST, equd, 1))
+	if(equipment.Try(uid, issuper?NEW_WORLD_SUPER_CLONE_COST:NEW_WORLD_CLONE_COST, equd, 1))
 		return R_ERR_PARAM;
 
 	CDataNewWorld *pData = GetDataNewWorld();
@@ -841,7 +869,7 @@ int CLogicNewWorld::Clone(unsigned uid, unsigned index, unsigned equd, Json::Val
 		return R_ERR_DATA;
 	}
 
-	ret = pData->Clone(NewWorldHeroIndex(uid, index));
+	ret = pData->Clone(NewWorldHeroIndex(uid, index),issuper);
 	if(ret)
 	{
 		error_log("Clone fail, uid=%u, index=%u, ret=%u",uid, index, ret);
@@ -850,7 +878,7 @@ int CLogicNewWorld::Clone(unsigned uid, unsigned index, unsigned equd, Json::Val
 
 	{
 		AUTO_LOCK_USER(uid)
-		ret = equipment.UseEquipment(uid, NEW_WORLD_CLONE_COST, equd, 1, "new_world_clone");
+		ret = equipment.UseEquipment(uid, issuper?NEW_WORLD_SUPER_CLONE_COST:NEW_WORLD_CLONE_COST, equd, 1, "new_world_clone");
 		if(ret)
 		{
 			error_log("new_world_clone uid=%u, equd=%u", uid , equd);
@@ -969,6 +997,7 @@ int CLogicNewWorld::Rush(unsigned uid, unsigned index, unsigned equd, bool fly, 
 	result["other"]["type"]	 = other.getType();
 	result["other"]["heroID"] = CDataXML::Hero2Str(other.hid);
 	result["other"]["name"]	 = string(other.name);
+	result["other"]["icon"]	 = string(other.icon);
 	result["other"]["kingdom"]= other.kingdom;
 	result["other"]["level"]	 = other.level;
 	result["other"]["hp"]	 = other.hp;
@@ -984,6 +1013,7 @@ int CLogicNewWorld::Rush(unsigned uid, unsigned index, unsigned equd, bool fly, 
 	result["end"]["type"]	 = end.getType();
 	result["end"]["heroID"] = CDataXML::Hero2Str(end.hid);
 	result["end"]["name"]	 = string(end.name);
+	result["end"]["icon"]	 = string(end.icon);
 	result["end"]["kingdom"]= end.kingdom;
 	result["end"]["level"]	= end.level;
 	result["end"]["hp"]	 = end.hp;
@@ -1209,6 +1239,16 @@ int CLogicNewWorld::KillRank(string path)
 	{
 		CLogicLordExploit logicLordExplot(LORD_EXPLOIT_PATH);
 		logicLordExplot.StatisticsIcrement(path, herokill, heroname);
+		ActInfoConfig actconfig(CONFIG_ZHENGBASHADI_CHONGBANG);
+		if (actconfig.IsActive() && Time::GetGlobalTime() >= actconfig.StartTS() + 3600)
+		{
+			CLogicChongBang logicChongBang(ZHENGBASHADI_CHONGBANG_PATH,actconfig.Version());
+			logicChongBang.StatisticsIcrement(path, herokill, heroname, Time::GetGlobalTime() >= actconfig.StartTS() + 3600 * 24);
+			if (Time::GetGlobalTime() >= actconfig.EndTS() - 3600*2)//活动结束前2小时发奖
+			{
+				logicChongBang.Stop();
+			}
+		}
 
 	}
 	catch (const std::exception& e) {
@@ -1238,8 +1278,8 @@ int CLogicNewWorld::KillRank(string path)
 		rank[i]["exp"] = CDataNewWorld::GetKillExp(it->first, user.level);
 
 		++i;
-		if(i == 100)
-			break;
+		//if(i == 100)
+		//	break;
 	}
 
 	ret = File::Write(path, Json::ToString(rank));
@@ -1408,6 +1448,14 @@ int CLogicNewWorld::KillReward()
 	{
 		CLogicLordExploit logicLordExplot(LORD_EXPLOIT_PATH);
 		logicLordExplot.Reset();
+		ActInfoConfig actconfig(CONFIG_ZHENGBASHADI_CHONGBANG);
+		if (actconfig.IsActive() && Time::GetGlobalTime() < actconfig.EndTS() - 3600*2)
+		{
+			CLogicChongBang logicChongBang(ZHENGBASHADI_CHONGBANG_PATH,actconfig.Version());
+			string path = "../webroot/data/newworldkill";
+			logicChongBang.StatisticsIcrement(path, herokill, heroname, Time::GetGlobalTime() >= actconfig.StartTS() + 3600 * 24);
+			logicChongBang.Reset();
+		}
 	}
 	catch (const std::exception& e) {
 		error_log("%s", e.what());

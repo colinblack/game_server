@@ -105,7 +105,7 @@ int CTencentPlatform::GetUserInfo(OPUserInfo &userInfo, const string &openid, co
 
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/user/get_info?";
+	string url = "https://" + m_config["v3domain"] + "/v3/user/get_info?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/get_info") + "&";
 
 
@@ -239,7 +239,7 @@ int CTencentPlatform::GetAppFriendList(OPFriendList &friendList, const string &o
 
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/relation/get_app_friends?";
+	string url = "https://" + m_config["v3domain"] + "/v3/relation/get_app_friends?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/relation/get_app_friends") + "&";
 	string qsig = "appid=" + Crypt::UrlEncodeForTX(m_appId) + "&format=json&openid="
 			+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey)
@@ -297,7 +297,7 @@ int CTencentPlatform::Is_Login(const string &openid, const string &openkey,const
 	}
 
 	m_errorMessage.clear();
-	string url = "http://" + m_config["v3domain"] + "/v3/user/is_login?";
+	string url = "https://" + m_config["v3domain"] + "/v3/user/is_login?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/is_login") + "&";
 	string qsig = "appid=" + m_appId + "&format=json&openid=" + openid + "&openkey=" + openkey
 			+ "&pf=" + pf + "&userip=" + m_userip;
@@ -350,7 +350,7 @@ int CTencentPlatform::Is_area_Login(const string &openid, const string &openkey,
 {
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/user/is_area_login ?";
+	string url = "https://" + m_config["v3domain"] + "/v3/user/is_area_login ?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/is_area_login ") + "&";
 	string qsig = "appid=" + Crypt::UrlEncodeForTX(m_appId) + "&format=json&openid="
 			+ Crypt::UrlEncodeForTX(openid) + "&openkey=" + Crypt::UrlEncodeForTX(openkey)
@@ -396,7 +396,7 @@ int CTencentPlatform::Set_Feed(const string &openid, const string &openkey)
 {
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/spread/set_feed";
+	string url = "https://" + m_config["v3domain"] + "/v3/spread/set_feed";
 //	string url = "http://" + "119.147.19.43" + "/v3/spread/set_feed";   //test
 
 	string osig = "POST&" + Crypt::UrlEncodeForTX("/v3/spread/set_feed") + "&";
@@ -457,7 +457,7 @@ int CTencentPlatform::Set_Request(const string &openid, const string &openkey,co
 {
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/spread/set_request";
+	string url = "https://" + m_config["v3domain"] + "/v3/spread/set_request";
 
 	string osig = "POST&" + Crypt::UrlEncodeForTX("/v3/spread/set_request") + "&";
 
@@ -519,7 +519,7 @@ int CTencentPlatform::Send_Notification(const string &openid, const string &open
 {
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/message/send_notification ?";
+	string url = "https://" + m_config["v3domain"] + "/v3/message/send_notification ?";
 
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/message/send_notification ") + "&";
 
@@ -577,7 +577,7 @@ int CTencentPlatform::Get_Figure(OPUserInfo &userInfo,const string &openid, cons
 {
 	m_errorMessage.clear();
 
-	string url = "http://" + m_config["v3domain"] + "/v3/user/get_figure ?";
+	string url = "https://" + m_config["v3domain"] + "/v3/user/get_figure ?";
 
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/get_figure ") + "&";
 
@@ -660,7 +660,7 @@ void CTencentPlatform::SetReply(string& reply)
 int CTencentPlatform::Get_app_flag(const string &openid, const string &openkey,const string &pf, unsigned &customflag)
 {
 	m_errorMessage.clear();
-	string url = "http://" + m_config["v3domain"] + "/v3/user/get_app_flag?";
+	string url = "https://" + m_config["v3domain"] + "/v3/user/get_app_flag?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/get_app_flag") + "&";
 	string qsig = "appid=" + m_appId + "&format=json&openid=" + openid + "&openkey=" + openkey
 			+ "&pf=" + pf + "&userip=" + m_userip;
@@ -720,7 +720,7 @@ int CTencentPlatform::Del_app_flag(const string &openid, const string &openkey,c
 	string strflag = CTrans::ITOS(customflag);
 
 	m_errorMessage.clear();
-	string url = "http://" + m_config["v3domain"] + "/v3/user/del_app_flag?";
+	string url = "https://" + m_config["v3domain"] + "/v3/user/del_app_flag?";
 	string osig = "GET&" + Crypt::UrlEncodeForTX("/v3/user/del_app_flag") + "&";
 	string qsig = "acttype=1&appid=" + m_appId + "&format=json&openid=" + openid + "&openkey=" + openkey
 			+ "&pf=" + pf + "&usergroupid=" + strflag + "&userip=" + m_userip;

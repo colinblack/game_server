@@ -514,7 +514,7 @@ int CLogicUpdates::sendAllServerPMatchAward(unsigned uid, const Json::Value &upd
 	int level = update["level"].asInt();
 
 	int eqNum;
-	int res;
+	int res = 0;
 	switch(rank)
 	{
 		case 1:

@@ -91,6 +91,10 @@ public:
 	CGI_SET_ACTION_MAP("getbeautyinfo", GetBeautyInfo)
 	CGI_SET_ACTION_MAP("InvestmentInfo", InvestmentInfo)
 	CGI_SET_ACTION_MAP("GetHequbuchangLevel", GetHequbuchangLevel)
+	CGI_SET_ACTION_MAP("GetChongBang", GetChongBang)
+	CGI_SET_ACTION_MAP("GetZhouNianQingQianDao", GetZhouNianQingQianDao)
+	CGI_SET_ACTION_MAP("FixConsumeRank", FixConsumeRank)
+	CGI_SET_ACTION_MAP("RotaryTableFeedbackInfo", RotaryTableFeedbackInfo)
 	CGI_ACTION_MAP_END
 
 	int GetQixijieData()
@@ -1394,6 +1398,35 @@ public:
 		return 0;
 	}
 
+	int RotaryTableFeedbackInfo()
+	{
+		uint32_t beginTime = Config::GetIntValue(CONFIG_ACTIVITY_ZHUANPANHUIKUI_BEGIN_TS);
+		uint32_t endTime   = Config::GetIntValue(CONFIG_ACTIVITY_ZHUANPANHUIKUI_END_TS);
+		uint32_t version   = Config::GetIntValue(CONFIG_ACTIVITY_ZHUANPANHUIKUI_VER);
+		if(endTime < Time::GetGlobalTime() || beginTime > Time::GetGlobalTime())
+		{
+			LOGIC_ERROR_RETURN_MSG("activity_over");
+		}
+
+		//获取抽奖信息
+		Json::Value tempdata;
+		Json::Value data;
+		string url = "action=GetRotaryTableFeedbackRewardInfo";
+		data["version"] = version;
+		string datastr = Json::ToString(data);
+		url.append("&data=").append(Crypt::UrlEncode(datastr));
+
+		CLogicAllServerBaseMatch logicBaseMatch;
+		int ret = logicBaseMatch.RequestBaseMatch(url,tempdata,CONFIG_ALLS_MATCH_SERVER_PATH,true);
+		if(ret)
+			return ret;
+		if (tempdata.isMember("list"))
+			m_jsonResult["list"] = tempdata["list"];
+		else
+			m_jsonResult["list"] = Json::Value(Json::arrayValue);
+		return 0;
+	}
+
 	int getchongzhizixuan()
 	{
 		UserWrap user(m_uid, false);
@@ -1416,6 +1449,41 @@ public:
 	int GetHequbuchangLevel() {
 		CLogicCMD logicCMD;
 		m_jsonResult["level"] = logicCMD.GetHequbuchangLevel(m_uid);
+		return 0;
+	}
+
+	int GetChongBang()
+	{
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		CLogicChongBang logicChongBang;
+		int ret = logicChongBang.GetInfo(id, m_jsonResult["info"]);
+		if (ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=GetChongBang&uid=%u", m_uid);
+		return 0;
+	}
+
+	int GetZhouNianQingQianDao()
+	{
+		CLogicZhouNianQing logicZhouNianQing;
+		int ret = logicZhouNianQing.GetQuanFuInfo(m_jsonResult["info"]);
+		if (ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=GetZhouNianQingQianDao&uid=%u", m_uid);
+		return 0;
+	}
+
+	int FixConsumeRank()
+	{
+		CLogicPay logicPay;
+		logicPay.FixConsumeRank(m_uid);
+		CGI_SEND_LOG("action=FixConsumeRank&uid=%u", m_uid);
 		return 0;
 	}
 };

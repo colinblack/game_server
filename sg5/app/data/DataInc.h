@@ -122,6 +122,9 @@
 #include "DataChick.h"
 #include "DataQingRenJie.h"
 #include "DataNianShou.h"
+#include "DataChongBangWangZhe.h"
+#include "DataZhouNianQingQianDao.h"
+#include "DataNewDouJiang.h"
 
 #endif /* DATAINC_H_ */
 

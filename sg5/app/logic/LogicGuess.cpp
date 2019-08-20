@@ -98,6 +98,7 @@ int CLogicGuess::GuessorsUid(unsigned gid, int type)
 			}
 		}
 	}
+	return 0;
 }
 
 int CLogicGuess::GuessorsUidCoins(unsigned gid, vector<U_U_MAP> &vecGuessors, int type)

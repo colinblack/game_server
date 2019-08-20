@@ -141,6 +141,19 @@ const BraveNewWorldConfig::Tech& ConfigManager::GetBraveNewWorldConfigTech(unsig
 	return m_BraveNewWorldConfig.m_config.tech(i);
 }
 
+const BraveNewWorldConfig::Technology &ConfigManager::GetBraveNewWorldConfigKeji(unsigned type,unsigned lv)
+{
+	if(lv) lv -= 1;
+	const BraveNewWorldConfig::FortTechlonogy &conf = m_BraveNewWorldConfig.m_config.keji(type);
+	if(lv < 0 || lv >= conf.node_size())
+		throw runtime_error("lv_error");
+	return conf.node(lv);
+}
+const BraveNewWorldConfig::FortTechlonogy &ConfigManager::GetTechNodeConf(unsigned type)
+{
+	return m_BraveNewWorldConfig.m_config.keji(type);
+}
+
 unsigned ConfigManager::GetOldSoulStoneA(unsigned id)
 {
 	if(m_OldSoulStoneA.count(id))

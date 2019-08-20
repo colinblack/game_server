@@ -18,6 +18,7 @@
 #define USER_LEVEL_LOG(fmt, args...) CBusinessLogHelper::GetInstance("userlevel")->Log(fmt,##args)
 #define BUILDING_LEVEL_LOG(fmt, args...) CBusinessLogHelper::GetInstance("buildinglevel")->Log(fmt,##args)
 #define BATTLE_LOG(fmt, args...) CBusinessLogHelper::GetInstance("battle")->Log(fmt,##args)
+#define MATERIAL_LOG(fmt, args...) CBusinessLogHelper::GetInstance("material")->Log(fmt,##args)
 
 class CBusinessLog
 {

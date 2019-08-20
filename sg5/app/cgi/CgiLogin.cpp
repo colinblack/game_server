@@ -1,5 +1,5 @@
-
 #include "LogicInc.h"
+#include "LogicQQReport.h"
 
 class CCgiLogin : public CCgiBase
 {
@@ -281,6 +281,13 @@ public:
 					SPREAD_LOG("%s|%u|%u|%s|",openid.c_str(),uid,spreadid,iopenid.c_str());
 				}
 //			}
+			if (OpenPlatform::IsQQPlatform()) {
+				CLogicQQReport logicReport;
+				if (isNewUser) {
+					logicReport.ReportEx(QQREPORT_role_create, openid, uid, ip, pf);
+				}
+				logicReport.ReportEx(QQREPORT_role_login, openid, uid, ip, pf);
+			}
 		}
 
 		if (OpenPlatform::GetType() == 7)
@@ -323,6 +330,7 @@ public:
 		int serveridb;
 		Config::GetDomain(serveridb);
 		m_jsonResult["serverid"] = serveridb;
+		m_jsonResult["first_serverid"] = MainConfig::GetMergedDomain(serveridb);
 		set<int> db;
 		MainConfig::GetIncludeDomains(serveridb, db);
 		m_jsonResult["domains"].resize(0);

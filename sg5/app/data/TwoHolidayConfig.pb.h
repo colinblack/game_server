@@ -615,35 +615,12 @@ class TwoHolidayItmCfg : public ::google::protobuf::Message {
   inline ::TwoHolidayConfig::EveryDayOnlineItem* release_eveyday_online();
   inline void set_allocated_eveyday_online(::TwoHolidayConfig::EveryDayOnlineItem* eveyday_online);
 
-  // repeated .TwoHolidayConfig.BuyItem recharge_buy = 3;
-  inline int recharge_buy_size() const;
-  inline void clear_recharge_buy();
-  static const int kRechargeBuyFieldNumber = 3;
-  inline const ::TwoHolidayConfig::BuyItem& recharge_buy(int index) const;
-  inline ::TwoHolidayConfig::BuyItem* mutable_recharge_buy(int index);
-  inline ::TwoHolidayConfig::BuyItem* add_recharge_buy();
-  inline const ::google::protobuf::RepeatedPtrField< ::TwoHolidayConfig::BuyItem >&
-      recharge_buy() const;
-  inline ::google::protobuf::RepeatedPtrField< ::TwoHolidayConfig::BuyItem >*
-      mutable_recharge_buy();
-
-  // required .TwoHolidayConfig.VipItem vip_reward = 4;
-  inline bool has_vip_reward() const;
-  inline void clear_vip_reward();
-  static const int kVipRewardFieldNumber = 4;
-  inline const ::TwoHolidayConfig::VipItem& vip_reward() const;
-  inline ::TwoHolidayConfig::VipItem* mutable_vip_reward();
-  inline ::TwoHolidayConfig::VipItem* release_vip_reward();
-  inline void set_allocated_vip_reward(::TwoHolidayConfig::VipItem* vip_reward);
-
   // @@protoc_insertion_point(class_scope:TwoHolidayConfig.TwoHolidayItmCfg)
  private:
   inline void set_has_everyday_recharge();
   inline void clear_has_everyday_recharge();
   inline void set_has_eveyday_online();
   inline void clear_has_eveyday_online();
-  inline void set_has_vip_reward();
-  inline void clear_has_vip_reward();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -651,8 +628,6 @@ class TwoHolidayItmCfg : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::TwoHolidayConfig::EveryDayRechargeItem* everyday_recharge_;
   ::TwoHolidayConfig::EveryDayOnlineItem* eveyday_online_;
-  ::google::protobuf::RepeatedPtrField< ::TwoHolidayConfig::BuyItem > recharge_buy_;
-  ::TwoHolidayConfig::VipItem* vip_reward_;
   friend void  protobuf_AddDesc_TwoHolidayConfig_2eproto();
   friend void protobuf_AssignDesc_TwoHolidayConfig_2eproto();
   friend void protobuf_ShutdownFile_TwoHolidayConfig_2eproto();
@@ -1144,77 +1119,6 @@ inline void TwoHolidayItmCfg::set_allocated_eveyday_online(::TwoHolidayConfig::E
     clear_has_eveyday_online();
   }
   // @@protoc_insertion_point(field_set_allocated:TwoHolidayConfig.TwoHolidayItmCfg.eveyday_online)
-}
-
-// repeated .TwoHolidayConfig.BuyItem recharge_buy = 3;
-inline int TwoHolidayItmCfg::recharge_buy_size() const {
-  return recharge_buy_.size();
-}
-inline void TwoHolidayItmCfg::clear_recharge_buy() {
-  recharge_buy_.Clear();
-}
-inline const ::TwoHolidayConfig::BuyItem& TwoHolidayItmCfg::recharge_buy(int index) const {
-  // @@protoc_insertion_point(field_get:TwoHolidayConfig.TwoHolidayItmCfg.recharge_buy)
-  return recharge_buy_.Get(index);
-}
-inline ::TwoHolidayConfig::BuyItem* TwoHolidayItmCfg::mutable_recharge_buy(int index) {
-  // @@protoc_insertion_point(field_mutable:TwoHolidayConfig.TwoHolidayItmCfg.recharge_buy)
-  return recharge_buy_.Mutable(index);
-}
-inline ::TwoHolidayConfig::BuyItem* TwoHolidayItmCfg::add_recharge_buy() {
-  // @@protoc_insertion_point(field_add:TwoHolidayConfig.TwoHolidayItmCfg.recharge_buy)
-  return recharge_buy_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::TwoHolidayConfig::BuyItem >&
-TwoHolidayItmCfg::recharge_buy() const {
-  // @@protoc_insertion_point(field_list:TwoHolidayConfig.TwoHolidayItmCfg.recharge_buy)
-  return recharge_buy_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::TwoHolidayConfig::BuyItem >*
-TwoHolidayItmCfg::mutable_recharge_buy() {
-  // @@protoc_insertion_point(field_mutable_list:TwoHolidayConfig.TwoHolidayItmCfg.recharge_buy)
-  return &recharge_buy_;
-}
-
-// required .TwoHolidayConfig.VipItem vip_reward = 4;
-inline bool TwoHolidayItmCfg::has_vip_reward() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void TwoHolidayItmCfg::set_has_vip_reward() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void TwoHolidayItmCfg::clear_has_vip_reward() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void TwoHolidayItmCfg::clear_vip_reward() {
-  if (vip_reward_ != NULL) vip_reward_->::TwoHolidayConfig::VipItem::Clear();
-  clear_has_vip_reward();
-}
-inline const ::TwoHolidayConfig::VipItem& TwoHolidayItmCfg::vip_reward() const {
-  // @@protoc_insertion_point(field_get:TwoHolidayConfig.TwoHolidayItmCfg.vip_reward)
-  return vip_reward_ != NULL ? *vip_reward_ : *default_instance_->vip_reward_;
-}
-inline ::TwoHolidayConfig::VipItem* TwoHolidayItmCfg::mutable_vip_reward() {
-  set_has_vip_reward();
-  if (vip_reward_ == NULL) vip_reward_ = new ::TwoHolidayConfig::VipItem;
-  // @@protoc_insertion_point(field_mutable:TwoHolidayConfig.TwoHolidayItmCfg.vip_reward)
-  return vip_reward_;
-}
-inline ::TwoHolidayConfig::VipItem* TwoHolidayItmCfg::release_vip_reward() {
-  clear_has_vip_reward();
-  ::TwoHolidayConfig::VipItem* temp = vip_reward_;
-  vip_reward_ = NULL;
-  return temp;
-}
-inline void TwoHolidayItmCfg::set_allocated_vip_reward(::TwoHolidayConfig::VipItem* vip_reward) {
-  delete vip_reward_;
-  vip_reward_ = vip_reward;
-  if (vip_reward) {
-    set_has_vip_reward();
-  } else {
-    clear_has_vip_reward();
-  }
-  // @@protoc_insertion_point(field_set_allocated:TwoHolidayConfig.TwoHolidayItmCfg.vip_reward)
 }
 
 

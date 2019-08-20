@@ -29,6 +29,7 @@ private:
 		,m_twoholidaycfg("TwoHolidayEnjoyCfg.json")
 		,m_functionscfg("functionConfig.json")
 		,m_newsoulstone("newsoulstone.json")
+		,m_wuhuncfg("wuhunhuikui.json")
 	{
 		Init();
 	}
@@ -42,10 +43,10 @@ public:
 	static void Fail(){m_init = false;}
 	static ConfigManager* Instance();
 
-	const ConfigPB<YingLing::YingLing> m_yingling;
 	const ConfigPB<BraveNewWorldConfig::BraveNewWorldConfig> m_BraveNewWorldConfig;
 	const ConfigPB<AllianceConsumeConfig::AllianceConsumeConfig> m_AllianceConsumeConfig;
 	const ConfigPB<CompoundShredConfig::ShredCompounds> m_CompoundConfig;
+	const ConfigPB<YingLing::YingLing> m_yingling;
 	const ConfigPB<GroupBuyingConfig::GroupBuyingItemsCfg> m_groupbuyConfig;
 	const ConfigPB<ConfigScrollActivity::ScrollActivity> m_scrollactivitycfg;
 	const ConfigPB<ConfigKingTreasure::KingTreasure> m_kingtreasurecfg;
@@ -55,6 +56,7 @@ public:
 	const ConfigPB<TwoHolidayConfig::TwoHolidayItmCfg> m_twoholidaycfg;
 	const ConfigPB<ConfigFunction::Functions> m_functionscfg;
 	const ConfigPB<NewSoulStone::NewSoulStone> m_newsoulstone;
+	const ConfigPB<WuhunActivity::Activities> m_wuhuncfg;
 
 	map<unsigned, pair<unsigned, unsigned> > m_yingling_random_normal;
 	map<unsigned, pair<unsigned, unsigned> > m_yingling_random_advance;
@@ -76,6 +78,8 @@ public:
 	const BraveNewWorldConfig::Zone& GetBraveNewWorldConfigZone(unsigned l);
 	const BraveNewWorldConfig::City& GetBraveNewWorldConfigCity(unsigned l);
 	const BraveNewWorldConfig::Tech& GetBraveNewWorldConfigTech(unsigned j, unsigned t, unsigned l);
+	const BraveNewWorldConfig::Technology &GetBraveNewWorldConfigKeji(unsigned type,unsigned lv);
+	const BraveNewWorldConfig::FortTechlonogy &GetTechNodeConf(unsigned type);
 
 	map<unsigned, unsigned> m_compoundId;  //碎片id与下标的映射
 	map<unsigned, pair<unsigned, unsigned> > m_scrollIndex;  //古卷专项活动的映射. id-><dayIndex, affarindex>

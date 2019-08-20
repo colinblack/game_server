@@ -10,3 +10,8 @@ clean:
 	@make -C ./logic clean
 	@make -C ./cgi clean
 	@make -C ./test clean
+install:
+	@make -C ./platform install
+	@make -C ./data install
+	@make -C ./logic install
+	@make -C ./cgi install

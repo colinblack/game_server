@@ -41,7 +41,8 @@ private:
 #define NEW_WORLD_CHALLENGE_TIME			(5 * 60)			// 5min
 /**************hero para*******************/
 #define NEW_WORLD_HERO 					50000
-#define NEW_WORLD_HERO_INDEX 			5
+#define NEW_WORLD_HERO_INDEX 			10
+#define NEW_WORLD_HERO_FREE_INDEX 		6
 #define NEW_WORLD_HERO_MIN				5
 #define NEW_WORLD_HERO_MIN_F			double(5)
 #define NEW_WORLD_HERO_TIME_1			600
@@ -59,7 +60,8 @@ private:
 #define NEW_WORLD_CITY 					(NEW_WORLD_CITY_KINGDOM*3+NEW_WORLD_CITY_NEUTRAL)
 #define NEW_WORLD_CITY_KINGDOM_SEQ		100
 /**************npc para*******************/
-#define NEW_WORLD_CITY_VISION			50
+#define NEW_WORLD_CITY_VISION_BASE		70
+#define NEW_WORLD_CITY_VISION			100
 #define NEW_WORLD_CITY_VISION_NPC		(NEW_WORLD_CITY_VISION + 1)
 #define NEW_WORLD_CITY_NPC				50u
 #define NEW_WORLD_CITY_NPC_TIME_1		1800
@@ -207,6 +209,7 @@ struct NewWorldHero
 	unsigned seq, hid, kingdom, job, level, type, cid, status, next, ts;
 	int hp;
 	char name[32];
+	char icon[64];
 	int property[NewWorldProperty_max];
 	unsigned kill, buff;
 	unsigned inc_kill;
@@ -214,6 +217,7 @@ struct NewWorldHero
 	{
 		seq = hid = kingdom = job = level = hp = type = cid = status = next = ts = 0;
 		memset(name, 0, sizeof(name));
+		memset(icon, 0, sizeof(icon));
 		memset(property, 0, sizeof(property));
 		kill = buff = 0;
 		inc_kill =0;
@@ -486,7 +490,7 @@ public:
 	int SetHero(NewWorldHero &hero, bool &fix);
 	int Move(NewWorldHeroIndex index, unsigned cid, bool leave, unsigned fly, unsigned &status);
 	int Change(NewWorldHeroIndex index, unsigned type);
-	int Clone(NewWorldHeroIndex index);
+	int Clone(NewWorldHeroIndex index, bool issuper=false);
 	int Rush(NewWorldHeroIndex index, NewWorldHero &other, NewWorldHero &end);
 	int Recover(NewWorldHeroIndex index, unsigned num);
 	int Explode(NewWorldHeroIndex index);
@@ -1067,6 +1071,7 @@ protected:
 			return ;
 
 		kill = getKill(kill, otherkill, hero.kingdom, hero.level, otherhero.level, hero.cid, now);
+
 		if (isHero(hero.index))
 		{
 			hero.kill += kill;
@@ -1090,6 +1095,7 @@ protected:
 	{
 		if (kill < 0)
 			return ;
+
 
 		if (isHero(hero.index))
 		{

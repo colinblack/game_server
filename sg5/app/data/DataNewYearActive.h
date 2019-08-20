@@ -11,6 +11,8 @@
 #include "Kernel.h"
 #include "DataBase.h"
 #include "NewYearActive.pb.h"
+#include "WuhunActivity.pb.h"
+#include "LogicCmdUnits.h"
 
 #define DATA_NEW_YEAR_ACTIVE_RANK_LEN 10
 #define DATA_NEW_YEAR_ACTIVE_HISTORY_LEN 10
@@ -273,6 +275,238 @@ protected:
 private:
 	DataNewYearActive m_data;
 	unsigned m_sync_ts;
+};
+
+
+#define DATA_GIVE_MAX_MASTER 3
+#define DATA_GIVE_MAX_HELPER 20
+
+//助力大行动支援列表
+struct DataGiveHelpUserInfo {
+	unsigned uid;
+	unsigned charge;
+	string name;
+	string url;
+
+	DataGiveHelpUserInfo() {
+		uid = charge = 0;
+	}
+	DataGiveHelpUserInfo(unsigned _uid, unsigned _charge, string _name, string _url) {
+		uid = _uid;
+		charge = _charge;
+		name = _name;
+		url = _url;
+	}
+
+	void clear() {
+		uid = 0;
+		charge = 0;
+		name.clear();
+		url.clear();
+	}
+	void parse(const WuhunActivity::UserInfo &item) {
+		this->uid = item.uid();
+		this->name = item.name();
+		this->url = item.url();
+		this->charge = item.charge();
+	}
+
+	void serialize(WuhunActivity::UserInfo *item) {
+		if (item == NULL) {
+			return;
+		}
+		item->set_uid(this->uid);
+		item->set_name(this->name);
+		item->set_url(this->url);
+		item->set_charge(this->charge);
+	}
+};
+
+struct DataGiveHelpMasterRank {
+	unsigned uid;
+	unsigned count;
+	unsigned ts;
+	string name;
+
+	DataGiveHelpMasterRank() {
+		uid = count = ts = 0;
+		name.clear();
+	}
+	DataGiveHelpMasterRank(unsigned _uid, unsigned _count, unsigned _ts, const string &_name) {
+		uid = _uid;
+		count = _count;
+		ts = _ts;
+		name = _name;
+	}
+	void parse(const WuhunActivity::RankInfo &item) {
+		uid = item.uid();
+		count = item.count();
+		ts = item.ts();
+		name = item.name();
+	}
+	void serialize(WuhunActivity::RankInfo *item) {
+		item->set_uid(uid);
+		item->set_count(count);
+		item->set_ts(ts);
+		item->set_name(name);
+	}
+};
+
+struct DataGiveHelpMasterInfo
+{
+	unsigned ts;
+	DataGiveHelpUserInfo info;
+	map<unsigned, DataGiveHelpUserInfo> helper;
+
+	DataGiveHelpMasterInfo() {
+		ts = 0;
+	}
+	void parse(const WuhunActivity::MasterInfo &item) {
+		ts = item.ts();
+		info.parse(item.info());
+		DataGiveHelpUserInfo user;
+		for (int i = 0; i < item.helper_size(); ++i) {
+			user.parse(item.helper(i));
+			helper.insert(make_pair(user.uid, user));
+		}
+	}
+	void serialize(WuhunActivity::MasterInfo *item) {
+		item->set_ts(ts);
+		info.serialize(item->mutable_info());
+		map<unsigned, DataGiveHelpUserInfo>::iterator itr = helper.begin();
+		for (; itr != helper.end(); ++itr) {
+			DataGiveHelpUserInfo &user = itr->second;
+			user.serialize(item->add_helper());
+		}
+	}
+	bool operator==(uint32_t uid) const {
+		return this->info.uid == uid;
+	}
+};
+
+struct DataGiveHelpHelperMaster {
+	unsigned uid;
+	bool refused;
+
+	DataGiveHelpHelperMaster() {
+		uid = 0;
+		refused = false;
+	}
+	DataGiveHelpHelperMaster(unsigned _uid) {
+		uid = _uid;
+		refused = false;
+	}
+	void parse(const WuhunActivity::HelperMaster &item) {
+		uid = item.uid();
+		refused = item.refused();
+	}
+	void serialize(WuhunActivity::HelperMaster *item) {
+		item->set_uid(uid);
+		item->set_refused(refused);
+	}
+};
+
+struct DataGiveHelpHelperInfo
+{
+	unsigned uid;
+	map<unsigned, DataGiveHelpHelperMaster> master;
+
+	DataGiveHelpHelperInfo() {
+		uid = 0;
+		master.clear();
+	}
+	void parse(const WuhunActivity::HelperInfo &item) {
+		uid = item.uid();
+		for (int i = 0; i < item.master_size(); ++i) {
+			DataGiveHelpHelperMaster user;
+			user.parse(item.master(i));
+			master.insert(make_pair(user.uid, user));
+		}
+	}
+	void serialize(WuhunActivity::HelperInfo *item) {
+		item->set_uid(uid);
+		map<unsigned, DataGiveHelpHelperMaster>::iterator itr = master.begin();
+		for (; itr != master.end(); ++itr) {
+			DataGiveHelpHelperMaster &user = itr->second;
+			user.serialize(item->add_master());
+		}
+	}
+};
+
+struct DataGiveHelpActive {
+	unsigned version;
+	bool reward;
+	map<unsigned, DataGiveHelpMasterInfo> masters;
+	map<unsigned, DataGiveHelpHelperInfo> helpers;
+	list<DataGiveHelpMasterRank> ranks;
+
+	DataGiveHelpActive() {
+		Clear();
+	}
+	void parse(const WuhunActivity::GiveHelpActive *item) {
+		version = item->version();
+		reward = item->reward();
+		for (int i = 0; i < item->masters_size(); ++i) {
+			DataGiveHelpMasterInfo master;
+			master.parse(item->masters(i));
+			masters.insert(make_pair(master.info.uid, master));
+		}
+		for (int i = 0; i < item->helpers_size(); ++i) {
+			DataGiveHelpHelperInfo helper;
+			helper.parse(item->helpers(i));
+			helpers.insert(make_pair(helper.uid, helper));
+		}
+		for (int i = 0; i < item->ranks_size(); ++i) {
+			DataGiveHelpMasterRank rank;
+			rank.parse(item->ranks(i));
+			ranks.push_back(rank);
+		}
+	}
+	void serialize(WuhunActivity::GiveHelpActive *item) {
+		item->set_version(version);
+		item->set_reward(reward);
+		map<unsigned, DataGiveHelpMasterInfo>::iterator itr1 = masters.begin();
+		for (; itr1 != masters.end(); ++itr1) {
+			DataGiveHelpMasterInfo &master = itr1->second;
+			master.serialize(item->add_masters());
+		}
+		map<unsigned, DataGiveHelpHelperInfo>::iterator itr2 = helpers.begin();
+		for (; itr2 != helpers.end(); ++itr2) {
+			DataGiveHelpHelperInfo &helper = itr2->second;
+			helper.serialize(item->add_helpers());
+		}
+		list<DataGiveHelpMasterRank>::iterator itr3 = ranks.begin();
+		for (; itr3 != ranks.end(); ++itr3) {
+			itr3->serialize(item->add_ranks());
+		}
+	}
+	void Clear() {
+		reward = false;
+		version = 0;
+		masters.clear();
+		helpers.clear();
+		ranks.clear();
+	}
+};
+
+class CDataGiveHelpActive : public DataBase {
+public:
+	CDataGiveHelpActive(const string & path);
+	virtual ~CDataGiveHelpActive();
+	int Init();
+	int Save();
+	int Sig(int sig);
+	int StartGiveHelp(const DataGiveHelpUserInfo &data, Json::Value &result);
+	int AddGiveHelp(const DataGiveHelpUserInfo &data, unsigned uid, Json::Value &result);
+	int DelGiveHelp(unsigned uid, unsigned userid, Json::Value &result);
+	int GetMyGiveHelpInfo(unsigned uid, Json::Value &result);
+	int GetGiveHelpList(Json::Value &result);
+	int RankList();
+	int CheckVersion(unsigned ver);
+	int UpdateMasterCharge();
+	int RewardHelper();
+private:
+	DataGiveHelpActive m_data;
 };
 
 #endif /* DATA_NEWYEARACTIVE_H_ */

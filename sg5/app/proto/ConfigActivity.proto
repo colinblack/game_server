@@ -356,6 +356,25 @@ message RotaryTableCrazyReward
 	required RewardConfig.RewardItemCfg fixedReward = 4;
 }
 
+//转盘回馈
+message ChargeGetChanceCfg
+{
+	required uint32 need = 1;
+	required uint32 c = 2;
+}
+message SingleReward
+{
+	required RewardConfig.RewardItemCfg reward = 4;
+}
+message RotaryTableFeedBackReward
+{
+	repeated DiamondReward jindu   = 1;
+	repeated SingleReward singlereward = 2;
+	repeated ChargeGetChanceCfg count = 3;
+	repeated RotaryTableCfg randomReward = 4;
+	required RewardConfig.RewardItemCfg fixedReward = 5;
+}
+
 //小兵宝物
 message BatmanTreasureDraw
 {
@@ -436,6 +455,7 @@ message Activities
 	required ChinaDayActivity  chinadayavtivity         = 29;   //喜迎国庆
 	required PayOptionalActivity payoptionalactivity    = 30;   //充值自选
 	repeated FreeExchange free_exchg					= 31;//兑换自选
+	required RotaryTableFeedBackReward zhuanpanhuikui   = 32; //转盘回馈
 }
 
 

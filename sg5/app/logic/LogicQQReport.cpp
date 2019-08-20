@@ -135,9 +135,120 @@ int CLogicQQReport::Report(unsigned report, string openid, unsigned uid, unsigne
 	return 0;
 }
 
+int CLogicQQReport::ReportEx(unsigned report, string openid, unsigned uid, string userip, string pf, string zoneid) {
+	int ret = 0;
+	if (report > QQREPORT_max) {
+		return 1;
+	}
+	if (openid.empty()) {
+		return 2;
+	}
+	unsigned uidtemp;
+	CDataUserMapping dbUserMapping;
+	ret = dbUserMapping.GetMapping(openid, PT_PENGYOU, uidtemp);
+	if (ret) {
+		if (!uid) {
+			return 3;
+		}
+	} else {
+		uid = uidtemp;
+	}
+	unsigned ip;
+	if (userip.empty()) {
+		ip = CCGIIn::GetRemoteIP();
+	} else {
+		struct in_addr addr;
+		inet_aton(userip.c_str(), &addr);
+		ip = ntohl(addr.s_addr);
+	}
+	unsigned pt;
+	if (pf.empty()) {
+		pf = CCGIIn::GetCGIStr("pf");
+	}
+	pt = GetQQPT(pf);
+	if (!pt) {
+		return 4;
+	}
+	CLogicUser logicUser;
+	DataUser user;
+	ret = logicUser.GetUserLimit(uid, user);
+	if (0 != ret) {
+		return 5;
+	}
+	if (zoneid.empty()) {
+		string host = getenv("SERVER_NAME");
+		vector<string> rlt;
+		String::Split(host, '.', rlt);
+		zoneid = rlt[0].substr(1, rlt[0].length() - 1);
+	}
+	const string url = OpenPlatform::GetPlatform()->GetConfig("report_domain");
+	const string report_key = OpenPlatform::GetPlatform()->GetConfig("report_key");
+	map<string, string> params;
+	params["dtEventTime="] = CTime::FormatTime("%Y-%m-%d %H:%M:%S", Time::GetGlobalTime());
+	params["iversion"] = "1.0.0";
+	params["appid"] = OpenPlatform::GetPlatform()->GetAppId();
+	params["userip"] = CTrans::UTOS(ip);
+	params["svrip"] = CTrans::UTOS(m_ip);
+	params["time"] = CTrans::UTOS(Time::GetGlobalTime());;
+	params["domain"] = CTrans::UTOS(pt);
+	params["iworldid"] = zoneid;
+	params["optype"] = "3";
+	params["actionid"] = CTrans::UTOS(report + 1);
+	params["opuid"] = CTrans::UTOS(uid);
+	params["opopenid"] = openid;
+	params["level"] = CTrans::ITOS(user.level);
+	if (report == QQREPORT_logout || report == QQREPORT_role_logout) {
+		if (!IsOnlineUser(user.last_active_time)) {
+			return 10;
+		}
+		params["onlinetime"] = CTrans::ITOS(Time::GetGlobalTime() - user.last_login_time);
+	}
+	string data = "";
+	for (map<string, string>::iterator itr = params.begin(); itr != params.end(); ++itr) {
+		data.append(itr->first);
+		data.append("=");
+		data.append(itr->second);
+		data.append("&");
+	}
+	Json::Value post_data;
+	post_data = Json::Value(Json::objectValue);
+	post_data["log_name"] = "log_common";
+	post_data["log_fields"] = data.substr(0, data.size() - 1);
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	long mts = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	Json::Value post;
+	post["title"] = Json::Value(Json::objectValue);
+	post["title"]["app_id"] = OpenPlatform::GetPlatform()->GetAppId();
+	post["title"]["timestamp"] = Time::GetGlobalTime();
+	post["title"]["seq_id"] = CTrans::UTOS(uid + mts);
+	post["data"] = Json::Value(Json::arrayValue);
+	post["data"].append(post_data);
+	string post_str = Json::ToString(post);
+	map<string, string> headers;
+	headers["version"] = "1.0";
+	headers["signature"] = Crypt::Md5Encode(post_str + report_key);
+	string response;
+	if (!Network::HttpPostRequest(response, url, post_str, headers) || response.empty()) {
+		error_log("[report request fail][url=%s,response=%s,post=%s]", url.c_str(), response.c_str(), post_str.c_str());
+		return 6;
+	}
+	Json::Value value;
+	if (!Json::Reader().parse(response, value) || !value.isObject()) {
+		error_log("[report parse fail][url=%s,response=%s,post=%s]", url.c_str(), response.c_str(), post_str.c_str());
+		return 7;
+	}
+	if (!value.isMember("data") || !Json::GetInt(value["data"], "code", ret) || ret != 200) {
+		error_log("[report fail][url=%s,response=%s,post=%s]", url.c_str(), response.c_str(), post_str.c_str());
+		return 8;
+	}
+	info_log("[qq report][report=%u, openid=%s, uid=%u]", report, openid.c_str(), uid);
+	return 0;
+}
+
 int CLogicQQReport::SetFeed(const string &openid, const string &openkey, const string &pf, const string &imgurl, const string &text)
 {
-	string url = "http://" + OpenPlatform::GetPlatform()->GetConfig("v3domain") + "/v3/spread/set_feed";
+	string url = "https://" + OpenPlatform::GetPlatform()->GetConfig("v3domain") + "/v3/spread/set_feed";
 
 	string osig = "POST&" + Crypt::UrlEncodeForTX("/v3/spread/set_feed") + "&";
 
@@ -203,7 +314,7 @@ int CLogicQQReport::SetAchievement(const string &openid, const string &openkey, 
 {
 	string attr = "{\"level\":" + level + ",\"area_name\":\"" + zoneid + "\"}";
 
-	string url = "http://" + OpenPlatform::GetPlatform()->GetConfig("v3domain") + "/v3/user/set_achievement";
+	string url = "https://" + OpenPlatform::GetPlatform()->GetConfig("v3domain") + "/v3/user/set_achievement";
 
 	string osig = "POST&" + Crypt::UrlEncodeForTX("/v3/user/set_achievement") + "&";
 

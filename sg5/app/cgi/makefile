@@ -22,3 +22,6 @@ all: $(TARGETS)
 clean:
 	@rm -f $(TARGETS) *.o *.d
 
+install: 
+	cp $(TARGETS) -f $(PATH_CGI)
+

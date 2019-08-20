@@ -132,6 +132,22 @@ virtual int Process()	\
 	}	\
 	else	\
 
+#define CGI_SET_ACTION_CHECKVERSION_MAP(ActionName, ActionCallback, CheckFunc)	\
+	if(m_actionName == ActionName)	\
+	{	\
+		try \
+		{ \
+			CheckFunc(); \
+			result = ActionCallback();	\
+		} \
+		catch(const std::exception& e) \
+		{ \
+			SetError(R_ERROR, e.what()); \
+			result = R_ERROR; \
+		} \
+	}	\
+	else	\
+
 #define CGI_ACTION_MAP_END	\
 	{	\
 		m_actionName.clear(); \

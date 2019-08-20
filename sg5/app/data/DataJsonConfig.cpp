@@ -37,6 +37,12 @@ JsonFeedbackItem::JsonFeedbackItem(const Json::Value& jsonData)
 		throw std::runtime_error("config_soul_feedback_id_and_cnt_size_error");
 	}
 
+	for(Json::UInt i = 0; i < jsonData["ltime"].size(); i++)
+	{
+		int cnt = jsonData["ltime"][i].asInt();
+		v_equips_ltime_.push_back(cnt);
+	}
+
 	/*if (amount_ == 0)
 	{
 		throw std::runtime_error("config_soul_feedback_need_error");
@@ -61,4 +67,16 @@ int JsonFeedbackItem::EquipCnt(int idx) const
 	}
 
 	return v_equips_cnt_[idx];
+}
+
+int JsonFeedbackItem::EquipLtime(int idx) const
+{
+	if (!v_equips_ltime_.size())
+		return 0;
+	if (idx < 0 || idx > v_equips_ltime_.size())
+	{
+		throw std::runtime_error("equps_index_error");
+	}
+
+	return v_equips_ltime_[idx];
 }

@@ -83,6 +83,9 @@ class HongBao;
 class TaskGift;
 class RotaryTableCfg;
 class RotaryTableCrazyReward;
+class ChargeGetChanceCfg;
+class SingleReward;
+class RotaryTableFeedBackReward;
 class BatmanTreasureDraw;
 class BatmanTreasureCfg;
 class SummerChargeRewardCfg;
@@ -5018,6 +5021,309 @@ class RotaryTableCrazyReward : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ChargeGetChanceCfg : public ::google::protobuf::Message {
+ public:
+  ChargeGetChanceCfg();
+  virtual ~ChargeGetChanceCfg();
+
+  ChargeGetChanceCfg(const ChargeGetChanceCfg& from);
+
+  inline ChargeGetChanceCfg& operator=(const ChargeGetChanceCfg& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChargeGetChanceCfg& default_instance();
+
+  void Swap(ChargeGetChanceCfg* other);
+
+  // implements Message ----------------------------------------------
+
+  ChargeGetChanceCfg* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChargeGetChanceCfg& from);
+  void MergeFrom(const ChargeGetChanceCfg& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 need = 1;
+  inline bool has_need() const;
+  inline void clear_need();
+  static const int kNeedFieldNumber = 1;
+  inline ::google::protobuf::uint32 need() const;
+  inline void set_need(::google::protobuf::uint32 value);
+
+  // required uint32 c = 2;
+  inline bool has_c() const;
+  inline void clear_c();
+  static const int kCFieldNumber = 2;
+  inline ::google::protobuf::uint32 c() const;
+  inline void set_c(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.ChargeGetChanceCfg)
+ private:
+  inline void set_has_need();
+  inline void clear_has_need();
+  inline void set_has_c();
+  inline void clear_has_c();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 need_;
+  ::google::protobuf::uint32 c_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static ChargeGetChanceCfg* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SingleReward : public ::google::protobuf::Message {
+ public:
+  SingleReward();
+  virtual ~SingleReward();
+
+  SingleReward(const SingleReward& from);
+
+  inline SingleReward& operator=(const SingleReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SingleReward& default_instance();
+
+  void Swap(SingleReward* other);
+
+  // implements Message ----------------------------------------------
+
+  SingleReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SingleReward& from);
+  void MergeFrom(const SingleReward& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .RewardConfig.RewardItemCfg reward = 4;
+  inline bool has_reward() const;
+  inline void clear_reward();
+  static const int kRewardFieldNumber = 4;
+  inline const ::RewardConfig::RewardItemCfg& reward() const;
+  inline ::RewardConfig::RewardItemCfg* mutable_reward();
+  inline ::RewardConfig::RewardItemCfg* release_reward();
+  inline void set_allocated_reward(::RewardConfig::RewardItemCfg* reward);
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.SingleReward)
+ private:
+  inline void set_has_reward();
+  inline void clear_has_reward();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::RewardConfig::RewardItemCfg* reward_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static SingleReward* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RotaryTableFeedBackReward : public ::google::protobuf::Message {
+ public:
+  RotaryTableFeedBackReward();
+  virtual ~RotaryTableFeedBackReward();
+
+  RotaryTableFeedBackReward(const RotaryTableFeedBackReward& from);
+
+  inline RotaryTableFeedBackReward& operator=(const RotaryTableFeedBackReward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RotaryTableFeedBackReward& default_instance();
+
+  void Swap(RotaryTableFeedBackReward* other);
+
+  // implements Message ----------------------------------------------
+
+  RotaryTableFeedBackReward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RotaryTableFeedBackReward& from);
+  void MergeFrom(const RotaryTableFeedBackReward& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .ConfigActivity.DiamondReward jindu = 1;
+  inline int jindu_size() const;
+  inline void clear_jindu();
+  static const int kJinduFieldNumber = 1;
+  inline const ::ConfigActivity::DiamondReward& jindu(int index) const;
+  inline ::ConfigActivity::DiamondReward* mutable_jindu(int index);
+  inline ::ConfigActivity::DiamondReward* add_jindu();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >&
+      jindu() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >*
+      mutable_jindu();
+
+  // repeated .ConfigActivity.SingleReward singlereward = 2;
+  inline int singlereward_size() const;
+  inline void clear_singlereward();
+  static const int kSinglerewardFieldNumber = 2;
+  inline const ::ConfigActivity::SingleReward& singlereward(int index) const;
+  inline ::ConfigActivity::SingleReward* mutable_singlereward(int index);
+  inline ::ConfigActivity::SingleReward* add_singlereward();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::SingleReward >&
+      singlereward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::SingleReward >*
+      mutable_singlereward();
+
+  // repeated .ConfigActivity.ChargeGetChanceCfg count = 3;
+  inline int count_size() const;
+  inline void clear_count();
+  static const int kCountFieldNumber = 3;
+  inline const ::ConfigActivity::ChargeGetChanceCfg& count(int index) const;
+  inline ::ConfigActivity::ChargeGetChanceCfg* mutable_count(int index);
+  inline ::ConfigActivity::ChargeGetChanceCfg* add_count();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::ChargeGetChanceCfg >&
+      count() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::ChargeGetChanceCfg >*
+      mutable_count();
+
+  // repeated .ConfigActivity.RotaryTableCfg randomReward = 4;
+  inline int randomreward_size() const;
+  inline void clear_randomreward();
+  static const int kRandomRewardFieldNumber = 4;
+  inline const ::ConfigActivity::RotaryTableCfg& randomreward(int index) const;
+  inline ::ConfigActivity::RotaryTableCfg* mutable_randomreward(int index);
+  inline ::ConfigActivity::RotaryTableCfg* add_randomreward();
+  inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::RotaryTableCfg >&
+      randomreward() const;
+  inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::RotaryTableCfg >*
+      mutable_randomreward();
+
+  // required .RewardConfig.RewardItemCfg fixedReward = 5;
+  inline bool has_fixedreward() const;
+  inline void clear_fixedreward();
+  static const int kFixedRewardFieldNumber = 5;
+  inline const ::RewardConfig::RewardItemCfg& fixedreward() const;
+  inline ::RewardConfig::RewardItemCfg* mutable_fixedreward();
+  inline ::RewardConfig::RewardItemCfg* release_fixedreward();
+  inline void set_allocated_fixedreward(::RewardConfig::RewardItemCfg* fixedreward);
+
+  // @@protoc_insertion_point(class_scope:ConfigActivity.RotaryTableFeedBackReward)
+ private:
+  inline void set_has_fixedreward();
+  inline void clear_has_fixedreward();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward > jindu_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::SingleReward > singlereward_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::ChargeGetChanceCfg > count_;
+  ::google::protobuf::RepeatedPtrField< ::ConfigActivity::RotaryTableCfg > randomreward_;
+  ::RewardConfig::RewardItemCfg* fixedreward_;
+  friend void  protobuf_AddDesc_ConfigActivity_2eproto();
+  friend void protobuf_AssignDesc_ConfigActivity_2eproto();
+  friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
+
+  void InitAsDefaultInstance();
+  static RotaryTableFeedBackReward* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class BatmanTreasureDraw : public ::google::protobuf::Message {
  public:
   BatmanTreasureDraw();
@@ -6077,6 +6383,15 @@ class Activities : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange >*
       mutable_free_exchg();
 
+  // required .ConfigActivity.RotaryTableFeedBackReward zhuanpanhuikui = 32;
+  inline bool has_zhuanpanhuikui() const;
+  inline void clear_zhuanpanhuikui();
+  static const int kZhuanpanhuikuiFieldNumber = 32;
+  inline const ::ConfigActivity::RotaryTableFeedBackReward& zhuanpanhuikui() const;
+  inline ::ConfigActivity::RotaryTableFeedBackReward* mutable_zhuanpanhuikui();
+  inline ::ConfigActivity::RotaryTableFeedBackReward* release_zhuanpanhuikui();
+  inline void set_allocated_zhuanpanhuikui(::ConfigActivity::RotaryTableFeedBackReward* zhuanpanhuikui);
+
   // @@protoc_insertion_point(class_scope:ConfigActivity.Activities)
  private:
   inline void set_has_blesspoint();
@@ -6115,6 +6430,8 @@ class Activities : public ::google::protobuf::Message {
   inline void clear_has_chinadayavtivity();
   inline void set_has_payoptionalactivity();
   inline void clear_has_payoptionalactivity();
+  inline void set_has_zhuanpanhuikui();
+  inline void clear_has_zhuanpanhuikui();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -6151,6 +6468,7 @@ class Activities : public ::google::protobuf::Message {
   ::ConfigActivity::ChinaDayActivity* chinadayavtivity_;
   ::ConfigActivity::PayOptionalActivity* payoptionalactivity_;
   ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange > free_exchg_;
+  ::ConfigActivity::RotaryTableFeedBackReward* zhuanpanhuikui_;
   friend void  protobuf_AddDesc_ConfigActivity_2eproto();
   friend void protobuf_AssignDesc_ConfigActivity_2eproto();
   friend void protobuf_ShutdownFile_ConfigActivity_2eproto();
@@ -10435,6 +10753,268 @@ inline void RotaryTableCrazyReward::set_allocated_fixedreward(::RewardConfig::Re
 
 // -------------------------------------------------------------------
 
+// ChargeGetChanceCfg
+
+// required uint32 need = 1;
+inline bool ChargeGetChanceCfg::has_need() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ChargeGetChanceCfg::set_has_need() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ChargeGetChanceCfg::clear_has_need() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ChargeGetChanceCfg::clear_need() {
+  need_ = 0u;
+  clear_has_need();
+}
+inline ::google::protobuf::uint32 ChargeGetChanceCfg::need() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.ChargeGetChanceCfg.need)
+  return need_;
+}
+inline void ChargeGetChanceCfg::set_need(::google::protobuf::uint32 value) {
+  set_has_need();
+  need_ = value;
+  // @@protoc_insertion_point(field_set:ConfigActivity.ChargeGetChanceCfg.need)
+}
+
+// required uint32 c = 2;
+inline bool ChargeGetChanceCfg::has_c() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ChargeGetChanceCfg::set_has_c() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ChargeGetChanceCfg::clear_has_c() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ChargeGetChanceCfg::clear_c() {
+  c_ = 0u;
+  clear_has_c();
+}
+inline ::google::protobuf::uint32 ChargeGetChanceCfg::c() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.ChargeGetChanceCfg.c)
+  return c_;
+}
+inline void ChargeGetChanceCfg::set_c(::google::protobuf::uint32 value) {
+  set_has_c();
+  c_ = value;
+  // @@protoc_insertion_point(field_set:ConfigActivity.ChargeGetChanceCfg.c)
+}
+
+// -------------------------------------------------------------------
+
+// SingleReward
+
+// required .RewardConfig.RewardItemCfg reward = 4;
+inline bool SingleReward::has_reward() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SingleReward::set_has_reward() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SingleReward::clear_has_reward() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SingleReward::clear_reward() {
+  if (reward_ != NULL) reward_->::RewardConfig::RewardItemCfg::Clear();
+  clear_has_reward();
+}
+inline const ::RewardConfig::RewardItemCfg& SingleReward::reward() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.SingleReward.reward)
+  return reward_ != NULL ? *reward_ : *default_instance_->reward_;
+}
+inline ::RewardConfig::RewardItemCfg* SingleReward::mutable_reward() {
+  set_has_reward();
+  if (reward_ == NULL) reward_ = new ::RewardConfig::RewardItemCfg;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.SingleReward.reward)
+  return reward_;
+}
+inline ::RewardConfig::RewardItemCfg* SingleReward::release_reward() {
+  clear_has_reward();
+  ::RewardConfig::RewardItemCfg* temp = reward_;
+  reward_ = NULL;
+  return temp;
+}
+inline void SingleReward::set_allocated_reward(::RewardConfig::RewardItemCfg* reward) {
+  delete reward_;
+  reward_ = reward;
+  if (reward) {
+    set_has_reward();
+  } else {
+    clear_has_reward();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.SingleReward.reward)
+}
+
+// -------------------------------------------------------------------
+
+// RotaryTableFeedBackReward
+
+// repeated .ConfigActivity.DiamondReward jindu = 1;
+inline int RotaryTableFeedBackReward::jindu_size() const {
+  return jindu_.size();
+}
+inline void RotaryTableFeedBackReward::clear_jindu() {
+  jindu_.Clear();
+}
+inline const ::ConfigActivity::DiamondReward& RotaryTableFeedBackReward::jindu(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.RotaryTableFeedBackReward.jindu)
+  return jindu_.Get(index);
+}
+inline ::ConfigActivity::DiamondReward* RotaryTableFeedBackReward::mutable_jindu(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.RotaryTableFeedBackReward.jindu)
+  return jindu_.Mutable(index);
+}
+inline ::ConfigActivity::DiamondReward* RotaryTableFeedBackReward::add_jindu() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.RotaryTableFeedBackReward.jindu)
+  return jindu_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >&
+RotaryTableFeedBackReward::jindu() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.RotaryTableFeedBackReward.jindu)
+  return jindu_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::DiamondReward >*
+RotaryTableFeedBackReward::mutable_jindu() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.RotaryTableFeedBackReward.jindu)
+  return &jindu_;
+}
+
+// repeated .ConfigActivity.SingleReward singlereward = 2;
+inline int RotaryTableFeedBackReward::singlereward_size() const {
+  return singlereward_.size();
+}
+inline void RotaryTableFeedBackReward::clear_singlereward() {
+  singlereward_.Clear();
+}
+inline const ::ConfigActivity::SingleReward& RotaryTableFeedBackReward::singlereward(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.RotaryTableFeedBackReward.singlereward)
+  return singlereward_.Get(index);
+}
+inline ::ConfigActivity::SingleReward* RotaryTableFeedBackReward::mutable_singlereward(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.RotaryTableFeedBackReward.singlereward)
+  return singlereward_.Mutable(index);
+}
+inline ::ConfigActivity::SingleReward* RotaryTableFeedBackReward::add_singlereward() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.RotaryTableFeedBackReward.singlereward)
+  return singlereward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::SingleReward >&
+RotaryTableFeedBackReward::singlereward() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.RotaryTableFeedBackReward.singlereward)
+  return singlereward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::SingleReward >*
+RotaryTableFeedBackReward::mutable_singlereward() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.RotaryTableFeedBackReward.singlereward)
+  return &singlereward_;
+}
+
+// repeated .ConfigActivity.ChargeGetChanceCfg count = 3;
+inline int RotaryTableFeedBackReward::count_size() const {
+  return count_.size();
+}
+inline void RotaryTableFeedBackReward::clear_count() {
+  count_.Clear();
+}
+inline const ::ConfigActivity::ChargeGetChanceCfg& RotaryTableFeedBackReward::count(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.RotaryTableFeedBackReward.count)
+  return count_.Get(index);
+}
+inline ::ConfigActivity::ChargeGetChanceCfg* RotaryTableFeedBackReward::mutable_count(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.RotaryTableFeedBackReward.count)
+  return count_.Mutable(index);
+}
+inline ::ConfigActivity::ChargeGetChanceCfg* RotaryTableFeedBackReward::add_count() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.RotaryTableFeedBackReward.count)
+  return count_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::ChargeGetChanceCfg >&
+RotaryTableFeedBackReward::count() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.RotaryTableFeedBackReward.count)
+  return count_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::ChargeGetChanceCfg >*
+RotaryTableFeedBackReward::mutable_count() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.RotaryTableFeedBackReward.count)
+  return &count_;
+}
+
+// repeated .ConfigActivity.RotaryTableCfg randomReward = 4;
+inline int RotaryTableFeedBackReward::randomreward_size() const {
+  return randomreward_.size();
+}
+inline void RotaryTableFeedBackReward::clear_randomreward() {
+  randomreward_.Clear();
+}
+inline const ::ConfigActivity::RotaryTableCfg& RotaryTableFeedBackReward::randomreward(int index) const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.RotaryTableFeedBackReward.randomReward)
+  return randomreward_.Get(index);
+}
+inline ::ConfigActivity::RotaryTableCfg* RotaryTableFeedBackReward::mutable_randomreward(int index) {
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.RotaryTableFeedBackReward.randomReward)
+  return randomreward_.Mutable(index);
+}
+inline ::ConfigActivity::RotaryTableCfg* RotaryTableFeedBackReward::add_randomreward() {
+  // @@protoc_insertion_point(field_add:ConfigActivity.RotaryTableFeedBackReward.randomReward)
+  return randomreward_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ConfigActivity::RotaryTableCfg >&
+RotaryTableFeedBackReward::randomreward() const {
+  // @@protoc_insertion_point(field_list:ConfigActivity.RotaryTableFeedBackReward.randomReward)
+  return randomreward_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::RotaryTableCfg >*
+RotaryTableFeedBackReward::mutable_randomreward() {
+  // @@protoc_insertion_point(field_mutable_list:ConfigActivity.RotaryTableFeedBackReward.randomReward)
+  return &randomreward_;
+}
+
+// required .RewardConfig.RewardItemCfg fixedReward = 5;
+inline bool RotaryTableFeedBackReward::has_fixedreward() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void RotaryTableFeedBackReward::set_has_fixedreward() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void RotaryTableFeedBackReward::clear_has_fixedreward() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void RotaryTableFeedBackReward::clear_fixedreward() {
+  if (fixedreward_ != NULL) fixedreward_->::RewardConfig::RewardItemCfg::Clear();
+  clear_has_fixedreward();
+}
+inline const ::RewardConfig::RewardItemCfg& RotaryTableFeedBackReward::fixedreward() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.RotaryTableFeedBackReward.fixedReward)
+  return fixedreward_ != NULL ? *fixedreward_ : *default_instance_->fixedreward_;
+}
+inline ::RewardConfig::RewardItemCfg* RotaryTableFeedBackReward::mutable_fixedreward() {
+  set_has_fixedreward();
+  if (fixedreward_ == NULL) fixedreward_ = new ::RewardConfig::RewardItemCfg;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.RotaryTableFeedBackReward.fixedReward)
+  return fixedreward_;
+}
+inline ::RewardConfig::RewardItemCfg* RotaryTableFeedBackReward::release_fixedreward() {
+  clear_has_fixedreward();
+  ::RewardConfig::RewardItemCfg* temp = fixedreward_;
+  fixedreward_ = NULL;
+  return temp;
+}
+inline void RotaryTableFeedBackReward::set_allocated_fixedreward(::RewardConfig::RewardItemCfg* fixedreward) {
+  delete fixedreward_;
+  fixedreward_ = fixedreward;
+  if (fixedreward) {
+    set_has_fixedreward();
+  } else {
+    clear_has_fixedreward();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.RotaryTableFeedBackReward.fixedReward)
+}
+
+// -------------------------------------------------------------------
+
 // BatmanTreasureDraw
 
 // required .RewardConfig.RewardItemCfg item = 1;
@@ -12099,6 +12679,47 @@ inline ::google::protobuf::RepeatedPtrField< ::ConfigActivity::FreeExchange >*
 Activities::mutable_free_exchg() {
   // @@protoc_insertion_point(field_mutable_list:ConfigActivity.Activities.free_exchg)
   return &free_exchg_;
+}
+
+// required .ConfigActivity.RotaryTableFeedBackReward zhuanpanhuikui = 32;
+inline bool Activities::has_zhuanpanhuikui() const {
+  return (_has_bits_[0] & 0x80000000u) != 0;
+}
+inline void Activities::set_has_zhuanpanhuikui() {
+  _has_bits_[0] |= 0x80000000u;
+}
+inline void Activities::clear_has_zhuanpanhuikui() {
+  _has_bits_[0] &= ~0x80000000u;
+}
+inline void Activities::clear_zhuanpanhuikui() {
+  if (zhuanpanhuikui_ != NULL) zhuanpanhuikui_->::ConfigActivity::RotaryTableFeedBackReward::Clear();
+  clear_has_zhuanpanhuikui();
+}
+inline const ::ConfigActivity::RotaryTableFeedBackReward& Activities::zhuanpanhuikui() const {
+  // @@protoc_insertion_point(field_get:ConfigActivity.Activities.zhuanpanhuikui)
+  return zhuanpanhuikui_ != NULL ? *zhuanpanhuikui_ : *default_instance_->zhuanpanhuikui_;
+}
+inline ::ConfigActivity::RotaryTableFeedBackReward* Activities::mutable_zhuanpanhuikui() {
+  set_has_zhuanpanhuikui();
+  if (zhuanpanhuikui_ == NULL) zhuanpanhuikui_ = new ::ConfigActivity::RotaryTableFeedBackReward;
+  // @@protoc_insertion_point(field_mutable:ConfigActivity.Activities.zhuanpanhuikui)
+  return zhuanpanhuikui_;
+}
+inline ::ConfigActivity::RotaryTableFeedBackReward* Activities::release_zhuanpanhuikui() {
+  clear_has_zhuanpanhuikui();
+  ::ConfigActivity::RotaryTableFeedBackReward* temp = zhuanpanhuikui_;
+  zhuanpanhuikui_ = NULL;
+  return temp;
+}
+inline void Activities::set_allocated_zhuanpanhuikui(::ConfigActivity::RotaryTableFeedBackReward* zhuanpanhuikui) {
+  delete zhuanpanhuikui_;
+  zhuanpanhuikui_ = zhuanpanhuikui;
+  if (zhuanpanhuikui) {
+    set_has_zhuanpanhuikui();
+  } else {
+    clear_has_zhuanpanhuikui();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ConfigActivity.Activities.zhuanpanhuikui)
 }
 
 

@@ -251,7 +251,7 @@ const ConfigActivity::BuildSuitItem &  ActivityConfigWrap::GetBuildSuitConfigByI
 
 const ConfigActivity::ExchangeItem & ActivityConfigWrap::GetExchangeConfigById(unsigned id)
 {
-	if (id > activity_cfg.blesspoint().exchange_size())
+	if (id == 0 || id > activity_cfg.blesspoint().exchange_size())
 	{
 		error_log("param index error. id=%u", id);
 		throw runtime_error("param_error");
@@ -493,6 +493,47 @@ unsigned  ActivityConfigWrap::GetRotaryTableChargeCfgSize()
 {
 	return activity_cfg.rotary_table().chargereward_size();
 }
+//转盘回馈
+const ConfigActivity::RotaryTableCfg & ActivityConfigWrap::GetRotaryTableFeedBackItemcfg(unsigned index)
+{
+	if (index < 0 || index >= activity_cfg.zhuanpanhuikui().randomreward_size())
+	{
+		error_log("param error. index=%u", index);
+		throw runtime_error("param_error");
+	}
+
+	return activity_cfg.zhuanpanhuikui().randomreward(index);
+}
+
+const ConfigActivity::DiamondReward & ActivityConfigWrap::GetRotaryTableFeedbackChargeItemcfg(unsigned index)
+{
+	if (index < 1 || index > activity_cfg.zhuanpanhuikui().jindu_size())
+	{
+		error_log("param error. index=%u", index);
+		throw runtime_error("param_error");
+	}
+
+	return activity_cfg.zhuanpanhuikui().jindu(index - 1);
+}
+
+const RewardConfig::RewardItemCfg & ActivityConfigWrap::GetRotaryTableFeedbackFixedItemcfg()
+{
+	return activity_cfg.zhuanpanhuikui().fixedreward();
+}
+const ConfigActivity::SingleReward & ActivityConfigWrap::GetAccChargeItemcfg(unsigned index)
+{
+	if (index < 1 || index > activity_cfg.zhuanpanhuikui().singlereward_size())
+	{
+		error_log("param error. index=%u", index);
+		throw runtime_error("param_error");
+	}
+
+	return activity_cfg.zhuanpanhuikui().singlereward(index - 1);
+}
+unsigned ActivityConfigWrap::GetRotaryTableFeedBackItemSize()
+{
+	return activity_cfg.zhuanpanhuikui().randomreward_size();
+}
 
 const ConfigActivity::RotaryTableCfg & ActivityConfigWrap::GetRotaryTableRandomItemcfg(unsigned index)
 {
@@ -621,4 +662,25 @@ const ConfigFunction::OpenSpecialEquipItem & FunctionsConfigWrap::GetSpecialEqui
 	error_log("param error. eqid=%u", eqid);
 	throw runtime_error("param_error");
 }
+
+
+WuhunActivityWrap::WuhunActivityWrap()
+	:activity_cfg(ConfigManager::Instance()->m_wuhuncfg.m_config){}
+
+const WuhunActivity::AccChangeItem & WuhunActivityWrap::GetAccChargeItemCfg(unsigned index)
+{
+	if(index < 0 || index > GetAccChargeItemSize())
+	{
+		error_log("param error. index=%u", index);
+		//LOGIC_ERROR_RETURN_MSG("index error");
+		throw runtime_error("index error");
+	}
+
+	return activity_cfg.zhulidaxingdong(index);
+}
+
+const WuhunActivity::QunXingHuiJu& WuhunActivityWrap::GetQunXingHuiJu() {
+	return activity_cfg.qunxinghuiju();
+}
+
 

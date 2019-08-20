@@ -100,6 +100,7 @@ public:
 	//更新最近活跃时间和最近呼吸时间，同时统计并更新在线时长,last_active_time 最返活跃时间，ext 在线时长
 	int UpdateActiveExtBreathTime(unsigned uid, unsigned last_active_time, int ext);
 	int ChangeResource(unsigned uid, int r1, int r2, int r3, int r4);
+	int ChangeResource(int r1,int r2,int r3,int r4,const string &reason,DataUser &dataUser,Json::Value &result);
 
 	int GetUserFlag(unsigned uid, Json::Value &userFlag);
 	int SetUserFlag(unsigned uid, const Json::Value &userFlag);
@@ -114,6 +115,7 @@ public:
 	int GetUserClass(unsigned uid, int &type);
 	int GetMainpos(unsigned uid, unsigned &mainpos);
 	int SetMainpos(unsigned uid, const  unsigned mainpos);
+	int UpdateMaterial(unsigned uid, const Json::Value &data, string &result);
 
 	int ChangeBet(unsigned uid, int bet, bool allserver = false);
 	int ChangeBetForBack(unsigned uid, int bet, string &userStat, unsigned &balance);

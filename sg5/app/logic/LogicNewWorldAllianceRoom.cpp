@@ -6,6 +6,7 @@
  */
 
 #include "LogicNewWorldAllianceRoom.h"
+#include "LogicCmdUnits.h"
 
 #define NEW_WORLD_ALLIANCE_ROOM_PROCESS_CHANGE(pData,allresult) \
 	NewWorldAllianceRoomChangeMap *change; \
@@ -28,11 +29,9 @@
 	} \
 
 CLogicNewWorldAllianceRoom::CLogicNewWorldAllianceRoom() {
-	// TODO Auto-generated constructor stub
-
 }
+
 CLogicNewWorldAllianceRoom::~CLogicNewWorldAllianceRoom() {
-	// TODO Auto-generated destructor stub
 }
 
 int CLogicNewWorldAllianceRoom::GetWorld(unsigned rid, Json::Value &allresult)
@@ -506,6 +505,14 @@ int CLogicNewWorldAllianceRoom::GetAllHero(unsigned rid, unsigned uid,Json::Valu
 int CLogicNewWorldAllianceRoom::SetHero(unsigned rid, unsigned uid, unsigned index, const Json::Value &para, Json::Value &allresult, unsigned &seq)
 {
 	Json::Value &result = allresult["SetHero"];
+	if (index > NEW_WORLD_ALLIANCE_ROOM_HERO_FREE_INDEX) {
+		UserWrap user(uid, false);
+		NewWorldHeroPointUint cmd(user);
+		unsigned open_num = cmd.GetOpenNum();
+		if (open_num < index - NEW_WORLD_HERO_FREE_INDEX) {
+			return R_ERR_LOGIC;
+		}
+	}
 
 	int ret = 0;
 	CDataNewWorldAllianceRoom *pData = GetData();

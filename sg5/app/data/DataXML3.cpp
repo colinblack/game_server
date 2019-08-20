@@ -53,17 +53,19 @@ GiftEquipItem::GiftEquipItem()
 	,m_nQuality(0)
 	,m_nCh(0)
 	,m_bIsHero(false)
+	,m_bIsXianShi(false)
 {
 
 }
 
 
-GiftEquipItem::GiftEquipItem(const Json::Value& jsonEquips, bool ishero)
+GiftEquipItem::GiftEquipItem(const Json::Value& jsonEquips, bool ishero, bool isxianshi)
 	: m_nId(0)
 	,m_nCnt(1)
 	,m_nQuality(0)
 	,m_nCh(0)
 	,m_bIsHero(ishero)
+	,m_bIsXianShi(isxianshi)
 {
 	if (! Json::GetUInt(jsonEquips, "id", m_nId))
 	{
@@ -73,6 +75,11 @@ GiftEquipItem::GiftEquipItem(const Json::Value& jsonEquips, bool ishero)
 	Json::GetUInt(jsonEquips, "c", m_nCnt);
 	Json::GetUInt(jsonEquips, "q", m_nQuality); //强化等级
 	Json::GetUInt(jsonEquips, "ch", m_nCh);  //品质
+
+	unsigned xs = 0;
+	Json::GetUInt(jsonEquips, "xs", xs);  //是否为限时道具
+	if (xs)
+		m_bIsXianShi = true;
 }
 
 
@@ -84,6 +91,11 @@ bool GiftEquipItem::IsHero() const
 bool GiftEquipItem::IsEquip() const
 {
 	return (m_nId > 0 &&  (!m_bIsHero));
+}
+
+bool GiftEquipItem::IsXianShi() const
+{
+	return m_bIsXianShi;
 }
 
 bool GiftEquipItem::IsSame(GiftEquipItem & othitem)
@@ -301,6 +313,24 @@ int CDataXML::Init(const std::string &path, semdat sem, bool initconfig)
 	INIT_XML_DAT(XiaoNian)
 	INIT_XML_DAT(QingRenJieMeiGui)
 	INIT_XML_DAT(NianShouBoss)
+	INIT_XML_DAT(XianShiMuBiao)
+	INIT_XML_DAT(ZhouNianQing)
+	INIT_XML_DAT(Chariot)
+	INIT_XML_DAT(TouZiDaFanLi)
+	INIT_XML_DAT(QingMing)
+	INIT_XML_DAT(GuYu)
+	INIT_XML_DAT(KuaFuFengHuo)
+	INIT_XML_DAT(childrenDaysActivity)
+	INIT_XML_DAT(CostHeavenUp)
+	INIT_XML_DAT(GuYuJinJie)
+	INIT_XML_DAT(BinghunTurnDish)
+	INIT_XML_DAT(XingshiPoints)
+	INIT_XML_DAT(oldToNew)
+	INIT_XML_DAT(WuYiQingDian)
+	INIT_XML_DAT(yongguansanjun_goumai)
+	INIT_XML_DAT(GiveHelpItem)
+	INIT_XML_DAT(QiTianJinJie)
+
 	if(!initconfig)
 	{
 		//building map
@@ -970,6 +1000,11 @@ int CDataXML::Init(const std::string &path, semdat sem, bool initconfig)
 			{
 				m_mapXMLHeavenDaoist[pdata->heavenDaoist[i].id] = i;
 			}
+
+			for (unsigned j=0;j<MAX_HEAVENUP_CONFIG_NUM;j++)
+			{
+				m_XMLHeavenUp[pdata->heavenup[j].exp] = pdata->heavenup[j];
+			}
 		}
 
 		{
@@ -987,6 +1022,27 @@ int CDataXML::Init(const std::string &path, semdat sem, bool initconfig)
 				m_mapCostHeavenDaoist[pdata->heavenDaoistCost[i].id] = pdata->heavenDaoistCost[i].cash;
 			}
 		}
+
+		{
+			DataXMLCostHeavenUp *pdata = (DataXMLCostHeavenUp *)m_shCostHeavenUp.GetAddress();
+			if(pdata == NULL)
+			{
+				return R_ERR_DB;
+			}
+
+			CAutoLock lock(const_cast<CShareMemory *>(&(m_shCostHeavenUp)),true);
+			
+			m_mapCostHeavenUp.clear();
+			m_mapCostBShuToBHun.clear();
+
+			for(unsigned i = 0; i < HEAVENUP_JIE_NUM;++i)
+			{
+				m_mapCostHeavenUp[pdata->heavenUpCost[i].id] = pdata->heavenUpCost[i].cash;
+			}
+
+			m_mapCostBShuToBHun[0] = pdata->exBinghun;
+		}
+
 		{
 			DataXMLEightFormation *pdata = (DataXMLEightFormation *)m_shEightFormation.GetAddress();
 			if (NULL == pdata)
@@ -4943,7 +4999,7 @@ int CDataXML::GetCeleNewYearRewardItem(unsigned index, XMLNewYearReward & item)
 	return R_SUCCESS;
 }
 
-int CDataXML::ParseXMLInterface(void * pdata, int length, char * filename, CShareMemory& shmomory, ParseComplete pfun)
+int CDataXML::ParseXMLInterface(void * pdata, int length, const char * filename, CShareMemory& shmomory, ParseComplete pfun)
 {
 	//统一的接口
 	//先初始化空间
@@ -5597,7 +5653,7 @@ int CDataXML::InitCatapult()
 	CAutoLock lock(&(m_shCatapult), true, LOCK_MAX);
 	memset(pdata, 0, sizeof(*pdata));
 	string dataPath;
-	int ret = GetFile("catapultConfig.xml", dataPath);
+	int ret = GetFile("catapult.xml", dataPath);
 	if (ret)
 	{
 		return ret;
@@ -5721,7 +5777,7 @@ int CDataXML::InitCostCatapult()
 	memset(pdata, 0, sizeof(*pdata));
 
 	string dataPath;
-	int ret = GetFile("catapultConfig.xml", dataPath);
+	int ret = GetFile("catapult.xml", dataPath);
 	if (ret)
 	{
 		return ret;
@@ -5801,7 +5857,7 @@ int CDataXML::InitCatapultSkill()
 	memset(pdata, 0, sizeof(*pdata));
 
 	string dataPath;
-	ret = GetFile("catapultConfig.xml", dataPath);
+	ret = GetFile("catapult.xml", dataPath);
 
 	if (ret)
 	{
@@ -6035,8 +6091,8 @@ int CDataXML::InitBirdBridge() {
 	}
 	return 0;
 }
-int CDataXML::GetBirdBridgeItem(unsigned type, unsigned id, XMLBirdBridgeItem &item) {
-	DataXMLBirdBridge *pdata = (DataXMLBirdBridge*)m_shBirdBridge.GetAddress();
+int CDataXML::GetBirdBridgeItem(unsigned type, unsigned id, unsigned day, XMLBirdBridgeItem &item) {
+	DataXMLBirdBridge *pdata = (DataXMLBirdBridge*) m_shBirdBridge.GetAddress();
 	if (pdata == NULL) {
 		return R_ERR_DATA;
 	}
@@ -6055,9 +6111,18 @@ int CDataXML::GetBirdBridgeItem(unsigned type, unsigned id, XMLBirdBridgeItem &i
 				return 0;
 			}
 		}
-	} else {
+	} else if (type == 2) {
 		memcpy(&item, &(pdata->center), sizeof(XMLBirdBridgeItem));
 		return 0;
+	} else {
+		if (day < XML_BIRD_BRIDGE_DAILY_DAY_NUM) {
+			for (int i = 0; i < XML_BIRD_BRIDGE_DAILY_ITEM_NUM; ++i) {
+				if (pdata->days[day].day[i].id == id) {
+					memcpy(&item, &(pdata->days[day].day[i]), sizeof(XMLBirdBridgeItem));
+					return 0;
+				}
+			}
+		}
 	}
 	return R_ERR_NO_DATA;
 }
@@ -6200,3 +6265,1349 @@ int CDataXML::GetNianShouBossReward(unsigned id, XMLNianShouBossItem &data)
 	return 0;
 }
 
+int CDataXML::InitXianShiMuBiao() {
+	try {
+		return DataXMLXianShiMuBiaoUnit(m_shXianShiMuBiao, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitXianShiMuBiao]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+int CDataXML::GetXianShiMuBiaoReward(DataXMLXianShiMuBiao &data)
+{
+	DataXMLXianShiMuBiao *pdata = (DataXMLXianShiMuBiao*)m_shXianShiMuBiao.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shXianShiMuBiao), true);
+	memcpy(&data, pdata, sizeof(DataXMLXianShiMuBiao));
+	return 0;
+}
+
+int CDataXML::InitZhouNianQing() {
+	try {
+		return DataXMLZhouNianQingUnit(m_shZhouNianQing, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitZhouNianQing]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+int CDataXML::GetZhouNianQingReward(DataXMLZhouNianQing &data)
+{
+	DataXMLZhouNianQing *pdata = (DataXMLZhouNianQing*)m_shZhouNianQing.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shZhouNianQing), true);
+	memcpy(&data, pdata, sizeof(DataXMLZhouNianQing));
+	return 0;
+}
+
+int CDataXML::InitChariot()
+{
+	DataXMLChariot *pdata = (DataXMLChariot *)m_shChariot.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shChariot), true,LOCK_MAX);
+
+	memset(pdata,0,sizeof(*pdata));
+
+	string dataPath = MainConfig::GetAllServerPath(CONFIG_XML_PATH);
+	if (dataPath.empty())
+	{
+		cout<<("data path empty")<<endl;
+		return 1;
+	}
+	if (dataPath[dataPath.length() - 1] != '/')
+		dataPath.append("/");
+	dataPath.append("chariot.xml");
+	CMarkupSTL xmlConf;
+	if(!xmlConf.Load(dataPath.c_str()))
+	{
+		cout<<("data path wrong")<<endl;
+		return 1;
+	}
+	if(!xmlConf.FindElem("content"))
+	{
+		cout<<("content node wrong")<<endl;
+		return 1;
+	}
+	xmlConf.IntoElem();
+
+	if(!xmlConf.FindElem("cydatas"))
+	{
+		cout<<("cydatas node wrong")<<endl;
+		return 1;
+	}
+	xmlConf.IntoElem();
+
+	unsigned numcy = 0;
+	while(xmlConf.FindElem("cydata"))
+	{
+		string id = xmlConf.GetAttrib("id");
+		string ch = xmlConf.GetAttrib("ch");
+		if(id.empty() ||  ch.empty())
+		{
+			cout<<("equipsub config wrong 1 ")<<id<<endl;
+			return 1;
+		}
+		pdata->cydatas[numcy].id = CTrans::STOI(id.c_str());
+		pdata->cydatas[numcy].ch = CTrans::STOI(ch.c_str());
+		cout << pdata->cydatas[numcy].id << " " << pdata->cydatas[numcy].ch << endl;
+		if(++numcy >= XML_ZHANCHE_CHENGYUAN_NUM)
+		{
+			cout<<("XML_ZHANCHE_CHENGYUAN_NUM wrong ") << endl;
+			return 1;
+		}
+	}
+
+	xmlConf.OutOfElem();
+
+	if(!xmlConf.FindElem("cypropertys"))
+	{
+		cout<<("cydatas node wrong")<<endl;
+		return 1;
+	}
+	xmlConf.IntoElem();
+	numcy = 0;
+	while(xmlConf.FindElem("cy"))
+	{
+		string ch = xmlConf.GetAttrib("ch");
+		pdata->cylevels[numcy].ch = CTrans::STOI(ch.c_str());
+		cout << pdata->cylevels[numcy].ch << endl;
+		xmlConf.IntoElem();
+		unsigned numfloor = 0;
+		while(xmlConf.FindElem("floor"))
+		{
+			string id = xmlConf.GetAttrib("id");
+			string r1 = xmlConf.GetAttrib("r1");
+			string rid = xmlConf.GetAttrib("rid");
+			string needq = xmlConf.GetAttrib("needq");
+			pdata->cylevels[numcy].floor[numfloor].id =  CTrans::STOI(id.c_str());
+			pdata->cylevels[numcy].floor[numfloor].r1 =  CTrans::STOI(r1.c_str());
+			pdata->cylevels[numcy].floor[numfloor].rid =  CTrans::STOI(rid.c_str());
+			pdata->cylevels[numcy].floor[numfloor].needq =  CTrans::STOI(needq.c_str());
+			cout << pdata->cylevels[numcy].floor[numfloor].id  << " " << pdata->cylevels[numcy].floor[numfloor].r1 <<
+					" " << pdata->cylevels[numcy].floor[numfloor].needq << endl;
+
+			if(++numfloor >= XML_ZHANCHE_LEVEL)
+			{
+				cout<<("XML_ZHANCHE_LEVEL wrong ") << endl;
+				return 1;
+			}
+		}
+		xmlConf.OutOfElem();
+		if(++numcy >= XML_ZHANCHE_PINZHI_NUM + 1)
+		{
+			cout<<("XML_ZHANCHE_PINZHI_NUM wrong ") << endl;
+			return 1;
+		}
+	}
+
+	unsigned numpropertys = 0;
+	while(xmlConf.FindElem("cystar"))
+	{
+		string id = xmlConf.GetAttrib("id");
+		string needcount = xmlConf.GetAttrib("needcount");
+		string needeq = xmlConf.GetAttrib("needeq");
+		vector<string> vneedeq;
+		String::Split(needeq,',',vneedeq);
+		if(id.empty() ||  needcount.empty() || vneedeq.size()!=XML_ZHANCHE_PINZHI_NUM )
+		{
+			cout<<("equipsub config wrong 1 ")<<id<<endl;
+			return 1;
+		}
+		pdata->cypropertys[numpropertys].id = CTrans::STOI(id.c_str());
+		pdata->cypropertys[numpropertys].needcount = CTrans::STOI(needcount.c_str());
+		cout << pdata->cypropertys[numpropertys].id << " " << pdata->cypropertys[numpropertys].needcount << endl;
+		for (unsigned i=0;i<XML_ZHANCHE_PINZHI_NUM;i++)
+		{
+			pdata->cypropertys[numpropertys].needeq[i] = CTrans::STOI(vneedeq[i].c_str());
+			cout << pdata->cypropertys[numpropertys].needeq[i] << " ";
+		}
+		cout << endl;
+
+
+
+		if(++numpropertys >= XML_ZHANCHE_XINGJI_NUM + 1)
+		{
+			cout<<("XML_ZHANCHE_XINGJI_NUM wrong ") << endl;
+			return 1;
+		}
+	}
+
+	xmlConf.OutOfElem();
+
+
+	if(!xmlConf.FindElem("equipsub"))
+	{
+		cout<<("equipsub node wrong")<<endl;
+		return 1;
+	}
+	xmlConf.IntoElem();
+
+	while(xmlConf.FindElem("sub"))
+	{
+		string id = xmlConf.GetAttrib("id");
+		string stone = xmlConf.GetAttrib("stone");
+		string num = xmlConf.GetAttrib("num");
+		if(id.empty() || stone.empty() || num.empty())
+		{
+			cout<<("equipsub config wrong 1 ")<<id<<endl;
+			return 1;
+		}
+		unsigned subid = CTrans::STOI(id.c_str());
+		if(subid - 1 >= XML_ZHANCHE_ZHUANCHANG_NUM)
+		{
+			cout<<("equipsub config wrong 1.1 ")<<id<<endl;
+			return 1;
+		}
+		pdata->sub[subid-1].id = subid;
+		pdata->sub[subid-1].stone = CTrans::STOI(stone.c_str());
+		pdata->sub[subid-1].num = CTrans::STOI(num.c_str());
+
+		cout << pdata->sub[subid-1].id << " " << pdata->sub[subid-1].stone << " " << pdata->sub[subid-1].num << endl;
+
+
+		unsigned itemSnum = 0;
+		xmlConf.IntoElem();
+		while(xmlConf.FindElem("items"))
+		{
+			string items = xmlConf.GetAttrib("id");
+			string itemsrate = xmlConf.GetAttrib("rate");
+			if(items.empty() || itemsrate.empty())
+			{
+				cout<<("equipsub config wrong 2 ")<<items<<endl;
+				return 1;
+			}
+			if(itemSnum + 1 >= XML_EQUIP_SUB_ITEM_S)
+			{
+				cout<<("equipsub config wrong 2.1 ")<<items<<endl;
+				return 1;
+			}
+			memcpy(pdata->sub[subid-1].subs[itemSnum].id,items.c_str(),items.size()>XML_EQUIP_SUB_ID-1?XML_EQUIP_SUB_ID-1:items.size());
+			pdata->sub[subid-1].subs[itemSnum].rate = CTrans::STOI(itemsrate.c_str());
+			cout << pdata->sub[subid-1].subs[itemSnum].id << " " << pdata->sub[subid-1].subs[itemSnum].rate << endl;
+			xmlConf.IntoElem();
+			unsigned itemnum = 0;
+			while(xmlConf.FindElem("item"))
+			{
+				string star = xmlConf.GetAttrib("star");
+				string value = xmlConf.GetAttrib("value");
+				string rate = xmlConf.GetAttrib("rate");
+				pdata->sub[subid-1].subs[itemSnum].items[itemnum].star = CTrans::STOI(star.c_str());
+				pdata->sub[subid-1].subs[itemSnum].items[itemnum].value = CTrans::STOI(value.c_str());
+				pdata->sub[subid-1].subs[itemSnum].items[itemnum].rate = CTrans::STOI(rate.c_str());
+				cout << pdata->sub[subid-1].subs[itemSnum].items[itemnum].star << " " <<
+						pdata->sub[subid-1].subs[itemSnum].items[itemnum].value << " " <<
+						pdata->sub[subid-1].subs[itemSnum].items[itemnum].rate << endl;
+				++itemnum;
+			}
+			xmlConf.OutOfElem();
+			++itemSnum;
+		}
+		xmlConf.OutOfElem();
+	}
+	xmlConf.OutOfElem();
+
+	if(!xmlConf.FindElem("chouqu"))
+	{
+		cout<<("chouqu node wrong")<<endl;
+		return 1;
+	}
+	xmlConf.IntoElem();
+
+	for (char ch = 'A';ch <= 'B';ch++)
+	{
+		char buffer[200];
+		sprintf(buffer,"library%c",ch);
+		if(!xmlConf.FindElem(buffer))
+		{
+			cout<<buffer<<endl;
+			return 1;
+		}
+		unsigned idx = ch-'A';
+		pdata->ku[idx].need = CTrans::STOI(xmlConf.GetAttrib("need"));
+		cout << idx << ' ' << pdata->ku[idx].need  << endl;
+		xmlConf.IntoElem();
+
+		unsigned numreward = 0;
+		while(xmlConf.FindElem("reward"))
+		{
+			pdata->ku[idx].reward[numreward].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+			pdata->ku[idx].reward[numreward].eqid = CTrans::STOI(xmlConf.GetAttrib("eqid"));
+			pdata->ku[idx].reward[numreward].count = CTrans::STOI(xmlConf.GetAttrib("count"));
+			pdata->ku[idx].reward[numreward].weight = CTrans::STOI(xmlConf.GetAttrib("weight"));
+			cout << pdata->ku[idx].reward[numreward].id << " " <<
+					pdata->ku[idx].reward[numreward].eqid << " " <<
+					pdata->ku[idx].reward[numreward].count << " " <<
+					pdata->ku[idx].reward[numreward].weight << " " << endl;
+			++numreward;
+		}
+
+		xmlConf.OutOfElem();
+	}
+
+	m_shChariot.SetInitDone();
+
+	return 0;
+}
+
+int CDataXML::GetChariotReward(DataXMLChariot &data)
+{
+	DataXMLChariot *pdata = (DataXMLChariot*)m_shChariot.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shChariot), true);
+	memcpy(&data, pdata, sizeof(DataXMLChariot));
+	return 0;
+}
+
+int CDataXML::InitTouZiDaFanLi()
+{
+	DataXMLTouZiDaFanLi *pdata = (DataXMLTouZiDaFanLi *)m_shTouZiDaFanLi.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shTouZiDaFanLi), true,LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	IntoXmlNode(xmlConf, "touzidafanli");
+	IntoXmlNode(xmlConf, "linqu");
+	int numitem = 0;
+	Json::Reader reader;
+	while (xmlConf.FindElem("item"))
+	{
+		pdata->touzi[numitem].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		cout << pdata->touzi[numitem].id << " ";
+		char name[100];
+		for (int i=1;i<=3;i++)
+		{
+			sprintf(name,"integral%d",i);
+			pdata->touzi[numitem].integral[i-1] = CTrans::STOI(xmlConf.GetAttrib(name));
+			cout << pdata->touzi[numitem].integral[i-1] << " ";
+		}
+		cout << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->touzi[numitem].reward, XML_TOUZIFANLI_ITEM_ONE_POOL);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		++numitem;
+	}
+	xmlConf.OutOfElem();
+	int numduihuan = 0;
+	IntoXmlNode(xmlConf, "duihuan");
+	while (xmlConf.FindElem("item"))
+	{
+		pdata->duihuan[numduihuan].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->duihuan[numduihuan].sum = CTrans::STOI(xmlConf.GetAttrib("sum"));
+		cout << pdata->duihuan[numduihuan].id << " " << pdata->duihuan[numduihuan].sum << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->duihuan[numduihuan].reward, XML_TOUZIFANLI_ITEM_ONE_POOL);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		++numduihuan;
+	}
+
+	m_shTouZiDaFanLi.SetInitDone();
+	return 0;
+}
+
+int CDataXML::InitGuYu(bool reset)
+{
+	DataXMLGuYu *pdata = (DataXMLGuYu *)m_shGuYu.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shGuYu), true,LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	Json::Reader reader;
+
+	IntoXmlNode(xmlConf, "guyv");
+	if (!xmlConf.FindElem("online")) {
+		error_log("online data error");
+		return R_ERR_DATA;
+	}
+	Json::Value data;
+	if (!reader.parse(xmlConf.GetData(), data)) {
+		error_log("parse data error");
+		return R_ERR_DATA;
+	}
+	int ret = _parse_activity_simple_reward(data["reward"], pdata->online, MAX_GUYU_ONLINE_REWARD_NUM);
+	if (ret) {
+		error_log("online reward error");
+		return ret;
+	}
+	int num = 0;
+	if (!xmlConf.FindElem("jifen")) {
+		error_log("jifen data error");
+		return R_ERR_DATA;
+	}
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item")) {
+		pdata->jifen[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->jifen[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		pdata->jifen[num].limit = CTrans::STOI(xmlConf.GetAttrib("limit"));
+		cout << "id = " << int(pdata->jifen[num].id) << "require = " << pdata->jifen[num].require << "limit = " << pdata->jifen[num].limit << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->jifen[num].reward, MAX_GUYU_JIFEN_REWARD_NUM);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		if (++num >= MAX_GUYU_JIFEN_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	num = 0;
+	if (!xmlConf.FindElem("meiri")) {
+		error_log("meiri data error");
+		return R_ERR_DATA;
+	}
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item")) {
+		pdata->meiri[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->meiri[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		cout << "id = " << int(pdata->meiri[num].id) << "require = " << pdata->meiri[num].require << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->meiri[num].reward, MAX_GUYU_MEIRI_REWARD_NUM);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		if (++num >= MAX_GUYU_MEIRI_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	m_shGuYu.SetInitDone();
+	return 0;
+}
+
+int CDataXML::InitXingshiPoints()
+{
+	Json::Reader reader;
+	DataXMLXingshiPoints *pdata = (DataXMLXingshiPoints *)m_shXingshiPoints.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shXingshiPoints),true,LOCK_MAX);
+
+	memset(pdata,0,sizeof(*pdata));
+	CMarkupSTL xmlConf;
+	if(_get_xml(xmlConf,"activityconfig.xml") != 0)
+	{
+		return R_ERR_DATA;
+	}
+
+	if(!xmlConf.FindElem("stonejifen"))
+	{
+		cout << "stonejefen node wrong!" << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+	unsigned num = 0;
+	while(xmlConf.FindElem("item"))
+	{
+		pdata->stone[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->stone[num].points = CTrans::STOI(xmlConf.GetAttrib("jifenNeed"));
+		pdata->stone[num].grade = CTrans::STOI(xmlConf.GetAttrib("lvNeed"));
+		pdata->stone[num].times = CTrans::STOI(xmlConf.GetAttrib("limit"));
+		cout << pdata->stone[num].id <<"," <<pdata->stone[num].points<<","<<pdata->stone[num].grade
+		<<","<<pdata->stone[num].times<<endl;
+		Json::Value data;
+		if(!reader.parse(xmlConf.GetData(),data))
+		{
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"],pdata->stone[num].reward,MAX_XINGSHI_REWARD_NUM);
+		if(ret)
+		{
+			error_log("reward error");
+			return ret;
+		}
+		cout << "reward:"<<pdata->stone[num].reward[0].id <<","<<pdata->stone[num].reward[0].count << endl;
+		if(++num >= MAX_XINGSHI_ITEM_NUM)
+		{
+			break;
+		}
+	}
+
+	xmlConf.OutOfElem();
+	m_shXingshiPoints.SetInitDone();
+	
+	return 0;
+}
+
+int CDataXML::GetXingshiPointsReward(DataXMLXingshiPoints &data)
+{
+	DataXMLXingshiPoints *pdata = (DataXMLXingshiPoints *)m_shXingshiPoints.GetAddress();
+	if(pdata == NULL)
+	{
+		LOGIC_ERROR_RETURN_MSG("GetXingshiPointsReward error");
+	}
+
+	memcpy(&data,pdata,sizeof(DataXMLXingshiPoints));
+	return R_SUCCESS;
+}
+
+int CDataXML::InitGiveHelpItem()
+{
+	Json::Reader reader;
+	DataXMLGiveHelpItem *pdata = (DataXMLGiveHelpItem *) m_shGiveHelpItem.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DB;
+	}
+	CAutoLock lock(&(m_shGiveHelpItem), true, LOCK_MAX);
+	memset(pdata, 0, sizeof(*pdata));
+	CMarkupSTL xmlConf;
+	if (_get_xml(xmlConf, "activityconfig.xml") != 0) {
+		return R_ERR_DATA;
+	}
+	if (!xmlConf.FindElem("zhulidaxingdong")) {
+		cout << "zhulidaxingdong node wrong" << endl;
+		return R_ERR_DB;
+	}
+	xmlConf.IntoElem();
+	if (!xmlConf.FindElem("jichu")) {
+		cout << "jichu node was not find" << endl;
+		return R_ERR_DB;
+	}
+	xmlConf.IntoElem();
+	unsigned num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->helpuser[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->helpuser[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			cout << "parse data error" << endl;
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->helpuser[num].reward, MAX_GIVEHELPEXTRA_REWARD_NUM);
+		if (ret) {
+			cout << "reward error" << endl;
+			return ret;
+		}
+		if (++num >= MAX_GIVEHELPEXTRA_ITEM_NUM) {
+			break;
+		}
+	}
+
+	xmlConf.OutOfElem();
+	if (!xmlConf.FindElem("ewai")) {
+		cout << "ewai node wrong" << endl;
+		return R_ERR_DB;
+	}
+	xmlConf.IntoElem();
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->extra[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->extra[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		cout << pdata->extra[num].id << "," << pdata->extra[num].require << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			cout << "parse data error" << endl;
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->extra[num].reward, MAX_GIVEHELPEXTRA_REWARD_NUM);
+		if (ret) {
+			cout << "reward error" << endl;
+			return ret;
+		}
+		if (++num >= MAX_GIVEHELPEXTRA_ITEM_NUM) {
+			break;
+		}
+	}
+	if (num < MAX_GIVEHELPEXTRA_ITEM_NUM) {
+		pdata->extra[num].id = 0;
+	}
+	xmlConf.OutOfElem();
+	m_shGiveHelpItem.SetInitDone();
+	return 0;
+}
+int CDataXML::GetGiveHelpItemReward(DataXMLGiveHelpItem &data)
+{
+	DataXMLGiveHelpItem *pdata = (DataXMLGiveHelpItem *)m_shGiveHelpItem.GetAddress();
+	if(pdata == NULL) {
+		LOGIC_ERROR_RETURN_MSG("GetGiveHelpItemReward error");
+	}
+	memcpy(&data, pdata, sizeof(DataXMLGiveHelpItem));
+	return R_SUCCESS;
+}
+
+int CDataXML::InitGuYuJinJie()
+{
+	Json::Reader reader;
+	DataXMLGuYuJinJie *pdata = (DataXMLGuYuJinJie *)m_shGuYuJinJie.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shGuYuJinJie), true,LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	string dataPath;
+	int ret = GetFile("activityconfig.xml",dataPath);
+	if(ret)
+	{
+		error_log("Not find activityconfig.xml,ret:%d",ret);
+		return ret;
+	}
+
+	CMarkupSTL xmlConf;
+	if(!xmlConf.Load(dataPath.c_str()))
+	{
+		error_log("InitGuYuJinJie dataPath loading wrong!");
+		return R_ERROR;
+	}
+
+	if(!xmlConf.FindElem("content"))
+	{
+		error_log("InitCostHeavenUp content node wrong!");
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	if (!xmlConf.FindElem("guyv"))
+	{
+		cout << ("guyu node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	if (!xmlConf.FindElem("zhuanshi"))
+	{
+		cout << ("zhuanshi node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	unsigned num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->diamond[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->diamond[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		//cout << "id = " << int(pdata->diamond[num].id) << "require = " << pdata->diamond[num].require << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->diamond[num].reward, MAX_GUYU_DIAMOND_REWARD_NUM);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		//cout << "reward:" << pdata->diamond[num].reward[0].id<<","<<pdata->diamond[num].reward[0].count<<endl;
+		if (++num >= MAX_GUYU_JINJIE_DIAMOND) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	if (!xmlConf.FindElem("huanyv"))
+	{
+		cout << ("huanyv node wrong") << endl;
+		return R_ERROR;
+	}
+	xmlConf.IntoElem();
+
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->huanyu[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->huanyu[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		//cout << "id = " << int(pdata->huanyu[num].id) << "require = " << pdata->huanyu[num].require << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->huanyu[num].reward, MAX_GUYU_HUANYU_REWARD_NUM);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		//cout << "reward:" << pdata->huanyu[num].reward[0].id<<","<<pdata->huanyu[num].reward[0].count<<endl;
+		if (++num >= MAX_GUYU_JINJIE_HUANYU) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	m_shGuYuJinJie.SetInitDone();
+
+	return 0;
+}
+
+int CDataXML::InitBinghunTurnDish()
+{
+	Json::Reader reader;
+	DataXMLBinghunTurnDish *pdata = (DataXMLBinghunTurnDish *)m_shBinghunTurnDish.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shBinghunTurnDish),true,LOCK_MAX);
+
+	memset(pdata,0,sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(_get_xml(xmlConf,"activityconfig.xml") != 0)
+	{
+		return R_ERR_DATA;
+	}
+
+	//IntoXmlNode(xmlConf,"soldierSoulZhuanPan");
+	if (!xmlConf.FindElem("soldierSoulZhuanPan"))
+	{
+		cout << ("soldierSoulZhuanPan node wrong") << endl;
+		return R_ERROR;
+	}
+	//xmlConf.IntoElem();
+
+	string rateNum = xmlConf.GetAttrib("rate");
+	if(rateNum.size() == 0)
+	{
+		cout <<"read activityconfig.xml failed" << endl;
+		return R_ERR_DATA;
+	}
+	vector<string> rateNumvec;
+	String::Split(rateNum,',',rateNumvec);
+	unsigned sumTmp = 0;
+	for(unsigned i = 0;i < rateNumvec.size();++i)
+	{
+		pdata->turndish.rate[i] = CTrans::STOI(rateNumvec[i]) + sumTmp;
+		sumTmp += CTrans::STOI(rateNumvec[i]);
+		cout << CTrans::STOI(rateNumvec[i]) << "," << pdata->turndish.rate[i] << ",";
+	}
+	cout << endl;
+	string valueNum = xmlConf.GetAttrib("value");
+	vector<string> valuevec;
+	String::Split(valueNum,',',valuevec);
+	for(unsigned i = 0;i < valuevec.size();++i)
+	{
+		pdata->turndish.value[i] = CTrans::STOI(valuevec[i]);
+		cout << pdata->turndish.value[i] << ",";
+	}
+	cout << endl;
+	xmlConf.OutOfElem();
+	
+	m_shBinghunTurnDish.SetInitDone();
+
+	return 0;
+}
+
+int CDataXML::GetBinghunTurnDish(DataXMLBinghunTurnDish &data)
+{
+	DataXMLBinghunTurnDish *pdata = (DataXMLBinghunTurnDish *)m_shBinghunTurnDish.GetAddress();
+	if(pdata == NULL)
+	{
+		LOGIC_ERROR_RETURN_MSG("Read GetBinghunTurnDish failed");
+	}
+
+	memcpy(&data,pdata,sizeof(DataXMLBinghunTurnDish));
+	return R_SUCCESS;
+}
+
+int CDataXML::GetGuYuJinJieReward(DataXMLGuYuJinJie &data)
+{
+	DataXMLGuYuJinJie *pdata = (DataXMLGuYuJinJie *)m_shGuYuJinJie.GetAddress();
+	if(pdata == NULL)
+	{
+		LOGIC_ERROR_RETURN_MSG("Read GetGuYuJinJie failed!");
+	}
+
+	memcpy(&data,pdata,sizeof(DataXMLGuYuJinJie));
+	return R_SUCCESS;
+}
+
+int CDataXML::GetGuYuReward(DataXMLGuYu &data)
+{
+	DataXMLGuYu *pdata = (DataXMLGuYu*)m_shGuYu.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	memcpy(&data, pdata, sizeof(DataXMLGuYu));
+	return 0;
+}
+
+int CDataXML::GetTouZiDaFanLiReward(DataXMLTouZiDaFanLi &data)
+{
+	DataXMLTouZiDaFanLi *pdata = (DataXMLTouZiDaFanLi*)m_shTouZiDaFanLi.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shTouZiDaFanLi), true);
+	memcpy(&data, pdata, sizeof(DataXMLTouZiDaFanLi));
+	return 0;
+}
+
+int CDataXML::InitQingMing()
+{
+	try {
+		return DataXMLQingMingUnit(m_shQingMing, "activityconfig.xml").Initialize();
+	} catch (const std::exception& e) {
+		std::cout << "[InitZhouNianQing]Error: " << e.what() << std::endl;
+		return R_ERROR;
+	}
+	return 0;
+}
+
+int CDataXML::GetQingMingReward(DataXMLQingMing &data)
+{
+	DataXMLQingMing *pdata = (DataXMLQingMing*)m_shQingMing.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shQingMing), true);
+	memcpy(&data, pdata, sizeof(DataXMLQingMing));
+	return 0;
+}
+
+int CDataXML::InitKuaFuFengHuo(bool reset)
+{
+	DataXMLKuaFuFengHuo *pdata = (DataXMLKuaFuFengHuo *)m_shKuaFuFengHuo.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shKuaFuFengHuo), true,LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	Json::Reader reader;
+	IntoXmlNode(xmlConf, "allServerLordWorld");
+	int numphase = 0;
+	while (xmlConf.FindElem("phase")) {
+		pdata->starttime[numphase] = CTrans::STOI(xmlConf.GetAttrib("startTime"));
+		pdata->endtime[numphase] = CTrans::STOI(xmlConf.GetAttrib("endTime"));
+		cout << "starttime = " << pdata->starttime[numphase] << "endtime = " << pdata->endtime[numphase] << endl;
+		if (++numphase >= MAX_KUAFUFENGHUO_TIME_SEGMENT_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	IntoXmlNode(xmlConf, "fenghuojifen");
+
+	IntoXmlNode(xmlConf, "rank");
+
+	int numreward = 0;
+	while (xmlConf.FindElem("reward")) {
+		pdata->rank[numreward].id =  CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->rank[numreward].rank1 =  CTrans::STOI(xmlConf.GetAttrib("rank1"));
+		pdata->rank[numreward].rank2 =  CTrans::STOI(xmlConf.GetAttrib("rank2"));
+		cout << "id = " << int(pdata->rank[numreward].id) << ' ' << "rank1 = " << pdata->rank[numreward].rank1 << "rank2 = " << pdata->rank[numreward].rank2 <<endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->rank[numreward].reward, MAX_KUAFUFENGHUO_BUCHANG_REWARD_NUM);
+		if (ret) {
+			error_log("buchang reward error");
+			return ret;
+		}
+		if (++numreward >= MAX_KUAFUFENGHUO_RANK_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	IntoXmlNode(xmlConf, "jifen");
+	if (!xmlConf.FindElem("Score"))
+	{
+		cout << "reward error" << endl;
+	}
+	pdata->jifen.num1 =  CTrans::STOI(xmlConf.GetAttrib("num1"));
+	pdata->jifen.score1 =  CTrans::STOI(xmlConf.GetAttrib("score1"));
+	pdata->jifen.score2 =  CTrans::STOI(xmlConf.GetAttrib("score2"));
+	pdata->jifen.score4 =  CTrans::STOI(xmlConf.GetAttrib("score4"));
+	cout << pdata->jifen.num1 << " " << pdata->jifen.score1 << " " << pdata->jifen.score2 << " " << pdata->jifen.score4 << endl;
+	IntoXmlNode(xmlConf, "attack");
+	int numlevel = 0;
+	while (xmlConf.FindElem("level")) {
+		pdata->jifen.attack[numlevel].lv = CTrans::STOI(xmlConf.GetAttrib("lv"));
+		pdata->jifen.attack[numlevel].kongdi = CTrans::STOI(xmlConf.GetAttrib("kongdi"));
+		pdata->jifen.attack[numlevel].ziyuandian = CTrans::STOI(xmlConf.GetAttrib("ziyuandian"));
+		pdata->jifen.attack[numlevel].zhucheng = CTrans::STOI(xmlConf.GetAttrib("zhucheng"));
+		pdata->jifen.attack[numlevel].mingcheng = CTrans::STOI(xmlConf.GetAttrib("mingcheng"));
+		cout << numlevel<< " " << pdata->jifen.attack[numlevel].lv << " " << pdata->jifen.attack[numlevel].kongdi << " "
+				<< pdata->jifen.attack[numlevel].ziyuandian << " " << pdata->jifen.attack[numlevel].zhucheng << " "
+				<< pdata->jifen.attack[numlevel].mingcheng << endl;
+		++numlevel;
+	}
+	xmlConf.OutOfElem();
+	xmlConf.OutOfElem();
+
+	IntoXmlNode(xmlConf, "buchang");
+	if (!xmlConf.FindElem("reward")) {
+		error_log("reward data error");
+		return R_ERR_DATA;
+	}
+	Json::Value data;
+	if (!reader.parse(xmlConf.GetData(), data)) {
+		error_log("parse data error");
+		return R_ERR_DATA;
+	}
+	int ret = _parse_activity_simple_reward(data["reward"], pdata->buchang, MAX_KUAFUFENGHUO_BUCHANG_REWARD_NUM);
+	if (ret) {
+		error_log("buchang reward error");
+		return ret;
+	}
+	cout << pdata->buchang[0].id << " " << pdata->buchang[0].count << endl;
+	xmlConf.OutOfElem();
+	xmlConf.OutOfElem();
+
+	m_shKuaFuFengHuo.SetInitDone();
+	return 0;
+}
+
+int CDataXML::GetKuaFuFengHuoReward(DataXMLKuaFuFengHuo &data)
+{
+	DataXMLKuaFuFengHuo *pdata = (DataXMLKuaFuFengHuo*)m_shKuaFuFengHuo.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shKuaFuFengHuo), true);
+	memcpy(&data, pdata, sizeof(DataXMLKuaFuFengHuo));
+	return 0;
+}
+
+int CDataXML::GetKuaFuFengHuoTimeSegment(unsigned ts)
+{
+	/*
+	unsigned fullblood;
+	if (OpenPlatform::GetType() != PT_TEST) {
+		if (!OpenPlatform::IsQQPlatform()) {
+			return 0;
+		}
+		fullblood = 0;
+		bool have = Config::GetUIntValue(fullblood, "nianshou_blood");
+		if (have && fullblood <= 30000000) {
+			return 0;
+		}
+	}
+	*/
+	int serverid = 0, domain = 0;
+	Config::GetDB(domain);
+	serverid = MainConfig::GetMergedDomain(domain);
+	if (serverid > 819) {
+		return 0;
+	}
+	DataXMLKuaFuFengHuo *pdata = (DataXMLKuaFuFengHuo*) m_shKuaFuFengHuo.GetAddress();
+	if (pdata == NULL) {
+		return 0;
+	}
+	for (int i = 0; i < MAX_KUAFUFENGHUO_TIME_SEGMENT_NUM; i++) {
+		if (ts > pdata->starttime[i] && ts < pdata->endtime[i]) {
+			return i + 1;
+		}
+	}
+	return 0;
+}
+
+int CDataXML::InitchildrenDaysActivity(bool reset)
+{
+	DataXMLchildrenDaysActivity *pdata = (DataXMLchildrenDaysActivity *)m_shchildrenDaysActivity.GetAddress();
+	if(pdata == NULL)
+	{
+		return R_ERR_DB;
+	}
+
+	CAutoLock lock(&(m_shchildrenDaysActivity), true,LOCK_MAX);
+
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	Json::Reader reader;
+	IntoXmlNode(xmlConf, "goldenMonkey");
+	int num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->item[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->item[num].times = CTrans::STOI(xmlConf.GetAttrib("times"));
+		string needNum = xmlConf.GetAttrib("needNum");
+		vector<string> needNumvec;
+		String::Split(needNum,',',needNumvec); //以逗号为分隔把数据写到needNumvec中
+		for (int i=0;i<needNumvec.size();i++)  //转换成整形
+		{
+			pdata->item[num].needNum[i] = CTrans::STOI(needNumvec[i]);
+			cout << pdata->item[num].needNum[i] << " ";
+		}
+		string need = xmlConf.GetAttrib("need");
+		vector<string> needvec;
+		String::Split(need,',',needvec);
+		for (int i=0;i<needvec.size();i++)
+		{
+			pdata->item[num].need[i] = CTrans::STOI(needvec[i]);
+			cout << pdata->item[num].need[i] << " ";
+		}
+		cout << endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->item[num].reward, XML_ERTONGJIEHUODONG_REWARD_NUM);
+		if (ret) {
+			error_log("buchang reward error");
+			return ret;
+		}
+		if (++num >= XML_ERTONGJIEHUODONG_MAX_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
+	m_shchildrenDaysActivity.SetInitDone(); //标志共享内存已初始化
+	return 0;
+}
+
+int CDataXML::GetchildrenDaysActivityReward(DataXMLchildrenDaysActivity &data)
+{
+	DataXMLchildrenDaysActivity *pdata = (DataXMLchildrenDaysActivity*)m_shchildrenDaysActivity.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory *>(&m_shchildrenDaysActivity), true); //加锁，防止此时修改共享内存
+	memcpy(&data, pdata, sizeof(DataXMLchildrenDaysActivity));
+	return 0;
+}
+
+int CDataXML::InitoldToNew(bool reset)
+{
+	DataXMLoldToNew *pdata = (DataXMLoldToNew*)m_sholdToNew.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&(m_sholdToNew), true, LOCK_MAX);
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	IntoXmlNode(xmlConf, "oldToNew");
+
+	int num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->item[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->item[num].eqid1 = CTrans::STOI(xmlConf.GetAttrib("eqid1"));
+		pdata->item[num].count1 = CTrans::STOI(xmlConf.GetAttrib("count1"));
+		pdata->item[num].eqid2 = CTrans::STOI(xmlConf.GetAttrib("eqid2"));
+		pdata->item[num].count2 = CTrans::STOI(xmlConf.GetAttrib("count2"));
+		if (++num >= MAX_OLDTONEW_DUIHUAN_NUM)
+			break;
+	}
+
+	m_sholdToNew.SetInitDone();
+
+	return 0;
+}
+
+int CDataXML::GetOldToNew(DataXMLoldToNew &data)
+{
+	DataXMLoldToNew *pdata = (DataXMLoldToNew*)m_sholdToNew.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	memcpy(&data, pdata, sizeof(DataXMLoldToNew));
+	return 0;
+}
+
+int CDataXML::InitWuYiQingDian(bool reset)
+{
+	DataXMLWuYiQingDian *pdata = (DataXMLWuYiQingDian*)m_shWuYiQingDian.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&(m_shWuYiQingDian), true, LOCK_MAX);
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	Json::Reader reader;
+
+	IntoXmlNode(xmlConf, "wuyiqingdian");
+	if (!xmlConf.FindElem("jifen")) {
+		error_log("jifen data error");
+		return R_ERR_DATA;
+	}
+	int num = 0;
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item"))
+	{
+		pdata->jifen[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->jifen[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		pdata->jifen[num].limit = CTrans::STOI(xmlConf.GetAttrib("limit"));
+		cout << "id = " << pdata->jifen[num].id << "require = " << pdata->jifen[num].require << "limit = " << pdata->jifen[num].limit <<endl;
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->jifen[num].reward, MAX_GUYU_JIFEN_REWARD_NUM);
+		if (ret) {
+			error_log("reward error");
+			return ret;
+		}
+		++num;
+	}
+	xmlConf.OutOfElem();
+
+	if (!xmlConf.FindElem("limit")) {
+		error_log("limit data error");
+		return R_ERR_DATA;
+	}
+	num = 0;
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item"))
+	{
+		pdata->limit[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->limit[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		pdata->limit[num].limitmax = CTrans::STOI(xmlConf.GetAttrib("limitmax"));
+		cout << pdata->limit[num].id << " " << pdata->limit[num].require << " " << pdata->limit[num].limitmax << endl;
+		++num;
+	}
+	xmlConf.OutOfElem();
+
+	for (unsigned day=1;day<=MAX_WUYIQINGDIAN_MEIRI_DAY_NUM;day++){
+		char labelname[100];
+		sprintf(labelname,"meiri%d",day);
+		if (xmlConf.FindElem(labelname))
+		{
+			cout << labelname << endl;
+			num = 0;
+			xmlConf.IntoElem();
+			while (xmlConf.FindElem("item"))
+			{
+				pdata->meiri[day-1][num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+				pdata->meiri[day-1][num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+				cout << pdata->meiri[day-1][num].id << " " << pdata->meiri[day-1][num].require << endl;
+				Json::Value data;
+				if (!reader.parse(xmlConf.GetData(), data)) {
+					error_log("parse data error");
+					return R_ERR_DATA;
+				}
+				int ret = _parse_activity_simple_reward(data["reward"], pdata->meiri[day-1][num].reward, MAX_WUYIQINGDIAN_MEIRI_REWARD_NUM);
+				if (ret) {
+					error_log("reward error");
+					return ret;
+				}
+				++num;
+			}
+			xmlConf.OutOfElem();
+		}
+	}
+
+	m_shWuYiQingDian.SetInitDone();
+	return 0;
+}
+
+int CDataXML::GetWuYiQingDianReward(DataXMLWuYiQingDian &data)
+{
+	DataXMLWuYiQingDian *pdata = (DataXMLWuYiQingDian*)m_shWuYiQingDian.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	memcpy(&data, pdata, sizeof(DataXMLWuYiQingDian));
+	return 0;
+}
+
+int CDataXML::Inityongguansanjun_goumai(bool reset)
+{
+	DataXMLyongguansanjun_goumai *pdata = (DataXMLyongguansanjun_goumai*)m_shyongguansanjun_goumai.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&(m_shyongguansanjun_goumai), true, LOCK_MAX);
+	memset(pdata, 0, sizeof(*pdata));
+
+	CMarkupSTL xmlConf;
+	if(0 != _get_xml(xmlConf, "activityconfig.xml"))
+	{
+		return R_ERR_DATA;
+	}
+
+	Json::Reader reader;
+
+	IntoXmlNode(xmlConf, "yongguansanjun");
+
+	int num = 0;
+	while (xmlConf.FindElem("reward")) {
+		pdata->item[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->item[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		pdata->item[num].price = CTrans::STOI(xmlConf.GetAttrib("price"));
+		Json::Value data;
+		if (!reader.parse(xmlConf.GetData(), data)) {
+			error_log("parse data error");
+			return R_ERR_DATA;
+		}
+		cout << pdata->item[num].id << " " << pdata->item[num].require << " " << pdata->item[num].price << endl;
+		int ret = _parse_activity_simple_reward(data["reward"], pdata->item[num].reward, XML_KUANGHUAN618_REWARD_NUM);
+		if (ret) {
+			error_log("buchang reward error");
+			return ret;
+		}
+		if (++num >= XML_KUANGHUAN618_ITEM_NUM)
+			break;
+	}
+
+	m_shyongguansanjun_goumai.SetInitDone();
+
+	return 0;
+}
+
+int CDataXML::Getyongguansanjun_goumaiReward(DataXMLyongguansanjun_goumai &data)
+{
+	DataXMLyongguansanjun_goumai *pdata = (DataXMLyongguansanjun_goumai*)m_shyongguansanjun_goumai.GetAddress();
+	if (pdata == NULL)
+	{
+		return R_ERR_DATA;
+	}
+	memcpy(&data, pdata, sizeof(DataXMLyongguansanjun_goumai));
+	return 0;
+}
+
+int CDataXML::InitQiTianJinJie() {
+	DataXMLQiTianJinJie *pdata = (DataXMLQiTianJinJie*) m_shQiTianJinJie.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(&m_shQiTianJinJie, true, LOCK_MAX);
+	memset(pdata, 0, sizeof(*pdata));
+	CMarkupSTL xmlConf;
+	if (0 != _get_xml(xmlConf, "activityconfig.xml")) {
+		return R_ERR_DATA;
+	}
+	Json::Reader reader;
+	IntoXmlNode(xmlConf, "qitianjinjie");
+	int numzone = 0;
+	while (xmlConf.FindElem("zone")) {
+		vector<string> vec_zone;
+		String::Split(xmlConf.GetAttrib("id"), '-', vec_zone);
+		pdata->zone[numzone].start = CTrans::STOI(vec_zone[0]);
+		pdata->zone[numzone].end = CTrans::STOI(vec_zone[1]);
+		xmlConf.IntoElem();
+		for (unsigned day = 1; day <= MAX_QITIANJINJIE_MEIRI_DAY_NUM; day++) {
+			char labelname[100];
+			sprintf(labelname, "meiri%d", day);
+			if (xmlConf.FindElem(labelname)) {
+				int num = 0;
+				xmlConf.IntoElem();
+				while (xmlConf.FindElem("item")) {
+					pdata->zone[numzone].meiri[day - 1][num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+					pdata->zone[numzone].meiri[day - 1][num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+					Json::Value data;
+					if (!reader.parse(xmlConf.GetData(), data)) {
+						error_log("parse data error");
+						return R_ERR_DATA;
+					}
+					int ret = _parse_activity_simple_reward(data["reward"], pdata->zone[numzone].meiri[day - 1][num].reward, MAX_QITIANJINJIE_MEIRI_REWARD_NUM);
+					if (ret) {
+						error_log("reward error");
+						return ret;
+					}
+					++num;
+				}
+				xmlConf.OutOfElem();
+			}
+		}
+		xmlConf.OutOfElem();
+		++numzone;
+	}
+	m_shQiTianJinJie.SetInitDone();
+	return 0;
+}
+int CDataXML::GetQiTianJinJieReward(DataXMLQiTianJinJie &data) {
+	DataXMLQiTianJinJie *pdata = (DataXMLQiTianJinJie*) m_shQiTianJinJie.GetAddress();
+	if (pdata == NULL) {
+		return R_ERR_DATA;
+	}
+	CAutoLock lock(const_cast<CShareMemory*>(&(m_shQiTianJinJie)), true);
+	memcpy(&data, pdata, sizeof(DataXMLQiTianJinJie));
+	return 0;
+}

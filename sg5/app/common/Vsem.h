@@ -72,6 +72,9 @@ enum semdat {
 	sem_rotaty_table_draw,
 	sem_all_server_double11_2018,
 	sem_nianshou,
+	sem_chongbangwangzhe,
+	sem_zhounianqing_qiandao,
+	sem_rotaty_table_feedback
 };
 
 #define SEM_START 2000000000

@@ -14,3 +14,6 @@ $(TARGET) : $(OBJS)
 
 %.o : $(CUR_PATH)/%.cpp
 	$(CXX) $(INC) -c $(CXXFLAGS) $< -o  $@
+
+install:
+	cp $(TARGET) -f $(PATH_CGI)

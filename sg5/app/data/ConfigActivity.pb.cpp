@@ -167,6 +167,15 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* RotaryTableCrazyReward_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RotaryTableCrazyReward_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ChargeGetChanceCfg_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ChargeGetChanceCfg_reflection_ = NULL;
+const ::google::protobuf::Descriptor* SingleReward_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  SingleReward_reflection_ = NULL;
+const ::google::protobuf::Descriptor* RotaryTableFeedBackReward_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  RotaryTableFeedBackReward_reflection_ = NULL;
 const ::google::protobuf::Descriptor* BatmanTreasureDraw_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   BatmanTreasureDraw_reflection_ = NULL;
@@ -1024,7 +1033,57 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RotaryTableCrazyReward));
-  BatmanTreasureDraw_descriptor_ = file->message_type(49);
+  ChargeGetChanceCfg_descriptor_ = file->message_type(49);
+  static const int ChargeGetChanceCfg_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChargeGetChanceCfg, need_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChargeGetChanceCfg, c_),
+  };
+  ChargeGetChanceCfg_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      ChargeGetChanceCfg_descriptor_,
+      ChargeGetChanceCfg::default_instance_,
+      ChargeGetChanceCfg_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChargeGetChanceCfg, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ChargeGetChanceCfg, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(ChargeGetChanceCfg));
+  SingleReward_descriptor_ = file->message_type(50);
+  static const int SingleReward_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SingleReward, reward_),
+  };
+  SingleReward_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      SingleReward_descriptor_,
+      SingleReward::default_instance_,
+      SingleReward_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SingleReward, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SingleReward, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(SingleReward));
+  RotaryTableFeedBackReward_descriptor_ = file->message_type(51);
+  static const int RotaryTableFeedBackReward_offsets_[5] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, jindu_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, singlereward_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, randomreward_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, fixedreward_),
+  };
+  RotaryTableFeedBackReward_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      RotaryTableFeedBackReward_descriptor_,
+      RotaryTableFeedBackReward::default_instance_,
+      RotaryTableFeedBackReward_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RotaryTableFeedBackReward, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(RotaryTableFeedBackReward));
+  BatmanTreasureDraw_descriptor_ = file->message_type(52);
   static const int BatmanTreasureDraw_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureDraw, item_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureDraw, weight_),
@@ -1040,7 +1099,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BatmanTreasureDraw));
-  BatmanTreasureCfg_descriptor_ = file->message_type(50);
+  BatmanTreasureCfg_descriptor_ = file->message_type(53);
   static const int BatmanTreasureCfg_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureCfg, xiaobing_chargereward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BatmanTreasureCfg, unique_xiaobing_dial_),
@@ -1058,7 +1117,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BatmanTreasureCfg));
-  SummerChargeRewardCfg_descriptor_ = file->message_type(51);
+  SummerChargeRewardCfg_descriptor_ = file->message_type(54);
   static const int SummerChargeRewardCfg_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerChargeRewardCfg, daily_chargereward_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerChargeRewardCfg, acc_chargereward_),
@@ -1074,7 +1133,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SummerChargeRewardCfg));
-  SummerHolidaysTicketCfg_descriptor_ = file->message_type(52);
+  SummerHolidaysTicketCfg_descriptor_ = file->message_type(55);
   static const int SummerHolidaysTicketCfg_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysTicketCfg, need_cost_ticket_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysTicketCfg, exchange_count_max_),
@@ -1091,7 +1150,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SummerHolidaysTicketCfg));
-  SummerHolidaysRewardCfg_descriptor_ = file->message_type(53);
+  SummerHolidaysRewardCfg_descriptor_ = file->message_type(56);
   static const int SummerHolidaysRewardCfg_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysRewardCfg, exchange_ticket_max_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SummerHolidaysRewardCfg, per_ticket_need_diamond_),
@@ -1109,7 +1168,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SummerHolidaysRewardCfg));
-  FreeExchangeItem_descriptor_ = file->message_type(54);
+  FreeExchangeItem_descriptor_ = file->message_type(57);
   static const int FreeExchangeItem_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchangeItem, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchangeItem, c_),
@@ -1125,7 +1184,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(FreeExchangeItem));
-  FreeExchange_descriptor_ = file->message_type(55);
+  FreeExchange_descriptor_ = file->message_type(58);
   static const int FreeExchange_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FreeExchange, item_),
   };
@@ -1140,8 +1199,8 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(FreeExchange));
-  Activities_descriptor_ = file->message_type(56);
-  static const int Activities_offsets_[31] = {
+  Activities_descriptor_ = file->message_type(59);
+  static const int Activities_offsets_[32] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, buildsuit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, blesspoint_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, double_welfare_),
@@ -1173,6 +1232,7 @@ void protobuf_AssignDesc_ConfigActivity_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, chinadayavtivity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, payoptionalactivity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, free_exchg_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Activities, zhuanpanhuikui_),
   };
   Activities_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -1296,6 +1356,12 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RotaryTableCrazyReward_descriptor_, &RotaryTableCrazyReward::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    ChargeGetChanceCfg_descriptor_, &ChargeGetChanceCfg::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    SingleReward_descriptor_, &SingleReward::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    RotaryTableFeedBackReward_descriptor_, &RotaryTableFeedBackReward::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     BatmanTreasureDraw_descriptor_, &BatmanTreasureDraw::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     BatmanTreasureCfg_descriptor_, &BatmanTreasureCfg::default_instance());
@@ -1414,6 +1480,12 @@ void protobuf_ShutdownFile_ConfigActivity_2eproto() {
   delete RotaryTableCfg_reflection_;
   delete RotaryTableCrazyReward::default_instance_;
   delete RotaryTableCrazyReward_reflection_;
+  delete ChargeGetChanceCfg::default_instance_;
+  delete ChargeGetChanceCfg_reflection_;
+  delete SingleReward::default_instance_;
+  delete SingleReward_reflection_;
+  delete RotaryTableFeedBackReward::default_instance_;
+  delete RotaryTableFeedBackReward_reflection_;
   delete BatmanTreasureDraw::default_instance_;
   delete BatmanTreasureDraw_reflection_;
   delete BatmanTreasureCfg::default_instance_;
@@ -1566,72 +1638,83 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
     "TableCost\030\002 \002(\0132\033.RewardConfig.RewardIte"
     "mCfg\0224\n\014randomReward\030\003 \003(\0132\036.ConfigActiv"
     "ity.RotaryTableCfg\0220\n\013fixedReward\030\004 \002(\0132"
-    "\033.RewardConfig.RewardItemCfg\"O\n\022BatmanTr"
-    "easureDraw\022)\n\004item\030\001 \002(\0132\033.RewardConfig."
-    "RewardItemCfg\022\016\n\006weight\030\002 \002(\r\"\305\001\n\021Batman"
-    "TreasureCfg\022<\n\025xiaobing_chargeReward\030\001 \003"
-    "(\0132\035.ConfigActivity.DiamondReward\022@\n\024uni"
-    "que_xiaobing_dial\030\002 \003(\0132\".ConfigActivity"
-    ".BatmanTreasureDraw\022\024\n\014draw_cnt_max\030\003 \002("
-    "\r\022\032\n\022draw_cost_integral\030\004 \002(\r\"\213\001\n\025Summer"
-    "ChargeRewardCfg\0229\n\022daily_chargeReward\030\001 "
-    "\003(\0132\035.ConfigActivity.DiamondReward\0227\n\020ac"
-    "c_chargeReward\030\002 \003(\0132\035.ConfigActivity.Di"
-    "amondReward\"|\n\027SummerHolidaysTicketCfg\022\030"
-    "\n\020need_cost_ticket\030\001 \002(\r\022\032\n\022exchange_cou"
-    "nt_max\030\002 \002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardCon"
-    "fig.RewardItemCfg\"\325\001\n\027SummerHolidaysRewa"
-    "rdCfg\022\033\n\023exchange_ticket_max\030\001 \002(\r\022\037\n\027pe"
-    "r_ticket_need_diamond\030\002 \002(\r\022G\n\026summer_ho"
-    "lidays_ticket\030\003 \003(\0132\'.ConfigActivity.Sum"
-    "merHolidaysTicketCfg\0223\n\014chargeReward\030\004 \003"
-    "(\0132\035.ConfigActivity.DiamondReward\")\n\020Fre"
-    "eExchangeItem\022\n\n\002id\030\001 \002(\r\022\t\n\001c\030\002 \002(\r\">\n\014"
-    "FreeExchange\022.\n\004item\030\001 \003(\0132 .ConfigActiv"
-    "ity.FreeExchangeItem\"\246\r\n\nActivities\0220\n\tb"
-    "uildsuit\030\001 \003(\0132\035.ConfigActivity.BuildSui"
-    "tItem\022.\n\nblesspoint\030\002 \002(\0132\032.ConfigActivi"
-    "ty.BlessPoint\0225\n\016double_welfare\030\003 \002(\0132\035."
-    "ConfigActivity.DoubleWelfare\0223\n\rpearl_ad"
-    "vance\030\004 \003(\0132\034.ConfigActivity.PearlAdvanc"
-    "e\022B\n\025unique_knowledge_dial\030\005 \003(\0132#.Confi"
-    "gActivity.UniqueKnowledgeDial\022:\n\016spiritv"
-    "itality\030\006 \003(\0132\".ConfigActivity.SpriteVit"
-    "alityItem\022)\n\005forge\030\007 \002(\0132\032.ConfigActivit"
-    "y.ForgeSmelt\022*\n\010herodial\030\010 \002(\0132\030.ConfigA"
-    "ctivity.HeroDial\022.\n\nkingdomwar\030\t \003(\0132\032.C"
-    "onfigActivity.KingdomWar\022<\n\021onediamondwe"
-    "lfare\030\n \003(\0132!.ConfigActivity.OneDiamondW"
-    "elfare\0223\n\rfortune_packs\030\013 \002(\0132\034.ConfigAc"
-    "tivity.FortunePacks\0225\n\016sevenday_packs\030\014 "
-    "\003(\0132\035.ConfigActivity.SevenDayPacks\0221\n\nic"
-    "ephoenix\030\r \003(\0132\035.ConfigActivity.DiamondR"
-    "eward\0226\n\017autumn_feedback\030\016 \003(\0132\035.ConfigA"
-    "ctivity.DiamondReward\0222\n\013protectflag\030\017 \003"
-    "(\0132\035.ConfigActivity.DiamondReward\0224\n\rkey"
-    "luxurygift\030\020 \002(\0132\035.ConfigActivity.KeyLux"
-    "uryGift\022=\n\017enjoy_smallgift\030\021 \002(\0132$.Confi"
-    "gActivity.EnjoySmallGiftReward\022-\n\nlucky_"
-    "gift\030\022 \002(\0132\031.ConfigActivity.LuckyGift\0223\n"
-    "\014year_endgift\030\023 \003(\0132\035.ConfigActivity.Dia"
-    "mondReward\0228\n\017newyearactivity\030\024 \002(\0132\037.Co"
-    "nfigActivity.NewYearActivity\022(\n\005kaifu\030\025 "
-    "\002(\0132\031.ConfigActivity.KaiFuGift\0222\n\tstarst"
-    "one\030\026 \002(\0132\037.ConfigActivity.StarStoneChan"
-    "ge\022.\n\rnewyearactive\030\027 \002(\0132\027.ConfigActivi"
-    "ty.HongBao\0220\n\016HebdomadReward\030\030 \003(\0132\030.Con"
-    "figActivity.TaskGift\022<\n\014rotary_table\030\031 \002"
-    "(\0132&.ConfigActivity.RotaryTableCrazyRewa"
-    "rd\0229\n\016batmantreasure\030\032 \002(\0132!.ConfigActiv"
-    "ity.BatmanTreasureCfg\022<\n\rsummer_charge\030\033"
-    " \002(\0132%.ConfigActivity.SummerChargeReward"
-    "Cfg\022@\n\017summer_holidays\030\034 \002(\0132\'.ConfigAct"
-    "ivity.SummerHolidaysRewardCfg\022:\n\020chinada"
-    "yavtivity\030\035 \002(\0132 .ConfigActivity.ChinaDa"
-    "yActivity\022@\n\023payoptionalactivity\030\036 \002(\0132#"
-    ".ConfigActivity.PayOptionalActivity\0220\n\nf"
-    "ree_exchg\030\037 \003(\0132\034.ConfigActivity.FreeExc"
-    "hange", 7645);
+    "\033.RewardConfig.RewardItemCfg\"-\n\022ChargeGe"
+    "tChanceCfg\022\014\n\004need\030\001 \002(\r\022\t\n\001c\030\002 \002(\r\";\n\014S"
+    "ingleReward\022+\n\006reward\030\004 \002(\0132\033.RewardConf"
+    "ig.RewardItemCfg\"\230\002\n\031RotaryTableFeedBack"
+    "Reward\022,\n\005jindu\030\001 \003(\0132\035.ConfigActivity.D"
+    "iamondReward\0222\n\014singlereward\030\002 \003(\0132\034.Con"
+    "figActivity.SingleReward\0221\n\005count\030\003 \003(\0132"
+    "\".ConfigActivity.ChargeGetChanceCfg\0224\n\014r"
+    "andomReward\030\004 \003(\0132\036.ConfigActivity.Rotar"
+    "yTableCfg\0220\n\013fixedReward\030\005 \002(\0132\033.RewardC"
+    "onfig.RewardItemCfg\"O\n\022BatmanTreasureDra"
+    "w\022)\n\004item\030\001 \002(\0132\033.RewardConfig.RewardIte"
+    "mCfg\022\016\n\006weight\030\002 \002(\r\"\305\001\n\021BatmanTreasureC"
+    "fg\022<\n\025xiaobing_chargeReward\030\001 \003(\0132\035.Conf"
+    "igActivity.DiamondReward\022@\n\024unique_xiaob"
+    "ing_dial\030\002 \003(\0132\".ConfigActivity.BatmanTr"
+    "easureDraw\022\024\n\014draw_cnt_max\030\003 \002(\r\022\032\n\022draw"
+    "_cost_integral\030\004 \002(\r\"\213\001\n\025SummerChargeRew"
+    "ardCfg\0229\n\022daily_chargeReward\030\001 \003(\0132\035.Con"
+    "figActivity.DiamondReward\0227\n\020acc_chargeR"
+    "eward\030\002 \003(\0132\035.ConfigActivity.DiamondRewa"
+    "rd\"|\n\027SummerHolidaysTicketCfg\022\030\n\020need_co"
+    "st_ticket\030\001 \002(\r\022\032\n\022exchange_count_max\030\002 "
+    "\002(\r\022+\n\006reward\030\003 \002(\0132\033.RewardConfig.Rewar"
+    "dItemCfg\"\325\001\n\027SummerHolidaysRewardCfg\022\033\n\023"
+    "exchange_ticket_max\030\001 \002(\r\022\037\n\027per_ticket_"
+    "need_diamond\030\002 \002(\r\022G\n\026summer_holidays_ti"
+    "cket\030\003 \003(\0132\'.ConfigActivity.SummerHolida"
+    "ysTicketCfg\0223\n\014chargeReward\030\004 \003(\0132\035.Conf"
+    "igActivity.DiamondReward\")\n\020FreeExchange"
+    "Item\022\n\n\002id\030\001 \002(\r\022\t\n\001c\030\002 \002(\r\">\n\014FreeExcha"
+    "nge\022.\n\004item\030\001 \003(\0132 .ConfigActivity.FreeE"
+    "xchangeItem\"\351\r\n\nActivities\0220\n\tbuildsuit\030"
+    "\001 \003(\0132\035.ConfigActivity.BuildSuitItem\022.\n\n"
+    "blesspoint\030\002 \002(\0132\032.ConfigActivity.BlessP"
+    "oint\0225\n\016double_welfare\030\003 \002(\0132\035.ConfigAct"
+    "ivity.DoubleWelfare\0223\n\rpearl_advance\030\004 \003"
+    "(\0132\034.ConfigActivity.PearlAdvance\022B\n\025uniq"
+    "ue_knowledge_dial\030\005 \003(\0132#.ConfigActivity"
+    ".UniqueKnowledgeDial\022:\n\016spiritvitality\030\006"
+    " \003(\0132\".ConfigActivity.SpriteVitalityItem"
+    "\022)\n\005forge\030\007 \002(\0132\032.ConfigActivity.ForgeSm"
+    "elt\022*\n\010herodial\030\010 \002(\0132\030.ConfigActivity.H"
+    "eroDial\022.\n\nkingdomwar\030\t \003(\0132\032.ConfigActi"
+    "vity.KingdomWar\022<\n\021onediamondwelfare\030\n \003"
+    "(\0132!.ConfigActivity.OneDiamondWelfare\0223\n"
+    "\rfortune_packs\030\013 \002(\0132\034.ConfigActivity.Fo"
+    "rtunePacks\0225\n\016sevenday_packs\030\014 \003(\0132\035.Con"
+    "figActivity.SevenDayPacks\0221\n\nicephoenix\030"
+    "\r \003(\0132\035.ConfigActivity.DiamondReward\0226\n\017"
+    "autumn_feedback\030\016 \003(\0132\035.ConfigActivity.D"
+    "iamondReward\0222\n\013protectflag\030\017 \003(\0132\035.Conf"
+    "igActivity.DiamondReward\0224\n\rkeyluxurygif"
+    "t\030\020 \002(\0132\035.ConfigActivity.KeyLuxuryGift\022="
+    "\n\017enjoy_smallgift\030\021 \002(\0132$.ConfigActivity"
+    ".EnjoySmallGiftReward\022-\n\nlucky_gift\030\022 \002("
+    "\0132\031.ConfigActivity.LuckyGift\0223\n\014year_end"
+    "gift\030\023 \003(\0132\035.ConfigActivity.DiamondRewar"
+    "d\0228\n\017newyearactivity\030\024 \002(\0132\037.ConfigActiv"
+    "ity.NewYearActivity\022(\n\005kaifu\030\025 \002(\0132\031.Con"
+    "figActivity.KaiFuGift\0222\n\tstarstone\030\026 \002(\013"
+    "2\037.ConfigActivity.StarStoneChange\022.\n\rnew"
+    "yearactive\030\027 \002(\0132\027.ConfigActivity.HongBa"
+    "o\0220\n\016HebdomadReward\030\030 \003(\0132\030.ConfigActivi"
+    "ty.TaskGift\022<\n\014rotary_table\030\031 \002(\0132&.Conf"
+    "igActivity.RotaryTableCrazyReward\0229\n\016bat"
+    "mantreasure\030\032 \002(\0132!.ConfigActivity.Batma"
+    "nTreasureCfg\022<\n\rsummer_charge\030\033 \002(\0132%.Co"
+    "nfigActivity.SummerChargeRewardCfg\022@\n\017su"
+    "mmer_holidays\030\034 \002(\0132\'.ConfigActivity.Sum"
+    "merHolidaysRewardCfg\022:\n\020chinadayavtivity"
+    "\030\035 \002(\0132 .ConfigActivity.ChinaDayActivity"
+    "\022@\n\023payoptionalactivity\030\036 \002(\0132#.ConfigAc"
+    "tivity.PayOptionalActivity\0220\n\nfree_exchg"
+    "\030\037 \003(\0132\034.ConfigActivity.FreeExchange\022A\n\016"
+    "zhuanpanhuikui\030  \002(\0132).ConfigActivity.Ro"
+    "taryTableFeedBackReward", 8103);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ConfigActivity.proto", &protobuf_RegisterTypes);
   BuildSuitItem::default_instance_ = new BuildSuitItem();
@@ -1683,6 +1766,9 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   TaskGift::default_instance_ = new TaskGift();
   RotaryTableCfg::default_instance_ = new RotaryTableCfg();
   RotaryTableCrazyReward::default_instance_ = new RotaryTableCrazyReward();
+  ChargeGetChanceCfg::default_instance_ = new ChargeGetChanceCfg();
+  SingleReward::default_instance_ = new SingleReward();
+  RotaryTableFeedBackReward::default_instance_ = new RotaryTableFeedBackReward();
   BatmanTreasureDraw::default_instance_ = new BatmanTreasureDraw();
   BatmanTreasureCfg::default_instance_ = new BatmanTreasureCfg();
   SummerChargeRewardCfg::default_instance_ = new SummerChargeRewardCfg();
@@ -1740,6 +1826,9 @@ void protobuf_AddDesc_ConfigActivity_2eproto() {
   TaskGift::default_instance_->InitAsDefaultInstance();
   RotaryTableCfg::default_instance_->InitAsDefaultInstance();
   RotaryTableCrazyReward::default_instance_->InitAsDefaultInstance();
+  ChargeGetChanceCfg::default_instance_->InitAsDefaultInstance();
+  SingleReward::default_instance_->InitAsDefaultInstance();
+  RotaryTableFeedBackReward::default_instance_->InitAsDefaultInstance();
   BatmanTreasureDraw::default_instance_->InitAsDefaultInstance();
   BatmanTreasureCfg::default_instance_->InitAsDefaultInstance();
   SummerChargeRewardCfg::default_instance_->InitAsDefaultInstance();
@@ -16811,6 +16900,904 @@ void RotaryTableCrazyReward::Swap(RotaryTableCrazyReward* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int ChargeGetChanceCfg::kNeedFieldNumber;
+const int ChargeGetChanceCfg::kCFieldNumber;
+#endif  // !_MSC_VER
+
+ChargeGetChanceCfg::ChargeGetChanceCfg()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.ChargeGetChanceCfg)
+}
+
+void ChargeGetChanceCfg::InitAsDefaultInstance() {
+}
+
+ChargeGetChanceCfg::ChargeGetChanceCfg(const ChargeGetChanceCfg& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.ChargeGetChanceCfg)
+}
+
+void ChargeGetChanceCfg::SharedCtor() {
+  _cached_size_ = 0;
+  need_ = 0u;
+  c_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+ChargeGetChanceCfg::~ChargeGetChanceCfg() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.ChargeGetChanceCfg)
+  SharedDtor();
+}
+
+void ChargeGetChanceCfg::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void ChargeGetChanceCfg::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ChargeGetChanceCfg::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ChargeGetChanceCfg_descriptor_;
+}
+
+const ChargeGetChanceCfg& ChargeGetChanceCfg::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+ChargeGetChanceCfg* ChargeGetChanceCfg::default_instance_ = NULL;
+
+ChargeGetChanceCfg* ChargeGetChanceCfg::New() const {
+  return new ChargeGetChanceCfg;
+}
+
+void ChargeGetChanceCfg::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<ChargeGetChanceCfg*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(need_, c_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool ChargeGetChanceCfg::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.ChargeGetChanceCfg)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 need = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &need_)));
+          set_has_need();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_c;
+        break;
+      }
+
+      // required uint32 c = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_c:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &c_)));
+          set_has_c();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.ChargeGetChanceCfg)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.ChargeGetChanceCfg)
+  return false;
+#undef DO_
+}
+
+void ChargeGetChanceCfg::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.ChargeGetChanceCfg)
+  // required uint32 need = 1;
+  if (has_need()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->need(), output);
+  }
+
+  // required uint32 c = 2;
+  if (has_c()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->c(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.ChargeGetChanceCfg)
+}
+
+::google::protobuf::uint8* ChargeGetChanceCfg::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.ChargeGetChanceCfg)
+  // required uint32 need = 1;
+  if (has_need()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->need(), target);
+  }
+
+  // required uint32 c = 2;
+  if (has_c()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->c(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.ChargeGetChanceCfg)
+  return target;
+}
+
+int ChargeGetChanceCfg::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 need = 1;
+    if (has_need()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->need());
+    }
+
+    // required uint32 c = 2;
+    if (has_c()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->c());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ChargeGetChanceCfg::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const ChargeGetChanceCfg* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ChargeGetChanceCfg*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ChargeGetChanceCfg::MergeFrom(const ChargeGetChanceCfg& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_need()) {
+      set_need(from.need());
+    }
+    if (from.has_c()) {
+      set_c(from.c());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void ChargeGetChanceCfg::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ChargeGetChanceCfg::CopyFrom(const ChargeGetChanceCfg& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ChargeGetChanceCfg::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void ChargeGetChanceCfg::Swap(ChargeGetChanceCfg* other) {
+  if (other != this) {
+    std::swap(need_, other->need_);
+    std::swap(c_, other->c_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata ChargeGetChanceCfg::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ChargeGetChanceCfg_descriptor_;
+  metadata.reflection = ChargeGetChanceCfg_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int SingleReward::kRewardFieldNumber;
+#endif  // !_MSC_VER
+
+SingleReward::SingleReward()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.SingleReward)
+}
+
+void SingleReward::InitAsDefaultInstance() {
+  reward_ = const_cast< ::RewardConfig::RewardItemCfg*>(&::RewardConfig::RewardItemCfg::default_instance());
+}
+
+SingleReward::SingleReward(const SingleReward& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.SingleReward)
+}
+
+void SingleReward::SharedCtor() {
+  _cached_size_ = 0;
+  reward_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+SingleReward::~SingleReward() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.SingleReward)
+  SharedDtor();
+}
+
+void SingleReward::SharedDtor() {
+  if (this != default_instance_) {
+    delete reward_;
+  }
+}
+
+void SingleReward::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* SingleReward::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SingleReward_descriptor_;
+}
+
+const SingleReward& SingleReward::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+SingleReward* SingleReward::default_instance_ = NULL;
+
+SingleReward* SingleReward::New() const {
+  return new SingleReward;
+}
+
+void SingleReward::Clear() {
+  if (has_reward()) {
+    if (reward_ != NULL) reward_->::RewardConfig::RewardItemCfg::Clear();
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool SingleReward::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.SingleReward)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .RewardConfig.RewardItemCfg reward = 4;
+      case 4: {
+        if (tag == 34) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.SingleReward)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.SingleReward)
+  return false;
+#undef DO_
+}
+
+void SingleReward::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.SingleReward)
+  // required .RewardConfig.RewardItemCfg reward = 4;
+  if (has_reward()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, this->reward(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.SingleReward)
+}
+
+::google::protobuf::uint8* SingleReward::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.SingleReward)
+  // required .RewardConfig.RewardItemCfg reward = 4;
+  if (has_reward()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, this->reward(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.SingleReward)
+  return target;
+}
+
+int SingleReward::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .RewardConfig.RewardItemCfg reward = 4;
+    if (has_reward()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->reward());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void SingleReward::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const SingleReward* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SingleReward*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void SingleReward::MergeFrom(const SingleReward& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_reward()) {
+      mutable_reward()->::RewardConfig::RewardItemCfg::MergeFrom(from.reward());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void SingleReward::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SingleReward::CopyFrom(const SingleReward& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SingleReward::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  if (has_reward()) {
+    if (!this->reward().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void SingleReward::Swap(SingleReward* other) {
+  if (other != this) {
+    std::swap(reward_, other->reward_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata SingleReward::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = SingleReward_descriptor_;
+  metadata.reflection = SingleReward_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int RotaryTableFeedBackReward::kJinduFieldNumber;
+const int RotaryTableFeedBackReward::kSinglerewardFieldNumber;
+const int RotaryTableFeedBackReward::kCountFieldNumber;
+const int RotaryTableFeedBackReward::kRandomRewardFieldNumber;
+const int RotaryTableFeedBackReward::kFixedRewardFieldNumber;
+#endif  // !_MSC_VER
+
+RotaryTableFeedBackReward::RotaryTableFeedBackReward()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ConfigActivity.RotaryTableFeedBackReward)
+}
+
+void RotaryTableFeedBackReward::InitAsDefaultInstance() {
+  fixedreward_ = const_cast< ::RewardConfig::RewardItemCfg*>(&::RewardConfig::RewardItemCfg::default_instance());
+}
+
+RotaryTableFeedBackReward::RotaryTableFeedBackReward(const RotaryTableFeedBackReward& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ConfigActivity.RotaryTableFeedBackReward)
+}
+
+void RotaryTableFeedBackReward::SharedCtor() {
+  _cached_size_ = 0;
+  fixedreward_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+RotaryTableFeedBackReward::~RotaryTableFeedBackReward() {
+  // @@protoc_insertion_point(destructor:ConfigActivity.RotaryTableFeedBackReward)
+  SharedDtor();
+}
+
+void RotaryTableFeedBackReward::SharedDtor() {
+  if (this != default_instance_) {
+    delete fixedreward_;
+  }
+}
+
+void RotaryTableFeedBackReward::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* RotaryTableFeedBackReward::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RotaryTableFeedBackReward_descriptor_;
+}
+
+const RotaryTableFeedBackReward& RotaryTableFeedBackReward::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ConfigActivity_2eproto();
+  return *default_instance_;
+}
+
+RotaryTableFeedBackReward* RotaryTableFeedBackReward::default_instance_ = NULL;
+
+RotaryTableFeedBackReward* RotaryTableFeedBackReward::New() const {
+  return new RotaryTableFeedBackReward;
+}
+
+void RotaryTableFeedBackReward::Clear() {
+  if (has_fixedreward()) {
+    if (fixedreward_ != NULL) fixedreward_->::RewardConfig::RewardItemCfg::Clear();
+  }
+  jindu_.Clear();
+  singlereward_.Clear();
+  count_.Clear();
+  randomreward_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool RotaryTableFeedBackReward::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ConfigActivity.RotaryTableFeedBackReward)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .ConfigActivity.DiamondReward jindu = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_jindu:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_jindu()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_jindu;
+        if (input->ExpectTag(18)) goto parse_singlereward;
+        break;
+      }
+
+      // repeated .ConfigActivity.SingleReward singlereward = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_singlereward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_singlereward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_singlereward;
+        if (input->ExpectTag(26)) goto parse_count;
+        break;
+      }
+
+      // repeated .ConfigActivity.ChargeGetChanceCfg count = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_count:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_count()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_count;
+        if (input->ExpectTag(34)) goto parse_randomReward;
+        break;
+      }
+
+      // repeated .ConfigActivity.RotaryTableCfg randomReward = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_randomReward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_randomreward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(34)) goto parse_randomReward;
+        if (input->ExpectTag(42)) goto parse_fixedReward;
+        break;
+      }
+
+      // required .RewardConfig.RewardItemCfg fixedReward = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_fixedReward:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_fixedreward()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ConfigActivity.RotaryTableFeedBackReward)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ConfigActivity.RotaryTableFeedBackReward)
+  return false;
+#undef DO_
+}
+
+void RotaryTableFeedBackReward::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ConfigActivity.RotaryTableFeedBackReward)
+  // repeated .ConfigActivity.DiamondReward jindu = 1;
+  for (int i = 0; i < this->jindu_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->jindu(i), output);
+  }
+
+  // repeated .ConfigActivity.SingleReward singlereward = 2;
+  for (int i = 0; i < this->singlereward_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->singlereward(i), output);
+  }
+
+  // repeated .ConfigActivity.ChargeGetChanceCfg count = 3;
+  for (int i = 0; i < this->count_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->count(i), output);
+  }
+
+  // repeated .ConfigActivity.RotaryTableCfg randomReward = 4;
+  for (int i = 0; i < this->randomreward_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, this->randomreward(i), output);
+  }
+
+  // required .RewardConfig.RewardItemCfg fixedReward = 5;
+  if (has_fixedreward()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->fixedreward(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ConfigActivity.RotaryTableFeedBackReward)
+}
+
+::google::protobuf::uint8* RotaryTableFeedBackReward::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ConfigActivity.RotaryTableFeedBackReward)
+  // repeated .ConfigActivity.DiamondReward jindu = 1;
+  for (int i = 0; i < this->jindu_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->jindu(i), target);
+  }
+
+  // repeated .ConfigActivity.SingleReward singlereward = 2;
+  for (int i = 0; i < this->singlereward_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->singlereward(i), target);
+  }
+
+  // repeated .ConfigActivity.ChargeGetChanceCfg count = 3;
+  for (int i = 0; i < this->count_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->count(i), target);
+  }
+
+  // repeated .ConfigActivity.RotaryTableCfg randomReward = 4;
+  for (int i = 0; i < this->randomreward_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, this->randomreward(i), target);
+  }
+
+  // required .RewardConfig.RewardItemCfg fixedReward = 5;
+  if (has_fixedreward()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->fixedreward(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ConfigActivity.RotaryTableFeedBackReward)
+  return target;
+}
+
+int RotaryTableFeedBackReward::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[4 / 32] & (0xffu << (4 % 32))) {
+    // required .RewardConfig.RewardItemCfg fixedReward = 5;
+    if (has_fixedreward()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->fixedreward());
+    }
+
+  }
+  // repeated .ConfigActivity.DiamondReward jindu = 1;
+  total_size += 1 * this->jindu_size();
+  for (int i = 0; i < this->jindu_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->jindu(i));
+  }
+
+  // repeated .ConfigActivity.SingleReward singlereward = 2;
+  total_size += 1 * this->singlereward_size();
+  for (int i = 0; i < this->singlereward_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->singlereward(i));
+  }
+
+  // repeated .ConfigActivity.ChargeGetChanceCfg count = 3;
+  total_size += 1 * this->count_size();
+  for (int i = 0; i < this->count_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->count(i));
+  }
+
+  // repeated .ConfigActivity.RotaryTableCfg randomReward = 4;
+  total_size += 1 * this->randomreward_size();
+  for (int i = 0; i < this->randomreward_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->randomreward(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RotaryTableFeedBackReward::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const RotaryTableFeedBackReward* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const RotaryTableFeedBackReward*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void RotaryTableFeedBackReward::MergeFrom(const RotaryTableFeedBackReward& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  jindu_.MergeFrom(from.jindu_);
+  singlereward_.MergeFrom(from.singlereward_);
+  count_.MergeFrom(from.count_);
+  randomreward_.MergeFrom(from.randomreward_);
+  if (from._has_bits_[4 / 32] & (0xffu << (4 % 32))) {
+    if (from.has_fixedreward()) {
+      mutable_fixedreward()->::RewardConfig::RewardItemCfg::MergeFrom(from.fixedreward());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void RotaryTableFeedBackReward::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RotaryTableFeedBackReward::CopyFrom(const RotaryTableFeedBackReward& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RotaryTableFeedBackReward::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000010) != 0x00000010) return false;
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->jindu())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->singlereward())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->count())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->randomreward())) return false;
+  if (has_fixedreward()) {
+    if (!this->fixedreward().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void RotaryTableFeedBackReward::Swap(RotaryTableFeedBackReward* other) {
+  if (other != this) {
+    jindu_.Swap(&other->jindu_);
+    singlereward_.Swap(&other->singlereward_);
+    count_.Swap(&other->count_);
+    randomreward_.Swap(&other->randomreward_);
+    std::swap(fixedreward_, other->fixedreward_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata RotaryTableFeedBackReward::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = RotaryTableFeedBackReward_descriptor_;
+  metadata.reflection = RotaryTableFeedBackReward_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int BatmanTreasureDraw::kItemFieldNumber;
 const int BatmanTreasureDraw::kWeightFieldNumber;
 #endif  // !_MSC_VER
@@ -18904,6 +19891,7 @@ const int Activities::kSummerHolidaysFieldNumber;
 const int Activities::kChinadayavtivityFieldNumber;
 const int Activities::kPayoptionalactivityFieldNumber;
 const int Activities::kFreeExchgFieldNumber;
+const int Activities::kZhuanpanhuikuiFieldNumber;
 #endif  // !_MSC_VER
 
 Activities::Activities()
@@ -18931,6 +19919,7 @@ void Activities::InitAsDefaultInstance() {
   summer_holidays_ = const_cast< ::ConfigActivity::SummerHolidaysRewardCfg*>(&::ConfigActivity::SummerHolidaysRewardCfg::default_instance());
   chinadayavtivity_ = const_cast< ::ConfigActivity::ChinaDayActivity*>(&::ConfigActivity::ChinaDayActivity::default_instance());
   payoptionalactivity_ = const_cast< ::ConfigActivity::PayOptionalActivity*>(&::ConfigActivity::PayOptionalActivity::default_instance());
+  zhuanpanhuikui_ = const_cast< ::ConfigActivity::RotaryTableFeedBackReward*>(&::ConfigActivity::RotaryTableFeedBackReward::default_instance());
 }
 
 Activities::Activities(const Activities& from)
@@ -18960,6 +19949,7 @@ void Activities::SharedCtor() {
   summer_holidays_ = NULL;
   chinadayavtivity_ = NULL;
   payoptionalactivity_ = NULL;
+  zhuanpanhuikui_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -18988,6 +19978,7 @@ void Activities::SharedDtor() {
     delete summer_holidays_;
     delete chinadayavtivity_;
     delete payoptionalactivity_;
+    delete zhuanpanhuikui_;
   }
 }
 
@@ -19055,7 +20046,7 @@ void Activities::Clear() {
       if (newyearactive_ != NULL) newyearactive_->::ConfigActivity::HongBao::Clear();
     }
   }
-  if (_has_bits_[24 / 32] & 1056964608) {
+  if (_has_bits_[24 / 32] & 3204448256) {
     if (has_rotary_table()) {
       if (rotary_table_ != NULL) rotary_table_->::ConfigActivity::RotaryTableCrazyReward::Clear();
     }
@@ -19073,6 +20064,9 @@ void Activities::Clear() {
     }
     if (has_payoptionalactivity()) {
       if (payoptionalactivity_ != NULL) payoptionalactivity_->::ConfigActivity::PayOptionalActivity::Clear();
+    }
+    if (has_zhuanpanhuikui()) {
+      if (zhuanpanhuikui_ != NULL) zhuanpanhuikui_->::ConfigActivity::RotaryTableFeedBackReward::Clear();
     }
   }
   buildsuit_.Clear();
@@ -19514,6 +20508,19 @@ bool Activities::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(250)) goto parse_free_exchg;
+        if (input->ExpectTag(258)) goto parse_zhuanpanhuikui;
+        break;
+      }
+
+      // required .ConfigActivity.RotaryTableFeedBackReward zhuanpanhuikui = 32;
+      case 32: {
+        if (tag == 258) {
+         parse_zhuanpanhuikui:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_zhuanpanhuikui()));
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -19727,6 +20734,12 @@ void Activities::SerializeWithCachedSizes(
   for (int i = 0; i < this->free_exchg_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       31, this->free_exchg(i), output);
+  }
+
+  // required .ConfigActivity.RotaryTableFeedBackReward zhuanpanhuikui = 32;
+  if (has_zhuanpanhuikui()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      32, this->zhuanpanhuikui(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -19956,6 +20969,13 @@ void Activities::SerializeWithCachedSizes(
         31, this->free_exchg(i), target);
   }
 
+  // required .ConfigActivity.RotaryTableFeedBackReward zhuanpanhuikui = 32;
+  if (has_zhuanpanhuikui()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        32, this->zhuanpanhuikui(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -20098,6 +21118,13 @@ int Activities::ByteSize() const {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->payoptionalactivity());
+    }
+
+    // required .ConfigActivity.RotaryTableFeedBackReward zhuanpanhuikui = 32;
+    if (has_zhuanpanhuikui()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->zhuanpanhuikui());
     }
 
   }
@@ -20304,6 +21331,9 @@ void Activities::MergeFrom(const Activities& from) {
     if (from.has_payoptionalactivity()) {
       mutable_payoptionalactivity()->::ConfigActivity::PayOptionalActivity::MergeFrom(from.payoptionalactivity());
     }
+    if (from.has_zhuanpanhuikui()) {
+      mutable_zhuanpanhuikui()->::ConfigActivity::RotaryTableFeedBackReward::MergeFrom(from.zhuanpanhuikui());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -20321,7 +21351,7 @@ void Activities::CopyFrom(const Activities& from) {
 }
 
 bool Activities::IsInitialized() const {
-  if ((_has_bits_[0] & 0x3f7b84c6) != 0x3f7b84c6) return false;
+  if ((_has_bits_[0] & 0xbf7b84c6) != 0xbf7b84c6) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->buildsuit())) return false;
   if (has_blesspoint()) {
@@ -20390,6 +21420,9 @@ bool Activities::IsInitialized() const {
     if (!this->payoptionalactivity().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->free_exchg())) return false;
+  if (has_zhuanpanhuikui()) {
+    if (!this->zhuanpanhuikui().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -20426,6 +21459,7 @@ void Activities::Swap(Activities* other) {
     std::swap(chinadayavtivity_, other->chinadayavtivity_);
     std::swap(payoptionalactivity_, other->payoptionalactivity_);
     free_exchg_.Swap(&other->free_exchg_);
+    std::swap(zhuanpanhuikui_, other->zhuanpanhuikui_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -12,6 +12,8 @@
 #include "LogicUpdates.h"
 #include "LogicCmdUnits.h"
 #include "LogicAlliance.h"
+#include <fstream>
+#include <iostream>
 
 const unsigned CDataBraveNewWorld::m_rect[BRAVE_NEW_WORLD_LEVEL][2][2] =
 {
@@ -75,6 +77,8 @@ unsigned CDataBraveNewWorld::m_zone[BRAVE_NEW_WORLD_ZONE][2][2] =
 unsigned CDataBraveNewWorld::m_user_point[BRAVE_NEW_WORLD_LEVEL] = {8, 10, 12, 13, 15, 18, 20, 22, 25, 30};
 int CDataBraveNewWorld::m_user_money[BRAVE_NEW_WORLD_LEVEL] = {80000, 100000, 120000, 130000, 150000, 180000, 200000, 220000, 250000, 300000};
 
+bool CDataBraveNewWorld::m_iskuafu = false;
+
 CDataBraveNewWorld::CDataBraveNewWorld(string path)
 	: DataBase(path)
 {
@@ -129,20 +133,25 @@ int CDataBraveNewWorld::Init()
 
 	((BraveNewWorld::BraveNewWorld *)m_msg)->Clear();
 
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if (dataXML == NULL) {
+		return 0;
+	}
+	int seg = dataXML->GetKuaFuFengHuoTimeSegment(Time::GetGlobalTime());
+	if (seg != 0) {
+		m_iskuafu = true;
+	}
+	debug_log("m_iskuafu=%d", m_iskuafu);
 	return 0;
 }
 int CDataBraveNewWorld::Save()
 {
 	m_data.Serialize((BraveNewWorld::BraveNewWorld *)m_msg);
-
 	int ret = Serialize();
-	if(ret)
+	if(ret) {
 		return ret;
-
-	//debug_log("%s",m_msg->DebugString().c_str());
-
+	}
 	((BraveNewWorld::BraveNewWorld *)m_msg)->Clear();
-
 	return 0;
 }
 int CDataBraveNewWorld::Sig(int sig)
@@ -157,6 +166,14 @@ int CDataBraveNewWorld::Sig(int sig)
 		OnHalfHour();
 	else if(sig == SIGRTMIN + 4)
 		OnDayFourHour();
+	else if(sig == SIGRTMIN + 5)
+		OnMidNight();
+	else if(sig == SIGRTMIN + 6)
+		ClearUserCity();
+	else if(sig == SIGRTMIN + 7)
+		RewardRank();
+	else if(sig == SIGRTMIN + 8)
+		CheckVersion();
 
 	return 0;
 }
@@ -656,6 +673,47 @@ void CDataBraveNewWorld::CreateMap()
 	File::Write(path, p2j.SerializeJson());
 }
 
+void CDataBraveNewWorld::CheckVersion()
+{
+//	unsigned fullblood;
+//	if (OpenPlatform::GetType() != PT_TEST)
+//	{
+//		if (!OpenPlatform::IsQQPlatform())
+//			return;
+//		fullblood = 0;
+//		bool have = Config::GetUIntValue(fullblood, "nianshou_blood");
+//		if (have && fullblood<=30000000)
+//			return;
+//	}
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if (dataXML == NULL) {
+		return;
+	}
+	unsigned now_ts = Time::GetGlobalTime();
+	int seg = dataXML->GetKuaFuFengHuoTimeSegment(now_ts);
+	DataXMLKuaFuFengHuo config;
+	dataXML->GetKuaFuFengHuoReward(config);
+	if (now_ts < config.starttime[0]) {
+		m_data.has_season_rewarded = true;
+	}
+	if (0 == seg) {
+		return;
+	}
+	m_iskuafu = true;
+	if (m_data.has_season_rewarded && now_ts < config.endtime[seg-1])
+	{
+		m_data.land.clear();
+		m_data.user.clear();
+		m_data.zone.clear();
+		m_data.alliance.clear();
+		m_data.city.clear();
+		m_data.has_chongbang_rewarded = false;
+		m_data.has_season_rewarded = false;
+		m_data.Init();
+		Save();
+	}
+}
+
 int CDataBraveNewWorld::GetSelf(unsigned uid, unsigned aid, unsigned lv, Json::Value &result)
 {
 	if(!m_data.user.count(uid))
@@ -687,6 +745,13 @@ int CDataBraveNewWorld::GetSelf(unsigned uid, unsigned aid, unsigned lv, Json::V
 			m_data.alliance[aid].RandMission();
 		}
 		m_data.alliance[aid].GetJson(result);
+	}
+
+	set<BraveNewWorldPoint> &lands = m_data.user[uid].lands;
+	for(set<BraveNewWorldPoint>::const_iterator it=lands.begin();it!=lands.end();++it){
+		Json::Value t;
+		BraveNewWorldPoint p(it->first,it->second);
+		GetTechFortPoint(p,t);
 	}
 	return 0;
 }
@@ -762,15 +827,56 @@ int CDataBraveNewWorld::GetOnePoint(BraveNewWorldPoint& p, Json::Value &result)
 		if (xishu < 0)
 			xishu = 0;
 		result["xishu"] = xishu;
+		GetTechFortPoint(p,result);
+		GetTechFortLevel(userid,result);
 	}
 	return 0;
 }
+void CDataBraveNewWorld::GetTechFortPoint(BraveNewWorldPoint &p,Json::Value &res)
+{
+	unsigned uid = m_data.land[p].uid;
+	if(m_data.land[p].sdef == BRAVE_NEW_WORLD_FORT){
+       unsigned now = Time::GetGlobalTime();
+       if (now >= (m_data.land[p].defts + 50*3600)){
+            if(m_data.user[uid].mfn) 
+				m_data.user[uid].mfn -= 1;
+       }else{
+            res["def"]["ct"] = m_data.user[uid].mfn;
+            return;
+       }
+    }
+     res["ct"] = m_data.user[uid].mfn;
+}
+
+int CDataBraveNewWorld::GetTechFortLevel(unsigned uid,Json::Value &result)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	int ret = logicUser.GetUser(uid,dataUser);
+	if(ret){
+		error_log("GetTechFortLevel.GetUser error");
+		return ret;
+	}
+	Json::Value tech;
+	Json::Reader reader;
+	reader.parse(dataUser.user_tech,tech);
+	if(!tech.isMember("bnkj") || !tech["bnkj"].isArray()){
+		return 0;
+	}
+	uint8_t indx = 0;
+	result["bnkj"] = tech["bnkj"][indx]["t"];
+	return 0;
+}
+
 int CDataBraveNewWorld::GetPointsLimit(vector<BraveNewWorldPoint>& p, Json::Value &result)
 {
 	result["lands"].resize(0);
 	for(vector<BraveNewWorldPoint>::iterator it=p.begin();it!=p.end();++it)
 	{
 		Json::Value t;
+		if(m_data.land[*it].sdef == BRAVE_NEW_WORLD_FORT){
+			GetTechFortPoint(*it,t);
+		}
 		m_data.land[*it].GetJsonLimit(t);
 		m_data.land[*it].GetDefLimit(t);
 		unsigned userid = m_data.land[*it].uid;
@@ -851,91 +957,93 @@ int CDataBraveNewWorld::Collect(unsigned uid, unsigned seq, Json::Value &result)
 	int m = getUserMoney(m_data.user[uid].lv), n = dataUser.type;
 	do
 	{
-		unsigned ai = 0, ats = -1;
-		for(unsigned i=1;i<=BRAVE_NEW_WORLD_ZONE_1;++i)
-		{
-			if(m_data.zone[i].aid == m_data.user[uid].aid)
+		if (m_data.user[uid].aid) {
+			unsigned ai = 0, ats = -1;
+			for(unsigned i=1;i<=BRAVE_NEW_WORLD_ZONE_1;++i)
 			{
-				if(m_data.zone[i].ts < ats)
+				if(m_data.zone[i].aid == m_data.user[uid].aid)
 				{
-					ats = m_data.zone[i].ts;
-					ai = i;
+					if(m_data.zone[i].ts < ats)
+					{
+						ats = m_data.zone[i].ts;
+						ai = i;
+					}
 				}
 			}
-		}
-		if(ai && ats + 60 <= ts)
-		{
-			n += min(300u, Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
-			if(n >= m)
+			if(ai && ats + 60 <= ts)
 			{
-				n = m;
-				break;
+				n += min(300u, Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+				if(n >= m)
+				{
+					n = m;
+					break;
+				}
 			}
-		}
 
-		ai = 0, ats = -1;
-		for(unsigned i=BRAVE_NEW_WORLD_ZONE_1+1;i<=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2;++i)
-		{
-			if(m_data.zone[i].aid == m_data.user[uid].aid)
+			ai = 0, ats = -1;
+			for(unsigned i=BRAVE_NEW_WORLD_ZONE_1+1;i<=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2;++i)
 			{
-				if(m_data.zone[i].ts < ats)
+				if(m_data.zone[i].aid == m_data.user[uid].aid)
 				{
-					ats = m_data.zone[i].ts;
-					ai = i;
+					if(m_data.zone[i].ts < ats)
+					{
+						ats = m_data.zone[i].ts;
+						ai = i;
+					}
 				}
 			}
-		}
-		if(ai && ats + 60 <= ts)
-		{
-			n += min(300u, Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
-			if(n >= m)
+			if(ai && ats + 60 <= ts)
 			{
-				n = m;
-				break;
+				n += min(300u, Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+				if(n >= m)
+				{
+					n = m;
+					break;
+				}
 			}
-		}
 
-		ai = 0, ats = -1;
-		for(unsigned i=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2+1;i<=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2+BRAVE_NEW_WORLD_ZONE_3;++i)
-		{
-			if(m_data.zone[i].aid == m_data.user[uid].aid)
+			ai = 0, ats = -1;
+			for(unsigned i=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2+1;i<=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2+BRAVE_NEW_WORLD_ZONE_3;++i)
 			{
-				if(m_data.zone[i].ts < ats)
+				if(m_data.zone[i].aid == m_data.user[uid].aid)
 				{
-					ats = m_data.zone[i].ts;
-					ai = i;
+					if(m_data.zone[i].ts < ats)
+					{
+						ats = m_data.zone[i].ts;
+						ai = i;
+					}
 				}
 			}
-		}
-		if(ai && ats + 60 <= ts)
-		{
-			n += min(300u, Protect_time(ts , max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
-			if(n >= m)
+			if(ai && ats + 60 <= ts)
 			{
-				n = m;
-				break;
+				n += min(300u, Protect_time(ts , max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+				if(n >= m)
+				{
+					n = m;
+					break;
+				}
 			}
-		}
 
-		ai = 0, ats = -1;
-		for(unsigned i=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2+BRAVE_NEW_WORLD_ZONE_3+1;i<=BRAVE_NEW_WORLD_ZONE;++i)
-		{
-			if(m_data.zone[i].aid == m_data.user[uid].aid)
+			ai = 0, ats = -1;
+			for(unsigned i=BRAVE_NEW_WORLD_ZONE_1+BRAVE_NEW_WORLD_ZONE_2+BRAVE_NEW_WORLD_ZONE_3+1;i<=BRAVE_NEW_WORLD_ZONE;++i)
 			{
-				if(m_data.zone[i].ts < ats)
+				if(m_data.zone[i].aid == m_data.user[uid].aid)
 				{
-					ats = m_data.zone[i].ts;
-					ai = i;
+					if(m_data.zone[i].ts < ats)
+					{
+						ats = m_data.zone[i].ts;
+						ai = i;
+					}
 				}
 			}
-		}
-		if(ai && ats + 60 <= ts)
-		{
-			n += min(300u,Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
-			if(n >= m)
+			if(ai && ats + 60 <= ts)
 			{
-				n = m;
-				break;
+				n += min(300u,Protect_time(ts ,max(ats, m_data.user[uid].rts))) * ConfigManager::Instance()->GetBraveNewWorldConfigZone(getZoneLevel(ai)).product();
+				if(n >= m)
+				{
+					n = m;
+					break;
+				}
 			}
 		}
 		int delta = 0;
@@ -982,13 +1090,12 @@ int CDataBraveNewWorld::StartAttack(unsigned uid, unsigned seq, BraveNewWorldPoi
 		return R_ERR_PARAM;
 	if(seq != m_data.user[uid].seq)
 		return R_ERR_PARAM;
-
 	bool ic = m_data.city.count(p);
 	bool isc = ic && m_data.city[p] == uid;
 	bool ioc = ic && m_data.city[p] != uid;
 	bool is = m_data.land[p].uid == uid;
 	unsigned userid = ioc ? m_data.city[p] : m_data.land[p].uid;
-
+	
 	//点
 	if(m_data.user[uid].lands.size() >= getUserPoint(m_data.user[uid].lv))
 	{
@@ -1066,7 +1173,7 @@ int CDataBraveNewWorld::StartAttack(unsigned uid, unsigned seq, BraveNewWorldPoi
 		Json::Value user_flag;
 		bool bsave = false;
 		reader.parse(dataUser.user_flag,user_flag);
-		ret = logicPay.ProcessOrderForBackend(uid, -10*c, 0, payData, "CDataBraveNewWorld_StartAttack",user_flag,bsave);
+		ret = logicPay.ProcessOrderForBackend(uid, -10*c, 0, payData, "CDataBraveNewWorld_StartAttack",user_flag,bsave,0,m_iskuafu);
 		if(ret)
 			return ret;
 		result["pointpay"].resize(0);
@@ -1089,6 +1196,7 @@ int CDataBraveNewWorld::StartAttack(unsigned uid, unsigned seq, BraveNewWorldPoi
 		m_data.land[p].GetDef(result);
 	else
 		m_data.user[userid].GetDef(result);
+
 	result["uid"] = userid;
 	result["bt"] = m_data.user[uid].bt;
 	result["tts"] = m_data.user[uid].tts;
@@ -1122,18 +1230,105 @@ bool CDataBraveNewWorld::CheckZonePoint(unsigned zid, unsigned uid, BraveNewWorl
 	return false;
 }
 
+/*
+int CDataBraveNewWorld::handleLueduoDelta(unsigned uid, int delta, int version)
+{
+	int ret;
+	if (m_data.user[uid].version != version)
+	{
+		m_data.user[uid].version = version;
+		m_data.user[uid].cb = 0;
+		m_data.has_chongbang_rewarded = false;
+	}
+	m_data.user[uid].cb += delta;
+	CLogicSecinc logicSecinc;
+	Json::Value newAct;
+	ret = logicSecinc.GetSecinc(uid, NAT_xianshi_mubiao_2,newAct);
+	if (R_ERR_NO_DATA == ret || newAct["v"].asUInt() != version)
+	{
+		CLogicChongBang logicChongBang;
+		CDataXML *dataXML = CDataXML::GetCDataXML();
+		DataXMLXianShiMuBiao config;
+		dataXML->GetXianShiMuBiaoReward(config);
+		unsigned max_id = 0;
+		for (unsigned j=0;j<XML_XIANSHI_MUBIAO_PER_EQUIP_NUM;j++)
+			if (max_id < config.huodong[1].equip[j].id)
+				max_id = config.huodong[1].equip[j].id;
+		logicChongBang.ResetNewAct(newAct,NAT_xianshi_mubiao_2,version,max_id);
+	}
+	if (m_data.user[uid].cb >= 2000000000)
+		newAct["a"][0u][0u] = 2000000000;
+	else if (m_data.user[uid].cb < 0)
+		newAct["a"][0u][0u] = 0;
+	else
+		newAct["a"][0u][0u] = unsigned(m_data.user[uid].cb);
+	ret = logicSecinc.SetOneSecinc(uid, newAct);
+	if (ret) {
+		error_log("SetOneSecinc error. uid=%u",uid);
+	}
+	return 0;
+}
+*/
+
+int CDataBraveNewWorld::handleLueduoDelta(unsigned uid, long long *pcb, int delta, int version)
+{
+	int ret;
+	if (m_data.user[uid].version != version)
+	{
+		m_data.user[uid].version = version;
+		m_data.user[uid].cb = 0;
+		m_data.user[uid].bcb = 0;
+		m_data.has_chongbang_rewarded = false;
+	}
+	*pcb += delta;
+	if (delta < 0)
+		return 0;
+	CLogicSecinc logicSecinc;
+	Json::Value newAct;
+	ret = logicSecinc.GetSecinc(uid, NAT_xianshi_mubiao_2,newAct);
+	if (R_ERR_NO_DATA == ret || newAct["v"].asUInt() != version)
+	{
+		CLogicChongBang logicChongBang;
+		CDataXML *dataXML = CDataXML::GetCDataXML();
+		DataXMLXianShiMuBiao config;
+		dataXML->GetXianShiMuBiaoReward(config);
+		unsigned max_id = 0;
+		for (unsigned j=0;j<XML_XIANSHI_MUBIAO_PER_EQUIP_NUM;j++)
+			if (max_id < config.huodong[1].equip[j].id)
+				max_id = config.huodong[1].equip[j].id;
+		logicChongBang.ResetNewAct(newAct,NAT_xianshi_mubiao_2,version,max_id);
+	}
+	if (m_data.user[uid].cb >= 2000000000)
+		newAct["a"][0u][0u] = 2000000000;
+	else if (m_data.user[uid].cb < 0)
+		newAct["a"][0u][0u] = 0;
+	else
+		newAct["a"][0u][0u] = unsigned(m_data.user[uid].cb);
+	ret = logicSecinc.SetOneSecinc(uid, newAct);
+	if (ret) {
+		error_log("SetOneSecinc error. uid=%u",uid);
+	}
+	return 0;
+}
+
 int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, vector<unsigned>& hp, Json::Value &result)
 {
 	if(!m_data.user.count(uid))
+	{
+		error_log("!m_data.user.count(uid)");
 		return R_ERR_PARAM;
+	}
 	if(seq != m_data.user[uid].seq)
+	{
+		error_log("seq != m_data.user[uid].seq");
 		return R_ERR_PARAM;
-
+	}
 	bool ic = m_data.city.count(p);
 	bool isc = ic && m_data.city[p] == uid;
 	bool ioc = ic && m_data.city[p] != uid;
 	bool is = m_data.land[p].uid == uid;
 	unsigned userid = ioc ? m_data.city[p] : m_data.land[p].uid;
+	unsigned sdef = m_data.land[p].sdef;
 
 	if(m_data.land[p].fid != uid || m_data.land[p].fts + BNW_ATTACK_MAX_TIME < Time::GetGlobalTime())
 	{
@@ -1143,6 +1338,10 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		struct tm* stime=localtime(&ttt);
 		bool protecttime = (stime->tm_hour >= 1) &&	(stime->tm_hour < 7);
 
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	int seg = dataXML->GetKuaFuFengHuoTimeSegment(Time::GetGlobalTime());
+	DataXMLKuaFuFengHuo config;
+	dataXML->GetKuaFuFengHuoReward(config);
 	bool w = false;
 	double gd = 0;
 	int g = 0, t = 0, lm = 0, nm = 0, lh = 0, nh = 0;
@@ -1189,10 +1388,12 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 			lm = g;
 			nm = dataUser.type;
 
-			RESOURCE_LOG("[bnwm][uid=%u,chg=%d,bnwm=%u]",userid,-g,dataUser.type);
+			RESOURCE_LOG("[bnwm][uid=%u,chg=%d,bnwm=%u,type=rob]",userid,-g,dataUser.type);
 		}
 		if(hp[BRAVE_NEW_WORLD_HP_USER-1] == 0)
 		{
+			if (!m_data.has_season_rewarded && seg && m_data.user[userid].lv)
+				m_data.user[uid].jf += config.jifen.attack[m_data.user[userid].lv-1].zhucheng;
 			w = true;
 			unsigned l = getPointLevel(p);
 			if(l)
@@ -1228,6 +1429,37 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 			updates["x"] = k.first;
 			updates["y"] = k.second;
 			logicUpdates.AddUpdate(userid, updates);
+
+			ActInfoConfig actconfig(CONFIG_LUEDUOTONGQIAN_CHONGBANG);
+			try
+			{
+				if (actconfig.IsActive())
+				{
+					CLogicSecinc logicSecinc;
+					Json::Value newAct;
+					int ret = logicSecinc.GetSecinc(uid, NAT_xianshi_mubiao_2,newAct);
+					if (R_ERR_NO_DATA == ret || newAct["v"].asUInt() != actconfig.Version())
+					{
+						CLogicChongBang logicChongBang;
+						DataXMLXianShiMuBiao config;
+						dataXML->GetXianShiMuBiaoReward(config);
+						unsigned max_id = 0;
+						for (unsigned j=0;j<XML_XIANSHI_MUBIAO_PER_EQUIP_NUM;j++)
+							if (max_id < config.huodong[1].equip[j].id)
+								max_id = config.huodong[1].equip[j].id;
+						logicChongBang.ResetNewAct(newAct,NAT_xianshi_mubiao_2,actconfig.Version(),max_id);
+					}
+					newAct["a"][4u][0u] = newAct["a"][4u][0u].asUInt() + 1;
+					ret = logicSecinc.SetOneSecinc(uid, newAct);
+					if (ret)
+					{
+						error_log("SetOneSecinc error. uid=%u",uid);
+					}
+				}
+			}
+			catch (runtime_error & e)
+			{
+			}
 		}
 	}
 	else
@@ -1275,6 +1507,58 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		m_data.land[p].hero = 0;
 		m_data.land[p].hp = 0;
 		m_data.land[p].def = false;
+
+		unsigned type = ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).type();
+		unsigned level = ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).level();
+		if (!m_data.has_season_rewarded && seg)
+		{
+			if (type == 1)
+				m_data.user[uid].jf += config.jifen.attack[level-1].kongdi;
+			else if (type == 2)
+				m_data.user[uid].jf += config.jifen.attack[level-1].ziyuandian;
+			else if (type == 3)
+				m_data.user[uid].jf += config.jifen.attack[level-1].mingcheng;
+		}
+
+		if (m_data.land[p].sdef == 250)
+		{
+			if (!m_data.has_season_rewarded && seg)
+				m_data.user[uid].jf += config.jifen.score4;
+			try
+			{
+				ActInfoConfig actconfig(CONFIG_LUEDUOTONGQIAN_CHONGBANG);
+				if (actconfig.IsActive())
+				{
+					CLogicSecinc logicSecinc;
+					Json::Value newAct;
+					int ret = logicSecinc.GetSecinc(uid, NAT_xianshi_mubiao_2,newAct);
+					if (R_ERR_NO_DATA == ret || newAct["v"].asUInt() != actconfig.Version())
+					{
+						CLogicChongBang logicChongBang;
+						DataXMLXianShiMuBiao config;
+						dataXML->GetXianShiMuBiaoReward(config);
+						unsigned max_id = 0;
+						for (unsigned j=0;j<XML_XIANSHI_MUBIAO_PER_EQUIP_NUM;j++)
+							if (max_id < config.huodong[1].equip[j].id)
+								max_id = config.huodong[1].equip[j].id;
+						logicChongBang.ResetNewAct(newAct,NAT_xianshi_mubiao_2,actconfig.Version(),max_id);
+					}
+					newAct["a"][3u][0u] = newAct["a"][3u][0u].asUInt() + 1;
+					ret = logicSecinc.SetOneSecinc(uid, newAct);
+					if (ret) {
+						error_log("SetOneSecinc error. uid=%u",uid);
+					}
+				}
+			}
+			catch (runtime_error & e)
+			{
+			}
+		}
+		
+		if(userid && sdef == BRAVE_NEW_WORLD_FORT){
+			if(m_data.user[userid].mfn)
+				m_data.user[userid].mfn -= 1;
+		}
 		m_data.land[p].sdef = 0;
 		unsigned zid = getZoneID(p);
 		if(zid && m_data.user[uid].aid && m_data.zone[zid].aid != m_data.user[uid].aid)
@@ -1323,6 +1607,8 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 			unsigned c = min(mu - m_data.user[uid].rl, m_data.land[p].rc);
 			m_data.user[uid].rl += c;
 			CLogicEquipment loigcEquipment;
+			if (!m_data.has_season_rewarded && seg)
+				m_data.user[uid].jf += c * config.jifen.score2;
 			loigcEquipment.AddOneItem(uid, BRAVE_NEW_WORLD_REWARD, c, "EndAttack", result["equip"], true);
 			m_data.land[p].rc = 0;
 		}
@@ -1350,10 +1636,32 @@ int CDataBraveNewWorld::EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint
 		if(ret)
 			return ret;
 
-		RESOURCE_LOG("[bnwm][uid=%u,chg=%d,bnwm=%u]",uid,on,dataUser.type);
+		if (!ioc)
+			RESOURCE_LOG("[bnwm][uid=%u,chg=%d,bnwm=%u]",uid,on,dataUser.type);
+		else
+			RESOURCE_LOG("[bnwm][uid=%u,chg=%d,bnwm=%u,type=rob]",uid,on,dataUser.type);
 
 		if(m_data.user[uid].mission.m2 != e_DataBraveNewWorldMissionStat_got2)
 			m_data.user[uid].mission.m2 += g;
+		ActInfoConfig actconfig(CONFIG_LUEDUOTONGQIAN_CHONGBANG);
+		try
+		{
+			if (ioc)
+			{
+				if (!m_data.has_season_rewarded && seg)
+				{
+					m_data.user[uid].ld += g;
+					m_data.user[userid].bld += g;
+				}
+				if (actconfig.IsActive() && Time::GetGlobalTime()<actconfig.EndTS()-3600*2 )
+				{
+					handleLueduoDelta(uid,&m_data.user[uid].cb,g,actconfig.Version());
+					handleLueduoDelta(userid,&m_data.user[userid].bcb,-g,actconfig.Version());
+				}
+			}
+		}
+		catch (runtime_error & e) {
+		}
 	}
 	m_data.land[p].fid = 0;
 	m_data.land[p].fts = 0;
@@ -1396,12 +1704,16 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 		return R_ERR_PARAM;
 	if(seq != m_data.user[uid].seq)
 		return R_ERR_PARAM;
-
 	bool ic = m_data.city.count(p);
 	bool isc = ic && m_data.city[p] == uid;
 	bool ioc = ic && m_data.city[p] != uid;
 	bool is = m_data.land[p].uid == uid;
 	unsigned userid = ioc ? m_data.city[p] : m_data.land[p].uid;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	int seg = dataXML->GetKuaFuFengHuoTimeSegment(Time::GetGlobalTime());
+	DataXMLKuaFuFengHuo config;
+	dataXML->GetKuaFuFengHuoReward(config);
 
 	//玩家
 	if(userid || m_data.land[p].def || ioc || m_data.land[p].sdef)
@@ -1494,7 +1806,7 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 		Json::Value user_flag;
 		bool bsave = false;
 		reader.parse(dataUser.user_flag,user_flag);
-		ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_FastAttack",user_flag,bsave);
+		ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_FastAttack",user_flag,bsave,0,m_iskuafu);
 		if(ret)
 			return ret;
 		result["pointpay"].resize(0);
@@ -1520,6 +1832,17 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 	int t = 0, lm = g, nm = 0, lh = BRAVE_NEW_WORLD_HP, nh = 0;
 	if(w)
 	{
+		unsigned type = ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).type();
+		unsigned level = ConfigManager::Instance()->GetBraveNewWorldConfigPointProperty(p).level();
+		if (!m_data.has_season_rewarded && seg)
+		{
+			if (type == 1)
+				m_data.user[uid].jf += config.jifen.attack[level-1].kongdi;
+			else if (type == 2)
+				m_data.user[uid].jf += config.jifen.attack[level-1].ziyuandian;
+			else if (type == 3)
+				m_data.user[uid].jf += config.jifen.attack[level-1].mingcheng;
+		}
 		if(m_data.land[p].uid)
 			m_data.user[m_data.land[p].uid].lands.erase(p);
 		m_data.land[p].uid = uid;
@@ -1561,6 +1884,8 @@ int CDataBraveNewWorld::FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoin
 		{
 			unsigned c = min(mu - m_data.user[uid].rl, m_data.land[p].rc);
 			m_data.user[uid].rl += c;
+			if (!m_data.has_season_rewarded && seg)
+				m_data.user[uid].jf += c * config.jifen.score2;
 			CLogicEquipment loigcEquipment;
 			loigcEquipment.AddOneItem(uid, BRAVE_NEW_WORLD_REWARD, c, "EndAttack", result["equip"], true);
 			m_data.land[p].rc = 0;
@@ -1796,7 +2121,7 @@ int CDataBraveNewWorld::Move(unsigned uid, unsigned seq, BraveNewWorldPoint& p, 
 	result["seq"] = ++m_data.user[uid].seq;
 	return 0;
 }
-int CDataBraveNewWorld::Build(unsigned uid, unsigned seq, bool cash, BraveNewWorldPoint& p, Json::Value &result)
+int CDataBraveNewWorld::Build(unsigned uid, unsigned seq, unsigned cash, BraveNewWorldPoint& p, Json::Value &result)
 {
 	if(!m_data.user.count(uid))
 		return R_ERR_PARAM;
@@ -1820,6 +2145,12 @@ int CDataBraveNewWorld::Build(unsigned uid, unsigned seq, bool cash, BraveNewWor
 	DataUser dataUser;
 	CLogicPay logicPay;
 	DataPay payData;
+
+	bool type = false;
+	if(cash == 3 || cash == 4 || cash == 5){ //3、50钻和四项 4、60钻石 5、50金币和四项
+		type = true;
+	}
+
 	AUTO_LOCK_USER(uid)
 	int ret = logicUser.GetUser(uid,dataUser);
 	if(ret)
@@ -1828,22 +2159,68 @@ int CDataBraveNewWorld::Build(unsigned uid, unsigned seq, bool cash, BraveNewWor
 	Json::FastWriter writer;
 	Json::Value user_flag;
 	bool bsave = false;
+	bool coins;
 	reader.parse(dataUser.user_flag,user_flag);
-	ret = logicPay.ProcessOrderForBackend(uid, cash?-10:0, cash?0:-10, payData, "CDataBraveNewWorld_Build",user_flag,bsave);
-	if(ret)
-		return ret;
+
+	Json::Value tech;
+	if(type)
+	{
+		reader.parse(dataUser.user_tech,tech);
+		if(!tech.isMember("bnkj") || !tech["bnkj"].isArray()){
+			error_log("bnkj is not find");
+			return R_ERR_LOGIC;
+		}
+		unsigned totalFort = 0;
+		uint8_t idx = 0;
+		for(uint8_t i = 0;i < 3;++i){
+			unsigned lv = tech["bnkj"][idx]["t"][i].asUInt();
+			BraveNewWorldConfig::Technology tec = ConfigManager::Instance()->GetBraveNewWorldConfigKeji(i,lv);
+			totalFort += tec.add();
+		}
+		if(m_data.user[uid].mfn >= totalFort){
+			error_log("already full.num=%d,totalFort=%d",m_data.user[uid].mfn,totalFort);
+			LOGIC_ERROR_RETURN_MSG("not_enough");
+		}
+		result["bnkj"] = tech["bnkj"][idx]["t"];
+		coins = cash == 5 ? true : false;
+		cash = cash == 4 ? 60 : 50;
+		ret = logicPay.ProcessOrderForBackend(uid,coins?0:-cash,coins?-cash:0,payData,"CDataBrave_Build_Fort",user_flag,bsave,0,m_iskuafu);
+		if(ret){
+			error_log("ProcessOrderFortBackend error");
+			return ret;
+		}		
+		if(cash == 50){
+			int r1 = 0,r2 = 0,r3 = 0,r4 = 0;
+			r1 = r2 = r3 = r4 = coins ? 500000000 : 20000000;
+			string reason = "BuildMjorFort_" + CTrans::ITOS(uid);
+			logicUser.ChangeResource(-r1,-r2,-r3,-r4,reason,dataUser,result);
+		}
+	}else{
+		ret = logicPay.ProcessOrderForBackend(uid, cash?-10:0, cash?0:-10, payData, "CDataBraveNewWorld_Build",user_flag,bsave,0,m_iskuafu);
+		if(ret)
+			return ret;
+	}
+	
 	result["pointpay"].resize(0);
 	result["pointpay"] = user_flag["user_pay"];
 	if(bsave)
 		dataUser.user_flag = writer.write(user_flag);
 	ret = logicUser.SetUser(uid, dataUser);
-	if(ret)
+	if(ret){
+		error_log("SetUser error");
 		return ret;
+	}
 
 	m_data.land[p].def = true;
 	m_data.land[p].hero = 0;
 	m_data.land[p].hp = BRAVE_NEW_WORLD_HP;
 	m_data.land[p].defts = Time::GetGlobalTime();
+
+	if(type){
+		m_data.land[p].sdef = BRAVE_NEW_WORLD_FORT;
+		m_data.user[uid].mfn += 1; 
+		result["def"]["ct"] = m_data.user[uid].mfn;
+	}
 
 	m_data.land[p].GetJsonLimit(result);
 	m_data.land[p].GetDef(result);
@@ -1885,7 +2262,7 @@ int CDataBraveNewWorld::Defend(unsigned uid, unsigned seq, bool cash, BraveNewWo
 		Json::Value user_flag;
 		bool bsave = false;
 		reader.parse(dataUser.user_flag,user_flag);
-		ret = logicPay.ProcessOrderForBackend(uid, -50, 0, payData, "CDataBraveNewWorld_Defend",user_flag,bsave);
+		ret = logicPay.ProcessOrderForBackend(uid, -50, 0, payData, "CDataBraveNewWorld_Defend",user_flag,bsave,0,m_iskuafu);
 		if(ret)
 			return ret;
 		result["pointpay"].resize(0);
@@ -1949,7 +2326,7 @@ int CDataBraveNewWorld::RecoverPoint(unsigned uid, unsigned seq, BraveNewWorldPo
 		Json::Value user_flag;
 		bool bsave = false;
 		reader.parse(dataUser.user_flag,user_flag);
-		ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_RecoverPoint",user_flag,bsave);
+		ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_RecoverPoint",user_flag,bsave,0,m_iskuafu);
 		if(ret)
 			return ret;
 		result["pointpay"].resize(0);
@@ -2017,7 +2394,7 @@ int CDataBraveNewWorld::RevcoverUser(unsigned uid, unsigned seq, bool cash, Json
 		Json::Value user_flag;
 		bool bsave = false;
 		reader.parse(dataUser.user_flag,user_flag);
-		ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_RevcoverUser",user_flag,bsave);
+		ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_RevcoverUser",user_flag,bsave,0,m_iskuafu);
 		if(ret)
 			return ret;
 		result["pointpay"].resize(0);
@@ -2058,7 +2435,9 @@ int CDataBraveNewWorld::Discard(unsigned uid, unsigned seq, BraveNewWorldPoint& 
 	{
 		LOGIC_ERROR_RETURN_MSG("CDataBraveNewWorld_Discard_def");
 	}
-
+	if(m_data.land[p].sdef == BRAVE_NEW_WORLD_FORT){
+		if(m_data.user[uid].mfn) m_data.user[uid].mfn -= 1;	
+	}
 	m_data.user[uid].lands.erase(p);
 	m_data.land[p].Clear();
 
@@ -2134,7 +2513,7 @@ int CDataBraveNewWorld::Buy_hts(unsigned uid, unsigned seq, Json::Value &result)
 	Json::Value user_flag;
 	bool bsave = false;
 	reader.parse(dataUser.user_flag,user_flag);
-	ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_Buy_hts",user_flag,bsave);
+	ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_Buy_hts",user_flag,bsave,0,m_iskuafu);
 	if(ret)
 		return ret;
 	result["pointpay"].resize(0);
@@ -2177,7 +2556,7 @@ int CDataBraveNewWorld::Buy_bts(unsigned uid, unsigned seq, Json::Value &result)
 	Json::Value user_flag;
 	bool bsave = false;
 	reader.parse(dataUser.user_flag,user_flag);
-	ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_Buy_bts",user_flag,bsave);
+	ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_Buy_bts",user_flag,bsave,0,m_iskuafu);
 	if(ret)
 		return ret;
 	result["pointpay"].resize(0);
@@ -2221,7 +2600,7 @@ int CDataBraveNewWorld::Buy_bt(unsigned uid, unsigned seq, unsigned count, Json:
 	Json::Value user_flag;
 	bool bsave = false;
 	reader.parse(dataUser.user_flag,user_flag);
-	ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_Buy_bt",user_flag,bsave);
+	ret = logicPay.ProcessOrderForBackend(uid, -u, 0, payData, "CDataBraveNewWorld_Buy_bt",user_flag,bsave,0,m_iskuafu);
 	if(ret)
 		return ret;
 	result["pointpay"].resize(0);
@@ -2458,6 +2837,88 @@ int CDataBraveNewWorld::GetMission(unsigned uid, unsigned seq, unsigned type, Js
 	m_data.user[uid].mission.GetJson(result);
 	result["seq"] = ++m_data.user[uid].seq;
 	return 0;
+}
+
+void CDataBraveNewWorld::OnMidNight()
+{
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	DataXMLKuaFuFengHuo config;
+	dataXML->GetKuaFuFengHuoReward(config);
+	for(map<unsigned int, DataBraveNewWorldUser>::iterator it=m_data.user.begin();it!=m_data.user.end();++it)
+	{
+		if (it->second.ld > it->second.bld)
+			it->second.jf += (it->second.ld - it->second.bld)/config.jifen.num1*config.jifen.score1;
+		it->second.ld = 0;
+		it->second.bld = 0;
+	}
+}
+
+void CDataBraveNewWorld::ClearUserCity()
+{
+	string buff;
+	string path = MainConfig::GetAllServerPath(CONFIG_BRAVE_NEWWORLD_ACTION);
+	int ret = File::Read(path, buff);
+	Json::Value value;
+	Json::Reader reader;
+	if (!reader.parse(buff, value)) {
+		return;
+	}
+	string action;
+	Json::GetString(value, "action", action);
+	if (action == "viewpoint") {
+		unsigned x = 0, y = 0;
+		Json::GetUInt(value, "x", x);
+		Json::GetUInt(value, "y", y);
+		BraveNewWorldPoint p(x, y);
+		map<BraveNewWorldPoint, DataBraveNewWorldPoint>::iterator itr = m_data.land.find(p);
+		if (itr == m_data.land.end()) {
+			return;
+		}
+		DataBraveNewWorldPoint &point = itr->second;
+		Json::Value result;
+		point.GetJson(result);
+		debug_log("viewpoint %s", Json::ToString(result).c_str());
+	} else if (action == "deluser") {
+		unsigned x = 0, y = 0;
+		Json::GetUInt(value, "x", x);
+		Json::GetUInt(value, "y", y);
+		BraveNewWorldPoint p(x, y);
+		if (!m_data.city.count(p)) {
+			return;
+		}
+		map<BraveNewWorldPoint, DataBraveNewWorldPoint>::iterator lItr;
+		unsigned uid = m_data.city[p];
+		map<unsigned int, DataBraveNewWorldUser>::iterator itr = m_data.user.find(uid);
+		if (itr != m_data.user.end()) {
+			DataBraveNewWorldUser &user = itr->second;
+			set<BraveNewWorldPoint>::iterator it = user.lands.begin();
+			for (; it != user.lands.end(); ++ it) {
+				lItr = m_data.land.find(*it);
+				if (lItr != m_data.land.end()) {
+					DataBraveNewWorldPoint &land = lItr->second;
+					land.Clear();
+				}
+			}
+			m_data.user.erase(itr);
+		}
+		m_data.city.erase(p);
+		debug_log("deluser %u", uid);
+	} else if (action == "delfts") {
+		unsigned x = 0, y = 0;
+		Json::GetUInt(value, "x", x);
+		Json::GetUInt(value, "y", y);
+		BraveNewWorldPoint p(x, y);
+		map<BraveNewWorldPoint, DataBraveNewWorldPoint>::iterator itr = m_data.land.find(p);
+		if (itr == m_data.land.end()) {
+			return;
+		}
+		DataBraveNewWorldPoint &point = itr->second;
+		point.fts = 0;
+		point.fid = 0;
+		Json::Value result;
+		point.GetJson(result);
+		debug_log("delfts %s", Json::ToString(result).c_str());
+	}
 }
 
 void CDataBraveNewWorld::OnDay()
@@ -2842,5 +3303,297 @@ int CDataBraveNewWorld::getNewWorldBoss(Json::Value &result)
 			t["y"] = (it->first).second;
 			result.append(t);
 		}
+	return 0;
+}
+
+/*
+
+typedef struct DataChongBangRank {
+	unsigned uid;
+	long long cb;
+	DataChongBangRank(unsigned tuid, long long tcb)
+		:uid(tuid), cb(tcb)
+		{
+		}
+};
+bool cmp_DataChongBangRank(const DataChongBangRank & a, const DataChongBangRank & b)
+{
+	if (a.cb > b.cb) return true;
+	if (a.cb < b.cb) return false;
+	return false;
+}
+
+int CDataBraveNewWorld::GetChongBangRank(unsigned uid, Json::Value &result)
+{
+	vector<DataChongBangRank> ranklist;
+	ActInfoConfig actconfig(CONFIG_LUEDUOTONGQIAN_CHONGBANG);
+	try
+	{
+		for (map<unsigned int, DataBraveNewWorldUser>::iterator it = m_data.user.begin(); it!=m_data.user.end(); ++it)
+			if ((it->second).version == actconfig.Version() && (it->second).cb > 0)
+			{
+				ranklist.push_back(DataChongBangRank((it->second).uid, (it->second).cb));
+			}
+	}
+	catch (runtime_error & e) {
+		return 0;
+	}
+	if (!ranklist.size())
+		return 0;
+	sort(ranklist.begin(),ranklist.end(),cmp_DataChongBangRank);
+	unsigned rank = 0;
+	CDataUserBasic dbUser;
+	result["list"] = Json::Value(Json::arrayValue);
+	bool reward = false;
+	if (actconfig.IsActive() && Time::GetGlobalTime()>=actconfig.EndTS()-3600*2 && !m_data.has_chongbang_rewarded) {
+		reward = true;
+		m_data.has_chongbang_rewarded = true;
+	}
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	DataXMLXianShiMuBiao config;
+	dataXML->GetXianShiMuBiaoReward(config);
+	for (vector<DataChongBangRank>::iterator it = ranklist.begin(); it != ranklist.end(); ++it)
+	{
+		++rank;
+		if (rank <= 100)
+		{
+			Json::Value temp;
+			temp["rank"] = rank;
+			temp["uid"] = it->uid;
+			temp["cb"] = double(it->cb);
+			string userName;
+			dbUser.GetUserName(it->uid, OpenPlatform::GetType(), userName);
+			temp["name"] = userName;
+			result["list"].append(temp);
+			if (reward) {
+				if (rank == 1)
+				{
+					CLogicChongBang logicChongBang;
+					logicChongBang.SetUser(2, it->uid);
+				}
+				CLogicUpdates logicUpdates;
+				for (unsigned loop = 0;loop < MAX_XIANSHI_MUBIAO_RANK_NUM;loop++)
+					if (config.huodong[1].rank[loop].rank1 <= rank && rank <=config.huodong[1].rank[loop].rank2)
+					{
+						Json::Value equip;
+						vector<GiftEquipItem> reward;
+						string code = "lueduotongqian_chongbang_rank_"+CTrans::ITOS(rank);
+						for (int k=0;k<XML_XIANSHI_MUBIAO_RANK_REWARD_NUM;k++)
+							reward.push_back(config.huodong[1].rank[loop].reward[k]);
+						BaseCmdUnit basecmdUnit(it->uid);
+						basecmdUnit.AddGiftEquips(reward, code, equip);
+
+						Json::Value updates;
+						updates["s"] = "LUEDUOTONGQIANCHONGBANGRANK";
+						updates["uid"] = it->uid;
+						updates["ts"] = Time::GetGlobalTime();
+						updates["rank"] = rank;
+						logicUpdates.AddUpdate(it->uid,updates,true);
+					}
+			}
+		}
+		if (it->uid == uid)
+		{
+			result["myrank"] = rank;
+			result["mycb"] = double(it->cb);
+		}
+	}
+	return 0;
+}
+*/
+
+struct DataChongBangRank {
+	unsigned uid;
+	long long cb1;
+	long long cb2;
+	DataChongBangRank(unsigned tuid, long long tcb1, long long tcb2) :
+			uid(tuid), cb1(tcb1), cb2(tcb2) {
+	}
+};
+bool cmp_DataChongBangRank(const DataChongBangRank & a, const DataChongBangRank & b)
+{
+	if (a.cb1 + a.cb2 > b.cb1 + b.cb2) return true;
+	if (a.cb1 + a.cb2 < b.cb1 + b.cb2) return false;
+	if (a.cb1 > b.cb1) return true;
+	if (a.cb1 < b.cb1) return false;
+	return false;
+}
+
+int CDataBraveNewWorld::GetChongBangRank(unsigned uid, Json::Value &result)
+{
+	vector<DataChongBangRank> ranklist;
+	ActInfoConfig actconfig(CONFIG_lueduotongqian_chongbang);
+	try
+	{
+		for (map<unsigned int, DataBraveNewWorldUser>::iterator it = m_data.user.begin(); it!=m_data.user.end(); ++it)
+			if ((it->second).version == actconfig.Version() && (it->second).cb + (it->second).bcb > 0)
+			{
+				ranklist.push_back(DataChongBangRank((it->second).uid, (it->second).cb, (it->second).bcb));
+			}
+	}
+	catch (runtime_error & e) {
+		return 0;
+	}
+	if (!ranklist.size())
+		return 0;
+	sort(ranklist.begin(),ranklist.end(),cmp_DataChongBangRank);
+	unsigned rank = 0;
+	CDataUserBasic dbUser;
+	result["list"] = Json::Value(Json::arrayValue);
+	bool reward = false;
+	if (actconfig.IsActive() && Time::GetGlobalTime()>=actconfig.EndTS()-3600*2 && !m_data.has_chongbang_rewarded) {
+		reward = true;
+		m_data.has_chongbang_rewarded = true;
+	}
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	DataXMLXianShiMuBiao config;
+	int ret = dataXML->GetXianShiMuBiaoReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+	for (vector<DataChongBangRank>::iterator it = ranklist.begin(); it != ranklist.end(); ++it)
+	{
+		++rank;
+		if (rank <= 100)
+		{
+			Json::Value temp;
+			temp["rank"] = rank;
+			temp["uid"] = it->uid;
+			temp["cb"] = double(it->cb1 + it->cb2);
+			string userName;
+			dbUser.GetUserName(it->uid, OpenPlatform::GetType(), userName);
+			temp["name"] = userName;
+			result["list"].append(temp);
+			if (reward) {
+				if (rank == 1)
+				{
+					CLogicChongBang logicChongBang;
+					logicChongBang.SetUser(2, it->uid);
+				}
+				CLogicUpdates logicUpdates;
+				for (unsigned loop = 0;loop < MAX_XIANSHI_MUBIAO_RANK_NUM;loop++)
+					if (config.huodong[1].rank[loop].rank1 <= rank && rank <=config.huodong[1].rank[loop].rank2)
+					{
+						Json::Value equip;
+						vector<GiftEquipItem> reward;
+						string code = "lueduotongqian_chongbang_rank_"+CTrans::ITOS(rank);
+						for (int k=0;k<XML_XIANSHI_MUBIAO_RANK_REWARD_NUM;k++)
+							reward.push_back(config.huodong[1].rank[loop].reward[k]);
+						BaseCmdUnit basecmdUnit(it->uid);
+						basecmdUnit.AddGiftEquips(reward, code, equip);
+
+						Json::Value updates;
+						updates["s"] = "LUEDUOTONGQIANCHONGBANGRANK";
+						updates["uid"] = it->uid;
+						updates["ts"] = Time::GetGlobalTime();
+						updates["rank"] = rank;
+						logicUpdates.AddUpdate(it->uid,updates,true);
+					}
+			}
+		}
+		if (it->uid == uid)
+		{
+			result["myrank"] = rank;
+		}
+	}
+	if (m_data.user[uid].version == actconfig.Version())
+	{
+		result["mycb"] = double(m_data.user[uid].cb);
+		result["mybcb"] = double(m_data.user[uid].bcb);
+		result["mydcb"] = double(m_data.user[uid].cb + m_data.user[uid].bcb);
+	}
+	return 0;
+}
+
+int CDataBraveNewWorld::GetKuaFuFengHuoRank(list<DataBraveNewWorldRank> &ranklist, bool all)
+{
+	list<DataBraveNewWorldRank>::iterator rankItr;
+	map<unsigned int, DataBraveNewWorldUser>::iterator itr;
+
+	for (itr = m_data.user.begin(); itr != m_data.user.end(); ++itr) {
+		const DataBraveNewWorldUser &user = itr->second;
+		if (user.jf == 0) {
+			continue;
+		}
+		if (!all && ranklist.size() >= BRAVE_NEW_WORLD_CROSS_RANK_NUM && user.jf <= ranklist.back().jf) {
+			continue;
+		}
+		for (rankItr = ranklist.begin(); rankItr != ranklist.end(); ++rankItr) {
+			if (user.jf > rankItr->jf) {
+				ranklist.insert(rankItr, DataBraveNewWorldRank(user.uid, user.jf));
+				break;
+			}
+		}
+		if (rankItr == ranklist.end()) {
+			ranklist.push_back(DataBraveNewWorldRank(user.uid, user.jf));
+		}
+		if (!all && ranklist.size() > BRAVE_NEW_WORLD_CROSS_RANK_NUM) {
+			ranklist.pop_back();
+		}
+	}
+
+	return 0;
+}
+
+int CDataBraveNewWorld::GetScore(unsigned uid, unsigned &jf, unsigned &ld, unsigned &bld) {
+	map<unsigned int, DataBraveNewWorldUser>::iterator itr = m_data.user.find(uid);
+	if (itr == m_data.user.end()) {
+		jf = ld = bld = 0;
+	} else {
+		const DataBraveNewWorldUser &user = itr->second;
+		jf = user.jf;
+		ld = user.ld;
+		bld = user.bld;
+	}
+	return 0;
+}
+
+int CDataBraveNewWorld::RewardRank() {
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	unsigned ts_now = Time::GetGlobalTime();
+	int seg = dataXML->GetKuaFuFengHuoTimeSegment(ts_now);
+	DataXMLKuaFuFengHuo config;
+	int ret = dataXML->GetKuaFuFengHuoReward(config);
+	if (ret) {
+		error_log("get cfg error ret=%d", ret);
+		return ret;
+	}
+
+	if (m_data.has_season_rewarded) {
+		return 0;
+	}
+
+	m_data.has_season_rewarded = true;
+
+	list<DataBraveNewWorldRank> ranklist;
+	GetKuaFuFengHuoRank(ranklist, true);
+	list<DataBraveNewWorldRank>::iterator it = ranklist.begin();
+	CLogicUpdates logicUpdates;
+	unsigned rank = 0;
+	for (; it != ranklist.end(); ++it) {
+		++rank;
+		for (unsigned i = 0; i < MAX_KUAFUFENGHUO_RANK_ITEM_NUM; ++i) {
+			if (config.rank[i].rank1 <= rank && rank <= config.rank[i].rank2) {
+				Json::Value equip;
+				vector<GiftEquipItem> reward;
+				string code = "bravenewworld_season_rank_" + CTrans::ITOS(rank);
+				CActUnit ActUnit;
+				ActUnit.Init(it->uid);
+				ret = ActUnit.ParseSimpleReward(config.rank[i].reward, MAX_KUAFUFENGHUO_BUCHANG_REWARD_NUM, code);
+				if (ret) {
+					break;
+				}
+				Json::Value updates;
+				updates["s"] = "BRAVENEWWORLDSEASONRANK";
+				updates["uid"] = it->uid;
+				updates["ts"] = Time::GetGlobalTime();
+				updates["rank"] = rank;
+				updates["jf"] = it->jf;
+				logicUpdates.AddUpdate(it->uid, updates, true);
+				break;
+			}
+		}
+	}
 	return 0;
 }

@@ -232,10 +232,10 @@ void BaseCmdUnit::AddEquips(unsigned eqid, const std::string& op, Json::Value& r
 	this->AddEquips(equips, result);
 }
 
-void BaseCmdUnit::AddEquips(unsigned eqid, unsigned cnt, const std::string& op, Json::Value& result)
+void BaseCmdUnit::AddEquips(unsigned eqid, unsigned cnt, const std::string& op, Json::Value& result, unsigned ats)
 {
 	std::vector<ItemAdd> equips;
-	equips.push_back(ItemAdd(eqid, cnt, op));
+	equips.push_back(ItemAdd(eqid, cnt, op,0,0,ats));
 	this->AddEquips(equips, result);
 }
 
@@ -360,7 +360,7 @@ void BaseCmdUnit::AddHeroExp(Json::Value & herodata, int userlv, int add_exp)
 	HERO_LEVEL_LOG("uid=%u,l=%u,ud=%u",m_nUid, level, hero_ud);
 }
 
-ItemAdd BaseCmdUnit::Equip2ItemAdd(const GiftEquipItem& equip, const std::string& reason)
+ItemAdd BaseCmdUnit::Equip2ItemAdd(const GiftEquipItem& equip, const std::string& reason, unsigned ats)
 {
 	ItemAdd itemAdd;
 	itemAdd.eqid = equip.m_nId;
@@ -368,6 +368,8 @@ ItemAdd BaseCmdUnit::Equip2ItemAdd(const GiftEquipItem& equip, const std::string
 	itemAdd.q = equip.m_nQuality;
 	itemAdd.ch = equip.m_nCh;
 	itemAdd.reason = reason;
+	if (equip.m_bIsXianShi)
+		itemAdd.ats = ats;
 
 	return itemAdd;
 }
@@ -375,18 +377,18 @@ ItemAdd BaseCmdUnit::Equip2ItemAdd(const GiftEquipItem& equip, const std::string
 void BaseCmdUnit::AddGiftEquips(
 				const GiftEquipItem& equip
 				, const std::string& reason
-				, Json::Value& result)
+				, Json::Value& result, unsigned ats)
 {
 	GiftEquipItem equips[1];
 	equips[0] = equip;
 
-	AddGiftEquips(equips, 1, reason, result);
+	AddGiftEquips(equips, 1, reason, result, ats);
 }
 
 void BaseCmdUnit::AddGiftEquips(
 				std::vector<GiftEquipItem>& equips
 				, const std::string& reason
-				, Json::Value& result)
+				, Json::Value& result, unsigned ats)
 {
 	//装备
 	std::vector<ItemAdd> vItemAdds;
@@ -399,7 +401,7 @@ void BaseCmdUnit::AddGiftEquips(
 	{
 		if (equips[i].IsEquip())
 		{
-			vItemAdds.push_back(Equip2ItemAdd(equips[i], reason));
+			vItemAdds.push_back(Equip2ItemAdd(equips[i], reason, ats));
 		}
 		else if (equips[i].IsHero())
 		{
@@ -430,7 +432,7 @@ void BaseCmdUnit::AddGiftEquips(
 		GiftEquipItem equips[],
 		unsigned size,
 		const std::string& reason,
-		Json::Value& result)
+		Json::Value& result, unsigned ats)
 {
 
 	//装备
@@ -444,7 +446,7 @@ void BaseCmdUnit::AddGiftEquips(
 	{
 		if (equips[i].IsEquip())
 		{
-			vItemAdds.push_back(Equip2ItemAdd(equips[i], reason));
+			vItemAdds.push_back(Equip2ItemAdd(equips[i], reason, ats));
 		}
 		else if (equips[i].IsHero())
 		{
@@ -872,6 +874,11 @@ UnitIndexCmdParams::UnitIndexCmdParams(const Json::Value& jsonData)
 	}
 }
 
+InitIdCmdParams::InitIdCmdParams(const Json::Value &jsonData)
+	:BaseCmdParams(jsonData)
+{
+	id_ = 0; //不需要消耗物品
+}
 
 UnitUdCmdParams::UnitUdCmdParams(const Json::Value& jsonData)
 	: BaseCmdParams(jsonData)
@@ -926,15 +933,22 @@ int BaseFeedbackActUnit::DrawImpl(UserWrap& user, const BaseFeedbackActUnit::Dra
 	{
 		std::vector<ItemAdd> equips;
 		for(int i=0;i<item_cfg.Size();++i)
-			equips.push_back(ItemAdd(item_cfg.EquipId(i), item_cfg.EquipCnt(i), DrawOp()));
+		{
+			if (!item_cfg.EquipLtime(i))
+				equips.push_back(ItemAdd(item_cfg.EquipId(i), item_cfg.EquipCnt(i), DrawOp()));
+			else
+				equips.push_back(ItemAdd(item_cfg.EquipId(i), item_cfg.EquipCnt(i), DrawOp(), 0, 0, GetEndTs() - Time::GetGlobalTime()));
+		}
 		this->AddEquips(equips, result);
 	}
 	else
 	{
 		int eqid = item_cfg.EquipId(eqIdx);
 		int eqcnt = item_cfg.EquipCnt(eqIdx);
-
-		this->AddEquips(eqid, eqcnt, DrawOp(), result);
+		if (!item_cfg.EquipLtime(eqIdx))
+			this->AddEquips(eqid, eqcnt, DrawOp(), result);
+		else
+			this->AddEquips(eqid, eqcnt, DrawOp(), result, GetEndTs() - Time::GetGlobalTime());
 	}
 
 	result["info"] = m_jsonData;

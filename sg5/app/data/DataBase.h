@@ -37,6 +37,7 @@ using google::protobuf::Reflection;
 #include "MVP.pb.h"
 #include "Chick.pb.h"
 #include "QingRenJie.pb.h"
+#include "NewDouJiang.pb.h"
 
 enum ProtoType
 {

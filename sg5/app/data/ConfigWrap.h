@@ -3,7 +3,7 @@
 #define METHOD_GET_DIAMOND_ITEMCFG(activity, field)	\
 	const ConfigActivity::DiamondReward & Get##activity##Itemcfg(unsigned index) \
 	{ \
-		if (index < 1 || index > activity_cfg.field##_size()) \
+		if (index < 1 || static_cast<int>(index) > activity_cfg.field##_size()) \
 		{ \
 			error_log("param error. index=%u", index);\
 			throw runtime_error("param_error");\
@@ -201,6 +201,13 @@ public:
 	const RewardConfig::RewardItemCfg & GetRotaryTableFixedItemcfg();
 	const RewardConfig::RewardItemCfg & GetRotaryTableCostItemcfg();
 
+	//转盘回馈--物品cfg
+	const ConfigActivity::DiamondReward & GetRotaryTableFeedbackChargeItemcfg(unsigned index);
+	const ConfigActivity::RotaryTableCfg & GetRotaryTableFeedBackItemcfg(unsigned index);
+	const  ConfigActivity::SingleReward & GetAccChargeItemcfg(unsigned index);
+	const RewardConfig::RewardItemCfg & GetRotaryTableFeedbackFixedItemcfg();
+	unsigned GetRotaryTableFeedBackItemSize();
+
 	//小兵宝物---配置读取
 	const ConfigActivity::DiamondReward & GetBatmanTreasureChargeItemcfg(unsigned index);
 
@@ -250,6 +257,9 @@ public:
 	//获取转盘狂惠配置
 	const ConfigActivity::RotaryTableCrazyReward & GetRotaryTableActivityCfg() const {return activity_cfg.rotary_table();}
 
+	//获取转盘回馈配置
+	const ConfigActivity::RotaryTableFeedBackReward & GetRotaryTableFeedBackCfg() const {return activity_cfg.zhuanpanhuikui();}
+
 	//获取小兵宝物配置
 	const ConfigActivity::BatmanTreasureCfg & GetBatmanTreasureCfg() const {return activity_cfg.batmantreasure();}
 
@@ -284,4 +294,17 @@ public:
 	const ConfigFunction::OpenSpecialEquipItem & GetSpecialEquipItemCfg(unsigned int eqid) const;
 private:
 	const ConfigFunction::Functions & functions_cfg;
+};
+
+class WuhunActivityWrap
+{
+public:
+	WuhunActivityWrap();
+	int GetAccChargeItemSize() const {
+		return activity_cfg.zhulidaxingdong_size();
+	}
+	const WuhunActivity::AccChangeItem & GetAccChargeItemCfg(unsigned index);
+	const WuhunActivity::QunXingHuiJu& GetQunXingHuiJu();
+private:
+	const WuhunActivity::Activities & activity_cfg;
 };

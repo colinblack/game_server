@@ -1,0 +1,76 @@
+package WuhunActivity;
+
+//助力大行动--累计充值
+message AccChangeItem
+{
+    required uint32 index = 1;
+    required uint32 need = 2;
+    repeated uint32 id = 3;  //物品ID
+    repeated uint32 count = 4;
+}
+
+//群英汇聚
+message QunXingHuiJuYanHui {
+	required uint32 index = 1;
+	optional uint32 need = 2;
+	repeated uint32 zone = 3;
+	required uint32 point = 4;
+}
+
+message QunXingHuiJu {
+	repeated AccChangeItem daily = 1;
+	repeated AccChangeItem total = 2;
+	repeated QunXingHuiJuYanHui yanhui = 3;
+	repeated QunXingHuiJuYanHui zhanli = 4;
+	repeated AccChangeItem jindu = 5;
+}
+
+message Activities
+{
+    repeated AccChangeItem zhulidaxingdong = 1;
+    required QunXingHuiJu qunxinghuiju = 2;
+}
+
+//支援列表
+message UserInfo
+{
+    required uint32 uid = 1;
+    required string name = 2;
+    required string url = 3;
+    required uint32 charge = 4;
+}
+
+message MasterInfo
+{
+    required UserInfo info = 1;
+    required uint32 ts = 2;
+    repeated UserInfo helper = 3;
+}
+
+message HelperMaster {
+	required uint32 uid = 1;
+	required bool refused = 2;
+}
+
+message HelperInfo
+{
+    required uint32 uid = 1;
+    repeated HelperMaster master = 2;
+}
+
+message RankInfo
+{
+	required uint32 uid = 1;
+	required uint32 count = 2;
+	required uint32 ts = 3;
+	required string name = 4;
+}
+
+message GiveHelpActive
+{
+    required uint32 version = 1;
+    required bool reward = 2;
+    repeated MasterInfo masters = 3;
+    repeated HelperInfo helpers = 4;
+    repeated RankInfo ranks = 5;
+}

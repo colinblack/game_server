@@ -4,7 +4,6 @@
  *  Created on: 2018年1月26日
  *      Author: Administrator
  */
-
 #include "LogicNewYearActive.h"
 #include "LogicUnitWrap.h"
 
@@ -139,11 +138,11 @@ int CLogicNewYearActive::BirdBridgeReward(unsigned uid, unsigned type, Json::Val
 	ItemAdd item1;
 	item1.eqid = ACT_BIRD_BRIDGE_LEFT;
 	if (type == 0) {
-		item1.count = 4 + Math::GetRandomInt(3);
+		item1.count = 6 + Math::GetRandomInt(3);
 	} else if (type == 1) {
-		item1.count = 4 + Math::GetRandomInt(3);
+		item1.count = 6 + Math::GetRandomInt(3);
 	} else {
-		item1.count = 9 + Math::GetRandomInt(3);
+		item1.count = 13 + Math::GetRandomInt(3);
 	}
 	item1.ats = ats;
 	item1.reason = "newyear_birdbridge";
@@ -153,9 +152,9 @@ int CLogicNewYearActive::BirdBridgeReward(unsigned uid, unsigned type, Json::Val
 	ItemAdd item2;
 	item2.eqid = ACT_BIRD_BRIDGE_RIGHT;
 	if (type == 0) {
-		item2.count = 4 + Math::GetRandomInt(3);
+		item2.count = 6 + Math::GetRandomInt(3);
 	} else {
-		item2.count = 9 + Math::GetRandomInt(3);
+		item2.count = 13 + Math::GetRandomInt(3);
 	}
 	item2.ats = ats;
 	item2.reason = "newyear_birdbridge";
@@ -370,3 +369,112 @@ int CLogicNewYearActive::getEquipReward(unsigned type, unsigned &equid, unsigned
 	return R_ERR_DATA;
 }
 
+//助力大行动
+int CLogicGiveHelpActive::GetStartGiveHelpList(unsigned uid, Json::Value &result) {
+	int ret = 0;
+	CDataGiveHelpActive *pdata = GetData();
+	if (pdata == NULL) {
+		error_log("get data error!");
+		return R_ERR_DATA;
+	}
+
+	//判断是否在活动时间内
+	ActInfoConfig actconfig(CONFIG_GIVEHELPACTION);
+	unsigned ts = Time::GetGlobalTime();
+	if (!actconfig.IsActive()) {
+		LOGIC_ERROR_RETURN_MSG("activity_over");
+		return 0;
+	}
+
+	pdata->CheckVersion(actconfig.Version());
+
+	DataUserBasic dataUser;
+	CLogicUserBasic logicUserBasic;
+	ret = logicUserBasic.GetUserBasicLimit(uid, OpenPlatform::GetType(), dataUser);
+	if (ret) {
+		error_log("get user info failed");
+		return ret;
+	}
+
+	DataGiveHelpUserInfo data;
+	data.uid = uid;
+	data.name = dataUser.name;
+	data.url = dataUser.figure_url;
+	data.charge = GetTotalChargeByUid(uid);
+
+	ret = pdata->StartGiveHelp(data, result);
+	if (ret) {
+		error_log("get data error! uid=%u", uid);
+		return ret;
+	}
+
+	return 0;
+}
+
+unsigned CLogicGiveHelpActive::GetTotalChargeByUid(unsigned uid) {
+	if (!uid) {
+		return 0;
+	}
+	UserWrap user(uid, false);
+	ActInfoConfig act_time(CONFIG_GIVEHELPACTION);
+	return user.GetRechargePoint(act_time.StartTS(), act_time.EndTS());
+}
+
+int CLogicGiveHelpActive::ClickGiveHelpList(unsigned tuid, unsigned fuid, Json::Value &result) {
+	int ret = 0;
+	DataUserBasic dataFromUser;
+	CLogicUserBasic logicUserBasic;
+	ret = logicUserBasic.GetUserBasicLimit(fuid, OpenPlatform::GetType(), dataFromUser);
+	if (ret) {
+		error_log("ClickGiveHelpList. get userdata error");
+		return R_ERR_AUTH;
+	}
+
+	DataGiveHelpUserInfo info;
+	info.uid = fuid;
+	info.name = dataFromUser.name;
+	info.url = dataFromUser.figure_url;
+
+	CDataGiveHelpActive *pdata = GetData();
+	if (pdata == NULL) {
+		error_log("get data error!");
+		return R_ERR_DATA;
+	}
+
+	ret = pdata->AddGiveHelp(info, tuid, result);
+	if (ret) {
+		error_log("get data error");
+		return ret;
+	}
+
+	return 0;
+}
+
+int CLogicGiveHelpActive::GiveHelpRetail(unsigned uid, Json::Value &result) {
+	int ret = 0;
+	CDataGiveHelpActive *pdata = GetData();
+	if (pdata == NULL) {
+		error_log("get data error!");
+		return R_ERR_DATA;
+	}
+	ret = pdata->GetMyGiveHelpInfo(uid, result);
+	if (ret) {
+		error_log("get data error! uid=%u", uid);
+		return ret;
+	}
+	return 0;
+}
+
+int CLogicGiveHelpActive::DelHelper(unsigned uid, unsigned userid, Json::Value &result) {
+	CDataGiveHelpActive *pdata = GetData();
+	if (pdata == NULL) {
+		error_log("get data error!");
+		return R_ERR_DATA;
+	}
+	int ret = pdata->DelGiveHelp(uid, userid, result);
+	if (0 != ret) {
+		error_log("del helper error uid=%u userid=%u ret=%d", uid, userid, ret);
+		return ret;
+	}
+	return 0;
+}

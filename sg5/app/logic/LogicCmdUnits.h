@@ -1142,6 +1142,10 @@ public:
 
 	void EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned type, Json::Value &result);    //混元技或普通技
 
+	void AddSqkillQueue(UserWrap& userWrap,  unsigned sindex,  unsigned rentime,unsigned paytype,unsigned amount, Json::Value &result); //增加技能队列
+
+	void EndSqkillQueue(UserWrap& userWrap,  unsigned sindex, Json::Value &result); //结束技能队列
+
 	void CommderSkilLearn(UserWrap& userWrap, unsigned heroud, unsigned equd,Json::Value &result);  //争霸技能
 
 	void PotianSkilLearn(UserWrap& userWrap, unsigned heroud,string skid,Json::Value &m_data,Json::Value &result);  //破天技能
@@ -2023,6 +2027,43 @@ private:
 	int m_chargeitemsize;
 };
 
+//转盘回馈
+class RotaryTableFeedBackUnix : public BaseActivityUnit
+{
+	public:
+		RotaryTableFeedBackUnix(const UserWrap &user);
+	
+		//累计充值进度条奖励
+		int GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result);
+
+		//随机抽奖奖励
+		int GetRandomReward(UserWrap& userWrap, const InitIdCmdParams & param, Json::Value & result);
+
+		//累计充值钻石
+		int GetAccChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result);
+	protected:
+		int ResetAct();
+		int CheckItemSize();
+	private:
+		int m_chargeitemsize;  //抽奖
+		int m_jinduSize;	   //进度条
+		int m_countSize;	   //机会
+		int m_singleSize;	   //累计充值钻石
+};
+
+class GiveHelpChargeUnit : public BaseActivityUnit {
+public:
+	GiveHelpChargeUnit(const UserWrap &user);
+	int GetTotalChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result);
+	int GetExtraReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result);
+	int SetHelpCount(unsigned count);
+	int ResetAct();
+private:
+	int m_chargeItemSize;
+	int m_extraItemSize;
+	DataXMLGiveHelpItem m_config;
+};
+
 //小兵宝物
 class BatmanTreasureActivityUnix : public BaseActivityUnit
 {
@@ -2700,7 +2741,41 @@ public:
 			const CONFIG_NAME##_CONFIG& cfg_; \
 		};
 /********************************************************************/
+/********************************************************************/
+/*  活动太多  先是抽象成模板  最后只能搞宏    活动时间名单独区分的宏   */
+#define CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_NAME, ACT_TIME_NAME,CONFIG_ALL, CONFIG_MEIRI) \
+		class CONFIG_NAME##_Unit : public BaseFeedbackActUnit \
+		{ \
+		public: \
+			CONFIG_NAME##_Unit(const UserWrap& user) \
+			: BaseFeedbackActUnit(user.Id(), ACT_TIME_NAME, NAT_##CONFIG_NAME, CONFIG_ALL, CONFIG_MEIRI) \
+			, cfg_(DataXmlPtr()->Get_##CONFIG_NAME()) {Init();} \
+		private: \
+			virtual int GetDrawItems() const {return cfg_.size();} \
+			virtual const JsonFeedbackItem& GetFeedbackItem(int index) const {return cfg_.Item(index);} \
+			virtual const char* DrawOp() const {return CONFIG_NAME"_draw_op";} \
+		private: \
+			const CONFIG_NAME##_CONFIG& cfg_; \
+		};
+/********************************************************************/
 //autolable6
+CHARGE_DRAW_ACT(CONFIG_yongguansanjun, true, false)
+CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_wuyiqingdian_leiji, ACTIVITY_TIME_wuyiqingdian, true, false)
+CHARGE_DRAW_ACT(CONFIG_yvre618_2, true, false)
+CHARGE_DRAW_ACT(CONFIG_yvre618_1, true, false)
+CHARGE_DRAW_ACT(CONFIG_toushichejineng, false, false)
+CHARGE_DRAW_ACT(CONFIG_chongbang_3, true, true)
+CHARGE_DRAW_ACT(CONFIG_zhuanshucanjuan, false, false)
+CHARGE_DRAW_ACT(CONFIG_baihuahuikui_3, true, false)
+CHARGE_DRAW_ACT(CONFIG_baihuahuikui_2, true, false)
+CHARGE_DRAW_ACT(CONFIG_baihuahuikui_1, true, false)
+CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_guyv_leiji, ACTIVITY_TIME_GUYU, true, false)
+CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_chengyuantisheng_2, CONFIG_chengyuantisheng, true, false)
+CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_chengyuantisheng_1, CONFIG_chengyuantisheng, false, false)
+CHARGE_DRAW_ACT(CONFIG_lueduotongqian_chongbang, true, true)
+CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_anniversary_leiji, CONFIG_anniversary_chongzhi, true, false)
+CHARGE_DRAW_ACT_TIME_NAME_ACT(CONFIG_anniversary_meiri, CONFIG_anniversary_chongzhi, true, true)
+CHARGE_DRAW_ACT(CONFIG_zhengbashadi_chongbang, true, true)
 CHARGE_DRAW_ACT(CONFIG_hanjiajingxuan, false, false)
 CHARGE_DRAW_ACT(CONFIG_fuzhuhesui, true, false)
 CHARGE_DRAW_ACT(CONFIG_zhuniandaji, true, false)
@@ -2799,16 +2874,26 @@ public:
 	enum {
 		ACT_BIRD_BRIDGE_REWARD_LEFT = 0,
 		ACT_BIRD_BRIDGE_REWARD_RIGHT = 1,
-		ACT_BIRD_BRIDGE_REWARD_CENTER = 2
+		ACT_BIRD_BRIDGE_REWARD_CENTER = 2,
+		ACT_BIRD_BRIDGE_REWARD_DAILY = 3,
 	};
 	ActivityBirdBridge(const UserWrap& user);
 	virtual void Reset();
 	int DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result);
 	int RewardCenter(unsigned pointLeft, unsigned pointRight, vector<GiftEquipItem> &reward);
 	int RewardEdge(Json::Value &act, unsigned type, unsigned id, unsigned point, vector<GiftEquipItem> &reward);
+	int RewardDaily(unsigned point, vector<GiftEquipItem> &reward);
 private:
 	string _left_code;
 	string _right_code;
 	string _center_code;
+	string _daily_code;
+};
+class NewWorldHeroPointUint : public BaseCmdUnit
+{
+public:
+	NewWorldHeroPointUint(const UserWrap& user);
+	int DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result);
+	unsigned GetOpenNum();
 };
 #endif /* LOGICCMDUNIT_H_ */

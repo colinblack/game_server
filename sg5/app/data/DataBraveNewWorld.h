@@ -31,8 +31,9 @@
 #define BRAVE_NEW_WORLD_USER_MISSION		50
 #define BRAVE_NEW_WORLD_USER_REWARD			4055
 #define BRAVE_NEW_WORLD_ALLIANCE_MISSION	3
-#define BRAVE_NEW_WORLD_TASK_NUM       10
-#define BRAVE_NEW_WORLD_HUOYUE_NUM       5
+#define BRAVE_NEW_WORLD_TASK_NUM			10
+#define BRAVE_NEW_WORLD_HUOYUE_NUM			5
+#define BRAVE_NEW_WORLD_CROSS_RANK_NUM		300
 
 enum DataBraveNewWorldPointType
 {
@@ -382,6 +383,13 @@ public:
 	unsigned int bt;
 	unsigned int tts;
 	unsigned int rl;
+	long long cb;
+	int version;
+	long long bcb;
+	unsigned jf;
+	unsigned ld;
+	unsigned bld;
+	unsigned mfn;
 	vector<unsigned int> hp;
 	list<DataBraveNewWorldHistory> his;
 	vector<DataBraveNewWorldFavourate> fav;
@@ -401,6 +409,13 @@ public:
 		bt = 0;
 		tts = 0;
 		rl = 0;
+		cb = 0;
+		bcb = 0;
+		version = -1;
+		jf = 0;
+		ld = 0;
+		bld = 0;
+		mfn = 0;
 	}
 	~DataBraveNewWorldUser() {
 	}
@@ -436,6 +451,13 @@ public:
 		for (vector<DataBraveNewWorldFavourate>::iterator it = fav.begin(); it != fav.end(); ++it)
 			it->Serialize(p->add_fav());
 		mission.Serialize(p->mutable_mission());
+		p->set_cb(cb);
+		p->set_bcb(bcb);
+		p->set_version(version);
+		p->set_jf(jf);
+		p->set_ld(ld);
+		p->set_bld(bld);
+		p->set_mfn(mfn);
 	}
 	void Parse(const BraveNewWorld::BraveNewWorldUser &p) {
 		uid = p.uid();
@@ -479,6 +501,13 @@ public:
 			for(int i=0;i<BRAVE_NEW_WORLD_HP_USER;++i)
 				hp.push_back(BRAVE_NEW_WORLD_HP);
 		}
+		cb = p.cb();
+		bcb = p.bcb();
+		version = p.version();
+		jf = p.jf();
+		ld = p.ld();
+		bld = p.bld();
+		mfn = p.has_mfn() ? p.mfn() : 0;
 	}
 
 	void GetJson(Json::Value& res)
@@ -505,6 +534,12 @@ public:
 			res["lands"].append(t);
 		}
 		mission.GetJson(res);
+		res["cb"] = double(cb);
+		res["version"] = version;
+		res["bcb"] = double(bcb);
+		res["jf"] = double(jf);
+		res["ld"] = double(ld);
+		res["bld"] = double(bld);
 	}
 	void GetDefLimit(Json::Value& res)
 	{
@@ -629,7 +664,9 @@ public:
 	map<unsigned int, DataBraveNewWorldZone> zone;
 	map<unsigned int, DataBraveNewWorldAlliance> alliance;
 	map<BraveNewWorldPoint, unsigned> city;
-	DataBraveNewWorld() {
+	bool has_chongbang_rewarded;
+	bool has_season_rewarded;
+	DataBraveNewWorld() : has_chongbang_rewarded(false), has_season_rewarded(false){
 	}
 	~DataBraveNewWorld() {
 	}
@@ -642,21 +679,11 @@ public:
 			it->second.Serialize(p->add_zone());
 		for (map<unsigned int, DataBraveNewWorldAlliance>::iterator it = alliance.begin(); it != alliance.end(); ++it)
 			it->second.Serialize(p->add_alliance());
+		p->set_has_chongbang_rewarded(has_chongbang_rewarded);
+		p->set_has_season_rewarded(has_season_rewarded);
 	}
-	void Parse(const BraveNewWorld::BraveNewWorld &p) {
-		for (int i = 0; i < p.land_size(); ++i)
-			land[BraveNewWorldPoint(p.land(i).x(),p.land(i).y())].Parse(p.land(i));
-		for (int i = 0; i < p.user_size(); ++i)
-		{
-			unsigned uid = p.user(i).uid();
-			user[uid].Parse(p.user(i));
-			city[BraveNewWorldPoint(user[uid].x, user[uid].y)] = uid;
-		}
-		for (int i = 0; i < p.zone_size(); ++i)
-			zone[p.zone(i).id()].Parse(p.zone(i));
-		for (int i = 0; i < p.alliance_size(); ++i)
-			alliance[p.alliance(i).aid()].Parse(p.alliance(i));
-
+	void Init()
+	{
 		if(land.size() != BRAVE_NEW_WORLD_SIZE * BRAVE_NEW_WORLD_SIZE)
 		{
 			land.clear();
@@ -682,12 +709,40 @@ public:
 				zone[i] = d;
 			}
 		}
+	}
+	void Parse(const BraveNewWorld::BraveNewWorld &p) {
+		for (int i = 0; i < p.land_size(); ++i)
+			land[BraveNewWorldPoint(p.land(i).x(),p.land(i).y())].Parse(p.land(i));
+		for (int i = 0; i < p.user_size(); ++i)
+		{
+			unsigned uid = p.user(i).uid();
+			user[uid].Parse(p.user(i));
+			city[BraveNewWorldPoint(user[uid].x, user[uid].y)] = uid;
+			if (land[BraveNewWorldPoint(user[uid].x, user[uid].y)].sdef == 250)
+				land[BraveNewWorldPoint(user[uid].x, user[uid].y)].sdef = 0;
+		}
+		for (int i = 0; i < p.zone_size(); ++i)
+			zone[p.zone(i).id()].Parse(p.zone(i));
+		for (int i = 0; i < p.alliance_size(); ++i)
+			alliance[p.alliance(i).aid()].Parse(p.alliance(i));
+
+		Init();
 
 		for(map<BraveNewWorldPoint, DataBraveNewWorldPoint>::iterator it=land.begin();it!=land.end();++it)
 		{
 			if(it->second.uid)
 				user[it->second.uid].lands.insert(it->first);
 		}
+
+		has_chongbang_rewarded = p.has_chongbang_rewarded();
+		has_season_rewarded = p.has_season_rewarded();
+	}
+};
+
+struct DataBraveNewWorldRank {
+	unsigned uid;
+	unsigned jf;
+	DataBraveNewWorldRank(unsigned tuid, unsigned tjf) : uid(tuid), jf(tjf) {
 	}
 };
 /**********************************************************/
@@ -706,6 +761,9 @@ public:
 	static unsigned m_user_point[BRAVE_NEW_WORLD_LEVEL];
 	static int m_user_money[BRAVE_NEW_WORLD_LEVEL];
 
+	static bool m_iskuafu;
+
+	void CheckVersion();
 	int GetSelf(unsigned uid, unsigned aid, unsigned lv, Json::Value &result);
 	int GetMissionInfo(unsigned uid, Json::Value &result);
 	int GetPoints(vector<BraveNewWorldPoint>& p, Json::Value &result);
@@ -719,7 +777,7 @@ public:
 	int EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, vector<unsigned>& hp, Json::Value &result);
 	int FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, bool cash, bool cash1, Json::Value &result);
 	int Move(unsigned uid, unsigned seq, BraveNewWorldPoint& p, unsigned ud, bool super, Json::Value &result);
-	int Build(unsigned uid, unsigned seq, bool cash, BraveNewWorldPoint& p, Json::Value &result);
+	int Build(unsigned uid, unsigned seq, unsigned cash, BraveNewWorldPoint& p, Json::Value &result);
 	int Defend(unsigned uid, unsigned seq, bool cash, BraveNewWorldPoint& p, unsigned hero, Json::Value &result);
 	int RecoverPoint(unsigned uid, unsigned seq, BraveNewWorldPoint& p, bool cash, Json::Value &result);
 	int RevcoverUser(unsigned uid, unsigned seq, bool cash, Json::Value &result);
@@ -735,6 +793,15 @@ public:
 	int newWorldAwards(unsigned uid, unsigned index, unsigned id, unsigned seq, Json::Value &result);
 	int GetTarget(unsigned uid, Json::Value &result);
 	int getNewWorldBoss(Json::Value &result);
+	int GetChongBangRank(unsigned uid, Json::Value & result);
+	int GetKuaFuFengHuoRank(list<DataBraveNewWorldRank> &ranklist, bool all);
+	int GetScore(unsigned uid, unsigned &jf, unsigned &ld, unsigned &bld);
+	int RewardRank();
+
+private:
+	int handleLueduoDelta(unsigned uid, long long *pcb, int delta, int version);
+	void GetTechFortPoint(BraveNewWorldPoint &p,Json::Value &res);
+	int GetTechFortLevel(unsigned uid,Json::Value &result);
 
 private:
 	//判断该州府内是否存在有该用户的地块
@@ -769,9 +836,11 @@ private:
 
 	void CreateMap();
 	void OnDay();
+	void OnMidNight();
 	void OnHour();
 	void OnHalfHour();
 	void OnDayFourHour();
+	void ClearUserCity();
 
 	void MakeBoss(int xbase,int ybase);
 	void MakeBoss(const BraveNewWorldPoint& p) {MakeBoss(p.first,p.second);};

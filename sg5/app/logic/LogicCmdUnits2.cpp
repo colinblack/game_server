@@ -1,9 +1,8 @@
 #include "LogicCMD.h"
 
-const int FortunePacksActivityUnit::extra_num_relation[MAX_EXTRA_ITEMS] ={1,5,10,15,20,30,35,40,45,50,60,70,80,90};
+const int FortunePacksActivityUnit::extra_num_relation[MAX_EXTRA_ITEMS] = {1, 5, 10, 15, 20, 30, 35, 40, 45, 50, 60, 70, 80, 90};
 
-EquipStrengthenUnit::EquipStrengthenUnit(unsigned uid):
-	m_nUid(uid)
+EquipStrengthenUnit::EquipStrengthenUnit(unsigned uid) : m_nUid(uid)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_EQUIPSTRENGTHEN, m_jsonData);
@@ -12,13 +11,13 @@ EquipStrengthenUnit::EquipStrengthenUnit(unsigned uid):
 	{
 		Json::Value array(Json::arrayValue);
 
-		for(int i = 0; i < max_status_length; ++i)
+		for (int i = 0; i < max_status_length; ++i)
 		{
 			array[i] = 0;
 		}
 
-		m_jsonData["a"] = array;    //领取状态数组
-		m_jsonData["v"] = 0;  //版本号
+		m_jsonData["a"] = array; //领取状态数组
+		m_jsonData["v"] = 0;	 //版本号
 
 		m_jsonData["id"] = NAT_EQUIPSTRENGTHEN;
 
@@ -31,7 +30,7 @@ EquipStrengthenUnit::EquipStrengthenUnit(unsigned uid):
 	}
 }
 
-int EquipStrengthenUnit::GetChargeReward(UserWrap& userWrap, unsigned index, Json::Value & result)
+int EquipStrengthenUnit::GetChargeReward(UserWrap &userWrap, unsigned index, Json::Value &result)
 {
 	//版本号判断
 	CheckVersion(result);
@@ -56,7 +55,7 @@ int EquipStrengthenUnit::GetChargeReward(UserWrap& userWrap, unsigned index, Jso
 	GetRewardInfo(index, reward_info);
 
 	//获取指定时间内的充值额度
-	unsigned begints = Config::GetIntValue(CONFIG_EQUIP_STRENGTHEN_BEGIN_TS);  //活动的开启时间
+	unsigned begints = Config::GetIntValue(CONFIG_EQUIP_STRENGTHEN_BEGIN_TS); //活动的开启时间
 	unsigned now = Time::GetGlobalTime();
 
 	unsigned charget_cash = userWrap.GetRechargePoint(begints, now);
@@ -78,7 +77,7 @@ int EquipStrengthenUnit::GetChargeReward(UserWrap& userWrap, unsigned index, Jso
 
 	int ret = logicEquipMent.AddItems(m_nUid, equips, result["equipments"], true);
 
-	if(ret)
+	if (ret)
 	{
 		error_log("Add_Equip_error uid=%u， ret=%u", m_nUid, ret);
 		throw std::runtime_error("add_equipitems_failed");
@@ -93,7 +92,7 @@ int EquipStrengthenUnit::GetChargeReward(UserWrap& userWrap, unsigned index, Jso
 	return 0;
 }
 
-int EquipStrengthenUnit::CheckVersion(Json::Value & result)
+int EquipStrengthenUnit::CheckVersion(Json::Value &result)
 {
 	//先判断是否在活动时间之内
 	CheckActivityOpen();
@@ -114,11 +113,11 @@ int EquipStrengthenUnit::CheckVersion(Json::Value & result)
 	return 0;
 }
 
-unsigned EquipStrengthenUnit::GetVersionCfg(const string& szVersion)
+unsigned EquipStrengthenUnit::GetVersionCfg(const string &szVersion)
 {
 	unsigned nVersion = 0;
 
-	if (! Config::GetUIntValue(nVersion, szVersion))
+	if (!Config::GetUIntValue(nVersion, szVersion))
 	{
 		throw std::runtime_error("can't_get_version_cfg");
 	}
@@ -129,11 +128,12 @@ unsigned EquipStrengthenUnit::GetVersionCfg(const string& szVersion)
 int EquipStrengthenUnit::CheckActivityOpen()
 {
 	//判断活动是否开启
-	unsigned begints = Config::GetIntValue(CONFIG_EQUIP_STRENGTHEN_BEGIN_TS);  //活动的开启时间
-	unsigned endts = Config::GetIntValue(CONFIG_EQUIP_STRENGTHEN_END_TS);;
+	unsigned begints = Config::GetIntValue(CONFIG_EQUIP_STRENGTHEN_BEGIN_TS); //活动的开启时间
+	unsigned endts = Config::GetIntValue(CONFIG_EQUIP_STRENGTHEN_END_TS);
+	;
 
 	unsigned now = Time::GetGlobalTime();
-	if (now >= begints && now <= endts)  //在活动开启范围内
+	if (now >= begints && now <= endts) //在活动开启范围内
 	{
 		return 0;
 	}
@@ -146,7 +146,7 @@ int EquipStrengthenUnit::ResetActivity(unsigned version)
 	//先修改版本号
 	m_jsonData["v"] = version;
 
-	for(unsigned i = 0; i < m_jsonData["a"].size(); ++i)
+	for (unsigned i = 0; i < m_jsonData["a"].size(); ++i)
 	{
 		m_jsonData["a"][i] = 0;
 	}
@@ -154,21 +154,38 @@ int EquipStrengthenUnit::ResetActivity(unsigned version)
 	return 0;
 }
 
-int EquipStrengthenUnit::GetRewardInfo(unsigned index, RewardInfo & rewardinfo)
+int EquipStrengthenUnit::GetRewardInfo(unsigned index, RewardInfo &rewardinfo)
 {
 	unsigned quota = 0, luck_id = 0, luck_num = 0, en_id = 0, en_num = 1, q_level = 0;
 
-	switch(index)
+	switch (index)
 	{
-		case 1: quota = 10; luck_id = QLIMIT_LUCK_STONE_6_ID; luck_num = 30; q_level = 6;
-				break;
-		case 2: quota = 1000; luck_id = QLIMIT_LUCK_STONE_7_ID; luck_num = 90; q_level = 7;
-				break;
-		case 3: quota = 3500; luck_id = QLIMIT_LUCK_STONE_8_ID; luck_num = 350; q_level = 8;
-				break;
-		case 4: quota = 10000; luck_id = QLIMIT_LUCK_STONE_9_ID; luck_num = 1500; q_level = 9;
-				break;
-		default: break;
+	case 1:
+		quota = 10;
+		luck_id = QLIMIT_LUCK_STONE_6_ID;
+		luck_num = 30;
+		q_level = 6;
+		break;
+	case 2:
+		quota = 1000;
+		luck_id = QLIMIT_LUCK_STONE_7_ID;
+		luck_num = 90;
+		q_level = 7;
+		break;
+	case 3:
+		quota = 3500;
+		luck_id = QLIMIT_LUCK_STONE_8_ID;
+		luck_num = 350;
+		q_level = 8;
+		break;
+	case 4:
+		quota = 10000;
+		luck_id = QLIMIT_LUCK_STONE_9_ID;
+		luck_num = 1500;
+		q_level = 9;
+		break;
+	default:
+		break;
 	}
 
 	en_id = GET_EN_STONE_ID(q_level);
@@ -188,20 +205,18 @@ void EquipStrengthenUnit::Save()
 
 	int ret = logicSecinc.SetOneSecinc(m_nUid, m_jsonData);
 
-	if (ret !=  R_SUCCESS)
+	if (ret != R_SUCCESS)
 	{
 		error_log("[Save] update secinc failed. uid=%u, id = %u, ret=%d", m_nUid, m_jsonData["id"].asUInt(), ret);
 		throw std::runtime_error("Save_data_failed");
 	}
 }
 
-HeQuActivityUnit::HeQuActivityUnit(unsigned uid):
-	BaseCmdUnit(uid)
+HeQuActivityUnit::HeQuActivityUnit(unsigned uid) : BaseCmdUnit(uid)
 {
-
 }
 
-int HeQuActivityUnit::GetChargeReward(UserWrap& userWrap, unsigned index, Json::Value & result)
+int HeQuActivityUnit::GetChargeReward(UserWrap &userWrap, unsigned index, Json::Value &result)
 {
 	//判断活动是否开启
 	bool isopen = IsActivityOpen();
@@ -262,7 +277,7 @@ int HeQuActivityUnit::GetChargeReward(UserWrap& userWrap, unsigned index, Json::
 	return 0;
 }
 
-int HeQuActivityUnit::GetVIPCelebrate(UserWrap& userWrap, unsigned vindex, unsigned sindex, Json::Value & result)
+int HeQuActivityUnit::GetVIPCelebrate(UserWrap &userWrap, unsigned vindex, unsigned sindex, Json::Value &result)
 {
 	//判断活动是否开启
 	bool isopen = IsActivityOpen();
@@ -326,7 +341,7 @@ int HeQuActivityUnit::GetVIPCelebrate(UserWrap& userWrap, unsigned vindex, unsig
 	return 0;
 }
 
-int HeQuActivityUnit::GetCombineZoneRecompense(UserWrap& userWrap, unsigned index, Json::Value & result)
+int HeQuActivityUnit::GetCombineZoneRecompense(UserWrap &userWrap, unsigned index, Json::Value &result)
 {
 	//判断活动是否开启
 	bool isopen = IsActivityOpen();
@@ -373,7 +388,7 @@ int HeQuActivityUnit::GetCombineZoneRecompense(UserWrap& userWrap, unsigned inde
 	AddGiftEquips(recomitem.items, recomitem.itemnum, "HeQu_Buchang", result);
 
 	//设置奖励领取状态
-	for(int i = 0; i < MAX_RECOMPENSE_ITEMS; ++i)
+	for (int i = 0; i < MAX_RECOMPENSE_ITEMS; ++i)
 	{
 		if (pos == i)
 		{
@@ -392,7 +407,7 @@ int HeQuActivityUnit::GetCombineZoneRecompense(UserWrap& userWrap, unsigned inde
 	return 0;
 }
 
-int HeQuActivityUnit::GetCombineZoneBuZhu(UserWrap& userWrap, Json::Value & result)
+int HeQuActivityUnit::GetCombineZoneBuZhu(UserWrap &userWrap, Json::Value &result)
 {
 	//判断活动是否开启
 	bool isopen = IsActivityOpen();
@@ -401,7 +416,6 @@ int HeQuActivityUnit::GetCombineZoneBuZhu(UserWrap& userWrap, Json::Value & resu
 	{
 		throw std::runtime_error("activity_not_open");
 	}
-
 
 	Json::Value user_stat;
 	userWrap.GetUserStats(user_stat);
@@ -422,7 +436,7 @@ int HeQuActivityUnit::GetCombineZoneBuZhu(UserWrap& userWrap, Json::Value & resu
 	CLogicEquipment logicEquipment;
 	CLogicCMD logicCMD;
 	unsigned uid = userWrap.Id();
-	logicEquipment.AddOneItem(uid, 50123, 2*logicCMD.GetHequbuchangLevel(uid), "HequBuZhu",result["equipment"]);
+	logicEquipment.AddOneItem(uid, 50123, 2 * logicCMD.GetHequbuchangLevel(uid), "HequBuZhu", result["equipment"]);
 
 	//设置奖励领取状态
 	user_stat["hqbz"] = 1;
@@ -434,7 +448,7 @@ int HeQuActivityUnit::GetCombineZoneBuZhu(UserWrap& userWrap, Json::Value & resu
 	return 0;
 }
 
-bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
+bool HeQuActivityUnit::CheckUserstatComplete(Json::Value &user_stat)
 {
 	//补偿（现改为等级补偿）
 	if (!user_stat.isMember("hqbc") || !user_stat["hqbc"].isArray())
@@ -443,7 +457,7 @@ bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
 		Json::Value array = Json::arrayValue;
 		user_stat["hqbc"] = array;
 
-		for(int i = 0; i < MAX_RECOMPENSE_ITEMS; ++i)
+		for (int i = 0; i < MAX_RECOMPENSE_ITEMS; ++i)
 		{
 			user_stat["hqbc"][i] = 0;
 		}
@@ -463,7 +477,7 @@ bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
 		Json::Value array = Json::arrayValue;
 		user_stat["hqchg"] = array;
 
-		for(int i = 0; i < max_charge_index; ++i)
+		for (int i = 0; i < max_charge_index; ++i)
 		{
 			user_stat["hqchg"][i] = 0;
 		}
@@ -476,11 +490,11 @@ bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
 		Json::Value array = Json::arrayValue;
 		user_stat["hqvip"] = array;
 
-		for(int i = 0; i < MAX_VIP_ITEMS; ++i)
+		for (int i = 0; i < MAX_VIP_ITEMS; ++i)
 		{
 			Json::Value array = Json::arrayValue;
 
-			for(int j = 0; j < MAX_VIP_SUBQUENT; ++j)
+			for (int j = 0; j < MAX_VIP_SUBQUENT; ++j)
 			{
 				array[j] = 0;
 			}
@@ -495,15 +509,16 @@ bool HeQuActivityUnit::CheckUserstatComplete(Json::Value & user_stat)
 bool HeQuActivityUnit::IsActivityOpen()
 {
 	//判断活动是否开启
-	unsigned begints = Config::GetIntValue(CONFIG_HEQU_ACTIVITY_BEGIN_TS);  //活动的开启时间
-	unsigned endts = Config::GetIntValue(CONFIG_HEQU_ACTIVITY_END_TS);;
+	unsigned begints = Config::GetIntValue(CONFIG_HEQU_ACTIVITY_BEGIN_TS); //活动的开启时间
+	unsigned endts = Config::GetIntValue(CONFIG_HEQU_ACTIVITY_END_TS);
+	;
 
 	string type;
 	Config::GetValue(type, CONFIG_ACTIVITY_GALLERY_TYPE);
 
 	unsigned now = Time::GetGlobalTime();
 	//判断类型，再判断时间
-	if (now >= begints && now <= endts)  //在活动开启范围内
+	if (now >= begints && now <= endts) //在活动开启范围内
 	{
 		return true;
 	}
@@ -516,13 +531,11 @@ bool HeQuActivityUnit::IsActivityOpen()
 	return false;
 }
 
-AncientScrollUnit::AncientScrollUnit(const UserWrap& user):
-		BaseCmdUnit(user.Id())
+AncientScrollUnit::AncientScrollUnit(const UserWrap &user) : BaseCmdUnit(user.Id())
 {
-
 }
 
-int AncientScrollUnit::InjectScroll(UserWrap& userWrap, const AncientParam & param, Json::Value & result)
+int AncientScrollUnit::InjectScroll(UserWrap &userWrap, const AncientParam &param, Json::Value &result)
 {
 	userWrap.GetUserTech(m_jsonData);
 
@@ -534,7 +547,7 @@ int AncientScrollUnit::InjectScroll(UserWrap& userWrap, const AncientParam & par
 	//从科技中获取当前的科技等级
 	unsigned level = m_jsonData["ancientScroll"][id - 1]["level"].asUInt();
 
-	if (level >= MAX_SCROLL_LEVEL- 1)
+	if (level >= MAX_SCROLL_LEVEL - 1)
 	{
 		error_log("item is max level. uid=%u", m_nUid);
 		throw runtime_error("item_is_max_level");
@@ -567,7 +580,7 @@ int AncientScrollUnit::InjectScroll(UserWrap& userWrap, const AncientParam & par
 	r3 = scrollitem.res[2];
 	r4 = scrollitem.res[3];
 
-	if (res["r1"].asUInt() < r1 || res["r2"].asUInt() < r2 ||res["r3"].asUInt() < r3 ||res["r4"].asUInt() <r4)
+	if (res["r1"].asUInt() < r1 || res["r2"].asUInt() < r2 || res["r3"].asUInt() < r3 || res["r4"].asUInt() < r4)
 	{
 		error_log("resource not enough. uid=%u", m_nUid);
 		throw runtime_error("resource_not_enough");
@@ -601,8 +614,8 @@ int AncientScrollUnit::InjectScroll(UserWrap& userWrap, const AncientParam & par
 		times = 0;
 	}
 
-	m_jsonData["ancientScroll"][id - 1]["times"]  = times;
-	m_jsonData["ancientScroll"][id - 1]["level"]  = level;
+	m_jsonData["ancientScroll"][id - 1]["times"] = times;
+	m_jsonData["ancientScroll"][id - 1]["level"] = level;
 
 	//更新卷轴科技
 	userWrap.SetUserTech(m_jsonData);
@@ -616,7 +629,7 @@ int AncientScrollUnit::GetMinLevel()
 {
 	unsigned minLevel = m_jsonData["ancientScroll"][0u]["level"].asUInt();
 
-	for(int i = 1; i < m_jsonData["ancientScroll"].size(); ++i)
+	for (int i = 1; i < m_jsonData["ancientScroll"].size(); ++i)
 	{
 		unsigned level = m_jsonData["ancientScroll"][i]["level"].asUInt();
 
@@ -636,13 +649,13 @@ int AncientScrollUnit::CheckScrollInit()
 		//未初始化
 		Json::Value item(Json::arrayValue);
 
-		for(int i = 0; i < ANCIENT_SCROLL_ITEMS; ++i)
+		for (int i = 0; i < ANCIENT_SCROLL_ITEMS; ++i)
 		{
 			Json::Value itemobj;
 
-			itemobj["id"] = i+1;
-			itemobj["level"] = 0;  //0级
-			itemobj["times"] = 0;  //注资次数
+			itemobj["id"] = i + 1;
+			itemobj["level"] = 0; //0级
+			itemobj["times"] = 0; //注资次数
 
 			item[i] = itemobj;
 		}
@@ -656,13 +669,13 @@ int AncientScrollUnit::CheckScrollInit()
 
 		m_jsonData["ancientScroll"].resize(ANCIENT_SCROLL_ITEMS);
 
-		for(int i = old_size; i < ANCIENT_SCROLL_ITEMS; ++i)
+		for (int i = old_size; i < ANCIENT_SCROLL_ITEMS; ++i)
 		{
 			Json::Value itemobj;
 
-			itemobj["id"] = i+1;
-			itemobj["level"] = 0;  //0级
-			itemobj["times"] = 0;  //注资次数
+			itemobj["id"] = i + 1;
+			itemobj["level"] = 0; //0级
+			itemobj["times"] = 0; //注资次数
 
 			m_jsonData["ancientScroll"][i] = itemobj;
 		}
@@ -671,13 +684,11 @@ int AncientScrollUnit::CheckScrollInit()
 	return 0;
 }
 
-CompoundShredUnit::CompoundShredUnit(const UserWrap& user):
-		BaseCmdUnit(user.Id())
+CompoundShredUnit::CompoundShredUnit(const UserWrap &user) : BaseCmdUnit(user.Id())
 {
-
 }
 
-int CompoundShredUnit::ShredCompound(UserWrap& userWrap, const UnitUdCmdParams & param, Json::Value & result)
+int CompoundShredUnit::ShredCompound(UserWrap &userWrap, const UnitUdCmdParams &param, Json::Value &result)
 {
 	unsigned equd = param.Ud();
 	unsigned cost_count = param.ValueAsUInt("cost");
@@ -692,9 +703,9 @@ int CompoundShredUnit::ShredCompound(UserWrap& userWrap, const UnitUdCmdParams &
 	unsigned eqid = equipdata["id"].asUInt();
 
 	//根据装备id加载碎片的配置
-	const CompoundShredConfig::ShredItem & shreditem = CompoundConfigWrap().GetShredItemCfg(eqid);
+	const CompoundShredConfig::ShredItem &shreditem = CompoundConfigWrap().GetShredItemCfg(eqid);
 
-	int addcount = cost_count/shreditem.count();
+	int addcount = cost_count / shreditem.count();
 	int costcount = addcount * shreditem.count();
 
 	if (count < costcount)
@@ -713,7 +724,7 @@ int CompoundShredUnit::ShredCompound(UserWrap& userWrap, const UnitUdCmdParams &
 		vector<string> heros;
 		vector<string> reasons;
 
-		for(int i = 0; i < addcount; ++i)
+		for (int i = 0; i < addcount; ++i)
 		{
 			char heroid[50] = {0};
 			sprintf(heroid, "H%u", shreditem.compoundid());
@@ -745,8 +756,7 @@ int CompoundShredUnit::ShredCompound(UserWrap& userWrap, const UnitUdCmdParams &
 	return 0;
 }
 
-ScrollActivityUnit::ScrollActivityUnit(unsigned uid):
-		BaseActivityUnit(uid, CONFIG_SCROLL_ACTIVITY)
+ScrollActivityUnit::ScrollActivityUnit(unsigned uid) : BaseActivityUnit(uid, CONFIG_SCROLL_ACTIVITY)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_SCROLL_SPECIAL, m_jsonData);
@@ -782,7 +792,7 @@ int ScrollActivityUnit::GainMaterial(unsigned type, unsigned count)
 	return 0;
 }
 
-int ScrollActivityUnit::LoadScrollActivity(Json::Value & result)
+int ScrollActivityUnit::LoadScrollActivity(Json::Value &result)
 {
 	CheckVersion();
 
@@ -795,7 +805,7 @@ int ScrollActivityUnit::LoadScrollActivity(Json::Value & result)
 		//跨天，则事件id取第一个
 		int days = GetDistanceDays();
 
-		m_jsonData["b"] = scrollcfgwrap.GetInitAffairId(days);  //当前事件的新id
+		m_jsonData["b"] = scrollcfgwrap.GetInitAffairId(days); //当前事件的新id
 		m_jsonData["a"] = now;
 
 		Save(); //先保存，以免后面抛异常
@@ -806,7 +816,7 @@ int ScrollActivityUnit::LoadScrollActivity(Json::Value & result)
 	return 0;
 }
 
-int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value & result)
+int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value &result)
 {
 	CheckVersion();
 
@@ -826,7 +836,7 @@ int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value & result)
 		//跨天，则事件id取第一个
 		int days = GetDistanceDays();
 
-		m_jsonData["b"] = scrollcfgwrap.GetInitAffairId(days);  //当前事件的新id
+		m_jsonData["b"] = scrollcfgwrap.GetInitAffairId(days); //当前事件的新id
 		m_jsonData["a"] = now;
 
 		Save(); //先保存，以免后面抛异常
@@ -841,7 +851,7 @@ int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value & result)
 	}
 
 	//根据事件id,获取事件配置
-	const ConfigScrollActivity::Affair & affaircfg = scrollcfgwrap.GetAffairCfgById(affair_id);
+	const ConfigScrollActivity::Affair &affaircfg = scrollcfgwrap.GetAffairCfgById(affair_id);
 	unsigned active_value = 0;
 
 	if (complete_type_props == type)
@@ -849,7 +859,7 @@ int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value & result)
 		//扣除材料
 		unsigned type = affaircfg.props().type();
 		unsigned count = affaircfg.props().count();
-		active_value =  affaircfg.props().active_value();
+		active_value = affaircfg.props().active_value();
 
 		if (m_jsonData["d"][type - 1].asUInt() < count)
 		{
@@ -862,7 +872,7 @@ int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value & result)
 	else
 	{
 		unsigned cash = affaircfg.cash().count();
-		active_value =  affaircfg.cash().active_value();
+		active_value = affaircfg.cash().active_value();
 
 		//扣钻石
 		UserWrap userwrap(m_nUid, true);
@@ -892,13 +902,13 @@ int ScrollActivityUnit::CompleteAffair(unsigned type, Json::Value & result)
 	return 0;
 }
 
-int ScrollActivityUnit::GetActiveReward(unsigned index, Json::Value & result)
+int ScrollActivityUnit::GetActiveReward(unsigned index, Json::Value &result)
 {
 	CheckVersion();
 
 	ScrollActivityConfigWrap scrollcfgwrap;
 
-	const ConfigScrollActivity::ActiveValueReward & activevaluecfg = scrollcfgwrap.GetActiveRewardCfg(index);
+	const ConfigScrollActivity::ActiveValueReward &activevaluecfg = scrollcfgwrap.GetActiveRewardCfg(index);
 
 	//判断活跃值是否满足要求
 	if (m_jsonData["c"].asUInt() < activevaluecfg.value())
@@ -920,7 +930,7 @@ int ScrollActivityUnit::GetActiveReward(unsigned index, Json::Value & result)
 	//发奖励
 	ProvideCommonReward(activevaluecfg.reward(), "ScrollActivity_Active", result);
 
-	const ConfigScrollActivity::ScrollActivity & scrollactcfg = scrollcfgwrap.GetScrollCfg();
+	const ConfigScrollActivity::ScrollActivity &scrollactcfg = scrollcfgwrap.GetScrollCfg();
 
 	if (scrollactcfg.active_value_reward_size() == index)
 	{
@@ -930,7 +940,7 @@ int ScrollActivityUnit::GetActiveReward(unsigned index, Json::Value & result)
 		if (diff_day < max_activity_days)
 		{
 			//获取额外奖励的配置
-			const ConfigScrollActivity::ExtraReward &  extracfg = scrollcfgwrap.GetExtraRewardCfg(diff_day);
+			const ConfigScrollActivity::ExtraReward &extracfg = scrollcfgwrap.GetExtraRewardCfg(diff_day);
 			ProvideCommonReward(extracfg.reward(), "ScrollActivity_Extra", result["extra"]);
 		}
 	}
@@ -957,7 +967,7 @@ int ScrollActivityUnit::GetDistanceDays()
 
 	int diff_day = CTime::GetDayInterval(starts, now);
 
-	int day = diff_day + 1;  //包含活动开始当天
+	int day = diff_day + 1; //包含活动开始当天
 
 	return day;
 }
@@ -979,21 +989,21 @@ int ScrollActivityUnit::CheckVersion()
 
 int ScrollActivityUnit::Reset()
 {
-	m_jsonData["a"] = Time::GetGlobalTime();  //事件刷新的时间
+	m_jsonData["a"] = Time::GetGlobalTime(); //事件刷新的时间
 
 	int days = GetDistanceDays();
 
-	m_jsonData["b"] = ScrollActivityConfigWrap().GetInitAffairId(days);  //当前事件的id
-	m_jsonData["c"] = 0;  //活力值
-	m_jsonData["e"] = 0;  //活力值奖励领取状态，位标志
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_SCROLL_SPECIAL;  //id
+	m_jsonData["b"] = ScrollActivityConfigWrap().GetInitAffairId(days); //当前事件的id
+	m_jsonData["c"] = 0;												//活力值
+	m_jsonData["e"] = 0;												//活力值奖励领取状态，位标志
+	m_jsonData["v"] = GetVersion();										//版本号
+	m_jsonData["id"] = NAT_SCROLL_SPECIAL;								//id
 
-	m_jsonData["d"] = Json::arrayValue;  //三种材料的数量
+	m_jsonData["d"] = Json::arrayValue; //三种材料的数量
 
-	for(int i = 0; i < max_material_type; ++i)
+	for (int i = 0; i < max_material_type; ++i)
 	{
-		m_jsonData["d"][i] = 0;   //材料数量清0
+		m_jsonData["d"][i] = 0; //材料数量清0
 	}
 
 	Save();
@@ -1001,11 +1011,10 @@ int ScrollActivityUnit::Reset()
 	return 0;
 }
 
-KingTreasureActivityUnit::KingTreasureActivityUnit(unsigned uid):
-		BaseActivityUnit(uid, CONFIG_KING_TREASURE)
+KingTreasureActivityUnit::KingTreasureActivityUnit(unsigned uid) : BaseActivityUnit(uid, CONFIG_KING_TREASURE)
 {
 	//先解决共享内存数据的版本号问题
-	static CDataTreasureDepot* pdata = CDataTreasureDepot::GetCDataTreasureDepot();
+	static CDataTreasureDepot *pdata = CDataTreasureDepot::GetCDataTreasureDepot();
 
 	if (NULL == pdata)
 	{
@@ -1013,7 +1022,7 @@ KingTreasureActivityUnit::KingTreasureActivityUnit(unsigned uid):
 	}
 
 	unsigned version = GetVersion();
-	pdata->CheckVersion(version);   //检查共享内存中的版本号
+	pdata->CheckVersion(version); //检查共享内存中的版本号
 
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_KING_TREASURE, m_jsonData);
@@ -1030,7 +1039,7 @@ KingTreasureActivityUnit::KingTreasureActivityUnit(unsigned uid):
 	}
 }
 
-int KingTreasureActivityUnit::OpenTreasureBox(unsigned equd, Json::Value & result)
+int KingTreasureActivityUnit::OpenTreasureBox(unsigned equd, Json::Value &result)
 {
 	CheckVersion();
 
@@ -1041,7 +1050,7 @@ int KingTreasureActivityUnit::OpenTreasureBox(unsigned equd, Json::Value & resul
 		throw runtime_error("box_already_open");
 	}
 
-	const ConfigKingTreasure::KingTreasure &  treasurecfg = KingTreasureConfigWrap().GetTreasureCfg();
+	const ConfigKingTreasure::KingTreasure &treasurecfg = KingTreasureConfigWrap().GetTreasureCfg();
 
 	int cost = treasurecfg.cost();
 
@@ -1065,9 +1074,9 @@ int KingTreasureActivityUnit::OpenTreasureBox(unsigned equd, Json::Value & resul
 	vector<unsigned> rates;
 	map<unsigned, unsigned> mpos;
 	int num = 0;
-	static CDataTreasureDepot* pdata = CDataTreasureDepot::GetCDataTreasureDepot();
+	static CDataTreasureDepot *pdata = CDataTreasureDepot::GetCDataTreasureDepot();
 
-	for(int i = 0; i < treasurecfg.king_treasures_size(); ++i)
+	for (int i = 0; i < treasurecfg.king_treasures_size(); ++i)
 	{
 		//排除有次数限制，并且次数已经达到的箱子
 		if (treasurecfg.king_treasures(i).limit() > 0)
@@ -1094,7 +1103,7 @@ int KingTreasureActivityUnit::OpenTreasureBox(unsigned equd, Json::Value & resul
 	unsigned tpos = mpos[pos];
 
 	//往newact中更新
-	m_jsonData["a"] = treasurecfg.king_treasures(tpos).id();  //箱子id
+	m_jsonData["a"] = treasurecfg.king_treasures(tpos).id(); //箱子id
 	m_jsonData["b"] = 1;
 
 	Save();
@@ -1111,7 +1120,7 @@ int KingTreasureActivityUnit::OpenTreasureBox(unsigned equd, Json::Value & resul
 	return 0;
 }
 
-int KingTreasureActivityUnit::ReceiveReward(Json::Value & result)
+int KingTreasureActivityUnit::ReceiveReward(Json::Value &result)
 {
 	CheckVersion();
 
@@ -1125,11 +1134,11 @@ int KingTreasureActivityUnit::ReceiveReward(Json::Value & result)
 	unsigned id = m_jsonData["a"].asUInt();
 
 	//根据箱子的id，去获取对应的奖励
-	const ConfigKingTreasure::TreasureBox & boxcfg = KingTreasureConfigWrap().GetTreasureBoxById(id);
+	const ConfigKingTreasure::TreasureBox &boxcfg = KingTreasureConfigWrap().GetTreasureBoxById(id);
 
 	//发奖励
 	ProvideCommonReward(boxcfg.reward(), "KingTreasure_Receive", result);
-	m_jsonData["b"] = 0;   //修改箱子的状态
+	m_jsonData["b"] = 0; //修改箱子的状态
 
 	Save();
 
@@ -1138,7 +1147,7 @@ int KingTreasureActivityUnit::ReceiveReward(Json::Value & result)
 	return 0;
 }
 
-int KingTreasureActivityUnit::RecycleReward(Json::Value & result)
+int KingTreasureActivityUnit::RecycleReward(Json::Value &result)
 {
 	CheckVersion();
 
@@ -1152,12 +1161,12 @@ int KingTreasureActivityUnit::RecycleReward(Json::Value & result)
 	unsigned id = m_jsonData["a"].asUInt();
 
 	//根据箱子的id，去获取对应的奖励
-	const ConfigKingTreasure::TreasureBox & boxcfg = KingTreasureConfigWrap().GetTreasureBoxById(id);
+	const ConfigKingTreasure::TreasureBox &boxcfg = KingTreasureConfigWrap().GetTreasureBoxById(id);
 	int count = boxcfg.collect();
 
 	AddEquips(king_token_eqid, count, "KingTreasure_Recycle", result);
 
-	m_jsonData["b"] = 0;   //修改箱子的状态
+	m_jsonData["b"] = 0; //修改箱子的状态
 
 	Save();
 
@@ -1183,20 +1192,19 @@ int KingTreasureActivityUnit::CheckVersion()
 
 int KingTreasureActivityUnit::Reset()
 {
-	m_jsonData["a"] = 0;  //箱子id
-	m_jsonData["b"] = 0;  //宝箱状态.0-关闭，1-开启
+	m_jsonData["a"] = 0; //箱子id
+	m_jsonData["b"] = 0; //宝箱状态.0-关闭，1-开启
 
-	m_jsonData["v"] = GetVersion();  //版本号
+	m_jsonData["v"] = GetVersion(); //版本号
 
-	m_jsonData["id"] = NAT_KING_TREASURE;  //id
+	m_jsonData["id"] = NAT_KING_TREASURE; //id
 
 	Save();
 
 	return 0;
 }
 
-ScrollFeedbackActivityUnit::ScrollFeedbackActivityUnit(unsigned uid):
-		BaseActivityUnit(uid, CONFIG_SCROLL_FEEDBACK)
+ScrollFeedbackActivityUnit::ScrollFeedbackActivityUnit(unsigned uid) : BaseActivityUnit(uid, CONFIG_SCROLL_FEEDBACK)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_SCROLL_FEEDBACK, m_jsonData);
@@ -1213,12 +1221,12 @@ ScrollFeedbackActivityUnit::ScrollFeedbackActivityUnit(unsigned uid):
 	}
 }
 
-int ScrollFeedbackActivityUnit::ReceiveFeedback(unsigned index, UserWrap& userWrap, Json::Value & result)
+int ScrollFeedbackActivityUnit::ReceiveFeedback(unsigned index, UserWrap &userWrap, Json::Value &result)
 {
 	//判断参数
 	if (index < 1 || index > item_max_index)
 	{
-		error_log("param error. uid=%u,index=%u", m_nUid,index);
+		error_log("param error. uid=%u,index=%u", m_nUid, index);
 		throw runtime_error("param error");
 	}
 
@@ -1232,7 +1240,7 @@ int ScrollFeedbackActivityUnit::ReceiveFeedback(unsigned index, UserWrap& userWr
 
 	//判断充值金额是否满足配置
 	//先获取配置
-	const ConfigScrollFeedback::FeedBackItem & itemcfg = ScrollFeedbackConfigWrap().GetFeedbackByIndex(index);
+	const ConfigScrollFeedback::FeedBackItem &itemcfg = ScrollFeedbackConfigWrap().GetFeedbackByIndex(index);
 
 	if (charge < itemcfg.diamond())
 	{
@@ -1250,7 +1258,7 @@ int ScrollFeedbackActivityUnit::ReceiveFeedback(unsigned index, UserWrap& userWr
 	//发奖励
 	ProvideCommonReward(itemcfg.reward(), "Scroll_Feedback", result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -1268,23 +1276,22 @@ int ScrollFeedbackActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["ts"] = Time::GetGlobalTime();  //重置的时间
-	m_jsonData["v"] = GetVersion();  //版本号
+	m_jsonData["ts"] = Time::GetGlobalTime(); //重置的时间
+	m_jsonData["v"] = GetVersion();			  //版本号
 
-	m_jsonData["id"] = NAT_SCROLL_FEEDBACK;  //id
+	m_jsonData["id"] = NAT_SCROLL_FEEDBACK; //id
 
 	Save();
 
 	return 0;
 }
 
-SevenDaysAwakenActivityUnit::SevenDaysAwakenActivityUnit(unsigned uid):
-		BaseActivityUnit(uid, CONFIG_SEVENDAYS_AWAKEN)
+SevenDaysAwakenActivityUnit::SevenDaysAwakenActivityUnit(unsigned uid) : BaseActivityUnit(uid, CONFIG_SEVENDAYS_AWAKEN)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_SEVENDAY_AWAKEN, m_jsonData);
@@ -1302,7 +1309,7 @@ SevenDaysAwakenActivityUnit::SevenDaysAwakenActivityUnit(unsigned uid):
 	}
 }
 
-int SevenDaysAwakenActivityUnit::ReceiveGift(unsigned type, UserWrap& userWrap, Json::Value & result)
+int SevenDaysAwakenActivityUnit::ReceiveGift(unsigned type, UserWrap &userWrap, Json::Value &result)
 {
 	if (type_of_daily != type && type_of_seven != type)
 	{
@@ -1327,8 +1334,8 @@ int SevenDaysAwakenActivityUnit::ReceiveGift(unsigned type, UserWrap& userWrap, 
 	if (diff_day)
 	{
 		//跨天，重置每日礼包的领取状态
-		m_jsonData["b"] = 0;   //每日满300钻的礼包领取状态
-		m_jsonData["ts"] = now;  //领取奖励时间
+		m_jsonData["b"] = 0;	//每日满300钻的礼包领取状态
+		m_jsonData["ts"] = now; //领取奖励时间
 
 		need_save = true;
 	}
@@ -1356,13 +1363,13 @@ int SevenDaysAwakenActivityUnit::ReceiveGift(unsigned type, UserWrap& userWrap, 
 	return 0;
 }
 
-int SevenDaysAwakenActivityUnit::ProvideDailyGift(Json::Value & user_flag, Json::Value & result)
+int SevenDaysAwakenActivityUnit::ProvideDailyGift(Json::Value &user_flag, Json::Value &result)
 {
 	//判断当日充值是否满足要求
 	unsigned charge = 0;
 	unsigned now = Time::GetGlobalTime();
 
-	if (0 == CTime::GetDayInterval(user_flag["dchg"][0u].asUInt(), now) )
+	if (0 == CTime::GetDayInterval(user_flag["dchg"][0u].asUInt(), now))
 	{
 		charge = user_flag["dchg"][1u].asUInt();
 	}
@@ -1389,12 +1396,12 @@ int SevenDaysAwakenActivityUnit::ProvideDailyGift(Json::Value & user_flag, Json:
 		throw std::runtime_error("Add_equip_item_failed");
 	}
 
-	m_jsonData["b"] = 1;   //设置每日满300钻的礼包领取状态
+	m_jsonData["b"] = 1; //设置每日满300钻的礼包领取状态
 
 	return 0;
 }
 
-int SevenDaysAwakenActivityUnit::ProvideSevenDaysGift(Json::Value & user_flag, Json::Value & result)
+int SevenDaysAwakenActivityUnit::ProvideSevenDaysGift(Json::Value &user_flag, Json::Value &result)
 {
 	//判断是否满足7日洗髓真丹的领取条件
 	unsigned size = user_flag["chgs"].size();
@@ -1405,9 +1412,9 @@ int SevenDaysAwakenActivityUnit::ProvideSevenDaysGift(Json::Value & user_flag, J
 
 	for (unsigned i = 0; i < size; ++i)
 	{
-		unsigned ts  = user_flag["chgs"][i][0u].asUInt();
+		unsigned ts = user_flag["chgs"][i][0u].asUInt();
 
-		if(ts >= nStartTime && ts <= nEndTime)
+		if (ts >= nStartTime && ts <= nEndTime)
 		{
 			unsigned charge = user_flag["chgs"][i][1u].asUInt();
 
@@ -1446,21 +1453,20 @@ int SevenDaysAwakenActivityUnit::ProvideSevenDaysGift(Json::Value & user_flag, J
 
 int SevenDaysAwakenActivityUnit::Reset()
 {
-	m_jsonData["a"] = 0;   //7日礼包的洗髓真丹的领取状态
-	m_jsonData["b"] = 0;   //每日满300钻的礼包领取状态
+	m_jsonData["a"] = 0; //7日礼包的洗髓真丹的领取状态
+	m_jsonData["b"] = 0; //每日满300钻的礼包领取状态
 
-	m_jsonData["ts"] = Time::GetGlobalTime();  //跨天刷新时间
-	m_jsonData["v"] = GetVersion();  //版本号
+	m_jsonData["ts"] = Time::GetGlobalTime(); //跨天刷新时间
+	m_jsonData["v"] = GetVersion();			  //版本号
 
-	m_jsonData["id"] = NAT_SEVENDAY_AWAKEN;  //id
+	m_jsonData["id"] = NAT_SEVENDAY_AWAKEN; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-TokenUpgradeActivityUnit::TokenUpgradeActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_TOKEN_UPGRADE)
+TokenUpgradeActivityUnit::TokenUpgradeActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_TOKEN_UPGRADE)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_TOKEN_UPGRADE, m_jsonData);
@@ -1478,7 +1484,7 @@ TokenUpgradeActivityUnit::TokenUpgradeActivityUnit(const UserWrap& user):
 	}
 }
 
-int TokenUpgradeActivityUnit::ReceivePointGift(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int TokenUpgradeActivityUnit::ReceivePointGift(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.ValueAsUInt("index");
 
@@ -1497,7 +1503,7 @@ int TokenUpgradeActivityUnit::ReceivePointGift(UserWrap& userWrap, const BaseCmd
 	unsigned charge = userWrap.GetRechargePoint(begints, nowts);
 
 	//根据index，获取配置
-	const ConfigTokenUpgrade::ChargeReceive & receivecfg = TokenUpgradeConfigWrap().GetReceiveConfigByIndex(index);
+	const ConfigTokenUpgrade::ChargeReceive &receivecfg = TokenUpgradeConfigWrap().GetReceiveConfigByIndex(index);
 
 	if (charge < receivecfg.point())
 	{
@@ -1515,7 +1521,7 @@ int TokenUpgradeActivityUnit::ReceivePointGift(UserWrap& userWrap, const BaseCmd
 	//发放奖励
 	ProvideCommonReward(receivecfg.reward(), "TokenUpgrade_Point", result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 	Save();
 
 	result["NewAct"] = m_jsonData;
@@ -1523,7 +1529,7 @@ int TokenUpgradeActivityUnit::ReceivePointGift(UserWrap& userWrap, const BaseCmd
 	return 0;
 }
 
-int TokenUpgradeActivityUnit::PointLottery(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int TokenUpgradeActivityUnit::PointLottery(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckVersion();
@@ -1535,7 +1541,7 @@ int TokenUpgradeActivityUnit::PointLottery(UserWrap& userWrap, const BaseCmdPara
 	unsigned charge = userWrap.GetRechargePoint(begints, nowts);
 
 	//获取抽奖配置
-	const ConfigTokenUpgrade::ChargeLottery &  lotterycfg = TokenUpgradeConfigWrap().GetLotteryConfig();
+	const ConfigTokenUpgrade::ChargeLottery &lotterycfg = TokenUpgradeConfigWrap().GetLotteryConfig();
 
 	//判断抽奖次数是否达到上限
 	if (m_jsonData["b"].asUInt() >= lotterycfg.limit())
@@ -1555,7 +1561,7 @@ int TokenUpgradeActivityUnit::PointLottery(UserWrap& userWrap, const BaseCmdPara
 
 	vector<unsigned> rates;
 
-	for(int i = 0; i < lotterycfg.turntable_size(); ++i)
+	for (int i = 0; i < lotterycfg.turntable_size(); ++i)
 	{
 		unsigned weight = lotterycfg.turntable(i).weight();
 
@@ -1569,7 +1575,7 @@ int TokenUpgradeActivityUnit::PointLottery(UserWrap& userWrap, const BaseCmdPara
 	//发放物品
 	ProvideCommonReward(lotterycfg.turntable(pos).reward(), "TokenUpgrade_Lottary", result);
 
-	m_jsonData["b"] = m_jsonData["b"].asUInt() + 1;  //次数加1
+	m_jsonData["b"] = m_jsonData["b"].asUInt() + 1; //次数加1
 	Save();
 
 	result["NewAct"] = m_jsonData;
@@ -1602,24 +1608,23 @@ int TokenUpgradeActivityUnit::Reset()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["b"] = 0;   //已抽奖次数
+	m_jsonData["b"] = 0; //已抽奖次数
 
-	m_jsonData["v"] = GetVersion();  //版本号
+	m_jsonData["v"] = GetVersion(); //版本号
 
-	m_jsonData["id"] = NAT_TOKEN_UPGRADE;  //id
+	m_jsonData["id"] = NAT_TOKEN_UPGRADE; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-BuildSuitActivityUnit::BuildSuitActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_BUILD_SUIT)
+BuildSuitActivityUnit::BuildSuitActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_BUILD_SUIT)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_BUILD_SUIT, m_jsonData);
@@ -1637,7 +1642,7 @@ BuildSuitActivityUnit::BuildSuitActivityUnit(const UserWrap& user):
 	}
 }
 
-int BuildSuitActivityUnit::ReceiveChargeGift(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int BuildSuitActivityUnit::ReceiveChargeGift(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.Index();
 
@@ -1657,7 +1662,7 @@ int BuildSuitActivityUnit::ReceiveChargeGift(UserWrap& userWrap, const UnitIndex
 	unsigned charge = userWrap.GetRechargePoint(begints, nowts);
 
 	//根据index，获取配置
-	const ConfigActivity::BuildSuitItem & itemcfg = ActivityConfigWrap().GetBuildSuitConfigByIndex(index);
+	const ConfigActivity::BuildSuitItem &itemcfg = ActivityConfigWrap().GetBuildSuitConfigByIndex(index);
 
 	if (charge < itemcfg.diamond())
 	{
@@ -1675,7 +1680,7 @@ int BuildSuitActivityUnit::ReceiveChargeGift(UserWrap& userWrap, const UnitIndex
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "BuildSuit_Charge", result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 	Save();
 
 	result["NewAct"] = m_jsonData;
@@ -1707,21 +1712,19 @@ int BuildSuitActivityUnit::Reset()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_BUILD_SUIT;  //id
+	m_jsonData["v"] = GetVersion();	//版本号
+	m_jsonData["id"] = NAT_BUILD_SUIT; //id
 	need_save = true;
 
 	return 0;
 }
 
-
-BlessPointActivityUnit::BlessPointActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_BLESS_POINT)
+BlessPointActivityUnit::BlessPointActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_BLESS_POINT)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_BLESS_POINT, m_jsonData);
@@ -1739,58 +1742,46 @@ BlessPointActivityUnit::BlessPointActivityUnit(const UserWrap& user):
 	}
 }
 
-int BlessPointActivityUnit::BlessExchange(UserWrap& userWrap, const BlessParam & param, Json::Value & result)
+int BlessPointActivityUnit::BlessExchange(UserWrap &userWrap, const BlessParam &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
-
 	unsigned heroud = param.Ud();
 	unsigned id = param.Id();
-
 	//先根据id，获取兑换的条件
-	const ConfigActivity::ExchangeItem & exchangecfg = ActivityConfigWrap().GetExchangeConfigById(id);
-
+	const ConfigActivity::ExchangeItem &exchangecfg = ActivityConfigWrap().GetExchangeConfigById(id);
 	//获取等级和数量的条件
 	unsigned cond_num = exchangecfg.condition(0u);
 	unsigned cond_level = exchangecfg.condition(1u);
-
-	if (0 != cond_num || 0 != cond_level)
-	{
+	if (0 != cond_num || 0 != cond_level) {
 		//判断英雄身上的装备条件
 		bool isok = CheckHeroEquips(heroud, cond_num, cond_level);
-
-		if (!isok)
-		{
+		if (!isok) {
 			throw runtime_error("condition_not_match");
 		}
 	}
-
 	//判断积分是否满足当前的兑换需求
-	int pos = id - 1;
-	int cost = exchangecfg.first() + m_jsonData["a"][pos].asUInt() * exchangecfg.accumulate();
-
+	unsigned pos = id - 1;
+	unsigned buy_count = 0;
+	Json::GetUInt(m_jsonData["a"], pos, buy_count);
+	unsigned cost = exchangecfg.first() + buy_count * exchangecfg.accumulate();
 	//获取活动期间内的充值数目
 	unsigned begints = GetBeginTs();
 	unsigned nowts = Time::GetGlobalTime();
-
 	unsigned charge = userWrap.GetRechargePoint(begints, nowts);
-
-	if (charge < (cost + m_jsonData["b"].asUInt()))
-	{
-		error_log("charge not enough. uid=%u, charge=%u", m_nUid, charge);
+	unsigned used = 0;
+	Json::GetUInt(m_jsonData, "b", used);
+	used += cost;
+	if (used > charge || used > 200000) {
+		error_log("charge not enough. uid=%u, charge=%u, used=%u, cost=%u", m_nUid, charge, used, cost);
 		throw runtime_error("charge_not_enough");
 	}
-
+	m_jsonData["a"][pos] = buy_count + 1; //增加兑换次数
+	m_jsonData["b"] = used;		  //增加消耗的积分
+	Save();
 	//发放奖励
 	ProvideCommonReward(exchangecfg.reward(), "BlessPoint_Exchange", result);
-
-	m_jsonData["a"][pos] = m_jsonData["a"][pos].asUInt() + 1;   //增加兑换次数
-	m_jsonData["b"] = m_jsonData["b"].asUInt() + cost;  //增加消耗的积分
-
-	Save();
-
 	result["NewAct"] = m_jsonData;
-
 	return 0;
 }
 
@@ -1811,7 +1802,7 @@ bool BlessPointActivityUnit::CheckHeroEquips(unsigned heroud, unsigned cond_num,
 	char key[10] = {0};
 	vector<unsigned> equips;
 
-	for(int i = 1; i <= 10; ++i)
+	for (int i = 1; i <= 10; ++i)
 	{
 		sprintf(key, "e%d", i);
 
@@ -1830,7 +1821,7 @@ bool BlessPointActivityUnit::CheckHeroEquips(unsigned heroud, unsigned cond_num,
 		//数量有要求，至少装备的数量要满足条件
 		CLogicEquipment logicequip;
 
-		for(int i = 0; i < equips.size(); ++i)
+		for (int i = 0; i < equips.size(); ++i)
 		{
 			//获取装备数据
 			Json::Value equipdata;
@@ -1873,22 +1864,21 @@ int BlessPointActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置兑换次数
+		m_jsonData["a"][i] = 0; //重置兑换次数
 	}
 
-	m_jsonData["b"] = 0; //已使用积分
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_BLESS_POINT;  //id
+	m_jsonData["b"] = 0;				//已使用积分
+	m_jsonData["v"] = GetVersion();		//版本号
+	m_jsonData["id"] = NAT_BLESS_POINT; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-DoubleWelfareActivityUnit::DoubleWelfareActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_DOUBLE_WELFARE)
+DoubleWelfareActivityUnit::DoubleWelfareActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_DOUBLE_WELFARE)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_DOUBLE_WELFARE, m_jsonData);
@@ -1907,7 +1897,7 @@ DoubleWelfareActivityUnit::DoubleWelfareActivityUnit(const UserWrap& user):
 	}
 }
 
-int DoubleWelfareActivityUnit::GetExtraReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int DoubleWelfareActivityUnit::GetExtraReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.Index();
 
@@ -1927,7 +1917,7 @@ int DoubleWelfareActivityUnit::GetExtraReward(UserWrap& userWrap, const UnitInde
 	unsigned charge = userWrap.GetRechargePoint(begints, nowts);
 
 	//根据index，获取配置
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetDoubleExtraConfigByIndex(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetDoubleExtraConfigByIndex(index);
 
 	if (charge < itemcfg.diamond())
 	{
@@ -1944,7 +1934,7 @@ int DoubleWelfareActivityUnit::GetExtraReward(UserWrap& userWrap, const UnitInde
 
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "DoubleWelfare_Extra", result);
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -1953,7 +1943,7 @@ int DoubleWelfareActivityUnit::GetExtraReward(UserWrap& userWrap, const UnitInde
 	return 0;
 }
 
-int DoubleWelfareActivityUnit::GetChareReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int DoubleWelfareActivityUnit::GetChareReward(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -1981,7 +1971,7 @@ int DoubleWelfareActivityUnit::GetChareReward(UserWrap& userWrap, const BaseCmdP
 	}
 
 	//判断是否有剩余的代金券领取
-	unsigned fetched = m_jsonData["b"].asUInt();   //已领取的代金券
+	unsigned fetched = m_jsonData["b"].asUInt(); //已领取的代金券
 
 	if (sum <= fetched)
 	{
@@ -2016,22 +2006,21 @@ int DoubleWelfareActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置兑换次数
+		m_jsonData["a"][i] = 0; //重置兑换次数
 	}
 
-	m_jsonData["b"] = 0; //已领取代金券的数量
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_DOUBLE_WELFARE;  //id
+	m_jsonData["b"] = 0;				   //已领取代金券的数量
+	m_jsonData["v"] = GetVersion();		   //版本号
+	m_jsonData["id"] = NAT_DOUBLE_WELFARE; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-PearlAdvanceActivityUnit::PearlAdvanceActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_PEARL_ADVANCE)
+PearlAdvanceActivityUnit::PearlAdvanceActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_PEARL_ADVANCE)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_PEARL_ADVANCE, m_jsonData);
@@ -2050,7 +2039,7 @@ PearlAdvanceActivityUnit::PearlAdvanceActivityUnit(const UserWrap& user):
 	}
 }
 
-int PearlAdvanceActivityUnit::ExchangePearl(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int PearlAdvanceActivityUnit::ExchangePearl(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.Index();
 
@@ -2063,7 +2052,7 @@ int PearlAdvanceActivityUnit::ExchangePearl(UserWrap& userWrap, const UnitIndexC
 	//判断版本是否发生变化
 	CheckActVersion();
 
-	const ConfigActivity::PearlAdvance & pearlcfg = ActivityConfigWrap().GetPearlAdvanceConfig(index);
+	const ConfigActivity::PearlAdvance &pearlcfg = ActivityConfigWrap().GetPearlAdvanceConfig(index);
 
 	//判断兑换次数是否达到上限
 	if (m_jsonData["a"][index - 1].asUInt() >= pearlcfg.maximum())
@@ -2097,8 +2086,8 @@ int PearlAdvanceActivityUnit::ExchangePearl(UserWrap& userWrap, const UnitIndexC
 	unsigned endts = GetEndTs();
 	ProvideCommonReward(pearlcfg.reward(), "PearlAdvance_Charge", result, endts);
 
-	m_jsonData["a"][index - 1] = used + 1;    	//更新兑换次数
-	m_jsonData["b"] = usedpoint + pearlcfg.cost();    //更新消耗的积分
+	m_jsonData["a"][index - 1] = used + 1;		   //更新兑换次数
+	m_jsonData["b"] = usedpoint + pearlcfg.cost(); //更新消耗的积分
 
 	Save();
 
@@ -2107,11 +2096,11 @@ int PearlAdvanceActivityUnit::ExchangePearl(UserWrap& userWrap, const UnitIndexC
 	return 0;
 }
 
-bool PearlAdvanceActivityUnit::CheckEquipCondition(const ConfigActivity::PearlAdvance & pearlcfg, int need)
+bool PearlAdvanceActivityUnit::CheckEquipCondition(const ConfigActivity::PearlAdvance &pearlcfg, int need)
 {
 	map<unsigned, unsigned> need_equip;
 
-	for(int i = 0; i < pearlcfg.cond_eqid_size(); ++i)
+	for (int i = 0; i < pearlcfg.cond_eqid_size(); ++i)
 	{
 		unsigned eqid = pearlcfg.cond_eqid(i);
 		need_equip[eqid] = 1;
@@ -2136,7 +2125,7 @@ bool PearlAdvanceActivityUnit::CheckEquipCondition(const ConfigActivity::PearlAd
 
 		if (need_equip.count(eqid))
 		{
-			count += 1;   //灵珠不可叠加，所以直接+1
+			count += 1; //灵珠不可叠加，所以直接+1
 
 			if (count >= need)
 			{
@@ -2159,23 +2148,22 @@ int PearlAdvanceActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置兑换次数
+		m_jsonData["a"][i] = 0; //重置兑换次数
 	}
 
-	m_jsonData["b"] = 0;  //已用积分
+	m_jsonData["b"] = 0; //已用积分
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_PEARL_ADVANCE;  //id
+	m_jsonData["v"] = GetVersion();		  //版本号
+	m_jsonData["id"] = NAT_PEARL_ADVANCE; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-UniqueDialActivityUnit::UniqueDialActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_UNIQUE_DIAL)
+UniqueDialActivityUnit::UniqueDialActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_UNIQUE_DIAL)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_UNIQUEKNOWLEDGE_DIAL, m_jsonData);
@@ -2194,7 +2182,7 @@ UniqueDialActivityUnit::UniqueDialActivityUnit(const UserWrap& user):
 	}
 }
 
-int UniqueDialActivityUnit::BeginLottery(UserWrap& userWrap, BaseCmdParams & param, Json::Value & result)
+int UniqueDialActivityUnit::BeginLottery(UserWrap &userWrap, BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -2203,7 +2191,7 @@ int UniqueDialActivityUnit::BeginLottery(UserWrap& userWrap, BaseCmdParams & par
 	unsigned nowts = Time::GetGlobalTime();
 	unsigned charge = GetChargeByTime(userWrap, nowts);
 
-	int times = charge/10000;  //每10000钻，获得一次抽奖次数
+	int times = charge / 10000; //每10000钻，获得一次抽奖次数
 
 	if (times < (m_jsonData["a"].asUInt() + 1))
 	{
@@ -2218,11 +2206,11 @@ int UniqueDialActivityUnit::BeginLottery(UserWrap& userWrap, BaseCmdParams & par
 	}
 
 	//随机产生奖励
-	const ConfigActivity::Activities & activitycfg = ActivityConfigWrap().GetActivityCfg();
+	const ConfigActivity::Activities &activitycfg = ActivityConfigWrap().GetActivityCfg();
 
 	vector<unsigned> weights;
 
-	for(int i = 0; i < activitycfg.unique_knowledge_dial_size(); ++i)
+	for (int i = 0; i < activitycfg.unique_knowledge_dial_size(); ++i)
 	{
 		unsigned weight = activitycfg.unique_knowledge_dial(i).weight();
 
@@ -2239,7 +2227,7 @@ int UniqueDialActivityUnit::BeginLottery(UserWrap& userWrap, BaseCmdParams & par
 	//发放抽中的物品
 	ProvideCommonReward(activitycfg.unique_knowledge_dial(target).item(), "UniqueKnowledge_Dial_Lottery", result);
 
-	m_jsonData["a"] = m_jsonData["a"].asUInt() + 1;    	//更新抽奖次数
+	m_jsonData["a"] = m_jsonData["a"].asUInt() + 1; //更新抽奖次数
 
 	Save();
 
@@ -2250,18 +2238,17 @@ int UniqueDialActivityUnit::BeginLottery(UserWrap& userWrap, BaseCmdParams & par
 
 int UniqueDialActivityUnit::ResetAct()
 {
-	m_jsonData["a"] = 0;  //抽奖次数
+	m_jsonData["a"] = 0; //抽奖次数
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_UNIQUEKNOWLEDGE_DIAL;  //id
+	m_jsonData["v"] = GetVersion();				 //版本号
+	m_jsonData["id"] = NAT_UNIQUEKNOWLEDGE_DIAL; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-SpiritVitalityActivityUnit::SpiritVitalityActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_SPIRIT_VITALITY)
+SpiritVitalityActivityUnit::SpiritVitalityActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_SPIRIT_VITALITY)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_SPIRIT_VITALITY, m_jsonData);
@@ -2279,7 +2266,7 @@ SpiritVitalityActivityUnit::SpiritVitalityActivityUnit(const UserWrap& user):
 	}
 }
 
-int SpiritVitalityActivityUnit::ReceiveChargeGift(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int SpiritVitalityActivityUnit::ReceiveChargeGift(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.Index();
 
@@ -2297,7 +2284,7 @@ int SpiritVitalityActivityUnit::ReceiveChargeGift(UserWrap& userWrap, const Unit
 	unsigned charge = GetChargeByTime(userWrap, nowts);
 
 	//根据index，获取配置
-	const ConfigActivity::SpriteVitalityItem & itemcfg = ActivityConfigWrap().GetSpriteConfig(index);
+	const ConfigActivity::SpriteVitalityItem &itemcfg = ActivityConfigWrap().GetSpriteConfig(index);
 
 	if (charge < itemcfg.diamond())
 	{
@@ -2315,7 +2302,7 @@ int SpiritVitalityActivityUnit::ReceiveChargeGift(UserWrap& userWrap, const Unit
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "SpiritVitality_Charge", result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 	Save();
 
 	result["NewAct"] = m_jsonData;
@@ -2332,21 +2319,20 @@ int SpiritVitalityActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_SPIRIT_VITALITY;  //id
+	m_jsonData["v"] = GetVersion();			//版本号
+	m_jsonData["id"] = NAT_SPIRIT_VITALITY; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-ForgeSmeltActivityUnit::ForgeSmeltActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_FORGE_SMELT)
+ForgeSmeltActivityUnit::ForgeSmeltActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_FORGE_SMELT)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_FORGE_SMELT, m_jsonData);
@@ -2355,7 +2341,7 @@ ForgeSmeltActivityUnit::ForgeSmeltActivityUnit(const UserWrap& user):
 	if (R_ERR_NO_DATA == ret)
 	{
 		//初始化熔炉
-		m_jsonData["c"] = 0;  //当前熔炉值
+		m_jsonData["c"] = 0; //当前熔炉值
 
 		ResetAct();
 	}
@@ -2366,7 +2352,7 @@ ForgeSmeltActivityUnit::ForgeSmeltActivityUnit(const UserWrap& user):
 	}
 }
 
-int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -2375,7 +2361,7 @@ int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap& userWrap, const BaseCmdParams &
 	CheckDifferDay();
 
 	//取出所有待熔炼的物品
-	const Json::Value & paramdata = param.ParamsObj();
+	const Json::Value &paramdata = param.ParamsObj();
 	CLogicEquipment logicEquipMent;
 	map<unsigned, pair<unsigned, unsigned> > smelt_relation;
 
@@ -2385,7 +2371,7 @@ int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap& userWrap, const BaseCmdParams &
 	activitywrap.GetForgeSmeltRelation(smelt_relation);
 
 	//获取熔炉值的上限配置
-	const ConfigActivity::ForgeSmelt & smeltcfg = activitywrap.GetForgeSmeltCfg();
+	const ConfigActivity::ForgeSmelt &smeltcfg = activitywrap.GetForgeSmeltCfg();
 
 	//判断当前熔炉值是否达到上限
 	unsigned forgelimit = smeltcfg.forge_limit();
@@ -2405,11 +2391,11 @@ int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap& userWrap, const BaseCmdParams &
 	}
 
 	//返回实际消耗的物品和个数
-	for(unsigned i = 0; i < paramdata["items"].size(); ++i)
+	for (unsigned i = 0; i < paramdata["items"].size(); ++i)
 	{
 		//循环处理
 		unsigned equd = paramdata["items"][i]["ud"].asUInt();
-		unsigned times = paramdata["items"][i]["c"].asUInt();  //熔炼的次数
+		unsigned times = paramdata["items"][i]["c"].asUInt(); //熔炼的次数
 
 		if (0 == times)
 		{
@@ -2430,8 +2416,8 @@ int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap& userWrap, const BaseCmdParams &
 		}
 
 		//根据给定的熔炉值计算需要消耗几倍的装备
-		int realvalue = times * smelt_relation[eqid].second;  //实际增加的熔炉值
-		int cost_count = times * smelt_relation[eqid].first;  //实际消耗的物品
+		int realvalue = times * smelt_relation[eqid].second; //实际增加的熔炉值
+		int cost_count = times * smelt_relation[eqid].first; //实际消耗的物品
 
 		if (cost_count > equipdata["count"].asUInt())
 		{
@@ -2476,7 +2462,7 @@ int ForgeSmeltActivityUnit::ForgeSmelt(UserWrap& userWrap, const BaseCmdParams &
 	return 0;
 }
 
-int ForgeSmeltActivityUnit::BuyGoods(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int ForgeSmeltActivityUnit::BuyGoods(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -2487,7 +2473,7 @@ int ForgeSmeltActivityUnit::BuyGoods(UserWrap& userWrap, const UnitIndexCmdParam
 	unsigned index = param.Index();
 
 	//获取熔炉商店的配置
-	const ConfigActivity::ShopItem & forgeshopcfg = ActivityConfigWrap().GetForgeShopConfig(index);
+	const ConfigActivity::ShopItem &forgeshopcfg = ActivityConfigWrap().GetForgeShopConfig(index);
 
 	//判断该位置物品是否已购买
 	int pos = index - 1;
@@ -2517,7 +2503,7 @@ int ForgeSmeltActivityUnit::BuyGoods(UserWrap& userWrap, const UnitIndexCmdParam
 	//发放奖励
 	ProvideCommonReward(forgeshopcfg.item(), "ForgeShop", result);
 
-	m_jsonData["a"][pos] = m_jsonData["a"][pos].asUInt()+1;
+	m_jsonData["a"][pos] = m_jsonData["a"][pos].asUInt() + 1;
 
 	Save();
 
@@ -2542,7 +2528,7 @@ int ForgeSmeltActivityUnit::CheckDifferDay()
 
 	if (oldsize < size)
 	{
-		for(int i = oldsize; i < size; ++i)
+		for (int i = oldsize; i < size; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -2565,24 +2551,23 @@ int ForgeSmeltActivityUnit::ResetAct()
 
 	int size = ActivityConfigWrap().GetForgeShopSize();
 
-	for(int i = 0; i < size; ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置商店购买状态
+		m_jsonData["a"][i] = 0; //重置商店购买状态
 	}
 
-	m_jsonData["b"] = 0; // 每日获取的熔炉值
-	m_jsonData["t"] = Time::GetGlobalTime();  //每日重置时间
+	m_jsonData["b"] = 0;					 // 每日获取的熔炉值
+	m_jsonData["t"] = Time::GetGlobalTime(); //每日重置时间
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_FORGE_SMELT;  //id
+	m_jsonData["v"] = GetVersion();		//版本号
+	m_jsonData["id"] = NAT_FORGE_SMELT; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-HeroesDialActivityUnit::HeroesDialActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_HERO_DIAL)
+HeroesDialActivityUnit::HeroesDialActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_HERO_DIAL)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_HERO_DIAL, m_jsonData);
@@ -2600,7 +2585,7 @@ HeroesDialActivityUnit::HeroesDialActivityUnit(const UserWrap& user):
 	}
 }
 
-int HeroesDialActivityUnit::TurnHeroTable(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int HeroesDialActivityUnit::TurnHeroTable(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	unsigned type = param.ValueAsUInt("type");
 
@@ -2617,7 +2602,7 @@ int HeroesDialActivityUnit::TurnHeroTable(UserWrap& userWrap, const BaseCmdParam
 	unsigned nowts = Time::GetGlobalTime();
 	unsigned charge = GetChargeByTime(userWrap, nowts);
 
-	const ConfigActivity::HeroDial & herodialcfg = ActivityConfigWrap().GetHeroDialCfg();
+	const ConfigActivity::HeroDial &herodialcfg = ActivityConfigWrap().GetHeroDialCfg();
 
 	int nexttimes = 0;
 
@@ -2631,7 +2616,7 @@ int HeroesDialActivityUnit::TurnHeroTable(UserWrap& userWrap, const BaseCmdParam
 	}
 
 	//判断充值的钻石是否足够
-	int turntimes = charge/herodialcfg.per();
+	int turntimes = charge / herodialcfg.per();
 
 	if (turntimes < (m_jsonData["a"].asUInt() + nexttimes))
 	{
@@ -2647,7 +2632,7 @@ int HeroesDialActivityUnit::TurnHeroTable(UserWrap& userWrap, const BaseCmdParam
 	}
 
 	//开始转动
-	for(int i = 0; i < nexttimes; ++i)
+	for (int i = 0; i < nexttimes; ++i)
 	{
 		StartTurn(userWrap, herodialcfg, result);
 	}
@@ -2659,12 +2644,12 @@ int HeroesDialActivityUnit::TurnHeroTable(UserWrap& userWrap, const BaseCmdParam
 	return 0;
 }
 
-int HeroesDialActivityUnit::StartTurn(UserWrap& userWrap, const ConfigActivity::HeroDial & herodialcfg, Json::Value &result)
+int HeroesDialActivityUnit::StartTurn(UserWrap &userWrap, const ConfigActivity::HeroDial &herodialcfg, Json::Value &result)
 {
 	//根据配置的权重，取随机结果
 	vector<unsigned> weights;
 
-	for(int i = 0; i < herodialcfg.heroes_size(); ++i)
+	for (int i = 0; i < herodialcfg.heroes_size(); ++i)
 	{
 		unsigned weight = herodialcfg.heroes(i).weight();
 		weights.push_back(weight);
@@ -2702,17 +2687,15 @@ int HeroesDialActivityUnit::ResetAct()
 {
 	m_jsonData["a"] = 0; //已转动次数
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_HERO_DIAL;  //id
+	m_jsonData["v"] = GetVersion();   //版本号
+	m_jsonData["id"] = NAT_HERO_DIAL; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-
-KingdomWarActivityUnit::KingdomWarActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_KINGDOM_WAR)
+KingdomWarActivityUnit::KingdomWarActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_KINGDOM_WAR)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, NAT_KINGDOM_WAR, m_jsonData);
@@ -2730,7 +2713,7 @@ KingdomWarActivityUnit::KingdomWarActivityUnit(const UserWrap& user):
 	}
 }
 
-int KingdomWarActivityUnit::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int KingdomWarActivityUnit::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	ActivityConfigWrap activitywrap;
 	unsigned index = param.Index();
@@ -2753,7 +2736,7 @@ int KingdomWarActivityUnit::GetChargeReward(UserWrap& userWrap, const UnitIndexC
 	unsigned charge = GetChargeByTime(userWrap, nowts);
 
 	//根据index，获取配置
-	const ConfigActivity::KingdomWar & itemcfg = activitywrap.GetKingdomWarConfig(index);
+	const ConfigActivity::KingdomWar &itemcfg = activitywrap.GetKingdomWarConfig(index);
 
 	if (charge < itemcfg.diamond())
 	{
@@ -2771,7 +2754,7 @@ int KingdomWarActivityUnit::GetChargeReward(UserWrap& userWrap, const UnitIndexC
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "KingdomWar_Charge", result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -2788,7 +2771,7 @@ int KingdomWarActivityUnit::CheckItemSize()
 
 	if (oldsize < size)
 	{
-		for(int i = oldsize; i < size; ++i)
+		for (int i = oldsize; i < size; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -2810,31 +2793,29 @@ int KingdomWarActivityUnit::ResetAct()
 
 	int size = ActivityConfigWrap().GetKingdomItemSize();
 
-	for(int i = 0; i < size; ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置充值奖励领取状态
+		m_jsonData["a"][i] = 0; //重置充值奖励领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_KINGDOM_WAR;  //id
+	m_jsonData["v"] = GetVersion();		//版本号
+	m_jsonData["id"] = NAT_KINGDOM_WAR; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-ProtectiveFlagUnit::ProtectiveFlagUnit(const UserWrap& user):
-		BaseCmdUnit(user.Id())
+ProtectiveFlagUnit::ProtectiveFlagUnit(const UserWrap &user) : BaseCmdUnit(user.Id())
 {
-
 }
 
-int ProtectiveFlagUnit::Upgrade(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int ProtectiveFlagUnit::Upgrade(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	unsigned flagud = param.ValueAsUInt("ud");
 	unsigned type = param.ValueAsUInt("type");
-	unsigned aud = param.ValueAsUInt("aud");   //升级消耗的道具A
-	unsigned bud = param.ValueAsUInt("bud");  //保护旗帜建造令ud
+	unsigned aud = param.ValueAsUInt("aud"); //升级消耗的道具A
+	unsigned bud = param.ValueAsUInt("bud"); //保护旗帜建造令ud
 
 	CLogicBuilding logicbuild;
 
@@ -2864,7 +2845,7 @@ int ProtectiveFlagUnit::Upgrade(UserWrap& userWrap, const BaseCmdParams & param,
 	}
 
 	//判断是否达到最大等级
-	DataXMLProtectFlag * protectflagcfg = NULL;
+	DataXMLProtectFlag *protectflagcfg = NULL;
 	DataXmlPtr()->GetProtectFlagPointer(&protectflagcfg);
 
 	if (NULL == protectflagcfg)
@@ -2883,7 +2864,7 @@ int ProtectiveFlagUnit::Upgrade(UserWrap& userWrap, const BaseCmdParams & param,
 		throw runtime_error("level_already_max");
 	}
 
-	const int single_exp = 10;  //单次改造增加的经验值
+	const int single_exp = 10; //单次改造增加的经验值
 
 	CLogicEquipment logicequip;
 
@@ -2913,7 +2894,7 @@ int ProtectiveFlagUnit::Upgrade(UserWrap& userWrap, const BaseCmdParams & param,
 		//一键升级
 		//先计算距离下一级还差多少经验
 		newexp = protectflagcfg->exps[oldlevel];
-		count = (newexp - exp)/single_exp;  //需要消耗的道具A个数
+		count = (newexp - exp) / single_exp; //需要消耗的道具A个数
 		bcount = protectflagcfg->eqcount[oldlevel];
 
 		builddata["l"] = oldlevel + 1;
@@ -2950,12 +2931,12 @@ int ProtectiveFlagUnit::Upgrade(UserWrap& userWrap, const BaseCmdParams & param,
 	return ret;
 }
 
-int ProtectiveFlagUnit::GetLevelByExp(unsigned * pexp, int size, int exp)
+int ProtectiveFlagUnit::GetLevelByExp(unsigned *pexp, int size, int exp)
 {
 	//从后往前，查找第一个大于数组元素的下标
 	int level = 1;
 
-	for(int i = size - 1; i >= 0; --i)
+	for (int i = size - 1; i >= 0; --i)
 	{
 		if (pexp[i] <= exp)
 		{
@@ -2967,8 +2948,7 @@ int ProtectiveFlagUnit::GetLevelByExp(unsigned * pexp, int size, int exp)
 	return level;
 }
 
-OneDiamondWelfareActivityUnit::OneDiamondWelfareActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_ONEDIAMOND)
+OneDiamondWelfareActivityUnit::OneDiamondWelfareActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_ONEDIAMOND)
 {
 	sid = NAT_ONE_DIAMOND_WELFARE;
 	CLogicSecinc logicSecinc;
@@ -2987,7 +2967,7 @@ OneDiamondWelfareActivityUnit::OneDiamondWelfareActivityUnit(const UserWrap& use
 	}
 }
 
-int OneDiamondWelfareActivityUnit::BuyGoods(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int OneDiamondWelfareActivityUnit::BuyGoods(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	unsigned lindex = param.ValueAsUInt("lindex");
 	unsigned rindex = param.ValueAsUInt("rindex");
@@ -3001,7 +2981,7 @@ int OneDiamondWelfareActivityUnit::BuyGoods(UserWrap& userWrap, const BaseCmdPar
 	//判断版本是否发生变化
 	CheckActVersion();
 
-	const ConfigActivity::OneDiamondWelfare & onediamondcfg = ActivityConfigWrap().GetOneDiamondCfg(lindex);
+	const ConfigActivity::OneDiamondWelfare &onediamondcfg = ActivityConfigWrap().GetOneDiamondCfg(lindex);
 
 	if (rindex > onediamondcfg.items_size())
 	{
@@ -3045,7 +3025,7 @@ int OneDiamondWelfareActivityUnit::BuyGoods(UserWrap& userWrap, const BaseCmdPar
 	//发放奖励
 	ProvideCommonReward(onediamondcfg.items(rindex - 1).reward(), "OneDiamondWelfare", result);
 
-	m_jsonData["a"][lindex - 1][rindex - 1] = times + 1;   //增加购买次数
+	m_jsonData["a"][lindex - 1][rindex - 1] = times + 1; //增加购买次数
 
 	Save();
 
@@ -3063,28 +3043,27 @@ int OneDiamondWelfareActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < diamond_kinds_item; ++i)
+	for (int i = 0; i < diamond_kinds_item; ++i)
 	{
 		Json::Value insidearray(Json::arrayValue);
 
-		for(int j = 0; j < reward_item; ++j)
+		for (int j = 0; j < reward_item; ++j)
 		{
 			insidearray[j] = 0;
 		}
 
-		m_jsonData["a"][i] = insidearray;  //重置物品领取状态
+		m_jsonData["a"][i] = insidearray; //重置物品领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid;			//id
 
 	need_save = true;
 
 	return 0;
 }
 
-QiXiFeedbackActivityUnit::QiXiFeedbackActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_QIXI_FEEDBACK)
+QiXiFeedbackActivityUnit::QiXiFeedbackActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_QIXI_FEEDBACK)
 {
 	sid = NAT_QIXI_FEEDBACK;
 
@@ -3105,7 +3084,7 @@ QiXiFeedbackActivityUnit::QiXiFeedbackActivityUnit(const UserWrap& user):
 	}
 }
 
-int QiXiFeedbackActivityUnit::GetFeedback(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int QiXiFeedbackActivityUnit::GetFeedback(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -3137,8 +3116,8 @@ int QiXiFeedbackActivityUnit::GetFeedback(UserWrap& userWrap, const BaseCmdParam
 	if (ret != 0)
 		return ret;
 
-	result["coins"] = payData.coins;	//金币
-	result["coins2"] = payData.cash;	//钻石
+	result["coins"] = payData.coins; //金币
+	result["coins2"] = payData.cash; //钻石
 
 	//设置已领取标志
 	m_jsonData["a"] = 1;
@@ -3151,18 +3130,17 @@ int QiXiFeedbackActivityUnit::GetFeedback(UserWrap& userWrap, const BaseCmdParam
 
 int QiXiFeedbackActivityUnit::ResetAct()
 {
-	m_jsonData["a"] = 0;  //奖励领取标志
+	m_jsonData["a"] = 0; //奖励领取标志
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid;			//id
 
 	need_save = true;
 
 	return 0;
 }
 
-FortunePacksActivityUnit::FortunePacksActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_FORTUNE_PACKS)
+FortunePacksActivityUnit::FortunePacksActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_FORTUNE_PACKS)
 {
 	sid = NAT_FORTUNE_PACKS;
 
@@ -3185,7 +3163,7 @@ FortunePacksActivityUnit::FortunePacksActivityUnit(const UserWrap& user):
 
 int FortunePacksActivityUnit::ResetAct()
 {
-	m_jsonData["a"] = 0;  //参与的号数
+	m_jsonData["a"] = 0; //参与的号数
 
 	if (!m_jsonData.isMember("b"))
 	{
@@ -3194,25 +3172,25 @@ int FortunePacksActivityUnit::ResetAct()
 		m_jsonData["b"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["b"][i] = 0;  //重置物品购买状态
+		m_jsonData["b"][i] = 0; //重置物品购买状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid;			//id
 
 	need_save = true;
 
 	return 0;
 }
 
-int FortunePacksActivityUnit::OpenWindow(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int FortunePacksActivityUnit::OpenWindow(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//检查共享内存中的版本号
 	unsigned version = GetVersion();
 
-	CDataFortunePacks* pdata = CDataFortunePacks::GetCDataFortunePacks();
+	CDataFortunePacks *pdata = CDataFortunePacks::GetCDataFortunePacks();
 	pdata->CheckVersion(version);
 
 	//判断版本是否发生变化
@@ -3228,7 +3206,7 @@ int FortunePacksActivityUnit::OpenWindow(UserWrap& userWrap, const BaseCmdParams
 }
 
 //购买物品
-int FortunePacksActivityUnit::Purchase(UserWrap& userWrap, const UnitIdCmdParams & param, Json::Value & result)
+int FortunePacksActivityUnit::Purchase(UserWrap &userWrap, const UnitIdCmdParams &param, Json::Value &result)
 {
 	unsigned id = param.Id();
 
@@ -3242,7 +3220,7 @@ int FortunePacksActivityUnit::Purchase(UserWrap& userWrap, const UnitIdCmdParams
 	//检查共享内存中的版本号
 	unsigned version = GetVersion();
 
-	CDataFortunePacks* pdata = CDataFortunePacks::GetCDataFortunePacks();
+	CDataFortunePacks *pdata = CDataFortunePacks::GetCDataFortunePacks();
 	pdata->CheckVersion(version);
 
 	//判断版本是否发生变化
@@ -3269,7 +3247,7 @@ int FortunePacksActivityUnit::Purchase(UserWrap& userWrap, const UnitIdCmdParams
 
 	ActivityConfigWrap activitywrap;
 
-	const ConfigActivity::RewardItem & goodscfg = activitywrap.GetFortunePackItemCfg(id);
+	const ConfigActivity::RewardItem &goodscfg = activitywrap.GetFortunePackItemCfg(id);
 
 	//扣钻
 	userWrap.CostAsset(goodscfg.price(), 0, "FortunePack_Buy", result);
@@ -3286,14 +3264,14 @@ int FortunePacksActivityUnit::Purchase(UserWrap& userWrap, const UnitIdCmdParams
 		m_jsonData["a"] = num + 1;
 
 		//判断是否有额外奖励
-		unsigned extranum = pdata->GetExtraNum();  //额外奖励赠送个数
+		unsigned extranum = pdata->GetExtraNum(); //额外奖励赠送个数
 		bool isextra = false;
 
 		if (extranum < MAX_EXTRA_ITEMS && m_jsonData["a"].asUInt() == extra_num_relation[extranum])
 		{
 			//奖励未发送完，且当前玩家满足额外奖励所需的人数要求
 			isextra = true;
-			const RewardConfig::RewardItemCfg & extracfg = activitywrap.GetFortunePackExtracfg();
+			const RewardConfig::RewardItemCfg &extracfg = activitywrap.GetFortunePackExtracfg();
 
 			ProvideCommonReward(extracfg, "FortunePack_Extra", result["extra"]);
 		}
@@ -3317,7 +3295,7 @@ int FortunePacksActivityUnit::Purchase(UserWrap& userWrap, const UnitIdCmdParams
 	return 0;
 }
 
-int FortunePacksActivityUnit::GetGiftedUsers(CDataFortunePacks* pdata, Json::Value & users)
+int FortunePacksActivityUnit::GetGiftedUsers(CDataFortunePacks *pdata, Json::Value &users)
 {
 	//获取已获取礼包的用户名单
 	vector<unsigned> uids;
@@ -3327,7 +3305,7 @@ int FortunePacksActivityUnit::GetGiftedUsers(CDataFortunePacks* pdata, Json::Val
 	CLogicUserBasic logicUserBasic;
 	PlatformType platform = OpenPlatform::GetType();
 
-	for(int i = 0; i < uids.size(); ++i)
+	for (int i = 0; i < uids.size(); ++i)
 	{
 		unsigned uidtemp = uids[i];
 		DataUserBasic userBasic;
@@ -3343,8 +3321,7 @@ int FortunePacksActivityUnit::GetGiftedUsers(CDataFortunePacks* pdata, Json::Val
 	return 0;
 }
 
-SevenDayPacksActivityUnit::SevenDayPacksActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_SEVENDAYS_PACKS)
+SevenDayPacksActivityUnit::SevenDayPacksActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_SEVENDAYS_PACKS)
 {
 	sid = NAT_SEVENDAY_PACKS;
 
@@ -3374,20 +3351,20 @@ int SevenDayPacksActivityUnit::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < item_max_index; ++i)
+	for (int i = 0; i < item_max_index; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid;			//id
 
 	need_save = true;
 
 	return 0;
 }
 
-int SevenDayPacksActivityUnit::GetReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int SevenDayPacksActivityUnit::GetReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.Index();
 
@@ -3422,7 +3399,7 @@ int SevenDayPacksActivityUnit::GetReward(UserWrap& userWrap, const UnitIndexCmdP
 		throw runtime_error("reward_already_got");
 	}
 
-	const ConfigActivity::SevenDayPacks & sevencfg = ActivityConfigWrap().GetSevendayPacksItemcfg(index);
+	const ConfigActivity::SevenDayPacks &sevencfg = ActivityConfigWrap().GetSevendayPacksItemcfg(index);
 
 	char reason[40] = {0};
 	sprintf(reason, "SevenDayPacks_%u", index);
@@ -3440,9 +3417,8 @@ int SevenDayPacksActivityUnit::GetReward(UserWrap& userWrap, const UnitIndexCmdP
 	return 0;
 }
 
-ChargeQuotaActivityBase::ChargeQuotaActivityBase(unsigned uid, const std::string& actname,
-		int sid_, int itemsize_):
-		BaseActivityUnit(uid, actname)
+ChargeQuotaActivityBase::ChargeQuotaActivityBase(unsigned uid, const std::string &actname,
+												 int sid_, int itemsize_) : BaseActivityUnit(uid, actname)
 {
 	sid = sid_;
 	itemsize = itemsize_;
@@ -3473,13 +3449,13 @@ int ChargeQuotaActivityBase::ResetAct()
 		m_jsonData["a"] = array;
 	}
 
-	for(int i = 0; i < itemsize; ++i)
+	for (int i = 0; i < itemsize; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid;			//id
 
 	need_save = true;
 
@@ -3491,7 +3467,7 @@ int ChargeQuotaActivityBase::CheckItemSize()
 	return 0;
 }
 
-int ChargeQuotaActivityBase::Reward(UserWrap& userWrap, unsigned index, const ConfigActivity::DiamondReward & itemcfg, string reason, Json::Value & result)
+int ChargeQuotaActivityBase::Reward(UserWrap &userWrap, unsigned index, const ConfigActivity::DiamondReward &itemcfg, string reason, Json::Value &result)
 {
 	if (index < 1 || index > itemsize)
 	{
@@ -3526,7 +3502,7 @@ int ChargeQuotaActivityBase::Reward(UserWrap& userWrap, unsigned index, const Co
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), reason, result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -3535,65 +3511,57 @@ int ChargeQuotaActivityBase::Reward(UserWrap& userWrap, unsigned index, const Co
 	return 0;
 }
 
-IcePhoenixActivityUnix::IcePhoenixActivityUnix(const UserWrap& user):
-		ChargeQuotaActivityBase(user.Id(), CONFIG_ICEPHOENIX, NAT_ICE_PHOENIX, item_max_index)
+IcePhoenixActivityUnix::IcePhoenixActivityUnix(const UserWrap &user) : ChargeQuotaActivityBase(user.Id(), CONFIG_ICEPHOENIX, NAT_ICE_PHOENIX, item_max_index)
 {
-
 }
 
-int IcePhoenixActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int IcePhoenixActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetIcePhoenixItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetIcePhoenixItemcfg(index);
 
 	Reward(userWrap, index, itemcfg, "IcePhoenix", result);
 
 	return 0;
 }
 
-AutumnFeedbackActivityUnix::AutumnFeedbackActivityUnix(const UserWrap& user):
-		ChargeQuotaActivityBase(user.Id(), CONFIG_AUTUMN_FEEDBACK, NAT_AUTUMN_FEEDBACK, item_max_index)
+AutumnFeedbackActivityUnix::AutumnFeedbackActivityUnix(const UserWrap &user) : ChargeQuotaActivityBase(user.Id(), CONFIG_AUTUMN_FEEDBACK, NAT_AUTUMN_FEEDBACK, item_max_index)
 {
-
 }
 
-int AutumnFeedbackActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int AutumnFeedbackActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetAutumnFeedbackItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetAutumnFeedbackItemcfg(index);
 
 	Reward(userWrap, index, itemcfg, "AutumnFeedback", result);
 
 	return 0;
 }
 
-ProtectFlagActivityUnix::ProtectFlagActivityUnix(const UserWrap& user):
-		ChargeQuotaActivityBase(user.Id(), CONFIG_PROTECT_FLAG, NAT_PROTECT_FLAG, item_max_index)
+ProtectFlagActivityUnix::ProtectFlagActivityUnix(const UserWrap &user) : ChargeQuotaActivityBase(user.Id(), CONFIG_PROTECT_FLAG, NAT_PROTECT_FLAG, item_max_index)
 {
-
 }
 
-int ProtectFlagActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int ProtectFlagActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetProtectFlagItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetProtectFlagItemcfg(index);
 
 	Reward(userWrap, index, itemcfg, "ProtectFlag", result);
 
 	return 0;
 }
 
-
-PayOptionalActivityUnix::PayOptionalActivityUnix(const UserWrap& user):
-		SecincActivityUnit(user.Id(), CONFIG_OPTIONAL_PAY,NAT_PATIONAL_PAY)
+PayOptionalActivityUnix::PayOptionalActivityUnix(const UserWrap &user) : SecincActivityUnit(user.Id(), CONFIG_OPTIONAL_PAY, NAT_PATIONAL_PAY)
 {
-	const ConfigActivity::PayOptionalActivity & cfg = ActivityConfigWrap().GetPayOptionalActivityCfg();
+	const ConfigActivity::PayOptionalActivity &cfg = ActivityConfigWrap().GetPayOptionalActivityCfg();
 	itemsize_ = cfg.optional_reward_size();
 	Init();
 }
@@ -3605,83 +3573,80 @@ void PayOptionalActivityUnix::Reset()
 		Json::Value array(Json::arrayValue);
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < itemsize_; ++i)
+	for (int i = 0; i < itemsize_; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
-	m_jsonData["ts1"] = Time::GetGlobalTime();//每日领取时间戳
+	m_jsonData["ts1"] = Time::GetGlobalTime(); //每日领取时间戳
 	need_save = true;
 }
 
-int PayOptionalActivityUnix::GetChargeByActivityToday(UserWrap& userWrap,unsigned end_ts)
+int PayOptionalActivityUnix::GetChargeByActivityToday(UserWrap &userWrap, unsigned end_ts)
 {
 	return userWrap.GetRechargePoint(CTime::GetDayBeginTime((time_t)end_ts), end_ts);
 }
 
-int PayOptionalActivityUnix::GetEveryDayChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int PayOptionalActivityUnix::GetEveryDayChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
-		if(!Time::IsToday(m_jsonData["ts1"].asInt()))
-		{
-			Reset();
-		}
+	if (!Time::IsToday(m_jsonData["ts1"].asInt()))
+	{
+		Reset();
+	}
 
-		//根据index，获取配置
-		unsigned index = param.ValueAsUInt("index");
+	//根据index，获取配置
+	unsigned index = param.ValueAsUInt("index");
 
-		if (index < 1 || index > itemsize_)
-		{
-			error_log("PayOptionalActivityUnix::GetEveryDayChargeReward index  error. index=%u", index);
-			throw runtime_error("param_error");
-		}
+	if (index < 1 || index > itemsize_)
+	{
+		error_log("PayOptionalActivityUnix::GetEveryDayChargeReward index  error. index=%u", index);
+		throw runtime_error("param_error");
+	}
 
-		unsigned choose =  param.ValueAsUInt("choose");
-		const ConfigActivity::PayOptionalActivity & cfg = ActivityConfigWrap().GetPayOptionalActivityCfg();
-		const ConfigActivity::DiamondMoreReward &itemcfg = cfg.optional_reward(index - 1);
+	unsigned choose = param.ValueAsUInt("choose");
+	const ConfigActivity::PayOptionalActivity &cfg = ActivityConfigWrap().GetPayOptionalActivityCfg();
+	const ConfigActivity::DiamondMoreReward &itemcfg = cfg.optional_reward(index - 1);
 
-		if(choose < 1 || choose > itemcfg.reward_size() )
-		{
-			error_log("PayOptionalActivityUnix::GetEveryDayChargeReward choose  error. index=%u", index);
-			throw runtime_error("param_error");
-		}
+	if (choose < 1 || choose > itemcfg.reward_size())
+	{
+		error_log("PayOptionalActivityUnix::GetEveryDayChargeReward choose  error. index=%u", index);
+		throw runtime_error("param_error");
+	}
 
-		const RewardConfig::RewardItemCfg     &rewardcfg = itemcfg.reward(choose -1);
+	const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.reward(choose - 1);
 
-		//获取活动期间内的充值数目
-		unsigned nowts = Time::GetGlobalTime();
-		unsigned charge = GetChargeByActivityToday(userWrap, nowts);
+	//获取活动期间内的充值数目
+	unsigned nowts = Time::GetGlobalTime();
+	unsigned charge = GetChargeByActivityToday(userWrap, nowts);
 
-		//根据配置，判断充值条件是否满足1钻=1积分
-		if (charge < itemcfg.diamond())
-		{
-			error_log("PayOptionalActivityUnix::GetEveryDayChargeReward  charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
-			throw runtime_error("charge_not_enough");
-		}
+	//根据配置，判断充值条件是否满足1钻=1积分
+	if (charge < itemcfg.diamond())
+	{
+		error_log("PayOptionalActivityUnix::GetEveryDayChargeReward  charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
+		throw runtime_error("charge_not_enough");
+	}
 
-		//是否已经领取该位置处的奖励
-		if (m_jsonData["a"][index - 1].asUInt() > 0)
-		{
-			error_log("reward already been received. uid=%u,index=%u", m_nUid, index);
-			throw runtime_error("reward_aleardy_received");
-		}
+	//是否已经领取该位置处的奖励
+	if (m_jsonData["a"][index - 1].asUInt() > 0)
+	{
+		error_log("reward already been received. uid=%u,index=%u", m_nUid, index);
+		throw runtime_error("reward_aleardy_received");
+	}
 
-		//发放奖励
-		string reason = "Optional_Pay";
-		ProvideCommonReward(rewardcfg, reason, result);
-		m_jsonData["a"][index - 1]= 1;   //设置奖励领取状态
-		Save();
-		result["NewAct"] = m_jsonData;
-		return 0;
+	//发放奖励
+	string reason = "Optional_Pay";
+	ProvideCommonReward(rewardcfg, reason, result);
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
+	Save();
+	result["NewAct"] = m_jsonData;
+	return 0;
 }
 
-
-GuoQingKuangHuan::GuoQingKuangHuan(const UserWrap& user):
-		SecincActivityUnit(user.Id(), CONFIG_GUO_QING_KUANG_HUAN,NAT_GUO_QING_KUANG_HUAN)
+GuoQingKuangHuan::GuoQingKuangHuan(const UserWrap &user) : SecincActivityUnit(user.Id(), CONFIG_GUO_QING_KUANG_HUAN, NAT_GUO_QING_KUANG_HUAN)
 {
-	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const ConfigActivity::ChinaDayActivity &cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
 	itemsize_ = cfg.charge_reward_size();
 	Init();
 }
-
 
 void GuoQingKuangHuan::Reset()
 {
@@ -3691,21 +3656,21 @@ void GuoQingKuangHuan::Reset()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < itemsize_; ++i)
+	for (int i = 0; i < itemsize_; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
-	m_jsonData["m"] = 0;      //勋章数
+	m_jsonData["m"] = 0; //勋章数
 	need_save = true;
 }
 
-int GuoQingKuangHuan::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int GuoQingKuangHuan::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 	unsigned medal_num = 0;
-	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
-	const ConfigActivity::DiamondReward & itemcfg = cfg.charge_reward(index - 1);
+	const ConfigActivity::ChinaDayActivity &cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const ConfigActivity::DiamondReward &itemcfg = cfg.charge_reward(index - 1);
 
 	if (index < 1 || index > itemsize_)
 	{
@@ -3720,7 +3685,7 @@ int GuoQingKuangHuan::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdPara
 		throw std::runtime_error("get_new_active_data_error");
 	}
 
-	if(tmp_value.isMember("m"))
+	if (tmp_value.isMember("m"))
 	{
 		medal_num = tmp_value["m"].asInt();
 		m_jsonData["m"] = medal_num;
@@ -3731,7 +3696,7 @@ int GuoQingKuangHuan::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdPara
 	unsigned charge = GetChargeByTime(userWrap, nowts);
 
 	//根据配置，判断充值条件是否满足,加上存储的勋章，1勋章=1钻=1积分
-	if ((charge+medal_num) < itemcfg.diamond())
+	if ((charge + medal_num) < itemcfg.diamond())
 	{
 		error_log("charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
 		throw runtime_error("charge_not_enough");
@@ -3747,28 +3712,25 @@ int GuoQingKuangHuan::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdPara
 	//发放奖励
 	string reason = "ChinaDay_Gift";
 	ProvideCommonReward(itemcfg.reward(), reason, result);
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
-	RESOURCE_LOG("[activity : reward][uid:%u,reward_pos:%u,integral:%u]", userWrap.Id(),index,charge+medal_num);
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
+	RESOURCE_LOG("[activity : reward][uid:%u,reward_pos:%u,integral:%u]", userWrap.Id(), index, charge + medal_num);
 	Save();
 	result["NewAct"] = m_jsonData;
 	return 0;
 }
 
-
-ChinaDayActivityUnix::ChinaDayActivityUnix(const UserWrap& user):
-		SecincActivityUnit(user.Id(), CONFIG_CHINADAY_WELCOME,NAT_CHINADAY_WELCOME)
+ChinaDayActivityUnix::ChinaDayActivityUnix(const UserWrap &user) : SecincActivityUnit(user.Id(), CONFIG_CHINADAY_WELCOME, NAT_CHINADAY_WELCOME)
 {
-	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const ConfigActivity::ChinaDayActivity &cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
 	Init();
 }
 
-
 void ChinaDayActivityUnix::Reset()
 {
-	m_jsonData["d"] = 0;       //重置每日任务
-	m_jsonData["c"] = 0;     //重置每日在线
+	m_jsonData["d"] = 0; //重置每日任务
+	m_jsonData["c"] = 0; //重置每日在线
 	m_jsonData["cf"] = 0;
-	m_jsonData["mf"] =  0;
+	m_jsonData["mf"] = 0;
 	m_jsonData["ts1"] = Time::GetGlobalTime();
 	m_jsonData["m"] = 0;
 
@@ -3777,25 +3739,25 @@ void ChinaDayActivityUnix::Reset()
 
 int ChinaDayActivityUnix::ResetAct(int reset_type)
 {
-	m_jsonData["d"] = 0;       //重置每日任务
-	m_jsonData["c"] = 0;     //重置每日在线
+	m_jsonData["d"] = 0; //重置每日任务
+	m_jsonData["c"] = 0; //重置每日在线
 	m_jsonData["cf"] = 0;
-	m_jsonData["mf"] =  0;
+	m_jsonData["mf"] = 0;
 	m_jsonData["ts1"] = Time::GetGlobalTime();
 
 	need_save = true;
 	return 0;
 }
 
-int ChinaDayActivityUnix::DeDuctChallengeNum(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int ChinaDayActivityUnix::DeDuctChallengeNum(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断是否为今日在线挑战机会
-	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	if (!Time::IsToday(m_jsonData["ts1"].asUInt()))
 	{
 		throw std::runtime_error("not_today_challenge!");
 	}
-	if(m_jsonData["cf"].asInt() > 0 && m_jsonData["cf"].asInt() <= 2)
-		m_jsonData["cf"] = m_jsonData["cf"].asInt() -1;
+	if (m_jsonData["cf"].asInt() > 0 && m_jsonData["cf"].asInt() <= 2)
+		m_jsonData["cf"] = m_jsonData["cf"].asInt() - 1;
 	else
 		throw std::runtime_error("chinaday_challenge_num_error!");
 	Save();
@@ -3803,102 +3765,102 @@ int ChinaDayActivityUnix::DeDuctChallengeNum(UserWrap& userWrap, const BaseCmdPa
 	return 0;
 }
 
-int ChinaDayActivityUnix::GetInstanceZonesReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int ChinaDayActivityUnix::GetInstanceZonesReward(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
-	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	if (!Time::IsToday(m_jsonData["ts1"].asUInt()))
 	{
 		throw std::runtime_error("not_today_instanceZone!");
 	}
 
 	unsigned mf = 0;
-	Json::GetUInt(m_jsonData, "mf",  mf);
-	m_jsonData["mf"] = mf +1;
+	Json::GetUInt(m_jsonData, "mf", mf);
+	m_jsonData["mf"] = mf + 1;
 
-	if(m_jsonData["mf"].asInt() <=2 )
-		m_jsonData["m"] = m_jsonData["m"].asInt()+50;
+	if (m_jsonData["mf"].asInt() <= 2)
+		m_jsonData["m"] = m_jsonData["m"].asInt() + 50;
 
-	RESOURCE_LOG("[acticity : medal][uid:%u,m:%u,time:%u]", userWrap.Id(),m_jsonData["m"].asInt());
+	RESOURCE_LOG("[acticity : medal][uid:%u,m:%u,time:%u]", userWrap.Id(), m_jsonData["m"].asInt());
 	Save();
 	result["NewAct"] = m_jsonData;
 	return 0;
 }
 
-int ChinaDayActivityUnix::GetEveryDayReward(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int ChinaDayActivityUnix::GetEveryDayReward(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断今日充值金额是否足够
-	if(GetChargeByActivityToday(userWrap,Time::GetGlobalTime()) < 100)
+	if (GetChargeByActivityToday(userWrap, Time::GetGlobalTime()) < 100)
 		throw std::runtime_error("recharge_not_enough!");
 
-	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	if (!Time::IsToday(m_jsonData["ts1"].asUInt()))
 	{
-		ResetAct(reset_everyday_reward_tag);//重置每日充值领取记录标记
+		ResetAct(reset_everyday_reward_tag); //重置每日充值领取记录标记
 	}
 	else
 	{
-		if(1 == m_jsonData["d"].asUInt()) {
+		if (1 == m_jsonData["d"].asUInt())
+		{
 			throw std::runtime_error("already_get_reward");
 		}
 	}
 
-	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
-	const RewardConfig::RewardItemCfg & itemcfg = cfg.everyday_reward();
+	const ConfigActivity::ChinaDayActivity &cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const RewardConfig::RewardItemCfg &itemcfg = cfg.everyday_reward();
 
 	string reason = "ChinaDay_Gift";
 	//发放奖励
 	ProvideCommonReward(itemcfg, reason, result);
 
 	unsigned cf = 0;
-	Json::GetUInt(m_jsonData, "cf",  cf);
-	if(cf < 2)
-		m_jsonData["cf"] = cf +1;
-	m_jsonData["d"] = 1;   //设置领取状态
-	RESOURCE_LOG("[activity : everyday][uid:%u,cf:%u]", userWrap.Id(),m_jsonData["cf"].asInt());
+	Json::GetUInt(m_jsonData, "cf", cf);
+	if (cf < 2)
+		m_jsonData["cf"] = cf + 1;
+	m_jsonData["d"] = 1; //设置领取状态
+	RESOURCE_LOG("[activity : everyday][uid:%u,cf:%u]", userWrap.Id(), m_jsonData["cf"].asInt());
 	Save();
 	result["NewAct"] = m_jsonData;
 	return 0;
 }
 
-int ChinaDayActivityUnix::GetChargeByActivityToday(UserWrap& userWrap,unsigned end_ts)
+int ChinaDayActivityUnix::GetChargeByActivityToday(UserWrap &userWrap, unsigned end_ts)
 {
 	return userWrap.GetRechargePoint(CTime::GetDayBeginTime((time_t)end_ts), end_ts);
 }
 
-int ChinaDayActivityUnix::GetOnlineReward(UserWrap& user, const BaseCmdParams& params,  Json::Value& result)
+int ChinaDayActivityUnix::GetOnlineReward(UserWrap &user, const BaseCmdParams &params, Json::Value &result)
 {
-	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	if (!Time::IsToday(m_jsonData["ts1"].asUInt()))
 	{
-		ResetAct(reset_online_reward_tag);//重置在线奖励的领取记录标记
+		ResetAct(reset_online_reward_tag); //重置在线奖励的领取记录标记
 	}
 	else
 	{
-		if(1 == m_jsonData["c"].asUInt()) {
+		if (1 == m_jsonData["c"].asUInt())
+		{
 			throw std::runtime_error("already_get_reward");
 		}
 	}
 
-	const ConfigActivity::ChinaDayActivity & cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
-	const RewardConfig::RewardItemCfg & itemcfg = cfg.online_reward();
+	const ConfigActivity::ChinaDayActivity &cfg = ActivityConfigWrap().GetChinaDayActivityCfg();
+	const RewardConfig::RewardItemCfg &itemcfg = cfg.online_reward();
 
 	string reason = "ChinaDay_Gift";
 	//发放奖励
 	ProvideCommonReward(itemcfg, reason, result);
 
 	unsigned cf = 0;
-	Json::GetUInt(m_jsonData, "cf",  cf);
-	if(cf < 2)
-		m_jsonData["cf"] = cf +1;
-	m_jsonData["c"] = 1;   //设置领取状态
-	RESOURCE_LOG("[activity : online][uid:%u,cf:%u]", user.Id(),m_jsonData["cf"].asInt());
+	Json::GetUInt(m_jsonData, "cf", cf);
+	if (cf < 2)
+		m_jsonData["cf"] = cf + 1;
+	m_jsonData["c"] = 1; //设置领取状态
+	RESOURCE_LOG("[activity : online][uid:%u,cf:%u]", user.Id(), m_jsonData["cf"].asInt());
 	Save();
 	result["NewAct"] = m_jsonData;
 	return 0;
 }
 
-
-NewYearActivityUnix::NewYearActivityUnix(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_NEWYEAR_GIFT)
+NewYearActivityUnix::NewYearActivityUnix(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_NEWYEAR_GIFT)
 {
-	const ConfigActivity::NewYearActivity & cfg = ActivityConfigWrap().GetNewYearActivityCfg();
+	const ConfigActivity::NewYearActivity &cfg = ActivityConfigWrap().GetNewYearActivityCfg();
 	itemsize_ = cfg.charge_reward_size();
 	combinebuyitem_ = cfg.buy_items_size();
 
@@ -3928,11 +3890,10 @@ int NewYearActivityUnix::ResetAct()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < itemsize_; ++i)
+	for (int i = 0; i < itemsize_; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
-
 
 	if (!m_jsonData.isMember("b"))
 	{
@@ -3940,16 +3901,16 @@ int NewYearActivityUnix::ResetAct()
 
 		m_jsonData["b"] = array;
 	}
-	for(int i = 0; i < combinebuyitem_; ++i)
+	for (int i = 0; i < combinebuyitem_; ++i)
 	{
-		m_jsonData["b"][i] = 0;  //每种组合商店购买次数记录
+		m_jsonData["b"][i] = 0; //每种组合商店购买次数记录
 	}
 
-	m_jsonData["c"] = 0;  //在线30分钟领取记录
-	m_jsonData["ts1"] = Time::GetGlobalTime();//在线30分钟领取奖励时间戳标记
-	m_jsonData["ts2"] = Time::GetGlobalTime();//组合商店购买时间戳标记
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_NEWYEARE_GIFT;  //id
+	m_jsonData["c"] = 0;					   //在线30分钟领取记录
+	m_jsonData["ts1"] = Time::GetGlobalTime(); //在线30分钟领取奖励时间戳标记
+	m_jsonData["ts2"] = Time::GetGlobalTime(); //组合商店购买时间戳标记
+	m_jsonData["v"] = GetVersion();			   //版本号
+	m_jsonData["id"] = NAT_NEWYEARE_GIFT;	  //id
 
 	need_save = true;
 	return 0;
@@ -3957,31 +3918,34 @@ int NewYearActivityUnix::ResetAct()
 
 int NewYearActivityUnix::ResetAct(int reset_type)
 {
-	if(reset_charge_reward_tag == reset_type) {
-		for(int i = 0; i < itemsize_; ++i)
+	if (reset_charge_reward_tag == reset_type)
+	{
+		for (int i = 0; i < itemsize_; ++i)
 		{
-			m_jsonData["a"][i] = 0;  //重置奖励领取状态
+			m_jsonData["a"][i] = 0; //重置奖励领取状态
 		}
-	} else if(reset_combine_shop_get_tag == reset_type) {
-		for(int i = 0; i < combinebuyitem_; ++i)
+	}
+	else if (reset_combine_shop_get_tag == reset_type)
+	{
+		for (int i = 0; i < combinebuyitem_; ++i)
 		{
-			m_jsonData["b"][i] = 0;  //每种组合商店购买次数记录
+			m_jsonData["b"][i] = 0; //每种组合商店购买次数记录
 		}
-
-	} else {
-		m_jsonData["c"] = 0;  //每种组合商店购买次数记录
+	}
+	else
+	{
+		m_jsonData["c"] = 0; //每种组合商店购买次数记录
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_NEWYEARE_GIFT;  //id
+	m_jsonData["v"] = GetVersion();		  //版本号
+	m_jsonData["id"] = NAT_NEWYEARE_GIFT; //id
 
 	need_save = true;
 
 	return 0;
 }
 
-OpenServerActivityUnix::OpenServerActivityUnix(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_OPENSERVER_GIFT)
+OpenServerActivityUnix::OpenServerActivityUnix(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_OPENSERVER_GIFT)
 {
 	sid_ = NAT_OPENSERVER_GIFT;
 	CLogicSecinc logicSecinc;
@@ -4003,9 +3967,9 @@ OpenServerActivityUnix::OpenServerActivityUnix(const UserWrap& user):
 
 void OpenServerActivityUnix::ResetDiscountAct()
 {
-	for(int i = 0; i < 2; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //折扣商店购买标记
+		m_jsonData["a"][i] = 0; //折扣商店购买标记
 	}
 	need_save = true;
 }
@@ -4017,11 +3981,10 @@ int OpenServerActivityUnix::ResetAct()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < 2; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //折扣商店购买标记
+		m_jsonData["a"][i] = 0; //折扣商店购买标记
 	}
-
 
 	if (!m_jsonData.isMember("b"))
 	{
@@ -4029,24 +3992,22 @@ int OpenServerActivityUnix::ResetAct()
 
 		m_jsonData["b"] = array;
 	}
-	for(int i = 0; i < achievement_item_max; ++i)
+	for (int i = 0; i < achievement_item_max; ++i)
 	{
-		m_jsonData["b"][i] = 0;  //每种组合商店购买次数记录
+		m_jsonData["b"][i] = 0; //每种组合商店购买次数记录
 	}
 
-	m_jsonData["ts"] = Time::GetGlobalTime();//在线30分钟领取奖励时间戳标记
-	m_jsonData["id"] = NAT_OPENSERVER_GIFT;  //id
+	m_jsonData["ts"] = Time::GetGlobalTime(); //在线30分钟领取奖励时间戳标记
+	m_jsonData["id"] = NAT_OPENSERVER_GIFT;   //id
 
 	need_save = true;
 
 	return 0;
-
 }
 
-SummerHolidaysActivityUnix::SummerHolidaysActivityUnix(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_SUMMERREWARD_GIFT)
+SummerHolidaysActivityUnix::SummerHolidaysActivityUnix(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_SUMMERREWARD_GIFT)
 {
-	const ConfigActivity::SummerHolidaysRewardCfg & cfg =  ActivityConfigWrap().GetSummerHolidaysRewardCfg();
+	const ConfigActivity::SummerHolidaysRewardCfg &cfg = ActivityConfigWrap().GetSummerHolidaysRewardCfg();
 	m_acc_chargeitemsize = cfg.chargereward_size();
 	m_exchangeitemsize = cfg.summer_holidays_ticket_size();
 
@@ -4076,9 +4037,9 @@ int SummerHolidaysActivityUnix::ResetAct()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < m_acc_chargeitemsize; ++i)
+	for (int i = 0; i < m_acc_chargeitemsize; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 	if (!m_jsonData.isMember("b"))
 	{
@@ -4086,14 +4047,14 @@ int SummerHolidaysActivityUnix::ResetAct()
 
 		m_jsonData["b"] = array;
 	}
-	for(int i = 0; i < m_exchangeitemsize; ++i)
+	for (int i = 0; i < m_exchangeitemsize; ++i)
 	{
-		m_jsonData["b"][i] = 0;  //重置兑换状态
+		m_jsonData["b"][i] = 0; //重置兑换状态
 	}
-	m_jsonData["c"] = 0;  //使用了多少张兑换券
+	m_jsonData["c"] = 0; //使用了多少张兑换券
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_SUMMERREWARD;  //id
+	m_jsonData["v"] = GetVersion();		 //版本号
+	m_jsonData["id"] = NAT_SUMMERREWARD; //id
 
 	need_save = true;
 
@@ -4102,20 +4063,23 @@ int SummerHolidaysActivityUnix::ResetAct()
 
 int SummerHolidaysActivityUnix::CheckItemSize(int flag)
 {
-	if(check_acc_item == flag) {
+	if (check_acc_item == flag)
+	{
 		int oldsize = m_jsonData["a"].size();
 		if (oldsize < m_acc_chargeitemsize)
 		{
-			for(int i = oldsize; i < m_acc_chargeitemsize; ++i)
+			for (int i = oldsize; i < m_acc_chargeitemsize; ++i)
 			{
 				m_jsonData["a"][i] = 0;
 			}
 		}
-	}else if(check_exhange_item == flag) {
+	}
+	else if (check_exhange_item == flag)
+	{
 		int oldsize = m_jsonData["b"].size();
 		if (oldsize < m_exchangeitemsize)
 		{
-			for(int i = oldsize; i < m_exchangeitemsize; ++i)
+			for (int i = oldsize; i < m_exchangeitemsize; ++i)
 			{
 				m_jsonData["b"][i] = 0;
 			}
@@ -4126,19 +4090,19 @@ int SummerHolidaysActivityUnix::CheckItemSize(int flag)
 	return 0;
 }
 
-int SummerHolidaysActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int SummerHolidaysActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::SummerHolidaysRewardCfg & cfg =  ActivityConfigWrap().GetSummerHolidaysRewardCfg();
+	const ConfigActivity::SummerHolidaysRewardCfg &cfg = ActivityConfigWrap().GetSummerHolidaysRewardCfg();
 	m_acc_chargeitemsize = cfg.chargereward_size();
 	if (index < 0 || index >= m_acc_chargeitemsize)
 	{
 		error_log("param error. uid=%u,index=%u", m_nUid, index);
 		throw runtime_error("param error");
 	}
-	const ConfigActivity::DiamondReward & itemcfg = cfg.chargereward(index);
+	const ConfigActivity::DiamondReward &itemcfg = cfg.chargereward(index);
 
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -4167,7 +4131,7 @@ int SummerHolidaysActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIn
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "SummerHolidaysReward", result);
 
-	m_jsonData["a"][index] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -4176,12 +4140,12 @@ int SummerHolidaysActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIn
 	return 0;
 }
 
-int SummerHolidaysActivityUnix::ExchangeItem(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int SummerHolidaysActivityUnix::ExchangeItem(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::SummerHolidaysRewardCfg & cfg =  ActivityConfigWrap().GetSummerHolidaysRewardCfg();
+	const ConfigActivity::SummerHolidaysRewardCfg &cfg = ActivityConfigWrap().GetSummerHolidaysRewardCfg();
 	m_exchangeitemsize = cfg.summer_holidays_ticket_size();
 	if (index < 0 || index >= m_exchangeitemsize)
 	{
@@ -4198,7 +4162,7 @@ int SummerHolidaysActivityUnix::ExchangeItem(UserWrap& userWrap, const UnitIndex
 
 	//3.校验对应的档位是否已超过兑换次数
 	unsigned used_exchange_cnt = m_jsonData["b"][index].asUInt();
-	if(used_exchange_cnt >= cfg.summer_holidays_ticket(index).exchange_count_max())
+	if (used_exchange_cnt >= cfg.summer_holidays_ticket(index).exchange_count_max())
 	{
 		throw runtime_error("exchange_count_is_maxed");
 	}
@@ -4210,16 +4174,16 @@ int SummerHolidaysActivityUnix::ExchangeItem(UserWrap& userWrap, const UnitIndex
 
 	//根据充值额度计算玩家拥有多少兑换券
 	unsigned exchange_ticket = charge / cfg.per_ticket_need_diamond();
-	exchange_ticket = (exchange_ticket > cfg.exchange_ticket_max()) ? cfg.exchange_ticket_max():exchange_ticket;
+	exchange_ticket = (exchange_ticket > cfg.exchange_ticket_max()) ? cfg.exchange_ticket_max() : exchange_ticket;
 
 	unsigned used_exchange_ticket = m_jsonData["c"].asUInt();
-	if(used_exchange_ticket >= exchange_ticket)
+	if (used_exchange_ticket >= exchange_ticket)
 	{
 		throw runtime_error("exchange_ticket_used_over");
 	}
 
 	//校验兑换券是否足够
-	if(used_exchange_ticket + cfg.summer_holidays_ticket(index).need_cost_ticket() > exchange_ticket)
+	if (used_exchange_ticket + cfg.summer_holidays_ticket(index).need_cost_ticket() > exchange_ticket)
 	{
 		throw runtime_error("exchange_ticket_is_not_enough");
 	}
@@ -4239,11 +4203,9 @@ int SummerHolidaysActivityUnix::ExchangeItem(UserWrap& userWrap, const UnitIndex
 	return 0;
 }
 
-
-SummerRewardActivityUnix::SummerRewardActivityUnix(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_SUMMERCHAEGE_GIFT)
+SummerRewardActivityUnix::SummerRewardActivityUnix(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_SUMMERCHAEGE_GIFT)
 {
-	const ConfigActivity::SummerChargeRewardCfg & cfg =  ActivityConfigWrap().GetSummerChargeRewardCfg();
+	const ConfigActivity::SummerChargeRewardCfg &cfg = ActivityConfigWrap().GetSummerChargeRewardCfg();
 	m_acc_chargeitemsize = cfg.acc_chargereward_size();
 	m_daily_chargeitemsize = cfg.daily_chargereward_size();
 
@@ -4273,9 +4235,9 @@ int SummerRewardActivityUnix::ResetAct()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < m_acc_chargeitemsize; ++i)
+	for (int i = 0; i < m_acc_chargeitemsize; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 	if (!m_jsonData.isMember("b"))
 	{
@@ -4283,14 +4245,14 @@ int SummerRewardActivityUnix::ResetAct()
 
 		m_jsonData["b"] = array;
 	}
-	for(int i = 0; i < m_daily_chargeitemsize; ++i)
+	for (int i = 0; i < m_daily_chargeitemsize; ++i)
 	{
-		m_jsonData["b"][i] = 0;  //重置奖励领取状态
+		m_jsonData["b"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["c"] = 0;  //每日充值领取的ts
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_SUMMERCHARGE;  //id
+	m_jsonData["c"] = 0;				 //每日充值领取的ts
+	m_jsonData["v"] = GetVersion();		 //版本号
+	m_jsonData["id"] = NAT_SUMMERCHARGE; //id
 
 	need_save = true;
 
@@ -4299,20 +4261,23 @@ int SummerRewardActivityUnix::ResetAct()
 
 int SummerRewardActivityUnix::CheckItemSize(int flag)
 {
-	if(check_acc_item == flag) {
+	if (check_acc_item == flag)
+	{
 		int oldsize = m_jsonData["a"].size();
 		if (oldsize < m_acc_chargeitemsize)
 		{
-			for(int i = oldsize; i < m_acc_chargeitemsize; ++i)
+			for (int i = oldsize; i < m_acc_chargeitemsize; ++i)
 			{
 				m_jsonData["a"][i] = 0;
 			}
 		}
-	}else if(check_daily_item == flag) {
+	}
+	else if (check_daily_item == flag)
+	{
 		int oldsize = m_jsonData["b"].size();
 		if (oldsize < m_daily_chargeitemsize)
 		{
-			for(int i = oldsize; i < m_daily_chargeitemsize; ++i)
+			for (int i = oldsize; i < m_daily_chargeitemsize; ++i)
 			{
 				m_jsonData["b"][i] = 0;
 			}
@@ -4323,12 +4288,12 @@ int SummerRewardActivityUnix::CheckItemSize(int flag)
 	return 0;
 }
 
-int SummerRewardActivityUnix::GetSummerAccReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int SummerRewardActivityUnix::GetSummerAccReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetSummerAccChargeItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetSummerAccChargeItemcfg(index);
 	m_acc_chargeitemsize = ActivityConfigWrap().GetSummerChargeRewardCfg().acc_chargereward_size();
 
 	if (index < 0 || index >= m_acc_chargeitemsize)
@@ -4364,7 +4329,7 @@ int SummerRewardActivityUnix::GetSummerAccReward(UserWrap& userWrap, const UnitI
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "SummerAccChargeReward", result);
 
-	m_jsonData["a"][index] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -4373,12 +4338,12 @@ int SummerRewardActivityUnix::GetSummerAccReward(UserWrap& userWrap, const UnitI
 	return 0;
 }
 
-int SummerRewardActivityUnix::GetSummerDailyReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int SummerRewardActivityUnix::GetSummerDailyReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetSummerDailyChargeItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetSummerDailyChargeItemcfg(index);
 	m_daily_chargeitemsize = ActivityConfigWrap().GetSummerChargeRewardCfg().daily_chargereward_size();
 
 	if (index < 0 || index >= m_daily_chargeitemsize)
@@ -4395,11 +4360,11 @@ int SummerRewardActivityUnix::GetSummerDailyReward(UserWrap& userWrap, const Uni
 
 	//根据每日领取的ts充值每日领取标记
 	unsigned reward_ts = m_jsonData["c"].asUInt();
-	if(!Time::IsToday(reward_ts))
+	if (!Time::IsToday(reward_ts))
 	{
-		for(int i = 0; i < m_daily_chargeitemsize; ++i)
+		for (int i = 0; i < m_daily_chargeitemsize; ++i)
 		{
-			m_jsonData["b"][i] = 0;  //重置奖励领取状态
+			m_jsonData["b"][i] = 0; //重置奖励领取状态
 		}
 	}
 
@@ -4425,7 +4390,7 @@ int SummerRewardActivityUnix::GetSummerDailyReward(UserWrap& userWrap, const Uni
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "SummerDailyChargeReward", result);
 
-	m_jsonData["b"][index] = 1;   //设置奖励领取状态
+	m_jsonData["b"][index] = 1; //设置奖励领取状态
 	m_jsonData["c"] = Time::GetGlobalTime();
 
 	Save();
@@ -4441,21 +4406,18 @@ unsigned SummerRewardActivityUnix::GetCurDateStartTs()
 	unsigned cur_hour_ts = Time::GetGlobalTime();
 	time_t nts = cur_hour_ts;
 	struct tm ptm;
-	if(localtime_r(&nts, &ptm) != NULL)
+	if (localtime_r(&nts, &ptm) != NULL)
 	{
-		cur_hour_ts  -= ptm.tm_hour * 3600;
-		cur_hour_ts  -= ptm.tm_min * 60;
-		cur_hour_ts  -= ptm.tm_sec;
+		cur_hour_ts -= ptm.tm_hour * 3600;
+		cur_hour_ts -= ptm.tm_min * 60;
+		cur_hour_ts -= ptm.tm_sec;
 	}
 	return cur_hour_ts;
 }
 
-
-
-BatmanTreasureActivityUnix::BatmanTreasureActivityUnix(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_BATMANTREASURE_GIFT)
+BatmanTreasureActivityUnix::BatmanTreasureActivityUnix(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_BATMANTREASURE_GIFT)
 {
-	const ConfigActivity::BatmanTreasureCfg & cfg =  ActivityConfigWrap().GetBatmanTreasureCfg();
+	const ConfigActivity::BatmanTreasureCfg &cfg = ActivityConfigWrap().GetBatmanTreasureCfg();
 	m_chargeitemsize = cfg.xiaobing_chargereward_size();
 
 	sid_ = NAT_BATMANTREASURE;
@@ -4484,14 +4446,14 @@ int BatmanTreasureActivityUnix::ResetAct()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < m_chargeitemsize; ++i)
+	for (int i = 0; i < m_chargeitemsize; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 	m_jsonData["b"] = 0;
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_BATMANTREASURE;  //id
+	m_jsonData["v"] = GetVersion();		   //版本号
+	m_jsonData["id"] = NAT_BATMANTREASURE; //id
 
 	need_save = true;
 
@@ -4503,7 +4465,7 @@ int BatmanTreasureActivityUnix::CheckItemSize()
 	int oldsize = m_jsonData["a"].size();
 	if (oldsize < m_chargeitemsize)
 	{
-		for(int i = oldsize; i < m_chargeitemsize; ++i)
+		for (int i = oldsize; i < m_chargeitemsize; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -4513,12 +4475,12 @@ int BatmanTreasureActivityUnix::CheckItemSize()
 	return 0;
 }
 
-int BatmanTreasureActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int BatmanTreasureActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetBatmanTreasureChargeItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetBatmanTreasureChargeItemcfg(index);
 	m_chargeitemsize = ActivityConfigWrap().GetBatmanTreasureCfg().xiaobing_chargereward_size();
 
 	if (index < 0 || index >= m_chargeitemsize)
@@ -4554,7 +4516,7 @@ int BatmanTreasureActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIn
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "BatmanTreasureChargeReward", result);
 
-	m_jsonData["a"][index] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -4563,7 +4525,7 @@ int BatmanTreasureActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIn
 	return 0;
 }
 
-int BatmanTreasureActivityUnix::Draw(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int BatmanTreasureActivityUnix::Draw(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -4571,7 +4533,7 @@ int BatmanTreasureActivityUnix::Draw(UserWrap& userWrap, const BaseCmdParams & p
 	//获取活动期间内的充值数目
 	unsigned nowts = Time::GetGlobalTime();
 	unsigned charge = GetChargeByTime(userWrap, nowts);
-	unsigned integral = charge;//一钻一积分
+	unsigned integral = charge; //一钻一积分
 
 	//-------校验
 	unsigned draw_cnt_max = ActivityConfigWrap().GetBatmanTreasureCfg().draw_cnt_max();
@@ -4579,30 +4541,30 @@ int BatmanTreasureActivityUnix::Draw(UserWrap& userWrap, const BaseCmdParams & p
 	unsigned used_draw_cnt = m_jsonData["b"].asUInt();
 
 	//---校验抽奖次数
-	if(used_draw_cnt >= draw_cnt_max)
+	if (used_draw_cnt >= draw_cnt_max)
 	{
 		throw std::runtime_error("draw_cnt_is_max");
 	}
 
 	//校验积分是否足够
-	if(used_draw_cnt * draw_cost_integral + draw_cost_integral > integral)
+	if (used_draw_cnt * draw_cost_integral + draw_cost_integral > integral)
 	{
 		throw std::runtime_error("integral_is_not_enough");
 	}
 
 	//--------校验通过、按权重抽奖
 	int target = 0;
-	vector<unsigned>weights;
+	vector<unsigned> weights;
 	weights.clear();
-	for(int i = 0; i < ActivityConfigWrap().GetBatmanTreasureCfg().unique_xiaobing_dial_size(); i++)
+	for (int i = 0; i < ActivityConfigWrap().GetBatmanTreasureCfg().unique_xiaobing_dial_size(); i++)
 	{
 		weights.push_back(ActivityConfigWrap().GetBatmanTreasureCfg().unique_xiaobing_dial(i).weight());
 	}
 
-	TurnLuckTable(weights,weights.size(),target);
+	TurnLuckTable(weights, weights.size(), target);
 
 	//---------发放物品
-	const RewardConfig::RewardItemCfg & itemcfg = ActivityConfigWrap().GetBatmanTreasureCfg().unique_xiaobing_dial(target).item();
+	const RewardConfig::RewardItemCfg &itemcfg = ActivityConfigWrap().GetBatmanTreasureCfg().unique_xiaobing_dial(target).item();
 	ProvideCommonReward(itemcfg, "BatmanTreasureChargeReward", result);
 
 	//记录抽奖次数
@@ -4615,12 +4577,12 @@ int BatmanTreasureActivityUnix::Draw(UserWrap& userWrap, const BaseCmdParams & p
 	return 0;
 }
 
-int BatmanTreasureActivityUnix::TurnLuckTable(vector<unsigned> & prates, int len, int & target)
+int BatmanTreasureActivityUnix::TurnLuckTable(vector<unsigned> &prates, int len, int &target)
 {
 	//获得概率总和
 	int max = 0, last = 0;
 
-	for(int i = 0 ; i < len; ++i)
+	for (int i = 0; i < len; ++i)
 	{
 		max += prates[i];
 	}
@@ -4632,7 +4594,7 @@ int BatmanTreasureActivityUnix::TurnLuckTable(vector<unsigned> & prates, int len
 
 	int j = 0;
 
-	for (; j < len; ++j )
+	for (; j < len; ++j)
 	{
 		if (random < (last + prates[j]))
 		{
@@ -4647,12 +4609,35 @@ int BatmanTreasureActivityUnix::TurnLuckTable(vector<unsigned> & prates, int len
 	return 0;
 }
 
-
-
-RotaryTableActivityUnix::RotaryTableActivityUnix(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_ROTARYTABLE_GIFT)
+RotaryTableFeedBackUnix::RotaryTableFeedBackUnix(const UserWrap &user)
+	: BaseActivityUnit(user.Id(), CONFIG_ROTARYTABLEFEEDBACK_GIFT, NAT_ROTARYTABLE_FEEDBACK)
 {
-	const ConfigActivity::RotaryTableCrazyReward & cfg = ActivityConfigWrap().GetRotaryTableActivityCfg();
+	const ConfigActivity::RotaryTableFeedBackReward &cfg = ActivityConfigWrap().GetRotaryTableFeedBackCfg();
+	m_chargeitemsize = cfg.randomreward_size();
+	m_countSize = cfg.count_size();
+	m_jinduSize = cfg.jindu_size();
+	m_singleSize = cfg.singlereward_size();
+
+	sid_ = NAT_ROTARYTABLE_FEEDBACK;
+	CLogicSecinc logicSecinc;
+	int ret = logicSecinc.GetSecinc(m_nUid, sid_, m_jsonData);
+	need_save = false;
+
+	if (R_ERR_NO_DATA == ret)
+	{
+		//初始化
+		ResetAct();
+	}
+	else if (ret)
+	{
+		error_log("get newact error.uid=%u id=%d", m_nUid, sid_);
+		throw std::runtime_error("get_new_active_data_error");
+	}
+}
+
+RotaryTableActivityUnix::RotaryTableActivityUnix(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_ROTARYTABLE_GIFT)
+{
+	const ConfigActivity::RotaryTableCrazyReward &cfg = ActivityConfigWrap().GetRotaryTableActivityCfg();
 	m_chargeitemsize = cfg.chargereward_size();
 
 	sid_ = NAT_ROTARYTABLE;
@@ -4681,13 +4666,13 @@ int RotaryTableActivityUnix::ResetAct()
 
 		m_jsonData["a"] = array;
 	}
-	for(int i = 0; i < m_chargeitemsize; ++i)
+	for (int i = 0; i < m_chargeitemsize; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置奖励领取状态
+		m_jsonData["a"][i] = 0; //重置奖励领取状态
 	}
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = NAT_ROTARYTABLE;  //id
+	m_jsonData["v"] = GetVersion();		//版本号
+	m_jsonData["id"] = NAT_ROTARYTABLE; //id
 
 	need_save = true;
 
@@ -4699,7 +4684,7 @@ int RotaryTableActivityUnix::CheckItemSize()
 	int oldsize = m_jsonData["a"].size();
 	if (oldsize < m_chargeitemsize)
 	{
-		for(int i = oldsize; i < m_chargeitemsize; ++i)
+		for (int i = oldsize; i < m_chargeitemsize; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -4709,13 +4694,98 @@ int RotaryTableActivityUnix::CheckItemSize()
 
 	return 0;
 }
+int RotaryTableFeedBackUnix::ResetAct()
+{
+	if (!m_jsonData.isMember("b"))
+	{
+		Json::Value array(Json::arrayValue);
 
-int RotaryTableActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+		m_jsonData["b"] = array;
+	}
+	for (int i = 0; i < m_jinduSize; ++i)
+	{
+		m_jsonData["b"][i] = 0; //进度条领取状态
+	}
+
+	m_jsonData["tms"] = 0; //抽奖机会
+	m_jsonData["ctm"] = 0; //充钻石机会
+	m_jsonData["v"] = GetVersion();	
+	m_jsonData["id"] = NAT_ROTARYTABLE_FEEDBACK; //活动id
+
+	need_save = true;
+	Save();
+	return 0;
+}
+
+int RotaryTableFeedBackUnix::CheckItemSize()
+{
+	int oldsize = m_jsonData["b"].size();
+	if (oldsize < m_jinduSize)
+	{
+		for (int i = oldsize; i < m_jinduSize; ++i)
+		{
+			m_jsonData["b"][i] = 0;
+		}
+
+		need_save = true;
+	}
+	return 0;
+}
+
+int RotaryTableFeedBackUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index() + 1;
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetRotaryTableChargeItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetRotaryTableFeedbackChargeItemcfg(index);
+
+	if (index < 1 || index > m_jinduSize)
+	{
+		error_log("param error. uid=%u,index=%u", m_nUid, index);
+		throw runtime_error("param error");
+	}
+
+	//判断版本是否发生变化
+	CheckActVersion();
+
+	//检查充值额度的档位数
+	CheckItemSize();
+
+	//获取活动期间内的充值数目
+	unsigned nowts = Time::GetGlobalTime();
+	unsigned charge = GetChargeByTime(userWrap, nowts);
+	
+	//根据配置，判断充值条件是否满足
+	if (charge < itemcfg.diamond())
+	{
+		error_log("charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
+		throw runtime_error("charge_not_enough");
+	}
+
+	//是否已经领取该位置处的奖励,进度条只能领一次
+	if (m_jsonData["b"][index - 1].asUInt() > 0)
+	{
+		error_log("reward already been received. uid=%u,index=%u", m_nUid, index);
+		throw runtime_error("reward_aleardy_received");
+	}
+
+	m_jsonData["b"][index - 1] = 1; 
+	Save();
+
+	//发放奖励
+	ProvideCommonReward(itemcfg.reward(), "RotaryTableChargeFeedbackReward", result);
+
+	result["newAct"] = m_jsonData;
+
+	return 0;
+}
+
+int RotaryTableActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
+{
+	//根据index，获取配置
+	unsigned index = param.Index() + 1;
+
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetRotaryTableChargeItemcfg(index);
 	m_chargeitemsize = ActivityConfigWrap().GetRotaryTableChargeCfgSize();
 
 	if (index < 1 || index > m_chargeitemsize)
@@ -4751,7 +4821,7 @@ int RotaryTableActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndex
 	//发放奖励
 	ProvideCommonReward(itemcfg.reward(), "RotaryTableChargeReward", result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -4760,7 +4830,7 @@ int RotaryTableActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndex
 	return 0;
 }
 
-int RotaryTableActivityUnix::GetRandomReward(UserWrap& userWrap, const UnitIdCmdParams & param, Json::Value & result)
+int RotaryTableActivityUnix::GetRandomReward(UserWrap &userWrap, const UnitIdCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -4772,7 +4842,7 @@ int RotaryTableActivityUnix::GetRandomReward(UserWrap& userWrap, const UnitIdCmd
 	data["uid"] = userWrap.Id();
 	data["costItemUd"] = param.Id();
 	data["version"] = GetVersion();
-	if(GetEndTs() < Time::GetGlobalTime() || GetBeginTs() > Time::GetGlobalTime())
+	if (GetEndTs() < Time::GetGlobalTime() || GetBeginTs() > Time::GetGlobalTime())
 	{
 		LOGIC_ERROR_RETURN_MSG("activity_over");
 	}
@@ -4780,8 +4850,8 @@ int RotaryTableActivityUnix::GetRandomReward(UserWrap& userWrap, const UnitIdCmd
 	string datastr = Json::ToString(data);
 	url.append("&data=").append(Crypt::UrlEncode(datastr));
 	CLogicAllServerBaseMatch logicBaseMatch;
-	int ret = logicBaseMatch.RequestBaseMatch(url,tempdata,CONFIG_ALLS_MATCH_SERVER_PATH,true);
-	if(ret)
+	int ret = logicBaseMatch.RequestBaseMatch(url, tempdata, CONFIG_ALLS_MATCH_SERVER_PATH, true);
+	if (ret)
 		return ret;
 	if (tempdata.isMember("list"))
 		result["list"] = tempdata["list"];
@@ -4790,10 +4860,112 @@ int RotaryTableActivityUnix::GetRandomReward(UserWrap& userWrap, const UnitIdCmd
 	return 0;
 }
 
-YearEndGiftActivityUnix::YearEndGiftActivityUnix(const UserWrap& user):
-		ChargeQuotaActivityBase(user.Id(), CONFIG_YEAREND_GIFT, NAT_YEAREND_GIFT, item_max_index)
+//转盘回馈
+int RotaryTableFeedBackUnix::GetRandomReward(UserWrap &userWrap, const InitIdCmdParams &param, Json::Value &result)
 {
+	//判断版本是否发生变化
+	CheckActVersion();
+	
+	int ret = 0;
+	const ConfigActivity::RotaryTableFeedBackReward &cnf = ActivityConfigWrap().GetRotaryTableFeedBackCfg();
+	unsigned chge = GetChargeByTime(userWrap, Time::GetGlobalTime());
+	unsigned chanceNum = 0;
+	for (unsigned i = 0; i < m_countSize; ++i)
+	{
+		//每次都要计算机会次数??
+		if (chge >= cnf.count(i).need())
+		{
+			chanceNum += cnf.count(i).c();
+		}
+		else
+		{
+			break;
+		}
+	}
 
+	if (chanceNum <= m_jsonData["tms"].asUInt())
+	{
+		LOGIC_ERROR_RETURN_MSG("times not enough");
+	}
+	m_jsonData["tms"] = m_jsonData["tms"].asUInt() + 1; //使用次数
+	Save();
+
+	//跨服请求、获取随机奖励
+	Json::Value tempdata;
+	Json::Value data;
+	string url = "action=RotaryTableFeedBackDraw";
+	data["uid"] = userWrap.Id();
+	data["version"] = GetVersion();
+	if (GetEndTs() < Time::GetGlobalTime() || GetBeginTs() > Time::GetGlobalTime())
+	{
+		LOGIC_ERROR_RETURN_MSG("activity_over");
+	}
+
+	string datastr = Json::ToString(data);
+	url.append("&data=").append(Crypt::UrlEncode(datastr));
+	CLogicAllServerBaseMatch logicBaseMatch;
+	ret = logicBaseMatch.RequestBaseMatch(url, tempdata, CONFIG_ALLS_MATCH_SERVER_PATH, true);
+	if (ret)
+		return ret;
+	if (tempdata.isMember("list"))
+		result["list"] = tempdata["list"];
+	else
+		result["list"] = Json::Value(Json::arrayValue);
+	result["newAct"] = m_jsonData;
+	return 0;
+}
+
+//累计充值钻石500获取奖励
+int RotaryTableFeedBackUnix::GetAccChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
+{
+	//根据index，获取配置
+	unsigned index = param.Index();
+	int ret = 0;
+	const ConfigActivity::SingleReward &itemcfg = ActivityConfigWrap().GetAccChargeItemcfg(index+1);
+
+	if (index < 0 || index >= m_singleSize)
+	{
+		error_log("param error. uid=%u,index=%u,m_singleSize=%u", m_nUid, index,m_singleSize);
+		throw runtime_error("param error");
+	}
+
+	//判断版本是否发生变化
+	CheckActVersion();
+
+	//获取活动期间内的充值数目
+	unsigned nowts = Time::GetGlobalTime();
+	unsigned charge = GetChargeByTime(userWrap, nowts);
+	unsigned chanceNum = charge / 500; //500钻一次机会
+	if (chanceNum > 20)
+	{
+		chanceNum = 20; //最多获得20次机会
+	}
+
+	CLogicSecinc logicSecinc;
+	ret = logicSecinc.GetSecinc(m_nUid, sid_, m_jsonData);
+	if (ret)
+	{
+		error_log("get newact error.uid=%u id=%d", m_nUid, sid_);
+		throw std::runtime_error("get_new_active_data_error");
+	}
+
+	if (chanceNum <= m_jsonData["ctm"].asUInt())
+	{
+		LOGIC_ERROR_RETURN_MSG("times not enough");
+	}
+	m_jsonData["ctm"] = m_jsonData["ctm"].asUInt() + 1; //使用次数
+	Save();
+
+	//发放奖励
+	ProvideCommonReward(itemcfg.reward(), "AccChargeItemReward", result);
+
+	result["newAct"] = m_jsonData;
+
+	return 0;
+}
+//
+YearEndGiftActivityUnix::YearEndGiftActivityUnix(const UserWrap &user) : ChargeQuotaActivityBase(user.Id(), CONFIG_YEAREND_GIFT, NAT_YEAREND_GIFT, item_max_index)
+{
 }
 
 int YearEndGiftActivityUnix::CheckItemSize()
@@ -4802,7 +4974,7 @@ int YearEndGiftActivityUnix::CheckItemSize()
 
 	if (oldsize < itemsize)
 	{
-		for(int i = oldsize; i < itemsize; ++i)
+		for (int i = oldsize; i < itemsize; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -4813,117 +4985,145 @@ int YearEndGiftActivityUnix::CheckItemSize()
 	return 0;
 }
 
-int OpenServerActivityUnix::GetAchievementGift(UserWrap& userWrap, const BaseCmdParams & param, Json::Value & result)
+int OpenServerActivityUnix::GetAchievementGift(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	unsigned index_parent = param.ValueAsInt("index_p");
 	unsigned index_child = param.ValueAsInt("index_c");
 
 	unsigned int bitFlag = 1;
-	bitFlag = bitFlag <<(index_child - 1);
-	bool isReceive = false;//领取标记
-	int Achievement = 0; //是否有指定的成就
+	bitFlag = bitFlag << (index_child - 1);
+	bool isReceive = false; //领取标记
+	int Achievement = 0;	//是否有指定的成就
 
-	if(index_parent < achievement_item_min || index_parent > achievement_item_max) {
+	if (index_parent < achievement_item_min || index_parent > achievement_item_max)
+	{
 		error_log("param error. index_parent=%u", index_parent);
 		throw runtime_error("param_error");
 	}
-	else{
-		if(m_jsonData["b"][index_parent - 1].asUInt() & bitFlag)
+	else
+	{
+		if (m_jsonData["b"][index_parent - 1].asUInt() & bitFlag)
 			isReceive = true;
 		else
 			isReceive = false;
 	}
 
-	const ConfigActivity::KaiFuGift & cfg = ActivityConfigWrap().GetKaifuActivityCfg();
-	const ConfigActivity::KaifuAchievement & itemcfg = cfg.achievement();
+	const ConfigActivity::KaiFuGift &cfg = ActivityConfigWrap().GetKaifuActivityCfg();
+	const ConfigActivity::KaifuAchievement &itemcfg = cfg.achievement();
 
-	if(isReceive) {
+	if (isReceive)
+	{
 		error_log("already Receive");
 		throw runtime_error("already Receive");
-	} else {
-		if(index_parent == jiangling_level_achievement) {
-			Achievement = judgeLevel(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.soul_lv(index_child -1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+	}
+	else
+	{
+		if (index_parent == jiangling_level_achievement)
+		{
+			Achievement = judgeLevel(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.soul_lv(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-		} else if(index_parent == jiangling_growth_achievement) {
-			Achievement = judgeGrowth(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.soul_growth(index_child - 1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+		}
+		else if (index_parent == jiangling_growth_achievement)
+		{
+			Achievement = judgeGrowth(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.soul_growth(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-
-		} else if(index_parent == wuhun_achievement) {
-			Achievement = judgeEternal(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.wuhun(index_child -1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+		}
+		else if (index_parent == wuhun_achievement)
+		{
+			Achievement = judgeEternal(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.wuhun(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-
-		} else if(index_parent == juexue_achievement) {
-			Achievement = judgeJueXue(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.juexue(index_child -1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+		}
+		else if (index_parent == juexue_achievement)
+		{
+			Achievement = judgeJueXue(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.juexue(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-		} else if(index_parent == shengxing_achievement) {
-			Achievement = judgeShengXing(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.star(index_child -1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+		}
+		else if (index_parent == shengxing_achievement)
+		{
+			Achievement = judgeShengXing(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.star(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-		} else if(index_parent == bingshu_achievement) {
-			Achievement = judgeBingShu(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.heaven(index_child - 1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+		}
+		else if (index_parent == bingshu_achievement)
+		{
+			Achievement = judgeBingShu(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.heaven(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-
-		} else if(index_parent == dunjia_achievement) {
-			Achievement = judgeDunJia(itemcfg,userWrap,index_child);
-			if(Achievement == 0) {
-				const RewardConfig::RewardItemCfg& rewardcfg = itemcfg.daoist(index_child -1).reward();
-				HandleAchievementGift(rewardcfg,index_parent,index_child,result);
+		}
+		else if (index_parent == dunjia_achievement)
+		{
+			Achievement = judgeDunJia(itemcfg, userWrap, index_child);
+			if (Achievement == 0)
+			{
+				const RewardConfig::RewardItemCfg &rewardcfg = itemcfg.daoist(index_child - 1).reward();
+				HandleAchievementGift(rewardcfg, index_parent, index_child, result);
 			}
-			else {
+			else
+			{
 				error_log("no this achivement！");
 				throw runtime_error("no this achivement！");
 			}
-
 		}
 	}
 	return 0;
 }
 
-int OpenServerActivityUnix::HandleAchievementGift(const RewardConfig::RewardItemCfg& itemCfg,int index_parent,int index_child,Json::Value & result)
+int OpenServerActivityUnix::HandleAchievementGift(const RewardConfig::RewardItemCfg &itemCfg, int index_parent, int index_child, Json::Value &result)
 {
 	unsigned int bitFlag = 1;
-	bitFlag = bitFlag <<(index_child - 1);
+	bitFlag = bitFlag << (index_child - 1);
 	string reason = "OpenServer_Gift";
 	ProvideCommonReward(itemCfg, reason, result);
 
@@ -4934,13 +5134,14 @@ int OpenServerActivityUnix::HandleAchievementGift(const RewardConfig::RewardItem
 	return 0;
 }
 
-int OpenServerActivityUnix::judgeBingShu(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeBingShu(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	Json::Value tech;
 	userWrap.GetUserTech(tech);
 	Json::Value heaven;
 	int result = -1;
-	if(tech.isMember("heaven")) {
+	if (tech.isMember("heaven"))
+	{
 		heaven = tech["heaven"];
 		int level = heaven["lv"].asInt();
 
@@ -4950,20 +5151,20 @@ int OpenServerActivityUnix::judgeBingShu(const ConfigActivity::KaifuAchievement&
 		config_jie = heaven_attr.jie();
 		config_ceng = heaven_attr.ceng();
 
-		if(level >= (config_jie - 1 )*10 + config_ceng)
+		if (level >= (config_jie - 1) * 10 + config_ceng)
 			result = 0;
 	}
 	return result;
-
 }
 
-int OpenServerActivityUnix::judgeDunJia(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeDunJia(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	Json::Value tech;
 	userWrap.GetUserTech(tech);
 	Json::Value daoist;
 	int result = -1;
-	if(tech.isMember("daoist")) {
+	if (tech.isMember("daoist"))
+	{
 		daoist = tech["daoist"];
 		int level = daoist["lv"].asInt();
 
@@ -4973,14 +5174,14 @@ int OpenServerActivityUnix::judgeDunJia(const ConfigActivity::KaifuAchievement& 
 		config_jie = daoist_attr.jie();
 		config_ceng = daoist_attr.ceng();
 
-		if(level >= (config_jie - 1 )*10 + config_ceng)
+		if (level >= (config_jie - 1) * 10 + config_ceng)
 			result = 0;
 	}
 
 	return result;
 }
 
-int OpenServerActivityUnix::judgeLevel(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeLevel(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	Json::Value tech;
 	userWrap.GetUserTech(tech);
@@ -4988,27 +5189,26 @@ int OpenServerActivityUnix::judgeLevel(const ConfigActivity::KaifuAchievement& i
 	Json::GetUInt(tech, "soul", soul);
 
 	int result = -1;
-	const ConfigActivity::MsgSoulLevel soul_lv= itemcfg.soul_lv(index - 1);
+	const ConfigActivity::MsgSoulLevel soul_lv = itemcfg.soul_lv(index - 1);
 	int config_level = soul_lv.lv();
 
 	unsigned level = 0;
 	unsigned exp = SOUL_EXP * soul;
-	for(int i=SOUL_LVL-1;i>=0;--i)
+	for (int i = SOUL_LVL - 1; i >= 0; --i)
 	{
-		if(exp >= SOUL_LVL_EXP[i])
+		if (exp >= SOUL_LVL_EXP[i])
 		{
 			level = i + 1;
 			break;
 		}
 	}
 
-	if(level >= config_level)
+	if (level >= config_level)
 		result = 0;
 	return result;
-
 }
 
-int OpenServerActivityUnix::judgeGrowth(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeGrowth(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	Json::Value tech;
 	userWrap.GetUserTech(tech);
@@ -5016,40 +5216,41 @@ int OpenServerActivityUnix::judgeGrowth(const ConfigActivity::KaifuAchievement& 
 
 	unsigned sgrowth = 0;
 	Json::GetUInt(tech, "sgrowth", sgrowth);
-	sgrowth = sgrowth/10;
+	sgrowth = sgrowth / 10;
 
-	const ConfigActivity::MsgSoulGrowth growth_lv= itemcfg.soul_growth(index - 1);
+	const ConfigActivity::MsgSoulGrowth growth_lv = itemcfg.soul_growth(index - 1);
 	int config_growth_lv = growth_lv.growth();
 
-	if(sgrowth >= config_growth_lv)
+	if (sgrowth >= config_growth_lv)
 		result = 0;
 	return result;
 }
 
-int OpenServerActivityUnix::judgeEternal(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeEternal(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	Json::Value tech;
 	userWrap.GetUserTech(tech);
 	int result = -1;
 
-	const ConfigActivity::MsgWuhun wuhun_attr= itemcfg.wuhun(index - 1);
+	const ConfigActivity::MsgWuhun wuhun_attr = itemcfg.wuhun(index - 1);
 	int config_partcount = wuhun_attr.partcount();
 	int config_partlv = wuhun_attr.partlv();
 
 	Json::Value jsonPart;
 	Json::GetArray(tech, "part", jsonPart);
 	int count = 0;
-	for(int i = 0; i < jsonPart.size(); i++) {
-		if(jsonPart[i].asInt() >= config_partlv)
+	for (int i = 0; i < jsonPart.size(); i++)
+	{
+		if (jsonPart[i].asInt() >= config_partlv)
 			count++;
 	}
 
-	if(count >= config_partcount)
+	if (count >= config_partcount)
 		result = 0;
 	return result;
 }
 
-int OpenServerActivityUnix::judgeJueXue(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeJueXue(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	int result = -1;
 
@@ -5063,24 +5264,30 @@ int OpenServerActivityUnix::judgeJueXue(const ConfigActivity::KaifuAchievement& 
 	config_quality = juexue_attr.quality();
 	config_count = juexue_attr.count();
 
-	for(int i = 0; i < data.size(); i++) {
+	for (int i = 0; i < data.size(); i++)
+	{
 		int hero_def = 0;
 		Json::GetInt(data[i], "def", hero_def);
-		if(hero_def == 1) {
-			if(data[i].isMember("juexue") && data[i]["juexue"].isArray()) {
-				if(data[i]["juexue"].size() >= 1) {
+		if (hero_def == 1)
+		{
+			if (data[i].isMember("juexue") && data[i]["juexue"].isArray())
+			{
+				if (data[i]["juexue"].size() >= 1)
+				{
 
 					int count = 0;
-					for(int k = 0; k <  data[i]["juexue"].size(); k++) {
+					for (int k = 0; k < data[i]["juexue"].size(); k++)
+					{
 						int id = data[i]["juexue"][k]["id"].asInt();
 						int value = id % 1000;
-						if(value >= config_quality)
-							count ++;
+						if (value >= config_quality)
+							count++;
 					}
-					if(count >= config_count)
+					if (count >= config_count)
 						result = 0;
-					else {
-						error_log("config_quality=%d,config_count=%d,count=%d",config_quality,config_count,count);
+					else
+					{
+						error_log("config_quality=%d,config_count=%d,count=%d", config_quality, config_count, count);
 					}
 				}
 			}
@@ -5090,7 +5297,7 @@ int OpenServerActivityUnix::judgeJueXue(const ConfigActivity::KaifuAchievement& 
 	return result;
 }
 
-int OpenServerActivityUnix::judgeShengXing(const ConfigActivity::KaifuAchievement& itemcfg,UserWrap& userWrap, int index)
+int OpenServerActivityUnix::judgeShengXing(const ConfigActivity::KaifuAchievement &itemcfg, UserWrap &userWrap, int index)
 {
 	int result = -1;
 
@@ -5105,18 +5312,20 @@ int OpenServerActivityUnix::judgeShengXing(const ConfigActivity::KaifuAchievemen
 	config_star = shengxing_attr.star();
 	config_type = shengxing_attr.type();
 
-	for(int i = 0; i < data.size(); i++) {
+	for (int i = 0; i < data.size(); i++)
+	{
 		int hero_def = 0;
 		Json::GetInt(data[i], "def", hero_def);
-		if(hero_def == 1) {
-			if(!Json::GetUInt(data[i],"star",start_target))
+		if (hero_def == 1)
+		{
+			if (!Json::GetUInt(data[i], "star", start_target))
 				start_target = 1;
 
 			string str_heroId;
 			unsigned heroId;
 			XMLHero hero;
 
-			if(!Json::GetString(data[i],"id",str_heroId))
+			if (!Json::GetString(data[i], "id", str_heroId))
 			{
 				error_log("[source hid or star error]");
 				return R_ERR_DATA;
@@ -5125,20 +5334,20 @@ int OpenServerActivityUnix::judgeShengXing(const ConfigActivity::KaifuAchievemen
 			heroId = CTrans::STOI(str_heroId);
 
 			CDataXML *pDataXML = CDataXML::GetCDataXML();
-			if(!pDataXML)
+			if (!pDataXML)
 			{
 				cout << "GetCDataXML fail" << endl;
 				return R_ERR_DATA;
 			}
 			int ret = pDataXML->GetHero(heroId, hero);
-			if(ret)
+			if (ret)
 			{
 				error_log("GetHero fail");
 				return R_ERR_DATA;
 			}
 			int type = hero.type;
 
-			if(type >= config_type && start_target >= config_star)
+			if (type >= config_type && start_target >= config_star)
 				result = 0;
 			break;
 		}
@@ -5146,8 +5355,7 @@ int OpenServerActivityUnix::judgeShengXing(const ConfigActivity::KaifuAchievemen
 	return result;
 }
 
-
-int OpenServerActivityUnix::HandleDiscountShopBuy(UserWrap& user,const ConfigActivity::KaifuDiscountShop & itemcfg,string reason,int index,Json::Value& result)
+int OpenServerActivityUnix::HandleDiscountShopBuy(UserWrap &user, const ConfigActivity::KaifuDiscountShop &itemcfg, string reason, int index, Json::Value &result)
 {
 	int cost = itemcfg.p_price();
 	if (R_SUCCESS != user.CostAsset(cost, 0, reason, result["cost"]))
@@ -5160,10 +5368,13 @@ int OpenServerActivityUnix::HandleDiscountShopBuy(UserWrap& user,const ConfigAct
 
 	//设置奖励领取状态
 	unsigned bit = 1;
-	bit = bit<<(index -1);
-	if(index > check_bit_max) {
+	bit = bit << (index - 1);
+	if (index > check_bit_max)
+	{
 		m_jsonData["a"][1] = m_jsonData["a"][1].asUInt() + bit;
-	} else {
+	}
+	else
+	{
 		m_jsonData["a"][0u] = m_jsonData["a"][0u].asUInt() + bit;
 	}
 
@@ -5173,61 +5384,65 @@ int OpenServerActivityUnix::HandleDiscountShopBuy(UserWrap& user,const ConfigAct
 	return 0;
 }
 
-
-int OpenServerActivityUnix::GetDiscountShopGift(UserWrap& user, const UnitIndexCmdParams& params,  Json::Value& result)
+int OpenServerActivityUnix::GetDiscountShopGift(UserWrap &user, const UnitIndexCmdParams &params, Json::Value &result)
 {
 	unsigned index = params.Index();
-	const ConfigActivity::KaiFuGift & cfg = ActivityConfigWrap().GetKaifuActivityCfg();
-	const ConfigActivity::KaifuDiscountShop & itemcfg = cfg.shop(index -1);
+	const ConfigActivity::KaiFuGift &cfg = ActivityConfigWrap().GetKaifuActivityCfg();
+	const ConfigActivity::KaifuDiscountShop &itemcfg = cfg.shop(index - 1);
 
 	string reason = "OpenServer_Gift";
-	if(index < check_bit_min || index > 2*check_bit_max) {
+	if (index < check_bit_min || index > 2 * check_bit_max)
+	{
 		error_log("param error. index=%u", index);
 		throw runtime_error("param_error");
 	}
-	if(!Time::IsToday(m_jsonData["ts"].asUInt())) {
+	if (!Time::IsToday(m_jsonData["ts"].asUInt()))
+	{
 		//处理 购买
 		ResetDiscountAct();
-		HandleDiscountShopBuy(user,itemcfg,reason,index,result);
-	}else {
+		HandleDiscountShopBuy(user, itemcfg, reason, index, result);
+	}
+	else
+	{
 		unsigned int bitFlag = 1;
-		bitFlag = bitFlag <<(index - 1);
-		bool isReceive = false;//领取标记
+		bitFlag = bitFlag << (index - 1);
+		bool isReceive = false; //领取标记
 
-		if(index > check_bit_max && index <= 2*check_bit_max) {
-			if(m_jsonData["a"][1].asUInt() & bitFlag)
+		if (index > check_bit_max && index <= 2 * check_bit_max)
+		{
+			if (m_jsonData["a"][1].asUInt() & bitFlag)
 				isReceive = true;
 			else
 				isReceive = false;
 		}
-		else if(index >= check_bit_min && index <= check_bit_max) {
-			if(m_jsonData["a"][0u].asUInt() & bitFlag)
+		else if (index >= check_bit_min && index <= check_bit_max)
+		{
+			if (m_jsonData["a"][0u].asUInt() & bitFlag)
 				isReceive = true;
 			else
 				isReceive = false;
 		}
-		if(!isReceive) {
+		if (!isReceive)
+		{
 			// 处理折扣商店购买
-			HandleDiscountShopBuy(user,itemcfg,reason,index,result);
-		}else {
+			HandleDiscountShopBuy(user, itemcfg, reason, index, result);
+		}
+		else
+		{
 			error_log("already Receive");
 			throw runtime_error("already Receive");
 		}
-
 	}
 	return 0;
 }
 
-
-
-
-int NewYearActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int NewYearActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::NewYearActivity & cfg = ActivityConfigWrap().GetNewYearActivityCfg();
-	const ConfigActivity::DiamondReward & itemcfg = cfg.charge_reward(index - 1);
+	const ConfigActivity::NewYearActivity &cfg = ActivityConfigWrap().GetNewYearActivityCfg();
+	const ConfigActivity::DiamondReward &itemcfg = cfg.charge_reward(index - 1);
 
 	if (index < 1 || index > itemsize_)
 	{
@@ -5260,7 +5475,7 @@ int NewYearActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdP
 	string reason = "NewYear_Gift";
 	ProvideCommonReward(itemcfg.reward(), reason, result);
 
-	m_jsonData["a"][index - 1] = 1;   //设置奖励领取状态
+	m_jsonData["a"][index - 1] = 1; //设置奖励领取状态
 
 	Save();
 
@@ -5269,27 +5484,27 @@ int NewYearActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdP
 	return 0;
 }
 
-int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap& user, const BaseCmdParams& params,  Json::Value& result)
+int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap &user, const BaseCmdParams &params, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = params.ValueAsUInt("index");
-	unsigned item_index [3];
+	unsigned item_index[3];
 	item_index[0] = params.ValueAsUInt("index_1");
 	item_index[1] = params.ValueAsUInt("index_2");
 	item_index[2] = params.ValueAsUInt("index_3");
 
 	//check index
-	if(index < 1 || index > combinebuyitem_)
+	if (index < 1 || index > combinebuyitem_)
 	{
 		error_log("param error. index=%u", index);
 		throw runtime_error("param_error");
 	}
 	//check equip_index
-	for(int i = 0; i < combinebuyitem_; i++)
+	for (int i = 0; i < combinebuyitem_; i++)
 	{
-		if(item_index[i] < 1 || item_index[i] > combine_shop_per_item_cnt_max)
+		if (item_index[i] < 1 || item_index[i] > combine_shop_per_item_cnt_max)
 		{
-			error_log("param error. item_index[%d]=%u", i,item_index[i]);
+			error_log("param error. item_index[%d]=%u", i, item_index[i]);
 			throw runtime_error("param_error");
 		}
 	}
@@ -5297,14 +5512,14 @@ int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap& user, const BaseCmdPa
 	//判断版本是否发生变化
 	CheckActVersion();
 
-	const ConfigActivity::NewYearActivity & cfg = ActivityConfigWrap().GetNewYearActivityCfg();
-	const ConfigActivity::DiamondRewardLimit & itemcfg = cfg.buy_items(index - 1);
-	unsigned int cost = itemcfg.diamond();//消耗的钻石
-	int limit = itemcfg.limit();//限领次数
+	const ConfigActivity::NewYearActivity &cfg = ActivityConfigWrap().GetNewYearActivityCfg();
+	const ConfigActivity::DiamondRewardLimit &itemcfg = cfg.buy_items(index - 1);
+	unsigned int cost = itemcfg.diamond(); //消耗的钻石
+	int limit = itemcfg.limit();		   //限领次数
 
-	if(!Time::IsToday(m_jsonData["ts2"].asUInt()))
+	if (!Time::IsToday(m_jsonData["ts2"].asUInt()))
 	{
-		ResetAct(reset_combine_shop_get_tag);//重置组合商店的领取记录标记
+		ResetAct(reset_combine_shop_get_tag); //重置组合商店的领取记录标记
 	}
 	else
 	{
@@ -5315,15 +5530,15 @@ int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap& user, const BaseCmdPa
 		}
 	}
 
-	const RewardConfig::RewardItemCfg & itemcfgrwd = itemcfg.reward();
+	const RewardConfig::RewardItemCfg &itemcfgrwd = itemcfg.reward();
 
 	string reason = "NewYear_Gift";
 	vector<ItemAdd> equips_v;
 	unsigned nowts = Time::GetGlobalTime();
 
-	for(int i = 0; i < combine_shop_select_item_cnt_max; ++i)
+	for (int i = 0; i < combine_shop_select_item_cnt_max; ++i)
 	{
-		const RewardConfig::EquipItem&  equipcfg = itemcfgrwd.equips(item_index[i] - 1);
+		const RewardConfig::EquipItem &equipcfg = itemcfgrwd.equips(item_index[i] - 1);
 		ItemAdd item(equipcfg.eqid(), equipcfg.c(), reason, equipcfg.ch(), equipcfg.q());
 
 		/*
@@ -5341,7 +5556,6 @@ int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap& user, const BaseCmdPa
 		AddEquips(equips_v, result);
 	}
 
-
 	//发放奖励
 
 	//ProvideCommonReward(itemcfg.reward(), reason, result);
@@ -5353,7 +5567,7 @@ int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap& user, const BaseCmdPa
 		return R_ERROR;
 	}
 
-	m_jsonData["b"][index - 1] = m_jsonData["b"][index - 1].asUInt() + 1;   //设置奖励领取状态
+	m_jsonData["b"][index - 1] = m_jsonData["b"][index - 1].asUInt() + 1; //设置奖励领取状态
 	m_jsonData["ts2"] = Time::GetGlobalTime();
 	Save();
 
@@ -5361,31 +5575,32 @@ int NewYearActivityUnix::BuyItemFromCombinedShop(UserWrap& user, const BaseCmdPa
 	return 0;
 }
 
-int NewYearActivityUnix::GetOnlineReward(UserWrap& user, const BaseCmdParams& params,  Json::Value& result)
+int NewYearActivityUnix::GetOnlineReward(UserWrap &user, const BaseCmdParams &params, Json::Value &result)
 {
 
 	//判断版本是否发生变化
 	CheckActVersion();
 
-	if(!Time::IsToday(m_jsonData["ts1"].asUInt()))
+	if (!Time::IsToday(m_jsonData["ts1"].asUInt()))
 	{
-		ResetAct(reset_day_reward_tag);//重置组合商店的领取记录标记
+		ResetAct(reset_day_reward_tag); //重置组合商店的领取记录标记
 	}
 	else
 	{
-		if(1 == m_jsonData["c"].asUInt()) {
+		if (1 == m_jsonData["c"].asUInt())
+		{
 			throw std::runtime_error("already_get_reward");
 		}
 	}
 
-	const ConfigActivity::NewYearActivity & cfg = ActivityConfigWrap().GetNewYearActivityCfg();
-	const RewardConfig::RewardItemCfg & itemcfg = cfg.online_reward();
+	const ConfigActivity::NewYearActivity &cfg = ActivityConfigWrap().GetNewYearActivityCfg();
+	const RewardConfig::RewardItemCfg &itemcfg = cfg.online_reward();
 
 	string reason = "NewYear_Gift";
 	//发放奖励
 	ProvideCommonReward(itemcfg, reason, result);
 
-	m_jsonData["c"] = 1;   //设置领取状态
+	m_jsonData["c"] = 1; //设置领取状态
 	m_jsonData["ts1"] = Time::GetGlobalTime();
 	Save();
 
@@ -5394,15 +5609,12 @@ int NewYearActivityUnix::GetOnlineReward(UserWrap& user, const BaseCmdParams& pa
 	return 0;
 }
 
-
-
-
-int YearEndGiftActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int YearEndGiftActivityUnix::GetChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	//根据index，获取配置
 	unsigned index = param.Index();
 
-	const ConfigActivity::DiamondReward & itemcfg = ActivityConfigWrap().GetYearEndGiftItemcfg(index);
+	const ConfigActivity::DiamondReward &itemcfg = ActivityConfigWrap().GetYearEndGiftItemcfg(index);
 	itemsize = ActivityConfigWrap().GetYearEndGiftSize();
 
 	Reward(userWrap, index, itemcfg, "YearEnd_Gift", result);
@@ -5410,13 +5622,11 @@ int YearEndGiftActivityUnix::GetChargeReward(UserWrap& userWrap, const UnitIndex
 	return 0;
 }
 
-ProtectGoddessUnix::ProtectGoddessUnix(const UserWrap& user):
-		BaseCmdUnit(user.Id())
+ProtectGoddessUnix::ProtectGoddessUnix(const UserWrap &user) : BaseCmdUnit(user.Id())
 {
-
 }
 
-int ProtectGoddessUnix::GetPointReward(UserWrap& userWrap, const UnitIdCmdParams & param, Json::Value & result)
+int ProtectGoddessUnix::GetPointReward(UserWrap &userWrap, const UnitIdCmdParams &param, Json::Value &result)
 {
 	unsigned id = param.Id();
 
@@ -5431,7 +5641,7 @@ int ProtectGoddessUnix::GetPointReward(UserWrap& userWrap, const UnitIdCmdParams
 	unsigned point = 0;
 	Json::GetUInt(user_stat, "nsp", point);
 
-	ProtectGoddessRewardItem * item = NULL;
+	ProtectGoddessRewardItem *item = NULL;
 
 	int ret = DataXmlPtr()->GetProtectGoddessRewardItem(id, &item);
 
@@ -5472,8 +5682,7 @@ int ProtectGoddessUnix::GetPointReward(UserWrap& userWrap, const UnitIdCmdParams
 	return 0;
 }
 
-KeyLuxuryGiftActivityUnit::KeyLuxuryGiftActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_KEY_LUXURYGIFT)
+KeyLuxuryGiftActivityUnit::KeyLuxuryGiftActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_KEY_LUXURYGIFT)
 {
 	sid = NAT_KEYLUXURY_GIFT;
 
@@ -5502,7 +5711,7 @@ int KeyLuxuryGiftActivityUnit::CheckItemSize()
 
 	if (oldsize < size)
 	{
-		for(int i = oldsize; i < size; ++i)
+		for (int i = oldsize; i < size; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -5524,22 +5733,22 @@ int KeyLuxuryGiftActivityUnit::ResetAct()
 
 	int size = ActivityConfigWrap().GetLuxuryItemSize();
 
-	for(int i = 0; i < size; ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置物品项兑换次数
+		m_jsonData["a"][i] = 0; //重置物品项兑换次数
 	}
 
-	m_jsonData["b"] = 0;  //已兑换密钥数
+	m_jsonData["b"] = 0; //已兑换密钥数
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid;			//id
 
 	need_save = true;
 
 	return 0;
 }
 
-int KeyLuxuryGiftActivityUnit::GetReward(UserWrap& userWrap, const UnitIndexCmdParams & param, Json::Value & result)
+int KeyLuxuryGiftActivityUnit::GetReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result)
 {
 	unsigned index = param.Index();
 
@@ -5551,7 +5760,7 @@ int KeyLuxuryGiftActivityUnit::GetReward(UserWrap& userWrap, const UnitIndexCmdP
 
 	//判断兑换次数是否达到上限
 	ActivityConfigWrap activitywrap;
-	const ConfigActivity::StuffItem & itemcfg = activitywrap.GetLuxuryGiftItem(index);
+	const ConfigActivity::StuffItem &itemcfg = activitywrap.GetLuxuryGiftItem(index);
 
 	int pos = index - 1;
 
@@ -5586,13 +5795,11 @@ int KeyLuxuryGiftActivityUnit::GetReward(UserWrap& userWrap, const UnitIndexCmdP
 	return 0;
 }
 
-SoldierSpiritUnit::SoldierSpiritUnit(const UserWrap& user):
-		BaseCmdUnit(user.Id())
+SoldierSpiritUnit::SoldierSpiritUnit(const UserWrap &user) : BaseCmdUnit(user.Id())
 {
-
 }
 
-int SoldierSpiritUnit::Inject(UserWrap& userWrap, const UnitUdCmdParams & param, Json::Value & result)
+int SoldierSpiritUnit::Inject(UserWrap &userWrap, const UnitUdCmdParams &param, Json::Value &result)
 {
 	Json::Value user_tech;
 	userWrap.GetUserTech(user_tech);
@@ -5631,8 +5838,7 @@ int SoldierSpiritUnit::Inject(UserWrap& userWrap, const UnitUdCmdParams & param,
 	return 0;
 }
 
-EnjoySmallGiftActivityUnit::EnjoySmallGiftActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_ENJOY_SMALLGIFT, NAT_ENJOY_SMALLGIFT)
+EnjoySmallGiftActivityUnit::EnjoySmallGiftActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_ENJOY_SMALLGIFT, NAT_ENJOY_SMALLGIFT)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, sid_, m_jsonData);
@@ -5660,7 +5866,7 @@ int EnjoySmallGiftActivityUnit::CheckItemSize()
 
 	if (oldsize < chargesize)
 	{
-		for(int i = oldsize; i < chargesize; ++i)
+		for (int i = oldsize; i < chargesize; ++i)
 		{
 			m_jsonData["a"][i] = 0;
 		}
@@ -5675,7 +5881,7 @@ int EnjoySmallGiftActivityUnit::CheckItemSize()
 
 	if (oldb_size < consumesize)
 	{
-		for(int i = oldb_size; i < consumesize; ++i)
+		for (int i = oldb_size; i < consumesize; ++i)
 		{
 			m_jsonData["b"][i] = 0;
 		}
@@ -5698,9 +5904,9 @@ int EnjoySmallGiftActivityUnit::ResetAct()
 
 	int chargesize = ActivityConfigWrap().GetChargeCfgItemSize();
 
-	for(int i = 0; i < chargesize; ++i)
+	for (int i = 0; i < chargesize; ++i)
 	{
-		m_jsonData["a"][i] = 0;  //重置充值额度奖励领取状态
+		m_jsonData["a"][i] = 0; //重置充值额度奖励领取状态
 	}
 
 	//处理消费额度奖励领取状态
@@ -5713,21 +5919,21 @@ int EnjoySmallGiftActivityUnit::ResetAct()
 
 	int consumesize = ActivityConfigWrap().GetConsumeCfgItemSize();
 
-	for(int i = 0; i < consumesize; ++i)
+	for (int i = 0; i < consumesize; ++i)
 	{
-		m_jsonData["b"][i] = 0;  //重置消费额度奖励领取状态
+		m_jsonData["b"][i] = 0; //重置消费额度奖励领取状态
 	}
 
-	m_jsonData["t"] = Time::GetGlobalTime();  //重置奖励的时间
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid_;  //id
+	m_jsonData["t"] = Time::GetGlobalTime(); //重置奖励的时间
+	m_jsonData["v"] = GetVersion();			 //版本号
+	m_jsonData["id"] = sid_;				 //id
 
 	need_save = true;
 
 	return 0;
 }
 
-int EnjoySmallGiftActivityUnit::GetReward(UserWrap& userWrap, const GiftParam & param, Json::Value & result)
+int EnjoySmallGiftActivityUnit::GetReward(UserWrap &userWrap, const GiftParam &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -5757,9 +5963,9 @@ int EnjoySmallGiftActivityUnit::GetReward(UserWrap& userWrap, const GiftParam & 
 	{
 		//获取充值数目
 		unsigned nowts = Time::GetGlobalTime();
-		unsigned charge = userWrap.GetSingleDayRecharge(nowts);  //获取当日充值数
+		unsigned charge = userWrap.GetSingleDayRecharge(nowts); //获取当日充值数
 
-		const ConfigActivity::DiamondReward & chargecfg = ActivityConfigWrap().GetChargeItemCfg(index);
+		const ConfigActivity::DiamondReward &chargecfg = ActivityConfigWrap().GetChargeItemCfg(index);
 
 		if (charge < chargecfg.diamond())
 		{
@@ -5783,9 +5989,9 @@ int EnjoySmallGiftActivityUnit::GetReward(UserWrap& userWrap, const GiftParam & 
 	else
 	{
 		unsigned nowts = Time::GetGlobalTime();
-		unsigned costcash = userWrap.GetSingleDayConsume(nowts);  //当日消费钻石数
+		unsigned costcash = userWrap.GetSingleDayConsume(nowts); //当日消费钻石数
 
-		const ConfigActivity::ConsumeGiftItem & consumecfg = ActivityConfigWrap().GetConsumeItemCfg(index);
+		const ConfigActivity::ConsumeGiftItem &consumecfg = ActivityConfigWrap().GetConsumeItemCfg(index);
 
 		if (costcash < consumecfg.consume())
 		{
@@ -5814,8 +6020,7 @@ int EnjoySmallGiftActivityUnit::GetReward(UserWrap& userWrap, const GiftParam & 
 	return 0;
 }
 
-LuckyGiftActivityUnit::LuckyGiftActivityUnit(const UserWrap& user):
-		BaseActivityUnit(user.Id(), CONFIG_LUCKY_GIFT, NAT_LUCKY_GIFT)
+LuckyGiftActivityUnit::LuckyGiftActivityUnit(const UserWrap &user) : BaseActivityUnit(user.Id(), CONFIG_LUCKY_GIFT, NAT_LUCKY_GIFT)
 {
 	CLogicSecinc logicSecinc;
 	int ret = logicSecinc.GetSecinc(m_nUid, sid_, m_jsonData);
@@ -5838,15 +6043,15 @@ int LuckyGiftActivityUnit::ResetAct()
 {
 	m_jsonData["a"] = 0; //重置已使用的积分数目
 
-	m_jsonData["v"] = GetVersion();  //版本号
-	m_jsonData["id"] = sid_;  //id
+	m_jsonData["v"] = GetVersion(); //版本号
+	m_jsonData["id"] = sid_;		//id
 
 	need_save = true;
 
 	return 0;
 }
 
-int LuckyGiftActivityUnit::TurnTable(UserWrap& userWrap,  const BaseCmdParams & param, Json::Value & result)
+int LuckyGiftActivityUnit::TurnTable(UserWrap &userWrap, const BaseCmdParams &param, Json::Value &result)
 {
 	//判断版本是否发生变化
 	CheckActVersion();
@@ -5860,7 +6065,7 @@ int LuckyGiftActivityUnit::TurnTable(UserWrap& userWrap,  const BaseCmdParams & 
 		throw std::runtime_error("param_error");
 	}
 
-	const ConfigActivity::LuckyGift &  luckygiftcfg = ActivityConfigWrap().GetLuckyGiftCfg();
+	const ConfigActivity::LuckyGift &luckygiftcfg = ActivityConfigWrap().GetLuckyGiftCfg();
 
 	if (turn_type_key == type)
 	{
@@ -5881,7 +6086,7 @@ int LuckyGiftActivityUnit::TurnTable(UserWrap& userWrap,  const BaseCmdParams & 
 		//扣除充值积分
 		unsigned needcost = times * luckygiftcfg.pointcost();
 		unsigned nowts = Time::GetGlobalTime();
-		unsigned charge = GetChargeByTime(userWrap, nowts);  //获取活动时间内的充值数目
+		unsigned charge = GetChargeByTime(userWrap, nowts); //获取活动时间内的充值数目
 
 		if (m_jsonData["a"].asUInt() + needcost > charge)
 		{
@@ -5895,7 +6100,7 @@ int LuckyGiftActivityUnit::TurnTable(UserWrap& userWrap,  const BaseCmdParams & 
 	Json::Value turnresult(Json::arrayValue);
 
 	//转动
-	for(int i = 0; i < times; ++i)
+	for (int i = 0; i < times; ++i)
 	{
 		TurnImpl(luckygiftcfg, turnresult);
 	}
@@ -5908,17 +6113,17 @@ int LuckyGiftActivityUnit::TurnTable(UserWrap& userWrap,  const BaseCmdParams & 
 	return 0;
 }
 
-int LuckyGiftActivityUnit::TurnImpl(const ConfigActivity::LuckyGift & luckygiftcfg, Json::Value & subresult)
+int LuckyGiftActivityUnit::TurnImpl(const ConfigActivity::LuckyGift &luckygiftcfg, Json::Value &subresult)
 {
 	//从配置的每个子库中挑选出一个物品
 	vector<unsigned> weights;
 
-	for(int i = 0; i < luckygiftcfg.stuff_items_size(); ++i)
+	for (int i = 0; i < luckygiftcfg.stuff_items_size(); ++i)
 	{
 		Json::Value tempresult;
 		weights.clear();
 
-		for(int j = 0; j < luckygiftcfg.stuff_items(i).items_size(); ++j)
+		for (int j = 0; j < luckygiftcfg.stuff_items(i).items_size(); ++j)
 		{
 			weights.push_back(luckygiftcfg.stuff_items(i).items(j).weight());
 		}
@@ -5932,6 +6137,121 @@ int LuckyGiftActivityUnit::TurnImpl(const ConfigActivity::LuckyGift & luckygiftc
 
 	return 0;
 }
+
+//助力大行动
+GiveHelpChargeUnit::GiveHelpChargeUnit(const UserWrap &user) :BaseActivityUnit(user.Id(), CONFIG_GIVEHELPACTION, NAT_CONFIG_givehelpaction) {
+	m_chargeItemSize = WuhunActivityWrap().GetAccChargeItemSize();
+	m_extraItemSize = MAX_GIVEHELPEXTRA_ITEM_NUM;
+	CDataXML *pdataXML = CDataXML::GetCDataXML();
+	if(pdataXML == NULL) {
+		error_log("GetInitXML Process error");
+		throw std::runtime_error("get_new_active_data_error");
+	}
+	pdataXML->GetGiveHelpItemReward(m_config);
+	CLogicSecinc logicSecinc;
+	int ret = logicSecinc.GetSecinc(m_nUid,sid_,m_jsonData);
+	if(0 != ret && R_ERR_NO_DATA != ret) {
+		error_log("get newact error.uid=%u id=%d", m_nUid, sid_);
+		throw std::runtime_error("get_new_active_data_error");
+	}
+	if (R_ERR_NO_DATA == ret) {
+		ResetAct();
+	}
+}
+
+int GiveHelpChargeUnit::GetTotalChargeReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result) {
+	CheckActVersion();
+	unsigned index = param.Index();
+	const WuhunActivity::AccChangeItem &itemcfg = WuhunActivityWrap().GetAccChargeItemCfg(index);
+	//获取活动期间内的充值数目
+	unsigned nowts = Time::GetGlobalTime();
+	unsigned charge = GetChargeByTime(userWrap, nowts);
+	if (charge < itemcfg.need()) {
+		error_log("charge not enough. uid=%u,index=%u,charge=%u", m_nUid, index, charge);
+		throw runtime_error("charge not enough");
+	}
+	if (m_jsonData["a"][index].asUInt() > 0) {
+		error_log("reward already been received. uid=%u,index=%u", m_nUid, index);
+		throw runtime_error("reward was received");
+	}
+	m_jsonData["a"][index] = 1;
+	Save();
+	string code;
+	String::Format(code, "give_help_charge_%u", index);
+	vector<ItemAdd> equips;
+	for (int i = 0; i < itemcfg.id_size() && i < itemcfg.count_size(); ++i) {
+		equips.push_back(ItemAdd(itemcfg.id(i), itemcfg.count(i), code));
+	}
+	AddEquips(equips, result);
+	result["newAct"] = m_jsonData;
+	return 0;
+}
+
+int GiveHelpChargeUnit::GetExtraReward(UserWrap &userWrap, const UnitIndexCmdParams &param, Json::Value &result) {
+	CheckActVersion();
+	unsigned id = param.Index();
+	if (id >= m_extraItemSize) {
+		error_log("get id error uid=%u id=%u max=%u", m_nUid, id, m_extraItemSize);
+		return R_ERR_LOGIC;
+	}
+	unsigned totalCharge = GetChargeByTime(userWrap, Time::GetGlobalTime());
+	unsigned flag = 0;
+	Json::GetUInt(m_jsonData["b"], id, flag);
+	if (flag != 0) {
+		error_log("had got uid=%u id=%u", m_nUid, id);
+		return R_ERR_LOGIC;
+	}
+	unsigned gnm = 0;
+	Json::GetUInt(m_jsonData, "gnm", gnm);
+	if (totalCharge < m_config.extra[id].require || gnm < 20) {
+		error_log("can not reward uid=%u id=%u charge=[%u,%u] gnm=%u", m_nUid, id, totalCharge, m_config.extra[id].require, gnm);
+		return R_ERR_LOGIC;
+	}
+	m_jsonData["b"][id] = 1;
+	Save();
+	vector<ItemAdd> equips;
+	string code;
+	String::Format(code, "give_help_extra_%u", id);
+	for (unsigned i = 0; i < MAX_GIVEHELPEXTRA_REWARD_NUM; ++i) {
+		XMLActSimpleReward &item = m_config.extra[id].reward[i];
+		if (item.type == XML_ACT_SIMPLE_REWARD_TYPE_EQUIP && item.id != 0) {
+			equips.push_back(ItemAdd(item.id, item.count, code));
+		}
+	}
+	AddEquips(equips, result);
+	result["newAct"] = m_jsonData;
+	return 0;
+}
+
+int GiveHelpChargeUnit::SetHelpCount(unsigned count) {
+	CheckActVersion();
+	m_jsonData["gnm"] = count;
+	Save();
+	return 0;
+}
+
+int GiveHelpChargeUnit::ResetAct()
+{
+	m_jsonData["a"] = Json::Value(Json::arrayValue);
+	m_jsonData["b"] = Json::Value(Json::arrayValue);
+
+	for(int i = 0;i < m_chargeItemSize;++i)
+	{
+		m_jsonData["a"][i] = 0;
+	}
+
+	for(int i = 0;i < m_extraItemSize;++i)
+	{
+		m_jsonData["b"][i] = 0;
+	}
+
+	m_jsonData["v"] = GetVersion();
+	m_jsonData["id"] = sid_;
+	m_jsonData["gnm"] = 0;
+
+	return 0;
+}
+/**********************end************************/
 
 /*
 BlackEnhanceActivityUnit::BlackEnhanceActivityUnit(const UserWrap& user):

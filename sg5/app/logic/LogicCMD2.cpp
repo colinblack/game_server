@@ -3222,6 +3222,66 @@ int CLogicCMD::EndSkillTrain(unsigned uid, unsigned sindex, unsigned type, Json:
 	return R_SUCCESS;
 }
 
+int CLogicCMD::AddSqkillQueue(unsigned uid, unsigned sindex, unsigned rentime,unsigned paytype,unsigned amount, Json::Value & result, unsigned lasttime, unsigned seqid)
+{
+	try
+	{
+		AUTO_LOCK_USER(uid);
+
+		UserWrap userWrap(uid, false);
+
+		int ret = userWrap.CheckSession(lasttime, seqid, result);
+
+		if (ret != R_SUCCESS)
+		{
+			return ret;
+		}
+
+		SkillUnit skillunit(uid);
+		skillunit.AddSqkillQueue(userWrap, sindex, rentime,paytype,amount, result);
+
+		userWrap.Save();
+	}
+	catch (const std::exception& e)
+	{
+		::SetError(R_ERROR, e.what());
+		return R_ERROR;
+	}
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::EndSqkillQueue(unsigned uid, unsigned sindex, Json::Value & result, unsigned lasttime, unsigned seqid)
+{
+	try
+	{
+		AUTO_LOCK_USER(uid);
+
+		UserWrap userWrap(uid, false);
+
+		int ret = userWrap.CheckSession(lasttime, seqid, result);
+
+		if (ret != R_SUCCESS)
+		{
+			return ret;
+		}
+
+		SkillUnit skillunit(uid);
+		skillunit.EndSqkillQueue(userWrap, sindex, result);
+
+		userWrap.Save();
+	}
+	catch (const std::exception& e)
+	{
+		::SetError(R_ERROR, e.what());
+		return R_ERROR;
+	}
+
+	return R_SUCCESS;
+}
+
+
+
 int CLogicCMD::UpgradeHevenDaoSkill(unsigned uid, unsigned index, unsigned type, unsigned equd, Json::Value & result, unsigned lasttime, unsigned seqid)
 {
 	try

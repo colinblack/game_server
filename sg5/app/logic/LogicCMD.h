@@ -58,6 +58,7 @@
 #define EN_STONE_ID_8_T 11122
 #define EN_STONE_ID_9_T 11118
 #define EN_STONE_ID_10_T 11165
+#define NEW_EQUIP_ID_11  4211
 #define GET_SNAP_SOUL_EQID(level) (level+4900)
 #define GET_SNAP_BUILDSTONE_EQID(level) (level+4800)
 #define WUXINGZHU_ID 4031
@@ -133,6 +134,7 @@ const unsigned INITIAL_CHARATER_EXP_1[KINGDOM_WAR_CHARACTER_LEVEL] = {0, 10, 50}
 //商店代金券
 #define SHOP_PAY_VOUCHER   2040
 
+//国战商店
 enum ProductShopType
 {
 	WorldBattleShop = 0,
@@ -580,9 +582,9 @@ enum MultipleWheelType
 };
 #define MULTIPLE_WHEEL_REWARD_NUM 8
 #define MULTIPLE_WHEEL_MULTIPLE_NUM 8
-const unsigned MULTIPLE_WHEEL_REWARD_ID[MULTIPLE_WHEEL_REWARD_NUM] = {713, 6050, 50045, 11112, 5200, 51005, 714, 4011};
-const unsigned MULTIPLE_WHEEL_REWARD_COUNT[MULTIPLE_WHEEL_REWARD_NUM] = {2,5,1,1,2,2,1,7};
-const unsigned MULTIPLE_WHEEL_REWARD_RATE[MULTIPLE_WHEEL_REWARD_NUM] = {15, 26, 37, 49, 60, 66, 77, 100};
+const unsigned MULTIPLE_WHEEL_REWARD_ID[MULTIPLE_WHEEL_REWARD_NUM] = {10269, 6050, 4099, 10270, 5200, 8804, 686, 10271};
+const unsigned MULTIPLE_WHEEL_REWARD_COUNT[MULTIPLE_WHEEL_REWARD_NUM] = {3,10,25,1,5,500,2,1};
+const unsigned MULTIPLE_WHEEL_REWARD_RATE[MULTIPLE_WHEEL_REWARD_NUM] = {8, 25, 42, 46, 63, 80, 97, 100};
 
 const unsigned MULTIPLE_WHEEL_MULTIPLE[MULTIPLE_WHEEL_MULTIPLE_NUM] = {3,5,10,15,20,25,30,40};
 const unsigned MULTIPLE_WHEEL_MULTIPLE_RATE[MULTIPLE_WHEEL_MULTIPLE_NUM] = {280, 570, 860, 920, 960, 990, 997, 1000};
@@ -707,6 +709,12 @@ public:
 	int GetUpgradeHeroForActivity(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int ChargeBackHappyCard(unsigned uid, Json::Value &result,unsigned &lasttime,unsigned &seqid);
 	int ChangeEquipSub(unsigned uid, unsigned equip, unsigned lvl, unsigned stone, unsigned type, unsigned spirit, unsigned free, Json::Value &keep, Json::Value &result,unsigned lasttime,unsigned seqid);
+	int ChangeZhanCheSub(unsigned uid, unsigned equip, unsigned zcid, unsigned stoneud, Json::Value &result,unsigned lasttime,unsigned seqid, bool isnew=false);
+	int ZhanCheShengXing(unsigned uid, unsigned eqid, unsigned ud1, unsigned ud2, Json::Value & result,unsigned lasttime,unsigned seqid);
+	int ZhanCheShengJi(unsigned uid, unsigned eqid, unsigned ud,  Json::Value & result,unsigned lasttime,unsigned seqid);
+	int ZhanCheSuiPianChouQu(unsigned uid, unsigned ku, unsigned count, unsigned ud, Json::Value & result,unsigned lasttime,unsigned seqid);
+	int LingQuFengHuoHeQuBuChang(unsigned uid, Json::Value & result,unsigned lasttime,unsigned seqid);
+	int ChengYuanChaiJie(unsigned uid, unsigned ud, Json::Value & result,unsigned lasttime,unsigned seqid);
 	int EquipSubAct1(unsigned uid, unsigned equip, string& osub, string& nsub, unsigned lvl, Json::Value &result,unsigned lasttime,unsigned seqid);
 	int EquipSubAct2(unsigned uid, unsigned equip, unsigned all, unsigned lvl, Json::Value &result,unsigned lasttime,unsigned seqid);
 	int TreasureHunt(unsigned uid, unsigned type, unsigned times, unsigned equd, Json::Value &result, unsigned &lasttime,unsigned &seqid);
@@ -772,7 +780,7 @@ public:
 
 	int JueXueOneKeyFullLevel(unsigned uid, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 
-
+	int BinghunTurnDish(unsigned uid,unsigned ud,Json::Value &result,unsigned lasttime,unsigned seqid);
 	int Juexue(unsigned uid, bool all, Json::Value &result, unsigned &lasttime,unsigned &seqid);
 	int SellJuexue(unsigned uid, unsigned type, unsigned isell, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int CollectJuexue(unsigned uid, unsigned type, unsigned icoll, Json::Value &result, unsigned lasttime, unsigned seqid);
@@ -930,6 +938,8 @@ public:
     int UpgradeCatapultSkill(unsigned uid, unsigned index, unsigned equd, Json::Value & result, unsigned lasttime, unsigned seqid);
     int CommderSkilLearn(unsigned uid, unsigned heroud,unsigned equd,  Json::Value & result, unsigned lasttime, unsigned seqid);
     int PotianSkilLearn(unsigned uid, unsigned heroud,string skid,Json::Value &m_data, Json::Value & result, unsigned lasttime, unsigned seqid);
+    int AddSqkillQueue(unsigned uid, unsigned sindex, unsigned rentime,unsigned paytype,unsigned amount, Json::Value & result, unsigned lasttime, unsigned seqid);
+    int EndSqkillQueue(unsigned uid, unsigned sindex, Json::Value & result, unsigned lasttime, unsigned seqid);
 
     //福禄金袋
     int CalcuteFairyBag(unsigned uid, Json::Value & result, unsigned lasttime, unsigned seqid);
@@ -1033,6 +1043,8 @@ public:
 	int TouchGold(unsigned uid, unsigned type, unsigned id, unsigned listindex, unsigned ud, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int ProtectToken(unsigned uid, unsigned equd, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int HeavenDaoist(unsigned uid, unsigned type, unsigned count, const Json::Value &equd, bool is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick);
+	int HeavenUp(unsigned uid, unsigned count, const Json::Value &equd, const Json::Value &equd2, bool is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick,unsigned times);
+	int HeavenUp(unsigned uid, unsigned ud1, unsigned ud2, bool yijian, Json::Value &result, unsigned lasttime, unsigned seqid);
 	int Catapult(unsigned uid, unsigned count, const Json::Value &equd, int is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick);
 	int MergeEquipment(unsigned uid, const vector< vector<unsigned> > &uds, Json::Value &result, unsigned lasttime, unsigned seqid);//将同样ud的装备合并到一起
 	int EightFormation(unsigned uid, unsigned formation_id, unsigned count, const Json::Value &equd, unsigned cash, unsigned r, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick);
@@ -1110,6 +1122,9 @@ public:
     int Learjyt(unsigned uid, unsigned ud, Json::Value & result, unsigned lasttime, unsigned seqid);
     int LearnJM(unsigned uid, unsigned ud, unsigned id, Json::Value & result, unsigned lasttime, unsigned seqid);
 
+	int UpGradeTechFort(unsigned uid,unsigned type,unsigned lasttime,unsigned seqid,Json::Value &result);
+	int FastGradeTechFort(unsigned uid,Json::Value &result,unsigned lasttime,unsigned seqid);
+	
 	/*---------------古卷专项活动begin------------------*/
     int LoadScrollActivity(unsigned uid, Json::Value & result, unsigned lasttime, unsigned seqid);
     //完成事件
@@ -1143,6 +1158,17 @@ public:
 
     int ZhuanyiChenghao(unsigned uid, unsigned heroud1, unsigned heroud2, Json::Value &result, unsigned lasttime,unsigned seqid);
 
+    int MoBaiChongBangWangZhe(unsigned uid, unsigned chongbangid, unsigned uid2, Json::Value & result, unsigned lasttime,unsigned seqid);
+
+    int GetXianShiReward(unsigned uid, string key, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid);
+
+    int qiandaoduihuan(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid);
+    int qingmingduihuan(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid);
+    int qiandaolingqu(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid);
+    int zhouniantehuigoumai(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid);
+    int zhouniantehuibangding(unsigned uid, unsigned uid2, Json::Value & result, unsigned lasttime,unsigned seqid);
+    int zhounianqingonline(unsigned uid, Json::Value & result, unsigned lasttime,unsigned seqid);
+    int oldToNew(unsigned uid, unsigned id, unsigned ud, Json::Value & result, unsigned lasttime,unsigned seqid);
 private:
 	int deductSource(unsigned uid, int viplvl, unsigned refreshType, unsigned sourceType, Json::Value &result, Json::Value &stats, unsigned zmlud, Json::Value &user_flag, bool &bsave);
 	int deductTime(unsigned uid, unsigned refreshType, Json::Value &stats, Json::Value &result);  // 使用免费时间
@@ -1198,7 +1224,7 @@ private:
 	int  GetUsedCashFromActivity(Json::Value & user_flag, int begints, int endts, unsigned & cash);
 
 	//调用者必须是使用CLogicUser::GetUser加载的dataUser
-	int _useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned count, Json::Value &result);
+	int _useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned count, Json::Value &result, unsigned ats = 0);
 
 	//抽取转盘
 	int RollDragonTable(unsigned uid, Json::Value & newAct, Json::Value & result, unsigned & yinliang);

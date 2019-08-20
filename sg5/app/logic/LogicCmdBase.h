@@ -27,7 +27,7 @@ public:
 	//添加新装备
 	void AddEquips(const std::vector<ItemAdd>& items, Json::Value& result);
 	void AddEquips(unsigned eqid, const std::string& op, Json::Value& result);
-	void AddEquips(unsigned eqid, unsigned cnt, const std::string& op, Json::Value& result);
+	void AddEquips(unsigned eqid, unsigned cnt, const std::string& op, Json::Value& result, unsigned ats = 0);
 
 	////////////////////////////////////////////////
 	//处理装备套装
@@ -45,22 +45,22 @@ public:
 	//英雄经验添加
 	void AddHeroExp(Json::Value & herodata, int userlv, int add_exp);
 
-	ItemAdd Equip2ItemAdd(const GiftEquipItem& gift, const std::string& reason);
+	ItemAdd Equip2ItemAdd(const GiftEquipItem& gift, const std::string& reason, unsigned ats = 0);
 	//添加GiftEquipItem装备[包含普通装备，套装，英雄处理]
 	void AddGiftEquips(
 			GiftEquipItem equips[]
 			, unsigned size
 			, const std::string& reason
-			, Json::Value& result);
+			, Json::Value& result, unsigned ats = 0);
 
 	void AddGiftEquips(
 				const GiftEquipItem& equips
 				, const std::string& reason
-				, Json::Value& result);
+				, Json::Value& result, unsigned ats = 0);
 	void AddGiftEquips(
 					std::vector<GiftEquipItem>& equips
 					, const std::string& reason
-					, Json::Value& result);
+					, Json::Value& result, unsigned ats = 0);
 
 	//
 	void LoadUserGiftData(Json::Value& jsonData) const;
@@ -178,7 +178,7 @@ public:
 
 	virtual ~UnitIdCmdParams() {}
 private:
-	int 	id_;
+	int 	id_;   //物品ud
 };
 
 //index >= 0
@@ -194,6 +194,17 @@ private:
 	int 	index_;
 };
 
+class InitIdCmdParams : public BaseCmdParams
+{
+	public:
+		InitIdCmdParams(const Json::Value &jsonData);
+
+		int Id() const {return id_;}
+
+		virtual ~InitIdCmdParams(){}
+	private:
+		int id_;
+};
 
 //钻石消费改金币,需要添加道具参数,so....
 //ud字段为可缺失

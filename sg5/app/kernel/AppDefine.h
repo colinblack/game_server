@@ -67,6 +67,7 @@
 #define CONFIG_MVP_DATA 					"data/mvp.dat"
 #define CONFIG_ROTATYTABLEDRAW_DATA 		"data/rotatytabledraw.dat"
 #define CONFIG_CHICK_DATA 					"data/chick.dat"
+#define CONFIG_ROTATY_FEEDBACKK_DATA		"data/rotatytablefeedback.dat"
 
 //共享内存文件
 #define DATA_KING_TREASURE	"data/kingtreasure.dat"
@@ -101,6 +102,8 @@
 //not use
 #define CONFIG_PLATFORM			"platform_config"
 #define CONFIG_LEVEL_RESTRICT 60
+
+#define BRAVE_NEW_WORLD_FORT 2  //堡垒科技
 
 #define Has_DemoReform(u, i) (((u>>i) & 0x01) != 0)
 #define Set_DemoReform(u, i) u |= (0x01<<i)
@@ -199,9 +202,14 @@
 #define CONFIG_NEWYEAR_ACTIVNE_DATA    	"data/newyearactive.dat"
 #define CONFIG_DOUBLE11_2018_PATH			"data/double11_2018.dat"			// 双11活动
 #define CONFIG_QINGRENJIE_DATA    	"data/qingrenjie.dat"
-
+#define CONFIG_CHONGBANG_WANGZHE_DATA    	"data/chongbangwangzhe.dat"
+#define CONFIG_ZHOUNIANQING_QIANDAO_DATA    	"data/zhounianqing_qiandao.dat"
+#define CONFIG_NEWDOUJIANG_DATA    					"data/newdoujiang.dat"
+#define CONFIG_BRAVE_NEWWORLD_ACTION				"data/brave_new_action.json"
+#define CONFIG_GIVEHELPACTION_DATA		"data/givehelpactionnew.dat"
 //百服团购
 #define CONFIG_ALLSERVER_GROUPBUYING_PATH "data/allservergroupbuy.dat"
+#define CONFIG_QUNXING_DATA     					"data/qunxing.dat"
 
 //not use
 #define CONFIG_WHITE_LIST		"white_list"
@@ -366,6 +374,12 @@
 #define CONFIG_ACTIVITY_ROTARY_TABLE_END_TS "activity_rotary_table_end_ts"
 #define CONFIG_ACTIVITY_ROTARY_TABLE_VER "activity_rotary_table_ver"
 #define CONFIG_ACTIVITY_ROTARY_TABLE_PF "activity_rotary_table_pf"
+
+//转盘回馈
+#define CONFIG_ACTIVITY_ZHUANPANHUIKUI_BEGIN_TS "activity_zhuanpanhuikui_begin_ts"
+#define CONFIG_ACTIVITY_ZHUANPANHUIKUI_END_TS "activity_zhuanpanhuikui_end_ts"
+#define CONFIG_ACTIVITY_ZHUANPANHUIKUI_VER "activity_zhuanpanhuikui_ver"
+#define CONFIG_ACTIVITY_ZHUANPANHUIKUI_PF "activity_zhuanpanhuikui_pf"
 
 //大R(LR Large R)充值返利
 #define CONFIG_LR_CHARGE_REBATES_BEGIN_TS "lr_charge_rebates_begin_ts"
@@ -879,6 +893,9 @@
 //转盘狂惠
 #define CONFIG_ROTARYTABLE_GIFT "rotary_table"
 
+//转盘回馈
+#define CONFIG_ROTARYTABLEFEEDBACK_GIFT "zhuanpanhuikui"
+
 //小兵宝物
 #define CONFIG_BATMANTREASURE_GIFT "batman_treasure"
 
@@ -941,6 +958,35 @@
 
 #define CONFIG_NIANSHOU_BOSS          "nianshouboss"
 
+#define CONFIG_ZHENGBASHADI_CHONGBANG "zhengbashadi_chongbang"
+
+#define CONFIG_LUEDUOTONGQIAN_CHONGBANG "lueduotongqian_chongbang"
+
+#define CONFIG_ZHOUNIANQING_QIANDAO "zhounianqing_qiandao"
+
+#define CONFIG_ZHOUNIANQING_GOUMAI "zhounian_shangdian"
+
+#define CONFIG_anniversary_chongzhi "anniversary_chongzhi"
+
+#define CONFIG_chengyuantisheng "chengyuantisheng"
+
+#define ACTIVITY_TIME_TOUZIDAFANLI "touzidafanli"
+
+#define ACTIVITY_TIME_GUYU "guyu"
+
+#define ACTIVITY_TIME_ERTONGJIE "childrenDaysActivity"
+
+#define ACTIVITY_TIME_STONE "xingshijifen"
+
+#define ACTIVITY_TIME_OLDTONEW "oldToNew"
+
+#define ACTIVITY_TIME_wuyiqingdian "wuyiqingdian"
+
+#define CONFIG_GIVEHELPACTION "zhulidaxingdong"
+
+#define ACTIVITY_TIME_QUNXING "qunxing"
+
+#define ACTIVITY_TIME_QITIANJINJIE "qitianjinjie"
 
 
 /********************************************************************/
@@ -957,6 +1003,23 @@
  */
 /********************************************************************/
 //autolable1
+#define CONFIG_yongguansanjun "yongguansanjun"
+#define CONFIG_wuyiqingdian_leiji "wuyiqingdian_leiji"
+#define CONFIG_yvre618_2 "yvre618_2"
+#define CONFIG_yvre618_1 "yvre618_1"
+#define CONFIG_toushichejineng "toushichejineng"
+#define CONFIG_chongbang_3 "chongbang_3"
+#define CONFIG_zhuanshucanjuan "zhuanshucanjuan"
+#define CONFIG_baihuahuikui_3 "baihuahuikui_3"
+#define CONFIG_baihuahuikui_2 "baihuahuikui_2"
+#define CONFIG_baihuahuikui_1 "baihuahuikui_1"
+#define CONFIG_guyv_leiji "guyv_leiji"
+#define CONFIG_chengyuantisheng_2 "chengyuantisheng_2"
+#define CONFIG_chengyuantisheng_1 "chengyuantisheng_1"
+#define CONFIG_lueduotongqian_chongbang "lueduotongqian_chongbang"
+#define CONFIG_anniversary_leiji "anniversary_leiji"
+#define CONFIG_anniversary_meiri "anniversary_meiri"
+#define CONFIG_zhengbashadi_chongbang "zhengbashadi_chongbang"
 #define CONFIG_hanjiajingxuan "hanjiajingxuan"
 #define CONFIG_fuzhuhesui "fuzhuhesui"
 #define CONFIG_zhuniandaji "zhuniandaji"
@@ -1157,6 +1220,7 @@ typedef vector<unsigned>	UidList;
 #define BNW_ATTACK_MAX_TIME	660	//BNW最大进攻时间
 #define RANK_ATTACK_MAX_TIME 540//RANK最大进攻时间
 #define MVP_ATTACK_MAX_TIME 540//MVP最大进攻时间
+#define NEW_DOUJIANG_ATTACK_MAX_TIME	660	//冲榜3期斗将最大进攻时间
 //#define ATTACK_PRO_TIME		665	//被攻击保护10分钟，别人不能攻击  ralf 20141225
 #define ATTACK_PRO_TIME		900
 #define DRAGON_BALL_PROTECT 300
@@ -1207,6 +1271,8 @@ typedef vector<unsigned>	UidList;
 #define ARENA_REWARD 50
 #define ARENA_COST 10
 
+#define MAX_MATERIAL_TYPE 8 //材料种类
+
 //道具替换钻石金币
 //紫色密钥
 enum PropReplaceCoin
@@ -1253,6 +1319,7 @@ enum LoadType
 	LT_DRAGON,		//绣球
 	LT_BNW,			//烽火大陆
 	LT_MVP,			//名人堂
+	LT_SUB_ATTACK,  //副本
 
 	LT_UNKNOW
 };
@@ -1459,6 +1526,45 @@ NAT_CONFIG_zhuniandaji			= 200,
 NAT_CONFIG_fuzhuhesui			= 201,
 	NAT_NIANSHOU_BOSS           = 202,
 NAT_CONFIG_hanjiajingxuan			= 203,
+NAT_CONFIG_zhengbashadi_chongbang			= 204,
+	NAT_xianshi_mubiao_1           = 205,
+	NAT_zhounianqing_qiandao       = 206,
+NAT_CONFIG_anniversary_meiri			= 207,
+NAT_CONFIG_anniversary_leiji			= 208,
+	NAT_zhounianqing_goumai			= 209,
+	NAT_xianshi_mubiao_2           = 210,
+NAT_CONFIG_lueduotongqian_chongbang			= 211,
+	NAT_xianshi_chengyuansuipian_chouqu     = 212,
+NAT_CONFIG_chengyuantisheng_1			= 213,
+NAT_CONFIG_chengyuantisheng_2			= 214,
+ACTIVITY_TOUZIDAFANLI_ACT_NUM_1 = 215,
+ACTIVITY_TOUZIDAFANLI_ACT_NUM_2 = 216,
+ACTIVITY_TOUZIDAFANLI_ACT_NUM_3 = 217,
+NAT_CONFIG_guyv_leiji			= 218,
+ACTIVITY_GUYU_JIFEN             = 219,
+NAT_CONFIG_guyv_meiri			= 220,
+NAT_CONFIG_baihuahuikui_1			= 221,
+NAT_CONFIG_baihuahuikui_2			= 222,
+NAT_CONFIG_baihuahuikui_3			= 223,
+NAT_CONFIG_zhuanshucanjuan			= 224,
+NAT_CONFIG_chongbang_3			= 225,
+NAT_xianshi_mubiao_3			= 226,
+NAT_CONFIG_toushichejineng			= 227,
+NAT_CONFIG_childrenDaysActivity			= 228,
+NAT_CONFIG_yvre618_1			= 229,
+NAT_CONFIG_yvre618_2			= 230,
+ACTIVITY_GUYU_JINJIE            = 231,
+NAT_CONFIG_binghunturndish      = 232,
+ACTIVITY_STONE_JIFEN			= 233,
+ACTIVITY_KUANGHUAN_618          = 234,
+ACTIVITY_WUYIQINGDIAN_MEIRI     = 235,
+NAT_CONFIG_wuyiqingdian_leiji			= 236,
+NAT_ROTARYTABLE_FEEDBACK		= 237,  //转盘回馈
+NAT_CONFIG_yongguansanjun			= 238,
+NAT_CONFIG_givehelpaction       = 239,
+NAT_ACT_QUNXINGHUIJU			= 240,	//群星汇聚活动
+NAT_NEW_WORLD_HERO_NUM			= 241,	//争霸武将开孔
+ACTIVITY_QITIANJINJIE_MEIRI		= 242,	//七日进阶活动
 NAT_MAX
 };
 

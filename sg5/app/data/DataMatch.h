@@ -82,6 +82,7 @@ public:
 	int StartPlayoff4();
 	int StartPlayoff2();
 	int FinishMatch(const MatchData **p);
+	int BufaMatch(const MatchData **p);
 	int NextTurn();
 	int IsMatchProtect(unsigned aid, unsigned uid, bool &prot);
 

@@ -104,5 +104,10 @@
 #include "LogicChick.h"
 #include "LogicQingRenJie.h"
 #include "LogicNianShou.h"
+#include "LogicChongBang.h"
+#include "LogicZhouNianQing.h"
+#include "LogicActivityUnits.h"
+#include "LogicNewDouJiang.h"
+#include "LogicAttackInfo.h"
 
 #endif /* LOGICINC_H_ */
