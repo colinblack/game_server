@@ -158,7 +158,7 @@ int LogicOrderManager::Process(unsigned uid, ProtoOrder::OrderQueryReq * req, Pr
 			DataOrder & sOrder = DataOrderManager::Instance()->AddNewOrder(uid, i, storage_id, level_id, order_id);
 			sOrder.coin = coin;
 			sOrder.exp = exp;
-			//debug_log("create a order uid:%d storage_id:%d level_id:%d order_id:%d",uid,storage_id, level_id, order_id);
+			debug_log("create a order uid:%d storage_id:%d level_id:%d order_id:%d",uid,storage_id, level_id, order_id);
 			DataOrderManager::Instance()->UpdateItem(sOrder);
 		}
 	}
@@ -280,6 +280,11 @@ int LogicOrderManager::Process(unsigned uid, ProtoOrder::RewardOrderReq * req, P
 int LogicOrderManager::Process(unsigned uid, ProtoOrder::StartOrderReq * req, ProtoOrder::StartOrderResp * resp)
 {
 	unsigned slot = req->slot();
+	if(DataOrderManager::Instance()->IsExistItem(uid,slot) == false)
+	{
+		error_log("start_order_data_error,uid=%u,slot=%u",uid,slot);
+		throw runtime_error("start_order_data_error");
+	}
 	DataOrder & sOrder = DataOrderManager::Instance()->GetData(uid, slot);
 
 	//const ConfigOrder::Order & order = GetOrderConfig(sOrder.storage_id,sOrder.level_id,sOrder.order_id);
@@ -392,7 +397,17 @@ int LogicOrderManager::Process(unsigned uid, ProtoOrder::StartOrderReq * req, Pr
 int LogicOrderManager::Process(unsigned uid, ProtoOrder::DeleteOrderReq * req, ProtoOrder::DeleteOrderResp * resp)
 {
 	unsigned slot = req->slot();
+	if(DataOrderManager::Instance()->IsExistItem(uid,slot) == false)
+	{
+		error_log("order_not_exsit,uid=%u,slot=%u",uid,slot);
+		throw runtime_error("order_not_exsit");
+	}
 	DataOrder & sOrder = DataOrderManager::Instance()->GetData(uid, slot);
+	if(sOrder.storage_id == 0 || sOrder.level_id == 0)
+	{
+		error_log("delete_order_data_error,uid=%u,storage_id=%u,level_id=%u",uid,sOrder.storage_id,sOrder.level_id);
+		throw runtime_error("data_error");
+	}
 
 	if(sOrder.end_ts != 0)
 	{
@@ -464,6 +479,7 @@ int LogicOrderManager::GetRandomOrder(unsigned uid,unsigned soltid,uint32_t leve
 	int index = GetRandomStorageIndex(soltid);
 	if(index < 0)
 	{
+		error_log("GetRandomOrder_index_error,index=%d",index);
 		return 0;
 	}
 	unsigned level_index = level - 1;
