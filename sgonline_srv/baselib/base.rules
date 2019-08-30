@@ -1,0 +1,8 @@
+include $(trunk_path)/make.rules
+
+INC     = -I.  $(BASE_INC) $(FCGI_INC) $(DBC_INC)
+LINK    = 
+H_DIR	= $(trunk_path)/baselib/include/
+OBJ_DIR	= $(trunk_path)/baselib/obj/
+LIB_DIR	= $(trunk_path)/baselib/lib/
+TARGET_HEADERS = $(patsubst %, $(H_DIR)/%, $(wildcard *.h));
