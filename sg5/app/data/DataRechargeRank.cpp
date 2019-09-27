@@ -54,7 +54,7 @@ int CDataRechargeRank::Init(const string &path, semdat sem) {
 unsigned get_rr_day(unsigned i, unsigned c)
 {
 	const unsigned rr_day_cash[5] = {148888,98888,28888,5888,1000};
-	const unsigned rr_day_id[5] = {50124,10217,10222,44107,44106};
+	const unsigned rr_day_id[5] = {50124,86040,10267,44107,44106};
 	for(;i<5;++i)
 	{
 		if(c >= rr_day_cash[i])
@@ -62,22 +62,23 @@ unsigned get_rr_day(unsigned i, unsigned c)
 	}
 	return 0;
 }
-unsigned get_rr_all(unsigned i, unsigned c)
+pair<unsigned, unsigned > get_rr_all(unsigned i, unsigned c)
 {
 	const unsigned rr_all_cash[5] = {488888,288888,98888,28888,8888};
-	const unsigned rr_all_id[5] = {50125,4500,44129,4497,44127};
+	const unsigned rr_all_id[5] = {50161,6610,44129,4497,44127};
+	const unsigned rr_all_count[5] = {1,1,1,1,1};
 	for(;i<5;++i)
 	{
 		if(c >= rr_all_cash[i])
-			return rr_all_id[i];
+			return make_pair(rr_all_id[i],rr_all_count[i]);
 	}
-	return 0;
+	return make_pair(0,0);
 }
 
 int CDataRechargeRank::GetList(unsigned uid, vector<RRUser> &day, vector<RRUser> &all)
 {
-	const unsigned rr_day_basic_id[5] = {50126,50127,50128,50129,50130};
-	const unsigned rr_all_basic_id[5] = {50131,50132,50133,50134,50135};
+	const unsigned rr_day_basic_id[5] = {50151,50152,50153,50154,50155};
+	const unsigned rr_all_basic_id[5] = {50156,50157,50158,50159,50160};
 
 	unsigned zoneId = 0;
 	int ret = getZoneId(uid, zoneId);
@@ -194,40 +195,41 @@ int CDataRechargeRank::GetList(unsigned uid, vector<RRUser> &day, vector<RRUser>
 						break;
 
 					vector<ItemAdd> equip_items;
+					pair<unsigned, unsigned> reward;
 					if (i + 1 == 1)
 					{
 						equip_items.push_back(ItemAdd(rr_all_basic_id[0], 1, "RechargeRank"));
-						unsigned id = get_rr_all(0, pTable->all.user[p].cash);
-						if (id)
-							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+						reward = get_rr_all(0, pTable->all.user[p].cash);
+						if (reward.first)
+							equip_items.push_back(ItemAdd(reward.first, reward.second, "RechargeRank"));
 					}
 					else if (i + 1 <= 3)
 					{
 						equip_items.push_back(ItemAdd(rr_all_basic_id[1], 1, "RechargeRank"));
-						unsigned id = get_rr_all(1, pTable->all.user[p].cash);
-						if (id)
-							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+						reward = get_rr_all(1, pTable->all.user[p].cash);
+						if (reward.first)
+							equip_items.push_back(ItemAdd(reward.first, reward.second, "RechargeRank"));
 					}
 					else if (i + 1 <= 10)
 					{
 						equip_items.push_back(ItemAdd(rr_all_basic_id[2], 1, "RechargeRank"));
-						unsigned id = get_rr_all(2, pTable->all.user[p].cash);
-						if (id)
-							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+						reward  = get_rr_all(2, pTable->all.user[p].cash);
+						if (reward.first)
+							equip_items.push_back(ItemAdd(reward.first, reward.second, "RechargeRank"));
 					}
 					else if (i + 1 <= 30)
 					{
 						equip_items.push_back(ItemAdd(rr_all_basic_id[3], 1, "RechargeRank"));
-						unsigned id = get_rr_all(3, pTable->all.user[p].cash);
-						if (id)
-							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+						reward = get_rr_all(3, pTable->all.user[p].cash);
+						if (reward.first)
+							equip_items.push_back(ItemAdd(reward.first, reward.second, "RechargeRank"));
 					}
 					else
 					{
 						equip_items.push_back(ItemAdd(rr_all_basic_id[4], 1, "RechargeRank"));
-						unsigned id = get_rr_all(4, pTable->all.user[p].cash);
-						if (id)
-							equip_items.push_back(ItemAdd(id, 1, "RechargeRank"));
+						reward = get_rr_all(4, pTable->all.user[p].cash);
+						if (reward.first)
+							equip_items.push_back(ItemAdd(reward.first, reward.second, "RechargeRank"));
 					}
 					if(!equip_items.empty())
 					{
@@ -240,6 +242,7 @@ int CDataRechargeRank::GetList(unsigned uid, vector<RRUser> &day, vector<RRUser>
 							updates["ts"] = now1+1;
 							updates["rank"] = i+1;
 							updates["eqid"] = equip_items[0].eqid;
+							updates["num"] = reward.second;
 							if(equip_items.size()>1)
 								updates["eqid1"] = equip_items[1].eqid;
 							updates["cash"] = pTable->all.user[p].cash;

@@ -31,6 +31,6 @@ message VipItem{
 message TwoHolidayItmCfg{	
 	required EveryDayRechargeItem everyday_recharge   = 1;  // 每日充值	
 	required EveryDayOnlineItem   eveyday_online      = 2;  // 每日在线	
-	repeated BuyItem              recharge_buy        = 3;  // 充值购买优惠	
-	required VipItem              vip_reward          = 4;  // vip奖励
+	//repeated BuyItem              recharge_buy        = 3;  // 充值购买优惠	
+	//required VipItem              vip_reward          = 4;  // vip奖励
 }

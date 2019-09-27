@@ -42,6 +42,8 @@ class ZoneArea;
 class RewardConfig;
 class Mission;
 class Task;
+class Technology;
+class FortTechlonogy;
 class BraveNewWorldConfig;
 
 // ===================================================================
@@ -1024,6 +1026,230 @@ class Task : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class Technology : public ::google::protobuf::Message {
+ public:
+  Technology();
+  virtual ~Technology();
+
+  Technology(const Technology& from);
+
+  inline Technology& operator=(const Technology& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Technology& default_instance();
+
+  void Swap(Technology* other);
+
+  // implements Message ----------------------------------------------
+
+  Technology* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Technology& from);
+  void MergeFrom(const Technology& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required uint32 value = 2;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 2;
+  inline ::google::protobuf::uint32 value() const;
+  inline void set_value(::google::protobuf::uint32 value);
+
+  // required uint32 add = 3;
+  inline bool has_add() const;
+  inline void clear_add();
+  static const int kAddFieldNumber = 3;
+  inline ::google::protobuf::uint32 add() const;
+  inline void set_add(::google::protobuf::uint32 value);
+
+  // required uint32 cost = 4;
+  inline bool has_cost() const;
+  inline void clear_cost();
+  static const int kCostFieldNumber = 4;
+  inline ::google::protobuf::uint32 cost() const;
+  inline void set_cost(::google::protobuf::uint32 value);
+
+  // repeated uint32 cost1 = 5;
+  inline int cost1_size() const;
+  inline void clear_cost1();
+  static const int kCost1FieldNumber = 5;
+  inline ::google::protobuf::uint32 cost1(int index) const;
+  inline void set_cost1(int index, ::google::protobuf::uint32 value);
+  inline void add_cost1(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      cost1() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_cost1();
+
+  // @@protoc_insertion_point(class_scope:BraveNewWorldConfig.Technology)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_value();
+  inline void clear_has_value();
+  inline void set_has_add();
+  inline void clear_has_add();
+  inline void set_has_cost();
+  inline void clear_has_cost();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 value_;
+  ::google::protobuf::uint32 add_;
+  ::google::protobuf::uint32 cost_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > cost1_;
+  friend void  protobuf_AddDesc_BraveNewWorldConfig_2eproto();
+  friend void protobuf_AssignDesc_BraveNewWorldConfig_2eproto();
+  friend void protobuf_ShutdownFile_BraveNewWorldConfig_2eproto();
+
+  void InitAsDefaultInstance();
+  static Technology* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class FortTechlonogy : public ::google::protobuf::Message {
+ public:
+  FortTechlonogy();
+  virtual ~FortTechlonogy();
+
+  FortTechlonogy(const FortTechlonogy& from);
+
+  inline FortTechlonogy& operator=(const FortTechlonogy& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const FortTechlonogy& default_instance();
+
+  void Swap(FortTechlonogy* other);
+
+  // implements Message ----------------------------------------------
+
+  FortTechlonogy* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const FortTechlonogy& from);
+  void MergeFrom(const FortTechlonogy& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required uint32 type = 2;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 2;
+  inline ::google::protobuf::uint32 type() const;
+  inline void set_type(::google::protobuf::uint32 value);
+
+  // repeated .BraveNewWorldConfig.Technology node = 3;
+  inline int node_size() const;
+  inline void clear_node();
+  static const int kNodeFieldNumber = 3;
+  inline const ::BraveNewWorldConfig::Technology& node(int index) const;
+  inline ::BraveNewWorldConfig::Technology* mutable_node(int index);
+  inline ::BraveNewWorldConfig::Technology* add_node();
+  inline const ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Technology >&
+      node() const;
+  inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Technology >*
+      mutable_node();
+
+  // @@protoc_insertion_point(class_scope:BraveNewWorldConfig.FortTechlonogy)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_type();
+  inline void clear_has_type();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 id_;
+  ::google::protobuf::uint32 type_;
+  ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Technology > node_;
+  friend void  protobuf_AddDesc_BraveNewWorldConfig_2eproto();
+  friend void protobuf_AssignDesc_BraveNewWorldConfig_2eproto();
+  friend void protobuf_ShutdownFile_BraveNewWorldConfig_2eproto();
+
+  void InitAsDefaultInstance();
+  static FortTechlonogy* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class BraveNewWorldConfig : public ::google::protobuf::Message {
  public:
   BraveNewWorldConfig();
@@ -1215,6 +1441,18 @@ class BraveNewWorldConfig : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Task >*
       mutable_task();
 
+  // repeated .BraveNewWorldConfig.FortTechlonogy keji = 13;
+  inline int keji_size() const;
+  inline void clear_keji();
+  static const int kKejiFieldNumber = 13;
+  inline const ::BraveNewWorldConfig::FortTechlonogy& keji(int index) const;
+  inline ::BraveNewWorldConfig::FortTechlonogy* mutable_keji(int index);
+  inline ::BraveNewWorldConfig::FortTechlonogy* add_keji();
+  inline const ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::FortTechlonogy >&
+      keji() const;
+  inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::FortTechlonogy >*
+      mutable_keji();
+
   // @@protoc_insertion_point(class_scope:BraveNewWorldConfig.BraveNewWorldConfig)
  private:
   inline void set_has_reward();
@@ -1238,6 +1476,7 @@ class BraveNewWorldConfig : public ::google::protobuf::Message {
   ::BraveNewWorldConfig::Mission* mission_;
   ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > huoyue_;
   ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Task > task_;
+  ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::FortTechlonogy > keji_;
   friend void  protobuf_AddDesc_BraveNewWorldConfig_2eproto();
   friend void protobuf_AssignDesc_BraveNewWorldConfig_2eproto();
   friend void protobuf_ShutdownFile_BraveNewWorldConfig_2eproto();
@@ -2132,6 +2371,218 @@ Task::mutable_count() {
 
 // -------------------------------------------------------------------
 
+// Technology
+
+// required uint32 id = 1;
+inline bool Technology::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Technology::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Technology::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Technology::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 Technology::id() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.Technology.id)
+  return id_;
+}
+inline void Technology::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.Technology.id)
+}
+
+// required uint32 value = 2;
+inline bool Technology::has_value() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Technology::set_has_value() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Technology::clear_has_value() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Technology::clear_value() {
+  value_ = 0u;
+  clear_has_value();
+}
+inline ::google::protobuf::uint32 Technology::value() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.Technology.value)
+  return value_;
+}
+inline void Technology::set_value(::google::protobuf::uint32 value) {
+  set_has_value();
+  value_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.Technology.value)
+}
+
+// required uint32 add = 3;
+inline bool Technology::has_add() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Technology::set_has_add() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Technology::clear_has_add() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Technology::clear_add() {
+  add_ = 0u;
+  clear_has_add();
+}
+inline ::google::protobuf::uint32 Technology::add() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.Technology.add)
+  return add_;
+}
+inline void Technology::set_add(::google::protobuf::uint32 value) {
+  set_has_add();
+  add_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.Technology.add)
+}
+
+// required uint32 cost = 4;
+inline bool Technology::has_cost() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Technology::set_has_cost() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Technology::clear_has_cost() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Technology::clear_cost() {
+  cost_ = 0u;
+  clear_has_cost();
+}
+inline ::google::protobuf::uint32 Technology::cost() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.Technology.cost)
+  return cost_;
+}
+inline void Technology::set_cost(::google::protobuf::uint32 value) {
+  set_has_cost();
+  cost_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.Technology.cost)
+}
+
+// repeated uint32 cost1 = 5;
+inline int Technology::cost1_size() const {
+  return cost1_.size();
+}
+inline void Technology::clear_cost1() {
+  cost1_.Clear();
+}
+inline ::google::protobuf::uint32 Technology::cost1(int index) const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.Technology.cost1)
+  return cost1_.Get(index);
+}
+inline void Technology::set_cost1(int index, ::google::protobuf::uint32 value) {
+  cost1_.Set(index, value);
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.Technology.cost1)
+}
+inline void Technology::add_cost1(::google::protobuf::uint32 value) {
+  cost1_.Add(value);
+  // @@protoc_insertion_point(field_add:BraveNewWorldConfig.Technology.cost1)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+Technology::cost1() const {
+  // @@protoc_insertion_point(field_list:BraveNewWorldConfig.Technology.cost1)
+  return cost1_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+Technology::mutable_cost1() {
+  // @@protoc_insertion_point(field_mutable_list:BraveNewWorldConfig.Technology.cost1)
+  return &cost1_;
+}
+
+// -------------------------------------------------------------------
+
+// FortTechlonogy
+
+// required uint32 id = 1;
+inline bool FortTechlonogy::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void FortTechlonogy::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void FortTechlonogy::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void FortTechlonogy::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 FortTechlonogy::id() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.FortTechlonogy.id)
+  return id_;
+}
+inline void FortTechlonogy::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.FortTechlonogy.id)
+}
+
+// required uint32 type = 2;
+inline bool FortTechlonogy::has_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void FortTechlonogy::set_has_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void FortTechlonogy::clear_has_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void FortTechlonogy::clear_type() {
+  type_ = 0u;
+  clear_has_type();
+}
+inline ::google::protobuf::uint32 FortTechlonogy::type() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.FortTechlonogy.type)
+  return type_;
+}
+inline void FortTechlonogy::set_type(::google::protobuf::uint32 value) {
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorldConfig.FortTechlonogy.type)
+}
+
+// repeated .BraveNewWorldConfig.Technology node = 3;
+inline int FortTechlonogy::node_size() const {
+  return node_.size();
+}
+inline void FortTechlonogy::clear_node() {
+  node_.Clear();
+}
+inline const ::BraveNewWorldConfig::Technology& FortTechlonogy::node(int index) const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.FortTechlonogy.node)
+  return node_.Get(index);
+}
+inline ::BraveNewWorldConfig::Technology* FortTechlonogy::mutable_node(int index) {
+  // @@protoc_insertion_point(field_mutable:BraveNewWorldConfig.FortTechlonogy.node)
+  return node_.Mutable(index);
+}
+inline ::BraveNewWorldConfig::Technology* FortTechlonogy::add_node() {
+  // @@protoc_insertion_point(field_add:BraveNewWorldConfig.FortTechlonogy.node)
+  return node_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Technology >&
+FortTechlonogy::node() const {
+  // @@protoc_insertion_point(field_list:BraveNewWorldConfig.FortTechlonogy.node)
+  return node_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Technology >*
+FortTechlonogy::mutable_node() {
+  // @@protoc_insertion_point(field_mutable_list:BraveNewWorldConfig.FortTechlonogy.node)
+  return &node_;
+}
+
+// -------------------------------------------------------------------
+
 // BraveNewWorldConfig
 
 // repeated .BraveNewWorldConfig.Point land = 1;
@@ -2514,6 +2965,36 @@ inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::Task >*
 BraveNewWorldConfig::mutable_task() {
   // @@protoc_insertion_point(field_mutable_list:BraveNewWorldConfig.BraveNewWorldConfig.task)
   return &task_;
+}
+
+// repeated .BraveNewWorldConfig.FortTechlonogy keji = 13;
+inline int BraveNewWorldConfig::keji_size() const {
+  return keji_.size();
+}
+inline void BraveNewWorldConfig::clear_keji() {
+  keji_.Clear();
+}
+inline const ::BraveNewWorldConfig::FortTechlonogy& BraveNewWorldConfig::keji(int index) const {
+  // @@protoc_insertion_point(field_get:BraveNewWorldConfig.BraveNewWorldConfig.keji)
+  return keji_.Get(index);
+}
+inline ::BraveNewWorldConfig::FortTechlonogy* BraveNewWorldConfig::mutable_keji(int index) {
+  // @@protoc_insertion_point(field_mutable:BraveNewWorldConfig.BraveNewWorldConfig.keji)
+  return keji_.Mutable(index);
+}
+inline ::BraveNewWorldConfig::FortTechlonogy* BraveNewWorldConfig::add_keji() {
+  // @@protoc_insertion_point(field_add:BraveNewWorldConfig.BraveNewWorldConfig.keji)
+  return keji_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::FortTechlonogy >&
+BraveNewWorldConfig::keji() const {
+  // @@protoc_insertion_point(field_list:BraveNewWorldConfig.BraveNewWorldConfig.keji)
+  return keji_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorldConfig::FortTechlonogy >*
+BraveNewWorldConfig::mutable_keji() {
+  // @@protoc_insertion_point(field_mutable_list:BraveNewWorldConfig.BraveNewWorldConfig.keji)
+  return &keji_;
 }
 
 

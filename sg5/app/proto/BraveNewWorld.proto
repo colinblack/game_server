@@ -53,6 +53,13 @@ message BraveNewWorldUser {
 		repeated BraveNewWorldFavourate fav = 15;//收藏
 		optional uint32 rl			= 16;//今日已获得2029的个数
 		optional BraveNewWorldUserMission mission = 17;//任务
+		optional int64 		     	cb = 18;//冲榜掠夺铜钱总量
+		optional int32                 version = 19;//冲榜版本号
+		optional int64 		     	bcb = 20;//冲榜被掠夺铜钱总量
+		optional int64                 jf = 21;//跨服积分
+		optional int64 		     	ld = 22;//单日掠夺铜钱总量
+		optional int64 		     	bld = 23;//单日被掠夺铜钱总量
+		optional uint32 mfn 		= 24; //已建主城堡垒个数(总个数由科技堡垒等级决定)
 }
 
 message BraveNewWorldPoint {
@@ -83,4 +90,6 @@ message BraveNewWorld {
 		repeated BraveNewWorldUser user 	= 2;		
 		repeated BraveNewWorldZone zone 	= 3;	
 		repeated BraveNewWorldAlliance alliance = 4;
+		optional bool has_chongbang_rewarded = 5;
+		optional bool has_season_rewarded = 6;
 }

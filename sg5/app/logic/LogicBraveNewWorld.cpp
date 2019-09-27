@@ -8,6 +8,19 @@
 
 #include "LogicBraveNewWorld.h"
 
+map<unsigned, string> CLogicBraveNewWorld::m_rank_name;
+
+void CLogicBraveNewWorld::CheckVersion()
+{
+	CDataBraveNewWorld *pData = GetData();
+	if (NULL == pData)
+	{
+		error_log("GetData fail");
+		return;
+	}
+	pData->CheckVersion();
+}
+
 int CLogicBraveNewWorld::GetSelf(unsigned uid, unsigned aid, unsigned lv, Json::Value &result)
 {
 	CDataBraveNewWorld *pData = GetData();
@@ -203,7 +216,7 @@ int CLogicBraveNewWorld::Move(unsigned uid, unsigned seq, BraveNewWorldPoint& p,
 
 	return 0;
 }
-int CLogicBraveNewWorld::Build(unsigned uid, unsigned seq, bool cash, BraveNewWorldPoint& p, Json::Value &result)
+int CLogicBraveNewWorld::Build(unsigned uid, unsigned seq, unsigned cash, BraveNewWorldPoint& p, Json::Value &result)
 {
 	CDataBraveNewWorld *pData = GetData();
 	if (NULL == pData)
@@ -443,7 +456,7 @@ int CLogicBraveNewWorld::GetTarget(unsigned uid, unsigned userid, Json::Value &r
 	Json::Value user_flag;
 	bool bsave = false;
 	reader.parse(dataUser.user_flag,user_flag);
-	ret = logicPay.ProcessOrderForBackend(uid, -20, 0, payData, "CLogicBraveNewWorld_GetTarget",user_flag,bsave);
+	ret = logicPay.ProcessOrderForBackend(uid, -20, 0, payData, "CLogicBraveNewWorld_GetTarget",user_flag,bsave,0,pData->m_iskuafu);
 	if(ret)
 		return ret;
 	result["coins"] = payData.coins;
@@ -476,5 +489,79 @@ int CLogicBraveNewWorld::getNewWorldBoss(Json::Value &result)
 	if(ret)
 		return ret;
 
+	return 0;
+}
+
+int CLogicBraveNewWorld::GetChongBangRank(unsigned uid, Json::Value & result)
+{
+	CDataBraveNewWorld *pData = GetData();
+	if (NULL == pData)
+	{
+		error_log("GetData fail");
+		return R_ERR_DATA;
+	}
+
+
+	int ret = pData->GetChongBangRank(uid, result);
+	if(ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicBraveNewWorld::GetKuaFuFengHuoRank(unsigned uid, Json::Value &result)
+{
+	result["list"] = Json::Value(Json::arrayValue);
+	CDataBraveNewWorld *pData = GetData();
+	if (NULL == pData) {
+		error_log("GetData fail");
+		return R_ERR_DATA;
+	}
+	list<DataBraveNewWorldRank> ranklist;
+	int ret = pData->GetKuaFuFengHuoRank(ranklist, false);
+	if (ret) {
+		return ret;
+	}
+	int rank = 0;
+	string userName;
+	for (list<DataBraveNewWorldRank>::iterator it = ranklist.begin(); it != ranklist.end(); ++it) {
+		++rank;
+		Json::Value temp;
+		temp["rank"] = rank;
+		temp["uid"] = it->uid;
+		temp["jf"] = it->jf;
+		GetRankName(it->uid, userName);
+		temp["name"] = userName;
+		result["list"].append(temp);
+		if (uid == it->uid) {
+			result["myrank"] = rank;
+		}
+		if (result["list"].size() >= BRAVE_NEW_WORLD_CROSS_RANK_NUM) {
+			break;
+		}
+	}
+	unsigned jf = 0;
+	unsigned ld = 0;
+	unsigned bld = 0;
+	pData->GetScore(uid, jf, ld, bld);
+	result["myjf"] = jf;
+	result["myld"] = ld;
+	result["mybld"] = bld;
+	return 0;
+}
+
+int CLogicBraveNewWorld::GetRankName(unsigned uid, string &n) {
+	map<unsigned, string>::iterator itr = m_rank_name.find(uid);
+	if (itr != m_rank_name.end()) {
+		n = itr->second;
+		return 0;
+	}
+	CDataUserBasic dbUser;
+	int ret = dbUser.GetUserName(uid, OpenPlatform::GetType(), n);
+	if (0 == ret) {
+		m_rank_name[uid] = n;
+	} else {
+		n.clear();
+	}
 	return 0;
 }

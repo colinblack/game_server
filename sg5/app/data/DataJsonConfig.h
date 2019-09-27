@@ -112,11 +112,13 @@ public:
 	int Amount() const { return amount_; }
 	int EquipId(int idx) const;
 	int EquipCnt(int idx) const;
+	int EquipLtime(int idx) const;
 	int Size() const { return v_equips_id_.size(); }
 private:
 	int amount_;
 	std::vector<int> v_equips_id_;
 	std::vector<int> v_equips_cnt_;
+	std::vector<int> v_equips_ltime_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

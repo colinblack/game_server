@@ -1396,10 +1396,10 @@ int CLogicCMD::useGiftBag(unsigned uid,unsigned ud,unsigned count,Json::Value &r
 		return R_ERR_DATA;
 	}
 
-	return _useGiftBag(dataUser, giftbagId, count, result);
+	return _useGiftBag(dataUser, giftbagId, count, result, Equip_data["ats"].asUInt());
 }
 //调用者必须是使用CLogicUser::GetUser加载的dataUser
-int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned count, Json::Value &result)
+int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned count, Json::Value &result, unsigned ats)
 {
 	unsigned uid = dataUser.uid;
 	Json::FastWriter writer;
@@ -1467,6 +1467,8 @@ int CLogicCMD::_useGiftBag(DataUser& dataUser, unsigned giftbagId, unsigned coun
 					eqip.lexp = data[i][type]["lexp"].asUInt();
 				if(data[i][type].isMember("hexp"))
 					eqip.hexp = data[i][type]["hexp"].asUInt();
+				if(data[i][type].isMember("xs") && ats)
+					eqip.ats = ats - Time::GetGlobalTime();
 				string reason = "from_useGiftbag_";
 				eqip.reason = reason.append(CTrans::UTOS(giftbagId));
 				equip_items.push_back(eqip);
@@ -2544,7 +2546,7 @@ int CLogicCMD::GetEquipIntensifys(unsigned uid, const Json::Value data, Json::Va
 		}
 	}
 
-	int temp = dataUser.battle_spirits - costBs;
+	int temp = dataUser.battle_spirits - costBs; 
 	if (temp < 0)
 	{
 		LOGIC_ERROR_RETURN_MSG("battle_spirits less than zero");
@@ -2634,7 +2636,21 @@ int CLogicCMD::GetEquipIntensifys(unsigned uid, const Json::Value data, Json::Va
 		qianghuashi_id = q_id;
 	}
 
-	ret = Equip.UseEquipment(uid, qianghuashi_id, q_ud, 1, "equip_intensifys_back");
+	//开通装备强化11、12级并消耗新物品不再用强化石-----vicky说写死
+	uint32_t qianghuaCount = 1; 
+	if(q_level > 10)
+	{	
+		//便于以后添加新物品
+		switch(q_level)
+		{								
+			case 11:qianghuashi_id = NEW_EQUIP_ID_11;qianghuaCount = 1000;break;
+			case 12:qianghuashi_id = NEW_EQUIP_ID_11;qianghuaCount = 1500;break;
+			default:
+				return 0;
+		}
+	}
+
+	ret = Equip.UseEquipment(uid, qianghuashi_id, q_ud, qianghuaCount, "equip_intensifys_back");
 	if(ret)
 	{
 		error_log("[equipintensifys_deduct_qianghuashi_fail] [uid=%u|e_id=%u|count=%u]", uid, qianghuashi_id, 1);
@@ -2661,9 +2677,9 @@ int CLogicCMD::GetEquipIntensifys(unsigned uid, const Json::Value data, Json::Va
 		}
 
 		Equip_data["q"] = Equip_data["q"].asInt() + 1;
-		if(Equip_data["q"].asInt() > 10)  //强化等级最高为10级
+		if(Equip_data["q"].asInt() > 12)  //强化等级最高为12级
 		{
-			Equip_data["q"] = 10;
+			Equip_data["q"] = 12;
 		}
 		ret = Equip.Chg(uid, equip_ud, Equip_data);
 		result["equip"] = Equip_data;
@@ -2909,7 +2925,7 @@ int CLogicCMD::DivinePower(unsigned uid, Json::Value &data, Json::Value &result,
 	{
 		return R_ERR_PARAM;
 	}
-	if(!IS_TECH_GEM_EQID(gem_id) || gem_id == 6610)
+	if(!IS_TECH_GEM_EQID(gem_id) || gem_id == 6612)
 	{
 		return R_ERR_PARAM;
 	}
@@ -2936,6 +2952,25 @@ int CLogicCMD::DivinePower(unsigned uid, Json::Value &data, Json::Value &result,
 	result["saveuserid"] = uid;
 
 	CLogicEquipment logicEquip;
+	if (gem_id >= 6610)//合成10级以上星石
+	{
+		unsigned ud2;
+		if (!Json::GetUInt(data, "ud2", ud2))
+		{
+			PARAM_ERROR_RETURN_MSG("ud2");
+		}
+		unsigned count = 1000;
+		if (gem_id >= 6611)
+			count = 1500;
+
+		ret = logicEquip.UseEquipment(uid, 6600,  data["ud2"].asUInt(), ud_array.size()/4*count, "DivinePower");
+		if(ret)
+		{
+			LOGIC_ERROR_RETURN_MSG("DivinePower_FourLowLevel_To_OneHighLevel_ud2");
+		}
+	}
+
+
 	for(unsigned i = 0; i < ud_array.size(); ++i)
 	{
 		ret = logicEquip.UseEquipment(uid, gem_id, ud_array[i].asUInt(), 1, "DivinePower");
@@ -2943,6 +2978,7 @@ int CLogicCMD::DivinePower(unsigned uid, Json::Value &data, Json::Value &result,
 		{
 			LOGIC_ERROR_RETURN_MSG("DivinePower_FourLowLevel_To_OneHighLevel_ud");
 		}
+
 	}
 	ret = logicEquip.AddOneItem(uid, gem_id+1, ud_array.size()/4, "DivinePower",result["add_equip"], true);
 	if(ret)
@@ -3288,25 +3324,37 @@ int CLogicCMD::EveryDayOnline(unsigned uid, Json::Value &result, unsigned lastti
 	result["lastseq"] = dataUser.lastseq;
 	result["saveuserid"] = uid;
 
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	DataXMLQingMing config;
+	ret = dataXML->GetQingMingReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+
 	Json::Value newAct; //newAct初始化
 	CLogicSecinc logicSecinc;
 	ret = logicSecinc.GetSecinc(uid, NAT_EVERYDAYONLINE, newAct);
-	if (ret == R_ERR_NO_DATA)
+	if (ret && ret!=R_ERR_NO_DATA)
+		return ret;
+
+	if (ret == R_ERR_NO_DATA || actCfg.Version() != newAct["v"].asInt())
 	{
+		newAct.clear();
 		newAct["id"] = NAT_EVERYDAYONLINE;
 		newAct["v"] = actCfg.Version();
+		newAct["s"]  = 0; //在线时长达标奖励领取状态（0：没领；1：领过）
 	}
 	else if(ret)
 		return ret;
 	if(!newAct.isMember("id"))
 	{
 		newAct["id"] = NAT_EVERYDAYONLINE;
-	}
-
-	if(actCfg.Version() != newAct["v"].asInt())
-	{
-		newAct["v"] = actCfg.Version();
-		newAct["s"]  = 0; //在线时长达标奖励领取状态（0：没领；1：领过）
 	}
 
 	if(!newAct.isMember("ts") || !Time::IsToday(newAct["ts"].asUInt()) || !newAct.isMember("s"))
@@ -3321,6 +3369,7 @@ int CLogicCMD::EveryDayOnline(unsigned uid, Json::Value &result, unsigned lastti
 		if(dataUser.ext >= ConfigManager::Instance()->m_twoholidaycfg.m_config.eveyday_online().ts_limit() && newAct["s"].asUInt() == 0)
 		{
 			//发奖励
+			newAct["j"] = newAct["j"].asUInt() + config.jijiuCount;
 			unsigned reward_num = ConfigManager::Instance()->m_twoholidaycfg.m_config.eveyday_online().reward_size();
 			vector<ItemAdd> equip_items;
 			equip_items.clear();
@@ -3373,6 +3422,7 @@ int CLogicCMD::EveryDayOnline(unsigned uid, Json::Value &result, unsigned lastti
 //畅享商店
 int CLogicCMD::EnjoyStore(unsigned uid, Json::Value &data, Json::Value &result, unsigned lasttime, unsigned seqid)
 {
+	/*
 	//判断是否在活动开启时间之内
 	unsigned now = Time::GetGlobalTime();
 	ActInfoConfig actCfg = ActInfoConfig(CONFIG_TWOHOLIDAY_ENJOY);
@@ -3554,12 +3604,14 @@ int CLogicCMD::EnjoyStore(unsigned uid, Json::Value &data, Json::Value &result, 
 	ret = logicUser.SetUser(uid, dataUser);
 	if(ret)
 		return ret;
+		*/
 	return R_SUCCESS;
 }
 //vip奖励
 int CLogicCMD::VipReward(unsigned uid, Json::Value &result, unsigned lasttime, unsigned seqid)
 {
 	//判断是否在活动开启时间之内
+	/*
 	unsigned now = Time::GetGlobalTime();
 	ActInfoConfig actCfg = ActInfoConfig(CONFIG_TWOHOLIDAY_ENJOY);
 	if(!actCfg.IsActive())
@@ -3712,6 +3764,7 @@ int CLogicCMD::VipReward(unsigned uid, Json::Value &result, unsigned lasttime, u
 	ret = logicUser.SetUserLimit(uid, dataUser);
 	if(ret)
 		return ret;
+		*/
 	return R_SUCCESS;
 }
 
@@ -3810,7 +3863,7 @@ int CLogicCMD::SyntheticGem(unsigned uid, Json::Value &data, Json::Value &result
 	else
 		return R_ERR_LOGIC;
 #else
-	if(IS_INTENSIFY_EQID(gem_id))		//强化石
+	if(IS_INTENSIFY_EQID(gem_id) || IS_JIANZHU_GEM_EQID(gem_id))		//强化石
 	{
 		synthetic_count = (count + snap_gem_count) / 2;
 	}

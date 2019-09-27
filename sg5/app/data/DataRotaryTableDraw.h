@@ -73,4 +73,26 @@ private:
 	bool m_init;
 };
 
+//转盘回馈
+class CDataRotaryTableFeedBackDraw
+{
+public:
+	CDataRotaryTableFeedBackDraw(){m_init=false;}
+	virtual ~CDataRotaryTableFeedBackDraw(){}
+public:
+	//初始化
+	int Init(const string &path, semdat sem=sem_rotaty_table_feedback);
+
+	//抽奖
+	int Draw(unsigned uid,unsigned version,Json::Value &result);
+
+	//获取抽奖记录信息
+	int GetDrawInfo(unsigned version,Json::Value &result);
+private:
+	int GetList(unsigned version, vector<DataRotaryTableDrawUser> &list, vector<int>& left);
+	int AddUser(unsigned version, DataRotaryTableDrawUser& user, vector<DataRotaryTableDrawUser> &list, unsigned &type,unsigned &id,vector<int> &left);
+	int TurnLuckTable(vector<unsigned> & prates, int len, int & target);
+	CShareMemory m_sh;
+	bool m_init;
+};
 #endif /* DATASHOOTPOINTRANK_H_ */

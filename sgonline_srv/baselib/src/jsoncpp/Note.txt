@@ -1,0 +1,3 @@
+修改：
+1.features。h改为json_features。h
+2.FastWriter::write删去document_ += "\n";

@@ -123,5 +123,7 @@ int CDataAllServerGroupBuying::ResetGroupBuying(unsigned version)
 
 	//将改变的内容写入映射的文件中
 	Save();
+
+	return 0;
 }
 

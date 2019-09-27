@@ -31,6 +31,7 @@
 #include <stack>
 #include <algorithm>
 #include <stdexcept>
+#include <deque>
 
 using std::string;
 using std::pair;

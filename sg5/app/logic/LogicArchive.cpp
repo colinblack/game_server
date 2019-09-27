@@ -36,6 +36,8 @@ loadTypes[] =
 
 	{LT_REPLAY, "review"},
 
+	{LT_SUB_ATTACK, "subattack"},
+
 	{LT_UNKNOW, NULL}
 };
 
@@ -409,6 +411,7 @@ int CLogicArchive::Load(unsigned uid, unsigned uidBy, const string &type,const J
 		REFUSE_RETURN_MSG("invalid_uid");
 	}
 
+	AUTO_LOCK_SAVE_USER(uid,loadType)
 	DataPay payData;
 	CLogicPay logicPay;
 	ret = logicPay.GetPay(uidBy, payData);
@@ -810,7 +813,7 @@ int CLogicArchive::Load(unsigned uid, unsigned uidBy, const string &type,const J
 				result["online"] = 1;
 			}
 		}
-		if (loadType == LT_ATTACK)
+		if (loadType == LT_ATTACK || loadType == LT_SUB_ATTACK)
 		{
 			DataUserBasic userBasicBy;
 			ret = logicUserBasic.GetUserBasicLimit(uidBy, OpenPlatform::GetType(), userBasicBy);
@@ -955,16 +958,19 @@ int CLogicArchive::Load(unsigned uid, unsigned uidBy, const string &type,const J
 				*/
 				result["beAttackedCount"] = 0;//beAttackedCount;
 
-				//设置攻击状态
-				//20131107 Ralf last_save_uid -> last_load_save_uid : fix for bugs, can save only last load archieve
-				user.last_save_uid = uidBy;
-				//20131107 Ralf last_breath_time -> last_attacked_time : fix for online attacking bugs
-				user.last_breath_time = Time::GetGlobalTime();
-				if(IsOnlineUser(user.last_active_time))
-					user.protected_time = Time::GetGlobalTime() + ATTACK_PRO_TIME;
-				ret = logicUser.SetUserLimit(uid, user, DATA_USER_LSUID|DATA_USER_LBT);
-				if (ret != 0)
-					return ret;
+				if (loadType != LT_SUB_ATTACK)
+				{
+					//设置攻击状态
+					//20131107 Ralf last_save_uid -> last_load_save_uid : fix for bugs, can save only last load archieve
+					user.last_save_uid = uidBy;
+					//20131107 Ralf last_breath_time -> last_attacked_time : fix for online attacking bugs
+					user.last_breath_time = Time::GetGlobalTime();
+					if(IsOnlineUser(user.last_active_time))
+						user.protected_time = Time::GetGlobalTime() + ATTACK_PRO_TIME;
+					ret = logicUser.SetUserLimit(uid, user, DATA_USER_LSUID|DATA_USER_LBT);
+					if (ret != 0)
+						return ret;
+				}
 				//debug_log("[load attack operated=%u,operator=%u,last_breath_time=%u,]",uid, uidBy,user.last_breath_time);
 
 				//取消攻击者保护
@@ -1160,6 +1166,9 @@ int CLogicArchive::Load(unsigned uid, unsigned uidBy, const string &type,const J
 				memberData["point"] = Convert::UInt64ToString(allianceMember.point>0x7fffffff?0x7fffffff:allianceMember.point);
 				Json::FromString(memberData["data"], allianceMember.extra_data);
 			}
+
+			CLogicAttackInfo logicAttackInfo(uid);
+			logicAttackInfo.GetInfo(result["battleinfo"]);
 		}
 
 #if DATA_NEW_WORLD_ENABLE == 0
@@ -1672,6 +1681,19 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 		//差异部分
 		if (uid != uidBy)
 		{
+			if ((loadType == LT_ATTACK  || loadType == LT_SUB_ATTACK) && !(OpenPlatform::GetType() == PT_4399 || OpenPlatform::GetType() == PT_NEW_4399))
+			{
+				int serveridb;
+				Config::GetDomain(serveridb);
+				set<int> dbs;
+				MainConfig::GetIncludeDomains(serveridb, dbs);
+				unsigned attack_server = Config::GetZoneByUID(uid);
+				if (!dbs.count(attack_server))
+				{
+					error_log("not_in_same_server uid=%u,uidby=%u", uid, uidBy);
+					LOGIC_ERROR_RETURN_MSG("not_in_same_server");
+				}
+			}
 			if(loadType == LT_RANK)
 			{
 				if(attackend)
@@ -1920,8 +1942,11 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 				//20131107 Ralf last_breath_time -> last_attacked_time : fix for online attacking bugs
 				if(attackend)
 				{
-					user.last_breath_time = Time::GetGlobalTime() - ATTACK_TIMEOUT - 5;
-					flagUser |= DATA_USER_LBT;
+					if (loadType != LT_SUB_ATTACK)
+					{
+						user.last_breath_time = Time::GetGlobalTime() - ATTACK_TIMEOUT - 5;
+						flagUser |= DATA_USER_LBT;
+					}
 				}
 				else if(IsAttackFinished(userBy.bit_info) && userBy.bit_info)//Ralf20140307 这里用作开始进攻时间，检测进攻时间过长
 				{
@@ -1935,8 +1960,11 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 						logicUser.SetBitInfo(uidBy, userBy.bit_info);
 					}
 
-					user.last_breath_time = Time::GetGlobalTime();
-					flagUser |= DATA_USER_LBT;
+					if (loadType != LT_SUB_ATTACK)
+					{
+						user.last_breath_time = Time::GetGlobalTime();
+						flagUser |= DATA_USER_LBT;
+					}
 				}
 
 				ret = ProcessOrders(uidBy, data, payData,false,userFlag,bsave);
@@ -1995,6 +2023,19 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 									uidBy, data, userBy.level);
 						}
 						logicTopTenUser.SetUserPlunder(uidBy, uid);
+					}
+				}
+
+				if (loadType == LT_SUB_ATTACK && data.isMember("battleinfo"))
+				{
+					CLogicAttackInfo logicAttackInfo(uid);
+					logicAttackInfo.SetInfo(data["battleinfo"]);
+					unsigned protectedTime = 0;
+					int bdamage = 0;
+					Json::GetInt(data["battleinfo"], "damage", bdamage);
+					ret = SetProtectedTime(user.level, bdamage, bdamage, protectedTime);
+					if (0 == ret && protectedTime > user.protected_time) {
+						user.protected_time = protectedTime;
 					}
 				}
 				//debug_log("[save attack,operated=%u,operator=%u,last_breath_time=%u,attackend=%d]",uid,uidBy,user.last_breath_time,attackend);
@@ -2460,6 +2501,12 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 					}
 				}
 			}
+
+			if (data.isMember("battleinfo")){
+				CLogicAttackInfo logicAttackInfo(uid);
+				logicAttackInfo.SetInfo(data["battleinfo"]);
+			}
+
 			/*20150908 Ralf fix
 			unsigned daily = 0;
 			Json::GetUInt(data, "daily", daily);
@@ -3003,7 +3050,7 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 			}
 		}
 
-		if(!IsVision(loadType))
+		if(!IsVision(loadType) || loadType==LT_SUB_ATTACK)
 		{
 			UpdateAttack(userBy, user, data, rchg);
 		}
@@ -3029,6 +3076,12 @@ int CLogicArchive::Save(unsigned uid, unsigned uidBy, const string &type,Json::V
 					user.r1, r2chg, user.r2, r3chg, user.r3, r4chg, user.r4, r5chg,
 					user.r5, addprosper, user.prosper, addbs, user.battle_spirits,
 					qlechg,qleres,ylchg,ylres,betchg,betres,exp,user.point,user.level,rcode.c_str());
+		}
+	}
+	else
+	{
+		if (loadType == LT_SUB_ATTACK && user.protected_time > Time::GetGlobalTime()){
+			ret = logicUser.UpdateProtectedTime(uid, user.protected_time);
 		}
 	}
 
@@ -3929,8 +3982,8 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 			{
 				if(r1chg > 0)
 					r1chg = (int)(r1chg * FCM_VALUE[fcm]);
-				if((min && r1chg > NPC_RES_MAX) || (r1chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || type != LT_ATTACK))){
-					error_log("[resource_error][uid=%u]", uid);
+				if((min && r1chg > NPC_RES_MAX) || (r1chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || (type != LT_ATTACK && type != LT_SUB_ATTACK) ))){
+					error_log("[resource_error][uid=%u,min=%d,r1chg=%d,attackuid=%u,res=%d,type=%u]", uid,int(min),r1chg,attackuid,int(res),type);
 					res = false;
 					r1chg = 0;
 				}else{
@@ -3954,8 +4007,8 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 			{
 				if(r2chg > 0)
 					r2chg = (int)(r2chg * FCM_VALUE[fcm]);
-				if((min && r2chg > NPC_RES_MAX) || (r2chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || type != LT_ATTACK))){
-					error_log("[resource_error][uid=%u]", uid);
+				if((min && r2chg > NPC_RES_MAX) || (r2chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || (type != LT_ATTACK && type != LT_SUB_ATTACK) ))){
+					error_log("[resource_error][uid=%u,min=%d,r2chg=%d,attackuid=%u,res=%d,type=%u]", uid,int(min),r2chg,attackuid,int(res),type);
 					res = false;
 					r2chg = 0;
 				}else{
@@ -3979,8 +4032,8 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 			{
 				if(r3chg > 0)
 					r3chg = (int)(r3chg * FCM_VALUE[fcm]);
-				if((min && r3chg > NPC_RES_MAX) || (r3chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || type != LT_ATTACK))){
-					error_log("[resource_error][uid=%u]", uid);
+				if((min && r3chg > NPC_RES_MAX) || (r3chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || (type != LT_ATTACK && type != LT_SUB_ATTACK) ))){
+					error_log("[resource_error][uid=%u,min=%d,r3chg=%d,attackuid=%u,res=%d,type=%u]", uid,int(min),r3chg,attackuid,int(res),type);
 					res = false;
 					r3chg = 0;
 				}else{
@@ -4004,8 +4057,8 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 			{
 				if(r4chg > 0)
 					r4chg = (int)(r4chg * FCM_VALUE[fcm]);
-				if((min && r4chg > NPC_RES_MAX) || (r4chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || type != LT_ATTACK))){
-					error_log("[resource_error][uid=%u]", uid);
+				if((min && r4chg > NPC_RES_MAX) || (r4chg > 0 && ((!IsValidUid(attackuid) && !npc) || !res || (type != LT_ATTACK && type != LT_SUB_ATTACK) ))){
+					error_log("[resource_error][uid=%u,min=%d,r4chg=%d,attackuid=%u,res=%d,type=%u]", uid,int(min),r4chg,attackuid,int(res),type);
 					res = false;
 					r4chg = 0;
 				}else{
@@ -4027,7 +4080,7 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 
 	if (Json::GetInt(attackinfo, "r5", r5chg) && r5chg != 0)
 	{
-		if(!IsValidUid(attackuid) || type != LT_ATTACK)
+		if(!IsValidUid(attackuid) || (type != LT_ATTACK && type != LT_SUB_ATTACK) )
 		{
 			error_log("[resource_error][uid=%u]", uid);
 			LOGIC_ERROR_RETURN_MSG("resource_error");
@@ -4052,7 +4105,7 @@ int CLogicArchive::ProcessAttackInfo(unsigned uid,Json::Value &attackinfo, Json:
 	{
 		int bug = 0;
 		Json::GetInt(worldres, "bug", bug);
-		if(IsValidUid(attackuid) && type == LT_ATTACK)
+		if(IsValidUid(attackuid) && (type == LT_ATTACK || type == LT_SUB_ATTACK) )
 		{
 			unsigned oldr5 = 0;
 			Json::GetUInt(worldres, "r5", oldr5);
@@ -5804,6 +5857,10 @@ int CLogicArchive::checkUserTech(Json::Value &old, Json::Value &now)
 
 	if(old.isMember("ylna"))
 		now["ylna"] =  old["ylna"];
+
+	if(old.isMember("bnkj")){
+		now["bnkj"] = old["bnkj"];
+	}
 
 	if(old.isMember("catapult"))
 		now["catapult"] = old["catapult"];

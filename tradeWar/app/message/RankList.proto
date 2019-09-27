@@ -1,0 +1,79 @@
+/*
+ * 排行榜数据存储格式
+ */
+package ProtoRankList;
+
+message RankItem
+{
+	required uint32 uid       = 1;
+	required uint32 value     = 2;
+	required string name      = 3;
+	required string pic       = 4;
+}
+
+message RankItemLevel
+{
+	required uint32 lv        = 1;
+	repeated RankItem data    = 2;
+}
+
+message RankExp
+{
+	repeated RankItemLevel data    = 1;
+}
+
+message RankCombat
+{
+	repeated RankItemLevel data    = 1;
+}
+
+message RankTransport
+{
+	repeated RankItemLevel data    = 1;
+	required uint32 ts             = 2;
+}
+
+message NewServerRankItem
+{
+	required uint32 id        = 1;
+	required uint32 ver       = 2;
+	required uint32 ts        = 3;
+	required bool reward      = 4;
+	repeated RankItem data    = 5;
+}
+
+message NewServerRank
+{
+	repeated NewServerRankItem ranks = 1;
+}
+
+message ActRankItem
+{
+	required uint32 id        = 1;
+	required uint32 ver       = 2;
+	required uint32 ts        = 3;
+	required bool reward      = 4;
+	repeated RankItem data    = 5;
+}
+
+message ActRank
+{
+	repeated ActRankItem ranks = 1;
+}
+
+message BossRankItem {
+	required uint32 uid = 1;
+	required uint64 hurt = 2;
+	required string name = 3;
+}
+
+message BossRank {
+	required uint32 ts = 1;
+	required bool flag = 2;
+	repeated BossRankItem ranks = 3;
+}
+
+message ArenaRank {
+	required bool flag = 1;
+	repeated uint32 ranks = 2;
+}

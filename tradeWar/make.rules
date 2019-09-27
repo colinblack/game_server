@@ -1,0 +1,138 @@
+### cmd
+CC   = gcc
+CXX  = g++
+AR   = ar
+
+#Debug Version
+CFLAGS  = -g -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_DEBUG_BUILD
+
+#Release Version
+#CFLAGS  = -O3 -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_RELEASE_BUILD
+
+#-D_NEED_CHECK_OPEN
+
+CXXFLAGS= $(CFLAGS)
+
+dirs = baselib outerlib app
+
+define get_trunk_path
+	trunk_path=`pwd`; \
+	for dir in $(dirs); do \
+		if [[ $${trunk_path} = *$$dir* ]]; then \
+			trunk_path=`echo $${trunk_path} | sed "s/\/$$dir.*//"`; \
+			break; \
+		fi \
+	done; \
+	echo $${trunk_path}
+endef
+
+PATH_PLATFORM_PRJ := $(shell $(call get_trunk_path))
+
+
+### INNER LIB DIR
+PATH_INNERLIB_PRJ			= $(PATH_PLATFORM_PRJ)/innerlib
+### OUTTER LIB DIR
+#PATH_OUTER_LIB_PRJ			= $(PATH_PLATFORM_PRJ)/outerlib
+
+
+### BASE LIB
+BASE_INC		= -I$(PATH_PLATFORM_PRJ)/baselib/include
+LIB_BASE		= -L$(PATH_PLATFORM_PRJ)/baselib/lib
+BASE_LIB		= $(LIB_BASE) -ldbc_ext -lonline_count -lptlogin -lnetwork -ljsoncpp -lcommlog -lhtmltmpl -lstr4i -lbase -lmarkupstl -lpthread
+
+### FCGI LIB
+FCGI_INC		= -I$(PATH_PLATFORM_PRJ)/outerlib/fcgi/include
+FCGI_LIB		= -L/usr/local/service/fcgi-2.4.0/lib -lfcgi++  -lnsl -Wl,--rpath -Wl,/usr/local/services/fcgi/lib
+
+### DBC LIB
+DBC_INC			= -I$(PATH_PLATFORM_PRJ)/outerlib/dbc/include
+DBC_LIB			= -L$(PATH_PLATFORM_PRJ)/outerlib/dbc/lib -ldbs
+
+### DATA
+DATA_INC		= -I$(PATH_PLATFORM_PRJ)/app/data
+DATA_LIB		= -L$(PATH_PLATFORM_PRJ)/app/data -ldata
+
+### KERNEL
+KERNEL_INC		= -I$(PATH_PLATFORM_PRJ)/app/kernel
+KERNEL_LIB		= -L$(PATH_PLATFORM_PRJ)/app/kernel -lkernel
+
+### COMMON
+COMMON_INC		= -I$(PATH_PLATFORM_PRJ)/app/common
+COMMON_LIB		= -L$(PATH_PLATFORM_PRJ)/app/common -lcommon
+
+### STATE
+STATE_INC		= -I$(PATH_PLATFORM_PRJ)/app/StateServer
+STATE_LIB		= -L$(PATH_PLATFORM_PRJ)/app/StateServer -lstate
+
+### LOGIC
+LOGIC_INC		= -I$(PATH_PLATFORM_PRJ)/app/logic
+LOGIC_LIB		= -L$(PATH_PLATFORM_PRJ)/app/logic -llogic
+LOGIC_SRC       = $(PATH_PLATFORM_PRJ)/app/logic/*.cpp
+
+### SKILLS
+SKILLS_DIR      = $(PATH_PLATFORM_PRJ)/app/skills
+SKILLS_INC      = -I$(SKILLS_DIR) -I$(SKILLS_DIR)/Result -I$(SKILLS_DIR)/TargetFilter -I$(SKILLS_DIR)/TargetSelect
+SKILLS_LIB      = -L$(PATH_PLATFORM_PRJ)/app/skills -lskills
+SKILLS_SRC      = $(SKILLS_DIR)/*.cpp $(SKILLS_DIR)/Result/*.cpp $(SKILLS_DIR)/TargetFilter/*.cpp $(SKILLS_DIR)/TargetSelect/*.cpp
+
+### BUFF
+BUFF_DIR        = $(PATH_PLATFORM_PRJ)/app/buff
+BUFF_INC        = -I$(BUFF_DIR) -I$(BUFF_DIR)/Result
+BUFF_LIB        = -L$(PATH_PLATFORM_PRJ)/app/buff -lbuff
+BUFF_SRC        = $(BUFF_DIR)/*.cpp $(BUFF_DIR)/Result/*.cpp
+
+### PLATFORM
+PLATFORM_INC    = -I$(PATH_PLATFORM_PRJ)/app/platform
+PLATFORM_LIB    = -L$(PATH_PLATFORM_PRJ)/app/platform -lplatform
+
+### PENGYOU
+PENGYOU_INC		= -I$(PATH_PLATFORM_PRJ)/outerlib/pengyou/include
+PENGYOU_LIB		= -L$(PATH_PLATFORM_PRJ)/outerlib/pengyou/lib -lopenapi  -ljsoncpp -lz -ldl
+
+### ROCKPAY
+ROCKPAY_INC		= -I$(PATH_PLATFORM_PRJ)/outerlib/rockpay/include
+ROCKPAY_LIB	    = -L$(PATH_PLATFORM_PRJ)/outerlib/rockpay/lib -lrockpay -lgsoap++
+
+### PROTOCOL
+PROTOCOL_INC    = -I$(PATH_PLATFORM_PRJ)/app/protocol
+PROTOCOL_LIB	= -L$(PATH_PLATFORM_PRJ)/app/protocol -lprotocol
+
+### MAPOBJ
+MAPOBJ_INC      = -I$(PATH_PLATFORM_PRJ)/app/mapobj
+MAPOBJ_LIB      = -L$(PATH_PLATFORM_PRJ)/app/mapobj -lmapobj
+MAPOBJ_SRC      = $(PATH_PLATFORM_PRJ)/app/mapobj/*.cpp
+
+### CONFIG
+CONFIG_INC      = -I$(PATH_PLATFORM_PRJ)/app/config
+CONFIG_LIB      = -L$(PATH_PLATFORM_PRJ)/app/config -lconfig
+
+### ACTIVITY
+ACTIVITY_INC    = -I$(PATH_PLATFORM_PRJ)/app/activity
+ACTIVITY_LIB    = -L$(PATH_PLATFORM_PRJ)/app/activity -lactivity
+ACTIVITY_SRC    = $(PATH_PLATFORM_PRJ)/app/activity/*.cpp
+
+### WORLD
+WORLD_DIR       = $(PATH_PLATFORM_PRJ)/app/world
+WORLD_INC       = -I$(WORLD_DIR) -I$(WORLD_DIR)/countryQuest
+WORLD_LIB       = -L$(PATH_PLATFORM_PRJ)/app/world -lworld
+WORLD_SRC       = $(WORLD_DIR)/*.cpp $(WORLD_DIR)/countryQuest/*.cpp
+
+### CURL
+CURL_LIB        = -lcurl
+
+### LOGIN
+LOGIN_INC       = -I$(PATH_PLATFORM_PRJ)/app/login
+LOGIN_LIB       = -L$(PATH_PLATFORM_PRJ)/app/login -llogin
+LOGIN_SRC       = $(PATH_PLATFORM_PRJ)/app/login/*.cpp
+
+### BATTLE
+BATTLE_INC    = -I$(PATH_PLATFORM_PRJ)/app/battle
+BATTLE_LIB    = -L$(PATH_PLATFORM_PRJ)/app/battle -lbattle
+BATTLE_SRC    = $(PATH_PLATFORM_PRJ)/app/battle/*.cpp
+
+### MESSAGE
+MESSAGE_INC = -I$(PATH_PLATFORM_PRJ)/app/message
+MESSAGE_LIB = -L$(PATH_PLATFORM_PRJ)/app/message -lmessage
+
+### PROTOBUF
+PROTOBUF_LIB = -lprotobuf

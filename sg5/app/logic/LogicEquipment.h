@@ -3,6 +3,9 @@
 
 #include "LogicInc.h"
 
+//乘员
+#define IS_CHENGYUAN_EQID(eqid) (eqid >= 32000 && eqid <= 33000)
+
 //fashion
 #define IS_TEMP_FASHION_EQID(eqid) ((eqid >= 72001 && eqid <= 72050)||(eqid >= 71001 && eqid <= 71050))
 #define IS_FOREVER_FASHION_EQID(eqid) ((eqid >= 72101 && eqid <= 72150)||(eqid >= 71101 && eqid <= 71150))
@@ -32,7 +35,7 @@
 #define IS_EQ_EQID(eqid)  (IS_FASHION_EQID(eqid) || IS_HORSE_EQID(eqid) || IS_TOKEN_EQID(eqid)\
 		|| IS_GENERAL_EQ_EQID(eqid) || IS_SET_EQID(eqid) || IS_KEEPSAKE_EQID(eqid)\
 		|| IS_NEW_WORLD_SKILL_EQID(eqid) || IS_STAR_STONE_EQID(eqid) || IS_SOILDER_SkILL_EQID(eqid) \
-		|| IS_YINGLING_EQ_EQID(eqid) || IS_NEWWORLD_STONE_EQID(eqid))
+		|| IS_YINGLING_EQ_EQID(eqid) || IS_NEWWORLD_STONE_EQID(eqid) || IS_CHENGYUAN_EQID(eqid) )
 
 //gem
 #define IS_SOULSTONE_EQID(eqid)  (eqid >= 4401 && eqid <= 4490)
@@ -57,13 +60,15 @@
 //限时万能灵珠
 #define IS_UNLIMIT_PEARL(eqid) (eqid >= 75002 && eqid <= 75008)
 //天降神力
-#define IS_TECH_GEM_EQID(eqid) (eqid >= 6601 && eqid <= 6610)
+#define IS_TECH_GEM_EQID(eqid) (eqid >= 6601 && eqid <= 6612)
+//建筑晶石
+#define IS_JIANZHU_GEM_EQID(eqid) (eqid >= 33001 && eqid <= 33200)
 
 //unoverlay
 #define IS_UN_OVERLAY_ID(eqid) (IS_EQ_EQID(eqid) || IS_GEM_EQID(eqid) || IS_TEMP_GEM_EQID(eqid) \
 		|| IS_SPECIALSTONE_EQID(eqid) || IS_FIVE_ATTACK_STONE_EQID(eqid) || IS_SS_SS_EQID(eqid) \
 		|| IS_SS_BS_EQID(eqid) || IS_UNLIMIT_PEARL(eqid) || IS_GEM_GEM_EQID(eqid) \
-		|| IS_DOUBLE_GEM(eqid) || IS_TECH_GEM_EQID(eqid) || IS_NEW_SOULSTONE_EQID(eqid))
+		|| IS_DOUBLE_GEM(eqid) || IS_TECH_GEM_EQID(eqid) || IS_NEW_SOULSTONE_EQID(eqid) || IS_JIANZHU_GEM_EQID(eqid))
 //other
 #define IS_CAN_SYN_SPECIALSTONE_EQID(eqid)  (eqid >= 4496 && eqid <= 4500)
 #define IS_ADVANCED_SET_EQID(eqid) (eqid >= 157001 && eqid <= 157249)

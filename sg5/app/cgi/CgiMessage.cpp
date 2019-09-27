@@ -60,6 +60,8 @@ public:
 	CGI_SET_ACTION_MAP("EndAllServerNewWorldFightMVP", EndAllServerNewWorldFightMVP)
 	CGI_SET_ACTION_MAP("GetChickReg", GetChickReg)
 	CGI_SET_ACTION_MAP("ChickReg", ChickReg)
+	CGI_SET_ACTION_MAP("getbattleinfo", GetBattleInfo)
+	CGI_SET_ACTION_MAP("clearbuildinginfo", ClearBuildingInfo)
 	CGI_ACTION_MAP_END
 
 	int SendMessage()
@@ -1211,6 +1213,30 @@ public:
 
 		CGI_SEND_LOG("action=ChickReg&uid=%u",m_uid);
 		return R_SUCCESS;
+	}
+
+	int GetBattleInfo()
+	{
+		AUTO_LOCK_USER(m_uid)
+		CLogicAttackInfo logicAttackInfo(m_uid);
+		int ret = logicAttackInfo.GetInfo(m_jsonResult["battleinfo"]);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=getbattleinfo&uid=%u", m_uid);
+		return 0;
+	}
+
+	int ClearBuildingInfo()
+	{
+		AUTO_LOCK_USER(m_uid)
+		CLogicAttackInfo logicAttackInfo(m_uid);
+		int ret = logicAttackInfo.ClearBuildingInfo();
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=clearbuildinginfo&uid=%u", m_uid);
+		return 0;
 	}
 
 };

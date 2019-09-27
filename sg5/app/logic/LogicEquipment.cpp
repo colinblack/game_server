@@ -145,6 +145,26 @@ int CLogicEquipment::UpdateEquipment(unsigned uid, unsigned uidBy, Json::Value &
 		maxid = oldeq.rbegin()->first;
 	unsigned totalnew = 0;
 
+	for (unsigned i = 0; i < data.size(); i++)
+	{
+		int eqid = 0;
+		if (!Json::GetInt(data[i], "id", eqid))
+		{
+			string seqid;
+			if (Json::GetString(data[i], "id", seqid))
+			{
+				eqid = CTrans::STOI(seqid);
+			}
+		}
+		int count = data[i]["count"].asInt();
+		if (count > 0) {
+			CLogicChongBang logicChongBang;
+			ret = logicChongBang.AddUseEquipCnt(uid,eqid,count,data[i]["code"].asString(),true);
+			if (ret)
+				return ret;
+		}
+	}
+
 	map<int, Json::Value> oldeqbyid;
 #if SERVER_EQUIP_ADDABLE == 1
 	if(merge)
@@ -237,6 +257,8 @@ int CLogicEquipment::UpdateEquipment(unsigned uid, unsigned uidBy, Json::Value &
 		int oldstar = 0, newstar = 0;
 		int oldyexp = 0, newyexp = 0;
 		int oldtts = 0, newtts = 0;
+		int oldclv = 0, newclv = 0;
+		int oldcstar = 0, newcstar = 0;
 		string logtype;
 
 		Json::GetInt(data[i], "count", newcount);
@@ -248,6 +270,8 @@ int CLogicEquipment::UpdateEquipment(unsigned uid, unsigned uidBy, Json::Value &
 		Json::GetInt(data[i], "star", newstar);
 		Json::GetInt(data[i], "yexp", newyexp);
 		Json::GetInt(data[i], "tts", newtts);
+		Json::GetInt(data[i], "clv", newclv);
+		Json::GetInt(data[i], "cstar", newcstar);
 		string code;
 		if (Json::GetString(data[i], "code", code))
 		{
@@ -366,6 +390,16 @@ int CLogicEquipment::UpdateEquipment(unsigned uid, unsigned uidBy, Json::Value &
 						data[i]["tts"] = oldtts;
 						error_log("[equipment tts protect][uid = %u,oldtts=%d,newtts=%d]", uid, oldtts, newtts);
 					}
+					Json::GetInt(old, "clv", oldclv);
+					if (newclv != oldclv){
+						data[i]["clv"] = oldclv;
+						error_log("[equipment clv protect][uid = %u,oldclv=%d,newclv=%d]", uid, oldclv, newclv);
+					}
+					Json::GetInt(old, "cstar", oldcstar);
+					if (newcstar != oldcstar){
+						data[i]["cstar"] = oldcstar;
+						error_log("[equipment cstar protect][uid = %u,oldcstar=%d,newcstar=%d]", uid, oldcstar, newcstar);
+					}
 
 					Json::GetInt(old,"count",oldcount);
 					if(oldcount > newcount)
@@ -389,6 +423,24 @@ int CLogicEquipment::UpdateEquipment(unsigned uid, unsigned uidBy, Json::Value &
 							if(!old["sub"].isMember(*it) || old["sub"][*it].asUInt() != data[i]["sub"][*it].asUInt())
 							{
 								error_log("[equip sub error][uid=%u,id=%u]",uid,id);
+								//DATA_ERROR_RETURN_MSG("equip_sub_error");
+								f = true;
+								break;
+							}
+						}
+						if(f)
+							continue;
+					}
+
+					if(data[i].isMember("csub") && old.isMember("csub"))
+					{
+						//todo: fix flash equip sub bug
+						bool f = false;
+						for (unsigned j=0;j<data[i]["csub"].size();j++)
+						{
+							if (old["csub"].size()-1>j || old["csub"][j][0u]!=data[i]["csub"][j][0u]|| old["csub"][j][1u]!=data[i]["csub"][j][1u])
+							{
+								error_log("[equip csub error][uid=%u,id=%u]",uid,id);
 								//DATA_ERROR_RETURN_MSG("equip_sub_error");
 								f = true;
 								break;
@@ -574,6 +626,17 @@ int CLogicEquipment::UseEquipmentEx(unsigned uid, unsigned eqid, unsigned ud, un
 		string equipData = writer.write(data);
 		EQUIPMENT_LOG("uid=%u,id=%u,eqid=%d,act=%s,chg=%d,count=%d,code=%s,data=%s",uid,ud,eqid,
 						logtype.c_str(),-count,newcount,reason.c_str(),equipData.c_str());
+		CLogicChongBang logicChongBang;
+		ret = logicChongBang.AddUseEquipCnt(uid,eqid,count,reason);
+		if (ret)
+			return ret;
+
+		if(eqid == 4067)  //幻羽
+		{
+			CActGuYu guyu;
+			guyu.Init(uid,ACTIVITY_TIME_GUYU);
+			guyu.sumHuanyu(count);
+		}
 	}
 	return ret;
 }

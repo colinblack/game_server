@@ -1838,7 +1838,7 @@ int CLogicAdmin::ChangeActivityTime(const string &name, unsigned value)
 
 			if(!xmlConf.SetAttrib("value", value))
 			{
-				error_log("set config %s fail",name);
+				error_log("set config %s fail", name.c_str());
 				DATA_ERROR_RETURN_MSG(name);
 			}
 
@@ -1886,7 +1886,7 @@ int CLogicAdmin::ChangePlatform(const string &name, const string &value)
 
 			if(!xmlConf.SetAttrib("value", value.c_str()))
 			{
-				error_log("set config %s fail",name);
+				error_log("set config %s fail",name.c_str());
 				DATA_ERROR_RETURN_MSG(name);
 			}
 
@@ -2501,6 +2501,28 @@ int CLogicAdmin::Th_ImportEquip(unsigned uid, Json::Value &data)
 int CLogicAdmin::KickOffline(unsigned uid)
 {
 	int ret = Session::RemoveSession(uid);
+	if (ret)
+		return ret;
+
+	return R_SUCCESS;
+}
+
+int CLogicAdmin::ChangeFangChenMi(unsigned uid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser user;
+	KickOffline(uid);
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,user);
+	Json::Value stats;
+	Json::Reader reader;
+	reader.parse(user.user_stat,stats);
+	stats["z"] = 1;
+
+	Json::FastWriter writer;
+	user.user_stat = writer.write(stats);
+	ret = logicUser.SetUser(uid, user);
 	if (ret)
 		return ret;
 

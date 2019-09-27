@@ -239,9 +239,11 @@ public:
 		unsigned equd = 0;
 		if(!Json::GetUInt(m_data, "equd", equd))
 			return R_ERR_PARAM;
+		unsigned issuper = 0;
+		Json::GetUInt(m_data, "issuper", issuper);
 
 		CLogicNewWorld logicNewWorld;
-		ret = logicNewWorld.Clone(m_uid, index, equd, m_jsonResult);
+		ret = logicNewWorld.Clone(m_uid, index, equd, m_jsonResult, issuper>0);
 
 		CGI_SEND_LOG("action=Clone&uid=%u", m_uid);
 		return ret;

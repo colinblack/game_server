@@ -4086,11 +4086,12 @@ int CLogicCMD::HappyCard(unsigned uid, unsigned type, const Json::Value &iData, 
 			if (hasThisCard)
 				continue;
 
-			if (newAct_2["sa"][rand][(unsigned)0].asInt() == happyCard_Purple)
+			if (newAct_2["sa"][rand][(unsigned)0].asInt() == happyCard_Purple) {
 				if (!hasPruple)
 					hasPruple = true;
 				else
 					continue;
+			}
 
 			Json::Value item = Json::Value(Json::arrayValue);
 			item.append(rand);

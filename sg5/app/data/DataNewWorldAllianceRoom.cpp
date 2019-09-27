@@ -552,17 +552,18 @@ int CDataNewWorldAllianceRoom::Rush(unsigned rid, DataNewWorldAllianceRoomHeroIn
 
 	unsigned r = 0;
 	unsigned cid = m_data.room[rid].hero[index].cid;
+	bool rush_att = m_data.room[rid].hero[index].aid != m_data.room[rid].city[cid].aid;
 	if(!isValid(rid, index))
 	{
 		LOGIC_ERROR_RETURN_MSG("newworld_fighting_can_not_rush");
 	}
-	if(m_data.room[rid].hero[index].aid == m_data.room[rid].city[cid].aid
+	if(!rush_att
 	&& (m_data.room[rid].city[cid].attacker.size() <= NEW_WORLD_ALLIANCE_ROOM_RUSH_MIN
 	|| m_data.room[rid].city[cid].defender.size() <= NEW_WORLD_ALLIANCE_ROOM_RUSH_MIN))
 	{
 		LOGIC_ERROR_RETURN_MSG("newworld_rush_min");
 	}
-	if(m_data.room[rid].hero[index].aid != m_data.room[rid].city[cid].aid
+	if(rush_att
 	&& (m_data.room[rid].city[cid].attacker.size() <= NEW_WORLD_ALLIANCE_ROOM_RUSH_MIN
 	|| m_data.room[rid].city[cid].defender.size() + m_data.room[rid].city[cid].countN  <= NEW_WORLD_ALLIANCE_ROOM_RUSH_MIN))
 	{
@@ -570,7 +571,7 @@ int CDataNewWorldAllianceRoom::Rush(unsigned rid, DataNewWorldAllianceRoomHeroIn
 	}
 
 	DataNewWorldAllianceRoomHero npc;
-	NewWorldAllianceCityQueue &queue = m_data.room[rid].hero[index].aid==m_data.room[rid].city[cid].aid?m_data.room[rid].city[cid].attacker:m_data.room[rid].city[cid].defender;
+	NewWorldAllianceCityQueue &queue = rush_att ? m_data.room[rid].city[cid].defender : m_data.room[rid].city[cid].attacker;
 	NewWorldAllianceCityQueue::iterator it=queue.begin();
 	for(;it!=queue.end();++it)
 	{
@@ -586,7 +587,7 @@ int CDataNewWorldAllianceRoom::Rush(unsigned rid, DataNewWorldAllianceRoomHeroIn
 	}
 	if(it == queue.end())
 	{
-		if(m_data.room[rid].hero[index].aid != m_data.room[rid].city[cid].aid && m_data.room[rid].city[cid].countN > 0)
+		if(rush_att && m_data.room[rid].city[cid].countN > 0)
 			makeNPC(npc, m_data.room[rid].level);
 		else
 		{
@@ -594,9 +595,9 @@ int CDataNewWorldAllianceRoom::Rush(unsigned rid, DataNewWorldAllianceRoomHeroIn
 		}
 	}
 
-	DataNewWorldAllianceRoomHero &attacker = m_data.room[rid].hero[index];
-	DataNewWorldAllianceRoomHero &defender = it==queue.end()?npc:(isHero(it->second)?m_data.room[rid].hero[it->second]:m_data.room[rid].city[cid].vision[it->second]);
-	other = defender;
+	DataNewWorldAllianceRoomHero &attacker = rush_att ? m_data.room[rid].hero[index] : (it == queue.end() ? npc : (isHero(it->second)?m_data.room[rid].hero[it->second] : m_data.room[rid].city[cid].vision[it->second]));
+	DataNewWorldAllianceRoomHero &defender = rush_att ? (it == queue.end() ? npc : (isHero(it->second)?m_data.room[rid].hero[it->second] : m_data.room[rid].city[cid].vision[it->second])) : m_data.room[rid].hero[index];
+	other = rush_att ? defender : attacker;
 
 	unsigned result = NewWorldAllianceRoomHeroAttackResult_none;
 

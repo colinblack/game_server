@@ -1,0 +1,22 @@
+package MerchantShip;
+
+message MerchantShipItem {
+	required uint32 uid = 1;
+	required uint32 id = 2;       //序号
+	required uint32 endTs = 3;    //结束时间
+	required uint32 waitTs = 4;   //等待时间
+	required uint32 totalRes = 5; //资源数
+	required uint32 lostRes = 6;  //掠夺数
+	required uint32 lv = 7;       //等级
+	repeated uint32 challenge = 8;//
+}
+
+message MerchantShipWait {
+	required uint32 uid = 1;
+	required uint64 key = 2;
+}
+
+message MerchantShip {
+	repeated MerchantShipItem items = 1;
+	repeated MerchantShipWait wait = 2;
+}

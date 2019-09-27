@@ -1693,6 +1693,7 @@ bool NewWorldHero::copy(NewWorldHero &other)
 	if(level == 0)
 		level = 1;
 	memcpy(name, other.name, sizeof(name));
+	memcpy(icon, other.icon, sizeof(icon));
 	memcpy(property, other.property, sizeof(property));
 
 	other.level = level;
@@ -2099,7 +2100,7 @@ int CDataNewWorld::Change(NewWorldHeroIndex index, unsigned type)
 
 	return 0;
 }
-int CDataNewWorld::Clone(NewWorldHeroIndex index)
+int CDataNewWorld::Clone(NewWorldHeroIndex index,bool issuper)
 {
 	checkTick();
 
@@ -2110,7 +2111,7 @@ int CDataNewWorld::Clone(NewWorldHeroIndex index)
 
 	if(m_citymap[m_heromap[index].cid].city.countV == NEW_WORLD_CITY_VISION)
 	{
-		LOGIC_ERROR_RETURN_MSG("newworld_vision_full");
+		LOGIC_ERROR_RETURN_MSG("newworld_vision_full_1");
 	}
 
 	unsigned now = Time::GetGlobalTime();
@@ -2140,41 +2141,66 @@ int CDataNewWorld::Clone(NewWorldHeroIndex index)
 				++pdata->city[seq].countV;
 		}
 	}
-	if(pdata->city[seq].countV == NEW_WORLD_CITY_VISION)
+	if(issuper && pdata->city[seq].countV < NEW_WORLD_CITY_VISION_BASE)
 	{
-		LOGIC_ERROR_RETURN_MSG("newworld_vision_full");
+		debug_log("uid=%u,cid=%u,countV=%u",index.uid,m_heromap[index].cid,pdata->city[seq].countV);
+		LOGIC_ERROR_RETURN_MSG("newworld_vision_not_full");
 	}
-
-	for(unsigned count=0;count<NEW_WORLD_CITY_VISION;++count)
+	if(pdata->city[seq].countV >= (issuper?NEW_WORLD_CITY_VISION-5+1:NEW_WORLD_CITY_VISION_BASE))
 	{
-		if(!pdata->city[seq].vision[count].index.uid)
+		debug_log("uid=%u,seq=%u,issuper=%d,countV=%u",index.uid,seq,int(issuper),pdata->city[seq].countV);
+		if (issuper)
 		{
-			pdata->city[seq].vision[count] = pdata->hero[m_heromap[index].seq];
-			pdata->city[seq].vision[count].status = pdata->city[seq].kingdom == pdata->city[seq].vision[count].kingdom?
-														NewWorldHeroStatus_wait_defence:NewWorldHeroStatus_wait_attack;
-			pdata->city[seq].vision[count].index.uid = index.index + 1;
-			pdata->city[seq].vision[count].index.index = count;
-			pdata->city[seq].vision[count].seq = index.uid;
-			pdata->city[seq].vision[count].ts = now;
-			pdata->city[seq].vision[count].next = now;
-			pdata->city[seq].vision[count].buff = 0;
-
-			++pdata->city[seq].countV;
-			/*20141114 change countN*/
-			if(pdata->city[seq].vision[count].kingdom)
-				++pdata->city[seq].count[pdata->city[seq].vision[count].kingdom-1];
-			//debug_log("city=%u,count%u=%d,countV=%d,hero=%u,%u",pdata->city[seq].cid,pdata->city[seq].vision[count].kingdom,pdata->city[seq].count[pdata->city[seq].vision[count].kingdom-1],pdata->city[seq].countV,index.uid,index.index);
-
-			pdata->city[seq].ts = now;
-			pdata->changets = now;
-
-			addKill(pdata->hero[m_heromap[index].seq], NEW_WORLD_KILL_ADD_CLONE, now, pdata);
-
-			return 0;
+			LOGIC_ERROR_RETURN_MSG("newworld_vision_full_1");
+		}
+		else
+		{
+			LOGIC_ERROR_RETURN_MSG("newworld_vision_full_0");
 		}
 	}
 
-	LOGIC_ERROR_RETURN_MSG("newworld_vision_full");
+
+	for (int loop=0;loop<(issuper?5:1);loop++)
+	{
+		for(unsigned count=0;count<(issuper?NEW_WORLD_CITY_VISION:NEW_WORLD_CITY_VISION_BASE);++count)
+		{
+			if(!pdata->city[seq].vision[count].index.uid)
+			{
+				pdata->city[seq].vision[count] = pdata->hero[m_heromap[index].seq];
+				pdata->city[seq].vision[count].status = pdata->city[seq].kingdom == pdata->city[seq].vision[count].kingdom?
+															NewWorldHeroStatus_wait_defence:NewWorldHeroStatus_wait_attack;
+				pdata->city[seq].vision[count].index.uid = index.index + 1;
+				pdata->city[seq].vision[count].index.index = count;
+				pdata->city[seq].vision[count].seq = index.uid;
+				pdata->city[seq].vision[count].ts = now;
+				pdata->city[seq].vision[count].next = now;
+				pdata->city[seq].vision[count].buff = 0;
+
+				++pdata->city[seq].countV;
+				/*20141114 change countN*/
+				if(pdata->city[seq].vision[count].kingdom)
+					++pdata->city[seq].count[pdata->city[seq].vision[count].kingdom-1];
+				//debug_log("city=%u,count%u=%d,countV=%d,hero=%u,%u",pdata->city[seq].cid,pdata->city[seq].vision[count].kingdom,pdata->city[seq].count[pdata->city[seq].vision[count].kingdom-1],pdata->city[seq].countV,index.uid,index.index);
+
+				pdata->city[seq].ts = now;
+				pdata->changets = now;
+
+				addKill(pdata->hero[m_heromap[index].seq], NEW_WORLD_KILL_ADD_CLONE, now, pdata);
+
+				if (issuper)
+					break;
+				else
+					return 0;
+			}
+		}
+	}
+
+	if (!issuper)
+	{
+		debug_log("uid=%u,seq=%u,issuper=%d,countV=%u",index.uid,seq,int(issuper),pdata->city[seq].countV);
+		LOGIC_ERROR_RETURN_MSG("newworld_vision_full_0");
+	}
+	return 0;
 }
 int CDataNewWorld::Rush(NewWorldHeroIndex index, NewWorldHero &other, NewWorldHero &end)
 {
@@ -2236,9 +2262,10 @@ int CDataNewWorld::Rush(NewWorldHeroIndex index, NewWorldHero &other, NewWorldHe
 		LOGIC_ERROR_RETURN_MSG("newworld_fighting_can_not_rush");
 	}
 
+	bool rush_att = pdata->hero[heroseq].kingdom != pdata->city[cityseq].kingdom;
 	NewWorldHero npc;
 	r = 0;
-	NewWorldCityQueue &queue = pdata->hero[heroseq].kingdom==pdata->city[cityseq].kingdom?m_citymap[cid].attacker:m_citymap[cid].defender;
+	NewWorldCityQueue &queue = rush_att ? m_citymap[cid].defender : m_citymap[cid].attacker;
 	NewWorldCityQueue::iterator it=queue.begin();
 	for(;it!=queue.end();++it)
 	{
@@ -2248,16 +2275,16 @@ int CDataNewWorld::Rush(NewWorldHeroIndex index, NewWorldHero &other, NewWorldHe
 		if(isHero(it->second))
 		{
 			otherseq = m_heromap[it->second].seq;
-			if(!CanMove(pdata->hero[otherseq].status) ||  pdata->hero[otherseq].cid != cid)
+			if(!CanMove(pdata->hero[otherseq].status) ||  pdata->hero[otherseq].cid != cid || (rush_att ? (pdata->hero[otherseq].kingdom != pdata->city[cityseq].kingdom) : (pdata->hero[otherseq].kingdom == pdata->city[cityseq].kingdom)))
 				continue;
 		}
-		else if(!pdata->city[cityseq].vision[it->second.index].index.uid || !CanMove(pdata->city[cityseq].vision[it->second.index].status))
+		else if(!pdata->city[cityseq].vision[it->second.index].index.uid || !CanMove(pdata->city[cityseq].vision[it->second.index].status) || (rush_att ? (pdata->city[cityseq].vision[it->second.index].kingdom != pdata->city[cityseq].kingdom) : (pdata->city[cityseq].vision[it->second.index].kingdom == pdata->city[cityseq].kingdom)))
 			continue;
 		break;
 	}
 	if(it == queue.end())
 	{
-		if(pdata->hero[heroseq].kingdom != pdata->city[cityseq].kingdom && pdata->city[cityseq].countN)
+		if(rush_att && pdata->city[cityseq].countN)
 			makeNPC(npc);
 		else
 		{
@@ -2265,9 +2292,9 @@ int CDataNewWorld::Rush(NewWorldHeroIndex index, NewWorldHero &other, NewWorldHe
 		}
 	}
 
-	NewWorldHero &attacker = pdata->hero[heroseq];
-	NewWorldHero &defender = it==queue.end()?npc:(isHero(it->second)?pdata->hero[otherseq]:pdata->city[cityseq].vision[it->second.index]);
-	other = defender;
+	NewWorldHero &attacker = rush_att ? pdata->hero[heroseq] : (it==queue.end() ? npc : (isHero(it->second) ? pdata->hero[otherseq] : pdata->city[cityseq].vision[it->second.index]));
+	NewWorldHero &defender = rush_att ? (it==queue.end() ? npc : (isHero(it->second) ? pdata->hero[otherseq] : pdata->city[cityseq].vision[it->second.index])) : pdata->hero[heroseq];
+	other = rush_att ? defender : attacker;
 
 	pdata->changets = now;
 	pdata->city[cityseq].ts = now;

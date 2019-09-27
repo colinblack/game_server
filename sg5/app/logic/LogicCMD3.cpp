@@ -1090,7 +1090,7 @@ int CLogicCMD::HeavenDaoist(unsigned uid, unsigned type, unsigned count, const J
 			}
 		}
 	}
-	unsigned need_cash = 0;
+	unsigned need_cash = 0;  //需要的材料
 	ret = dataXML->GetCostHeavenDaoist((bool)type, jie_index, need_cash);
 	if (ret)
 	{
@@ -1321,6 +1321,668 @@ int CLogicCMD::HeavenDaoist(unsigned uid, unsigned type, unsigned count, const J
 	return R_SUCCESS;
 }
 
+int CLogicCMD::HeavenUp(unsigned uid, unsigned count, const Json::Value &equd, const Json::Value &equd2, bool is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick,unsigned times)
+{
+	if(times && oneclick)  //一键修复不能使用替换功能
+	{
+		LOGIC_ERROR_RETURN_MSG("oneclick and times cna't be used at the same time");
+	}
+
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	int ret = logicUser.GetUser(uid, dataUser);
+	if (ret)
+	{
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+	{
+		return ret;
+	}
+
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	Json::Value tech;
+	Json::Reader reader;
+	Json::FastWriter writer;
+	unsigned exp = 0;
+	unsigned lv = 0;
+
+	reader.parse(dataUser.user_tech, tech);
+
+	//Json::Value &heavenDaoist = type ? tech["heaven"] : tech["daoist"];
+	unsigned &resource = dataUser.r3;
+	unsigned maxlv      = 101;
+
+	Json::GetUInt(tech, "bue", exp);
+
+	unsigned laoguofangbu = tech["heaven"]["lv"].asUInt();
+	if (laoguofangbu < 61 || (laoguofangbu < 71 && tech["bul"].asUInt()>=30) || (laoguofangbu < 81 && tech["bul"].asUInt()>=70))
+	{
+		LOGIC_ERROR_RETURN_MSG("老国防部等级不够");
+	}
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	XMLHeavenUp xmlHeavenDaoist;
+	unsigned max_exp;
+	ret = dataXML->GetMaxHeavenUpExp(max_exp);
+	if (ret)
+	{
+		error_log("GetMaxHeavenUpExp failed. uid = %u, ret = %d", uid, ret);
+		return ret;
+	}
+	if (exp >= max_exp)
+	{
+		LOGIC_ERROR_RETURN_MSG("already highest exp");
+	}
+
+	if (exp)
+	{
+		// 档中 lv 不可靠因此
+		// 根据exp获得lv
+		ret = dataXML->GetHeavenUpLevel(exp, lv);
+		if (ret)
+		{
+			error_log("GetHeavenItem failed. uid = %u, ret = %d", uid, ret);
+			return ret;
+		}
+	}
+
+	unsigned jie_index = 0;
+	if (lv == 0)
+	{
+		jie_index = 0;
+	} else if (lv >= 1 && lv <= 10)
+	{
+		jie_index = 1;
+	}else if (lv >= 11 && lv <= 20)
+	{
+		jie_index = 2;
+	}else if (lv >= 21 && lv <= 30)
+	{
+		jie_index = 3;
+	}else if (lv >= 31 && lv <= 40)
+	{
+		jie_index = 4;
+	}else if (lv >= 41 && lv <= 50)
+	{
+		jie_index = 5;
+	}else if (lv >= 51 && lv <= 60)
+	{
+		jie_index = 6;
+	}else if (lv >= 61 && lv <= 70)
+	{
+		jie_index = 7;
+	}else if (lv >= 71 && lv <= 80)
+	{
+		jie_index = 8;
+	}else if (lv >= 81 && lv <= 90)
+	{
+		jie_index = 9;
+	}else if (lv >= 91 && lv <= 100)
+	{
+		jie_index = 10;
+	}
+	else {
+		LOGIC_ERROR_RETURN_MSG("lv_error");
+	}
+
+	unsigned need_cash = 0;
+	ret = dataXML->GetCostHeavenUp(jie_index, need_cash);
+	if (ret)
+	{
+		error_log("GetHeavenItem cost failed. uid = %u, ret = %d", uid, ret);
+		return ret;
+	}
+
+	int needexp = 0;
+	ret = dataXML->GetHeavenUp(exp, xmlHeavenDaoist, needexp);
+	if (ret)
+	{
+		error_log("[get config error][uid=%u,oldexp=%u,ret=%d]", uid, exp, ret);
+		return ret;
+	}
+
+	/*
+
+	ret = dataXML->GetHeavenDaoistItem(typePrefix + lv, xmlHeavenDaoist);
+	if (ret)
+	{
+		error_log("GetHeavenItem failed. uid = %u, ret = %d", uid, ret);
+		return ret;
+	}
+	*/
+
+	unsigned curexp = exp;
+	unsigned curper = xmlHeavenDaoist.per;
+	unsigned curres = xmlHeavenDaoist.res;
+	unsigned curneedeq = xmlHeavenDaoist.needeq;
+	unsigned curneedeq2 = xmlHeavenDaoist.needeq2;
+	unsigned curcnt = 0;
+	unsigned nextexp = 0;
+
+	unsigned sumres = 0;
+	unsigned sumneedeq = 0;
+	unsigned sumneedeq2 = 0;
+
+	XMLCostHeavenUPToBinghun bhunData;
+	unsigned curTimes = 0;
+	unsigned now = 0;
+	unsigned resTimes = 0; 
+
+	if(times)
+	{
+		ret = dataXML->GetExchangeBinghuToBinghun(0,bhunData);
+		if (ret)
+		{
+			error_log("GetExchangeBinghuToBinghun failed. uid = %u, ret = %d", uid, ret);
+			return ret;
+		}
+
+		const unsigned maxTimes = bhunData.maxTimes;  //每天最多替换次数
+		now = Time::GetGlobalTime();
+		
+		if (!tech.isMember("bsts"))
+		{
+			tech["bsts"] = Json::Value(Json::arrayValue);
+			tech["bsts"][0u] = 0;  // 消耗兵书所得兵魂的次数
+			tech["bsts"][1u] = now; // 时间戳
+		}
+
+		unsigned ts = tech["bsts"][1u].asUInt(); 
+		if (CTime::IsDiffDay(ts, now))
+		{
+			tech["bsts"][0u] = 0;  // 每天重置
+			tech["bsts"][1u] = now;
+		}
+		
+		curTimes = tech["bsts"][0u].asUInt();
+
+		resTimes = curTimes;
+
+
+		if (curTimes >= maxTimes)
+		{//次数已用完
+			error_log("[to mamy times][uid=%u&times=%u]",uid,curTimes+times);
+			LOGIC_ERROR_RETURN_MSG("to many times");
+		}
+
+		int tmp = curneedeq2 - (maxTimes - curTimes);
+		if(tmp <= 0)
+		{
+			curneedeq += curneedeq2 * bhunData.bingshuNum;
+			resTimes += curneedeq2;
+			curneedeq2 = 0;  
+		}
+		else
+		{
+			unsigned cureq2 = 0;
+			cureq2 = curneedeq2 - (maxTimes - curTimes);
+			curneedeq += (maxTimes - curTimes) * bhunData.bingshuNum;
+			resTimes = maxTimes;
+			curneedeq2 = cureq2;
+		}
+		
+	}
+
+	CLogicEquipment logicEquip;
+	Json::Value equip_data;
+	unsigned ecnt = 0;
+	unsigned i = 0;
+	unsigned ud = 0;
+	unsigned id = 0;
+	unsigned len = equd.size();
+	unsigned sumecnt = 0;
+	Json::Value eqid(Json::arrayValue);
+	Json::Value eqcount(Json::arrayValue);
+
+	eqid.resize(len);
+	eqcount.resize(len);
+	for (i = 0; i < len; ++i)
+	{
+		ud = equd[i].asUInt();
+		ecnt = 0;
+		id = 0;
+		if (ud)
+		{
+			ret = logicEquip.Get(uid, ud, equip_data);
+			if (ret)
+			{
+				debug_log("Get failed. uid = %u, equd = %u", uid, ud);
+			}
+
+			if (!Json::GetUInt(equip_data, "id", id) || (0 == id)
+					|| !Json::GetUInt(equip_data, "count", ecnt) || (0 == ecnt))
+			{
+				debug_log("id or count is empty");
+				return R_ERR_DB;
+			}
+		}
+
+		sumecnt += ecnt;
+		eqid[i] = id;
+		eqcount[i] = ecnt;
+	}
+
+	unsigned ecnt2 = 0;
+	unsigned ud2 = 0;
+	unsigned id2 = 0;
+	unsigned len2 = equd2.size();
+	unsigned sumecnt2 = 0;
+	Json::Value eqid2(Json::arrayValue);
+	Json::Value eqcount2(Json::arrayValue);
+
+	eqid2.resize(len2);
+	eqcount2.resize(len2);
+	for (i = 0; i < len2; ++i)
+	{
+		ud2 = equd2[i].asUInt();
+		ecnt2 = 0;
+		id2 = 0;
+		if (ud2)
+		{
+			ret = logicEquip.Get(uid, ud2, equip_data);
+			if (ret)
+			{
+				debug_log("Get failed. uid = %u, equd = %u", uid, ud2);
+			}
+
+			if (!Json::GetUInt(equip_data, "id", id2) || (0 == id2)
+					|| !Json::GetUInt(equip_data, "count", ecnt2) || (0 == ecnt2))
+			{
+				debug_log("id or count is empty");
+				return R_ERR_DB;
+			}
+		}
+
+		sumecnt2 += ecnt2;
+		eqid2[i] = id2;
+		eqcount2[i] = ecnt2;
+	}
+
+	while (count > 0)
+	{
+		++lv;
+		/*
+		ret = dataXML->GetHeavenDaoistItem(typePrefix + lv, xmlHeavenDaoist);
+		if (ret)
+		{
+			error_log("GetHeavenItem failed. uid = %u, ret = %d", uid, ret);
+			return ret;
+		}
+		*/
+
+		nextexp = xmlHeavenDaoist.exp;
+		
+		// 当前需要次数
+		curcnt = (unsigned)ceil((needexp)/(float)curper);  //向上取整
+		unsigned next_lv_cnt = curcnt;
+		if(1 == oneclick)
+		{
+			unsigned c3 = sumecnt / curneedeq;
+			unsigned c33 = sumecnt2 / curneedeq2;
+			unsigned min_cnt = curcnt;
+			if(is_cash)
+			{
+				CLogicPay logic_pay;
+				DataPay pay;
+				int ret = logic_pay.GetPay(uid, pay);
+				if (ret != 0)
+					return ret;
+				unsigned c2 = pay.cash /need_cash;
+				min_cnt = min(c2, c3);
+			//	error_log("HeavenDaoist: curcnt: %u, c2 %u, c3 %u resource %u sumecnt %u", curcnt, c2, c3, resource, sumecnt);
+			}
+			else
+			{
+				unsigned c1 = resource /curres;
+				min_cnt = min(c1, c3);
+			//	error_log("HeavenDaoist: curcnt: %u, c1 %u, c3 %u resource %u sumecnt %u", curcnt,c1, c3, resource, sumecnt);
+			}
+
+			min_cnt = min(min_cnt, c33);
+
+			curcnt = min_cnt > curcnt ? curcnt: min_cnt;
+			if(curcnt >0)
+			{
+				need_cash *= curcnt;
+			}
+			if(curcnt < next_lv_cnt)
+			{
+				--lv;
+			}
+			count = curcnt;
+		}
+		else
+		{
+			// 次数不够
+			if (curcnt > count)
+			{
+				--lv;
+				curcnt = count;
+			}
+		}
+
+		count -= curcnt;
+		curexp += curper * curcnt;
+		// 总共消耗的资源
+		sumres += curres * curcnt;
+		// 总共消耗道具
+		sumneedeq += curneedeq * curcnt;
+		sumneedeq2 += curneedeq2 * curcnt;
+		exp = curexp;
+		if (exp >= max_exp)
+		{
+			break;
+		}
+
+		curper = xmlHeavenDaoist.per;
+		curneedeq = xmlHeavenDaoist.needeq;
+		curneedeq2 = xmlHeavenDaoist.needeq2;
+		curres = xmlHeavenDaoist.res;
+	}
+
+	if ((!is_cash) && sumres > resource)
+	{
+		LOGIC_ERROR_RETURN_MSG("resource is not enough");
+	}
+	if (!is_cash)
+	{
+		resource -= sumres;
+	}
+
+	if (sumneedeq > sumecnt)
+	{
+		LOGIC_ERROR_RETURN_MSG("equipment count is not enough");
+	}
+
+	unsigned usecount = 0;
+	for (i = 0; (i < len) && sumneedeq; ++i)
+	{
+		ud = equd[i].asUInt();
+		if (ud)
+		{
+			ecnt = eqcount[i].asUInt();
+			id = eqid[i].asUInt();
+			if (sumneedeq > ecnt)
+			{
+				usecount = ecnt;
+				sumneedeq -= ecnt;
+			}
+			else
+			{
+				usecount = sumneedeq;
+				sumneedeq = 0;
+			}
+
+			ret = logicEquip.UseEquipment(uid, id, ud, usecount, "HeavenUp_" + CTrans::UTOS(i));
+			if (ret)
+			{
+				error_log("UseEquipment failed. uid = %u, eqid = %u, equd = %u", uid, id, ud);
+				return ret;
+			}
+		}
+		// 每个道具使用数量
+		result["usecount"][i] = usecount;
+	}
+
+	// 已使用完剩余使用0
+	while (i < len)
+	{
+		result["usecount"][i++] = 0;
+	}
+
+
+	if (sumneedeq2 > sumecnt2)
+	{
+		error_log("sumneedeq2:%d,sumecnt2:%d",sumneedeq2,sumecnt2);
+		LOGIC_ERROR_RETURN_MSG("equipment2 count is not enough");
+	}
+
+	usecount = 0;
+	for (i = 0; (i < len) && sumneedeq2; ++i)
+	{
+		ud = equd2[i].asUInt();
+		if (ud)
+		{
+			ecnt = eqcount2[i].asUInt();
+			id = eqid2[i].asUInt();
+			if (sumneedeq2 > ecnt)
+			{
+				usecount = ecnt;
+				sumneedeq2 -= ecnt;
+			}
+			else
+			{
+				usecount = sumneedeq2;
+				sumneedeq2 = 0;
+			}
+
+			ret = logicEquip.UseEquipment(uid, id, ud, usecount, "HeavenUp_" + CTrans::UTOS(i));
+			if (ret)
+			{
+				error_log("UseEquipment failed. uid = %u, eqid = %u, equd = %u", uid, id, ud);
+				return ret;
+			}
+		}
+		// 每个道具使用数量
+		result["usecount2"][i] = usecount;
+	}
+
+	// 已使用完剩余使用0
+	while (i < len)
+	{
+		result["usecount2"][i++] = 0;
+	}
+
+
+	if (is_cash)
+	{
+		Json::Value user_flag;
+		bool bsave = false;
+		reader.parse(dataUser.user_flag, user_flag);
+		CLogicPay logicPay;
+		DataPay payData;
+		const string reason = "HEAVEN_UP";
+		ret = logicPay.ProcessOrderForBackend(uid, -need_cash, 0, payData, reason, user_flag, bsave);
+		if(ret)
+			return ret;
+		result["pointpay"].resize(0);
+		if(bsave)
+		{
+			result["pointpay"] = user_flag["user_pay"];
+			dataUser.user_flag = writer.write(user_flag);
+		}
+		result["coins"] = payData.coins;
+		result["coins2"] = payData.cash;
+	}
+
+	if(times)
+	{ //重置数据
+		curTimes = resTimes;
+		tech["bsts"][0u] = curTimes;
+		tech["bsts"][1u] = now; 
+
+		result["bsts"] = tech["bsts"];  
+	}
+
+	tech["bue"] = exp;
+	tech["bul"] = lv;
+
+	result["bue"] = tech["bue"];
+	result["bul"] = tech["bul"];
+	result["r3"] = dataUser.r3;
+
+	dataUser.user_tech = writer.write(tech);
+    string res = writer.write(result);
+    EQUIPMENT_LOG("HeavenUp: res %s", res.c_str());
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+
+	return R_SUCCESS;
+}
+
+
+int CLogicCMD::HeavenUp(unsigned uid, unsigned ud1, unsigned ud2, bool yijian, Json::Value &result, unsigned lasttime, unsigned seqid)
+{
+	int ret = 0;
+	CDataXML *pDataXML = CDataXML::GetCDataXML();
+	if(!pDataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+	{
+		return ret;
+	}
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+	{
+		return ret;
+	}
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+	CLogicEquipment logicEquipment;
+
+	Json::Value tech;
+	Json::FromString(tech, dataUser.user_tech);
+
+	if (!tech.isMember("bul"))
+	{
+		tech["bul"] = 0;
+	}
+	if (!tech.isMember("bue"))
+	{
+		tech["bue"] = 0;
+	}
+
+
+	unsigned oldexp = tech["bue"].asUInt();
+	unsigned oldlevel = tech["bul"].asUInt();
+
+
+	unsigned laoguofangbu = tech["heaven"]["lv"].asUInt();
+	if (laoguofangbu < 71 || (laoguofangbu < 81 && tech["bul"].asUInt()>=31) || (laoguofangbu < 91 && tech["bul"].asUInt()>=71))
+	{
+		LOGIC_ERROR_RETURN_MSG("老国防部等级不够");
+	}
+
+	XMLHeavenUp config;
+	int needexp = 0;
+	ret = pDataXML->GetHeavenUp(oldexp, config, needexp);
+	if (ret)
+	{
+		error_log("[get config error][uid=%u,oldexp=%u,ret=%d]", uid, oldexp, ret);
+		return ret;
+	}
+
+	int eq_count = 0, eq_count2 = 0;;
+	result["expup"] = 0;
+	if (yijian)
+	{
+		int needcount = 0;
+		if (needexp % config.per == 0)
+		{
+			needcount = needexp / config.per;
+		}
+		else
+		{
+			needcount = needexp / config.per + 1;
+		}
+		tech["bue"] = oldexp + needcount * config.per;
+		eq_count = needcount * config.needeq;
+		eq_count2 = needcount * config.needeq2;
+		result["expup"] = needcount * config.per;
+	}
+	else
+	{
+		tech["bue"] = oldexp + config.per;
+		eq_count = config.needeq;
+		eq_count2 = config.needeq2;
+		result["expup"] = config.per;
+	}
+	unsigned newlevel = 1;
+	pDataXML->GetHeavenUpLevel(tech["bue"].asUInt(), newlevel);
+	result["levelup"] = 0;
+	if (newlevel > oldlevel)
+	{
+		result["levelup"] = 1;
+	}
+	tech["bul"] = newlevel;
+
+	ret = logicEquipment.Try(uid,config.eqid,ud1,eq_count);
+	if (ret)
+		return ret;
+	/*
+	ret = logicEquipment.Try(uid,config.eqid2,ud2,eq_count2);
+	if (ret)
+		return ret;
+	*/
+	string code = "HeavenUp";
+	ret = logicEquipment.UseEquipment(uid,config.eqid,ud1,eq_count,code);
+	if (ret)
+		return ret;
+	/*
+	ret = logicEquipment.UseEquipment(uid,config.eqid2,ud2,eq_count2,code);
+	if (ret)
+		return ret;
+	*/
+
+	result["eq_count"].resize(2);
+	result["eq_ud"].resize(2);
+	result["eq_count"][0u] = eq_count;
+	result["eq_ud"][0u] = ud1;
+	result["eq_count"][1u] = eq_count2;
+	result["eq_ud"][1u] = ud2;
+
+	dataUser.user_tech = Json::ToString(tech);
+	ret = logicUser.SetUser(uid, dataUser);
+	if (ret)
+	{
+		return ret;
+	}
+	result["bul"] = tech["bul"];
+	result["bue"] = tech["bue"];
+	HERO_LOG("uid=%u,act=heavenup,oldexp=%u,newexp=%u,oldlevel=%u,newlevel=%u",
+			uid,oldexp,tech["bue"].asUInt(),oldlevel,newlevel);
+
+	/*
+	if (newlevel > oldlevel)
+	{
+		CLogicActivity logicActivity;
+		ret = logicActivity.AddLimitTimeHeaven(uid, oldlevel, newlevel, result["newAct"], isHeaven);
+	}
+	*/
+
+	return 0;
+}
 
 int CLogicCMD::Catapult(unsigned uid, unsigned count, const Json::Value &equd, int is_cash, Json::Value &result, unsigned lasttime, unsigned seqid, unsigned oneclick)
 {
@@ -1842,6 +2504,7 @@ int CLogicCMD::EightFormation(unsigned uid, unsigned formation_id, unsigned coun
 		curneedeq = xmlEightFormation.needeq;
 		curres = xmlEightFormation.res;
 	}
+	error_log("sumneedeq:%d,sumres:%d,count:%d,sumecnt:%d",sumneedeq,sumres,count,sumecnt);
 
 	if (0 == cash && 1 == r && sumres > resource)
 	{
@@ -2578,6 +3241,7 @@ int CLogicCMD::UpgradeTenWeapon(unsigned uid, unsigned id, unsigned equd, unsign
 	if (count)
 	{
 		const unsigned eqid = 1909; //铸魂符id
+		const unsigned limit_eqid2 = 2035;  //限级铸魂符
 		const unsigned limit_eqid = 2023;  //限级铸魂符
 
 		unsigned cost_eqid = 0;
@@ -2587,6 +3251,7 @@ int CLogicCMD::UpgradeTenWeapon(unsigned uid, unsigned id, unsigned equd, unsign
 		logicEquip.Get(uid, equd, equip_data);
 
 		//判断是否是限级铸魂符
+
 		if (equip_data["id"].asUInt() == limit_eqid)
 		{
 			//根据经验，判断铸魂所在的阶层。注意，限级铸魂符用于三阶到五阶
@@ -2600,6 +3265,20 @@ int CLogicCMD::UpgradeTenWeapon(unsigned uid, unsigned id, unsigned equd, unsign
 			}
 
 			cost_eqid = limit_eqid;
+		}
+		else if (equip_data["id"].asUInt() == limit_eqid2)
+		{
+			//根据经验，判断铸魂所在的阶层。注意，限级铸魂符用于三阶到五阶
+			//todo 铸魂经验对应的阶层
+			int zhuhun_class = GetZhuhunClass(tech["tw"][id][0u].asUInt());
+
+			if (zhuhun_class < 3 || zhuhun_class > 8)
+			{
+				error_log("[zhu hun class condition not match. only 3-8], uid=%u,class=%d",uid, zhuhun_class);
+				LOGIC_ERROR_RETURN_MSG("zhu_hun_class_mismatch");
+			}
+
+			cost_eqid = limit_eqid2;
 		}
 		else
 		{

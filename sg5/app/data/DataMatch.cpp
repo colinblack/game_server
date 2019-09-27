@@ -802,6 +802,71 @@ int CDataMatch::FinishMatch(const MatchData **p)
 	return 0;
 }
 
+int CDataMatch::BufaMatch(const MatchData **p)
+{
+	MatchData *pdata = (MatchData *)m_sh.GetAddress();
+	if(pdata == NULL)
+	{
+		error_log("[GetAddress fail][]");
+		return R_ERR_DB;
+	}
+	CAutoLock lock(&m_sh, true);
+	if (pdata->stage != MS_PLAYOFF2)
+	{
+	//	return R_ERR_LOGIC;
+	}
+	pdata->stage = MS_MATCH_FINISH;
+	unsigned itemp = 0;
+	if ((pdata->top2[0]).score < (pdata->top2[1]).score)
+		itemp = 1;
+	else if((pdata->top2[0]).score > (pdata->top2[1]).score){
+		itemp = 0;
+	}
+	else{
+		CGuessData guessData;
+		if(guessData.Init(Config::GetPath(GUESS_DATA_PATH),0) != 0){
+			error_log("guess data init fail");
+			return R_ERR_LOGIC;
+		}
+		unsigned s1=0,s2=0;
+		guessData.GetSupportCount(pdata->top2[0].aid,s1);
+		guessData.GetSupportCount(pdata->top2[1].aid,s2);
+		itemp = s1 > s2 ? 0 : 1;
+		if(s1 == s2){
+			int temp = random() % 2;
+			if(temp == 0)
+			{
+				if(pdata->top2[0].aid != 0 && pdata->top2[1].aid == 0)
+				{
+					itemp = 0;
+				}
+				else
+					itemp = 1;
+
+			}
+			if(temp == 1)
+			{
+				if(pdata->top2[1].aid != 0 && pdata->top2[0].aid == 0)
+				{
+					itemp = 1;
+				}
+				else
+					itemp = 0;
+			}
+			//itemp = random() % 2;
+		}
+	}
+	(pdata->champion).aid = (pdata->top2[itemp]).aid;
+	strcpy((pdata->champion).aname, (pdata->top2[itemp]).aname);
+	(pdata->champion).flag = (pdata->top2[itemp]).flag;
+	for (unsigned j = 0; j < 5; j++)
+	{
+		(pdata->champion).players[j] = (pdata->top2[itemp]).players[j];
+	}
+	*p = pdata;
+	return 0;
+}
+
 int CDataMatch::NextTurn()
 {
 	MatchData *pdata = (MatchData *)m_sh.GetAddress();

@@ -107,6 +107,8 @@ public:
 
 	int KickOffline(unsigned uid);
 
+	int ChangeFangChenMi(unsigned uid);
+
 private:
 	static map<string, AdminInfo> adminList;
 	static map<string, AdminSession> adminSession;

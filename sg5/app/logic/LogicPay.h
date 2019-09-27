@@ -71,14 +71,17 @@ public:
 	int AddPayHistory(DataPayHistory &payHistory);
 	int GetPayHistory(unsigned uid, uint64_t payId, DataPayHistory &payHistory);
 	int GetPayHistory(unsigned uid, PayChannelType channel, const string &channelPayId, DataPayHistory &payHistory);
+	int GetPayHistory(unsigned uid, unsigned startTs, unsigned endTs, unsigned &totalPay);
 	int SetPayHistoryStatus(unsigned uid, uint64_t payId, PayStatusType status);
 	int SetPayHistoryStatus(unsigned uid, PayChannelType channel, const string &channelPayId, PayStatusType status);
 
 	//修改货币的原始接口，须在调用前读取user_flag，调用后保存user_flag，只用于处理充值和前端发来的order
-	int ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag = 0);
+	int ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag = 0, bool iskuafufenghuo=false);
+
+	int FixConsumeRank(unsigned uid);
 
 	//增加了order_log的修改货币的原始接口，须在调用前读取user_flag，调用后保存user_flag，只用于处理后端产生的order
-	int ProcessOrderForBackend(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag = 0);
+	int ProcessOrderForBackend(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag = 0, bool iskuafufenghuo=false);
 
 	//修改货币的简易接口1，不保存user_flag， 不返回pay，只用于处理系统功能产生的货币变化
 	int ChangePay(unsigned uid, int cash, int coins, const string &type, unsigned flag = 0);
@@ -101,7 +104,7 @@ private:
 	int SetUserPayRank(unsigned uid, int cash, Json::Value &user_flag, bool &bsave);
 	int SetUserPayTotal(unsigned uid, int cash, Json::Value &user_flag, bool &bsave);
 	int SetHundredDaysActivities(unsigned uid, int cash, Json::Value &user_flag);    //百日消费活动
-	int SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag);    //百日消费活动
+	int SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag, bool iskuafufenghuo=false);    //百日消费活动
 	int SetRechargeRank(unsigned uid, int cash, Json::Value &user_flag);   //充值排行榜
 
 	//修改英雄积分的原始接口，须在调用前读取user_flag，调用后保存user_flag，只用于处理充值在ChangePay里调用

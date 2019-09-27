@@ -40,17 +40,71 @@ public:
 
 	bool m_bIsHero;
 
+	bool m_bIsXianShi;
+
 public:
 	GiftEquipItem();
-	GiftEquipItem(const Json::Value& json, bool ishero);
+	GiftEquipItem(const Json::Value& json, bool ishero, bool isxianshi=false);
 
 	bool IsHero() const;
 	bool IsEquip() const;
+	bool IsXianShi() const;
 	bool IsSame(GiftEquipItem & othitem); //判断两种选项是否属于同一物品
 
 	void Double();
 };
 
+enum XMLActSimpleRewardType{
+	XML_ACT_SIMPLE_REWARD_TYPE_EQUIP   = 0,
+	XML_ACT_SIMPLE_REWARD_TYPE_HERO    = 1,
+	XML_ACT_SIMPLE_REWARD_TYPE_GOLD    = 2,
+	XML_ACT_SIMPLE_REWARD_TYPE_DIAMOND = 3,
+	XML_ACT_SIMPLE_REWARD_TYPE_EXP_LV  = 4,
+	XML_ACT_SIMPLE_REWARD_TYPE_EXP     = 5,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT1     = 6,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT2     = 7,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT3     = 8,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT4     = 9,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT5     = 10,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT6     = 11,
+	XML_ACT_SIMPLE_REWARD_TYPE_MT7     = 12,
+	XML_ACT_SIMPLE_REWARD_TYPE_RES1    = 13,
+	XML_ACT_SIMPLE_REWARD_TYPE_RES2    = 14,
+	XML_ACT_SIMPLE_REWARD_TYPE_RES3    = 15,
+	XML_ACT_SIMPLE_REWARD_TYPE_PROSPER = 16,
+	XML_ACT_SIMPLE_REWARD_TYPE_CASH    = 17,
+	XML_ACT_SIMPLE_REWARD_TYPE_MAX
+};
+
+struct XMLActSimpleReward{
+	uint32_t id;
+	uint32_t count;
+	byte ch;
+	byte q;
+	byte type;
+	bool xs;
+	XMLActSimpleReward(){
+		id=count=0;
+		ch=q=type=0;
+		xs = false;
+	}
+};
+
+struct DataActivityTime
+{
+	unsigned start_ts;
+	unsigned end_ts;
+	unsigned version;
+	int veiw_delay;
+	char type[64];
+	char pf[32];
+	DataActivityTime()
+	{
+		start_ts=0,end_ts=0,version=0,veiw_delay=0;
+		memset(type, 0, 64);
+		memset(pf, 0, 32);
+	}
+};
 
 /****************Hero*********************/
 #define XML_HERO_STAR 10
@@ -181,7 +235,7 @@ struct DataXMLVIP
 #define XML_EQUIP_SUB_ITEM_S 30
 #define XML_EQUIP_SUB_GOLD 4
 #define XML_EQUIP_SUB_ITEM 10
-#define XML_EQUIP_SUB_ID 5
+#define XML_EQUIP_SUB_ID 20
 
 struct XMLEquipSubItem
 {
@@ -484,9 +538,9 @@ struct DataXMLTreasureHunt
 struct EquipIntensifys
 {
 	unsigned id;
-	unsigned rate[10];
-	unsigned addrate[10];
-	unsigned yijian[10];			//拆解所有等级一键搞定对应的幸运石数量 *0.3
+	unsigned rate[12];
+	unsigned addrate[12];
+	unsigned yijian[12];			//拆解所有等级一键搞定对应的幸运石数量 *0.3
 	EquipIntensifys()
 	{
 		id = 0;
@@ -711,9 +765,9 @@ struct DataXMLShop
 /*************************************/
 
 /*************worldBattleShop************************/
-#define XML_WORLD_BATTLE_SHOP_ALL_ITEM 200
-#define XML_WORLD_BATTLE_KILL_ITEM_NUM 12
-struct XMLWorldBattleShopItem
+#define XML_WORLD_BATTLE_SHOP_ALL_ITEM 200   //国战勋章商店物品可容纳总数
+#define XML_WORLD_BATTLE_KILL_ITEM_NUM 12    //国战杀敌
+struct XMLWorldBattleShopItem    //勋章商店物品结构
 {
 	unsigned id, getItem, getCount, type, costItem, costCount, times;
 	XMLWorldBattleShopItem()
@@ -731,7 +785,7 @@ struct XMLWorldBattleKillRewardsItem
 		memset(data,0,sizeof(data));
 	}
 };
-
+//国战商店（国战勋章、国战杀敌）
 struct DataXMLWorldBattleShop
 {
 	XMLWorldBattleShopItem shop[XML_WORLD_BATTLE_SHOP_ALL_ITEM];
@@ -776,7 +830,7 @@ struct DataXMLPreSummer
 //@end
 
 //@ 天坛
-#define XML_DATA_TEMPLE_ITEMS (7)
+#define XML_DATA_TEMPLE_ITEMS (8)
 #define XML_DATA_GOODS_CNT (10)
 struct XMLTempleItem
 {
@@ -1127,7 +1181,7 @@ struct DataXMLBuildingSkinBuy
 struct DataXMLBuildingSkin
 {
 	enum {
-		ITEM_CNT = 5,
+		ITEM_CNT = 6,
 	};
 
 	DataXMLBuildingSkinBuy 		buys[ITEM_CNT];
@@ -1741,6 +1795,23 @@ public:
 #define INIT_CHARGE_DRAW_ACT_CONFIG(CONFIG_NAME) m_##CONFIG_NAME = CONFIG_NAME##_CONFIG(data);
 /********************************************************************/
 //autolable3
+CHARGE_DRAW_ACT_CONFIG(CONFIG_yongguansanjun)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_wuyiqingdian_leiji)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_yvre618_2)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_yvre618_1)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_toushichejineng)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_chongbang_3)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuanshucanjuan)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_baihuahuikui_3)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_baihuahuikui_2)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_baihuahuikui_1)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_guyv_leiji)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_chengyuantisheng_2)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_chengyuantisheng_1)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_lueduotongqian_chongbang)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_anniversary_leiji)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_anniversary_meiri)
+CHARGE_DRAW_ACT_CONFIG(CONFIG_zhengbashadi_chongbang)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_hanjiajingxuan)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
 CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
@@ -1975,9 +2046,9 @@ struct XMLHeavenDaoist
 {
 	unsigned id;
 	unsigned exp;
-	unsigned res;
+	unsigned res; //?
 	unsigned needeq;
-	unsigned per;
+	unsigned per; //?
 
 	XMLHeavenDaoist() : id(0), exp(0), res(0), needeq(0), per(0)
 	{
@@ -1985,12 +2056,41 @@ struct XMLHeavenDaoist
 	}
 };
 
+#define MAX_HEAVENUP_CONFIG_NUM 101
+struct XMLHeavenUp
+{
+	//char name[20];
+	unsigned level;
+	unsigned exp;
+	unsigned res;
+	unsigned eqid;
+	unsigned eqid2;
+	unsigned needeq;
+	unsigned needeq2;
+	unsigned per;
+	XMLHeavenUp()
+	{
+		level=0,exp=0,res=0,eqid=0,eqid2=0;needeq=0,needeq2=0;per=0;
+	}
+	XMLHeavenUp& operator=(const XMLHeavenUp& data)
+	{
+		level = data.level;
+		exp = data.exp;
+		res= data.res;
+		eqid = data.eqid;
+		eqid2 = data.eqid2;
+		needeq = data.needeq;
+		needeq2 = data.needeq2;
+		per = data.per;
+		return *this;
+	}
+};
 
 struct DataXMLHeavenDaoist
 {
 	XMLHeavenDaoist heavenDaoist[HEAVEN_DAOIST_NUM];
+	XMLHeavenUp heavenup[MAX_HEAVENUP_CONFIG_NUM];
 };
-
 
 #define HEAVEN_JIE_NUM 13
 #define DAOIST_JIE_NUM 13
@@ -2006,8 +2106,35 @@ struct XMLCostHeavenDaoist
 struct DataXMLCostHeavenDaoist
 {
 	XMLCostHeavenDaoist heavenDaoistCost[HEAVEN_JIE_NUM + DAOIST_JIE_NUM];
+	//XMLCostHeavenUPToBinghun exBinghun; //兵书替换兵魂
 };
 
+//兵书替换兵魂 钻石替换木材
+#define HEAVENUP_JIE_NUM 11
+
+struct XMLCostHeavenUP
+{
+	unsigned id;
+	unsigned jie;
+	unsigned cash;
+
+	XMLCostHeavenUP() : id(0), jie(0), cash(0)
+	{}
+};
+
+struct XMLCostHeavenUPToBinghun
+{
+	unsigned bingshuNum;
+	unsigned binghunNum;
+	unsigned maxTimes;
+	XMLCostHeavenUPToBinghun():bingshuNum(0),binghunNum(0),maxTimes(0){}
+};
+
+struct DataXMLCostHeavenUp
+{
+	XMLCostHeavenUP heavenUpCost[HEAVENUP_JIE_NUM];
+	XMLCostHeavenUPToBinghun exBinghun; //兵书替换兵魂
+};
 
 #define EIGHT_FORMATION_NUM 100
 #define EIGHT_FORMATION_R_NUM 3
@@ -3741,6 +3868,8 @@ struct DataXMLInvestment {
 /*****************birdbridge-begin*************/
 #define XML_BIRD_BRIDGE_REWARD_NUM 5
 #define XML_BIRD_BRIDGE_ITEM_NUM 4
+#define XML_BIRD_BRIDGE_DAILY_ITEM_NUM 7
+#define XML_BIRD_BRIDGE_DAILY_DAY_NUM 4
 struct XMLBirdBridgeItem {
 	byte id;
 	uint32_t require;
@@ -3748,10 +3877,14 @@ struct XMLBirdBridgeItem {
 	XMLBirdBridgeItem(): id(0), require(0) {
 	}
 };
+struct XMLBirdBridgeDaily {
+	XMLBirdBridgeItem day[XML_BIRD_BRIDGE_DAILY_ITEM_NUM];
+};
 struct DataXMLBirdBridge {
 	XMLBirdBridgeItem left[XML_BIRD_BRIDGE_ITEM_NUM];
 	XMLBirdBridgeItem right[XML_BIRD_BRIDGE_ITEM_NUM];
 	XMLBirdBridgeItem center;
+	XMLBirdBridgeDaily days[XML_BIRD_BRIDGE_DAILY_DAY_NUM];
 };;
 /*****************birdbridge-end***************/
 /*****************uniontech-begin*************/
@@ -3866,6 +3999,459 @@ struct DataXMLNianShouBoss {
 	XMLNianShouBossItem item[XML_NIANSHOU_BOSS_ITEM_NUM];
 };
 /**********************************************/
+/******************争霸冲榜目标奖励*****************/
+#define XML_XIANSHI_MUBIAO_REWARD_NUM 3
+#define XML_XIANSHI_MUBIAO_ITEM_NUM 30
+#define XML_XIANSHI_MUBIAO_PER_EQUIP_NUM 6
+#define XML_XIANSHI_MUBIAO_NAME_LEN 100
+#define MAX_XIANSHI_MUBIAO_HUODONG_NUM 5
+#define XML_XIANSHI_MUBIAO_RANK_REWARD_NUM 5
+#define MAX_XIANSHI_MUBIAO_RANK_NUM 10
+struct XMLXianShiMuBiaoItem {
+	byte id;
+	uint32_t require;
+	GiftEquipItem reward[XML_XIANSHI_MUBIAO_REWARD_NUM];
+	XMLXianShiMuBiaoItem(): id(0),require(0) {
+	}
+};
+struct XMLXianShiMuBiaoEquip {
+	byte id;
+	uint32_t eqid, eqid2, value2;
+	bool ishuode;
+	char code[XML_XIANSHI_MUBIAO_NAME_LEN];
+	XMLXianShiMuBiaoItem item[XML_XIANSHI_MUBIAO_ITEM_NUM];
+	XMLXianShiMuBiaoEquip(): id(0),eqid(0),eqid2(0),value2(0),ishuode(false) {
+		memset(code,0,sizeof(code));
+	}
+};
+struct XMLChongBangRankReward {
+	byte id;
+	unsigned rank1,rank2;
+	GiftEquipItem reward[XML_XIANSHI_MUBIAO_RANK_REWARD_NUM];
+	XMLChongBangRankReward(): id(0),rank1(0),rank2(0){
+	}
+};
+struct XMLXianShiMuBiaoHuodong {
+	char name[XML_XIANSHI_MUBIAO_NAME_LEN];
+	XMLXianShiMuBiaoEquip equip[XML_XIANSHI_MUBIAO_PER_EQUIP_NUM];
+	XMLChongBangRankReward rank[MAX_XIANSHI_MUBIAO_RANK_NUM];
+	XMLXianShiMuBiaoHuodong() {
+		memset(name,0,sizeof(name));
+	}
+};
+struct DataXMLXianShiMuBiao {
+	GiftEquipItem mobai[XML_XIANSHI_MUBIAO_RANK_REWARD_NUM];
+	XMLXianShiMuBiaoHuodong huodong[MAX_XIANSHI_MUBIAO_HUODONG_NUM];
+};
+/**********************************************/
+/******************周年庆*****************/
+#define XML_ZHOUNIANQING_SIGN_REWARD_NUM 5
+#define MAX_ZHOUNIANQING_SIGN_ITEM_NUM 15
+#define XML_ZHOUNIANQING_SHOP_REWARD_NUM 3
+#define MAX_ZHOUNIANQING_SHOP_ITEM_NUM 15
+#define XML_ZHOUNIANQING_YEARSHOP_REWARD_NUM 3
+#define MAX_ZHOUNIANQING_YEARSHOP_ITEM_NUM 15
+#define XML_ZHOUNIANQING_BANGDING_REWARD_NUM 5
+#define XML_ZHOUNIANQING_BANGDING_ITEM_NUM 2
+#define MAX_ZHOUNIANQING_ONLINE_REWARD_NUM 4
+struct XMLZhouNianQingSign {
+	byte id;
+	unsigned quanfuneed, selfneed;
+	GiftEquipItem reward[XML_ZHOUNIANQING_SIGN_REWARD_NUM];
+	XMLZhouNianQingSign() : id(0), quanfuneed(0), selfneed(0) {
+	}
+};
+struct XMLZhouNianQingShop {
+	byte id;
+	unsigned require;
+	GiftEquipItem reward[XML_ZHOUNIANQING_SIGN_REWARD_NUM];
+	XMLZhouNianQingShop() : id(0), require(0) {
+	}
+};
+struct XMLZhouNianQingYearShop {
+	byte id;
+	unsigned moneyType;
+	unsigned require;
+	GiftEquipItem reward[XML_ZHOUNIANQING_SIGN_REWARD_NUM];
+	XMLZhouNianQingYearShop(): id(0), moneyType(0), require(0) {
+	}
+};
+struct XMLZhouNianQingYearBangDing {
+	byte rewardType;
+	GiftEquipItem reward[XML_ZHOUNIANQING_BANGDING_REWARD_NUM];
+	XMLZhouNianQingYearBangDing(): rewardType(0) {
+	}
+};
+struct DataXMLZhouNianQing {
+	unsigned ts,big,small;
+	unsigned juanCount;
+	XMLActSimpleReward online[MAX_ZHOUNIANQING_ONLINE_REWARD_NUM];
+	XMLZhouNianQingSign sign[MAX_ZHOUNIANQING_SIGN_ITEM_NUM];
+	XMLZhouNianQingShop shop[MAX_ZHOUNIANQING_SHOP_ITEM_NUM];
+	XMLZhouNianQingYearShop yearshop[MAX_ZHOUNIANQING_YEARSHOP_ITEM_NUM];
+	XMLZhouNianQingYearBangDing bangding[XML_ZHOUNIANQING_BANGDING_ITEM_NUM];
+	DataXMLZhouNianQing(): ts(0), big(0), small(0), juanCount(0) {
+	}
+};
+/**********************************************/
+/******************清明*****************/
+struct DataXMLQingMing {
+	unsigned jijiuCount;
+	XMLZhouNianQingShop shop[MAX_ZHOUNIANQING_SHOP_ITEM_NUM];
+	DataXMLQingMing() : jijiuCount(0) {
+	}
+};
+/**********************************************/
+/******************谷雨*****************/
+#define MAX_GUYU_ONLINE_REWARD_NUM 4
+#define MAX_GUYU_JIFEN_ITEM_NUM 10
+#define MAX_GUYU_JIFEN_REWARD_NUM 1
+#define MAX_GUYU_MEIRI_ITEM_NUM (10*4)
+#define MAX_GUYU_MEIRI_REWARD_NUM 6
+
+#define MAX_GUYU_JINJIE_DIAMOND 8  //618进阶 消耗钻石
+#define MAX_GUYU_JINJIE_HUANYU 8   //幻羽
+#define MAX_GUYU_DIAMOND_REWARD_NUM 1
+#define MAX_GUYU_HUANYU_REWARD_NUM 1
+
+struct XMLGuYuJiFen {
+	unsigned id;
+	unsigned require;
+	unsigned limit;
+	XMLActSimpleReward reward[MAX_GUYU_JIFEN_REWARD_NUM];
+	XMLGuYuJiFen() : id(0), require(0), limit(0) {
+	}
+};
+struct XMLGuYuMeiRi {
+	unsigned id;
+	unsigned require;
+	XMLActSimpleReward reward[MAX_GUYU_MEIRI_REWARD_NUM];
+	XMLGuYuMeiRi() : id(0), require(0) {
+	}
+};
+struct DataXMLGuYu {
+	XMLActSimpleReward online[MAX_GUYU_ONLINE_REWARD_NUM];
+	XMLGuYuJiFen jifen[MAX_GUYU_JIFEN_ITEM_NUM];
+	XMLGuYuMeiRi meiri[MAX_GUYU_MEIRI_ITEM_NUM];
+};
+
+//618jinjie
+struct XMLGuYuDiamond{
+	unsigned id;
+	unsigned require;
+	XMLActSimpleReward reward[MAX_GUYU_DIAMOND_REWARD_NUM];
+	XMLGuYuDiamond() : id(0), require(0) {}
+};
+
+struct XMLGuYuHuanYu{
+	unsigned id;
+	unsigned require;
+	XMLActSimpleReward reward[MAX_GUYU_HUANYU_REWARD_NUM];
+	XMLGuYuHuanYu() : id(0), require(0) {}
+};
+
+struct DataXMLGuYuJinJie {
+	XMLGuYuDiamond diamond[MAX_GUYU_JINJIE_DIAMOND];
+	XMLGuYuHuanYu huanyu[MAX_GUYU_JINJIE_HUANYU];
+};
+/**********************************************/
+
+/***************BingHunTurnDish***************/
+#define MAX_TURN_DISH_ITEM_NUM 6
+struct XMLBingHunTurnDish
+{
+	unsigned rate[MAX_TURN_DISH_ITEM_NUM];
+	unsigned value[MAX_TURN_DISH_ITEM_NUM];	
+	XMLBingHunTurnDish()
+	{
+		memset(rate,0,sizeof(rate));
+		memset(value,0,sizeof(value));
+	}
+};
+struct DataXMLBinghunTurnDish
+{
+	XMLBingHunTurnDish turndish;
+};
+/*********************************************/
+/***************XingshiPoints*****************/
+#define MAX_XINGSHI_ITEM_NUM 12
+#define MAX_XINGSHI_REWARD_NUM 1
+struct XMLXingshiPoints
+{
+	unsigned id;
+	unsigned points;
+	unsigned grade;
+	unsigned times;
+	XMLActSimpleReward reward[MAX_XINGSHI_REWARD_NUM];
+	XMLXingshiPoints() : id(0),points(0),grade(0),times(0){}
+};
+struct DataXMLXingshiPoints
+{
+	XMLXingshiPoints stone[MAX_XINGSHI_ITEM_NUM];
+};
+/*********************************************/
+/**************助力行动--额外奖励***************/
+#define MAX_GIVEHELPEXTRA_ITEM_NUM 8
+#define MAX_GIVEHELPEXTRA_REWARD_NUM 10
+struct XMLGiveHelpItem
+{
+	unsigned id;
+	unsigned require;
+	XMLActSimpleReward reward[MAX_GIVEHELPEXTRA_REWARD_NUM];
+	XMLGiveHelpItem(): id(0), require(0) {
+	}
+};
+struct DataXMLGiveHelpItem
+{
+	XMLGiveHelpItem extra[MAX_GIVEHELPEXTRA_ITEM_NUM];
+	XMLGiveHelpItem helpuser[MAX_GIVEHELPEXTRA_ITEM_NUM];
+};
+
+/********************************************/
+/******************跨服烽火*****************/
+#define MAX_KUAFUFENGHUO_BUCHANG_REWARD_NUM 5
+#define MAX_KUAFUFENGHUO_RANK_REWARD_NUM 5
+#define MAX_KUAFUFENGHUO_RANK_ITEM_NUM 5
+#define MAX_KUAFUFENGHUO_TIME_SEGMENT_NUM 3
+#define MAX_KUAFUFENGHUO_ATTACK_LEVEL_NUM 10
+struct XMLKuaFuFengHuoRankReward {
+	byte id;
+	unsigned rank1,rank2;
+	XMLActSimpleReward reward[XML_XIANSHI_MUBIAO_RANK_REWARD_NUM];
+	XMLKuaFuFengHuoRankReward(): id(0),rank1(0),rank2(0){
+	}
+};
+struct XMLKuaFuFengHuoAttack {
+	unsigned lv,kongdi,ziyuandian,zhucheng,mingcheng;
+	XMLKuaFuFengHuoAttack() : lv(0), kongdi(0), ziyuandian(0), zhucheng(0), mingcheng(0) {
+	}
+};
+struct XMLKuaFuFengHuoJiFen {
+	unsigned num1,score1,score2,score4;
+	XMLKuaFuFengHuoAttack attack[MAX_KUAFUFENGHUO_ATTACK_LEVEL_NUM];
+	XMLKuaFuFengHuoJiFen() : num1(0), score1(0), score2(0), score4(0) {
+	}
+};
+struct DataXMLKuaFuFengHuo {
+	XMLActSimpleReward buchang[MAX_KUAFUFENGHUO_BUCHANG_REWARD_NUM];
+	XMLKuaFuFengHuoRankReward rank[MAX_KUAFUFENGHUO_RANK_ITEM_NUM];
+	unsigned starttime[MAX_KUAFUFENGHUO_TIME_SEGMENT_NUM];
+	unsigned endtime[MAX_KUAFUFENGHUO_TIME_SEGMENT_NUM];
+	XMLKuaFuFengHuoJiFen jifen;
+};
+/**********************************************/
+/******************战车系统*****************/
+#define XML_ZHANCHE_SUB_LEVEL 5
+#define XML_ZHANCHE_PINZHI_NUM 3
+#define XML_ZHANCHE_ZHUANCHANG_NUM 3
+#define XML_ZHANCHE_XINGJI_NUM 10
+#define XML_ZHANCHE_CHENGYUAN_NUM 50
+#define XML_ZHANCHE_LEVEL 200
+#define XML_CHOUQU_NUM 100
+#define XML_CHENGYUANKU_NUM 2
+struct XMLZhanCheSubLevel
+{
+	unsigned id, stone, num;
+	XMLEquipOneSub subs[XML_EQUIP_SUB_ITEM_S];
+	XMLZhanCheSubLevel()
+	{
+		id = stone = num = 0;
+	}
+};
+struct XMLCYOneLevel
+{
+	unsigned id,r1,rid,needq;
+	XMLCYOneLevel()
+	{
+		id = r1 = rid = needq = 0;
+	}
+};
+struct XMLCYLevel
+{
+	unsigned ch;
+	XMLCYOneLevel floor[XML_ZHANCHE_LEVEL];
+	XMLCYLevel()
+	{
+		ch = 0;
+	}
+};
+struct XMLCYProperty
+{
+	unsigned id,needcount;
+	unsigned needeq[XML_ZHANCHE_PINZHI_NUM];
+	XMLCYProperty()
+	{
+		id = needcount = 0;
+		memset(needeq,0,sizeof(needeq));
+	}
+};
+struct XMLCYData //乘员数据
+{
+	unsigned id, ch;
+	XMLCYData()
+	{
+		id = ch = 0;
+	}
+};
+struct XMLCYChouQu
+{
+	unsigned id, eqid, count, weight;
+	XMLCYChouQu()
+	{
+		id = eqid = count = weight = 0;
+	}
+};
+struct XMLCYKu
+{
+	unsigned need;
+	XMLCYChouQu reward[XML_CHOUQU_NUM];
+};
+struct DataXMLChariot {
+	XMLCYData cydatas[XML_ZHANCHE_CHENGYUAN_NUM];
+	XMLCYLevel cylevels[XML_ZHANCHE_PINZHI_NUM];
+	XMLCYProperty cypropertys[XML_ZHANCHE_XINGJI_NUM];
+	XMLZhanCheSubLevel sub[XML_ZHANCHE_SUB_LEVEL];
+	XMLCYKu ku[XML_CHENGYUANKU_NUM];
+};
+/**********************************************/
+/******************投资大返利*****************/
+#define XML_TOUZIFANLI_POOL_NUM 32
+#define XML_TOUZIFANLI_ITEM_ONE_POOL 5
+#define XML_TOUZIFANLI_DUIHUAN_NUM 10
+struct XMLTouZiFanLiPoolItem {
+	byte id;
+	unsigned integral[XML_TOUZIFANLI_ITEM_ONE_POOL];
+	XMLActSimpleReward reward[XML_TOUZIFANLI_ITEM_ONE_POOL];
+	XMLTouZiFanLiPoolItem() : id(0)
+	{
+	}
+};
+struct XMLTouZiFanLiDuiHuanItem {
+	byte id;
+	unsigned sum;
+	XMLActSimpleReward reward[XML_TOUZIFANLI_ITEM_ONE_POOL];
+	XMLTouZiFanLiDuiHuanItem() : id(0), sum(0)
+	{
+	}
+};
+struct DataXMLTouZiDaFanLi {
+	XMLTouZiFanLiPoolItem touzi[XML_TOUZIFANLI_POOL_NUM];
+	XMLTouZiFanLiDuiHuanItem duihuan[XML_TOUZIFANLI_DUIHUAN_NUM];
+};
+/**********************************************/
+
+/******************儿童节活动*****************/
+#define XML_ERTONGJIEHUODONG_MAX_NUM 10
+#define XML_ERTONGJIEHUODONG_DUIHUAN_NUM 5
+#define XML_ERTONGJIEHUODONG_REWARD_NUM 5
+struct XMLchildrenDaysItem {
+	unsigned id;
+	unsigned times;
+	unsigned needNum[XML_ERTONGJIEHUODONG_DUIHUAN_NUM];
+	unsigned need[XML_ERTONGJIEHUODONG_DUIHUAN_NUM];
+	XMLActSimpleReward reward[XML_ERTONGJIEHUODONG_REWARD_NUM];
+	XMLchildrenDaysItem() : id(0), times(0) {
+		memset(needNum,0,sizeof(needNum));
+		memset(need,0,sizeof(need));
+	}
+
+};
+
+//儿童节活动商店
+struct DataXMLchildrenDaysActivity {
+	XMLchildrenDaysItem item[XML_ERTONGJIEHUODONG_MAX_NUM];
+};
+/**********************************************/
+
+/******************oldToNew*****************/
+#define MAX_OLDTONEW_DUIHUAN_NUM 100
+struct XMLoldToNew {
+	byte id;
+	unsigned eqid1, count1, eqid2, count2;
+	XMLoldToNew(): id(0), eqid1(0), count1(0), eqid2(0), count2(0) {
+	}
+};
+struct DataXMLoldToNew {
+	XMLoldToNew item[MAX_OLDTONEW_DUIHUAN_NUM];
+};
+/**********************************************/
+
+/******************五一庆典*****************/
+#define MAX_WUYIQINGDIAN_JIFEN_REWARD_NUM 1
+#define MAX_WUYIQINGDIAN_JIFEN_ITEM_NUM 10
+#define MAX_WUYIQINGDIAN_LIMIT_ITEM_NUM 4
+#define MAX_WUYIQINGDIAN_MEIRI_ITEM_NUM 20
+#define MAX_WUYIQINGDIAN_MEIRI_DAY_NUM 5
+#define MAX_WUYIQINGDIAN_MEIRI_ITEM_NUM 20
+#define MAX_WUYIQINGDIAN_MEIRI_REWARD_NUM 5
+struct XMLWuYiQingDianJiFen {
+	unsigned id;
+	unsigned require;
+	unsigned limit;
+	XMLActSimpleReward reward[MAX_WUYIQINGDIAN_JIFEN_REWARD_NUM];
+	XMLWuYiQingDianJiFen() : id(0), require(0), limit(0) {
+	}
+};
+struct XMLWuYiQingDianLimit {
+	unsigned id;
+	unsigned require;
+	unsigned limitmax;
+	XMLWuYiQingDianLimit() : id(0), require(0), limitmax(0) {
+	}
+};
+struct XMLWuYiQingDianMeiri {
+	unsigned id;
+	unsigned require;
+	XMLActSimpleReward reward[MAX_WUYIQINGDIAN_MEIRI_REWARD_NUM];
+	XMLWuYiQingDianMeiri() : id(0), require(0) {
+	}
+};
+struct DataXMLWuYiQingDian {
+	XMLWuYiQingDianJiFen jifen[MAX_WUYIQINGDIAN_JIFEN_ITEM_NUM];
+	XMLWuYiQingDianLimit limit[MAX_WUYIQINGDIAN_LIMIT_ITEM_NUM];
+	XMLWuYiQingDianMeiri meiri[MAX_WUYIQINGDIAN_MEIRI_DAY_NUM][MAX_WUYIQINGDIAN_MEIRI_ITEM_NUM];
+};
+/**********************************************/
+
+/******************618狂欢,勇冠三军购买通用结构*****************/
+#define XML_KUANGHUAN618_REWARD_NUM 5
+#define XML_KUANGHUAN618_ITEM_NUM 10
+struct XMLkuanghuan618Item {
+	unsigned id;
+	unsigned require;
+	unsigned price;
+	XMLActSimpleReward reward[XML_KUANGHUAN618_REWARD_NUM];
+	XMLkuanghuan618Item() : id(0), require(0), price(0) {
+	}
+
+};
+struct DataXMLyongguansanjun_goumai {
+	XMLkuanghuan618Item item[XML_KUANGHUAN618_ITEM_NUM];
+};
+/**********************************************/
+/******************七天进阶*****************/
+#define MAX_QITIANJINJIE_MEIRI_ITEM_NUM 20
+#define MAX_QITIANJINJIE_MEIRI_DAY_NUM 7
+#define MAX_QITIANJINJIE_MEIRI_ZONE_NUM 5
+#define MAX_QITIANJINJIE_MEIRI_ITEM_NUM 20
+#define MAX_QITIANJINJIE_MEIRI_REWARD_NUM 5
+struct XMLQiTianJinJieMeiri {
+	unsigned id;
+	unsigned require;
+	XMLActSimpleReward reward[MAX_QITIANJINJIE_MEIRI_REWARD_NUM];
+	XMLQiTianJinJieMeiri() : id(0), require(0) {
+	}
+};
+struct XMLQiTianJinJieZone {
+	unsigned start, end;
+	XMLQiTianJinJieMeiri meiri[MAX_QITIANJINJIE_MEIRI_DAY_NUM][MAX_QITIANJINJIE_MEIRI_ITEM_NUM];
+	XMLQiTianJinJieZone() : start(0), end(0) {
+	}
+};
+struct DataXMLQiTianJinJie {
+	XMLQiTianJinJieZone zone[MAX_QITIANJINJIE_MEIRI_ZONE_NUM];
+};
+/**********************************************/
 
 class CDataXML
 {
@@ -3968,7 +4554,7 @@ public:
 	/****************************************/
 
 	/**************WorldBattleShop**********************/
-	int InitWorldBattleShop();
+	int InitWorldBattleShop();  //初始化国战商店
 	int GetWorldBattleShopItem(unsigned id, XMLWorldBattleShopItem &item, unsigned &count);
 	int GetWorldBattleKillRewards(Json::Value &data, const unsigned& index);
 	int GetWorldBattleKillRewards(Json::Value &data);
@@ -4035,9 +4621,16 @@ public:
 	int InitHeavenDaoist();
 	int GetHeavenDaoistItem(const unsigned id, XMLHeavenDaoist &item);
 	int GetHeavenDaoistLv(unsigned last, unsigned exp, unsigned &lv);
+	int GetHeavenUp(unsigned exp, XMLHeavenUp &data, int &needexp);
+	int GetMaxHeavenUpExp(unsigned & exp);
+	int GetHeavenUpLevel(unsigned exp, unsigned &level);
 
 	int InitCostHeavenDaoist();
 	int GetCostHeavenDaoist(bool is_heaven, unsigned jie_index, unsigned &cash);
+
+	int InitCostHeavenUp();
+	int GetCostHeavenUp(unsigned jie_index, unsigned &cash);
+	int GetExchangeBinghuToBinghun(unsigned index,XMLCostHeavenUPToBinghun &data);
 
 	//八阵图
 	int InitEightFormation();
@@ -4197,6 +4790,23 @@ public:
 	//vicky的开服活动
 	const ConfigVickyNewOpen& GetVickyNewOpen() const;
 //autolable4
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yongguansanjun)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_wuyiqingdian_leiji)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yvre618_2)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_yvre618_1)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_toushichejineng)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_chongbang_3)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuanshucanjuan)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_baihuahuikui_3)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_baihuahuikui_2)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_baihuahuikui_1)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_guyv_leiji)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_chengyuantisheng_2)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_chengyuantisheng_1)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_lueduotongqian_chongbang)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_anniversary_leiji)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_anniversary_meiri)
+GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_zhengbashadi_chongbang)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_hanjiajingxuan)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_fuzhuhesui)
 GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_zhuniandaji)
@@ -4487,7 +5097,7 @@ GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_nnom)
 
 	/**************birdbridge***************************/
 	int InitBirdBridge();
-	int GetBirdBridgeItem(unsigned type, unsigned id, XMLBirdBridgeItem &item);
+	int GetBirdBridgeItem(unsigned type, unsigned id, unsigned day, XMLBirdBridgeItem &item);
 
 	/**************UnionTech***************************/
 	int InitUnionTech();
@@ -4510,6 +5120,75 @@ GET_CHARGE_DRAW_ACT_CONFIG(CONFIG_vicky_nnom)
 	/**************NianShouBoss***************************/
 	int InitNianShouBoss();
 	int GetNianShouBossReward(unsigned id, XMLNianShouBossItem &data);
+
+	/**************XianShiMuBiao***************************/
+	int InitXianShiMuBiao();
+	int GetXianShiMuBiaoReward(DataXMLXianShiMuBiao &data);
+
+	/**************ZhouNianQing***************************/
+	int InitZhouNianQing();
+	int GetZhouNianQingReward(DataXMLZhouNianQing &data);
+
+	/**************chariot***************************/
+	int InitChariot();
+	int GetChariotReward(DataXMLChariot &data);
+
+	/**************touzidafanli***************************/
+	int InitTouZiDaFanLi();
+	int GetTouZiDaFanLiReward(DataXMLTouZiDaFanLi &data);
+
+	/**************ZhouNianQing***************************/
+	int InitQingMing();
+	int GetQingMingReward(DataXMLQingMing &data);
+
+	/**************GuYu***************************/
+	int InitGuYu(bool reset = false);
+	int GetGuYuReward(DataXMLGuYu &data);
+	/**********************************************/
+	/**************GuYu618JinJie***************************/
+	int InitGuYuJinJie();
+	int GetGuYuJinJieReward(DataXMLGuYuJinJie &data);
+	/**********************************************/
+	/***************BingHunTurnDish***************/
+	int InitBinghunTurnDish();
+	int GetBinghunTurnDish(DataXMLBinghunTurnDish &data);
+	/*********************************************/
+	/***************XingshiPoints*****************/
+	int InitXingshiPoints();
+	int GetXingshiPointsReward(DataXMLXingshiPoints &data);
+	/*********************************************/
+	/***************GiveHelpExtra*****************/
+	int InitGiveHelpItem();
+	int GetGiveHelpItemReward(DataXMLGiveHelpItem &data);
+	/*********************************************/
+	/**************KuaFuFengHuo***************************/
+	int InitKuaFuFengHuo(bool reset = false);
+	int GetKuaFuFengHuoReward(DataXMLKuaFuFengHuo &data);
+	int GetKuaFuFengHuoTimeSegment(unsigned ts);
+	/**********************************************/
+	/**************childrenDaysActivity**************/
+	int InitchildrenDaysActivity(bool reset = false);
+	int GetchildrenDaysActivityReward(DataXMLchildrenDaysActivity &data);
+	/**********************************************/
+
+	/**************oldToNew***************************/
+	int InitoldToNew(bool reset = false);
+	int GetOldToNew(DataXMLoldToNew &data);
+	/**********************************************/
+
+	/**************WuYiQingDian***************************/
+	int InitWuYiQingDian(bool reset = false);
+	int GetWuYiQingDianReward(DataXMLWuYiQingDian &data);
+	/**********************************************/
+
+	/**************yongguansanjun_goumai***************************/
+	int Inityongguansanjun_goumai(bool reset = false);
+	int Getyongguansanjun_goumaiReward(DataXMLyongguansanjun_goumai &data);
+	/**********************************************/
+	/**************七天进阶***************************/
+	int InitQiTianJinJie();
+	int GetQiTianJinJieReward(DataXMLQiTianJinJie &data);
+	/**********************************************/
 
 	/*解析XML函数指针*/
 	typedef int (CDataXML::* ParseComplete)(void * , CMarkupSTL & xmlConf);
@@ -4745,9 +5424,14 @@ protected:
 
 	CShareMemory m_shHeavenDaoist;
 	map<unsigned, unsigned> m_mapXMLHeavenDaoist;
+	map<unsigned,XMLHeavenUp>  m_XMLHeavenUp;
 
 	CShareMemory m_shCostHeavenDaoist;
 	map<unsigned, unsigned> m_mapCostHeavenDaoist;
+
+	CShareMemory m_shCostHeavenUp;
+	map<unsigned,unsigned> m_mapCostHeavenUp;  //钻石替换木材
+	map<unsigned,XMLCostHeavenUPToBinghun> m_mapCostBShuToBHun;  //兵书替换兵魂
 
 	CShareMemory m_shEightFormation;
 	map<unsigned, unsigned> m_mapXMLEightFormation[EIGHT_FORMATION_R_NUM];
@@ -4962,6 +5646,51 @@ protected:
 
 	//年兽BOSS
 	CShareMemory m_shNianShouBoss;
+
+	//冲榜限时目标
+	CShareMemory m_shXianShiMuBiao;
+
+	//周年庆
+	CShareMemory m_shZhouNianQing;
+
+	//乘员
+	CShareMemory m_shChariot;
+
+	//投资大返利
+	CShareMemory m_shTouZiDaFanLi;	//乘员
+
+	//
+	CShareMemory m_shQingMing;
+
+	//
+	CShareMemory m_shGuYu;
+
+	CShareMemory m_shGuYuJinJie;
+
+	CShareMemory m_shBinghunTurnDish;
+
+	CShareMemory m_shXingshiPoints;
+
+	CShareMemory m_shGiveHelpItem;
+
+	//
+	CShareMemory m_shKuaFuFengHuo;
+
+	//
+	CShareMemory m_shchildrenDaysActivity;
+
+	//
+	CShareMemory m_sholdToNew;
+
+	//
+	CShareMemory m_shWuYiQingDian;
+
+	//
+	CShareMemory m_shyongguansanjun_goumai;
+
+	//
+	CShareMemory m_shQiTianJinJie;
+
 private:
 	int genUsePool(unsigned opool, set<unsigned> &quforbid, unsigned &upool);
 	int addforbidPool(unsigned forbid, set<unsigned> &quforbid);
@@ -4971,7 +5700,7 @@ private:
 	int GetLimitBuyOfZoneSection(const unsigned  & index_platform, unsigned sid, unsigned & section, const unsigned & total_zone_section);
 
 	//解析XML的统一接口
-	int ParseXMLInterface(void * pdata, int length, char * filename, CShareMemory& shmomory, ParseComplete pfun);
+	int ParseXMLInterface(void * pdata, int length, const char * filename, CShareMemory& shmomory, ParseComplete pfun);
 
 	//解析百宝箱
 	int ParseXMLTreasure(void * data, CMarkupSTL & xmlConf);
@@ -5004,6 +5733,25 @@ private:
 	//保护女神
 	int ParseXMLProtectGoddess(void *data, CMarkupSTL & xmlConf);
 	//@end
+
+private:
+	void IntoXmlNode(CMarkupSTL& xmlConf, const char* node)
+	{
+		if (node == NULL)
+		{
+			throw std::runtime_error("node_isnull_error");
+		}
+
+		if (! xmlConf.FindElem(node))
+		{
+			error_log("node_error: %s", node);
+			throw std::runtime_error("node_error");
+		}
+
+		xmlConf.IntoElem();
+	}
+	int _get_xml(CMarkupSTL &xmlConf, const string &file_name);
+	int _parse_activity_simple_reward(const Json::Value &reward, XMLActSimpleReward *data, int len);
 };
 
 #endif /* DATAXML_H_ */

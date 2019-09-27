@@ -1,0 +1,10 @@
+package WanBaGift;
+
+message User {
+	required string openid = 1;
+	repeated uint32 gift = 2;
+}
+message Daily {
+	required uint32 ts = 1;
+	repeated User ids = 2;
+}

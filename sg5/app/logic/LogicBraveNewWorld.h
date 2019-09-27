@@ -18,6 +18,7 @@ public:
 	CLogicBraveNewWorld(){}
 	~CLogicBraveNewWorld(){}
 
+	void CheckVersion();
 	int GetSelf(unsigned uid, unsigned aid, unsigned lv, Json::Value &result);
 	int GetMissionInfo(unsigned uid, Json::Value &result);
 	int GetPoints(vector<BraveNewWorldPoint>& p, Json::Value &result);
@@ -31,7 +32,7 @@ public:
 	int EndAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, vector<unsigned>& hp, Json::Value &result);
 	int FastAttack(unsigned uid, unsigned seq, BraveNewWorldPoint& p, bool cash, bool cash1, Json::Value &result);
 	int Move(unsigned uid, unsigned seq, BraveNewWorldPoint& p, unsigned ud, bool super, Json::Value &result);
-	int Build(unsigned uid, unsigned seq, bool cash, BraveNewWorldPoint& p, Json::Value &result);
+	int Build(unsigned uid, unsigned seq, unsigned cash, BraveNewWorldPoint& p, Json::Value &result);
 	int Defend(unsigned uid, unsigned seq, bool cash, BraveNewWorldPoint& p, unsigned hero, Json::Value &result);
 	int RecoverPoint(unsigned uid, unsigned seq, BraveNewWorldPoint& p, bool cash, Json::Value &result);
 	int RevcoverUser(unsigned uid, unsigned seq, bool cash, Json::Value &result);
@@ -47,6 +48,12 @@ public:
 	int newWorldAwards(unsigned uid, unsigned index,  unsigned id, unsigned seq, Json::Value &result);
 	int GetTarget(unsigned uid, unsigned userid, Json::Value &result);
 	int getNewWorldBoss(Json::Value &result);
+	int GetChongBangRank(unsigned uid, Json::Value & result);
+    int MoBaiChongBangWangZhe(unsigned uid, unsigned chongbangid, unsigned uid2, unsigned seq, Json::Value & result);
+    int GetKuaFuFengHuoRank(unsigned uid, Json::Value & result);
+    static int GetRankName(unsigned uid, string &n);
+private:
+    static map<unsigned, string> m_rank_name;
 };
 
 

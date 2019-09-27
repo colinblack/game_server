@@ -1677,7 +1677,7 @@ int BuildingSkinUint::Buy(UserWrap& user, const BuildingSkinBuyParams& params, J
 
 int BuildingSkinUint::Use(UserWrap& user, const BuildingSkinUseParams& params, Json::Value& result)
 {
-	if (params.Id() == 0 || IsValid(params.Id()))
+	if (params.Id() == 0 || params.Id() == 6 || IsValid(params.Id()))
 	{
 		m_jsonSkin["c"] = params.Id();
 	}
@@ -2272,8 +2272,11 @@ int WinterHolidayRevelayUnit::DrawReward(UserWrap& user, const WHRevelayDrawRewa
 	enum {
 		USER_POINT_ONCE = 50,
 	};
+	const unsigned MaxPoint = 50000;
 	int nUsedPoint = m_jsonData["a"].asInt();
 	int nTotalPoint = TotalRecharge(user);
+	if(nTotalPoint > MaxPoint)   //最多可获得50000积分
+		nTotalPoint = MaxPoint;
 	int nUse = USER_POINT_ONCE * params.Cnt();
 	if ((nTotalPoint - nUsedPoint) < nUse)
 	{
@@ -6892,7 +6895,7 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 
 	if (isLook)
 	{
-		error_log("[EndSkillTrain] skill is locked. uid=%u, skid=%d", m_nUid, skid);
+		error_log("[EndSkillTrain] skill is locked. uid=%u, skid=%s", m_nUid, skid.c_str());
 		throw std::runtime_error("skill_is_locked");
 	}
 
@@ -6922,6 +6925,115 @@ void SkillUnit::EndSkillTrain(UserWrap& userWrap,  unsigned sindex, unsigned typ
 
 	result["skillQ"] = skillq;
 }
+
+void SkillUnit::AddSqkillQueue(UserWrap& userWrap,  unsigned sindex,  unsigned rentime,unsigned paytype,unsigned amount, Json::Value &result)
+{
+	//判断支付方式
+	if (END_TRAIN_BY_CASH != paytype && END_TRAIN_BY_COIN != paytype)
+	{
+		error_log("[AddSqkillQueue] paytype's value error");
+		throw std::runtime_error("param_error");
+	}
+	info_log("[AddSqkillQueue] add sqkill queue!");
+	Json::Value skillq;
+	userWrap.GetUserSkillQ(skillq);
+
+	if(sindex < 2 || sindex >=5 ){
+		error_log("[AddSqkillQueue] sindex value error");
+		throw std::runtime_error("sqkill sindex error!");
+	}
+
+	char qkey[4] = {0};
+	sprintf(qkey, "i%u", sindex);
+
+	//判断此队列位置不为永久使用。
+	if (skillq.isMember(qkey)){
+			if(skillq[qkey]["o"].asInt() == 1){
+				error_log("[AddSqkillQueue] skillQ  have key:[%s]. uid=%u", qkey, m_nUid);
+				throw std::runtime_error("param_error");
+			}
+	}
+
+	int now = Time::GetGlobalTime();
+	int diff_time = now - skillq["upts"].asInt();
+
+	if (diff_time < 0 )   //处理修改服务器时间可能导致的问题
+	{
+		error_log("[AddSqkillQueue] time error. now is less than upts.uid=%u,now=%d,upts=%d", m_nUid, now, skillq["upts"].asInt());
+		throw std::runtime_error("upts_time_error");
+	}
+
+	//扣钱
+	unsigned cash = 0;
+	unsigned coin = 0;
+	if(paytype == END_TRAIN_BY_CASH){
+		cash = amount;
+	}else if(paytype == END_TRAIN_BY_COIN){
+		coin = amount;
+	}else{
+		error_log("[AddSqkillQueue] paytype error! paytype = %u",paytype);
+		throw std::runtime_error("paytype error!");
+	}
+
+	if(amount > 0){
+		userWrap.CostAsset(cash, coin, "ADD_SKILL_QUEUE", result);
+	}
+
+	//增加队列
+	Json::Value tmpsk(Json::objectValue);
+	if(rentime == 1){
+		tmpsk["o"] = 1;
+		tmpsk["r"] = 0;
+	}else{
+		tmpsk["o"] = 0;
+		tmpsk["r"] = rentime;
+	}
+	skillq[qkey] = tmpsk;
+	skillq["upts"] = Time::GetGlobalTime();
+	userWrap.SetUserSkillQ(skillq);
+	result["skillQ"] = skillq;
+}
+
+void SkillUnit::EndSqkillQueue(UserWrap& userWrap,  unsigned sindex, Json::Value &result)
+{
+	info_log("[EndSqkillQueue] end sqkill queue!");
+	Json::Value skillq;
+	userWrap.GetUserSkillQ(skillq);
+
+	if(sindex < 2 || sindex >=5 ){
+		error_log("[EndSqkillQueue] sindex value error");
+		throw std::runtime_error("sqkill sindex error!");
+	}
+	char qkey[4] = {0};
+	sprintf(qkey, "i%u", sindex);
+
+	//判断位置存在
+	if (!skillq.isMember(qkey)){
+			error_log("[EndSqkillQueue] skillQ  don't have key:[%s]. uid=%u", qkey, m_nUid);
+			throw std::runtime_error("param_error");
+	}
+
+	//判断位置不为永久存在
+	if(skillq[qkey]["o"].asInt() == 1){
+		error_log("[EndSqkillQueue] skillQ  queue is perpetual use  key:[%s]. uid=%u", qkey, m_nUid);
+		throw std::runtime_error("param_error");
+	}
+
+	int now = Time::GetGlobalTime();
+	int diff_time = now - skillq["upts"].asInt();
+
+	if (diff_time < 0 )   //处理修改服务器时间可能导致的问题
+	{
+		error_log("[EndSqkillQueue] time error. now is less than upts.uid=%u,now=%d,upts=%d", m_nUid, now, skillq["upts"].asInt());
+		throw std::runtime_error("upts_time_error");
+	}
+
+	skillq.removeMember(qkey);
+	skillq["upts"] = Time::GetGlobalTime();
+	userWrap.SetUserSkillQ(skillq);
+	result["skillQ"] = skillq;
+}
+
 
 void SkillUnit::UpgradeHevenDaoSkill(UserWrap& userWrap, unsigned index, unsigned type, unsigned equd, Json::Value &result)
 {
@@ -9459,20 +9571,33 @@ int ActivityInvestment::AutoRate() {
 	return 0;
 }
 ActivityBirdBridge::ActivityBirdBridge(const UserWrap& user)
-	: SecincActivityUnit(user.Id(), CONFIG_BIRDBRIDGE, NAT_ACTIVITY_BIRDBRIDGE) {
+	: SecincActivityUnit(user.Id(), CONFIG_BIRDBRIDGE, NAT_ACTIVITY_BIRDBRIDGE, true) {
 	Init();
 	_left_code.clear();
 	_right_code.clear();
 	_center_code.clear();
 }
 void ActivityBirdBridge::Reset() {
-	m_jsonData["r"] = Json::Value(Json::arrayValue);
-	m_jsonData["l"] = Json::Value(Json::arrayValue);
-	for (int i = 0; i < XML_BIRD_BRIDGE_ITEM_NUM; ++i) {
-		m_jsonData["r"][i] = 0;
-		m_jsonData["l"][i] = 0;
+	if (IsNewVersion(m_jsonData["v"].asInt())) {
+		m_jsonData["id"] = nat_id_;
+		m_jsonData["v"] = status_cfg_.Version();
+		m_jsonData["r"] = Json::Value(Json::arrayValue);
+		m_jsonData["l"] = Json::Value(Json::arrayValue);
+		m_jsonData["d"] = Json::Value(Json::arrayValue);
+		for (unsigned i = 0; i < XML_BIRD_BRIDGE_ITEM_NUM; ++i) {
+			m_jsonData["r"][i] = 0;
+			m_jsonData["l"][i] = 0;
+		}
+		for (unsigned i = 0; i < XML_BIRD_BRIDGE_DAILY_ITEM_NUM; ++i) {
+			m_jsonData["d"][i] = 0;
+		}
+		m_jsonData["c"] = 0;
 	}
-	m_jsonData["c"] = 0;
+
+	m_jsonData["d"] = Json::Value(Json::arrayValue);
+	for (unsigned i = 0; i < XML_BIRD_BRIDGE_DAILY_ITEM_NUM; ++i) {
+		m_jsonData["d"][i] = 0;
+	}
 }
 int ActivityBirdBridge::DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result) {
 	unsigned type = params.ValueAsUInt("type");
@@ -9480,10 +9605,11 @@ int ActivityBirdBridge::DrawImpl(UserWrap& user, const BaseCmdParams& params, Js
 	unsigned all = params.ValueAsUInt("yijian");
 
 	int ret = 0;
-	if (all == 0 && type > ACT_BIRD_BRIDGE_REWARD_CENTER) {
+	if (all == 0 && type > ACT_BIRD_BRIDGE_REWARD_DAILY) {
 		LOGIC_ERROR_RETURN_MSG("type_error");
 	}
 	unsigned totalCharge = user.GetRechargePoint(status_cfg_);
+	unsigned dailyCharge = user.GetSingleDayRecharge(Time::GetGlobalTime());
 	Json::Value equipLeft;
 	Json::Value equipRigth;
 	unsigned equipLeftCount = 0;
@@ -9522,6 +9648,9 @@ int ActivityBirdBridge::DrawImpl(UserWrap& user, const BaseCmdParams& params, Js
 		case ACT_BIRD_BRIDGE_REWARD_CENTER:
 			ret = RewardCenter(totalCharge + equipLeftCount, totalCharge + equipRigthCount, reward);
 			break;
+		case ACT_BIRD_BRIDGE_REWARD_DAILY:
+			ret = RewardDaily(dailyCharge, reward);
+			break;
 		}
 		if (ret != 0) {
 			error_log("uid=%u,type=%u,id=%u", user.Id(), type, id);
@@ -9531,7 +9660,7 @@ int ActivityBirdBridge::DrawImpl(UserWrap& user, const BaseCmdParams& params, Js
 
 	result["newAct"] = m_jsonData;
 
-	string code = "birdbridge*" + _left_code + "*" + _right_code + "*" + _center_code;
+	string code = "birdbridge*" + _left_code + "*" + _right_code + "*" + _center_code + "*" + _daily_code;
 	if (reward.empty()) {
 		error_log("reward empty uid=%u, code=%s", user.Id(), code.c_str());
 		return 0;
@@ -9556,7 +9685,7 @@ int ActivityBirdBridge::RewardCenter(unsigned pointLeft, unsigned pointRight, ve
 		throw std::runtime_error("xml_error");
 	}
 	XMLBirdBridgeItem cfg;
-	ret = pdata->GetBirdBridgeItem(ACT_BIRD_BRIDGE_REWARD_CENTER, 0, cfg);
+	ret = pdata->GetBirdBridgeItem(ACT_BIRD_BRIDGE_REWARD_CENTER, 0, 0, cfg);
 	if (0 != ret) {
 		error_log("GetBirdBridgeItem error uid=%u", m_nUid);
 		return 0;
@@ -9600,7 +9729,7 @@ int ActivityBirdBridge::RewardEdge(Json::Value &act, unsigned type, unsigned id,
 	}
 	for (vector<unsigned>::iterator itr = ids.begin(); itr != ids.end(); ++itr) {
 		XMLBirdBridgeItem cfg;
-		ret = pdata->GetBirdBridgeItem(type, *itr + 1, cfg);
+		ret = pdata->GetBirdBridgeItem(type, *itr + 1, 0, cfg);
 		if (0 != ret) {
 			error_log("GetBirdBridgeItem error uid=%u type=%u id=%u ret=%d", m_nUid, type, *itr, ret);
 			continue;
@@ -9622,6 +9751,45 @@ int ActivityBirdBridge::RewardEdge(Json::Value &act, unsigned type, unsigned id,
 	return 0;
 }
 
+int ActivityBirdBridge::RewardDaily(unsigned point, vector<GiftEquipItem> &reward) {
+	int ret = 0;
+	int rewardFlag = 0;
+	CDataXML *pdata = CDataXML::GetCDataXML();
+	if (pdata == NULL) {
+		throw std::runtime_error("xml_error");
+	}
+	int day = CTime::GetDayInterval(status_cfg_.StartTS(), Time::GetGlobalTime());
+	if (day < 0) {
+		error_log("act open day error uid=%u day=%d", m_nUid, day);
+		throw std::runtime_error("open day error");
+	}
+	_daily_code = "daily_" + CTrans::ITOS(day) + "_";
+	for (unsigned id = 0; id < XML_BIRD_BRIDGE_DAILY_ITEM_NUM; ++id) {
+		if (!Json::GetInt(m_jsonData["d"], id, rewardFlag)) {
+			continue;
+		}
+		if (rewardFlag != 0) {
+			continue;
+		}
+		XMLBirdBridgeItem cfg;
+		ret = pdata->GetBirdBridgeItem(ACT_BIRD_BRIDGE_REWARD_DAILY, id + 1, day, cfg);
+		if (0 != ret) {
+			error_log("GetBirdBridgeItem error uid=%u id=%u day=%d", m_nUid, id, day);
+			continue;
+		}
+		if (cfg.require > point) {
+			error_log("require error uid=%u require=%u point=%u id=%u day=%u", m_nUid, cfg.require, point, id, day);
+			continue;
+		}
+		for (int j = 0; j < XML_BIRD_BRIDGE_REWARD_NUM; ++j) {
+			reward.push_back(cfg.reward[j]);
+		}
+		m_jsonData["d"][id] = 1;
+		_daily_code += CTrans::ITOS(id) + "_";
+	}
+	return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 FreeExchangeUnit::FreeExchangeUnit(const UserWrap& user)
 	: SecincActivityUnit(
@@ -9635,20 +9803,20 @@ void FreeExchangeUnit::Reset()
 {
 	m_jsonData["u"] = 0;
 	m_jsonData["c"].resize(0);
-	for(int i=0;i<4;i++)
+	for(int i=0;i<5;i++)
 		m_jsonData["c"].append(0);
 }
 int FreeExchangeUnit::DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result)
 {
-	unsigned const cost[] = {500, 30000, 60000, 100000};
-	unsigned const times[] = {40, 1, 1, 1};
+	unsigned const cost[] = {500, 30000, 60000, 100000, 150000};
+	unsigned const times[] = {40, 1, 1, 1, 2};
 
 	unsigned index = params.ValueAsInt("index");
 	vector<unsigned> select_v;
 	params.ValueAsArray("select", select_v);
 	unsigned count = params.ValueAsInt("count");
 
-	if(index >= 4)
+	if(index >= 5)
 		throw std::runtime_error("free_exchg_index");
 	if(count == 0)
 		throw std::runtime_error("free_exchg_count");
@@ -9692,3 +9860,52 @@ int FreeExchangeUnit::DrawImpl(UserWrap& user, const BaseCmdParams& params, Json
 	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
+
+NewWorldHeroPointUint::NewWorldHeroPointUint(const UserWrap& user): BaseCmdUnit(user.Id()) {
+}
+
+int NewWorldHeroPointUint::DrawImpl(UserWrap& user, const BaseCmdParams& params, Json::Value& result) {
+	int ret = 0;
+	int id = params.ValueAsInt("id", 0);
+	int ud = params.ValueAsInt("ud", 0);
+	CLogicSecinc logicSecinc;
+	ret = logicSecinc.GetSecinc(m_nUid, NAT_NEW_WORLD_HERO_NUM, m_jsonData);
+	if (0 != ret && R_ERR_NO_DATA != ret) {
+		return ret;
+	}
+	m_jsonData["id"] = NAT_NEW_WORLD_HERO_NUM;
+	static unsigned int cost[] = {100, 200};
+	unsigned max_num = sizeof(cost) / sizeof(unsigned);
+	unsigned open_num = 0;
+	Json::GetUInt(m_jsonData, "num", open_num);
+	if (open_num >= max_num) {
+		error_log("open num error uid=%u curr=%u max=%u", m_nUid, open_num, max_num);
+		return R_ERROR;
+	}
+	string code;
+	String::Format(code, "new_world_hero_num_%u", open_num + 1);
+	CLogicEquipment logicEquipment;
+	ret = logicEquipment.UseEquipment(m_nUid, 4116u, ud, cost[open_num], code);
+	if (0 != ret) {
+		error_log("cost equip error uid=%u ud=%u num=%u", m_nUid, ud, cost[open_num]);
+		return ret;
+	}
+	m_jsonData["num"] = open_num + 1;
+	ret = logicSecinc.SetOneSecinc(m_nUid, m_jsonData);
+	if (0 != ret) {
+		return ret;
+	}
+	result["newAct"] = m_jsonData;
+	return 0;
+}
+unsigned NewWorldHeroPointUint::GetOpenNum() {
+	int ret = 0;
+	CLogicSecinc logicSecinc;
+	ret = logicSecinc.GetSecinc(m_nUid, NAT_NEW_WORLD_HERO_NUM, m_jsonData);
+	if (0 != ret && R_ERR_NO_DATA != ret) {
+		return 0;
+	}
+	unsigned open_num = 0;
+	Json::GetUInt(m_jsonData, "num", open_num);
+	return open_num;
+}

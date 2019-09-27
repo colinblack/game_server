@@ -136,6 +136,44 @@ int CDataPayHistory::GetPayHistory(unsigned uid, vector<DataPayHistory> &datas)
 	return 0;
 }
 
+int CDataPayHistory::GetPayHistory(unsigned uid, unsigned startTs, unsigned endTs, vector<DataPayHistory> &datas)
+{
+	DBCREQ_DECLARE(DBC::GetRequest, uid);
+	DBCREQ_SET_KEY(uid);
+	DBCREQ_SET_CONDITION(GE, time, startTs);
+	DBCREQ_SET_CONDITION(LE, time, endTs);
+
+	DBCREQ_NEED_BEGIN();
+	DBCREQ_NEED(uid);
+	DBCREQ_NEED(pay_id);
+	DBCREQ_NEED(type);
+	DBCREQ_NEED(channel);
+	DBCREQ_NEED(channel_pay_id);
+	DBCREQ_NEED(credit);
+	DBCREQ_NEED(count);
+	DBCREQ_NEED(status);
+	DBCREQ_NEED(time);
+	DBCREQ_NEED(open_id);
+
+	DBCREQ_EXEC;
+
+	DBCREQ_ARRAY_GET_BEGIN(datas);
+	DBCREQ_ARRAY_GET_INT(datas, uid);
+	DBCREQ_ARRAY_GET_INT(datas, pay_id);
+	DBCREQ_ARRAY_GET_INT(datas, type);
+	DBCREQ_ARRAY_GET_INT(datas, channel);
+	DBCREQ_ARRAY_GET_STR(datas, channel_pay_id);
+	DBCREQ_ARRAY_GET_INT(datas, credit);
+	DBCREQ_ARRAY_GET_INT(datas, count);
+	DBCREQ_ARRAY_GET_INT(datas, status);
+	DBCREQ_ARRAY_GET_INT(datas, time);
+	DBCREQ_ARRAY_GET_INT(datas, open_id);
+	DBCREQ_ARRAY_GET_END();
+
+	return 0;
+}
+
+
 int CDataPayHistory::SetPayHistoryStatus(unsigned uid, unsigned long long pay_id, char status)
 {
 	DBCREQ_DECLARE(DBC::UpdateRequest, uid);

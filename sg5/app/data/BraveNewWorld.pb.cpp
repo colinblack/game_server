@@ -148,7 +148,7 @@ void protobuf_AssignDesc_BraveNewWorld_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BraveNewWorldAlliance));
   BraveNewWorldUser_descriptor_ = file->message_type(5);
-  static const int BraveNewWorldUser_offsets_[17] = {
+  static const int BraveNewWorldUser_offsets_[24] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, uid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, seq_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, aid_),
@@ -166,6 +166,13 @@ void protobuf_AssignDesc_BraveNewWorld_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, fav_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, rl_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, mission_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, cb_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, version_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, bcb_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, jf_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, ld_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, bld_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldUser, mfn_),
   };
   BraveNewWorldUser_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -224,11 +231,13 @@ void protobuf_AssignDesc_BraveNewWorld_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BraveNewWorldZone));
   BraveNewWorld_descriptor_ = file->message_type(8);
-  static const int BraveNewWorld_offsets_[4] = {
+  static const int BraveNewWorld_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorld, land_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorld, user_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorld, zone_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorld, alliance_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorld, has_chongbang_rewarded_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorld, has_season_rewarded_),
   };
   BraveNewWorld_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -314,7 +323,7 @@ void protobuf_AddDesc_BraveNewWorld_2eproto() {
     "rldAllianceMission\022\n\n\002id\030\001 \002(\r\022\t\n\001m\030\002 \002("
     "\010\"b\n\025BraveNewWorldAlliance\022\013\n\003aid\030\001 \002(\r\022"
     "<\n\007mission\030\002 \003(\0132+.BraveNewWorld.BraveNe"
-    "wWorldAllianceMission\"\341\002\n\021BraveNewWorldU"
+    "wWorldAllianceMission\"\275\003\n\021BraveNewWorldU"
     "ser\022\013\n\003uid\030\001 \002(\r\022\013\n\003seq\030\002 \002(\r\022\013\n\003aid\030\003 \002"
     "(\r\022\n\n\002lv\030\004 \002(\r\022\t\n\001x\030\005 \002(\r\022\t\n\001y\030\006 \002(\r\022\013\n\003"
     "rts\030\007 \002(\r\022\013\n\003hts\030\010 \002(\r\022\013\n\003pts\030\t \002(\r\022\013\n\003b"
@@ -323,19 +332,23 @@ void protobuf_AddDesc_BraveNewWorld_2eproto() {
     "NewWorldHistory\0222\n\003fav\030\017 \003(\0132%.BraveNewW"
     "orld.BraveNewWorldFavourate\022\n\n\002rl\030\020 \001(\r\022"
     "8\n\007mission\030\021 \001(\0132\'.BraveNewWorld.BraveNe"
-    "wWorldUserMission\"\315\001\n\022BraveNewWorldPoint"
-    "\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\013\n\003uid\030\003 \002(\r\022\013\n\003d"
-    "ef\030\004 \002(\010\022\014\n\004hero\030\005 \002(\r\022\n\n\002hp\030\006 \002(\r\022\013\n\003fi"
-    "d\030\007 \002(\r\022\013\n\003fts\030\010 \002(\r\022\013\n\003rts\030\t \002(\r\022\n\n\002rc\030"
-    "\n \001(\r\022\r\n\005mtype\030\013 \001(\r\022\016\n\006mcount\030\014 \001(\r\022\r\n\005"
-    "defts\030\r \001(\r\022\014\n\004sdef\030\016 \001(\r\"8\n\021BraveNewWor"
-    "ldZone\022\n\n\002id\030\001 \002(\r\022\013\n\003aid\030\002 \002(\r\022\n\n\002ts\030\003 "
-    "\002(\r\"\330\001\n\rBraveNewWorld\022/\n\004land\030\001 \003(\0132!.Br"
-    "aveNewWorld.BraveNewWorldPoint\022.\n\004user\030\002"
-    " \003(\0132 .BraveNewWorld.BraveNewWorldUser\022."
-    "\n\004zone\030\003 \003(\0132 .BraveNewWorld.BraveNewWor"
-    "ldZone\0226\n\010alliance\030\004 \003(\0132$.BraveNewWorld"
-    ".BraveNewWorldAlliance", 1302);
+    "wWorldUserMission\022\n\n\002cb\030\022 \001(\003\022\017\n\007version"
+    "\030\023 \001(\005\022\013\n\003bcb\030\024 \001(\003\022\n\n\002jf\030\025 \001(\003\022\n\n\002ld\030\026 "
+    "\001(\003\022\013\n\003bld\030\027 \001(\003\022\013\n\003mfn\030\030 \001(\r\"\315\001\n\022BraveN"
+    "ewWorldPoint\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\013\n\003ui"
+    "d\030\003 \002(\r\022\013\n\003def\030\004 \002(\010\022\014\n\004hero\030\005 \002(\r\022\n\n\002hp"
+    "\030\006 \002(\r\022\013\n\003fid\030\007 \002(\r\022\013\n\003fts\030\010 \002(\r\022\013\n\003rts\030"
+    "\t \002(\r\022\n\n\002rc\030\n \001(\r\022\r\n\005mtype\030\013 \001(\r\022\016\n\006mcou"
+    "nt\030\014 \001(\r\022\r\n\005defts\030\r \001(\r\022\014\n\004sdef\030\016 \001(\r\"8\n"
+    "\021BraveNewWorldZone\022\n\n\002id\030\001 \002(\r\022\013\n\003aid\030\002 "
+    "\002(\r\022\n\n\002ts\030\003 \002(\r\"\225\002\n\rBraveNewWorld\022/\n\004lan"
+    "d\030\001 \003(\0132!.BraveNewWorld.BraveNewWorldPoi"
+    "nt\022.\n\004user\030\002 \003(\0132 .BraveNewWorld.BraveNe"
+    "wWorldUser\022.\n\004zone\030\003 \003(\0132 .BraveNewWorld"
+    ".BraveNewWorldZone\0226\n\010alliance\030\004 \003(\0132$.B"
+    "raveNewWorld.BraveNewWorldAlliance\022\036\n\026ha"
+    "s_chongbang_rewarded\030\005 \001(\010\022\033\n\023has_season"
+    "_rewarded\030\006 \001(\010", 1455);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "BraveNewWorld.proto", &protobuf_RegisterTypes);
   BraveNewWorldHistory::default_instance_ = new BraveNewWorldHistory();
@@ -2136,6 +2149,13 @@ const int BraveNewWorldUser::kHisFieldNumber;
 const int BraveNewWorldUser::kFavFieldNumber;
 const int BraveNewWorldUser::kRlFieldNumber;
 const int BraveNewWorldUser::kMissionFieldNumber;
+const int BraveNewWorldUser::kCbFieldNumber;
+const int BraveNewWorldUser::kVersionFieldNumber;
+const int BraveNewWorldUser::kBcbFieldNumber;
+const int BraveNewWorldUser::kJfFieldNumber;
+const int BraveNewWorldUser::kLdFieldNumber;
+const int BraveNewWorldUser::kBldFieldNumber;
+const int BraveNewWorldUser::kMfnFieldNumber;
 #endif  // !_MSC_VER
 
 BraveNewWorldUser::BraveNewWorldUser()
@@ -2171,6 +2191,13 @@ void BraveNewWorldUser::SharedCtor() {
   tts_ = 0u;
   rl_ = 0u;
   mission_ = NULL;
+  cb_ = GOOGLE_LONGLONG(0);
+  version_ = 0;
+  bcb_ = GOOGLE_LONGLONG(0);
+  jf_ = GOOGLE_LONGLONG(0);
+  ld_ = GOOGLE_LONGLONG(0);
+  bld_ = GOOGLE_LONGLONG(0);
+  mfn_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2224,8 +2251,11 @@ void BraveNewWorldUser::Clear() {
     ZR_(pts_, tts_);
     rl_ = 0u;
   }
-  if (has_mission()) {
-    if (mission_ != NULL) mission_->::BraveNewWorld::BraveNewWorldUserMission::Clear();
+  if (_has_bits_[16 / 32] & 16711680) {
+    ZR_(version_, mfn_);
+    if (has_mission()) {
+      if (mission_ != NULL) mission_->::BraveNewWorld::BraveNewWorldUserMission::Clear();
+    }
   }
 
 #undef OFFSET_OF_FIELD_
@@ -2498,6 +2528,111 @@ bool BraveNewWorldUser::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(144)) goto parse_cb;
+        break;
+      }
+
+      // optional int64 cb = 18;
+      case 18: {
+        if (tag == 144) {
+         parse_cb:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &cb_)));
+          set_has_cb();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(152)) goto parse_version;
+        break;
+      }
+
+      // optional int32 version = 19;
+      case 19: {
+        if (tag == 152) {
+         parse_version:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &version_)));
+          set_has_version();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(160)) goto parse_bcb;
+        break;
+      }
+
+      // optional int64 bcb = 20;
+      case 20: {
+        if (tag == 160) {
+         parse_bcb:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &bcb_)));
+          set_has_bcb();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(168)) goto parse_jf;
+        break;
+      }
+
+      // optional int64 jf = 21;
+      case 21: {
+        if (tag == 168) {
+         parse_jf:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &jf_)));
+          set_has_jf();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(176)) goto parse_ld;
+        break;
+      }
+
+      // optional int64 ld = 22;
+      case 22: {
+        if (tag == 176) {
+         parse_ld:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &ld_)));
+          set_has_ld();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(184)) goto parse_bld;
+        break;
+      }
+
+      // optional int64 bld = 23;
+      case 23: {
+        if (tag == 184) {
+         parse_bld:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &bld_)));
+          set_has_bld();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(192)) goto parse_mfn;
+        break;
+      }
+
+      // optional uint32 mfn = 24;
+      case 24: {
+        if (tag == 192) {
+         parse_mfn:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &mfn_)));
+          set_has_mfn();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2616,6 +2751,41 @@ void BraveNewWorldUser::SerializeWithCachedSizes(
       17, this->mission(), output);
   }
 
+  // optional int64 cb = 18;
+  if (has_cb()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(18, this->cb(), output);
+  }
+
+  // optional int32 version = 19;
+  if (has_version()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(19, this->version(), output);
+  }
+
+  // optional int64 bcb = 20;
+  if (has_bcb()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(20, this->bcb(), output);
+  }
+
+  // optional int64 jf = 21;
+  if (has_jf()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(21, this->jf(), output);
+  }
+
+  // optional int64 ld = 22;
+  if (has_ld()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(22, this->ld(), output);
+  }
+
+  // optional int64 bld = 23;
+  if (has_bld()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(23, this->bld(), output);
+  }
+
+  // optional uint32 mfn = 24;
+  if (has_mfn()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(24, this->mfn(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2716,6 +2886,41 @@ void BraveNewWorldUser::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         17, this->mission(), target);
+  }
+
+  // optional int64 cb = 18;
+  if (has_cb()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(18, this->cb(), target);
+  }
+
+  // optional int32 version = 19;
+  if (has_version()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(19, this->version(), target);
+  }
+
+  // optional int64 bcb = 20;
+  if (has_bcb()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(20, this->bcb(), target);
+  }
+
+  // optional int64 jf = 21;
+  if (has_jf()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(21, this->jf(), target);
+  }
+
+  // optional int64 ld = 22;
+  if (has_ld()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(22, this->ld(), target);
+  }
+
+  // optional int64 bld = 23;
+  if (has_bld()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt64ToArray(23, this->bld(), target);
+  }
+
+  // optional uint32 mfn = 24;
+  if (has_mfn()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(24, this->mfn(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2832,6 +3037,55 @@ int BraveNewWorldUser::ByteSize() const {
           this->mission());
     }
 
+    // optional int64 cb = 18;
+    if (has_cb()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->cb());
+    }
+
+    // optional int32 version = 19;
+    if (has_version()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->version());
+    }
+
+    // optional int64 bcb = 20;
+    if (has_bcb()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->bcb());
+    }
+
+    // optional int64 jf = 21;
+    if (has_jf()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->jf());
+    }
+
+    // optional int64 ld = 22;
+    if (has_ld()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->ld());
+    }
+
+    // optional int64 bld = 23;
+    if (has_bld()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int64Size(
+          this->bld());
+    }
+
+    // optional uint32 mfn = 24;
+    if (has_mfn()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->mfn());
+    }
+
   }
   // repeated uint32 hp = 13;
   {
@@ -2934,6 +3188,27 @@ void BraveNewWorldUser::MergeFrom(const BraveNewWorldUser& from) {
     if (from.has_mission()) {
       mutable_mission()->::BraveNewWorld::BraveNewWorldUserMission::MergeFrom(from.mission());
     }
+    if (from.has_cb()) {
+      set_cb(from.cb());
+    }
+    if (from.has_version()) {
+      set_version(from.version());
+    }
+    if (from.has_bcb()) {
+      set_bcb(from.bcb());
+    }
+    if (from.has_jf()) {
+      set_jf(from.jf());
+    }
+    if (from.has_ld()) {
+      set_ld(from.ld());
+    }
+    if (from.has_bld()) {
+      set_bld(from.bld());
+    }
+    if (from.has_mfn()) {
+      set_mfn(from.mfn());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2980,6 +3255,13 @@ void BraveNewWorldUser::Swap(BraveNewWorldUser* other) {
     fav_.Swap(&other->fav_);
     std::swap(rl_, other->rl_);
     std::swap(mission_, other->mission_);
+    std::swap(cb_, other->cb_);
+    std::swap(version_, other->version_);
+    std::swap(bcb_, other->bcb_);
+    std::swap(jf_, other->jf_);
+    std::swap(ld_, other->ld_);
+    std::swap(bld_, other->bld_);
+    std::swap(mfn_, other->mfn_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -4053,6 +4335,8 @@ const int BraveNewWorld::kLandFieldNumber;
 const int BraveNewWorld::kUserFieldNumber;
 const int BraveNewWorld::kZoneFieldNumber;
 const int BraveNewWorld::kAllianceFieldNumber;
+const int BraveNewWorld::kHasChongbangRewardedFieldNumber;
+const int BraveNewWorld::kHasSeasonRewardedFieldNumber;
 #endif  // !_MSC_VER
 
 BraveNewWorld::BraveNewWorld()
@@ -4073,6 +4357,8 @@ BraveNewWorld::BraveNewWorld(const BraveNewWorld& from)
 
 void BraveNewWorld::SharedCtor() {
   _cached_size_ = 0;
+  has_chongbang_rewarded_ = false;
+  has_season_rewarded_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -4108,6 +4394,21 @@ BraveNewWorld* BraveNewWorld::New() const {
 }
 
 void BraveNewWorld::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<BraveNewWorld*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(has_chongbang_rewarded_, has_season_rewarded_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
   land_.Clear();
   user_.Clear();
   zone_.Clear();
@@ -4178,6 +4479,36 @@ bool BraveNewWorld::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(34)) goto parse_alliance;
+        if (input->ExpectTag(40)) goto parse_has_chongbang_rewarded;
+        break;
+      }
+
+      // optional bool has_chongbang_rewarded = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_has_chongbang_rewarded:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_chongbang_rewarded_)));
+          set_has_has_chongbang_rewarded();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_has_season_rewarded;
+        break;
+      }
+
+      // optional bool has_season_rewarded = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_has_season_rewarded:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &has_season_rewarded_)));
+          set_has_has_season_rewarded();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -4231,6 +4562,16 @@ void BraveNewWorld::SerializeWithCachedSizes(
       4, this->alliance(i), output);
   }
 
+  // optional bool has_chongbang_rewarded = 5;
+  if (has_has_chongbang_rewarded()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->has_chongbang_rewarded(), output);
+  }
+
+  // optional bool has_season_rewarded = 6;
+  if (has_has_season_rewarded()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->has_season_rewarded(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -4269,6 +4610,16 @@ void BraveNewWorld::SerializeWithCachedSizes(
         4, this->alliance(i), target);
   }
 
+  // optional bool has_chongbang_rewarded = 5;
+  if (has_has_chongbang_rewarded()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(5, this->has_chongbang_rewarded(), target);
+  }
+
+  // optional bool has_season_rewarded = 6;
+  if (has_has_season_rewarded()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(6, this->has_season_rewarded(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -4280,6 +4631,18 @@ void BraveNewWorld::SerializeWithCachedSizes(
 int BraveNewWorld::ByteSize() const {
   int total_size = 0;
 
+  if (_has_bits_[4 / 32] & (0xffu << (4 % 32))) {
+    // optional bool has_chongbang_rewarded = 5;
+    if (has_has_chongbang_rewarded()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool has_season_rewarded = 6;
+    if (has_has_season_rewarded()) {
+      total_size += 1 + 1;
+    }
+
+  }
   // repeated .BraveNewWorld.BraveNewWorldPoint land = 1;
   total_size += 1 * this->land_size();
   for (int i = 0; i < this->land_size(); i++) {
@@ -4341,6 +4704,14 @@ void BraveNewWorld::MergeFrom(const BraveNewWorld& from) {
   user_.MergeFrom(from.user_);
   zone_.MergeFrom(from.zone_);
   alliance_.MergeFrom(from.alliance_);
+  if (from._has_bits_[4 / 32] & (0xffu << (4 % 32))) {
+    if (from.has_has_chongbang_rewarded()) {
+      set_has_chongbang_rewarded(from.has_chongbang_rewarded());
+    }
+    if (from.has_has_season_rewarded()) {
+      set_has_season_rewarded(from.has_season_rewarded());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -4371,6 +4742,8 @@ void BraveNewWorld::Swap(BraveNewWorld* other) {
     user_.Swap(&other->user_);
     zone_.Swap(&other->zone_);
     alliance_.Swap(&other->alliance_);
+    std::swap(has_chongbang_rewarded_, other->has_chongbang_rewarded_);
+    std::swap(has_season_rewarded_, other->has_season_rewarded_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

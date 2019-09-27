@@ -98,6 +98,7 @@ public:
 	CGI_SET_ACTION_MAP("th_import", Th_Import)		//TH 存档 一个英雄，一件装备 user_tech
 	CGI_SET_ACTION_MAP("kickOffline", KickOffline)  //踢下线
 	CGI_SET_ACTION_MAP("chgrefreshts", ChangeRefreshTs)  //禁言
+	CGI_SET_ACTION_MAP("ChangeFangChenMi", ChangeFangChenMi)
 
 	CGI_ACTION_MAP_END
 
@@ -649,7 +650,7 @@ public:
 				return ret;
 			Json::FromString(ext_data, allianceMemberDB.extra_data);
 			Json::GetInt(ext_data, "donate", donate);
-			allianceData = allianceDB.name;
+			allianceData = allianceDB.name + "(" + Convert::UIntToString(user.alliance_id) + ")";
 			alliancePoint = allianceMemberDB.point;
 
 		}
@@ -1917,6 +1918,48 @@ public:
 			CLogicCustomServiceAdmin::Log(name, "forbidtalk", close_reason, uid, CTrans::ITOS(refresh_time));
 		}
 		CGI_SEND_LOG("action=chgrefreshts&name=%s&refreshts=%s&refresh_time=%u&forbidtalk_reason=%s", name.c_str(), refreshts.c_str(), refresh_time, close_reason.c_str());
+		return 0;
+	}
+
+	int ChangeFangChenMi()
+	{
+		string name = CCGIIn::GetCGIStr("username");
+		string skey = CCGIIn::GetCGIStr("skey");
+		string uids = CCGIIn::GetCGIStr("uids");
+		if (name.empty() || skey.empty() || uids.empty())
+		{
+			PARAM_ERROR_RETURN_MSG("param_error");
+		}
+
+		CLogicAdmin logicAdmin;
+		int ret = logicAdmin.CheckSession(name, skey);
+		if (ret != 0)
+			return ret;
+		ret = checkIP(name);if(ret)	return ret;
+
+		vector<string> uidvec;
+		String::Split(uids,',',uidvec);
+		vector<unsigned> uidlist;
+		for (vector<string>::iterator it=uidvec.begin();it!=uidvec.end();++it)
+		{
+			unsigned uid = CTrans::STOI(*it);
+			if (!IsValidUid(uid))
+			{
+				PARAM_ERROR_RETURN_MSG("uid_error");
+			}
+			uidlist.push_back(uid);
+		}
+
+		for (vector<unsigned>::iterator it2=uidlist.begin(); it2!=uidlist.end(); ++it2)
+		{
+			ret = logicAdmin.ChangeFangChenMi(*it2);
+			if (ret)
+			{
+				LOGIC_ERROR_RETURN_MSG(CTrans::UTOS(*it2)+"_error");
+			}
+		}
+
+		CGI_SEND_LOG("action=ChangeFangChenMi&name=%s&uids=%s", name.c_str(), uids.c_str());
 		return 0;
 	}
 

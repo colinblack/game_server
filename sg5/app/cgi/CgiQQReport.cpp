@@ -68,9 +68,12 @@ public:
 			const string zoneid = CCGIIn::GetCGIStr("zoneid");
 
 			CLogicQQReport logicReport;
-			int ret = logicReport.Report(report,openid,uid,fee,userip,pf,zoneid);
-			if (ret != 0)
-				return ret;
+			//logicReport.Report(report,openid,uid,fee,userip,pf,zoneid);
+
+			if (report == QQREPORT_logout) {
+				logicReport.ReportEx(QQREPORT_role_logout, openid, uid, userip, pf, zoneid);
+			}
+			logicReport.ReportEx(report, openid, uid, userip, pf, zoneid);
 		}
 
 		CGI_SEND_LOG("openid=%s&report=%u", openid.c_str(),report);

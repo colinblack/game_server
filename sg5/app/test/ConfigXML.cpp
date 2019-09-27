@@ -92,6 +92,8 @@ int main(int argc, char *argv[])
 		ret = dataXML->InitHeavenDaoist();
 	else if (action == "costHeavenDaoist")
 		ret = dataXML->InitCostHeavenDaoist();
+	else if (action == "costHeavenUp")
+		ret = dataXML->InitCostHeavenUp();
 	else if (action == "yuandanconfig")
 		ret = dataXML->InitDouble11();
 	else if ("betshop" == action)
@@ -253,6 +255,70 @@ int main(int argc, char *argv[])
 	else if ("nianshouboss" == action)
 	{
 		ret = dataXML->InitNianShouBoss();
+	}
+	else if ("xianshi_mubiao" == action)
+	{
+		ret = dataXML->InitXianShiMuBiao();
+	}
+	else if ("zhounianqing" == action)
+	{
+		ret = dataXML->InitZhouNianQing();
+	}
+	else if ("chariot" == action)
+	{
+		ret = dataXML->InitChariot();
+	}
+	else if ("touzidafanli" == action)
+	{
+		ret = dataXML->InitTouZiDaFanLi();
+	}
+	else if ("qingming" == action)
+	{
+		ret = dataXML->InitQingMing();
+	}
+	else if ("guyu" == action)
+	{
+		ret = dataXML->InitGuYu();
+	}
+	else if("guyujinjie" == action)
+	{
+		ret = dataXML->InitGuYuJinJie();
+	}
+	else if("binghuntuandish" == action)
+	{
+		ret = dataXML->InitBinghunTurnDish();
+	}
+	else if("xingshipoints" == action)
+	{ 
+		ret = dataXML->InitXingshiPoints();
+	}
+	else if("givehelpactivity" == action)
+	{
+		ret = dataXML->InitGiveHelpItem();
+	}
+	else if ("kuafufenghuo" == action)
+	{
+		ret = dataXML->InitKuaFuFengHuo();
+	}
+	else if ("childrenDaysActivity" == action)
+	{
+		ret = dataXML->InitchildrenDaysActivity();
+	}
+	else if ("oldToNew" == action)
+	{
+		ret = dataXML->InitoldToNew();
+	}
+	else if ("WuYiQingDian" == action)
+	{
+		ret = dataXML->InitWuYiQingDian();
+	}
+	else if ("yongguansanjun_goumai" == action)
+	{
+		ret = dataXML->Inityongguansanjun_goumai();
+	}
+	else if ("qitianjinjie" == action)
+	{
+		ret = dataXML->InitQiTianJinJie();
 	}
 	else
 	{

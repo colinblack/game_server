@@ -1,0 +1,39 @@
+package NewDouJiang;
+
+message NewDouJiangHistory {
+		required uint32 uid			= 1;//进攻者（被进攻者）
+		required uint32 type		= 2;//类型：被进攻（0匹配 1复仇 2追杀） 345(相应的进攻)
+		required int32 n			= 3;//赢了几个将
+		required int32 point		= 4;//积分多少
+		required uint32 ts			= 5;//
+		required bool hasfc            = 6;//这条防御记录是否已经被复仇过
+}
+
+message NewDouJiangAttackInfo {
+	required uint32 uid  =  1; //进攻uid
+	required uint32 type  =  2; //进攻类型（1匹配2追杀3复仇）
+	required uint32 ts  =  3; //进攻时间
+}
+
+message NewDouJiangUser {
+		required uint32 uid			= 1;
+		required uint32 ts			= 2;//上阵、匹配次数时间戳
+		required int32 pppoint		= 3;//玩家当日积分
+		required int32 fcpoint		= 4;//玩家当日积分
+		required int32 zspoint		= 5;//玩家当日积分
+		required uint32 numpp		= 6;//玩家当日匹配次数
+		repeated uint32 szheros      = 7;//上阵武将列表
+		repeated uint32 ppheros      = 8;//匹配过的武将列表
+		repeated uint32 fcheros      = 9;//复仇过的武将列表
+		repeated uint32 zsheros      = 10;//追杀过的武将列表
+		repeated NewDouJiangHistory his = 11;//战报
+		repeated NewDouJiangAttackInfo flist = 12; //被进攻列表
+		required uint32 seq 		= 13;//包序号
+}
+
+
+message NewDouJiang {
+		repeated NewDouJiangUser user 	= 1;		
+		required int32          ver    = 2;
+		required int32          rewarded    = 3;
+}

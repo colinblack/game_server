@@ -1,0 +1,14 @@
+package ProtoAutoTransport;
+
+message AutoTransportItem {
+	required uint32 uid = 1;
+	required uint32 ets = 2;
+	required uint32 res = 3;
+	required uint32 lost = 4;
+	required uint32 lv = 5;
+	required uint32 blv = 6;
+}
+
+message AutoTransport {
+	repeated AutoTransportItem datas = 1;
+}

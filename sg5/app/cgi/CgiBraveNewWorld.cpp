@@ -62,6 +62,10 @@ public:
 	CGI_SET_ACTION_MAP("newWorldAwards",newWorldAwards)
 	CGI_SET_ACTION_MAP("GetTarget", GetTarget)
 	CGI_SET_ACTION_MAP("getNewWorldBoss",getNewWorldBoss)
+	CGI_SET_ACTION_MAP("GetChongBangRank",GetChongBangRank)
+	CGI_SET_ACTION_MAP("GetChongBang", GetChongBang)
+	CGI_SET_ACTION_MAP("MoBaiChongBangWangZhe", MoBaiChongBangWangZhe)
+	CGI_SET_ACTION_MAP("GetKuaFuFengHuoRank",GetKuaFuFengHuoRank)
 	CGI_ACTION_MAP_END
 
 	~CCgiBraveNewWorld()
@@ -749,6 +753,70 @@ public:
 
 		CGI_SEND_LOG("action=getNewWorldBoss&uid=%u", m_uid);
 		return ret;
+	}
+
+	int GetChongBangRank()
+	{
+		int ret = 0;
+
+		CLogicBraveNewWorld logicBraveNewWorld;
+		ret = logicBraveNewWorld.GetChongBangRank(m_uid, m_jsonResult);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=GetChongBangRank&uid=%u", m_uid);
+		return ret;
+	}
+
+	int GetChongBang()
+	{
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		if (id != 2)
+			return R_ERR_PARAM;
+		CLogicChongBang logicChongBang;
+		int ret = logicChongBang.GetInfo(id, m_jsonResult["info"]);
+		if (ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=GetChongBang&uid=%u", m_uid);
+		return 0;
+	}
+
+	int MoBaiChongBangWangZhe()
+	{
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		if (id != 2)
+			return R_ERR_PARAM;
+		unsigned uid;
+		if (!Json::GetUInt(m_data, "mobaiuid", uid))
+			return R_ERR_PARAM;
+
+		CLogicChongBang logicChongBang;
+		int ret = logicChongBang.Mobai(m_uid, id, uid, m_jsonResult["info"]);
+		if (ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=MoBaiChongBangWangZhe&uid=%u", m_uid);
+		return 0;
+	}
+
+	int GetKuaFuFengHuoRank()
+	{
+		int ret = 0;
+
+		CLogicBraveNewWorld logicBraveNewWorld;
+		ret = logicBraveNewWorld.GetKuaFuFengHuoRank(m_uid, m_jsonResult);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=GetKuaFuFengHuoRank&uid=%u", m_uid);
+		return 0;
 	}
 };
 

@@ -261,6 +261,786 @@ int CLogicCMD::ChangeEquipSub(unsigned uid, unsigned equip, unsigned lvl, unsign
 
 	return R_SUCCESS;
 }
+
+int CLogicCMD::ChangeZhanCheSub(unsigned uid, unsigned eqid, unsigned zcid, unsigned stoneud, Json::Value &result,unsigned lasttime,unsigned seqid,bool isnew)
+{
+	int ret;
+	if (!isnew)
+	{
+		CLogicUser logicUser;
+		DataUser dataUser;
+		AUTO_LOCK_USER(uid)
+		ret = logicUser.GetUser(uid,dataUser);
+		if(ret)
+		{
+			error_log(" get  user info failed,uid = %u",uid);
+			return ret;
+		}
+		ret = checkLastSaveUID(dataUser);
+		if(ret)
+			return ret;
+
+		ret = checkLastSaveTime(dataUser,lasttime,seqid);
+		if(ret)
+			return ret;
+		result["lasttime"] = dataUser.last_save_time;
+		result["lastseq"] = dataUser.lastseq;
+		result["saveuserid"] = uid;
+
+		ret = logicUser.SetUser(uid, dataUser);
+		if(ret)
+			return ret;
+	}
+
+	Json::FastWriter writer;
+
+	Json::Value dataEquip,dataStone;
+	CLogicEquipment loigcEquipment;
+	ret = loigcEquipment.Get(uid, eqid,dataEquip);
+	if(ret)
+		return ret;
+	/*
+	if(!dataEquip.isMember("csub") || !Json::GetUInt(dataEquip,"ch",ch))
+		return R_ERR_DB;;
+		*/
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	DataXMLChariot config;
+	ret = dataXML->GetChariotReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+	unsigned idx;
+	for (idx=0;idx<XML_ZHANCHE_CHENGYUAN_NUM;idx++)
+		if (config.cydatas[idx].id == dataEquip["id"].asUInt())
+			break;
+	if (config.cydatas[idx].id != dataEquip["id"].asUInt())
+	{
+		DATA_ERROR_RETURN_MSG("no id");
+	}
+	unsigned ch = config.cydatas[idx].ch;
+	unsigned numzhuanchang = 0;
+	if (dataEquip["cstar"].asUInt() >= 4)
+		numzhuanchang++;
+	if (ch >= 2 && dataEquip["cstar"].asUInt() >= 8 )
+		numzhuanchang++;
+	if (ch >= 3 && dataEquip["cstar"].asUInt() >= 10 )
+		numzhuanchang++;
+
+	if (zcid > numzhuanchang)
+	{
+		LOGIC_ERROR_RETURN_MSG("zcid");
+	}
+
+	if (dataEquip["csub"].size() < zcid - 1)
+	{
+		LOGIC_ERROR_RETURN_MSG("sub_size");
+	}
+
+	if (!isnew)
+	{
+		string reason = "ChangeZhanCheSub_"+CTrans::UTOS(zcid);
+		ret = loigcEquipment.UseEquipment(uid,config.sub[zcid-1].stone,stoneud,config.sub[zcid-1].num,reason);
+		if (ret)
+			return ret;
+	}
+	unsigned tot=0;
+	for (unsigned i=0;i<XML_EQUIP_SUB_ITEM_S;i++)
+		tot += config.sub[zcid-1].subs[i].rate;
+	unsigned oo = Math::GetRandomInt(tot);
+	tot=0;
+	unsigned wh;
+	for (wh=0;wh<XML_EQUIP_SUB_ITEM_S;wh++)
+	{
+		tot += config.sub[zcid-1].subs[wh].rate;
+		if (tot > oo)
+			break;
+	}
+
+	unsigned tot2=0;
+	for (unsigned i=0;i<XML_EQUIP_SUB_ITEM;i++)
+		tot2 += config.sub[zcid-1].subs[wh].items[i].rate;
+	oo = Math::GetRandomInt(tot2);
+	tot2=0;
+	unsigned wh2;
+	for (wh2=0;wh2<XML_EQUIP_SUB_ITEM;wh2++)
+	{
+		tot2 += config.sub[zcid-1].subs[wh].items[wh2].rate;
+		if (tot2 > oo)
+			break;
+	}
+
+
+	dataEquip["csub"][zcid-1][0u] = config.sub[zcid-1].subs[wh].id;
+	dataEquip["csub"][zcid-1][1u] =  config.sub[zcid-1].subs[wh].items[wh2].value;
+	ret = loigcEquipment.Chg(uid, eqid,dataEquip);
+	if(ret)
+		return ret;
+
+	string equipstr = writer.write(dataEquip);
+	EQUIPMENT_LOG("uid=%u,id=%u,eqid=%d,act=%s,chg=%d,count=%d,code=%s,data=%s",uid,dataEquip["id"].asUInt(),eqid,"sub",0,0,"sub",equipstr.c_str());
+
+	result["equip"] = dataEquip;
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::ZhanCheShengXing(unsigned uid, unsigned eqid, unsigned ud1, unsigned ud2, Json::Value & result,unsigned lasttime,unsigned seqid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		error_log(" get  user info failed,uid = %u",uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	Json::Reader reader;
+	Json::FastWriter writer;
+
+	Json::Value newAct;
+	CLogicSecinc logicSecinc;
+
+	Json::Value dataEquip;
+	CLogicEquipment loigcEquipment;
+	ret = loigcEquipment.Get(uid, eqid,dataEquip);
+	if(ret)
+		return ret;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	DataXMLChariot config;
+	ret = dataXML->GetChariotReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+	unsigned idx;
+	for (idx=0;idx<XML_ZHANCHE_CHENGYUAN_NUM;idx++)
+		if (config.cydatas[idx].id == dataEquip["id"].asUInt())
+			break;
+	if (config.cydatas[idx].id != dataEquip["id"].asUInt())
+	{
+		DATA_ERROR_RETURN_MSG("no id");
+	}
+
+
+	unsigned cstar = dataEquip["cstar"].asUInt();
+
+	if (cstar >= 10)
+	{
+		LOGIC_ERROR_RETURN_MSG("cstar");
+	}
+
+	string reason = "ZhanCheShengXing_"+CTrans::UTOS(cstar);
+
+	ret = loigcEquipment.UseEquipment(uid,23013,ud1,config.cypropertys[cstar].needeq[config.cydatas[idx].ch-1],reason);
+	if (ret)
+		return ret;
+
+	ret = loigcEquipment.UseEquipment(uid,config.cydatas[idx].id+2000,ud2,config.cypropertys[cstar].needcount,reason);
+	if (ret)
+		return ret;
+
+	dataEquip["cstar"] = cstar + 1;
+
+	ret = loigcEquipment.Chg(uid, eqid,dataEquip);
+	if(ret)
+		return ret;
+
+	string equipstr = writer.write(dataEquip);
+	EQUIPMENT_LOG("uid=%u,id=%u,eqid=%d,act=%s,chg=%d,count=%d,code=%s,data=%s",uid,dataEquip["id"].asUInt(),eqid,"sub",0,0,"sub",equipstr.c_str());
+
+	unsigned ch = config.cydatas[idx].ch;
+	unsigned num = 0;
+	if (dataEquip["cstar"].asUInt() == 4)
+		num = 1;
+	if (ch >= 2 && dataEquip["cstar"].asUInt() == 8 )
+		num = 2;
+	if (ch >= 3 && dataEquip["cstar"].asUInt() == 10 )
+		num = 3;
+
+	if (num)
+		ChangeZhanCheSub(uid, eqid, num, 0, result,0,0,true);
+	else
+		result["equip"] = dataEquip;
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::ZhanCheShengJi(unsigned uid, unsigned eqid, unsigned ud,  Json::Value & result,unsigned lasttime,unsigned seqid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		error_log(" get  user info failed,uid = %u",uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	Json::Value dataEquip;
+
+	CLogicEquipment loigcEquipment;
+	ret = loigcEquipment.Get(uid, eqid,dataEquip);
+	if(ret)
+		return ret;
+
+	DataXMLChariot config;
+	ret = dataXML->GetChariotReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+	unsigned idx;
+	for (idx=0;idx<XML_ZHANCHE_CHENGYUAN_NUM;idx++)
+		if (config.cydatas[idx].id == dataEquip["id"].asUInt())
+			break;
+	if (config.cydatas[idx].id != dataEquip["id"].asUInt())
+	{
+		DATA_ERROR_RETURN_MSG("no id");
+	}
+
+	unsigned now_level = dataEquip["clv"].asUInt();
+	if (now_level >= 150)
+	{
+		LOGIC_ERROR_RETURN_MSG("highest_level_has_archived");
+	}
+
+#define KOUZIYUAN(rid) \
+		if (dataUser.r##rid < config.cylevels[i].floor[now_level].r1) \
+		{ \
+			LOGIC_ERROR_RETURN_MSG("resource_not_enough"); \
+		} \
+		dataUser.r##rid  -= config.cylevels[i].floor[now_level].r1; \
+		sprintf(rkey,"r%d",rid); \
+		result[rkey] = dataUser.r##rid;
+
+	string reason;
+	for (unsigned i=0;i<XML_ZHANCHE_PINZHI_NUM;i++)
+		if (config.cylevels[i].ch == config.cydatas[idx].ch)
+		{
+			char rkey[100];
+			switch (config.cylevels[i].floor[now_level].rid) {
+				case 1:
+					KOUZIYUAN(1);
+					break;
+				case 2:
+					KOUZIYUAN(2);
+					break;
+				case 3:
+					KOUZIYUAN(3);
+					break;
+				case 4:
+					KOUZIYUAN(4);
+					break;
+			}
+			reason = "ZhanCheShengJi_"+CTrans::UTOS(config.cylevels[i].ch) +"_"+CTrans::UTOS(now_level);
+			ret = loigcEquipment.UseEquipment(uid, 23012,ud,config.cylevels[i].floor[now_level].needq,reason);
+			if(ret)
+				return ret;
+		}
+
+	dataEquip["clv"] = now_level + 1;
+	ret = loigcEquipment.Chg(uid,eqid,dataEquip);
+	if(ret)
+		return ret;
+
+	result["equip"] = dataEquip;
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::ZhanCheSuiPianChouQu(unsigned uid, unsigned ku, unsigned count, unsigned ud, Json::Value & result,unsigned lasttime,unsigned seqid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		error_log(" get  user info failed,uid = %u",uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+
+	DataXMLChariot config;
+	ret = dataXML->GetChariotReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+
+	Json::Value newAct;
+	CLogicSecinc logicSecinc;
+	ret = logicSecinc.GetSecinc(uid,NAT_xianshi_chengyuansuipian_chouqu,newAct);
+	if (ret && ret!=R_ERR_NO_DATA)
+	{
+		LOGIC_ERROR_RETURN_MSG("get_secinc_error");
+	}
+
+	if (ret==R_ERR_NO_DATA)
+	{
+		newAct["id"] = NAT_xianshi_chengyuansuipian_chouqu;
+	}
+
+	if (CTime::IsDiffDay(Time::GetGlobalTime(),newAct["ts"].asUInt()))
+	{
+		newAct["ts"] = Time::GetGlobalTime();
+		newAct["a"] = 0;
+		newAct["b"] = 0;
+	}
+
+	unsigned nummianfei,numchoujiang;
+	if (ku == 0)
+	{
+		nummianfei = 5;
+		numchoujiang = newAct["a"].asUInt();
+	}
+	else if (ku == 1)
+	{
+		nummianfei = 1;
+		numchoujiang = newAct["b"].asUInt();
+	}
+	else {
+		PARAM_ERROR_RETURN_MSG("ku");
+	}
+
+
+	CLogicEquipment logicEquipment;
+	string reason = "ZhanCheSuiPianChouQu_" + CTrans::UTOS(ku);
+	vector<ItemAdd> vecEqs;
+	for (unsigned i=0;i<count;i++)
+	{
+		if (numchoujiang + i + 1> nummianfei)
+		{
+			ret = logicEquipment.UseEquipment(uid,23016,ud,config.ku[ku].need,reason);
+			if (ret)
+				return ret;
+		}
+		unsigned tot = 0;
+		for (unsigned j=0;j<XML_CHOUQU_NUM;j++)
+			tot += config.ku[ku].reward[j].weight;
+		unsigned oo = Math::GetRandomInt(tot);
+		tot = 0;
+		unsigned j;
+		for (j=0;j<XML_CHOUQU_NUM;j++)
+		{
+			tot += config.ku[ku].reward[j].weight;
+			if (tot > oo)
+				break;
+		}
+		vecEqs.push_back(ItemAdd(config.ku[ku].reward[j].eqid,config.ku[ku].reward[j].count,reason));
+	}
+
+	ret = logicEquipment.AddItems(uid,vecEqs,result["equipments"],true);
+	if (ret)
+		return ret;
+
+	numchoujiang += count;
+	if (ku == 0)
+		newAct["a"] = numchoujiang;
+	else
+		newAct["b"] = numchoujiang;
+
+	ret = logicSecinc.SetOneSecinc(uid,newAct);
+	if (ret)
+		return ret;
+
+	result["newAct"] = newAct;
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::BinghunTurnDish(unsigned uid,unsigned ud,Json::Value &result,unsigned lasttime,unsigned seqid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	
+	AUTO_LOCK_USER(uid);
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		error_log("get user info of BinghunTurnDish failed");
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+	{
+		return ret;
+	}
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+	{
+		return ret;
+	}
+
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	Json::Reader reader;
+	Json::FastWriter writer;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(dataXML == NULL)
+	{
+		error_log("GetIniXML failed");
+		return R_ERR_DB;
+	}
+	DataXMLBinghunTurnDish config;
+	ret = dataXML->GetBinghunTurnDish(config);
+	if(ret)
+	{
+		return ret;
+	}
+
+	unsigned now = Time::GetGlobalTime();
+	Json::Value newAct;
+	CLogicSecinc logicSecinc;
+
+	ret = logicSecinc.GetSecinc(uid,NAT_CONFIG_binghunturndish,newAct);
+	if(ret && ret != R_ERR_NO_DATA)
+	{
+		LOGIC_ERROR_RETURN_MSG("get_secinc_error");
+	}
+	newAct["id"] = NAT_CONFIG_binghunturndish;
+	
+	if(CTime::IsDiffDay(Time::GetGlobalTime(),newAct["ts"].asUInt()))
+	{//每日重置
+		newAct["ts"] = Time::GetGlobalTime(); 
+		newAct["tms"] = 0;  //当前转动次数
+	}
+	unsigned curTimes = newAct["tms"].asUInt();
+	unsigned count = 0;  //消耗兵书数
+	
+	if(curTimes <= 10 && curTimes >=0)
+	{
+		count = 100;
+	}
+	else if(curTimes > 10)
+	{
+		count = (unsigned)ceil(100 + (curTimes - 10) * pow(15.0,(curTimes - 10) * 0.1));
+	}
+	else
+	{
+		return R_ERR_PARAM;
+	}
+	curTimes += 1;
+	
+	CLogicEquipment logicEquipment;
+	string reason = "BinghunTurnDish" + CTrans::UTOS(count);
+	ret = logicEquipment.UseEquipment(uid,4070,ud,count,reason);
+	if(ret)
+	{
+		error_log("UseEquipment BinghunTurnDish failed");
+		return ret;
+	}
+
+	unsigned bh_count = 0;
+	unsigned idex = 0;
+	unsigned randNum = Math::GetRandomInt(100);
+	if(randNum >=0 && randNum < config.turndish.rate[0])
+	{
+		idex = 0;
+		bh_count = config.turndish.value[0];
+	}
+	for(unsigned i = 0; i < MAX_TURN_DISH_ITEM_NUM - 1 && !bh_count;++i)
+	{
+		if(randNum >= config.turndish.rate[i] && randNum < config.turndish.rate[i+1])
+		{
+			idex = i + 1;
+			bh_count = config.turndish.value[i+1];
+			break;
+		}
+	}
+
+	ret = logicEquipment.AddOneItem(uid,4093,bh_count,reason,result["equipment"],true);
+	if(ret)
+	{
+		error_log("AddItem of BinghunTurnDish failed");
+		return ret;
+	}
+	
+	newAct["tms"] = curTimes;
+	ret = logicSecinc.SetOneSecinc(uid,newAct);
+	if(ret)
+	{
+		return ret;
+	}
+	
+	result["idx"] = idex; 
+	result["vlu"] = config.turndish.value[idex];
+	result["newAct"] = newAct;
+
+	string res = writer.write(result);
+	EQUIPMENT_LOG("uid:%u, Catapult: res %s", uid, res.c_str());
+
+	ret = logicUser.SetUser(uid,dataUser);
+	if(ret)
+	{
+		return ret;
+	}
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::ChengYuanChaiJie(unsigned uid, unsigned ud, Json::Value & result,unsigned lasttime,unsigned seqid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		error_log(" get  user info failed,uid = %u",uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+	Json::Value dataEquip;
+
+	CLogicEquipment loigcEquipment;
+	ret = loigcEquipment.Get(uid, ud,dataEquip);
+	if(ret)
+		return ret;
+
+	DataXMLChariot config;
+	ret = dataXML->GetChariotReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+	unsigned idx;
+	for (idx=0;idx<XML_ZHANCHE_CHENGYUAN_NUM;idx++)
+		if (config.cydatas[idx].id == dataEquip["id"].asUInt())
+			break;
+	if (config.cydatas[idx].id != dataEquip["id"].asUInt())
+	{
+		DATA_ERROR_RETURN_MSG("no id");
+	}
+
+	unsigned now_level = dataEquip["clv"].asUInt();
+	unsigned cstar = dataEquip["cstar"].asUInt();
+	map<unsigned, unsigned> equiplist;
+
+	string reason;
+	for (unsigned i=0;i<XML_ZHANCHE_PINZHI_NUM;i++)
+		if (config.cylevels[i].ch == config.cydatas[idx].ch)
+		{
+			for (unsigned j=0;j<now_level;j++)
+				equiplist[23012]+=config.cylevels[i].floor[j].needq;
+		}
+	for (unsigned j=0;j<cstar;j++)
+	{
+		equiplist[23013]+=config.cypropertys[j].needeq[config.cydatas[idx].ch-1];
+		equiplist[config.cydatas[idx].id+2000]+=config.cypropertys[j].needcount;
+	}
+	const CompoundShredConfig::ShredItem & shreditem = CompoundConfigWrap().GetShredItemCfg(config.cydatas[idx].id+2000);
+	equiplist[config.cydatas[idx].id+2000] += shreditem.count();
+
+	string code = "ChengYuanChaiJie";
+	vector<ItemAdd> vecEqs;
+	for (map<unsigned, unsigned>::iterator it = equiplist.begin(); it!=equiplist.end(); ++it)
+	{
+		double num = 0.7 * it->second;
+		vecEqs.push_back(ItemAdd(it->first, ceil(num), code));
+	}
+
+	CLogicPay logicPay;
+	DataPay payData;
+	Json::Reader reader;
+	Json::FastWriter writer;
+	Json::Value user_flag;
+	bool bsave = false;
+	reader.parse(dataUser.user_flag,user_flag);
+	ret = logicPay.ProcessOrderForBackend(uid, -200, 0, payData, code,user_flag,bsave);
+	if(ret)
+		return ret;
+	result["pointpay"].resize(0);
+	result["pointpay"] = user_flag["user_pay"];
+	if(bsave)
+		dataUser.user_flag = writer.write(user_flag);
+
+	ret = loigcEquipment.UseEquipment(uid, config.cydatas[idx].id, ud, 1, code);
+	if (ret)
+		return ret;
+
+	ret = loigcEquipment.AddItems(uid, vecEqs, result["equipment"], true);
+	if (ret)
+		return ret;
+
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	result["coins2"] = payData.cash;
+
+	return R_SUCCESS;
+}
+
+int CLogicCMD::LingQuFengHuoHeQuBuChang(unsigned uid, Json::Value & result,unsigned lasttime,unsigned seqid)
+{
+	int ret;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid)
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret)
+	{
+		error_log(" get  user info failed,uid = %u",uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	if(!dataXML)
+	{
+		error_log("GetInitXML fail");
+		return R_ERR_DB;
+	}
+
+	int seg = dataXML->GetKuaFuFengHuoTimeSegment(Time::GetGlobalTime());
+	if (!seg)
+	{
+		LOGIC_ERROR_RETURN_MSG("not_in_time");
+	}
+
+	CLogicSecinc logicSecinc;
+	Json::Value newact;
+	ret = logicSecinc.GetSecinc(uid,NAT_BRAVENEWWORLD_HUOYUE_NEW_NEW_ACT_NUM,newact);
+	if (ret && ret!=R_ERR_NO_DATA)
+		return ret;
+	newact["id"] = NAT_BRAVENEWWORLD_HUOYUE_NEW_NEW_ACT_NUM;
+	if (dataXML->GetKuaFuFengHuoTimeSegment(newact["tsb"].asInt()) == seg)
+	{
+		LOGIC_ERROR_RETURN_MSG("reward_has_got");
+	}
+	newact["tsb"] = Time::GetGlobalTime();
+	ret = logicSecinc.SetOneSecinc(uid,newact);
+	if (ret)
+		return ret;
+
+	string code = "FengHuoHeQuBuChang";
+
+	CActUnit ActUnit;
+	ActUnit.Init(uid);
+
+	DataXMLKuaFuFengHuo config;
+	ret = dataXML->GetKuaFuFengHuoReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+	ret = ActUnit.ParseSimpleReward(config.buchang,MAX_KUAFUFENGHUO_BUCHANG_REWARD_NUM,code);
+	if (ret)
+		return ret;
+	result["equipment"] = ActUnit._equip;
+	result["newact"] = newact;
+	return R_SUCCESS;
+}
+
 int CLogicCMD::EquipSubAct1(unsigned uid, unsigned equip, string& osub, string& nsub, unsigned lvl, Json::Value &result,unsigned lasttime,unsigned seqid)
 {
 	if(Time::GetGlobalTime() < Config::GetIntValue(CONFIG_ZHIZUN_BEGIN_TS)
@@ -1617,7 +2397,7 @@ int CLogicCMD::GetHequbuchangLevel(unsigned uid)
 			}
 		}
 	}
-	int start_ts = 0xFFFF,end_ts = 0,myserver_ts,serverid;
+	int start_ts = 0xFFFF,end_ts = 0,myserver_ts=0,serverid;
 	Config::GetDB(serverid);
 	for(set<int>::iterator it=domains.begin();it!=domains.end();++it)
 	{
@@ -1626,6 +2406,8 @@ int CLogicCMD::GetHequbuchangLevel(unsigned uid)
 		if (serverid == *it)
 			myserver_ts = kaiquts[*it];
 	}
+	if (!myserver_ts)
+		return 0;
 	if (start_ts == myserver_ts)
 		return 1;
 	else if (end_ts == myserver_ts)
@@ -2853,7 +3635,7 @@ int CLogicCMD::JihuoChenghao(unsigned uid, unsigned id, unsigned ud, unsigned he
 	if(ret)
 		return ret;
 
-	if (id < 50601 || id > 50609)
+	if (id < 50601 || id > 50612)
 		return R_ERR_LOGIC;
 	unsigned ch = 0;
 	Json::GetUInt(hero, "ch", ch);
@@ -2866,11 +3648,18 @@ int CLogicCMD::JihuoChenghao(unsigned uid, unsigned id, unsigned ud, unsigned he
 		return ret;
 
 	ch |= (0x0001 << (id - 50601));
+	Json::Value old_hero = hero;
 	hero["ch"] = ch;
 	ret = logicHero.Chg(uid, heroud, hero);
 	if(ret)
 		return ret;
 	result["ch"] = ch;
+
+	Json::FastWriter writer;
+
+	HERO_LOG("uid=%u,id=%u,act=%s,type=%s,before ch=%s after ch=%s",
+			uid, heroud, "chg",	"JihuoChenghao", writer.write(old_hero["ch"]).c_str()
+			, writer.write(hero["ch"]).c_str());
 
 	userWrap.Save();
 	return R_SUCCESS;
@@ -3126,6 +3915,8 @@ int CLogicCMD::godh(unsigned uid, unsigned equd, unsigned index1, unsigned index
 		{ret = CLogicEquipment().UseEquipment(uid, 1992, equd, 100, "godh"); if(ret) return ret;}
 	else if(index2 == 1)
 		{ret = CLogicEquipment().UseEquipment(uid, 1992, equd, 500, "godh"); if(ret) return ret;}
+	else if(index2 == 2)
+		{ret = CLogicEquipment().UseEquipment(uid, 1992, equd, 2500, "godh"); if(ret) return ret;}
 	else{return R_ERR_PARAM;}
 	godh |= (0x01 << (index1 + index2*10));
 	tech["godh"] = godh;
@@ -3196,5 +3987,592 @@ int CLogicCMD::HeroFm(unsigned uid,unsigned index,unsigned index1,unsigned hud,u
 			uid,hud,hero_data["id"].asString().c_str(),"fm",code.c_str(),Json::ToString(hero_data).c_str(),old_fm.c_str());
 	result["hero"] = hero_data["fm"];
 
+	return 0;
+}
+
+int CLogicCMD::MoBaiChongBangWangZhe(unsigned uid, unsigned chongbangid, unsigned uid2, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicChongBang logicChongBang;
+	ret = logicChongBang.Mobai(uid, chongbangid, uid2, result["info"]);
+	if (ret)
+	{
+		return ret;
+	}
+
+	return 0;
+}
+
+int CLogicCMD::GetXianShiReward(unsigned uid, string key, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicChongBang logicChongBang;
+	ret = logicChongBang.GetXianShiReward(uid, key, id, result["info"]);
+	if (ret)
+	{
+		return ret;
+	}
+	return 0;
+}
+
+int CLogicCMD::qiandaoduihuan(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.DuiHuan(uid, id, result["info"]);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicCMD::qingmingduihuan(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	ActInfoConfig actconfig(CONFIG_TWOHOLIDAY_ENJOY);
+	if (!actconfig.IsActive()) {
+		LOGIC_ERROR_RETURN_MSG("activity_is_over");
+	}
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	DataXMLZhouNianQing config;
+	ret = dataXML->GetZhouNianQingReward(config);
+	if (ret)
+	{
+		return ret;
+	}
+
+	Json::Value newAct;
+	CLogicSecinc logicSecinc;
+	ret = logicSecinc.GetSecinc(uid,NAT_EVERYDAYONLINE,newAct);
+	if (ret)
+	{
+		LOGIC_ERROR_RETURN_MSG("get_secinc_error");
+	}
+
+	unsigned num;
+	for (num=0;num<MAX_ZHOUNIANQING_SHOP_ITEM_NUM;num++)
+		if (!config.shop[num].id)
+			break;
+	debug_log("num=%u",num);
+
+	if (!Time::IsToday(newAct["ts2"].asUInt()))
+	{
+		newAct["ts2"] = Time::GetGlobalTime();
+		newAct["b"] = Json::Value(Json::arrayValue);
+		for (int i=0;i<num-1;i++)
+			newAct["b"].append(0);
+	}
+
+	if (!id)
+	{
+		PARAM_ERROR_RETURN_MSG("id");
+	}
+	if (newAct["j"].asUInt() < config.shop[id-1].require)
+	{
+		LOGIC_ERROR_RETURN_MSG("require_not_enough");
+	}
+
+	if (id>1 && newAct["b"][id-2].asUInt())
+	{
+		LOGIC_ERROR_RETURN_MSG("duihuan_has_got");
+	}
+
+	if (id>1)
+	{
+		newAct["b"][id-2] = 1;
+	}
+
+	newAct["j"] = newAct["j"].asUInt() - config.shop[id-1].require;
+
+	ret = logicSecinc.SetOneSecinc(uid, newAct);
+	if (ret)
+	{
+		LOGIC_ERROR_RETURN_MSG("set_secinc_error");
+	}
+
+	vector<GiftEquipItem> reward;
+	string code = "qingmingduihuan_"+CTrans::ITOS(id);
+	for (int k=0;k<XML_ZHOUNIANQING_SHOP_REWARD_NUM;k++)
+		reward.push_back(config.shop[id-1].reward[k]);
+	BaseCmdUnit basecmdUnit(uid);
+	basecmdUnit.AddGiftEquips(reward, code, result["equipments"],actconfig.EndTS()-Time::GetGlobalTime());
+
+	result["newAct"] = newAct;
+
+	return 0;
+}
+
+int CLogicCMD::qiandaolingqu(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.GetQianDaoReward(uid, id, result["info"]);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicCMD::zhouniantehuigoumai(unsigned uid, unsigned id, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.zhouniantehuigoumai(uid, id, result["info"]);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicCMD::zhouniantehuibangding(unsigned uid, unsigned uid2, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.zhouniantehuibangding(uid, uid2, result["info"]);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicCMD::zhounianqingonline(unsigned uid, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.online(uid, result["info"]);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+int CLogicCMD::oldToNew(unsigned uid, unsigned id, unsigned ud, Json::Value & result, unsigned lasttime,unsigned seqid)
+{
+	CLogicUser logicUser;
+	DataUser dataUser;
+	AUTO_LOCK_USER(uid);
+	int ret = logicUser.GetUserLimit(uid, dataUser);
+	if (ret){
+		error_log("[get_user_info_failed] [uid = %u, ret = %d]", uid, ret);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if (ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser, lasttime, seqid);
+	if (ret)
+		return ret;
+	ret = logicUser.SetUserLimit(uid, dataUser);
+	if (ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	CDataXML *dataXML = CDataXML::GetCDataXML();
+	DataXMLoldToNew config;
+	ret = dataXML->GetOldToNew(config);
+	unsigned eqid1 = 0, eqid2 = 0, count1 = 0, count2 = 0;
+	for (int i=0;i<MAX_OLDTONEW_DUIHUAN_NUM;i++)
+		if (config.item[i].id == id)
+		{
+			eqid1 = config.item[i].eqid1;
+			count1 = config.item[i].count1;
+			eqid2 = config.item[i].eqid2;
+			count2 = config.item[i].count2;
+			break;
+		}
+
+	ActInfoConfig actinfo(ACTIVITY_TIME_OLDTONEW);
+	if (!actinfo.IsActive()) {
+		LOGIC_ERROR_RETURN_MSG("activity_over");
+	}
+
+	CLogicSecinc logicSecinc;
+	Json::Value newact;
+	ret = logicSecinc.GetSecinc(uid,ACTIVITY_KUANGHUAN_618,newact);
+	if (ret && ret!=R_ERR_NO_DATA)
+		return ret;
+	if (ret==R_ERR_NO_DATA || newact["v"].asUInt() != actinfo.Version())
+	{
+		newact["id"] = ACTIVITY_KUANGHUAN_618;
+		newact["v"] = actinfo.Version();
+		newact["c"] = 0;
+	}
+
+	CActUnit actunit;
+	actunit.Init(uid,ACTIVITY_TIME_OLDTONEW);
+	unsigned totalCharge = actunit.GetTotalCharge();
+	unsigned cishu =  totalCharge / 1000;
+	if (cishu > 50)
+		cishu = 50;
+	if (newact["c"].asUInt() >= cishu )
+	{
+		LOGIC_ERROR_RETURN_MSG("兑换次数已超上限");
+	}
+
+	newact["c"] = newact["c"].asUInt() + 1;
+
+	bool hero_flag = false;
+	//武将换取物品
+	if(id >= 6 && id <= 7)
+	{
+		Json::Value hero_data;
+		CLogicHero logicHero;
+		ret = logicHero.Get(uid,ud,hero_data);
+		if(ret)
+		{
+			error_log("failed to get hero info");
+			return ret; 
+		}
+			
+		unsigned hlv = 0;
+		debug_log("isMember:%d,Get:%d",hero_data.isMember("l"),Json::GetUInt(hero_data,"l",hlv));
+		if(!hero_data.isMember("l") && !Json::GetUInt(hero_data,"l",hlv))
+		{
+			error_log("hero level is lost");
+			return R_ERR_LOGIC;
+		}
+
+		if(hlv != 1)
+		{
+			LOGIC_ERROR_RETURN_MSG("hero level error");
+		}
+		hero_flag = true;
+		
+		ret = logicHero.Del(uid,ud);
+		if(ret)
+		{
+			error_log("failed to delete hero");
+			return ret;
+		}
+		Json::FastWriter write;
+		string heroInfo = write.write(hero_data);
+		HERO_LOG("uid=%u,ud=%u,heroid=%s,heroLevel=%u,act=%s,code=%s,data=%s",uid,ud,hero_data["id"].asString().c_str(),hero_data["l"].asUInt(),"del","oldToNew",heroInfo.c_str());
+	}
+
+	CLogicEquipment logicEquipment;
+	if(!hero_flag)
+	{
+		ret = logicEquipment.UseEquipment(uid, eqid1, ud, count1, "oldToNew");
+		if (ret)
+			return ret;
+	}
+
+	ret = logicEquipment.AddOneItem(uid, eqid2, count2, "oldToNew", result["equipment"], true);
+	if (ret)
+		return ret;
+
+	ret = logicSecinc.SetOneSecinc(uid, newact);
+	if (ret)
+		return ret;
+
+	result["newAct"] = newact;
+
+	return 0;
+}
+
+int CLogicCMD::UpGradeTechFort(unsigned uid,unsigned type,unsigned lasttime,unsigned seqid,Json::Value &result)
+{
+	if(type < 0 || type >= 3){
+		LOGIC_ERROR_RETURN_MSG("index_error");
+	}
+
+	int ret = 0;
+	DataUser dataUser;
+	CLogicUser logicUser;
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret){
+		error_log("get user error,ret=%d,uid=%u",ret,uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	Json::Reader reader;
+	Json::FastWriter writer;
+	Json::Value tech;
+	reader.parse(dataUser.user_tech,tech);
+	if(!tech.isMember("bnkj") || !tech["bnkj"].isArray()){
+		Json::Value t;
+		tech["bnkj"] = Json::Value(Json::arrayValue);	
+		t["t"] = Json::Value(Json::arrayValue);
+		for(unsigned i = 0;i < 3;++i){
+			t["t"][i] = 0;
+		}
+		t["ts"] = 0;
+		t["tn"] = 0;
+		tech["bnkj"].append(t);
+	}
+	uint8_t indx = 0;
+	unsigned lv = tech["bnkj"][indx]["t"][type].asUInt();
+	unsigned lts = tech["bnkj"][indx]["ts"].asUInt();
+	const BraveNewWorldConfig::FortTechlonogy &conf = ConfigManager::Instance()->GetTechNodeConf(type);
+	if(lts >= Time::GetGlobalTime() || lv >= conf.node_size()){
+		return R_ERR_LOGIC;
+	}
+	unsigned curLevel = lv + 1;
+	const unsigned difLevel = 10;
+	for(uint8_t i = 0;i < 3;++i){
+		if(i != type && curLevel > tech["bnkj"][indx]["t"][i].asUInt() + difLevel){
+			LOGIC_ERROR_RETURN_MSG("level_difference_not_than_10");
+		}
+	}
+	BraveNewWorldConfig::Technology tec = ConfigManager::Instance()->GetBraveNewWorldConfigKeji(type,lv);
+	if(tec.cost() > dataUser.type)
+		return R_ERR_LOGIC;
+	if(tec.cost1_size()){
+		UserWrap userWrap(uid,true);
+		int r1 = 0,r2 = 0,r3 = 0,r4 = 0;
+		r1 = tec.cost1(0);
+		r2 = tec.cost1(1);
+		r3 = tec.cost1(2);
+		r4 = tec.cost1(3);
+		string reason = "UpGradeTechFort_" + CTrans::ITOS(uid);
+		userWrap.ChangeResource(-r1,-r2,-r3,-r4,reason,result);
+	}
+	AUTO_LOCK_USER(uid)
+	dataUser.type -= tec.cost(); //消耗铜钱
+	BraveNewWorldConfig::Tech te = ConfigManager::Instance()->GetBraveNewWorldConfigTech(0,type,lv);
+	tech["bnkj"][indx]["ts"] = Time::GetGlobalTime() + te.cd()*60;
+	tech["bnkj"][indx]["t"][type] = lv + 1;
+	tech["bnkj"][indx]["tn"] = type;
+	dataUser.user_tech = writer.write(tech);
+
+	RESOURCE_LOG("[bnkj][uid=%u,chg=%d,bnwm=%u]",uid,-tec.cost(),dataUser.type);
+	ret = logicUser.SetUser(uid,dataUser);
+	if(ret)
+		return ret;
+	result["bnkj"] = tech["bnkj"];
+	result["bnwm"] = dataUser.type;
+	return 0;
+}
+
+int CLogicCMD::FastGradeTechFort(unsigned uid,Json::Value &result,unsigned lasttime,unsigned seqid)
+{
+	int ret = 0;
+	CLogicUser logicUser;
+	DataUser dataUser;
+	ret = logicUser.GetUser(uid,dataUser);
+	if(ret){
+		error_log("get user info error,ret=%d,uid=%u",ret,uid);
+		return ret;
+	}
+	ret = checkLastSaveUID(dataUser);
+	if(ret)
+		return ret;
+
+	ret = checkLastSaveTime(dataUser,lasttime,seqid);
+	if(ret)
+		return ret;
+	result["lasttime"] = dataUser.last_save_time;
+	result["lastseq"] = dataUser.lastseq;
+	result["saveuserid"] = uid;
+
+	Json::Reader reader;
+	Json::FastWriter writer;
+	Json::Value tech,user_flag;
+	reader.parse(dataUser.user_tech,tech);
+	reader.parse(dataUser.user_flag,user_flag);
+
+	if(!tech.isMember("bnkj") || !tech["bnkj"].isArray()){
+		return R_ERR_LOGIC;
+	}
+	uint8_t idx = 0; 
+	unsigned lts = tech["bnkj"][idx]["ts"].asUInt();
+	if(lts <= Time::GetGlobalTime()){  //已消除cd
+		error_log("already clean up");
+		return R_ERR_DATA;
+	}
+	
+	int c = (lts - Time::GetGlobalTime()) / 60 + 1;
+	CLogicPay logicPay;
+	DataPay dataPay;
+	bool basve;
+	ret = logicPay.ProcessOrderForBackend(uid,-c,0,dataPay,"FastUpGradeTechFort",user_flag,basve);
+	if(ret)
+		return ret;
+	result["pointpay"].resize(0);
+	
+	AUTO_LOCK_USER(uid)
+	if(basve){
+		result["pointpay"] = user_flag["user_pay"];
+		dataUser.user_flag = writer.write(user_flag);
+	}
+	result["coins"] = dataPay.coins;
+	result["coins2"] = dataPay.cash;
+	tech["bnkj"][idx]["ts"] = 0;
+	result["bnkj"] = tech["bnkj"][idx];
+	dataUser.user_tech = writer.write(tech);
+	ret = logicUser.SetUser(uid, dataUser);
+	if(ret)
+		return ret;
 	return 0;
 }

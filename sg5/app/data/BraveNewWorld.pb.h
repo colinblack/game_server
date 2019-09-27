@@ -782,6 +782,55 @@ class BraveNewWorldUser : public ::google::protobuf::Message {
   inline ::BraveNewWorld::BraveNewWorldUserMission* release_mission();
   inline void set_allocated_mission(::BraveNewWorld::BraveNewWorldUserMission* mission);
 
+  // optional int64 cb = 18;
+  inline bool has_cb() const;
+  inline void clear_cb();
+  static const int kCbFieldNumber = 18;
+  inline ::google::protobuf::int64 cb() const;
+  inline void set_cb(::google::protobuf::int64 value);
+
+  // optional int32 version = 19;
+  inline bool has_version() const;
+  inline void clear_version();
+  static const int kVersionFieldNumber = 19;
+  inline ::google::protobuf::int32 version() const;
+  inline void set_version(::google::protobuf::int32 value);
+
+  // optional int64 bcb = 20;
+  inline bool has_bcb() const;
+  inline void clear_bcb();
+  static const int kBcbFieldNumber = 20;
+  inline ::google::protobuf::int64 bcb() const;
+  inline void set_bcb(::google::protobuf::int64 value);
+
+  // optional int64 jf = 21;
+  inline bool has_jf() const;
+  inline void clear_jf();
+  static const int kJfFieldNumber = 21;
+  inline ::google::protobuf::int64 jf() const;
+  inline void set_jf(::google::protobuf::int64 value);
+
+  // optional int64 ld = 22;
+  inline bool has_ld() const;
+  inline void clear_ld();
+  static const int kLdFieldNumber = 22;
+  inline ::google::protobuf::int64 ld() const;
+  inline void set_ld(::google::protobuf::int64 value);
+
+  // optional int64 bld = 23;
+  inline bool has_bld() const;
+  inline void clear_bld();
+  static const int kBldFieldNumber = 23;
+  inline ::google::protobuf::int64 bld() const;
+  inline void set_bld(::google::protobuf::int64 value);
+
+  // optional uint32 mfn = 24;
+  inline bool has_mfn() const;
+  inline void clear_mfn();
+  static const int kMfnFieldNumber = 24;
+  inline ::google::protobuf::uint32 mfn() const;
+  inline void set_mfn(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:BraveNewWorld.BraveNewWorldUser)
  private:
   inline void set_has_uid();
@@ -812,6 +861,20 @@ class BraveNewWorldUser : public ::google::protobuf::Message {
   inline void clear_has_rl();
   inline void set_has_mission();
   inline void clear_has_mission();
+  inline void set_has_cb();
+  inline void clear_has_cb();
+  inline void set_has_version();
+  inline void clear_has_version();
+  inline void set_has_bcb();
+  inline void clear_has_bcb();
+  inline void set_has_jf();
+  inline void clear_has_jf();
+  inline void set_has_ld();
+  inline void clear_has_ld();
+  inline void set_has_bld();
+  inline void clear_has_bld();
+  inline void set_has_mfn();
+  inline void clear_has_mfn();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -834,6 +897,13 @@ class BraveNewWorldUser : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::BraveNewWorld::BraveNewWorldFavourate > fav_;
   ::BraveNewWorld::BraveNewWorldUserMission* mission_;
   ::google::protobuf::uint32 rl_;
+  ::google::protobuf::int32 version_;
+  ::google::protobuf::int64 cb_;
+  ::google::protobuf::int64 bcb_;
+  ::google::protobuf::int64 jf_;
+  ::google::protobuf::int64 ld_;
+  ::google::protobuf::int64 bld_;
+  ::google::protobuf::uint32 mfn_;
   friend void  protobuf_AddDesc_BraveNewWorld_2eproto();
   friend void protobuf_AssignDesc_BraveNewWorld_2eproto();
   friend void protobuf_ShutdownFile_BraveNewWorld_2eproto();
@@ -1252,8 +1322,26 @@ class BraveNewWorld : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorld::BraveNewWorldAlliance >*
       mutable_alliance();
 
+  // optional bool has_chongbang_rewarded = 5;
+  inline bool has_has_chongbang_rewarded() const;
+  inline void clear_has_chongbang_rewarded();
+  static const int kHasChongbangRewardedFieldNumber = 5;
+  inline bool has_chongbang_rewarded() const;
+  inline void set_has_chongbang_rewarded(bool value);
+
+  // optional bool has_season_rewarded = 6;
+  inline bool has_has_season_rewarded() const;
+  inline void clear_has_season_rewarded();
+  static const int kHasSeasonRewardedFieldNumber = 6;
+  inline bool has_season_rewarded() const;
+  inline void set_has_season_rewarded(bool value);
+
   // @@protoc_insertion_point(class_scope:BraveNewWorld.BraveNewWorld)
  private:
+  inline void set_has_has_chongbang_rewarded();
+  inline void clear_has_has_chongbang_rewarded();
+  inline void set_has_has_season_rewarded();
+  inline void clear_has_has_season_rewarded();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1263,6 +1351,8 @@ class BraveNewWorld : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::BraveNewWorld::BraveNewWorldUser > user_;
   ::google::protobuf::RepeatedPtrField< ::BraveNewWorld::BraveNewWorldZone > zone_;
   ::google::protobuf::RepeatedPtrField< ::BraveNewWorld::BraveNewWorldAlliance > alliance_;
+  bool has_chongbang_rewarded_;
+  bool has_season_rewarded_;
   friend void  protobuf_AddDesc_BraveNewWorld_2eproto();
   friend void protobuf_AssignDesc_BraveNewWorld_2eproto();
   friend void protobuf_ShutdownFile_BraveNewWorld_2eproto();
@@ -2226,6 +2316,174 @@ inline void BraveNewWorldUser::set_allocated_mission(::BraveNewWorld::BraveNewWo
   // @@protoc_insertion_point(field_set_allocated:BraveNewWorld.BraveNewWorldUser.mission)
 }
 
+// optional int64 cb = 18;
+inline bool BraveNewWorldUser::has_cb() const {
+  return (_has_bits_[0] & 0x00020000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_cb() {
+  _has_bits_[0] |= 0x00020000u;
+}
+inline void BraveNewWorldUser::clear_has_cb() {
+  _has_bits_[0] &= ~0x00020000u;
+}
+inline void BraveNewWorldUser::clear_cb() {
+  cb_ = GOOGLE_LONGLONG(0);
+  clear_has_cb();
+}
+inline ::google::protobuf::int64 BraveNewWorldUser::cb() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.cb)
+  return cb_;
+}
+inline void BraveNewWorldUser::set_cb(::google::protobuf::int64 value) {
+  set_has_cb();
+  cb_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.cb)
+}
+
+// optional int32 version = 19;
+inline bool BraveNewWorldUser::has_version() const {
+  return (_has_bits_[0] & 0x00040000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_version() {
+  _has_bits_[0] |= 0x00040000u;
+}
+inline void BraveNewWorldUser::clear_has_version() {
+  _has_bits_[0] &= ~0x00040000u;
+}
+inline void BraveNewWorldUser::clear_version() {
+  version_ = 0;
+  clear_has_version();
+}
+inline ::google::protobuf::int32 BraveNewWorldUser::version() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.version)
+  return version_;
+}
+inline void BraveNewWorldUser::set_version(::google::protobuf::int32 value) {
+  set_has_version();
+  version_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.version)
+}
+
+// optional int64 bcb = 20;
+inline bool BraveNewWorldUser::has_bcb() const {
+  return (_has_bits_[0] & 0x00080000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_bcb() {
+  _has_bits_[0] |= 0x00080000u;
+}
+inline void BraveNewWorldUser::clear_has_bcb() {
+  _has_bits_[0] &= ~0x00080000u;
+}
+inline void BraveNewWorldUser::clear_bcb() {
+  bcb_ = GOOGLE_LONGLONG(0);
+  clear_has_bcb();
+}
+inline ::google::protobuf::int64 BraveNewWorldUser::bcb() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.bcb)
+  return bcb_;
+}
+inline void BraveNewWorldUser::set_bcb(::google::protobuf::int64 value) {
+  set_has_bcb();
+  bcb_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.bcb)
+}
+
+// optional int64 jf = 21;
+inline bool BraveNewWorldUser::has_jf() const {
+  return (_has_bits_[0] & 0x00100000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_jf() {
+  _has_bits_[0] |= 0x00100000u;
+}
+inline void BraveNewWorldUser::clear_has_jf() {
+  _has_bits_[0] &= ~0x00100000u;
+}
+inline void BraveNewWorldUser::clear_jf() {
+  jf_ = GOOGLE_LONGLONG(0);
+  clear_has_jf();
+}
+inline ::google::protobuf::int64 BraveNewWorldUser::jf() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.jf)
+  return jf_;
+}
+inline void BraveNewWorldUser::set_jf(::google::protobuf::int64 value) {
+  set_has_jf();
+  jf_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.jf)
+}
+
+// optional int64 ld = 22;
+inline bool BraveNewWorldUser::has_ld() const {
+  return (_has_bits_[0] & 0x00200000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_ld() {
+  _has_bits_[0] |= 0x00200000u;
+}
+inline void BraveNewWorldUser::clear_has_ld() {
+  _has_bits_[0] &= ~0x00200000u;
+}
+inline void BraveNewWorldUser::clear_ld() {
+  ld_ = GOOGLE_LONGLONG(0);
+  clear_has_ld();
+}
+inline ::google::protobuf::int64 BraveNewWorldUser::ld() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.ld)
+  return ld_;
+}
+inline void BraveNewWorldUser::set_ld(::google::protobuf::int64 value) {
+  set_has_ld();
+  ld_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.ld)
+}
+
+// optional int64 bld = 23;
+inline bool BraveNewWorldUser::has_bld() const {
+  return (_has_bits_[0] & 0x00400000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_bld() {
+  _has_bits_[0] |= 0x00400000u;
+}
+inline void BraveNewWorldUser::clear_has_bld() {
+  _has_bits_[0] &= ~0x00400000u;
+}
+inline void BraveNewWorldUser::clear_bld() {
+  bld_ = GOOGLE_LONGLONG(0);
+  clear_has_bld();
+}
+inline ::google::protobuf::int64 BraveNewWorldUser::bld() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.bld)
+  return bld_;
+}
+inline void BraveNewWorldUser::set_bld(::google::protobuf::int64 value) {
+  set_has_bld();
+  bld_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.bld)
+}
+
+// optional uint32 mfn = 24;
+inline bool BraveNewWorldUser::has_mfn() const {
+  return (_has_bits_[0] & 0x00800000u) != 0;
+}
+inline void BraveNewWorldUser::set_has_mfn() {
+  _has_bits_[0] |= 0x00800000u;
+}
+inline void BraveNewWorldUser::clear_has_mfn() {
+  _has_bits_[0] &= ~0x00800000u;
+}
+inline void BraveNewWorldUser::clear_mfn() {
+  mfn_ = 0u;
+  clear_has_mfn();
+}
+inline ::google::protobuf::uint32 BraveNewWorldUser::mfn() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorldUser.mfn)
+  return mfn_;
+}
+inline void BraveNewWorldUser::set_mfn(::google::protobuf::uint32 value) {
+  set_has_mfn();
+  mfn_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorldUser.mfn)
+}
+
 // -------------------------------------------------------------------
 
 // BraveNewWorldPoint
@@ -2764,6 +3022,54 @@ inline ::google::protobuf::RepeatedPtrField< ::BraveNewWorld::BraveNewWorldAllia
 BraveNewWorld::mutable_alliance() {
   // @@protoc_insertion_point(field_mutable_list:BraveNewWorld.BraveNewWorld.alliance)
   return &alliance_;
+}
+
+// optional bool has_chongbang_rewarded = 5;
+inline bool BraveNewWorld::has_has_chongbang_rewarded() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void BraveNewWorld::set_has_has_chongbang_rewarded() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void BraveNewWorld::clear_has_has_chongbang_rewarded() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void BraveNewWorld::clear_has_chongbang_rewarded() {
+  has_chongbang_rewarded_ = false;
+  clear_has_has_chongbang_rewarded();
+}
+inline bool BraveNewWorld::has_chongbang_rewarded() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorld.has_chongbang_rewarded)
+  return has_chongbang_rewarded_;
+}
+inline void BraveNewWorld::set_has_chongbang_rewarded(bool value) {
+  set_has_has_chongbang_rewarded();
+  has_chongbang_rewarded_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorld.has_chongbang_rewarded)
+}
+
+// optional bool has_season_rewarded = 6;
+inline bool BraveNewWorld::has_has_season_rewarded() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void BraveNewWorld::set_has_has_season_rewarded() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void BraveNewWorld::clear_has_has_season_rewarded() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void BraveNewWorld::clear_has_season_rewarded() {
+  has_season_rewarded_ = false;
+  clear_has_has_season_rewarded();
+}
+inline bool BraveNewWorld::has_season_rewarded() const {
+  // @@protoc_insertion_point(field_get:BraveNewWorld.BraveNewWorld.has_season_rewarded)
+  return has_season_rewarded_;
+}
+inline void BraveNewWorld::set_has_season_rewarded(bool value) {
+  set_has_has_season_rewarded();
+  has_season_rewarded_ = value;
+  // @@protoc_insertion_point(field_set:BraveNewWorld.BraveNewWorld.has_season_rewarded)
 }
 
 

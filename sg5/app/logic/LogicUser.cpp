@@ -20,6 +20,12 @@ int CLogicUser::AddUser(unsigned uid, PlatformType platform, unsigned inviteUid)
 	user.invite_uid = inviteUid;
 	user.last_login_platform = platform;
 	user.last_login_time = Time::GetGlobalTime();
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.QianDao(uid, user.last_login_time);
+	if (ret)
+		return ret;
+
 	user.last_active_time = Time::GetGlobalTime();
 	user.login_times = 1;
 	user.login_days = 1;
@@ -326,6 +332,14 @@ int CLogicUser::UpdateLogin(unsigned uid, PlatformType platform, unsigned loginT
 	{
 		return ret;
 	}
+
+
+	CLogicZhouNianQing logicZhouNianQing;
+	ret = logicZhouNianQing.QianDao(uid, user.last_login_time);
+	if (ret)
+		return ret;
+
+
 	int inter = CTime::GetDayInterval(user.last_login_time, loginTime);
 	if (inter == 1)
 		user.login_days++;
@@ -346,6 +360,7 @@ int CLogicUser::UpdateLogin(unsigned uid, PlatformType platform, unsigned loginT
 		logicTri.DaliyTribute(uid, user.invite_count);
 
 	}
+
 	user.last_login_platform = platform;
 	user.last_login_time = loginTime;
 	user.login_times++;
@@ -485,6 +500,62 @@ int CLogicUser::ChangeResource(unsigned uid, int r1, int r2, int r3, int r4)
 		}
 	}
 	return ret;
+}
+int CLogicUser::ChangeResource(int r1,int r2,int r3,int r4,const string &reason,DataUser &dataUser,Json::Value &result)
+{
+	unsigned uid = dataUser.uid;
+	if ((r1 < 0 && (unsigned)(-r1) > dataUser.r1))
+	{
+		error_log("[ChangeResource][uid=%u,r1=%d,r1_all=%u,]", uid, r1, dataUser.r1);
+		throw std::runtime_error("resource_not_enough");
+	}
+
+	if ((r2 < 0 && (unsigned)(-r2) > dataUser.r2))
+	{
+		error_log("[ChangeResource][uid=%u,r2=%d,r2_all=%u,]", uid, r2, dataUser.r2);
+		throw std::runtime_error("resource_not_enough");
+	}
+
+	if ((r3 < 0 && (unsigned)(-r3) > dataUser.r3))
+	{
+		error_log("[ChangeResource][uid=%u,r3=%d,r3_all=%u,]", uid, r3, dataUser.r3);
+		throw std::runtime_error("resource_not_enough");
+	}
+
+	if ((r4 < 0 && (unsigned)(-r4) > dataUser.r4))
+	{
+		error_log("[ChangeResource][uid=%u,r4=%d,r4_all=%u,]", uid, r4, dataUser.r4);
+		throw std::runtime_error("resource_not_enough");
+	}
+
+	if (r1 > 0 || r2 > 0 || r3 > 0 || r4 > 0)
+	{
+		dataUser.r1 +=  r1;
+		if(dataUser.r1 > dataUser.r1_max)
+			dataUser.r1 = dataUser.r1_max;
+		dataUser.r2 +=  r2;
+		if(dataUser.r2 > dataUser.r2_max)
+			dataUser.r2 = dataUser.r2_max;
+		dataUser.r3 +=  r3;
+		if(dataUser.r3 > dataUser.r3_max)
+			dataUser.r3 = dataUser.r3_max;
+		dataUser.r4 +=  r4;
+		if(dataUser.r4 > dataUser.r4_max)
+			dataUser.r4 = dataUser.r4_max;
+	}else{
+		dataUser.r1 += r1;
+		dataUser.r2 += r2;
+		dataUser.r3 += r3;
+		dataUser.r4 += r4;
+	}
+	RESOURCE_LOG("[%s][uid=%u,chgr1=%d,r1=%u,chgr2=%d,r2=%u,chgr3=%d,r3=%u,chgr4=%d,r4=%u]",
+					reason.c_str(), uid, r1, dataUser.r1, r2, dataUser.r2, r3, dataUser.r3, r4, dataUser.r4);
+
+	result["r1"] = dataUser.r1;
+	result["r2"] = dataUser.r2;
+	result["r3"] = dataUser.r3;
+	result["r4"] = dataUser.r4;
+	return 0;
 }
 /*
 bool CLogicUser::GetFlag(unsigned bit_info, UserFlag flag)
@@ -685,6 +756,64 @@ int  CLogicUser::SetMainpos(unsigned uid, const  unsigned mainpos)
 	}
 	return 0;
 }
+
+int CLogicUser::UpdateMaterial(unsigned uid, const Json::Value &data, string &result)
+{
+	if(!data.isArray())
+	{
+		return R_ERR_PARAM;
+	}
+	Json::Value material = Json::Value(Json::arrayValue);
+	Json::FastWriter writer;
+	if (!result.empty())
+	{
+		if(!Json::FromString(material, result))
+		{
+			error_log("[resource_error][parse material fail]");
+			LOGIC_ERROR_RETURN_MSG("resource_error");
+		}
+	}
+
+	bool needlog = false;
+	string log;
+	for(unsigned i=0; i<data.size(); i++)
+	{
+		int iChgValue = 0;
+		int currMaterial = 0;
+		int itemp = 0;
+		if (Json::GetInt(data[i], "d", iChgValue))
+		{
+			if (material.size() > i)
+			{
+				if (material[i].isMember("c"))
+				{
+					currMaterial = material[i]["c"].asInt();
+				}
+			}
+
+			itemp = currMaterial + iChgValue;
+			if(itemp >= 0)
+			{
+				material[i]["c"] = itemp;
+				material[i]["m"] = itemp;
+			}
+			else
+			{
+				LOGIC_ERROR_RETURN_MSG("resource_limit");
+			}
+			char temlog[512];
+			snprintf(temlog, 512, "m%d=%d,m%dchg=%d", i, itemp, i, iChgValue);
+			log += ","+string(temlog);
+			if (iChgValue != 0 )
+				needlog = true;
+		}
+	}
+	result = writer.write(material);
+	if (needlog)
+		MATERIAL_LOG("[change material][uid=%u%s]", uid, log.c_str());
+	return 0;
+}
+
 
 int CLogicUser::TransformVipLevel(int accChargeTotal, int &vipLevel)
 {

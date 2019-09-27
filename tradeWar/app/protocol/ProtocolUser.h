@@ -1,0 +1,248 @@
+/*
+ * ProtocolUser.h
+ *
+ *  Created on: 2015年12月14日
+ *      Author: asdf
+ */
+
+#ifndef _PROTOCOL_USER_H_
+#define _PROTOCOL_USER_H_
+
+#include "Kernel.h"
+
+//
+DEFINE_RECEIVE_PACKET_BEGIN(CUserSetClientStateProtocol)
+	byte cmd;
+	byte subCmd;
+	vector<pair<byte, byte> > data;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		uint32_t len = 0;
+		PACKET_DECODE(UInt32, len);
+		for (uint32_t i = 0; i < len; ++i) {
+			byte k = 0, v = 0;
+			PACKET_DECODE(Byte, k);
+			PACKET_DECODE(Byte, v);
+			data.push_back(make_pair(k, v));
+		}
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//
+DEFINE_RECEIVE_PACKET_BEGIN(CUserLevelRewardProtocol)
+	byte cmd;
+	byte subCmd;
+	byte id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//
+DEFINE_RECEIVE_PACKET_BEGIN(CUserDailySignProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//
+DEFINE_RECEIVE_PACKET_BEGIN(CUserVipRewardProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//每日交易-购买
+DEFINE_RECEIVE_PACKET_BEGIN(CUserDailyBuyProtocol)
+	byte cmd;
+	byte subCmd;
+	byte id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//
+DEFINE_RECEIVE_PACKET_BEGIN(CUserTotalChargeRewardProtocol)
+	byte cmd;
+	byte subCmd;
+	byte id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//
+DEFINE_RECEIVE_PACKET_BEGIN(CUserSetNameProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t uid;
+	string name;
+	string fig;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, uid);
+		PACKET_DECODE(String, name);
+		PACKET_DECODE_SKIP(1);
+		PACKET_DECODE(String, fig);
+		PACKET_DECODE_SKIP(1);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserViewProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t uid; //1V1....
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, uid);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserMonthGiftProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserMenubarSetProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t data1;
+	uint32_t data2;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, data1);
+		PACKET_DECODE(UInt32, data2);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserTutorialStageSetProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t tutorialStage;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, tutorialStage);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserTrailerStageSetProtocol)
+	byte cmd;
+	byte subCmd;
+	byte type;
+	uint32_t stage;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, type);
+		PACKET_DECODE(UInt32, stage);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserChargeReportProtocol)
+	byte cmd;
+	byte subCmd;
+	uint32_t id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(UInt32, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserWatchADProtocol)
+	byte cmd;
+	byte subCmd;
+	byte id;
+	byte type;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, id);
+		PACKET_DECODE(Byte, type);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+DEFINE_RECEIVE_PACKET_BEGIN(CUserInteractProtocol)
+	byte cmd;
+	byte subCmd;
+	byte type;
+	uint32_t uid;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, type);
+		PACKET_DECODE(UInt32, uid);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//获取星级宝箱 信息
+DEFINE_RECEIVE_PACKET_BEGIN(CUserBoxInfoProtocol)
+	byte cmd;
+	byte subCmd;
+	byte chapId;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, chapId);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+//打开星级宝箱
+DEFINE_RECEIVE_PACKET_BEGIN(CUserOpenBoxProtocol)
+	byte cmd;
+	byte subCmd;
+	byte chapId;
+	byte id;
+
+	IMPLEMENT_PACKET_DECODE_BEGIN
+		PACKET_DECODE(Byte, cmd);
+		PACKET_DECODE(Byte, subCmd);
+		PACKET_DECODE(Byte, chapId);
+		PACKET_DECODE(Byte, id);
+	IMPLEMENT_PACKET_DECODE_END
+DEFINE_RECEIVE_PACKET_END
+
+#endif /* _PROTOCOL_USER_H_ */

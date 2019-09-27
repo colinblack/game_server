@@ -47,6 +47,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Task_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Task_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Technology_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Technology_reflection_ = NULL;
+const ::google::protobuf::Descriptor* FortTechlonogy_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  FortTechlonogy_reflection_ = NULL;
 const ::google::protobuf::Descriptor* BraveNewWorldConfig_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   BraveNewWorldConfig_reflection_ = NULL;
@@ -219,8 +225,44 @@ void protobuf_AssignDesc_BraveNewWorldConfig_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Task));
-  BraveNewWorldConfig_descriptor_ = file->message_type(9);
-  static const int BraveNewWorldConfig_offsets_[12] = {
+  Technology_descriptor_ = file->message_type(9);
+  static const int Technology_offsets_[5] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, value_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, add_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, cost_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, cost1_),
+  };
+  Technology_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Technology_descriptor_,
+      Technology::default_instance_,
+      Technology_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Technology, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Technology));
+  FortTechlonogy_descriptor_ = file->message_type(10);
+  static const int FortTechlonogy_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortTechlonogy, id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortTechlonogy, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortTechlonogy, node_),
+  };
+  FortTechlonogy_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      FortTechlonogy_descriptor_,
+      FortTechlonogy::default_instance_,
+      FortTechlonogy_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortTechlonogy, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(FortTechlonogy, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(FortTechlonogy));
+  BraveNewWorldConfig_descriptor_ = file->message_type(11);
+  static const int BraveNewWorldConfig_offsets_[13] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, land_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, config_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, zone_),
@@ -233,6 +275,7 @@ void protobuf_AssignDesc_BraveNewWorldConfig_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, mission_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, huoyue_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, task_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BraveNewWorldConfig, keji_),
   };
   BraveNewWorldConfig_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -276,6 +319,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Task_descriptor_, &Task::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Technology_descriptor_, &Technology::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    FortTechlonogy_descriptor_, &FortTechlonogy::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     BraveNewWorldConfig_descriptor_, &BraveNewWorldConfig::default_instance());
 }
 
@@ -300,6 +347,10 @@ void protobuf_ShutdownFile_BraveNewWorldConfig_2eproto() {
   delete Mission_reflection_;
   delete Task::default_instance_;
   delete Task_reflection_;
+  delete Technology::default_instance_;
+  delete Technology_reflection_;
+  delete FortTechlonogy::default_instance_;
+  delete FortTechlonogy_reflection_;
   delete BraveNewWorldConfig::default_instance_;
   delete BraveNewWorldConfig_reflection_;
 }
@@ -326,18 +377,24 @@ void protobuf_AddDesc_BraveNewWorldConfig_2eproto() {
     " \003(\r\022\r\n\005user2\030\002 \002(\r\022\n\n\002m1\030\003 \002(\r\022\n\n\002m2\030\004 "
     "\002(\r\022\n\n\002m3\030\005 \002(\r\"@\n\004Task\022\n\n\002id\030\001 \002(\r\022\017\n\007r"
     "equire\030\002 \002(\r\022\014\n\004eqid\030\003 \003(\r\022\r\n\005count\030\004 \003("
-    "\r\"\323\003\n\023BraveNewWorldConfig\022(\n\004land\030\001 \003(\0132"
-    "\032.BraveNewWorldConfig.Point\022-\n\006config\030\002 "
-    "\003(\0132\035.BraveNewWorldConfig.Property\022\'\n\004zo"
-    "ne\030\003 \003(\0132\031.BraveNewWorldConfig.Zone\022\'\n\004c"
-    "ity\030\004 \003(\0132\031.BraveNewWorldConfig.City\022\017\n\007"
-    "p_limit\030\005 \003(\r\022\017\n\007m_limit\030\006 \003(\r\022\'\n\004tech\030\007"
-    " \003(\0132\031.BraveNewWorldConfig.Tech\022+\n\004area\030"
-    "\010 \003(\0132\035.BraveNewWorldConfig.ZoneArea\0221\n\006"
-    "reward\030\t \002(\0132!.BraveNewWorldConfig.Rewar"
-    "dConfig\022-\n\007mission\030\n \002(\0132\034.BraveNewWorld"
-    "Config.Mission\022\016\n\006huoyue\030\013 \003(\r\022\'\n\004task\030\014"
-    " \003(\0132\031.BraveNewWorldConfig.Task", 1071);
+    "\r\"Q\n\nTechnology\022\n\n\002id\030\001 \002(\r\022\r\n\005value\030\002 \002"
+    "(\r\022\013\n\003add\030\003 \002(\r\022\014\n\004cost\030\004 \002(\r\022\r\n\005cost1\030\005"
+    " \003(\r\"Y\n\016FortTechlonogy\022\n\n\002id\030\001 \002(\r\022\014\n\004ty"
+    "pe\030\002 \002(\r\022-\n\004node\030\003 \003(\0132\037.BraveNewWorldCo"
+    "nfig.Technology\"\206\004\n\023BraveNewWorldConfig\022"
+    "(\n\004land\030\001 \003(\0132\032.BraveNewWorldConfig.Poin"
+    "t\022-\n\006config\030\002 \003(\0132\035.BraveNewWorldConfig."
+    "Property\022\'\n\004zone\030\003 \003(\0132\031.BraveNewWorldCo"
+    "nfig.Zone\022\'\n\004city\030\004 \003(\0132\031.BraveNewWorldC"
+    "onfig.City\022\017\n\007p_limit\030\005 \003(\r\022\017\n\007m_limit\030\006"
+    " \003(\r\022\'\n\004tech\030\007 \003(\0132\031.BraveNewWorldConfig"
+    ".Tech\022+\n\004area\030\010 \003(\0132\035.BraveNewWorldConfi"
+    "g.ZoneArea\0221\n\006reward\030\t \002(\0132!.BraveNewWor"
+    "ldConfig.RewardConfig\022-\n\007mission\030\n \002(\0132\034"
+    ".BraveNewWorldConfig.Mission\022\016\n\006huoyue\030\013"
+    " \003(\r\022\'\n\004task\030\014 \003(\0132\031.BraveNewWorldConfig"
+    ".Task\0221\n\004keji\030\r \003(\0132#.BraveNewWorldConfi"
+    "g.FortTechlonogy", 1296);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "BraveNewWorldConfig.proto", &protobuf_RegisterTypes);
   Point::default_instance_ = new Point();
@@ -349,6 +406,8 @@ void protobuf_AddDesc_BraveNewWorldConfig_2eproto() {
   RewardConfig::default_instance_ = new RewardConfig();
   Mission::default_instance_ = new Mission();
   Task::default_instance_ = new Task();
+  Technology::default_instance_ = new Technology();
+  FortTechlonogy::default_instance_ = new FortTechlonogy();
   BraveNewWorldConfig::default_instance_ = new BraveNewWorldConfig();
   Point::default_instance_->InitAsDefaultInstance();
   Property::default_instance_->InitAsDefaultInstance();
@@ -359,6 +418,8 @@ void protobuf_AddDesc_BraveNewWorldConfig_2eproto() {
   RewardConfig::default_instance_->InitAsDefaultInstance();
   Mission::default_instance_->InitAsDefaultInstance();
   Task::default_instance_->InitAsDefaultInstance();
+  Technology::default_instance_->InitAsDefaultInstance();
+  FortTechlonogy::default_instance_->InitAsDefaultInstance();
   BraveNewWorldConfig::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_BraveNewWorldConfig_2eproto);
 }
@@ -3455,6 +3516,717 @@ void Task::Swap(Task* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int Technology::kIdFieldNumber;
+const int Technology::kValueFieldNumber;
+const int Technology::kAddFieldNumber;
+const int Technology::kCostFieldNumber;
+const int Technology::kCost1FieldNumber;
+#endif  // !_MSC_VER
+
+Technology::Technology()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:BraveNewWorldConfig.Technology)
+}
+
+void Technology::InitAsDefaultInstance() {
+}
+
+Technology::Technology(const Technology& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:BraveNewWorldConfig.Technology)
+}
+
+void Technology::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = 0u;
+  value_ = 0u;
+  add_ = 0u;
+  cost_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Technology::~Technology() {
+  // @@protoc_insertion_point(destructor:BraveNewWorldConfig.Technology)
+  SharedDtor();
+}
+
+void Technology::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Technology::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Technology::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Technology_descriptor_;
+}
+
+const Technology& Technology::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_BraveNewWorldConfig_2eproto();
+  return *default_instance_;
+}
+
+Technology* Technology::default_instance_ = NULL;
+
+Technology* Technology::New() const {
+  return new Technology;
+}
+
+void Technology::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<Technology*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(id_, cost_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  cost1_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Technology::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:BraveNewWorldConfig.Technology)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_value;
+        break;
+      }
+
+      // required uint32 value = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_value:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &value_)));
+          set_has_value();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_add;
+        break;
+      }
+
+      // required uint32 add = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_add:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &add_)));
+          set_has_add();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_cost;
+        break;
+      }
+
+      // required uint32 cost = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_cost:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &cost_)));
+          set_has_cost();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(40)) goto parse_cost1;
+        break;
+      }
+
+      // repeated uint32 cost1 = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_cost1:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 40, input, this->mutable_cost1())));
+        } else if (tag == 42) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_cost1())));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(40)) goto parse_cost1;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:BraveNewWorldConfig.Technology)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:BraveNewWorldConfig.Technology)
+  return false;
+#undef DO_
+}
+
+void Technology::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:BraveNewWorldConfig.Technology)
+  // required uint32 id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
+  }
+
+  // required uint32 value = 2;
+  if (has_value()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->value(), output);
+  }
+
+  // required uint32 add = 3;
+  if (has_add()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->add(), output);
+  }
+
+  // required uint32 cost = 4;
+  if (has_cost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->cost(), output);
+  }
+
+  // repeated uint32 cost1 = 5;
+  for (int i = 0; i < this->cost1_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      5, this->cost1(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:BraveNewWorldConfig.Technology)
+}
+
+::google::protobuf::uint8* Technology::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:BraveNewWorldConfig.Technology)
+  // required uint32 id = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
+  }
+
+  // required uint32 value = 2;
+  if (has_value()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->value(), target);
+  }
+
+  // required uint32 add = 3;
+  if (has_add()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->add(), target);
+  }
+
+  // required uint32 cost = 4;
+  if (has_cost()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->cost(), target);
+  }
+
+  // repeated uint32 cost1 = 5;
+  for (int i = 0; i < this->cost1_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(5, this->cost1(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:BraveNewWorldConfig.Technology)
+  return target;
+}
+
+int Technology::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 id = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->id());
+    }
+
+    // required uint32 value = 2;
+    if (has_value()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->value());
+    }
+
+    // required uint32 add = 3;
+    if (has_add()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->add());
+    }
+
+    // required uint32 cost = 4;
+    if (has_cost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->cost());
+    }
+
+  }
+  // repeated uint32 cost1 = 5;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->cost1_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->cost1(i));
+    }
+    total_size += 1 * this->cost1_size() + data_size;
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Technology::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Technology* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Technology*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Technology::MergeFrom(const Technology& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  cost1_.MergeFrom(from.cost1_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+    if (from.has_value()) {
+      set_value(from.value());
+    }
+    if (from.has_add()) {
+      set_add(from.add());
+    }
+    if (from.has_cost()) {
+      set_cost(from.cost());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Technology::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Technology::CopyFrom(const Technology& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Technology::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+
+  return true;
+}
+
+void Technology::Swap(Technology* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(value_, other->value_);
+    std::swap(add_, other->add_);
+    std::swap(cost_, other->cost_);
+    cost1_.Swap(&other->cost1_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Technology::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Technology_descriptor_;
+  metadata.reflection = Technology_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int FortTechlonogy::kIdFieldNumber;
+const int FortTechlonogy::kTypeFieldNumber;
+const int FortTechlonogy::kNodeFieldNumber;
+#endif  // !_MSC_VER
+
+FortTechlonogy::FortTechlonogy()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:BraveNewWorldConfig.FortTechlonogy)
+}
+
+void FortTechlonogy::InitAsDefaultInstance() {
+}
+
+FortTechlonogy::FortTechlonogy(const FortTechlonogy& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:BraveNewWorldConfig.FortTechlonogy)
+}
+
+void FortTechlonogy::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = 0u;
+  type_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+FortTechlonogy::~FortTechlonogy() {
+  // @@protoc_insertion_point(destructor:BraveNewWorldConfig.FortTechlonogy)
+  SharedDtor();
+}
+
+void FortTechlonogy::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void FortTechlonogy::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* FortTechlonogy::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return FortTechlonogy_descriptor_;
+}
+
+const FortTechlonogy& FortTechlonogy::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_BraveNewWorldConfig_2eproto();
+  return *default_instance_;
+}
+
+FortTechlonogy* FortTechlonogy::default_instance_ = NULL;
+
+FortTechlonogy* FortTechlonogy::New() const {
+  return new FortTechlonogy;
+}
+
+void FortTechlonogy::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<FortTechlonogy*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(id_, type_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  node_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool FortTechlonogy::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:BraveNewWorldConfig.FortTechlonogy)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &id_)));
+          set_has_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_type;
+        break;
+      }
+
+      // required uint32 type = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_type:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &type_)));
+          set_has_type();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_node;
+        break;
+      }
+
+      // repeated .BraveNewWorldConfig.Technology node = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_node:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_node()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_node;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:BraveNewWorldConfig.FortTechlonogy)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:BraveNewWorldConfig.FortTechlonogy)
+  return false;
+#undef DO_
+}
+
+void FortTechlonogy::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:BraveNewWorldConfig.FortTechlonogy)
+  // required uint32 id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
+  }
+
+  // required uint32 type = 2;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->type(), output);
+  }
+
+  // repeated .BraveNewWorldConfig.Technology node = 3;
+  for (int i = 0; i < this->node_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->node(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:BraveNewWorldConfig.FortTechlonogy)
+}
+
+::google::protobuf::uint8* FortTechlonogy::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:BraveNewWorldConfig.FortTechlonogy)
+  // required uint32 id = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
+  }
+
+  // required uint32 type = 2;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->type(), target);
+  }
+
+  // repeated .BraveNewWorldConfig.Technology node = 3;
+  for (int i = 0; i < this->node_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->node(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:BraveNewWorldConfig.FortTechlonogy)
+  return target;
+}
+
+int FortTechlonogy::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 id = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->id());
+    }
+
+    // required uint32 type = 2;
+    if (has_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->type());
+    }
+
+  }
+  // repeated .BraveNewWorldConfig.Technology node = 3;
+  total_size += 1 * this->node_size();
+  for (int i = 0; i < this->node_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->node(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FortTechlonogy::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const FortTechlonogy* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const FortTechlonogy*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void FortTechlonogy::MergeFrom(const FortTechlonogy& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  node_.MergeFrom(from.node_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      set_id(from.id());
+    }
+    if (from.has_type()) {
+      set_type(from.type());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void FortTechlonogy::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void FortTechlonogy::CopyFrom(const FortTechlonogy& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FortTechlonogy::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->node())) return false;
+  return true;
+}
+
+void FortTechlonogy::Swap(FortTechlonogy* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(type_, other->type_);
+    node_.Swap(&other->node_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata FortTechlonogy::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = FortTechlonogy_descriptor_;
+  metadata.reflection = FortTechlonogy_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int BraveNewWorldConfig::kLandFieldNumber;
 const int BraveNewWorldConfig::kConfigFieldNumber;
 const int BraveNewWorldConfig::kZoneFieldNumber;
@@ -3467,6 +4239,7 @@ const int BraveNewWorldConfig::kRewardFieldNumber;
 const int BraveNewWorldConfig::kMissionFieldNumber;
 const int BraveNewWorldConfig::kHuoyueFieldNumber;
 const int BraveNewWorldConfig::kTaskFieldNumber;
+const int BraveNewWorldConfig::kKejiFieldNumber;
 #endif  // !_MSC_VER
 
 BraveNewWorldConfig::BraveNewWorldConfig()
@@ -3546,6 +4319,7 @@ void BraveNewWorldConfig::Clear() {
   area_.Clear();
   huoyue_.Clear();
   task_.Clear();
+  keji_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -3737,6 +4511,20 @@ bool BraveNewWorldConfig::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(98)) goto parse_task;
+        if (input->ExpectTag(106)) goto parse_keji;
+        break;
+      }
+
+      // repeated .BraveNewWorldConfig.FortTechlonogy keji = 13;
+      case 13: {
+        if (tag == 106) {
+         parse_keji:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_keji()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(106)) goto parse_keji;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -3838,6 +4626,12 @@ void BraveNewWorldConfig::SerializeWithCachedSizes(
       12, this->task(i), output);
   }
 
+  // repeated .BraveNewWorldConfig.FortTechlonogy keji = 13;
+  for (int i = 0; i < this->keji_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      13, this->keji(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3927,6 +4721,13 @@ void BraveNewWorldConfig::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         12, this->task(i), target);
+  }
+
+  // repeated .BraveNewWorldConfig.FortTechlonogy keji = 13;
+  for (int i = 0; i < this->keji_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        13, this->keji(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -4042,6 +4843,14 @@ int BraveNewWorldConfig::ByteSize() const {
         this->task(i));
   }
 
+  // repeated .BraveNewWorldConfig.FortTechlonogy keji = 13;
+  total_size += 1 * this->keji_size();
+  for (int i = 0; i < this->keji_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->keji(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -4077,6 +4886,7 @@ void BraveNewWorldConfig::MergeFrom(const BraveNewWorldConfig& from) {
   area_.MergeFrom(from.area_);
   huoyue_.MergeFrom(from.huoyue_);
   task_.MergeFrom(from.task_);
+  keji_.MergeFrom(from.keji_);
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
     if (from.has_reward()) {
       mutable_reward()->::BraveNewWorldConfig::RewardConfig::MergeFrom(from.reward());
@@ -4115,6 +4925,7 @@ bool BraveNewWorldConfig::IsInitialized() const {
     if (!this->mission().IsInitialized()) return false;
   }
   if (!::google::protobuf::internal::AllAreInitialized(this->task())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->keji())) return false;
   return true;
 }
 
@@ -4132,6 +4943,7 @@ void BraveNewWorldConfig::Swap(BraveNewWorldConfig* other) {
     std::swap(mission_, other->mission_);
     huoyue_.Swap(&other->huoyue_);
     task_.Swap(&other->task_);
+    keji_.Swap(&other->keji_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

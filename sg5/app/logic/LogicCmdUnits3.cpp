@@ -398,7 +398,7 @@ int OpenSpecialPackUnit::Choose(UserWrap& userWrap, const BaseCmdParams & param,
 	}
 
 	//发放对应的物品
-	ProvideCommonReward(specialitemcfg.replace_equips(target), "SpecialPack_Open", result, 0, count);
+	ProvideCommonReward(specialitemcfg.replace_equips(target), "SpecialPack_Open", result, equipdata["ats"].asUInt(), count);
 
 	return 0;
 }

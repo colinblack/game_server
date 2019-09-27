@@ -11,6 +11,7 @@
 #define NEW_WORLD_RECOVER_COST 4065
 #define NEW_WORLD_RUSH_COST 4066
 #define NEW_WORLD_CLONE_COST 4067
+#define NEW_WORLD_SUPER_CLONE_COST 4115
 #define NEW_WORLD_COLLECTOTHER_COST		(4068)
 #define NEW_WORLD_DOUBLE_COST			(4069)
 #define NEW_WORLD_RUSHTS_COST			(4088)
@@ -41,7 +42,7 @@ public:
 
 	int Move(unsigned uid, unsigned index, unsigned cid, bool leave, unsigned fly, Json::Value &allresult);
 	int Change(unsigned uid, unsigned index, unsigned type, Json::Value &allresult);
-	int Clone(unsigned uid, unsigned index, unsigned equd, Json::Value &allresult);
+	int Clone(unsigned uid, unsigned index, unsigned equd, Json::Value &allresult, bool issuper = false);
 	int Rush(unsigned uid, unsigned index, unsigned equd, bool fly, Json::Value &allresult);
 	int Recover(unsigned uid, unsigned index, unsigned equd, unsigned num, Json::Value &allresult);
 	int Explode(unsigned uid, unsigned index, unsigned equd, Json::Value &allresult);

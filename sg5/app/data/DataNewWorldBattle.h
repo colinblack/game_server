@@ -20,7 +20,8 @@
 #endif
 /**************hero para*******************/
 #define NEW_WORLD_BATTLE_HERO 				50000
-#define NEW_WORLD_BATTLE_HERO_INDEX 		5
+#define NEW_WORLD_BATTLE_HERO_INDEX 		10
+#define NEW_WORLD_BATTLE_HERO_FREE_INDEX 	6
 #define NEW_WORLD_BATTLE_HERO_MIN			5
 #define NEW_WORLD_BATTLE_HERO_MIN_F			double(5)
 #define NEW_WORLD_BATTLE_HERO_TIME_1		600

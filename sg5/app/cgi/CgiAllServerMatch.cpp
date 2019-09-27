@@ -55,6 +55,10 @@ public:
 	CGI_SET_ACTION_MAP("GetRotaryTableRewardInfo", GetRotaryTableRewardInfo)
 	CGI_SET_ACTION_MAP("Double11", Double11)
 	CGI_SET_ACTION_MAP("GetDouble11Rcnt", GetDouble11Rcnt)
+	CGI_SET_ACTION_MAP("AddQuanFuQianDaoZhi", AddQuanFuQianDaoZhi)
+	CGI_SET_ACTION_MAP("GetQuanFuQianDaoZhi", GetQuanFuQianDaoZhi)
+	CGI_SET_ACTION_MAP("RotaryTableFeedBackDraw", RotaryTableFeedBackDraw)
+	CGI_SET_ACTION_MAP("GetRotaryTableFeedbackRewardInfo", GetRotaryTableFeedbackRewardInfo)
 	CGI_ACTION_MAP_END
 
 	int ViewBaseMatch()
@@ -629,6 +633,25 @@ public:
 		draw.Draw(uid,itemud,version,m_jsonResult["list"]);
 		return 0;
 	}
+	int RotaryTableFeedBackDraw()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+		unsigned uid = 0,version = 0,itemud = 0;
+		Json::GetUInt(jsonData, "uid", uid);
+		Json::GetUInt(jsonData,"version",version);
+
+		CDataRotaryTableFeedBackDraw draw;
+		draw.Draw(uid,version,m_jsonResult["list"]);
+		return 0;
+	}
 	int GetRotaryTableRewardInfo()
 	{
 		string data = CCGIIn::GetCGIStr("data");
@@ -644,6 +667,25 @@ public:
 		Json::GetUInt(jsonData,"version",version);
 
 		CDataRotaryTableDraw draw;
+		draw.GetDrawInfo(version,m_jsonResult["list"]);
+		return 0;
+	}
+
+	int GetRotaryTableFeedbackRewardInfo()
+	{
+		string data = CCGIIn::GetCGIStr("data");
+		Json::Value jsonData;
+		Json::Reader reader;
+
+		if(!reader.parse(data,jsonData))
+		{
+			error_log("error para: %s",data.c_str());
+			return -1;
+		}
+		unsigned version = 0;
+		Json::GetUInt(jsonData,"version",version);
+
+		CDataRotaryTableFeedBackDraw draw;
 		draw.GetDrawInfo(version,m_jsonResult["list"]);
 		return 0;
 	}
@@ -678,6 +720,26 @@ public:
 			return ret;
 		m_jsonResult["rcnt"] = rcnt;
 		CGI_SEND_LOG("action=GetDouble11Rcnt");
+		return R_SUCCESS;
+	}
+
+	int AddQuanFuQianDaoZhi()
+	{
+		int version = CCGIIn::GetCGIInt("version");
+		int count = CCGIIn::GetCGIInt("count");
+		int ret = CLogicZhouNianQing().AddQuanFuQianDaoZhi(version, count);
+		if (ret != 0)
+			return ret;
+		CGI_SEND_LOG("action=AddQuanFuQianDaoZhi");
+		return R_SUCCESS;
+	}
+
+	int GetQuanFuQianDaoZhi()
+	{
+		int ret = CLogicZhouNianQing().GetInfo(m_jsonResult);
+		if (ret != 0)
+			return ret;
+		CGI_SEND_LOG("action=GetQuanFuQianDaoZhi");
 		return R_SUCCESS;
 	}
 };

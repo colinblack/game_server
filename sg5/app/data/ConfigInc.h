@@ -12,3 +12,4 @@
 #include "ConfigFunction.pb.h"
 #include "NewSoulStone.pb.h"
 #include "YingLing.pb.h"
+#include "WuhunActivity.pb.h"

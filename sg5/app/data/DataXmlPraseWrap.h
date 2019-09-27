@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 #include "Kernel.h"
+#include "DataXML.h"
 
 template<class T>
 class DataXmlParseWrap
@@ -108,6 +109,90 @@ protected:
 		}
 
 		return jsonData;
+	}
+
+	int _parse_activity_simple_reward(const Json::Value &reward, XMLActSimpleReward *data, int len)
+	{
+		Json::Value::Members members(reward.getMemberNames());
+		int index = 0;
+		for (Json::Value::Members::iterator it=members.begin(); it!=members.end(); ++it)
+		{
+			string type = *it;
+			if (type.find("equip") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_EQUIP;
+				if (!Json::GetUInt(reward[type], "id", data[index].id)){
+					return R_ERR_DATA;
+				}
+				Json::GetUInt(reward[type], "c", data[index].count);
+				unsigned q,ch;
+				q=ch=0;
+				Json::GetUInt(reward[type], "ch", ch);
+				Json::GetUInt(reward[type], "q", q);
+				data[index].q = q;
+				data[index].ch = ch;
+				unsigned xs = 0;
+				Json::GetUInt(reward[type], "xs", xs);
+				if (xs)
+					data[index].xs = true;
+			}else if (type.find("hero") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_HERO;
+				if (!Json::GetUInt(reward[type], "id", data[index].id)){
+					return R_ERR_DATA;
+				}
+				Json::GetUInt(reward[type], "c", data[index].count);
+			}else if (type.find("gold") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_GOLD;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("explevel") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_EXP_LV;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("exp") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_EXP;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_1") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT1;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_2") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT2;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_3") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT3;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_4") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT4;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_5") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT5;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_6") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT6;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("mt_7") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_MT7;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("rs1") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_RES1;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("rs2") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_RES2;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("rs3") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_RES3;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("prosper") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_PROSPER;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else if (type.find("cash") != string::npos){
+				data[index].type = XML_ACT_SIMPLE_REWARD_TYPE_CASH;
+				Json::GetUInt(reward, type.c_str(), data[index].count);
+			}else{
+				continue;
+			}
+			if (++index >= len){
+				break;
+			}
+		}
+		return 0;
 	}
 
 private:

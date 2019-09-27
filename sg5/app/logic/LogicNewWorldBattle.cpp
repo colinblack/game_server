@@ -6,6 +6,7 @@
  */
 
 #include "LogicNewWorldBattle.h"
+#include "LogicCmdUnits.h"
 
 #define NEW_WORLD_BATTLE_PROCESS_CHANGE(pData,allresult) \
 	const NewWorldBattleChangeMap &change = pData->GetChangeMap(); \
@@ -26,11 +27,9 @@
 
 
 CLogicNewWorldBattle::CLogicNewWorldBattle() {
-	// TODO Auto-generated constructor stub
-
 }
+
 CLogicNewWorldBattle::~CLogicNewWorldBattle() {
-	// TODO Auto-generated destructor stub
 }
 
 CDataNewWorldBattle *CLogicNewWorldBattle::GetDataNewWorldBattle()
@@ -587,6 +586,14 @@ int CLogicNewWorldBattle::GetAllHero(unsigned uid,Json::Value &allresult)
 int CLogicNewWorldBattle::SetHero(unsigned uid, unsigned index, const Json::Value &para, Json::Value &allresult)
 {
 	Json::Value &result = allresult["SetHero"];
+	if (index > NEW_WORLD_BATTLE_HERO_FREE_INDEX) {
+		UserWrap user(uid, false);
+		NewWorldHeroPointUint cmd(user);
+		unsigned open_num = cmd.GetOpenNum();
+		if (open_num < index - NEW_WORLD_HERO_FREE_INDEX) {
+			return R_ERR_LOGIC;
+		}
+	}
 
 	int ret = 0;
 	CDataNewWorldBattle *pData = GetDataNewWorldBattle();

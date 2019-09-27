@@ -519,9 +519,10 @@ int CDataNewWorldBattle::Rush(NewWorldBattleHeroIndex index, NewWorldBattleHero 
 		LOGIC_ERROR_RETURN_MSG("newworldbattle_fighting_can_not_rush");
 	}
 
+	bool rush_att = pdata->hero[heroseq].kingdom != pdata->city[cityseq].kingdom;
 	NewWorldBattleHero npc;
 	r = 0;
-	NewWorldBattleCityQueue &queue = pdata->hero[heroseq].kingdom==pdata->city[cityseq].kingdom?m_citymap[cid].attacker:m_citymap[cid].defender;
+	NewWorldBattleCityQueue &queue = rush_att ? m_citymap[cid].defender : m_citymap[cid].attacker;
 	NewWorldBattleCityQueue::iterator it=queue.begin();
 	for(;it!=queue.end();++it)
 	{
@@ -531,16 +532,16 @@ int CDataNewWorldBattle::Rush(NewWorldBattleHeroIndex index, NewWorldBattleHero 
 		if(isHero(it->second))
 		{
 			otherseq = m_heromap[it->second].seq;
-			if(!CanMove(pdata->hero[otherseq].status) ||  pdata->hero[otherseq].cid != cid)
+			if(!CanMove(pdata->hero[otherseq].status) ||  pdata->hero[otherseq].cid != cid || (rush_att ? (pdata->hero[otherseq].kingdom != pdata->city[cityseq].kingdom) : (pdata->hero[otherseq].kingdom == pdata->city[cityseq].kingdom)))
 				continue;
 		}
-		else if(!pdata->city[cityseq].vision[it->second.index].index.uid || !CanMove(pdata->city[cityseq].vision[it->second.index].status))
+		else if(!pdata->city[cityseq].vision[it->second.index].index.uid || !CanMove(pdata->city[cityseq].vision[it->second.index].status) || (rush_att ? (pdata->city[cityseq].vision[it->second.index].kingdom != pdata->city[cityseq].kingdom) : (pdata->city[cityseq].vision[it->second.index].kingdom == pdata->city[cityseq].kingdom)))
 			continue;
 		break;
 	}
 	if(it == queue.end())
 	{
-		if(pdata->hero[heroseq].kingdom != pdata->city[cityseq].kingdom && pdata->city[cityseq].countN)
+		if(rush_att && pdata->city[cityseq].countN)
 			makeNPC(npc);
 		else
 		{
@@ -548,9 +549,9 @@ int CDataNewWorldBattle::Rush(NewWorldBattleHeroIndex index, NewWorldBattleHero 
 		}
 	}
 
-	NewWorldBattleHero &attacker = pdata->hero[heroseq];
-	NewWorldBattleHero &defender = it==queue.end()?npc:(isHero(it->second)?pdata->hero[otherseq]:pdata->city[cityseq].vision[it->second.index]);
-	other = defender;
+	NewWorldBattleHero &attacker = rush_att ? pdata->hero[heroseq] : (it == queue.end() ? npc : (isHero(it->second) ? pdata->hero[otherseq] : pdata->city[cityseq].vision[it->second.index]));
+	NewWorldBattleHero &defender = rush_att ? (it == queue.end() ? npc : (isHero(it->second) ? pdata->hero[otherseq] : pdata->city[cityseq].vision[it->second.index])) : pdata->hero[heroseq];
+	other = rush_att ? defender : attacker;
 
 	pdata->changets = now;
 	pdata->city[cityseq].ts = now;

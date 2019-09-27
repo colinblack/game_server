@@ -1,0 +1,28 @@
+package SysgemMsg;
+
+message SysgemMsgData
+{
+	required uint32 k = 1;
+	required uint32 v = 2;
+}
+
+message SysgemMsgReward
+{
+	required uint32 t = 1;
+	required uint32 id = 2;
+	required uint32 c = 3;
+}
+
+message SysgemMsgItem
+{
+	required uint32 ts = 1;
+	required uint32 uid = 2;
+	required string user_name = 3;
+	repeated SysgemMsgData data = 4;
+	repeated SysgemMsgReward reward = 5;
+}
+
+message SysgemMsg
+{
+	repeated SysgemMsgItem items = 1;
+}

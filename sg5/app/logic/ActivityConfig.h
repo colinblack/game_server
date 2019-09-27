@@ -16,10 +16,16 @@
 class ActInfoConfig
 {
 public:
-	ActInfoConfig(const std::string& name)
+	ActInfoConfig(const std::string& name = "")
 		: name_(name)
 	{
 
+	}
+
+	int init(const std::string& name)
+	{
+		name_ = name;
+		return 0;
 	}
 
 	/**
@@ -106,6 +112,11 @@ public:
 			return value;
 		}
 		return "";
+	}
+
+	std::string GetName() const
+	{
+		return name_;
 	}
 
 	void full_act_info(Json::Value& result) const;

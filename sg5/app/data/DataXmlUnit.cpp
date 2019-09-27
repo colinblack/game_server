@@ -1125,6 +1125,33 @@ int DataXMLBirdBridgeUnit::Parse(const std::string& fullCfg, DataXMLBirdBridge* 
 			pData->center.reward[reward++] = GiftEquipItem(json_reward[key], false);
 		}
 	}
+
+	IntoXmlNode(xmlConf, "daily");
+	while (xmlConf.FindElem("day")) {
+		unsigned day = CTrans::STOI(xmlConf.GetAttrib("id"));
+		if (day < 1 || day > XML_BIRD_BRIDGE_DAILY_DAY_NUM) {
+			return R_ERROR;
+		}
+		xmlConf.IntoElem();
+		num = 0;
+		while (xmlConf.FindElem("item")) {
+			pData->days[day-1].day[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+			pData->days[day-1].day[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+			Json::Value json_data = XmlDataToJson(xmlConf);
+			Json::Value json_reward = json_data["reward"];
+			int reward = 0;
+			for (int i = 0; i < XML_BIRD_BRIDGE_REWARD_NUM; ++i) {
+				std::string key = "equip" + CTrans::ITOS(i + 1);
+				if (json_reward.isMember(key)) {
+					pData->days[day-1].day[num].reward[reward++] = GiftEquipItem(json_reward[key], false);
+				}
+			}
+			if (++num >= XML_BIRD_BRIDGE_DAILY_ITEM_NUM) {
+				break;
+			}
+		}
+		xmlConf.OutOfElem();
+	}
 	return 0;
 }
 
@@ -1449,5 +1476,272 @@ int DataXMLNianShouBossUnit::Parse(const std::string& fullCfg, DataXMLNianShouBo
 		}
 	}
 	xmlConf.OutOfElem();
+	return 0;
+}
+
+int DataXMLXianShiMuBiaoUnit::Parse(const std::string& fullCfg, DataXMLXianShiMuBiao* pdata) {
+	CMarkupSTL xmlConf;
+	PreHandleXmlCfg(xmlConf, fullCfg);
+	IntoXmlNode(xmlConf, "chongBangRank");
+	xmlConf.IntoElem();
+	if (!xmlConf.FindElem("rankKing")) {
+		error_log("rankRank data error");
+		return R_ERR_DATA;
+	}
+	Json::Value json_data = XmlDataToJson(xmlConf);
+	Json::Value json_reward = json_data["reward"];
+	for (int i = 0; i < XML_XIANSHI_MUBIAO_RANK_REWARD_NUM; ++i) {
+		std::string key = "equip" + CTrans::ITOS(i + 1);
+		if (json_reward.isMember(key)) {
+			pdata->mobai[i] = GiftEquipItem(json_reward[key], false);
+			cout << "id = " << pdata->mobai[i].m_nId << ' ' << "m_nCnt = " << pdata->mobai[i].m_nCnt << endl;
+		}
+	}
+	int numtimeRank = 0;
+	while (xmlConf.FindElem("timeRank")) {
+		string key_huodong = xmlConf.GetAttrib("key");
+		memcpy(pdata->huodong[numtimeRank].name,key_huodong.c_str(),key_huodong.size());
+		cout << pdata->huodong[numtimeRank].name << endl;
+		xmlConf.IntoElem();
+		int numreward = 0;
+		while (xmlConf.FindElem("reward")) {
+			pdata->huodong[numtimeRank].equip[numreward].id =  CTrans::STOI(xmlConf.GetAttrib("id"));
+			pdata->huodong[numtimeRank].equip[numreward].eqid =  CTrans::STOI(xmlConf.GetAttrib("eqid"));
+			pdata->huodong[numtimeRank].equip[numreward].eqid2 =  CTrans::STOI(xmlConf.GetAttrib("eqid2"));
+			pdata->huodong[numtimeRank].equip[numreward].value2 =  CTrans::STOI(xmlConf.GetAttrib("value2"));
+			pdata->huodong[numtimeRank].equip[numreward].ishuode = xmlConf.GetAttrib("huode")!="";
+			cout << "id = " << int(pdata->huodong[numtimeRank].equip[numreward].id) << ' ' << "eqid = " << pdata->huodong[numtimeRank].equip[numreward].eqid <<
+					 "ishuode = " << int(pdata->huodong[numtimeRank].equip[numreward].ishuode) << endl;
+			cout << "eqid2=" << pdata->huodong[numtimeRank].equip[numreward].eqid2 << "value2=" << pdata->huodong[numtimeRank].equip[numreward].value2 << endl;
+			string code = xmlConf.GetAttrib("code");
+			memcpy(pdata->huodong[numtimeRank].equip[numreward].code,code.c_str(),code.size());
+			cout << pdata->huodong[numtimeRank].equip[numreward].code << endl;
+			int numitem = 0;
+			xmlConf.IntoElem();
+			while (xmlConf.FindElem("item")) {
+				pdata->huodong[numtimeRank].equip[numreward].item[numitem].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+				pdata->huodong[numtimeRank].equip[numreward].item[numitem].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+				cout << "id = " << int(pdata->huodong[numtimeRank].equip[numreward].item[numitem].id) << ' ' << "require = " << pdata->huodong[numtimeRank].equip[numreward].item[numitem].require << endl;
+				Json::Value json_data = XmlDataToJson(xmlConf);
+				Json::Value json_reward = json_data["reward"];
+				for (int i = 0; i < XML_XIANSHI_MUBIAO_REWARD_NUM; ++i) {
+					std::string key = "equip" + CTrans::ITOS(i + 1);
+					if (json_reward.isMember(key)) {
+						pdata->huodong[numtimeRank].equip[numreward].item[numitem].reward[i] = GiftEquipItem(json_reward[key], false);
+						cout << "id = " << pdata->huodong[numtimeRank].equip[numreward].item[numitem].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->huodong[numtimeRank].equip[numreward].item[numitem].reward[i].m_nCnt << endl;
+					}
+				}
+				if (++numitem >= XML_XIANSHI_MUBIAO_ITEM_NUM) {
+					break;
+				}
+			}
+			xmlConf.OutOfElem();
+			if (++numreward >= XML_XIANSHI_MUBIAO_PER_EQUIP_NUM) {
+				break;
+			}
+		}
+
+		if (!xmlConf.FindElem("rankRank")) {
+			error_log("rankRank data error");
+			return R_ERR_DATA;
+		}
+		xmlConf.IntoElem();
+		numreward = 0;
+		while (xmlConf.FindElem("reward")) {
+			pdata->huodong[numtimeRank].rank[numreward].id =  CTrans::STOI(xmlConf.GetAttrib("id"));
+			string rank_string = xmlConf.GetAttrib("rank");
+			vector<string> rlt;
+			String::Split(rank_string, '-', rlt);
+			pdata->huodong[numtimeRank].rank[numreward].rank1 = CTrans::STOI(rlt[0]);
+			pdata->huodong[numtimeRank].rank[numreward].rank2 = CTrans::STOI(rlt[1]);
+			cout << "id = " << int(pdata->huodong[numtimeRank].rank[numreward].id) << ' ' << "rank1 = " << pdata->huodong[numtimeRank].rank[numreward].rank1 << "rank2 = " << pdata->huodong[numtimeRank].rank[numreward].rank2 <<endl;
+			Json::Value json_data = XmlDataToJson(xmlConf);
+			Json::Value json_reward = json_data["reward"];
+			for (int i = 0; i < XML_XIANSHI_MUBIAO_RANK_REWARD_NUM; ++i) {
+				std::string key = "equip" + CTrans::ITOS(i + 1);
+				if (json_reward.isMember(key)) {
+					pdata->huodong[numtimeRank].rank[numreward].reward[i] = GiftEquipItem(json_reward[key], false);
+					cout << "id = " << pdata->huodong[numtimeRank].rank[numreward].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->huodong[numtimeRank].rank[numreward].reward[i].m_nCnt << endl;
+				}
+			}
+			if (++numreward >= MAX_XIANSHI_MUBIAO_RANK_NUM) {
+				break;
+			}
+		}
+		xmlConf.OutOfElem();
+
+
+		xmlConf.OutOfElem();
+		if (++numtimeRank >= MAX_XIANSHI_MUBIAO_HUODONG_NUM) {
+			break;
+		}
+	}
+	return 0;
+}
+
+int DataXMLZhouNianQingUnit::Parse(const std::string& fullCfg, DataXMLZhouNianQing* pdata) {
+	CMarkupSTL xmlConf;
+	PreHandleXmlCfg(xmlConf, fullCfg);
+	IntoXmlNode(xmlConf, "anniversary");
+
+	if (!xmlConf.FindElem("online")) {
+		error_log("online data error");
+		return R_ERR_DATA;
+	}
+
+	pdata->juanCount = CTrans::STOI(xmlConf.GetAttrib("juanCount"));
+
+	Json::Reader reader;
+	Json::Value data;
+	if (!reader.parse(xmlConf.GetData(), data)) {
+		error_log("parse data error");
+		return R_ERR_DATA;
+	}
+	int ret = _parse_activity_simple_reward(data["reward"], pdata->online, MAX_ZHOUNIANQING_ONLINE_REWARD_NUM);
+	if (ret) {
+		error_log("online reward error");
+		return ret;
+	}
+
+	if (!xmlConf.FindElem("signBangDing")) {
+		error_log("sign data error");
+		return R_ERR_DATA;
+	}
+	int num = 0;
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item")) {
+		pdata->bangding[num].rewardType = CTrans::STOI(xmlConf.GetAttrib("rewardType"));
+		cout << "rewardType = " << int(pdata->bangding[num].rewardType) << endl;
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_ZHOUNIANQING_BANGDING_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pdata->bangding[num].reward[i] = GiftEquipItem(json_reward[key], false);
+				cout << "id = " << pdata->bangding[num].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->bangding[num].reward[i].m_nCnt << endl;
+			}
+		}
+		if (++num >= XML_ZHOUNIANQING_BANGDING_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+	if (!xmlConf.FindElem("sign")) {
+		error_log("sign data error");
+		return R_ERR_DATA;
+	}
+	pdata->ts =  CTrans::STOI(xmlConf.GetAttrib("ts"));
+	pdata->big =  CTrans::STOI(xmlConf.GetAttrib("big"));
+	pdata->small =  CTrans::STOI(xmlConf.GetAttrib("small"));
+	cout << "ts = " << pdata->ts << "big = " << pdata->big << "small = " << pdata->small << endl;
+	xmlConf.IntoElem();
+	num = 0;
+	while (xmlConf.FindElem("item")) {
+		pdata->sign[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->sign[num].quanfuneed = CTrans::STOI(xmlConf.GetAttrib("quanfuneed"));
+		pdata->sign[num].selfneed = CTrans::STOI(xmlConf.GetAttrib("selfneed"));
+		cout << "quanfuneed = " << pdata->sign[num].quanfuneed << "selfneed = " << pdata->sign[num].selfneed << endl;
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_ZHOUNIANQING_SIGN_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pdata->sign[num].reward[i] = GiftEquipItem(json_reward[key], false);
+				cout << "id = " << pdata->sign[num].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->sign[num].reward[i].m_nCnt << endl;
+			}
+		}
+		if (++num >= MAX_ZHOUNIANQING_SIGN_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+	if (!xmlConf.FindElem("shop")) {
+		error_log("shop data error");
+		return R_ERR_DATA;
+	}
+	num = 0;
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item")) {
+		pdata->shop[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->shop[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		cout << "id = " << int(pdata->shop[num].id) << "require = " << pdata->shop[num].require << endl;
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_ZHOUNIANQING_SHOP_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pdata->shop[num].reward[i] = GiftEquipItem(json_reward[key], false);
+				cout << "id = " << pdata->shop[num].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->shop[num].reward[i].m_nCnt << endl;
+			}
+		}
+		if (++num >= MAX_ZHOUNIANQING_SHOP_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+	if (!xmlConf.FindElem("yearShop")) {
+		error_log("yearshop data error");
+		return R_ERR_DATA;
+	}
+	num = 0;
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item")) {
+		pdata->yearshop[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->yearshop[num].moneyType = CTrans::STOI(xmlConf.GetAttrib("moneyType"));
+		pdata->yearshop[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		cout << "id = " << int(pdata->yearshop[num].id) << "moneyType = " << pdata->yearshop[num].moneyType << "require = " << pdata->yearshop[num].require << endl;
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_ZHOUNIANQING_YEARSHOP_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pdata->yearshop[num].reward[i] = GiftEquipItem(json_reward[key], false);
+				cout << "id = " << pdata->yearshop[num].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->yearshop[num].reward[i].m_nCnt << endl;
+			}
+		}
+		if (++num >= MAX_ZHOUNIANQING_YEARSHOP_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+	return 0;
+}
+
+int DataXMLQingMingUnit::Parse(const std::string& fullCfg, DataXMLQingMing* pdata) {
+	CMarkupSTL xmlConf;
+	PreHandleXmlCfg(xmlConf, fullCfg);
+	IntoXmlNode(xmlConf, "qingming");
+	int num = 0;
+	if (!xmlConf.FindElem("shop")) {
+		error_log("shop data error");
+		return R_ERR_DATA;
+	}
+	pdata->jijiuCount = CTrans::STOI(xmlConf.GetAttrib("jijiuCount"));
+	cout << "jijiuCount = " << pdata->jijiuCount <<  endl;
+	xmlConf.IntoElem();
+	while (xmlConf.FindElem("item")) {
+		pdata->shop[num].id = CTrans::STOI(xmlConf.GetAttrib("id"));
+		pdata->shop[num].require = CTrans::STOI(xmlConf.GetAttrib("require"));
+		cout << "id = " << int(pdata->shop[num].id) << "require = " << pdata->shop[num].require << endl;
+		Json::Value json_data = XmlDataToJson(xmlConf);
+		Json::Value json_reward = json_data["reward"];
+		int reward = 0;
+		for (int i = 0; i < XML_ZHOUNIANQING_SHOP_REWARD_NUM; ++i) {
+			std::string key = "equip" + CTrans::ITOS(i + 1);
+			if (json_reward.isMember(key)) {
+				pdata->shop[num].reward[i] = GiftEquipItem(json_reward[key], false);
+				cout << "id = " << pdata->shop[num].reward[i].m_nId << ' ' << "m_nCnt = " << pdata->shop[num].reward[i].m_nCnt << endl;
+			}
+		}
+		if (++num >= MAX_ZHOUNIANQING_SHOP_ITEM_NUM) {
+			break;
+		}
+	}
+	xmlConf.OutOfElem();
+
 	return 0;
 }

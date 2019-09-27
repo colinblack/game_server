@@ -341,4 +341,35 @@ public:
 protected:
 	int Parse(const std::string& fullCfg, DataXMLNianShouBoss* pData);
 };
+///////////////////////////////////////////////////////////////////////////
+class DataXMLXianShiMuBiaoUnit : public DataXmlParseWrap<DataXMLXianShiMuBiao>
+{
+public:
+	DataXMLXianShiMuBiaoUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLXianShiMuBiao>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLXianShiMuBiao* pData);
+};
+///////////////////////////////////////////////////////////////////////////
+class DataXMLZhouNianQingUnit : public DataXmlParseWrap<DataXMLZhouNianQing>
+{
+public:
+	DataXMLZhouNianQingUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLZhouNianQing>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLZhouNianQing* pData);
+};
+///////////////////////////////////////////////////////////////////////////
+class DataXMLQingMingUnit : public DataXmlParseWrap<DataXMLQingMing>
+{
+public:
+	DataXMLQingMingUnit(CShareMemory& sh, const std::string& cfg)
+		: DataXmlParseWrap<DataXMLQingMing>(sh, cfg) {
+	}
+protected:
+	int Parse(const std::string& fullCfg, DataXMLQingMing* pData);
+};
+///////////////////////////////////////////////////////////////////////////
 #endif /* DATAXMLUNIT_H_ */

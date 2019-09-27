@@ -113,7 +113,7 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 					p2 = 5;
 				pe = ((p1 && p2) ? max(p1, p2) : 0);
 
-				unsigned eqid,eqid1;
+				unsigned eqid = 0, eqid1 = 0;
 				if(serverid <= ALL_SERVER_ZONE_A)
 				{
 					if(pe == 1)
@@ -229,7 +229,7 @@ int CDataConsumeRank::GetList(vector<CRUser> &day, vector<CRUser> &all)
 						p2 = 5;
 					pe = ((p1 && p2) ? max(p1, p2) : 0);
 
-					unsigned eqid, eqid1;
+					unsigned eqid = 0, eqid1 = 0;
 					if(serverid <= ALL_SERVER_ZONE_A)
 					{
 						if(pe == 1)
@@ -390,14 +390,23 @@ int CDataConsumeRank::SetUser(unsigned uid, unsigned cashDay, unsigned cashAll, 
 	}
 	else if(pTable->day.num < CR_DAY && cashDay <= pTable->day.user[pTable->day.tail].cash)//add after tail
 	{
-		pTable->day.user[pTable->day.num].uid = uid;
-		pTable->day.user[pTable->day.num].cash = cashDay;
-		strncpy(pTable->day.user[pTable->day.num].name, name.c_str(), sizeof(pTable->day.user[pTable->day.num].name));
-		pTable->day.user[pTable->day.num].pre = pTable->day.tail;
-		pTable->day.user[pTable->day.num].next = -1;
-		pTable->day.user[pTable->day.tail].next = pTable->day.num;
-		pTable->day.tail = pTable->day.num;
-		++pTable->day.num;
+		bool exist = false;
+		for(unsigned i=0;i<pTable->day.num;++i)
+		{
+			if (uid == pTable->day.user[i].uid)
+				exist = true;
+		}
+		if (!exist)
+		{
+			pTable->day.user[pTable->day.num].uid = uid;
+			pTable->day.user[pTable->day.num].cash = cashDay;
+			strncpy(pTable->day.user[pTable->day.num].name, name.c_str(), sizeof(pTable->day.user[pTable->day.num].name));
+			pTable->day.user[pTable->day.num].pre = pTable->day.tail;
+			pTable->day.user[pTable->day.num].next = -1;
+			pTable->day.user[pTable->day.tail].next = pTable->day.num;
+			pTable->day.tail = pTable->day.num;
+			++pTable->day.num;
+		}
 	}
 	else//replace or swap or add not tail
 	{
@@ -476,14 +485,23 @@ int CDataConsumeRank::SetUser(unsigned uid, unsigned cashDay, unsigned cashAll, 
 	}
 	else if(pTable->all.num < CR_ALL && cashAll <= pTable->all.user[pTable->all.tail].cash)//add after tail
 	{
-		pTable->all.user[pTable->all.num].uid = uid;
-		pTable->all.user[pTable->all.num].cash = cashAll;
-		strncpy(pTable->all.user[pTable->all.num].name, name.c_str(), sizeof(pTable->all.user[pTable->all.num].name));
-		pTable->all.user[pTable->all.num].pre = pTable->all.tail;
-		pTable->all.user[pTable->all.num].next = -1;
-		pTable->all.user[pTable->all.tail].next = pTable->all.num;
-		pTable->all.tail = pTable->all.num;
-		++pTable->all.num;
+		bool exist = false;
+		for(unsigned i=0;i<pTable->all.num;++i)
+		{
+			if (uid == pTable->all.user[i].uid)
+				exist = true;
+		}
+		if (!exist)
+		{
+			pTable->all.user[pTable->all.num].uid = uid;
+			pTable->all.user[pTable->all.num].cash = cashAll;
+			strncpy(pTable->all.user[pTable->all.num].name, name.c_str(), sizeof(pTable->all.user[pTable->all.num].name));
+			pTable->all.user[pTable->all.num].pre = pTable->all.tail;
+			pTable->all.user[pTable->all.num].next = -1;
+			pTable->all.user[pTable->all.tail].next = pTable->all.num;
+			pTable->all.tail = pTable->all.num;
+			++pTable->all.num;
+		}
 	}
 	else//replace or swap or add not tail
 	{

@@ -60,6 +60,21 @@ message Task {
 		repeated uint32 count		= 4;//道具数量选项
 }
 
+message Technology
+{
+	required uint32 id = 1;
+	required uint32 value = 2;
+	required uint32 add = 3;
+	required uint32 cost = 4;
+	repeated uint32 cost1 = 5;
+}
+message FortTechlonogy
+{
+	required uint32 id = 1;
+	required uint32 type = 2;
+	repeated Technology node = 3;
+}
+
 message BraveNewWorldConfig {
 		repeated Point land			= 1;//200*200	
 		repeated Property config 	= 2;	
@@ -73,4 +88,6 @@ message BraveNewWorldConfig {
 		required Mission mission	= 10;//任务配置
 		repeated uint32 huoyue		= 11;//日常任务的活跃值
 		repeated Task task			= 12;//日常任务奖励
+		repeated FortTechlonogy keji = 13;
 }
+

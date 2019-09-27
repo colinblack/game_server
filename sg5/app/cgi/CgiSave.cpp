@@ -142,6 +142,7 @@ public:
 	CGI_SET_ACTION_DEFAULT_MAP("ProtectToken", ProtectToken)
 	CGI_SET_ACTION_DEFAULT_MAP("Poker21", Poker21)
 	CGI_SET_ACTION_DEFAULT_MAP("HeavenDaoist", HeavenDaoist)
+	CGI_SET_ACTION_DEFAULT_MAP("HeavenUp", HeavenUp)
 	CGI_SET_ACTION_DEFAULT_MAP("Catapult", Catapult)
 	CGI_SET_ACTION_DEFAULT_MAP("CatapultSkill", CatapultSkillUp)
 	CGI_SET_ACTION_DEFAULT_MAP("EightFormation", EightFormation)
@@ -223,6 +224,8 @@ public:
     CGI_SET_ACTION_DEFAULT_MAP("innateskillup", InnateSkillUp)
     CGI_SET_ACTION_DEFAULT_MAP("StartskillTrain", StartSkillTrain)
     CGI_SET_ACTION_DEFAULT_MAP("EndskillTrain", EndSkillTrain)
+	CGI_SET_ACTION_DEFAULT_MAP("AddSqkillQueue", AddSqkillQueue)
+	CGI_SET_ACTION_DEFAULT_MAP("EndSqkillQueue", EndSqkillQueue)
     CGI_SET_ACTION_DEFAULT_MAP("HeavendaoSkillup", HeavendaoSkillup)
     CGI_SET_ACTION_DEFAULT_MAP("CalcuteFairybag", CalcuteFairybag)
     CGI_SET_ACTION_DEFAULT_MAP("ReceiveFairyReward", ReceiveFairyReward)
@@ -373,7 +376,7 @@ public:
     CGI_SET_ACTION_DEFAULT_MAP("EveryDayRecharge", EveryDayRecharge)
     CGI_SET_ACTION_DEFAULT_MAP("EveryDayOnline", EveryDayOnline)
     CGI_SET_ACTION_DEFAULT_MAP("EnjoyStore", EnjoyStore)
-    CGI_SET_ACTION_DEFAULT_MAP("VipReward", VipReward)
+   // CGI_SET_ACTION_DEFAULT_MAP("VipReward", VipReward)
 	CGI_SET_ACTION_DEFAULT_MAP("YingLingNormal", YingLingNormal)
 	CGI_SET_ACTION_DEFAULT_MAP("YingLingAdvance", YingLingAdvance)
 	CGI_SET_ACTION_DEFAULT_MAP("YingLingExp", YingLingExp)
@@ -384,7 +387,7 @@ public:
     CGI_SET_ACTION_DEFAULT_MAP("YearEndGift", YearEndGift)
     CGI_SET_ACTION_DEFAULT_MAP("GetGoddessReward", GetGoddessReward)
     CGI_SET_ACTION_DEFAULT_MAP("KeyLuxuryGift", KeyLuxuryGift)
-    CGI_SET_ACTION_DEFAULT_MAP("SoldierSpiritInject", SoldierSpiritInject)
+   // CGI_SET_ACTION_DEFAULT_MAP("SoldierSpiritInject", SoldierSpiritInject)
     CGI_SET_ACTION_DEFAULT_MAP("EnjoyGiftReward", EnjoyGiftReward)
     CGI_SET_ACTION_DEFAULT_MAP("TurnLuckyTable", TurnLuckyTable)
     CGI_SET_ACTION_DEFAULT_MAP("RecoverEnergy", RecoverEnergy)
@@ -423,12 +426,48 @@ public:
 	CGI_SET_ACTION_DEFAULT_MAP("BirdBridge", BirdBridge)
 	CGI_SET_ACTION_DEFAULT_MAP("ShengDan2018", ShengDan2018)
 	CGI_SET_ACTION_DEFAULT_MAP("XiaoNian2018", XiaoNian2018)
+	CGI_SET_ACTION_DEFAULT_MAP("ZhanCheSub", ZhanCheSub)
+	CGI_SET_ACTION_DEFAULT_MAP("ZhanCheShengXing", ZhanCheShengXing)
+	CGI_SET_ACTION_DEFAULT_MAP("ZhanCheShengJi", ZhanCheShengJi)
+	CGI_SET_ACTION_DEFAULT_MAP("ZhanCheSuiPianChouQu", ZhanCheSuiPianChouQu)
+	CGI_SET_ACTION_DEFAULT_MAP("ChengYuanChaiJie", ChengYuanChaiJie)
+	CGI_SET_ACTION_DEFAULT_MAP("LingQuFengHuoHeQuBuChang", LingQuFengHuoHeQuBuChang)
+	CGI_SET_ACTION_DEFAULT_MAP("getChildrenDaysReward", getChildrenDaysReward)
+	CGI_SET_ACTION_DEFAULT_MAP("BinghunTurnDish",BinghunTurnDish)
+	CGI_SET_ACTION_DEFAULT_MAP("XingshiPoints",XingshiPoints)
+	CGI_SET_ACTION_DEFAULT_MAP("oldToNew",oldToNew)
+	CGI_SET_ACTION_DEFAULT_MAP("wuyiqingdian", wuyiqingdian)
+	CGI_SET_ACTION_DEFAULT_MAP("AccChargeGetItemReward", AccChargeGetItemReward)
+	CGI_SET_ACTION_DEFAULT_MAP("GiveHelpExtraReward", GiveHelpExtraReward)
+	CGI_SET_ACTION_DEFAULT_MAP("qunxingreward", QunXingReward)
+	CGI_SET_ACTION_DEFAULT_MAP("newworldheronum", NewWorldHeroNum)
+	CGI_SET_ACTION_DEFAULT_MAP("qitianjinjie", qitianjinjie)
+	CGI_SET_ACTION_DEFAULT_MAP("UpGradeTechFort", UpGradeTechFort)
+	CGI_SET_ACTION_DEFAULT_MAP("FastUpGradeTechFort", FastUpGradeTechFort)
 	/********************************************************************/
 	/*  活动太多  先是抽象成模板  最后只能搞宏       */
 #define CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_NAME) \
 		CGI_SET_ACTION_DEFAULT_MAP(CONFIG_NAME, CONFIG_NAME##_ACT)
 	/********************************************************************/
+
 //autolable7
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yongguansanjun)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_wuyiqingdian_leiji)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yvre618_2)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_yvre618_1)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_toushichejineng)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_chongbang_3)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_zhuanshucanjuan)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_baihuahuikui_3)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_baihuahuikui_2)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_baihuahuikui_1)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_guyv_leiji)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_chengyuantisheng_2)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_chengyuantisheng_1)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_lueduotongqian_chongbang)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_anniversary_leiji)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_anniversary_meiri)
+CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_zhengbashadi_chongbang)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_hanjiajingxuan)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_fuzhuhesui)
 CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_zhuniandaji)
@@ -442,6 +481,7 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_water_taotie)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_water_qilin)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_water_pheonix)
+
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_vicky_nnom)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_NO_NAME)
 	CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_VICKY_BINGSHU)
@@ -458,6 +498,9 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	CGI_SET_ACTION_DEFAULT_MAP("JihuoChenghao", JihuoChenghao)
 	CGI_SET_ACTION_DEFAULT_MAP("PeidaiChenghao", PeidaiChenghao)
 	CGI_SET_ACTION_DEFAULT_MAP("ZhuanyiChenghao", ZhuanyiChenghao)
+	CGI_SET_ACTION_DEFAULT_MAP("RotaryTableFeedBackRandom", RotaryTableFeedBackRandom)
+	CGI_SET_ACTION_DEFAULT_MAP("RotaryTableFeedBackCharge", RotaryTableFeedBackCharge)
+	CGI_SET_ACTION_DEFAULT_MAP("GiveHelpActionTotalCharge",GiveHelpActionTotalCharge)
 
 	//争霸技能
 	CGI_SET_ACTION_DEFAULT_MAP("CommderSkilLearn", CommderSkilLearn)
@@ -477,7 +520,76 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	//fm
 	CGI_SET_ACTION_DEFAULT_MAP("setherofm",SetHeroFm)
 
+	CGI_SET_ACTION_DEFAULT_MAP("MoBaiChongBangWangZhe", MoBaiChongBangWangZhe)
+
+	CGI_SET_ACTION_DEFAULT_MAP("ChongBangJiangLi", ChongBangJiangLi)
+
+	CGI_SET_ACTION_DEFAULT_MAP("qiandaoduihuan", qiandaoduihuan)
+
+	CGI_SET_ACTION_DEFAULT_MAP("qiandaolingqu", qiandaolingqu)
+
+	CGI_SET_ACTION_DEFAULT_MAP("zhouniantehuigoumai", zhouniantehuigoumai)
+
+	CGI_SET_ACTION_DEFAULT_MAP("zhounianqingbangding", zhounianqingbangding)
+
+	CGI_SET_ACTION_DEFAULT_MAP("zhounianqingonline", zhounianqingonline)
+
+	CGI_SET_ACTION_DEFAULT_MAP("TouZiDaFanLiTouZi", TouZiDaFanLiTouZi)
+
+	CGI_SET_ACTION_DEFAULT_MAP("TouZiDaFanLiLingQu", TouZiDaFanLiLingQu)
+
+	CGI_SET_ACTION_DEFAULT_MAP("TouZiDaFanLiDuiHuan", TouZiDaFanLiDuiHuan)
+
+	CGI_SET_ACTION_DEFAULT_MAP("TouZiDaFanLiYiJianLingQu", TouZiDaFanLiYiJianLingQu)
+
+	CGI_SET_ACTION_DEFAULT_MAP("qingmingduihuan", qingmingduihuan)
+
+	CGI_SET_ACTION_DEFAULT_MAP("guyu", guyu)
+
+	CGI_SET_ACTION_DEFAULT_MAP("yongguansanjun_goumai", yongguansanjun_goumai)
+
     CGI_ACTION_DEFAULT_MAP_END
+
+	int ProcessActivity(CActUnit *pdata, const string &act_time_name, unsigned type)
+	{
+		if (pdata == NULL){
+			return R_ERR_DATA;
+		}
+		int ret = 0;
+		unsigned lasttime=0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		AUTO_LOCK_USER(m_uid)  //m_uid在Run里就已初始化.给m_uid玩家加锁
+		ret = pdata->Init(m_uid, act_time_name, lasttime, seqid); //初始化CActchildrenDaysReward对象
+		if (ret){
+			return ret;
+		}
+		ret = pdata->Check();    //检查时间是否正确
+		if (ret){
+			return ret;
+		}
+		if (!pdata->CheckActTime()) {  //检查活动时间是否开启
+			LOGIC_ERROR_RETURN_MSG("activity_over");
+		}
+		ret = pdata->Process(m_data, type);
+		if (ret){
+			return ret;
+		}
+		ret = pdata->Save(); //将玩家当前的信息（处理后的信息）入库
+		if (ret){
+			return ret;
+		}
+
+		pdata->GetLastTimeAndSeq(m_jsonResult);
+		
+		ret = pdata->GetResult(m_jsonResult);
+		if (ret){
+			return ret;
+		}
+
+		return 0;
+	}
 
 	int Save()
 	{
@@ -844,6 +956,242 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 		CGI_SEND_LOG("action=EquipSub&uid=%u&equip=%d", m_uid, equip);
 		return R_SUCCESS;
 	}
+
+	int ZhanCheSub()
+	{
+		unsigned equip = 0, stoneud = 0, zcid = 0;
+		if(!Json::GetUInt(m_data, "equip", equip)
+		|| !Json::GetUInt(m_data, "stoneud", stoneud)
+		|| !Json::GetUInt(m_data, "zcid", zcid))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ChangeZhanCheSub(m_uid, equip, zcid, stoneud, m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ZhanCheSub&uid=%u&equip=%d", m_uid, equip);
+		return R_SUCCESS;
+	}
+
+	int ZhanCheShengXing()
+	{
+		unsigned equip,ud1,ud2;
+		if(!Json::GetUInt(m_data, "equip", equip)
+		|| !Json::GetUInt(m_data, "ud1", ud1)
+		|| !Json::GetUInt(m_data, "ud2", ud2))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ZhanCheShengXing(m_uid, equip, ud1, ud2, m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ZhanCheShengXing&uid=%u&equip=%d", m_uid, equip);
+		return R_SUCCESS;
+	}
+
+	int ZhanCheShengJi()
+	{
+		unsigned equip,ud;
+		if(!Json::GetUInt(m_data, "equip", equip)
+		|| !Json::GetUInt(m_data, "ud", ud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ZhanCheShengJi(m_uid, equip, ud, m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ZhanCheShengJi&uid=%u&equip=%d", m_uid, equip);
+		return R_SUCCESS;
+	}
+
+	int ZhanCheSuiPianChouQu()
+	{
+		unsigned ku,count,ud;
+		if(!Json::GetUInt(m_data, "ku", ku)
+		|| !Json::GetUInt(m_data, "count", count)
+		|| !Json::GetUInt(m_data, "ud", ud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ZhanCheSuiPianChouQu(m_uid, ku, count, ud, m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ZhanCheSuiPianChouQu&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int BinghunTurnDish()
+	{
+		unsigned ud;
+		if(!Json::GetUInt(m_data,"ud",ud))
+		{
+			error_log("BinghunTurnDish para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data,"lastime",lasttime);
+		Json::GetUInt(m_data,"seqid",seqid);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.BinghunTurnDish(m_uid,ud,m_jsonResult,lasttime,seqid);
+		if(ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=BinghunTurnDish&uid=%u", m_uid);
+		
+		return R_SUCCESS;
+	}
+
+	int XingshiPoints()
+	{
+		unsigned type = 0;
+		//TODO Get type from multiple activities
+		CActXingshiPoints act;
+		int ret = ProcessActivity(&act,ACTIVITY_TIME_STONE, type); 
+		if (ret){
+			return ret;
+		}
+		
+		CGI_SEND_LOG("action=XingshiPoints&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int QunXingReward() {
+		CActQunXing act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_QUNXING, 0);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=qunxingreward&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+	
+	int oldToNew()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		unsigned ud;
+		if (!Json::GetUInt(m_data, "ud", ud))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.oldToNew(m_uid, id, ud, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=oldToNew&uid=%u", m_uid);
+		return 0;
+	}
+
+	int wuyiqingdian()
+	{
+		unsigned type = 0;
+		Json::GetUInt(m_data, "type", type);
+		CActWuYiQingDian act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_wuyiqingdian, type);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=wuyiqingdian&uid=%u&type=%u", m_uid,type);
+		return R_SUCCESS;
+	}
+
+	int ChengYuanChaiJie()
+	{
+		unsigned ud;
+		if(!Json::GetUInt(m_data, "ud", ud))
+		{
+			error_log("para error");
+			return R_ERR_PARAM;
+		}
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.ChengYuanChaiJie(m_uid, ud, m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=ChengYuanChaiJie&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int LingQuFengHuoHeQuBuChang()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.LingQuFengHuoHeQuBuChang(m_uid, m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+
+		CGI_SEND_LOG("action=LingQuFengHuoHeQuBuChang&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+	//六一儿童节
+	int getChildrenDaysReward()
+	{
+		unsigned type = 0;
+		Json::GetUInt(m_data, "type", type);
+		CActchildrenDaysActivity act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_ERTONGJIE, type);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=childrenDaysActivity&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
 	int EquipSubAct1()
 	{
 		unsigned equip = 0, lvl = 0;
@@ -1094,7 +1442,7 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 
 	int ProductShop()
 	{
-		unsigned ud = 0, id = 0, type = 0;
+		unsigned ud = 0, id = 0, type = 0;  //ud(勋章ID)、id(国战勋章里的物品id)、type(商店类型,即什么类型商店)
 		if(!Json::GetUInt(m_data, "ud", ud) || !Json::GetUInt(m_data, "id", id) || !Json::GetUInt(m_data, "type", type))
 		{
 			error_log("para error");
@@ -1147,7 +1495,7 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 		return R_SUCCESS;
 	}
 
-
+	//装备强化
 	int EquipIntensifys()
 	{
 		unsigned lasttime = 0;
@@ -2416,12 +2764,58 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	int HeavenDaoist()
 	{
 		Json::Value equd;
-		unsigned type = 0;
-		unsigned count = 0;
+		unsigned type = 0;  //??
+		unsigned count = 0;  //??
 		unsigned oneclick = 0; //0 -- 修炼   1 -- 一键升层
 		if (!Json::GetArray(m_data, "equd", equd) || (5 != equd.size() && 4 != equd.size())
 			|| !Json::GetUInt(m_data, "type", type)
 			|| !Json::GetUInt(m_data, "count", count) || (0 == count))
+		{
+
+			return R_ERR_PARAM;
+		}
+		if(!Json::GetUInt(m_data, "oneclick", oneclick))
+		{
+			return R_ERR_PARAM;
+		}
+
+		unsigned is_cash = 0;  //是否用钻石替换
+		Json::GetUInt(m_data, "isCash", is_cash);
+
+		unsigned lasttime;
+		unsigned seqid;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		CLogicCMD logicCMD;
+		int ret = 0;
+		if (is_cash == 1)
+		{//用钻石
+			ret = logicCMD.HeavenDaoist(m_uid, type, count, equd, true, m_jsonResult, lasttime, seqid, oneclick);
+		} else
+		{//用粮食
+			ret = logicCMD.HeavenDaoist(m_uid, type, count, equd, false, m_jsonResult, lasttime, seqid, oneclick);
+		}
+		if (ret)
+		{
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=HeavenDaoist&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	//魂殿
+	int HeavenUp()
+	{
+		Json::Value equd;
+		Json::Value equd2;
+		unsigned count = 0;
+		unsigned times = 0;
+		unsigned oneclick = 0; //0 -- 修炼   1 -- 一键升层
+		if (!Json::GetArray(m_data, "equd", equd) || (5 != equd.size() && 4 != equd.size()) ||
+			!Json::GetArray(m_data, "equd2", equd2) || (5 != equd2.size() && 4 != equd2.size())
+			|| !Json::GetUInt(m_data, "count", count) || !Json::GetUInt(m_data,"times",times) || (0 == count))
 		{
 
 			return R_ERR_PARAM;
@@ -2443,19 +2837,46 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 		int ret = 0;
 		if (is_cash == 1)
 		{
-			ret = logicCMD.HeavenDaoist(m_uid, type, count, equd, true, m_jsonResult, lasttime, seqid, oneclick);
+			ret = logicCMD.HeavenUp(m_uid, count, equd, equd2, true, m_jsonResult, lasttime, seqid, oneclick,times);
 		} else
 		{
-			ret = logicCMD.HeavenDaoist(m_uid, type, count, equd, false, m_jsonResult, lasttime, seqid, oneclick);
+			ret = logicCMD.HeavenUp(m_uid, count, equd, equd2, false, m_jsonResult, lasttime, seqid, oneclick,times);
 		}
 		if (ret)
 		{
 			return ret;
 		}
-
-		CGI_SEND_LOG("action=HeavenDaoist&uid=%u", m_uid);
+		CGI_SEND_LOG("action=HeavenUp&uid=%u", m_uid);
 		return R_SUCCESS;
 	}
+
+	/*
+	int HeavenUp()
+	{
+		int yijian = 0;
+		unsigned ud1 = 0;
+		unsigned ud2 = 0;
+		unsigned type = 0;
+		Json::GetUInt(m_data, "ud1", ud1);
+		Json::GetUInt(m_data, "ud2", ud2);
+
+		Json::GetInt(m_data, "yijian", yijian);
+
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.HeavenUp(m_uid, ud1, ud2, (yijian==1), m_jsonResult, lasttime, seqid);
+		if (ret)
+			return ret;
+
+		CGI_SEND_LOG("action=HeavenUp&uid=%u&ud1=%u&ud2=%u&yijian=%d",
+				m_uid, ud1, ud2, yijian);
+		return R_SUCCESS;
+	}
+	*/
 
 	int EightFormation()
 	{
@@ -2628,6 +3049,7 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 		return R_SUCCESS;
 	}
 
+	//十大神兵：神兵铸魂
 	int UpgradeTenWeapon()
 	{
 		unsigned id = 0;
@@ -3259,7 +3681,7 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 
         return R_SUCCESS;
     }
-
+	//每日任务
     int DailyQuestReward()
     {
         unsigned lasttime = 0;
@@ -4236,6 +4658,16 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 		CGI_SEND_LOG("action=YingLingStar&uid=%u", m_uid);
 		return R_SUCCESS;
 	}
+	int qitianjinjie()
+	{
+		CActQiTianJinJie act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_QITIANJINJIE, 0);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=qitianjinjie&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
 
 	//锤子领取
 	CGI_ACTION_FUNCTION(HammerFreeGet, BaseCmdParams, HammerHitUnit, false, DrawHammer)
@@ -4317,13 +4749,33 @@ CHARGE_DRAW_ACT_ACTION_MAP(CONFIG_double11_2018)
 	CGI_ACTION_FUNCTION(VickyNewOpen, VickyNewOpenUnit::DrawParams, VickyNewOpenUnit, false, DrawImpl);
 	//
 	CGI_ACTION_FUNCTION(chongzhizixuan, BaseCmdParams, ChongZhiZiXuan, false, DrawImpl);
+	//争霸武将开孔
+	CGI_ACTION_FUNCTION(NewWorldHeroNum, BaseCmdParams, NewWorldHeroPointUint, false, DrawImpl);
 
 	/********************************************************************/
 	/*  活动太多  先是抽象成模板  最后只能搞宏       */
 #define CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_NAME) \
 	CGI_ACTION_FUNCTION(CONFIG_NAME##_ACT, CONFIG_NAME##_Unit::DrawParams, CONFIG_NAME##_Unit, false, DrawImpl);
 	/********************************************************************/
+
 //autolable8
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yongguansanjun)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_wuyiqingdian_leiji)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yvre618_2)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_yvre618_1)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_toushichejineng)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_chongbang_3)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_zhuanshucanjuan)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_baihuahuikui_3)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_baihuahuikui_2)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_baihuahuikui_1)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_guyv_leiji)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_chengyuantisheng_2)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_chengyuantisheng_1)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_lueduotongqian_chongbang)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_anniversary_leiji)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_anniversary_meiri)
+CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_zhengbashadi_chongbang)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_hanjiajingxuan)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_fuzhuhesui)
 CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_zhuniandaji)
@@ -4337,6 +4789,7 @@ CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_water_taotie)
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_water_qilin)
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_water_pheonix)
+
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_vicky_nnom)
 	//vicky没想好名字的活动
 	CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_VICKY_NO_NAME)
@@ -4984,6 +5437,64 @@ CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
 		CGI_SEND_LOG("action=EndskillTrain&uid=%u", m_uid);
 		return R_SUCCESS;
 	}
+
+	int AddSqkillQueue()
+		{
+			unsigned lasttime = 0;
+			unsigned seqid = 0;
+			Json::GetUInt(m_data, "lastime", lasttime);
+			Json::GetUInt(m_data, "seqid", seqid);
+
+			unsigned index = 0, rentime = 0,paytype = 0,amount = 0;
+
+			if (!Json::GetUInt(m_data, "sindex", index) || !Json::GetUInt(m_data, "rentime", rentime)
+			|| !Json::GetUInt(m_data, "paytype", paytype) || !Json::GetUInt(m_data, "amount", amount))
+			{
+				error_log("param error: lack of sindex, rentime ,paytype,amount");
+				return R_ERR_PARAM;
+			}
+
+			CLogicCMD logicCMD;
+
+			int ret = logicCMD.AddSqkillQueue(m_uid, index, rentime,paytype,amount, m_jsonResult, lasttime, seqid);
+
+			if (R_SUCCESS != ret)
+			{
+				return ret;
+			}
+
+			CGI_SEND_LOG("action=AddSqkillQueue&uid=%u", m_uid);
+			return R_SUCCESS;
+		}
+
+	int EndSqkillQueue()
+			{
+				unsigned lasttime = 0;
+				unsigned seqid = 0;
+				Json::GetUInt(m_data, "lastime", lasttime);
+				Json::GetUInt(m_data, "seqid", seqid);
+
+				unsigned index = 0;
+
+				if (!Json::GetUInt(m_data, "sindex", index))
+				{
+					error_log("param error: lack of sindex");
+					return R_ERR_PARAM;
+				}
+
+				CLogicCMD logicCMD;
+
+				int ret = logicCMD.EndSqkillQueue(m_uid, index, m_jsonResult, lasttime, seqid);
+
+				if (R_SUCCESS != ret)
+				{
+					return ret;
+				}
+
+				CGI_SEND_LOG("action=EndSqkillQueue&uid=%u", m_uid);
+				return R_SUCCESS;
+			}
+
 
 	int HeavendaoSkillup()
 	{
@@ -7472,6 +7983,268 @@ CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
 		return 0;
 	}
 
+
+	int MoBaiChongBangWangZhe()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		unsigned uid;
+		if (!Json::GetUInt(m_data, "mobaiuid", uid))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.MoBaiChongBangWangZhe(m_uid, id, uid, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=MoBaiChongBangWangZhe&uid=%u", m_uid);
+		return 0;
+	}
+
+	int ChongBangJiangLi()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		string key;
+		if (!Json::GetString(m_data, "key", key))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.GetXianShiReward(m_uid, key, id, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=ChongBangJiangLi&uid=%u", m_uid);
+		return 0;
+	}
+
+	int qiandaoduihuan()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.qiandaoduihuan(m_uid, id, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=qiandaoduihuan&uid=%u", m_uid);
+		return 0;
+	}
+
+	int qingmingduihuan()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.qingmingduihuan(m_uid, id, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=qingmingduihuan&uid=%u", m_uid);
+		return 0;
+	}
+
+	int guyu()
+	{
+		unsigned type = 0;
+		Json::GetUInt(m_data, "type", type);
+		CActGuYu act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_GUYU, type);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=guyu&uid=%u&type=%u", m_uid,type);
+		return R_SUCCESS;
+	}
+
+	int yongguansanjun_goumai()
+	{
+		CActyongguansanjun act;
+		int ret = ProcessActivity(&act, CONFIG_yongguansanjun, 0);
+		if (ret){
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=yongguansanjun_goumai&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int qiandaolingqu()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.qiandaolingqu(m_uid, id, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=qiandaolingqu&uid=%u", m_uid);
+		return 0;
+	}
+
+	int zhouniantehuigoumai()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned id;
+		if (!Json::GetUInt(m_data, "id", id))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.zhouniantehuigoumai(m_uid, id, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=zhouniantehuigoumai&uid=%u", m_uid);
+		return 0;
+	}
+
+	int zhounianqingbangding()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "seqid", seqid);
+		Json::GetUInt(m_data, "lastime", lasttime);
+		unsigned uid;
+		if (!Json::GetUInt(m_data, "bangdinguid", uid))
+			return R_ERR_PARAM;
+		CLogicCMD logicCMD;
+		int ret = logicCMD.zhouniantehuibangding(m_uid, uid, m_jsonResult,lasttime,seqid);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=zhouniantehuibangding&uid=%u", m_uid);
+		return 0;
+	}
+
+	int zhounianqingonline()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.zhounianqingonline(m_uid, m_jsonResult, lasttime, seqid);
+		if (R_SUCCESS != ret)
+		{
+			return ret;
+		}
+		CGI_SEND_LOG("action=zhounianqingonline&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int TouZiDaFanLiTouZi()
+	{
+		CActTouZiDaFanLi act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_TOUZIDAFANLI, CActTouZiDaFanLi::ACT_TOUZI_DAFALI_PROCESS_TOUZI);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=TouZiDaFanLiTouZi&uid=%u&money=%u", m_uid, m_data["money"].asUInt());
+		return R_SUCCESS;
+	}
+
+	int TouZiDaFanLiLingQu()
+	{
+		CActTouZiDaFanLi act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_TOUZIDAFANLI, CActTouZiDaFanLi::ACT_TOUZI_DAFALI_PROCESS_LINGQU);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=TouZiDaFanLiLingQu&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int TouZiDaFanLiDuiHuan()
+	{
+		CActTouZiDaFanLi act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_TOUZIDAFANLI, CActTouZiDaFanLi::ACT_TOUZI_DAFALI_PROCESS_DUIHUAN);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=TouZiDaFanLiDuiHuan&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	int TouZiDaFanLiYiJianLingQu()
+	{
+		CActTouZiDaFanLi act;
+		int ret = ProcessActivity(&act, ACTIVITY_TIME_TOUZIDAFANLI, CActTouZiDaFanLi::ACT_TOUZI_DAFALI_PROCESS_YIJIANLINGQU);
+		if (ret){
+			return ret;
+		}
+		CGI_SEND_LOG("action=TouZiDaFanLiYiJianLingQu&uid=%u", m_uid);
+		return R_SUCCESS;
+	}
+
+	//科技堡垒升级突破
+	int UpGradeTechFort()
+	{
+		unsigned type = 0;
+		if(!Json::GetUInt(m_data,"type",type)){
+			error_log("parem error of type");
+			return R_ERR_DATA;
+		}
+		
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data, "lastime", lasttime);
+		Json::GetUInt(m_data, "seqid", seqid);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.UpGradeTechFort(m_uid,type,lasttime,seqid,m_jsonResult);
+		if(ret){
+			error_log("logic error,ret=%d",ret);
+			return ret;
+		}
+
+		CGI_SEND_LOG("action=UpGradeTechFort&uif=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+	//科技堡垒消除cd
+	int FastUpGradeTechFort()
+	{
+		unsigned lasttime = 0;
+		unsigned seqid = 0;
+		Json::GetUInt(m_data,"lastime",lasttime);
+		Json::GetUInt(m_data,"seqid",seqid);
+
+		CLogicCMD logicCMD;
+		int ret = logicCMD.FastGradeTechFort(m_uid,m_jsonResult,lasttime,seqid);
+		if(ret)
+			return ret;
+		
+		CGI_SEND_LOG("action=FastUpGradeTechFort&uif=%u",m_uid);
+		return R_SUCCESS;
+	}
+
+
 	//古卷奇书
 	CGI_ACTION_FUNCTION(InjectScroll, AncientScrollUnit::AncientParam, AncientScrollUnit, false, InjectScroll);
 	//碎片合成
@@ -7566,6 +8339,13 @@ CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
 	CGI_ACTION_FUNCTION(RotaryTableChargeReward, UnitIndexCmdParams, RotaryTableActivityUnix, false, GetChargeReward);
 	//装盘狂惠---随机奖励
 	CGI_ACTION_FUNCTION(RotaryTableRandomReward, UnitIdCmdParams, RotaryTableActivityUnix, false, GetRandomReward);
+	
+	//转盘回馈--抽奖随机奖励
+	CGI_ACTION_FUNCTION(RotaryTableFeedBackRandom, InitIdCmdParams, RotaryTableFeedBackUnix, false, GetRandomReward);
+	//转盘回馈--累计充值进度条
+	CGI_ACTION_FUNCTION(RotaryTableFeedBackCharge, UnitIndexCmdParams, RotaryTableFeedBackUnix, false, GetChargeReward);
+	//转盘回馈--累积充值钻石
+	CGI_ACTION_FUNCTION(AccChargeGetItemReward, UnitIndexCmdParams, RotaryTableFeedBackUnix, false, GetAccChargeReward);
 
 	//小兵宝物--充值奖励
 	CGI_ACTION_FUNCTION(BatmanTreasureChargeReward, UnitIndexCmdParams, BatmanTreasureActivityUnix, false, GetChargeReward);
@@ -7604,6 +8384,11 @@ CHARGE_DRAW_ACT_ACTION_FUNCTION(CONFIG_double11_2018)
 
 	//自选充值活动
 	CGI_ACTION_FUNCTION(EveryDayPayOptionalReward,UnitIndexCmdParams,PayOptionalActivityUnix,false,GetEveryDayChargeReward);
+
+	//助力大行动--累计充值
+	CGI_ACTION_FUNCTION(GiveHelpActionTotalCharge, UnitIndexCmdParams, GiveHelpChargeUnit, false, GetTotalChargeReward);
+	CGI_ACTION_FUNCTION(GiveHelpExtraReward, UnitIndexCmdParams, GiveHelpChargeUnit, false, GetExtraReward);
+
 };
 
 CGI_MAIN(CCgiSave)

@@ -135,7 +135,7 @@ int CLogicPay::AddHeroCoins(unsigned uid,int cash,const string &type, Json::Valu
 	return 0;
 }
 
-int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag)
+int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag, bool iskuafufenghuo)
 {
 	int ret = GetPay(uid, pay);
 	if (ret != 0)
@@ -186,7 +186,7 @@ int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const 
 		{
 			//百日庆典消费钻石
 			SetHundredDaysActivities( uid, cash, user_flag);
-			SetConsumeRank( uid, cash, user_flag);
+			SetConsumeRank( uid, cash, user_flag, iskuafufenghuo);
 		}
 	}
 
@@ -244,9 +244,26 @@ int CLogicPay::ChangePay(unsigned uid, int cash, int coins, DataPay &pay, const 
 	return 0;
 }
 
-int CLogicPay::ProcessOrderForBackend(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag)
+int CLogicPay::FixConsumeRank(unsigned uid)
 {
-	int ret = ChangePay(uid, cash, coins, pay, type, user_flag, bsave, flag);
+	CLogicUser logicUser;
+	DataUser user;
+	Json::Value user_flag;
+	Json::Reader reader;
+	int ret = logicUser.GetUser(uid,user);
+	if (ret)
+		return ret;
+	reader.parse(user.user_flag, user_flag);
+	addUserConsumeByDay(user_flag, 0, 0);
+		//百日庆典消费钻石
+	SetHundredDaysActivities( uid, 0, user_flag);
+	SetConsumeRank( uid, 0, user_flag);
+	return 0;
+}
+
+int CLogicPay::ProcessOrderForBackend(unsigned uid, int cash, int coins, DataPay &pay, const string &type, Json::Value &user_flag, bool &bsave, unsigned flag, bool iskuafufenghuo)
+{
+	int ret = ChangePay(uid, cash, coins, pay, type, user_flag, bsave, flag, iskuafufenghuo);
 	if(ret)
 	{
 		return ret;
@@ -323,6 +340,28 @@ int CLogicPay::GetPayHistory(unsigned uid, PayChannelType channel, const string 
 				ret, uid, channel, channelPayId.c_str());
 		DB_ERROR_RETURN_MSG("get_pay_history_fail");
 	}
+	return ret;
+}
+
+int CLogicPay::GetPayHistory(unsigned uid, unsigned startTs, unsigned endTs, unsigned &totalPay)
+{
+	CDataPayHistory dbPayHistory;
+	vector<DataPayHistory> vecPay;
+	int ret = dbPayHistory.GetPayHistory(uid, startTs, endTs, vecPay);
+	if (ret != 0 && ret != R_ERR_NO_DATA)
+	{
+		error_log("[GetPayHistory fail][ret=%d,uid=%u,startts=%u,endts=%u]",
+				ret, uid, startTs, endTs);
+		DB_ERROR_RETURN_MSG("get_pay_history_fail");
+	}
+
+    vector<DataPayHistory>::iterator itr = vecPay.begin();
+    for (; itr != vecPay.end(); itr++)
+    {
+    	if(itr->status == PST_OK)
+    		totalPay += itr->count;
+    }
+
 	return ret;
 }
 
@@ -661,7 +700,7 @@ int CLogicPay::SetHundredDaysActivities(unsigned uid, int cash, Json::Value &use
 	return 0;
 }
 
-int CLogicPay::SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag)
+int CLogicPay::SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag, bool iskuafufenghuo)
 {
 	time_t now;
 	time(&now);
@@ -673,7 +712,7 @@ int CLogicPay::SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag)
 	if((unsigned)now >= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_B_TS)
 	&& (unsigned)now <= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_E_TS)
 	&& tempNow < 79200					//每天的0点至22点
-	&& cash < 0)
+	&& cash <= 0)
 	{
 		int ret = 0;
 		unsigned lastpay_ts = 0;
@@ -712,20 +751,26 @@ int CLogicPay::SetConsumeRank(unsigned uid, int cash, Json::Value &user_flag)
 			}
 		}
 
-		if(-cash >= need)
+		if (iskuafufenghuo)
 		{
-			CLogicUserBasic logicUserBasic;
-			DataUserBasic dataUserBasic;
-			logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),dataUserBasic);
-
-			CLogicConsumeRank logicConsumeRank;
-			logicConsumeRank.SetUser(uid, dayTotal, allTotal, dataUserBasic.name, need);
-			user_flag["pay_need"][0u] = need;
+			user_flag["pay_need"][0u] = 0;
 		}
-		else
-		{
-			need += cash;
-			user_flag["pay_need"][0u] = need;
+		else {
+			if(-cash >= need)
+			{
+				CLogicUserBasic logicUserBasic;
+				DataUserBasic dataUserBasic;
+				logicUserBasic.GetUserBasicLimit(uid,OpenPlatform::GetType(),dataUserBasic);
+
+				CLogicConsumeRank logicConsumeRank;
+				logicConsumeRank.SetUser(uid, dayTotal, allTotal, dataUserBasic.name, need);
+				user_flag["pay_need"][0u] = need;
+			}
+			else
+			{
+				need += cash;
+				user_flag["pay_need"][0u] = need;
+			}
 		}
 	}
 	if((unsigned)now >= Config::GetIntValue(CONFIG_ACTIVITY_CONSUME_RANK_B_TS)
