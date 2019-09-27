@@ -1,0 +1,13 @@
+#! /bin/sh
+# TODO: parse & pass-through sudo options from $@
+sudo_options="-E"
+
+for arg in "$@"
+do
+   case "$arg" in
+    *\'*)
+      arg= ;;
+   esac
+   cmd_options="$cmd_options '$arg'" 
+done
+exec /usr/bin/sudo $sudo_options LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH scl enable devtoolset-6 "$cmd_options"

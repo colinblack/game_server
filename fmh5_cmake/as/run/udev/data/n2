@@ -1,0 +1,14 @@
+I:3823
+E:ID_BUS=pci
+E:ID_MODEL_FROM_DATABASE=Virtio network device
+E:ID_MODEL_ID=0x1000
+E:ID_NET_DRIVER=virtio_net
+E:ID_NET_NAME_MAC=enx525400e77435
+E:ID_PATH=pci-0000:00:03.0
+E:ID_PATH_TAG=pci-0000_00_03_0
+E:ID_PCI_CLASS_FROM_DATABASE=Network controller
+E:ID_PCI_SUBCLASS_FROM_DATABASE=Ethernet controller
+E:ID_VENDOR_FROM_DATABASE=Red Hat, Inc.
+E:ID_VENDOR_ID=0x1af4
+E:SYSTEMD_ALIAS=/sys/subsystem/net/devices/eth0
+G:systemd

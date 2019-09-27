@@ -1,0 +1,7 @@
+auto
+/opt/rh/devtoolset-8/root/usr/bin/ld
+
+/opt/rh/devtoolset-8/root/usr/bin/ld.bfd
+50
+/opt/rh/devtoolset-8/root/usr/bin/ld.gold
+30

@@ -1,0 +1,35 @@
+Package devtoolset-6 is the main package for Red Hat Developer
+Toolset 4.  By installing the devtoolset-6 package, you will get
+the working set of packages that are included in Red Hat Developer
+Toolset 4.  It is possible to install only certain components,
+such as an IDE or the toolchain packages used to develop and debug
+applications, since this package contains a number of meta packages.
+These are: devtoolset-6-ide, which includes Integrated Development
+Environment; devtoolset-6-perftools, which includes performance
+monitoring tools; and devtoolset-6-toolchain, which includes
+development and debugging tools.
+
+Usage: scl enable devtoolset-6 <command>
+
+Red Hat Developer Toolset allows you to build and execute applications
+which are not located in the filesystem root hierarchy, but are
+stored in an alternative location, which is /opt/rh/devtoolset-6/root in case
+of the devtoolset-6 collection.
+
+Examples:
+scl enable devtoolset-6 'command --arg'
+  Run a specific command with the argument --arg within the devtoolset-6
+  Red Hat Developer Toolset environment.
+
+scl enable devtoolset-6 'gcc'
+  Run GCC from the devtoolset-6 Red Hat Developer Toolset.
+
+scl enable devtoolset-6 'bash'
+  Run an interactive shell wherein the devtoolset-6 software collection
+  is enabled.
+
+scl enable devtoolset-6 'man gcc'
+  Show man pages for the gcc command, which is a part of the
+  devtoolset-6 Red Hat Developer Toolset.
+
+Report bugs to <http://bugzilla.redhat.com>.

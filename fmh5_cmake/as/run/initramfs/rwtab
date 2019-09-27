@@ -1,0 +1,2 @@
+files /etc/sysconfig/network-scripts
+files /var/lib/dhclient

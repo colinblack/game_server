@@ -1,0 +1,5 @@
+I:3754
+E:ID_MODEL_FROM_DATABASE=Virtio network device
+E:ID_PCI_CLASS_FROM_DATABASE=Network controller
+E:ID_PCI_SUBCLASS_FROM_DATABASE=Ethernet controller
+E:ID_VENDOR_FROM_DATABASE=Red Hat, Inc.
