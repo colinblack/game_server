@@ -54,6 +54,10 @@ public:
 			defaultCallback_(def) {
 	}
 
+	~ProtobufDispatcher(){
+	    debug_log("Dispatcher destory");
+        Destory();
+	}
 	int onMessage(Message* message) const {
 		CallbackMap::const_iterator it = callbacks_.find(
 				message->GetDescriptor());
@@ -71,6 +75,14 @@ public:
 		callbacks_[T::descriptor()] = pd;
 	}
 
+	void Destory(){
+	    auto itr = callbacks_.begin();
+	    while(itr != callbacks_.end()){
+	       delete itr->second;
+	       itr->second = nullptr;
+	       itr = callbacks_.erase(itr);
+	    }
+	}
 	typedef std::map<const Descriptor*, Callback*> CallbackMap;
 	CallbackMap callbacks_;
 	int (*defaultCallback_)(Message* message);

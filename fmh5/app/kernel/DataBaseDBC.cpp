@@ -16,6 +16,7 @@ CDataBaseDBC::CDataBaseDBC( const int table ) : m_iTableId( table )
 
 CDataBaseDBC::~CDataBaseDBC()
 {
+    delete m_pRouteTable;
 }
 
 int CDataBaseDBC::Init()

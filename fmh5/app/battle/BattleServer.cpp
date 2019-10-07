@@ -107,7 +107,7 @@ void* BattleServer::_run(void* args)
 			}
 			catch(const std::exception& e)
 			{}
-			//if(packet->m_msg) debug_log("process:%s", packet->m_msg->GetTypeName().c_str());
+			if(packet->m_msg) debug_log("process:%s", packet->m_msg->GetTypeName().c_str());
 			delete packet;
 		}
 	}

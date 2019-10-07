@@ -26,6 +26,8 @@ int main(int argc,char** argv){
 
 	LogicManager::Instance()->Destroy();
 	BattleServer::Instance()->Destroy();
+	CBusinessLogHelper::Destory();
+
 
 	return 0;
 }

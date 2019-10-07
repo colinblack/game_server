@@ -24,7 +24,7 @@ int LogicDynamicInfoManager::Process(unsigned uid, ProtoDynamicInfo::GetDynamicI
 		SetDyRespMsg(uid,dyItem[i],respmsg->add_arraydyinfo());
 	}
 
-	delete [] dyItem;
+	free(dyItem);
 	return 0;
 }
 

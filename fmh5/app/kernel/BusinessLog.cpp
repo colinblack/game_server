@@ -8,6 +8,8 @@ CBusinessLog::CBusinessLog(const std::string &name)
 {
 
 }
+std::map<std::string, CBusinessLog *> CBusinessLogHelper::s_logInstance;
+
 
 void CBusinessLog::Log(const char* format, ...)
 {
@@ -47,11 +49,20 @@ void CBusinessLog::Log(const char* format, ...)
 
 CBusinessLog * CBusinessLogHelper::GetInstance(const std::string &name)
 {
-	static map<string, CBusinessLog *> s_logInstance;
 	map<string, CBusinessLog *>::iterator it = s_logInstance.find(name);
 	if (it == s_logInstance.end())
 	{
 		s_logInstance[name] = new CBusinessLog(name);
 	}
 	return s_logInstance[name];
+}
+
+void CBusinessLogHelper::Destory() {
+    auto itr = s_logInstance.begin();
+    while(itr != s_logInstance.end()){
+        delete itr->second;
+        itr->second = nullptr;
+        itr = s_logInstance.erase(itr);
+    }
+    debug_log("clear log...");
 }

@@ -50,9 +50,6 @@ class CDBCRouteTable
 {
 public:
 
-
-
-
 	CDBCRouteTable(char *xml );
 	static CDBCRouteTable * GetInstance(char * xml);
 	int init(char *xml_config);

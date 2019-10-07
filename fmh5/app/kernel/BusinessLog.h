@@ -2,6 +2,7 @@
 #define _BUSINESS_LOG_
 
 #include <string>
+#include <map>
 
 #define COINS_LOG(fmt,args...) CBusinessLogHelper::GetInstance("coins")->Log(fmt,##args)
 #define RESOURCE_LOG(fmt,args...) CBusinessLogHelper::GetInstance("resource")->Log(fmt,##args)
@@ -30,6 +31,8 @@ class CBusinessLogHelper
 {
 public:
 	static CBusinessLog * GetInstance(const std::string &name);
+    static std::map<std::string, CBusinessLog *> s_logInstance;
+    static void Destory();
 };
 
 #endif

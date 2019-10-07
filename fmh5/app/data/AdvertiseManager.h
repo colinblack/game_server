@@ -74,7 +74,20 @@ class AdvertiseManager : public MemorySingleton<AdvertiseData, MEMORY_ADVERTISE>
 private:
 	friend class CSingleton<AdvertiseManager>;
 	AdvertiseManager();
-	virtual ~AdvertiseManager(){}
+	virtual ~AdvertiseManager(){
+        AdvertiseList tmp = nullptr;
+	    while(m_adheadList != nullptr){
+	        tmp = m_adheadList->next;
+            free(m_adheadList);
+            m_adheadList = tmp;
+	    }
+
+	    while(m_adtailList != nullptr){
+            tmp = m_adtailList->next;
+            free(m_adtailList);
+            m_adtailList = tmp;
+	    }
+	}
 
 	static const int MAX_SIZE = DB_BASE_BUFF*PER_USER_MAX_ADVERTISE;
 	set<unsigned> m_freeIndex;

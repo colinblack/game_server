@@ -61,7 +61,7 @@ int LogicMessageBoardManager::Process(unsigned uid, ProtoMessageBoard::GetMessag
 	}
 
 
-	delete [] msgItem;
+	free(msgItem);
 	return 0;
 }
 

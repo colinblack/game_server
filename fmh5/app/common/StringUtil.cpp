@@ -23,7 +23,7 @@ bool String::Format(string &out, const char *format, ...)
 	va_start(args, format);
 	size_t r = vsnprintf(buffer, n + 1, format, args);
 	out = buffer;
-	delete buffer;
+	delete [] buffer;
 	va_end(args);
 	return r == n;
 }

@@ -24,7 +24,7 @@ public:
 	{
 		if(m_bOwn && m_pBuffer != NULL)
 		{
-			delete m_pBuffer;
+			delete [] m_pBuffer;
 		}
 	}
 
