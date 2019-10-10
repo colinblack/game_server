@@ -9,30 +9,30 @@
 #define DYNAMICBUFFER_H_
 
 #include "Common.h"
-#define TCP_CHANNEL_BUFFER_SIZE      0x800000
-#define INCREMENT_FACTOR			 0x80000
-#define DEFAULT_SIZE	 			 0x20000   //128K
-template<size_t Capacity>
+#include "MemoryManager.h"
+#define TCP_CHANNEL_BUFFER_SIZE 0x800000
+#define INCREMENT_FACTOR 0x80000
+#define DEFAULT_SIZE 0x20000 //128K
+template <size_t Capacity>
 class CDynamicBuffer : public IBuffer
 {
 public:
-
-	CDynamicBuffer():m_uSize(0)
+	CDynamicBuffer() : m_uSize(0)
 	{
 		m_capacity = Capacity;
-		m_pBuffer = new byte[m_capacity];
+		m_pBuffer = CreateObj<byte>(m_capacity);
 	}
 
-	CDynamicBuffer(const CDynamicBuffer& other)
+	CDynamicBuffer(const CDynamicBuffer &other)
 	{
 		m_capacity = other.m_capacity;
-		m_pBuffer = new byte[m_capacity];
+		m_pBuffer = CreateObj<byte>(m_capacity);
 		this->m_uSize = other.m_uSize;
-		memcpy(m_pBuffer,other.m_pBuffer,m_capacity);
+		memcpy(m_pBuffer, other.m_pBuffer, m_capacity);
 	}
 	~CDynamicBuffer()
 	{
-		delete [] m_pBuffer;
+		delete[] m_pBuffer;
 	}
 	virtual byte *GetNativeBuffer()
 	{
@@ -48,7 +48,7 @@ public:
 	}
 	virtual bool SetSize(uint32_t size)
 	{
-		if(size > m_capacity)
+		if (size > m_capacity)
 		{
 			return false;
 		}
@@ -78,7 +78,7 @@ public:
 
 	virtual byte GetAt(uint32_t uIndex) const
 	{
-		if(uIndex >= m_uSize)
+		if (uIndex >= m_uSize)
 		{
 			return 0;
 		}
@@ -87,7 +87,7 @@ public:
 
 	virtual bool SetAt(uint32_t uIndex, byte cValue)
 	{
-		if(uIndex >= m_uSize)
+		if (uIndex >= m_uSize)
 		{
 			return false;
 		}
@@ -97,7 +97,7 @@ public:
 
 	virtual bool CopyFrom(const byte *pcBuffer, uint32_t uSize)
 	{
-		if(pcBuffer == NULL || uSize > m_capacity)
+		if (pcBuffer == NULL || uSize > m_capacity)
 		{
 			return false;
 		}
@@ -108,38 +108,38 @@ public:
 
 	virtual bool Append(const byte *pcBuffer, uint32_t uSize)
 	{
-		if(pcBuffer == NULL)
+		if (pcBuffer == NULL)
 		{
 			return false;
 		}
-		if(m_uSize + uSize > TCP_CHANNEL_BUFFER_SIZE)
+		if (m_uSize + uSize > TCP_CHANNEL_BUFFER_SIZE)
 		{
 			return false;
 		}
-		if(m_uSize + uSize > m_capacity)
+		if (m_uSize + uSize > m_capacity)
 		{
 			uint32_t uNeedSize = m_uSize + uSize;
 			uint32_t ucapacity = m_capacity;
-			while(1)
+			while (1)
 			{
 				ucapacity += INCREMENT_FACTOR;
-				if(ucapacity >= uNeedSize)
+				if (ucapacity >= uNeedSize)
 				{
-					if(ucapacity <= TCP_CHANNEL_BUFFER_SIZE)
+					if (ucapacity <= TCP_CHANNEL_BUFFER_SIZE)
 					{
 						break;
 					}
 					else
 					{
-						error_log("!!!!----need more buffer Capacity:%d m_uSize:%d uSize:%d\n",m_capacity,m_uSize,uSize);
+						error_log("!!!!----need more buffer Capacity:%d m_uSize:%d uSize:%d\n", m_capacity, m_uSize, uSize);
 						return false;
 					}
 				}
 			}
-			error_log("XXXX----need more buffer Capacity:%d m_uSize:%d uSize:%d\n",m_capacity,m_uSize,uSize);
-			byte * pTempBuffer =  m_pBuffer;
-			m_pBuffer = new byte[ucapacity];
-			if(m_pBuffer == NULL)
+			error_log("XXXX----need more buffer Capacity:%d m_uSize:%d uSize:%d\n", m_capacity, m_uSize, uSize);
+			byte *pTempBuffer = m_pBuffer;
+			m_pBuffer = CreateObj<byte>(ucapacity);
+			if (m_pBuffer == NULL)
 			{
 				m_pBuffer = pTempBuffer;
 				pTempBuffer = NULL;
@@ -149,10 +149,10 @@ public:
 			memcpy(m_pBuffer, pTempBuffer, m_uSize);
 			memcpy(m_pBuffer + m_uSize, pcBuffer, uSize);
 			m_uSize += uSize;
-			delete [] pTempBuffer;
+			delete[] pTempBuffer;
 			return true;
 		}
-		if(m_uSize + uSize <= m_capacity)
+		if (m_uSize + uSize <= m_capacity)
 		{
 			memcpy(m_pBuffer + m_uSize, pcBuffer, uSize);
 			m_uSize += uSize;
@@ -163,7 +163,7 @@ public:
 
 	virtual bool Remove(uint32_t uStart, uint32_t uSize)
 	{
-		if(uStart + uSize > m_uSize)
+		if (uStart + uSize > m_uSize)
 		{
 			return false;
 		}
@@ -174,7 +174,7 @@ public:
 
 	virtual bool GetData(byte *pBuffer, uint32_t uSize, uint32_t uIndex) const
 	{
-		if(pBuffer == NULL || uIndex + uSize > m_uSize)
+		if (pBuffer == NULL || uIndex + uSize > m_uSize)
 		{
 			return false;
 		}
@@ -182,14 +182,15 @@ public:
 		return true;
 	}
 
-	CDynamicBuffer& operator = (const CDynamicBuffer& other){
+	CDynamicBuffer &operator=(const CDynamicBuffer &other)
+	{
 		this->m_uSize = other.m_uSize;
-		memcpy(m_pBuffer,other.m_pBuffer,m_capacity);
+		memcpy(m_pBuffer, other.m_pBuffer, m_capacity);
 		return *this;
 	}
 
 private:
-	byte * m_pBuffer;
+	byte *m_pBuffer;
 	size_t m_capacity;
 	uint32_t m_uSize;
 };

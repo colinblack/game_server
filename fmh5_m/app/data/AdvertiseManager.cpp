@@ -1,22 +1,21 @@
 #include "AdvertiseManager.h"
 
-
-AdvertiseManager::AdvertiseManager():m_adheadList(NULL),m_adtailList(NULL)
+AdvertiseManager::AdvertiseManager() : m_adheadList(NULL), m_adtailList(NULL)
 {
 	InitList();
 }
 
 int AdvertiseManager::OnInit()
 {
-	for(int i = 0; i < MAX_SIZE; i++)
+	for (int i = 0; i < MAX_SIZE; i++)
 	{
-		if(m_data->item[i].id != 0) {
+		if (m_data->item[i].id != 0)
+		{
 			//初始化建立索引
 			m_map[m_data->item[i].id] = i;
 			m_adinfomap[m_data->item[i].uid][m_data->item[i].shelf_ud] = m_data->item[i].id;
 			//将广告数据添加到链表中
 			AddNode(m_data->item[i]);
-
 		}
 		else
 			m_freeIndex.insert(i);
@@ -27,15 +26,15 @@ int AdvertiseManager::OnInit()
 //初始化带头结点与尾借点的双向链表
 int AdvertiseManager::InitList()
 {
-	m_adheadList = (AdvertiseNode *)malloc(sizeof(AdvertiseNode));
-	m_adtailList = (AdvertiseNode *)malloc(sizeof(AdvertiseNode));
-	if(m_adheadList == NULL || m_adtailList == NULL)
+	m_adheadList = CreateObj<AdvertiseNode>();
+	m_adtailList = CreateObj<AdvertiseNode>();
+	if (m_adheadList == NULL || m_adtailList == NULL)
 	{
 		error_log("init adlist error");
 		throw std::runtime_error("init adlist error");
 	}
 	m_adheadList->prior = NULL;
-	m_adtailList->next  = NULL;
+	m_adtailList->next = NULL;
 
 	//构建空链表
 	m_adheadList->next = m_adtailList;
@@ -49,16 +48,16 @@ int AdvertiseManager::AddNode(AdvertiseItem data)
 	AdvertiseList phead = m_adheadList;
 
 	AdvertiseNode *node = (AdvertiseNode *)malloc(sizeof(AdvertiseNode));
-	if(node == NULL)
+	if (node == NULL)
 	{
 		error_log("add node failed");
 		return -1;
 	}
 
 	//添加节点
-	node->data  = data;
+	node->data = data;
 	node->prior = phead;
-	node->next  = phead->next;
+	node->next = phead->next;
 	phead->next->prior = node;
 	phead->next = node;
 
@@ -69,9 +68,9 @@ int AdvertiseManager::AddNode(AdvertiseItem data)
 int AdvertiseManager::DelNode(unsigned id)
 {
 	AdvertiseList p = m_adheadList->next;
-	while(p != m_adtailList)
+	while (p != m_adtailList)
 	{
-		if(p->data.id == id)
+		if (p->data.id == id)
 		{
 			p->prior->next = p->next;
 			p->next->prior = p->prior;
@@ -87,8 +86,8 @@ int AdvertiseManager::DelNode(unsigned id)
 
 unsigned AdvertiseManager::GetNewAdUd()
 {
-	std::set<unsigned>::iterator udset =  m_freeIndex.begin();
-	if(udset == m_freeIndex.end())
+	std::set<unsigned>::iterator udset = m_freeIndex.begin();
+	if (udset == m_freeIndex.end())
 	{
 		error_log("GetNewAdUd failed");
 		throw std::runtime_error("GetNewAdUd failed");
@@ -100,21 +99,22 @@ unsigned AdvertiseManager::GetAdCnt()
 {
 	unsigned count = 0;
 	AdvertiseList p = m_adheadList->next;
-	while(p != m_adtailList) {
-		count ++;
+	while (p != m_adtailList)
+	{
+		count++;
 		p = p->next;
 	}
 	return count;
 }
 
-unsigned AdvertiseManager::GetAdId(unsigned uid,unsigned shelf_ud)
+unsigned AdvertiseManager::GetAdId(unsigned uid, unsigned shelf_ud)
 {
 	unsigned id = 0;
-	map<unsigned,map<unsigned,unsigned> >::iterator it = m_adinfomap.find(uid);
-	if(it != m_adinfomap.end())
+	map<unsigned, map<unsigned, unsigned>>::iterator it = m_adinfomap.find(uid);
+	if (it != m_adinfomap.end())
 	{
-		map<unsigned,unsigned>::iterator itor = it->second.find(shelf_ud);
-		if(itor != it->second.end())
+		map<unsigned, unsigned>::iterator itor = it->second.find(shelf_ud);
+		if (itor != it->second.end())
 		{
 			id = itor->second;
 		}
@@ -122,17 +122,18 @@ unsigned AdvertiseManager::GetAdId(unsigned uid,unsigned shelf_ud)
 	return id;
 }
 
-unsigned AdvertiseManager::DelAdInfo(unsigned uid,unsigned shelf_ud)
+unsigned AdvertiseManager::DelAdInfo(unsigned uid, unsigned shelf_ud)
 {
-	unsigned id  = GetAdId(uid,shelf_ud);
+	unsigned id = GetAdId(uid, shelf_ud);
 
-	if(id) {
+	if (id)
+	{
 		//删除m_adinfomap索引里的信息
-		map<unsigned,map<unsigned,unsigned> >::iterator it = m_adinfomap.find(uid);
-		if(it != m_adinfomap.end())
+		map<unsigned, map<unsigned, unsigned>>::iterator it = m_adinfomap.find(uid);
+		if (it != m_adinfomap.end())
 		{
-			map<unsigned,unsigned>::iterator itor = it->second.find(shelf_ud);
-			if(itor != it->second.end())
+			map<unsigned, unsigned>::iterator itor = it->second.find(shelf_ud);
+			if (itor != it->second.end())
 			{
 				m_adinfomap[uid].erase(itor);
 			}
@@ -145,19 +146,18 @@ unsigned AdvertiseManager::DelAdInfo(unsigned uid,unsigned shelf_ud)
 		DelNode(id);
 
 		//添加调试日志
-		debug_log("DelAdInfo,uid=%u,shelf_ud=%u,id=%u",uid,shelf_ud,id);
-
+		debug_log("DelAdInfo,uid=%u,shelf_ud=%u,id=%u", uid, shelf_ud, id);
 	}
 }
 
-unsigned AdvertiseManager::AddAdInfo(AdvertiseItem & adItem)
+unsigned AdvertiseManager::AddAdInfo(AdvertiseItem &adItem)
 {
 	//添加信息
 	m_adinfomap[adItem.uid][adItem.shelf_ud] = adItem.id;
 	Add(adItem);
 	AddNode(adItem);
 	//添加调试日志
-	debug_log("AddAdInfo,uid=%u,shelf_ud=%u,id=%u",adItem.uid,adItem.shelf_ud,adItem.id);
+	debug_log("AddAdInfo,uid=%u,shelf_ud=%u,id=%u", adItem.uid, adItem.shelf_ud, adItem.id);
 }
 
 AdvertiseList AdvertiseManager::GetAdHeadList()

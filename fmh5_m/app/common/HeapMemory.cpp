@@ -7,22 +7,21 @@
 
 #include "HeapMemory.h"
 
-CHeapMemory::CHeapMemory() :
-	m_pAddress(NULL),
-	m_size(0)
+CHeapMemory::CHeapMemory() : m_pAddress(NULL),
+							 m_size(0)
 {
 }
 
 CHeapMemory::CHeapMemory(int size)
 {
-	if(size <= 0)
+	if (size <= 0)
 	{
 		m_pAddress = NULL;
 		m_size = 0;
-		return ;
+		return;
 	}
 	m_pAddress = new char[size];
-	if(m_pAddress == NULL)
+	if (m_pAddress == NULL)
 	{
 		m_size = 0;
 	}
@@ -35,7 +34,7 @@ CHeapMemory::CHeapMemory(int size)
 
 CHeapMemory::~CHeapMemory()
 {
-	if(m_pAddress != NULL)
+	if (m_pAddress != NULL)
 	{
 		delete (char *)m_pAddress;
 	}
@@ -43,12 +42,12 @@ CHeapMemory::~CHeapMemory()
 
 bool CHeapMemory::Create(int size)
 {
-	if(m_pAddress != NULL || size <= 0)
+	if (m_pAddress != NULL || size <= 0)
 	{
 		return false;
 	}
 	m_pAddress = new char[size];
-	if(m_pAddress == NULL)
+	if (m_pAddress == NULL)
 	{
 		m_size = 0;
 		return false;
@@ -60,7 +59,7 @@ bool CHeapMemory::Create(int size)
 
 bool CHeapMemory::Close()
 {
-	if(m_pAddress != NULL)
+	if (m_pAddress != NULL)
 	{
 		delete (char *)m_pAddress;
 		m_pAddress = NULL;
@@ -68,4 +67,3 @@ bool CHeapMemory::Close()
 	}
 	return true;
 }
-

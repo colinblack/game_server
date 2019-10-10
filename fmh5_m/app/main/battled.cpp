@@ -1,25 +1,27 @@
 #include "BattleServer.h"
 
-int main(int argc,char** argv){
+int main(int argc, char **argv)
+{
 
-	if(!BattleServer::Instance()->Initialize())
+	if (!BattleServer::Instance()->Initialize())
 	{
 		printf("battle Server Initialize Error\n");
 		return 0;
 	}
 
-	if(!LogicManager::Instance()->Initialize()){
+	if (!LogicManager::Instance()->Initialize())
+	{
 		printf("LogicManager Init failed\n");
 		return 0;
 	}
 
-	if(!BattleServer::Instance()->InitThread())
+	if (!BattleServer::Instance()->InitThread())
 	{
 		printf("battle Server InitThread Error\n");
 		return 0;
 	}
 
-	if(!BattleServer::Instance()->Run())
+	if (!BattleServer::Instance()->Run())
 	{
 		fatal_log("[FireServer::Run fail]");
 	}
@@ -27,7 +29,6 @@ int main(int argc,char** argv){
 	LogicManager::Instance()->Destroy();
 	BattleServer::Instance()->Destroy();
 	CBusinessLogHelper::Destory();
-
 
 	return 0;
 }

@@ -1,10 +1,10 @@
 #include "BattleServer.h"
 
-CBaseMutex   BattleServer::m_mutex;
+CBaseMutex BattleServer::m_mutex;
 pthread_t BattleServer::m_thread;
 pthread_cond_t BattleServer::m_cond;
-list<CFirePacket*> BattleServer::m_recv;
-list<CFirePacket*> BattleServer::m_send;
+list<CFirePacket *> BattleServer::m_recv;
+list<CFirePacket *> BattleServer::m_send;
 set<int> BattleServer::m_closed;
 
 static void OnReloadConfig()
@@ -15,23 +15,24 @@ static void OnExit()
 {
 	LogicManager::IsPreClosed = true;
 }
-static void OnSigNum(int signum,siginfo_t *info,void *myact)
+static void OnSigNum(int signum, siginfo_t *info, void *myact)
 {
 	LogicManager::m_signum = signum;
 }
 
 static bool ParseAddress(vector<CInternetAddress> &vecAddress, const string &sAddress)
 {
-	if(sAddress.empty())
+	if (sAddress.empty())
 	{
 		return false;
 	}
+
 	vector<string> vecStrAddress;
 	CBasic::StringSplitTrim(sAddress, ",", vecStrAddress);
-	for(vector<string>::iterator itr = vecStrAddress.begin(); itr != vecStrAddress.end(); itr++)
+	for (vector<string>::iterator itr = vecStrAddress.begin(); itr != vecStrAddress.end(); itr++)
 	{
 		CInternetAddress address;
-		if(address.FromString(*itr))
+		if (address.FromString(*itr))
 		{
 			vecAddress.push_back(address);
 		}
@@ -41,28 +42,28 @@ static bool ParseAddress(vector<CInternetAddress> &vecAddress, const string &sAd
 
 bool BattleServer::Initialize()
 {
-	if(!Kernel::Init())
+	if (!Kernel::Init())
 	{
 		fatal_log("[Kernel::Init fail][server=Toywar]");
 		return false;
 	}
 	vector<CInternetAddress> listenAddress;
-//	string ip = "0.0.0.0";
-//	ip.append(":").append(String::i2s(BASE_SERVER_PORT + atoi(Config::GetValue(CONFIG_SRVID).c_str()) * 10 + atoi(Config::GetValue("process_id").c_str()))))
-	if(!ParseAddress(listenAddress,Config::GetValue("server_listen")))
+	//	string ip = "0.0.0.0";
+	//	ip.append(":").append(String::i2s(BASE_SERVER_PORT + atoi(Config::GetValue(CONFIG_SRVID).c_str()) * 10 + atoi(Config::GetValue("process_id").c_str()))))
+	if (!ParseAddress(listenAddress, Config::GetValue("server_listen")))
 	{
 		fatal_log("[ParseAddress fail]");
 		return false;
 	}
 	int maxConn = TCP_SERVER_MAX_CONNECTIONS;
 	Config::GetIntValue(maxConn, "server_max_conn");
-	if(!CTcpServer::Initialize(listenAddress, maxConn))
+	if (!CTcpServer::Initialize(listenAddress, maxConn))
 	{
 		fatal_log("[TcpServer::Initialize fail]");
 		return false;
 	}
 
-	if(!System::InitDaemon())
+	if (!System::InitDaemon())
 	{
 		fatal_log("[System::InitDaemon fail][error=%d]", errno);
 		return false;
@@ -73,7 +74,6 @@ bool BattleServer::Initialize()
 	return true;
 }
 
-
 void BattleServer::OnReceive(CFirePacket *pPacket)
 {
 	CScopedLock guard(m_mutex);
@@ -81,17 +81,17 @@ void BattleServer::OnReceive(CFirePacket *pPacket)
 	pthread_cond_signal(&m_cond);
 }
 
-void* BattleServer::_run(void* args)
+void *BattleServer::_run(void *args)
 {
 	System::InitSig(OnExit, OnReloadConfig, OnSigNum);
 	CFirePacket *packet = NULL;
-	while(1)
+	while (1)
 	{
 		{
 			CScopedLock guard(m_mutex);
-			if(!packet)
+			if (!packet)
 				pthread_cond_wait(&m_cond, m_mutex.GetMutex());
-			if(!m_recv.empty())
+			if (!m_recv.empty())
 			{
 				packet = *m_recv.begin();
 				m_recv.pop_front();
@@ -99,27 +99,29 @@ void* BattleServer::_run(void* args)
 			else
 				packet = NULL;
 		}
-		if(packet)
+		if (packet)
 		{
 			try
 			{
 				LogicManager::Instance()->process(packet);
 			}
-			catch(const std::exception& e)
-			{}
-			if(packet->m_msg) debug_log("process:%s", packet->m_msg->GetTypeName().c_str());
-			delete packet;
+			catch (const std::exception &e)
+			{
+			}
+			if (packet->m_msg)
+				debug_log("process:%s", packet->m_msg->GetTypeName().c_str());
+			DestoryObj<CFirePacket>(packet);
 		}
 	}
 	pthread_exit(NULL);
 }
 
-bool BattleServer::AddSend(CFirePacket* packet)
+bool BattleServer::AddSend(CFirePacket *packet)
 {
-	if(!packet->delmsg)
+	if (!packet->delmsg)
 	{
 		packet->delmsg = true;
-		Message* m = packet->m_msg->New();
+		Message *m = packet->m_msg->New();
 		m->MergeFrom(*packet->m_msg);
 		packet->m_msg = m;
 	}
@@ -130,12 +132,12 @@ bool BattleServer::AddSend(CFirePacket* packet)
 
 void BattleServer::OnIdle()
 {
-	CFirePacket* packet = NULL;
+	CFirePacket *packet = NULL;
 	do
 	{
 		{
 			CScopedLock guard(m_mutex);
-			if(!m_send.empty())
+			if (!m_send.empty())
 			{
 				packet = *m_send.begin();
 				m_send.pop_front();
@@ -143,19 +145,19 @@ void BattleServer::OnIdle()
 			else
 				packet = NULL;
 		}
-		if(packet)
+		if (packet)
 		{
 			try
 			{
 				SendData(packet);
 			}
-			catch(const std::exception& e)
-			{}
+			catch (const std::exception &e)
+			{
+			}
 			//if(packet->m_msg) debug_log("send:%s", packet->m_msg->GetTypeName().c_str());
-			delete packet;
+			DestoryObj<CFirePacket>(packet);
 		}
-	}
-	while(packet);
+	} while (packet);
 }
 
 void BattleServer::OnChannelClose(int channelId)
@@ -168,7 +170,7 @@ bool BattleServer::IsChannelClosed(int channel)
 {
 	CScopedLock guard(m_mutex);
 	bool c = false;
-	if(m_closed.count(channel))
+	if (m_closed.count(channel))
 		c = true;
 	m_closed.clear();
 	return c;

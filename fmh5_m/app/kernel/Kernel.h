@@ -33,7 +33,7 @@
 #include "ConfigManager.h"
 #include "ConfigPB.h"
 #include "ConfigInc.h"
-
+#include "MemoryManager.h"
 #include "BattleConnect.h"
 
 #endif //__KERNEL_H__

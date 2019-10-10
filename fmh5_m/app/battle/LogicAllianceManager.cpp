@@ -2,11 +2,9 @@
 #include <fstream>
 LogicAllianceManager::LogicAllianceManager()
 {
-
 }
 
-OtherAllianceSaveControl::OtherAllianceSaveControl(unsigned aid):
-		aid_(aid)
+OtherAllianceSaveControl::OtherAllianceSaveControl(unsigned aid) : aid_(aid)
 {
 	int ret = LogicAllianceManager::Instance()->LoadAlliance(aid_);
 	if (ret)
@@ -27,9 +25,9 @@ int LogicAllianceManager::SaveAlliance(unsigned alliance_id)
 }
 int LogicAllianceManager::LoadAlliance(unsigned alliance_id)
 {
-	if(!IsAllianceId(alliance_id))
+	if (!IsAllianceId(alliance_id))
 		return R_ERR_PARAM;
-	if(CMI->IsNeedConnectByAID(alliance_id))
+	if (CMI->IsNeedConnectByAID(alliance_id))
 		return R_ERR_PARAM;
 
 	DataAllianceManager::Instance()->IsExist(alliance_id);
@@ -49,14 +47,13 @@ int LogicAllianceManager::LoadAlliance(unsigned alliance_id)
 	DataAllianceNotifyManager::Instance()->LoadBuffer(alliance_id);
 
 	//判断共享内存中是否有该商会信息
-	if(!MemoryAllianceManager::Instance()->IsExist(alliance_id))
+	if (!MemoryAllianceManager::Instance()->IsExist(alliance_id))
 	{
 		unsigned count = DataAllianceMemberManager::Instance()->GetMemberCount(alliance_id);
-		DataAlliance & alliance = DataAllianceManager::Instance()->GetData(alliance_id);
+		DataAlliance &alliance = DataAllianceManager::Instance()->GetData(alliance_id);
 		MemoryAllianceManager::Instance()->Add(alliance_id, count, alliance.apply_type, alliance.apply_level_limit, DataAllianceMemberManager::Instance()->GetMemberOnlineNum(alliance_id));
 
 		debug_log("alliance_member_count aid=%u count=%u", alliance_id, count);
-
 	}
 
 	return 0;
@@ -72,15 +69,15 @@ void LogicAllianceManager::OnTimer1()
 }
 void LogicAllianceManager::OnRaceSettle()
 {
-	map<uint32_t, pair<uint32_t, uint32_t> > rank;
+	map<uint32_t, pair<uint32_t, uint32_t>> rank;
 	MemoryAllianceRaceGroupManager::Instance()->Rank(rank);
 
 	string path = Config::GetPath("tools/");
 	string file = path + "racepoint.txt";
 	ofstream fout(file.c_str(), ios_base::out | ios_base::trunc);
 
-//	Json::Value globalRank(Json::arrayValue); // allianceId -> point
-	for(map<uint32_t, pair<uint32_t, uint32_t> >::iterator iter = rank.begin(); iter != rank.end(); ++iter)
+	//	Json::Value globalRank(Json::arrayValue); // allianceId -> point
+	for (map<uint32_t, pair<uint32_t, uint32_t>>::iterator iter = rank.begin(); iter != rank.end(); ++iter)
 	{
 		uint32_t aid = iter->first;
 		uint32_t rankId = iter->second.first;
@@ -90,17 +87,17 @@ void LogicAllianceManager::OnRaceSettle()
 		try
 		{
 			OtherAllianceSaveControl allianceCtl(aid);
-			DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+			DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 
 			alliance.race_rank_id = rankId;
 			alliance.race_opoint = alliance.race_point;
 			alliance.race_olevel = alliance.race_level;
 
-			if(rankId >= 1 && rankId <= 3 && alliance.race_level > 1)	// 前三名升到上一级
+			if (rankId >= 1 && rankId <= 3 && alliance.race_level > 1) // 前三名升到上一级
 			{
 				--alliance.race_level;
 			}
-			if(rankId >= 12 && rankId <= 15 && alliance.race_level < 5)	// 最后三名降到下一级
+			if (rankId >= 12 && rankId <= 15 && alliance.race_level < 5) // 最后三名降到下一级
 			{
 				++alliance.race_level;
 			}
@@ -112,26 +109,26 @@ void LogicAllianceManager::OnRaceSettle()
 
 			DataAllianceMemberManager::Instance()->GetIndexs(aid, indexs);
 
-			for(size_t i = 0; i < indexs.size(); ++i)
+			for (size_t i = 0; i < indexs.size(); ++i)
 			{
-				DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
-				if(IsInRace(member.join_ts))	// 参与到本轮竞赛才有奖励
+				DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
+				if (IsInRace(member.join_ts)) // 参与到本轮竞赛才有奖励
 				{
 					uint32_t levelId = AllianceRaceCfgWrap().GetRaceRewardLevelId(member.userlevel);
 					uint8_t race_grade_reward[DataAllianceMember_race_grade_reward_LENG]; // 等级奖励
 					memset(race_grade_reward, 0, sizeof(race_grade_reward));
-					if(rankId >= 1 && rankId <= 3)
+					if (rankId >= 1 && rankId <= 3)
 					{
 						AllianceRaceCfgWrap().RefreshGradeReward(levelId, race_grade_reward, 3);
 					}
-					for(uint32_t j = 0; j < DataAllianceMember_race_grade_reward_LENG; ++j)
+					for (uint32_t j = 0; j < DataAllianceMember_race_grade_reward_LENG; ++j)
 					{
 						member.race_grade_reward[j].rewardId = race_grade_reward[j];
 					}
-					if(member.race_point == 0)	// 本轮竞赛没有获得积分不会刷新阶段奖励,结算时要刷新
+					if (member.race_point == 0) // 本轮竞赛没有获得积分不会刷新阶段奖励,结算时要刷新
 					{
 						member.race_user_level = member.userlevel;
-						const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > fixId;
+						const ::google::protobuf::RepeatedField<::google::protobuf::uint32> fixId;
 						RefreshMemberRaceStageReward(fixId, levelId, member);
 					}
 					member.flag = 0;
@@ -147,9 +144,9 @@ void LogicAllianceManager::OnRaceSettle()
 			globalRank.append(obj);
 			*/
 			fout << aid << " " << alliance.race_ts << " "
-					<< AllianceRaceCfgWrap().getRankPoint(alliance.race_level, rankId) + ((count > 0) ? (alliance.race_point / count) : 0) << '\n';
+				 << AllianceRaceCfgWrap().getRankPoint(alliance.race_level, rankId) + ((count > 0) ? (alliance.race_point / count) : 0) << '\n';
 		}
-		catch(runtime_error &e)
+		catch (runtime_error &e)
 		{
 			error_log("load alliance fail aid=%u %s", aid, e.what());
 		}
@@ -175,22 +172,22 @@ int LogicAllianceManager::Offline(unsigned uid)
 	return UpdateMemberNow(uid);
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAlliance* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAlliance *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceBC* m = new ProtoAlliance::RequestAllianceBC;
+			ProtoAlliance::RequestAllianceBC *m = CreateObj<ProtoAlliance::RequestAllianceBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::AllianceCPP* resp = new ProtoAlliance::AllianceCPP;
+			ProtoAlliance::AllianceCPP *resp = CreateObj<ProtoAlliance::AllianceCPP>();
 			FillAlliance(aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
@@ -198,31 +195,33 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAlliance* 
 	FixSelf(uid);
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceBC* resp = new ProtoAlliance::ReplyAllianceBC;
+	ProtoAlliance::ReplyAllianceBC *resp = CreateObj<ProtoAlliance::ReplyAllianceBC>();
 	resp->set_uid(uid);
-	try{
+	try
+	{
 		OtherAllianceSaveControl allianceCtl(aid);
 		if (IsAllianceId(aid) && CheckMember(aid, uid))
 			FillAlliance(aid, resp->mutable_alliance());
 	}
-	catch(runtime_error &e){
+	catch (runtime_error &e)
+	{
 		delete resp;
 		return R_ERROR;
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	FixSelf(req->uid());
 	return 0;
 }
-void LogicAllianceManager::FillAlliance(uint32_t aid, ProtoAlliance::AllianceCPP* resp)
+void LogicAllianceManager::FillAlliance(uint32_t aid, ProtoAlliance::AllianceCPP *resp)
 {
 	CheckRace(aid);
 	DataAllianceManager::Instance()->SetMessage1(aid, resp);
@@ -231,7 +230,7 @@ void LogicAllianceManager::FixSelf(unsigned uid)
 {
 	DBCUserBaseWrap userwrap(uid);
 
-	DataCommon::CommonItemsCPP * msg = new DataCommon::CommonItemsCPP;
+	DataCommon::CommonItemsCPP *msg = CreateObj<DataCommon::CommonItemsCPP>();
 	SetUserAllianceMsg(userwrap.Obj().alliance_id, 0, msg);
 
 	userwrap.Obj().alliance_id = 0;
@@ -240,7 +239,7 @@ void LogicAllianceManager::FixSelf(unsigned uid)
 	LMI->sendMsg(uid, msg);
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetAllianceFunctionReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetAllianceFunctionReq *req)
 {
 	unsigned type = req->type();
 
@@ -249,21 +248,21 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetAllianceFuncti
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceFunctionBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceFunctionBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
 	unsigned type = req->type();
-	ProtoAlliance::ReplyAllianceFunctionBC* resp = new ProtoAlliance::ReplyAllianceFunctionBC;
+	ProtoAlliance::ReplyAllianceFunctionBC *resp = CreateObj<ProtoAlliance::ReplyAllianceFunctionBC>();
 	resp->set_uid(uid);
 	resp->set_type(type);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
-		GetAllianceFuncLocal(aid, uid,  type, resp->mutable_alliance());
+		GetAllianceFuncLocal(aid, uid, type, resp->mutable_alliance());
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceFunctionBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceFunctionBC *req)
 {
 	unsigned type = req->type();
 	if (functional_type_invite == type || functional_type_all == type)
@@ -284,26 +283,26 @@ int LogicAllianceManager::GetAllianceFunc(unsigned uid, unsigned type)
 		throw runtime_error("not_in_alliance");
 	}
 	unsigned aid = userwrap.Obj().alliance_id;
-	ProtoAlliance::GetAllianceFunctionResp * resp = NULL;
+	ProtoAlliance::GetAllianceFunctionResp *resp = NULL;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceFunctionBC* m = new ProtoAlliance::RequestAllianceFunctionBC;
+			ProtoAlliance::RequestAllianceFunctionBC *m = CreateObj<ProtoAlliance::RequestAllianceFunctionBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_type(type);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			resp = new ProtoAlliance::GetAllianceFunctionResp;
-			GetAllianceFuncLocal(aid, uid,  type, resp);
+			resp = CreateObj<ProtoAlliance::GetAllianceFunctionResp>();
+			GetAllianceFuncLocal(aid, uid, type, resp);
 		}
 	}
-	if(resp == NULL)
+	if (resp == NULL)
 	{
-		resp = new ProtoAlliance::GetAllianceFunctionResp;
+		resp = CreateObj<ProtoAlliance::GetAllianceFunctionResp>();
 	}
 	if (functional_type_invite == type || functional_type_all == type)
 	{
@@ -313,12 +312,12 @@ int LogicAllianceManager::GetAllianceFunc(unsigned uid, unsigned type)
 	}
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::GetAllianceFuncLocal(unsigned alliance_id, unsigned uid,  unsigned type, ProtoAlliance::GetAllianceFunctionResp * resp)
+int LogicAllianceManager::GetAllianceFuncLocal(unsigned alliance_id, unsigned uid, unsigned type, ProtoAlliance::GetAllianceFunctionResp *resp)
 {
 
 	OtherAllianceSaveControl allianceCtl(alliance_id);
 	//获取全部时，入会申请最多30条
-	int maxcount = (type == functional_type_all ? 30 :99);
+	int maxcount = (type == functional_type_all ? 30 : 99);
 
 	if (functional_type_apply == type || functional_type_all == type)
 	{
@@ -341,9 +340,9 @@ int LogicAllianceManager::GetAllianceFuncLocal(unsigned alliance_id, unsigned ui
 		DataAllianceMemberManager::Instance()->GetIndexs(alliance_id, indexs);
 		int count = 0;
 
-		for(int i = 0; i < indexs.size(); ++i)
+		for (int i = 0; i < indexs.size(); ++i)
 		{
-			DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
+			DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
 
 			if (member.id == uid)
 			{
@@ -352,12 +351,12 @@ int LogicAllianceManager::GetAllianceFuncLocal(unsigned alliance_id, unsigned ui
 
 			unsigned othuid = member.id;
 
-				//判断是否可援助
-				//bool isneedhelp = LogicUserManager::Instance()->IsUserNeedHelp(othuid);
+			//判断是否可援助
+			//bool isneedhelp = LogicUserManager::Instance()->IsUserNeedHelp(othuid);
 
 			if (member.helpTs)
 			{
-				ProtoAlliance::AidInfoCPP* aidmsg = resp->add_aidlist();
+				ProtoAlliance::AidInfoCPP *aidmsg = resp->add_aidlist();
 
 				aidmsg->set_uid(othuid);
 				aidmsg->set_name(member.username);
@@ -376,7 +375,7 @@ int LogicAllianceManager::GetAllianceFuncLocal(unsigned alliance_id, unsigned ui
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetNotifyReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetNotifyReq *req)
 {
 	GetAllianceNotify(uid);
 
@@ -396,16 +395,16 @@ int LogicAllianceManager::GetAllianceNotify(unsigned uid)
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceNotifyBC* m = new ProtoAlliance::RequestAllianceNotifyBC;
+			ProtoAlliance::RequestAllianceNotifyBC *m = CreateObj<ProtoAlliance::RequestAllianceNotifyBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::GetNotifyResp* resp = new ProtoAlliance::GetNotifyResp;
+			ProtoAlliance::GetNotifyResp *resp = CreateObj<ProtoAlliance::GetNotifyResp>();
 			//商会通知
 			DataAllianceNotifyManager::Instance()->FullMessage(aid, resp->mutable_notifies());
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -414,11 +413,11 @@ int LogicAllianceManager::GetAllianceNotify(unsigned uid)
 
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceNotifyBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceNotifyBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceNotifyBC* resp = new ProtoAlliance::ReplyAllianceNotifyBC;
+	ProtoAlliance::ReplyAllianceNotifyBC *resp = CreateObj<ProtoAlliance::ReplyAllianceNotifyBC>();
 	resp->set_uid(uid);
 
 	OtherAllianceSaveControl allianceCtl(aid);
@@ -426,29 +425,29 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceNotifyBC* req)
 		DataAllianceNotifyManager::Instance()->FullMessage(aid, resp->mutable_alliance()->mutable_notifies());
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceNotifyBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceNotifyBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetMemberReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetMemberReq *req)
 {
 	unsigned aid = req->allianceid();
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceMemberBC* m = new ProtoAlliance::RequestAllianceMemberBC;
+			ProtoAlliance::RequestAllianceMemberBC *m = CreateObj<ProtoAlliance::RequestAllianceMemberBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
 		else
 		{
-			ProtoAlliance::GetMemberResp* resp = new ProtoAlliance::GetMemberResp;
+			ProtoAlliance::GetMemberResp *resp = CreateObj<ProtoAlliance::GetMemberResp>();
 			GetMembers(uid, aid, resp);
 			resp->set_allianceid(aid);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -457,11 +456,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetMemberReq* req
 
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceMemberBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceMemberBC* resp = new ProtoAlliance::ReplyAllianceMemberBC;
+	ProtoAlliance::ReplyAllianceMemberBC *resp = CreateObj<ProtoAlliance::ReplyAllianceMemberBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid))
 	{
@@ -470,9 +469,9 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceMemberBC* req)
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceMemberBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
@@ -500,22 +499,22 @@ int LogicAllianceManager::GetMembers(unsigned uid, unsigned alliance_id, ProtoAl
 	return 0;
 }
 
-int LogicAllianceManager::FullMessage(unsigned alliance_id, google::protobuf::RepeatedPtrField<ProtoAlliance::AllianceMemberCPP >* msg)
+int LogicAllianceManager::FullMessage(unsigned alliance_id, google::protobuf::RepeatedPtrField<ProtoAlliance::AllianceMemberCPP> *msg)
 {
 	vector<unsigned> indexs;
 
 	DataAllianceMemberManager::Instance()->GetIndexs(alliance_id, indexs);
 
-	for(size_t i = 0; i < indexs.size(); ++i)
+	for (size_t i = 0; i < indexs.size(); ++i)
 	{
-		DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
+		DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
 		SetMemberMessage(member, msg->Add());
 	}
 
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CheckNameAvailableReq* req, ProtoAlliance::CheckNameAvailableResp* resp)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CheckNameAvailableReq *req, ProtoAlliance::CheckNameAvailableResp *resp)
 {
 	string name = req->name();
 
@@ -524,7 +523,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CheckNameAvailabl
 	return 0;
 }
 
-int LogicAllianceManager::CheckName(unsigned uid, string &name, ProtoAlliance::CheckNameAvailableResp * resp)
+int LogicAllianceManager::CheckName(unsigned uid, string &name, ProtoAlliance::CheckNameAvailableResp *resp)
 {
 	string reason;
 	bool isavail = IsNameAvailable(uid, name, reason);
@@ -541,14 +540,14 @@ int LogicAllianceManager::CheckName(unsigned uid, string &name, ProtoAlliance::C
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CreateAllianceReq* req, ProtoAlliance::CreateAllianceResp* resp)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CreateAllianceReq *req, ProtoAlliance::CreateAllianceResp *resp)
 {
 	CreateAlliance(uid, req, resp);
 
 	return 0;
 }
 
-int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAllianceReq * req, ProtoAlliance::CreateAllianceResp * resp)
+int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAllianceReq *req, ProtoAlliance::CreateAllianceResp *resp)
 {
 	string reason;
 	string name = req->name();
@@ -570,7 +569,7 @@ int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAlli
 	}
 
 	//获取商会配置
-	const ConfigAlliance::Alliance & alliancecfg = AllianceCfgWrap().GetAllianceCfg();
+	const ConfigAlliance::Alliance &alliancecfg = AllianceCfgWrap().GetAllianceCfg();
 
 	if (userwrap.Obj().level < alliancecfg.create_level())
 	{
@@ -633,7 +632,6 @@ int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAlli
 	DataAllianceMember member;
 	FillMember(uid, allianceid, pos_type_chief, userwrap, member);
 
-
 	/*
 	if(true)	// 测试代码
 	{
@@ -662,7 +660,6 @@ int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAlli
 	}
 	*/
 
-
 	debug_log("alliance_member_count aid=%u count=%u", allianceid, 0);
 	MemoryAllianceManager::Instance()->Add(allianceid, 0, alliance.apply_type, alliance.apply_level_limit, 1);
 	//创建商会
@@ -670,7 +667,6 @@ int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAlli
 	DataAllianceManager::Instance()->SetMessage(allianceid, resp);
 	//商会添加会长
 	AddNewMember(member, resp->mutable_member());
-
 
 	//更新用户档中的商会id
 	userwrap.Obj().alliance_id = allianceid;
@@ -682,23 +678,23 @@ int LogicAllianceManager::CreateAlliance(unsigned uid, ProtoAlliance::CreateAlli
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RecommendllianceReq* req, ProtoAlliance::RecommendllianceResp* resp)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RecommendllianceReq *req, ProtoAlliance::RecommendllianceResp *resp)
 {
 	RecommendAlliance(uid, resp);
 
 	return 0;
 }
 
-int LogicAllianceManager::RecommendAlliance(unsigned uid, ProtoAlliance::RecommendllianceResp * resp)
+int LogicAllianceManager::RecommendAlliance(unsigned uid, ProtoAlliance::RecommendllianceResp *resp)
 {
 	DBCUserBaseWrap userwrap(uid);
 	//使用推荐的100个公会
 	vector<unsigned> alliances;
 
-	const ConfigAlliance::Alliance & alliancecfg = AllianceCfgWrap().GetAllianceCfg();
+	const ConfigAlliance::Alliance &alliancecfg = AllianceCfgWrap().GetAllianceCfg();
 	MemoryAllianceManager::Instance()->GetRecommendAlliances(userwrap.Obj().alliance_id, userwrap.Obj().level, alliancecfg.member_num_limit(), LogicAllianceManager::join_type_anyone, alliances);
 
-	for(int i = 0; i < alliances.size(); ++i)
+	for (int i = 0; i < alliances.size(); ++i)
 	{
 		//获取商会id
 		unsigned alliance_id = alliances[i];
@@ -712,19 +708,19 @@ int LogicAllianceManager::RecommendAlliance(unsigned uid, ProtoAlliance::Recomme
 				MemoryAllianceManager::Instance()->DelAlliance(alliance_id);
 				error_log("alliance not exist. uid=%u,alliance_id=%u", uid, alliance_id);
 				continue;
-//				throw runtime_error("alliance_not_exist");
+				//				throw runtime_error("alliance_not_exist");
 			}
 		}
 
 		//商会存在，则获取商会信息
-		DataAlliance & alliance = DataAllianceManager::Instance()->GetData(alliance_id);
+		DataAlliance &alliance = DataAllianceManager::Instance()->GetData(alliance_id);
 
-		ProtoAlliance::PartAllianceCPP* partmsg = resp->add_alliancebrief();
+		ProtoAlliance::PartAllianceCPP *partmsg = resp->add_alliancebrief();
 		alliance.SetMessage(partmsg);
 		partmsg->set_onlinenum(MemoryAllianceManager::Instance()->GetOnlineNum(alliance_id));
 
 		unsigned index = MemoryAllianceManager::Instance()->GetIndex(alliance_id);
-		OfflineAllianceItem & item = MemoryAllianceManager::Instance()->GetAllianceItemByIndex(index);
+		OfflineAllianceItem &item = MemoryAllianceManager::Instance()->GetAllianceItemByIndex(index);
 
 		partmsg->set_membercount(item.memcount);
 	}
@@ -732,13 +728,13 @@ int LogicAllianceManager::RecommendAlliance(unsigned uid, ProtoAlliance::Recomme
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetPartAllianceInfoReq* req, ProtoAlliance::GetPartAllianceInfoResp* resp)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetPartAllianceInfoReq *req, ProtoAlliance::GetPartAllianceInfoResp *resp)
 {
 	vector<unsigned> allianceids;
 
-	for(int i = 0; i < req->allianceid_size(); ++i)
+	for (int i = 0; i < req->allianceid_size(); ++i)
 	{
-		if(!CMI->IsNeedConnectByAID(req->allianceid(i)))
+		if (!CMI->IsNeedConnectByAID(req->allianceid(i)))
 		{
 			allianceids.push_back(req->allianceid(i));
 		}
@@ -749,9 +745,9 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::GetPartAllianceIn
 	return 0;
 }
 
-int LogicAllianceManager::GetBatchAllianceInfo(unsigned uid, vector<unsigned> & allianceids, ProtoAlliance::GetPartAllianceInfoResp * resp)
+int LogicAllianceManager::GetBatchAllianceInfo(unsigned uid, vector<unsigned> &allianceids, ProtoAlliance::GetPartAllianceInfoResp *resp)
 {
-	for(int i = 0; i < allianceids.size(); ++i)
+	for (int i = 0; i < allianceids.size(); ++i)
 	{
 		//获取商会id
 		unsigned alliance_id = allianceids[i];
@@ -775,9 +771,9 @@ int LogicAllianceManager::GetBatchAllianceInfo(unsigned uid, vector<unsigned> & 
 		}
 
 		//商会存在，则获取商会信息
-		DataAlliance & alliance = DataAllianceManager::Instance()->GetData(alliance_id);
+		DataAlliance &alliance = DataAllianceManager::Instance()->GetData(alliance_id);
 
-		ProtoAlliance::PartAllianceCPP* partmsg = resp->add_alliancebrief();
+		ProtoAlliance::PartAllianceCPP *partmsg = resp->add_alliancebrief();
 		alliance.SetMessage(partmsg);
 
 		int count = DataAllianceMemberManager::Instance()->GetMemberCount(alliance_id);
@@ -787,7 +783,7 @@ int LogicAllianceManager::GetBatchAllianceInfo(unsigned uid, vector<unsigned> & 
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ApplyJoinReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ApplyJoinReq *req)
 {
 	unsigned alliance_id = req->allianceid();
 	string reason = req->reason();
@@ -797,12 +793,12 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ApplyJoinReq* req
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestApplyJoinBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestApplyJoinBC *req)
 {
 	unsigned aid = req->allianceid();
 	unsigned uid = req->member().memberuid();
 
-	ProtoAlliance::ReplyApplyJoinBC* resp = new ProtoAlliance::ReplyApplyJoinBC;
+	ProtoAlliance::ReplyApplyJoinBC *resp = CreateObj<ProtoAlliance::ReplyApplyJoinBC>();
 	resp->set_uid(uid);
 	resp->set_allianceid(aid);
 
@@ -827,15 +823,15 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestApplyJoinBC* req)
 	resp->set_ret(ret);
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyApplyJoinBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyApplyJoinBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 	{
 		int ret = req->ret();
 		unsigned uid = req->uid();
 		unsigned aid = req->allianceid();
 		DBCUserBaseWrap userwrap(uid);
-		if(ret != apply_join_allow && aid == userwrap.Obj().alliance_id)	// 不能直接加入需要重置工会ID
+		if (ret != apply_join_allow && aid == userwrap.Obj().alliance_id) // 不能直接加入需要重置工会ID
 		{
 			userwrap.Obj().alliance_id = 0;
 			userwrap.Save();
@@ -845,7 +841,7 @@ int LogicAllianceManager::Process(ProtoAlliance::ReplyApplyJoinBC* req)
 	}
 	return 0;
 }
-int LogicAllianceManager::ApplyJoin(unsigned uid, unsigned aid, string & reason)
+int LogicAllianceManager::ApplyJoin(unsigned uid, unsigned aid, string &reason)
 {
 	//敏感词过滤
 	SensitiveFilter(reason);
@@ -876,9 +872,9 @@ int LogicAllianceManager::ApplyJoin(unsigned uid, unsigned aid, string & reason)
 	{
 		DataAllianceMember member;
 		FillMember(uid, aid, pos_type_member, userwrap, member);
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestApplyJoinBC* m = new ProtoAlliance::RequestApplyJoinBC;
+			ProtoAlliance::RequestApplyJoinBC *m = CreateObj<ProtoAlliance::RequestApplyJoinBC>();
 			m->set_allianceid(aid);
 			m->set_reason(reason);
 			member.SetMessage(m->mutable_member());
@@ -886,9 +882,9 @@ int LogicAllianceManager::ApplyJoin(unsigned uid, unsigned aid, string & reason)
 		}
 		else
 		{
-			ProtoAlliance::ApplyJoinResp* resp = new ProtoAlliance::ApplyJoinResp;
+			ProtoAlliance::ApplyJoinResp *resp = CreateObj<ProtoAlliance::ApplyJoinResp>();
 			int ret = ApplyJoinLocal(member, reason, resp);
-			if(ret != apply_join_allow)
+			if (ret != apply_join_allow)
 			{
 				userwrap.Obj().alliance_id = 0;
 			}
@@ -901,7 +897,7 @@ int LogicAllianceManager::ApplyJoin(unsigned uid, unsigned aid, string & reason)
 	return 0;
 }
 
-int LogicAllianceManager::ApplyJoinLocal(DataAllianceMember& member, const string & reason,	ProtoAlliance::ApplyJoinResp * resp)
+int LogicAllianceManager::ApplyJoinLocal(DataAllianceMember &member, const string &reason, ProtoAlliance::ApplyJoinResp *resp)
 {
 	uint32_t aid = member.alliance_id;
 	uint32_t uid = member.id;
@@ -913,17 +909,17 @@ int LogicAllianceManager::ApplyJoinLocal(DataAllianceMember& member, const strin
 	if (!DataAllianceManager::Instance()->IsExist(aid))
 	{
 		error_log("alliance not exist. uid=%u,alliance_id=%u", uid, aid);
-//		throw runtime_error("alliance_not_exist");
+		//		throw runtime_error("alliance_not_exist");
 		return apply_join_nonexist;
 	}
 
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 
 	//判断是否满足该商会的入会条件
 	if (alliance.apply_type == join_type_invite)
 	{
 		error_log("alliance only support invite. uid=%u,alliance_id=%u", uid, aid);
-//		throw runtime_error("invite_only");
+		//		throw runtime_error("invite_only");
 		return apply_join_invite_only;
 	}
 
@@ -931,12 +927,12 @@ int LogicAllianceManager::ApplyJoinLocal(DataAllianceMember& member, const strin
 	if (alliance.apply_level_limit > userLevel)
 	{
 		error_log("user level not enough. uid=%u, alliance_id=%u", uid, aid);
-//		throw runtime_error("level_not_enough");
+		//		throw runtime_error("level_not_enough");
 		return apply_join_level_limit;
 	}
 
 	//判断商会是否已满
-	if(!CheckMemberFull(uid, aid))
+	if (!CheckMemberFull(uid, aid))
 	{
 		error_log("CheckMemberFull fail uid=%u, alliance_id=%u", uid, aid);
 		return apply_join_member_full;
@@ -965,7 +961,7 @@ int LogicAllianceManager::ApplyJoinLocal(DataAllianceMember& member, const strin
 		}
 
 		//商会添加入会申请
-		DataAllianceApply & apply = DataAllianceApplyManager::Instance()->GetData(aid, uid);
+		DataAllianceApply &apply = DataAllianceApplyManager::Instance()->GetData(aid, uid);
 		apply.applyts = Time::GetGlobalTime();
 
 		snprintf(apply.reason, sizeof(apply.reason), "%s", reason.c_str());
@@ -980,7 +976,7 @@ int LogicAllianceManager::ApplyJoinLocal(DataAllianceMember& member, const strin
 
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ApproveJoinReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ApproveJoinReq *req)
 {
 	unsigned applyuid = req->applyuid();
 	unsigned operate = req->operate();
@@ -989,7 +985,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ApproveJoinReq* r
 
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestApproveJoinAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestApproveJoinAllianceBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
@@ -997,21 +993,21 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestApproveJoinAllianceBC* r
 	{
 		DataAllianceMember member;
 		member.SetData(aid, req->mutable_member());
-		ProtoAlliance::ApproveJoinResp* resp = new ProtoAlliance::ApproveJoinResp;
+		ProtoAlliance::ApproveJoinResp *resp = CreateObj<ProtoAlliance::ApproveJoinResp>();
 		ApproveJoinUpdateAlliance(uid, req->operate(), member, resp);
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestApproveJoinUserBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestApproveJoinUserBC *req)
 {
 	unsigned uid = req->uid();
 	return ApproveJoinUpdateUser(uid, req->aid(), req->applyuid(), req->operate());
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::ReplyApproveJoinBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyApproveJoinBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
@@ -1036,9 +1032,9 @@ int LogicAllianceManager::ApproveJoin(unsigned uid, unsigned apply_uid, unsigned
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByUID(apply_uid))
+		if (CMI->IsNeedConnectByUID(apply_uid))
 		{
-			ProtoAlliance::RequestApproveJoinUserBC* m = new ProtoAlliance::RequestApproveJoinUserBC;
+			ProtoAlliance::RequestApproveJoinUserBC *m = CreateObj<ProtoAlliance::RequestApproveJoinUserBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_applyuid(apply_uid);
@@ -1053,7 +1049,7 @@ int LogicAllianceManager::ApproveJoin(unsigned uid, unsigned apply_uid, unsigned
 
 	return 0;
 }
-int LogicAllianceManager::ApproveJoinUpdateAlliance(unsigned uid, unsigned operate, DataAllianceMember& member, ProtoAlliance::ApproveJoinResp * resp)
+int LogicAllianceManager::ApproveJoinUpdateAlliance(unsigned uid, unsigned operate, DataAllianceMember &member, ProtoAlliance::ApproveJoinResp *resp)
 {
 	unsigned aid = member.alliance_id;
 	unsigned apply_uid = member.id;
@@ -1061,7 +1057,7 @@ int LogicAllianceManager::ApproveJoinUpdateAlliance(unsigned uid, unsigned opera
 	OtherAllianceSaveControl allianceCtl(aid);
 
 	CheckMemberPrivilege(uid, aid, privilege_approve);
-	if(!DataAllianceApplyManager::Instance()->IsExistItem(aid, apply_uid))
+	if (!DataAllianceApplyManager::Instance()->IsExistItem(aid, apply_uid))
 	{
 		error_log("user not in apply list. uid=%u,apply_uid=%u", uid, apply_uid);
 		throw runtime_error("user_not_apply");
@@ -1091,7 +1087,7 @@ int LogicAllianceManager::ApproveJoinUpdateUser(unsigned uid, unsigned aid, unsi
 	OffUserSaveControl offuserctl(apply_uid);
 	DBCUserBaseWrap othuserwrap(apply_uid);
 
-	if (othuserwrap.Obj().alliance_id > 0)	// 玩家已经加入其它联盟则拒绝玩家
+	if (othuserwrap.Obj().alliance_id > 0) // 玩家已经加入其它联盟则拒绝玩家
 	{
 		operate = approve_operate_reject;
 	}
@@ -1107,18 +1103,18 @@ int LogicAllianceManager::ApproveJoinUpdateUser(unsigned uid, unsigned aid, unsi
 	{
 		DataAllianceMember member;
 		FillMember(apply_uid, aid, pos_type_member, othuserwrap, member);
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestApproveJoinAllianceBC* m = new ProtoAlliance::RequestApproveJoinAllianceBC;
+			ProtoAlliance::RequestApproveJoinAllianceBC *m = CreateObj<ProtoAlliance::RequestApproveJoinAllianceBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_operate(operate);
 			member.SetMessage(m->mutable_member());
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ApproveJoinResp *resp = new ProtoAlliance::ApproveJoinResp;
+			ProtoAlliance::ApproveJoinResp *resp = CreateObj<ProtoAlliance::ApproveJoinResp>();
 			ApproveJoinUpdateAlliance(uid, operate, member, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
@@ -1126,7 +1122,7 @@ int LogicAllianceManager::ApproveJoinUpdateUser(unsigned uid, unsigned aid, unsi
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::InviteJoinReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::InviteJoinReq *req)
 {
 	unsigned inviteuid = req->inviteduid();
 
@@ -1134,7 +1130,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::InviteJoinReq* re
 
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestInviteJoinBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestInviteJoinBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
@@ -1146,16 +1142,16 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestInviteJoinBC* req)
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyInviteJoinBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyInviteJoinBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestInviteJoinUserBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestInviteJoinUserBC *req)
 {
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyInviteJoinBC* resp = new ProtoAlliance::ReplyInviteJoinBC;
+	ProtoAlliance::ReplyInviteJoinBC *resp = CreateObj<ProtoAlliance::ReplyInviteJoinBC>();
 	resp->set_uid(uid);
 	InviteJoinUpdateUser(uid, req->aid(), req->inviteduid(), req->allianceflag(), req->name(), req->alliancename(), resp->mutable_alliance());
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
@@ -1164,7 +1160,7 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestInviteJoinUserBC* req)
 int LogicAllianceManager::InviteJoin(unsigned uid, unsigned invited_uid)
 {
 	//权限校验
-//	CheckPrivilege(uid, privilege_invite);
+	//	CheckPrivilege(uid, privilege_invite);
 
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
@@ -1176,55 +1172,53 @@ int LogicAllianceManager::InviteJoin(unsigned uid, unsigned invited_uid)
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestInviteJoinBC* m = new ProtoAlliance::RequestInviteJoinBC;
+			ProtoAlliance::RequestInviteJoinBC *m = CreateObj<ProtoAlliance::RequestInviteJoinBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_inviteduid(invited_uid);
 			m->set_name(userwrap.Obj().name);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
 			InviteJoinUpdateAlliance(uid, aid, invited_uid, userwrap.Obj().name);
 		}
 	}
 
-
 	return 0;
 }
-int LogicAllianceManager::InviteJoinUpdateAlliance(unsigned uid, unsigned aid, unsigned invited_uid, const string& userName)
+int LogicAllianceManager::InviteJoinUpdateAlliance(unsigned uid, unsigned aid, unsigned invited_uid, const string &userName)
 {
 
 	OtherAllianceSaveControl allianceCtl(aid);
 
-
 	CheckMemberPrivilege(uid, aid, privilege_invite);
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 
-	if(CMI->IsNeedConnectByUID(invited_uid))
+	if (CMI->IsNeedConnectByUID(invited_uid))
 	{
-		ProtoAlliance::RequestInviteJoinUserBC* m = new ProtoAlliance::RequestInviteJoinUserBC;
+		ProtoAlliance::RequestInviteJoinUserBC *m = CreateObj<ProtoAlliance::RequestInviteJoinUserBC>();
 		m->set_aid(aid);
 		m->set_uid(uid);
 		m->set_inviteduid(invited_uid);
 		m->set_allianceflag(alliance.flag);
 		m->set_name(userName);
 		m->set_alliancename(alliance.name);
-		AddInviteDyInfoOverServer(uid,invited_uid,aid);		//邀请跨服 添加动态
+		AddInviteDyInfoOverServer(uid, invited_uid, aid); //邀请跨服 添加动态
 		return ProtoManager::BattleConnectNoReplyByUID(invited_uid, m);
 	}
 	else
 	{
-		ProtoAlliance::InviteJoinResp *resp = new ProtoAlliance::InviteJoinResp;
+		ProtoAlliance::InviteJoinResp *resp = CreateObj<ProtoAlliance::InviteJoinResp>();
 		InviteJoinUpdateUser(uid, aid, invited_uid, alliance.flag, userName.c_str(), alliance.name, resp);
-		AddInviteDyInfo(uid,invited_uid,aid);				//添加动态
+		AddInviteDyInfo(uid, invited_uid, aid); //添加动态
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 	}
 	return 0;
 }
-int LogicAllianceManager::InviteJoinUpdateUser(unsigned uid, unsigned aid, unsigned invited_uid, uint8_t aflag, const string& inviteName, const string& aname, ProtoAlliance::InviteJoinResp * resp)
+int LogicAllianceManager::InviteJoinUpdateUser(unsigned uid, unsigned aid, unsigned invited_uid, uint8_t aflag, const string &inviteName, const string &aname, ProtoAlliance::InviteJoinResp *resp)
 {
 
 	//先加载被邀请人的数据
@@ -1247,9 +1241,8 @@ int LogicAllianceManager::InviteJoinUpdateUser(unsigned uid, unsigned aid, unsig
 		throw runtime_error("invitation_max");
 	}
 
-
 	//发出邀请
-	DataInvitedList & invited = DataInvitedListManager::Instance()->GetData(invited_uid, aid);
+	DataInvitedList &invited = DataInvitedListManager::Instance()->GetData(invited_uid, aid);
 	invited.invite_uid = uid;
 	invited.flag = aflag;
 	invited.invitets = Time::GetGlobalTime();
@@ -1264,7 +1257,7 @@ int LogicAllianceManager::InviteJoinUpdateUser(unsigned uid, unsigned aid, unsig
 	//判断被邀请的人是否在线，如果在线，则发送通知
 	if (UserManager::Instance()->IsOnline(invited_uid))
 	{
-		ProtoAlliance::InvitedPushReq * pushmsg = new ProtoAlliance::InvitedPushReq;
+		ProtoAlliance::InvitedPushReq *pushmsg = CreateObj<ProtoAlliance::InvitedPushReq>();
 		DataInvitedListManager::Instance()->SetMessage(invited_uid, aid, pushmsg->mutable_invite());
 
 		//推送
@@ -1273,7 +1266,7 @@ int LogicAllianceManager::InviteJoinUpdateUser(unsigned uid, unsigned aid, unsig
 
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::AcceptInviteReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::AcceptInviteReq *req)
 {
 	unsigned allianceid = req->allianceid();
 	unsigned operate = req->operate();
@@ -1283,11 +1276,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::AcceptInviteReq* 
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestAcceptInviteBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAcceptInviteBC *req)
 {
 	unsigned aid = req->allianceid();
 	unsigned uid = req->member().memberuid();
-	ProtoAlliance::ReplyAcceptInviteBC* resp = new ProtoAlliance::ReplyAcceptInviteBC;
+	ProtoAlliance::ReplyAcceptInviteBC *resp = CreateObj<ProtoAlliance::ReplyAcceptInviteBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid))
 	{
@@ -1300,9 +1293,9 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAcceptInviteBC* req)
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAcceptInviteBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAcceptInviteBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
@@ -1322,14 +1315,13 @@ int LogicAllianceManager::AcceptInvite(unsigned uid, unsigned aid, unsigned oper
 		throw runtime_error("param_error");
 	}
 
-
 	//如果是拒绝，则直接删除该邀请即可
 	if (accept_operate_no == operate)
 	{
 		//拒绝，则删除该商会的邀请数据
 		DataInvitedListManager::Instance()->DelItem(uid, aid);
 
-		ProtoAlliance::AcceptInviteResp* resp = new ProtoAlliance::AcceptInviteResp;
+		ProtoAlliance::AcceptInviteResp *resp = CreateObj<ProtoAlliance::AcceptInviteResp>();
 		resp->set_operate(operate);
 		resp->set_allianceid(aid);
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -1360,15 +1352,15 @@ int LogicAllianceManager::AcceptInvite(unsigned uid, unsigned aid, unsigned oper
 
 	if (IsAllianceId(aid))
 	{
-		ProtoAlliance::AcceptInviteResp* resp = new ProtoAlliance::AcceptInviteResp;
+		ProtoAlliance::AcceptInviteResp *resp = CreateObj<ProtoAlliance::AcceptInviteResp>();
 		resp->set_operate(operate);
 		resp->set_allianceid(aid);
 
 		DataAllianceMember member;
 		FillMember(uid, aid, pos_type_member, userwrap, member);
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAcceptInviteBC* m = new ProtoAlliance::RequestAcceptInviteBC;
+			ProtoAlliance::RequestAcceptInviteBC *m = CreateObj<ProtoAlliance::RequestAcceptInviteBC>();
 			member.SetMessage(m->mutable_member());
 			m->set_allianceid(aid);
 			m->set_inviteuid(invited.invite_uid);
@@ -1386,13 +1378,12 @@ int LogicAllianceManager::AcceptInvite(unsigned uid, unsigned aid, unsigned oper
 	return 0;
 }
 
-int LogicAllianceManager::AcceptInviteUpdateAlliance(unsigned invite_uid, DataAllianceMember& member, ProtoAlliance::AcceptInviteResp * resp)
+int LogicAllianceManager::AcceptInviteUpdateAlliance(unsigned invite_uid, DataAllianceMember &member, ProtoAlliance::AcceptInviteResp *resp)
 {
 	unsigned uid = member.id;
 	unsigned aid = member.alliance_id;
 
 	OtherAllianceSaveControl allianceCtl(aid);
-
 
 	//接受邀请，那么则判断以下条件
 	//1.判断发出邀请的用户是否还在该商会
@@ -1403,7 +1394,7 @@ int LogicAllianceManager::AcceptInviteUpdateAlliance(unsigned invite_uid, DataAl
 	}
 
 	//2.判断发出邀请的用户是否有权限发出邀请
-	DataAllianceMember & inviteMember = DataAllianceMemberManager::Instance()->GetData(aid, invite_uid);
+	DataAllianceMember &inviteMember = DataAllianceMemberManager::Instance()->GetData(aid, invite_uid);
 
 	if (!IsPrivilege(inviteMember.authority, privilege_invite))
 	{
@@ -1420,7 +1411,7 @@ int LogicAllianceManager::AcceptInviteUpdateAlliance(unsigned invite_uid, DataAl
 	return 0;
 }
 
-int LogicAllianceManager::AddNewMember(DataAllianceMember& member, ProtoAlliance::AllianceMemberCPP * msg)
+int LogicAllianceManager::AddNewMember(DataAllianceMember &member, ProtoAlliance::AllianceMemberCPP *msg)
 {
 	unsigned uid = member.id;
 	unsigned alliance_id = member.alliance_id;
@@ -1447,14 +1438,14 @@ int LogicAllianceManager::AddNewMember(DataAllianceMember& member, ProtoAlliance
 	return 0;
 }
 
-int LogicAllianceManager::FillMember(unsigned uid, unsigned aid, unsigned pos, DBCUserBaseWrap& userwrap, DataAllianceMember& member)
+int LogicAllianceManager::FillMember(unsigned uid, unsigned aid, unsigned pos, DBCUserBaseWrap &userwrap, DataAllianceMember &member)
 {
-	member.alliance_id = aid;  //商会id
-	member.id = uid;  //用户id
+	member.alliance_id = aid; //商会id
+	member.id = uid;		  //用户id
 	member.position = pos;
-	member.authority = GetAuthorityByPosition(member.position);  //权限
-	member.helptimes = userwrap.Obj().helptimes; //帮助次数
-	member.userlevel = userwrap.Obj().level;  //用户等级
+	member.authority = GetAuthorityByPosition(member.position); //权限
+	member.helptimes = userwrap.Obj().helptimes;				//帮助次数
+	member.userlevel = userwrap.Obj().level;					//用户等级
 
 	member.helpTs = LogicUserManager::Instance()->IsUserNeedHelp(uid) ? Time::GetGlobalTime() : 0;
 	member.onlineTs = UserManager::Instance()->IsOnline(uid) ? Time::GetGlobalTime() : 0;
@@ -1463,23 +1454,23 @@ int LogicAllianceManager::FillMember(unsigned uid, unsigned aid, unsigned pos, D
 	snprintf(member.fig, sizeof(member.fig), userwrap.Obj().fig);
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ManipulateMemberReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ManipulateMemberReq *req)
 {
-//	unsigned memberuid = req->memberuid();
-//	unsigned operate = req->operate();
-//	unsigned type = req->type();
-//	unsigned dest = req->destination();
+	//	unsigned memberuid = req->memberuid();
+	//	unsigned operate = req->operate();
+	//	unsigned type = req->type();
+	//	unsigned dest = req->destination();
 
 	ManipulateMember(uid, req);
 
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestManipulateMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestManipulateMemberBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyManipulateMemberBC* resp = new ProtoAlliance::ReplyManipulateMemberBC;
+	ProtoAlliance::ReplyManipulateMemberBC *resp = CreateObj<ProtoAlliance::ReplyManipulateMemberBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -1488,13 +1479,13 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestManipulateMemberBC* req)
 
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyManipulateMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyManipulateMemberBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
-int LogicAllianceManager::ManipulateMember(unsigned uid, ProtoAlliance::ManipulateMemberReq* req)
+int LogicAllianceManager::ManipulateMember(unsigned uid, ProtoAlliance::ManipulateMemberReq *req)
 {
 	unsigned memberuid = req->memberuid();
 	unsigned operate = req->operate();
@@ -1523,17 +1514,17 @@ int LogicAllianceManager::ManipulateMember(unsigned uid, ProtoAlliance::Manipula
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestManipulateMemberBC* m = new ProtoAlliance::RequestManipulateMemberBC;
+			ProtoAlliance::RequestManipulateMemberBC *m = CreateObj<ProtoAlliance::RequestManipulateMemberBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->mutable_info()->CopyFrom(*req);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ManipulateMemberResp* resp = new ProtoAlliance::ManipulateMemberResp;
+			ProtoAlliance::ManipulateMemberResp *resp = CreateObj<ProtoAlliance::ManipulateMemberResp>();
 			ManipulateMemberLocal(uid, aid, memberuid, operate, type, dest, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
@@ -1541,8 +1532,7 @@ int LogicAllianceManager::ManipulateMember(unsigned uid, ProtoAlliance::Manipula
 	return 0;
 }
 
-int LogicAllianceManager::ManipulateMemberLocal(unsigned uid, unsigned aid, unsigned member_uid, unsigned operate, unsigned type, unsigned dest
-		,ProtoAlliance::ManipulateMemberResp * resp)
+int LogicAllianceManager::ManipulateMemberLocal(unsigned uid, unsigned aid, unsigned member_uid, unsigned operate, unsigned type, unsigned dest, ProtoAlliance::ManipulateMemberResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 	//权限校验
@@ -1560,14 +1550,13 @@ int LogicAllianceManager::ManipulateMemberLocal(unsigned uid, unsigned aid, unsi
 		throw runtime_error("type_param_error");
 	}
 
-
 	//成员校验
 	CheckMember(uid, aid, member_uid);
 
-	DataAllianceMember & selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 
 	//获取商会成员的数据
-	DataAllianceMember & othmember = DataAllianceMemberManager::Instance()->GetData(aid, member_uid);
+	DataAllianceMember &othmember = DataAllianceMemberManager::Instance()->GetData(aid, member_uid);
 	unsigned oldpos = othmember.position;
 
 	//判断该成员的职位是否与操作者相同
@@ -1578,7 +1567,7 @@ int LogicAllianceManager::ManipulateMemberLocal(unsigned uid, unsigned aid, unsi
 	}
 
 	//获取商会配置
-	const ConfigAlliance::Alliance & alliancecfg = AllianceCfgWrap().GetAllianceCfg();
+	const ConfigAlliance::Alliance &alliancecfg = AllianceCfgWrap().GetAllianceCfg();
 
 	if (type == manipute_type_committee)
 	{
@@ -1671,7 +1660,7 @@ int LogicAllianceManager::PositionChange(DataAllianceMember &member, unsigned ne
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::KickOutReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::KickOutReq *req)
 {
 	unsigned memberuid = req->memberuid();
 
@@ -1680,7 +1669,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::KickOutReq* req)
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestKickOutBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestKickOutBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
@@ -1691,17 +1680,17 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestKickOutBC* req)
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyKickOutBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyKickOutBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestKickOutMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestKickOutMemberBC *req)
 {
 	unsigned uid = req->uid();
 	KickOutUpdateMember(req->aid(), req->memberuid());
-	ProtoAlliance::ReplyKickOutBC* resp = new ProtoAlliance::ReplyKickOutBC;
+	ProtoAlliance::ReplyKickOutBC *resp = CreateObj<ProtoAlliance::ReplyKickOutBC>();
 	resp->set_uid(uid);
 	resp->mutable_alliance()->set_memberuid(req->memberuid());
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
@@ -1710,7 +1699,7 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestKickOutMemberBC* req)
 int LogicAllianceManager::KickOut(unsigned uid, unsigned member_uid)
 {
 	//权限校验
-//	CheckPrivilege(uid, privilege_kick_out);
+	//	CheckPrivilege(uid, privilege_kick_out);
 
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
@@ -1722,15 +1711,15 @@ int LogicAllianceManager::KickOut(unsigned uid, unsigned member_uid)
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestKickOutBC* m = new ProtoAlliance::RequestKickOutBC;
+			ProtoAlliance::RequestKickOutBC *m = CreateObj<ProtoAlliance::RequestKickOutBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_memberuid(member_uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
 			KickOutUpdateAlliance(uid, aid, member_uid);
 		}
@@ -1760,9 +1749,9 @@ int LogicAllianceManager::KickOutUpdateAlliance(unsigned uid, unsigned aid, unsi
 	//对方的职位变化通知
 	NotifyPositionChange(member_uid, oldpos, pos_type_none, 0);
 
-	if(CMI->IsNeedConnectByUID(member_uid))
+	if (CMI->IsNeedConnectByUID(member_uid))
 	{
-		ProtoAlliance::RequestKickOutMemberBC* m = new ProtoAlliance::RequestKickOutMemberBC;
+		ProtoAlliance::RequestKickOutMemberBC *m = CreateObj<ProtoAlliance::RequestKickOutMemberBC>();
 		m->set_aid(aid);
 		m->set_uid(uid);
 		m->set_memberuid(member_uid);
@@ -1770,7 +1759,7 @@ int LogicAllianceManager::KickOutUpdateAlliance(unsigned uid, unsigned aid, unsi
 	}
 	else
 	{
-		ProtoAlliance::KickOutResp *resp = new ProtoAlliance::KickOutResp;
+		ProtoAlliance::KickOutResp *resp = CreateObj<ProtoAlliance::KickOutResp>();
 		resp->set_memberuid(member_uid);
 		KickOutUpdateMember(aid, member_uid);
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -1785,28 +1774,28 @@ int LogicAllianceManager::KickOutUpdateMember(unsigned aid, unsigned member_uid)
 	OffUserSaveControl offuserctl(member_uid);
 	DBCUserBaseWrap othuserwrap(member_uid);
 
-	if(aid == othuserwrap.Obj().alliance_id)
+	if (aid == othuserwrap.Obj().alliance_id)
 	{
 		othuserwrap.Obj().alliance_id = 0;
-		othuserwrap.Obj().allian_allow_ts = Time::GetGlobalTime() + 24*3600; //24小时后才能再申请加入其它商会
+		othuserwrap.Obj().allian_allow_ts = Time::GetGlobalTime() + 24 * 3600; //24小时后才能再申请加入其它商会
 		othuserwrap.Save();
 	}
 
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ExitAllianceReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::ExitAllianceReq *req)
 {
 	ExitAlliance(uid);
 
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestExitAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestExitAllianceBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyExitAllianceBC* resp = new ProtoAlliance::ReplyExitAllianceBC;
+	ProtoAlliance::ReplyExitAllianceBC *resp = CreateObj<ProtoAlliance::ReplyExitAllianceBC>();
 	resp->set_uid(uid);
 	resp->set_aid(aid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
@@ -1815,7 +1804,7 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestExitAllianceBC* req)
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyExitAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyExitAllianceBC *req)
 {
 	ExitAllianceUpdateUser(req->uid(), req->aid(), req->mutable_alliance());
 	return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
@@ -1836,16 +1825,16 @@ int LogicAllianceManager::ExitAlliance(unsigned uid)
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestExitAllianceBC* m = new ProtoAlliance::RequestExitAllianceBC;
+			ProtoAlliance::RequestExitAllianceBC *m = CreateObj<ProtoAlliance::RequestExitAllianceBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ExitAllianceResp* resp = new ProtoAlliance::ExitAllianceResp;
+			ProtoAlliance::ExitAllianceResp *resp = CreateObj<ProtoAlliance::ExitAllianceResp>();
 			ExitAllianceUpdateAlliance(uid, aid);
 			ExitAllianceUpdateUser(uid, aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -1856,7 +1845,7 @@ int LogicAllianceManager::ExitAlliance(unsigned uid)
 int LogicAllianceManager::ExitAllianceUpdateAlliance(unsigned uid, unsigned aid)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 
 	if (member.position != pos_type_chief)
 	{
@@ -1879,7 +1868,7 @@ int LogicAllianceManager::ExitAllianceUpdateAlliance(unsigned uid, unsigned aid)
 	}
 	return 0;
 }
-int LogicAllianceManager::ExitAllianceUpdateUser(unsigned uid, unsigned aid, ProtoAlliance::ExitAllianceResp * resp)
+int LogicAllianceManager::ExitAllianceUpdateUser(unsigned uid, unsigned aid, ProtoAlliance::ExitAllianceResp *resp)
 {
 	DBCUserBaseWrap userwrap(uid);
 	if (userwrap.Obj().alliance_id == 0)
@@ -1887,11 +1876,11 @@ int LogicAllianceManager::ExitAllianceUpdateUser(unsigned uid, unsigned aid, Pro
 		error_log("user not in alliance. uid=%u", uid);
 		throw runtime_error("not_in_alliance");
 	}
-	if(userwrap.Obj().alliance_id == aid)
+	if (userwrap.Obj().alliance_id == aid)
 	{
 		//更新当前用户的商会
 		userwrap.Obj().alliance_id = 0;
-		userwrap.Obj().allian_allow_ts = 0;  //主动退出，下次入会申请无需等待
+		userwrap.Obj().allian_allow_ts = 0; //主动退出，下次入会申请无需等待
 		userwrap.Save();
 		SetUserAllianceMsg(aid, userwrap.Obj().alliance_id, resp->mutable_commons());
 	}
@@ -1900,7 +1889,7 @@ int LogicAllianceManager::ExitAllianceUpdateUser(unsigned uid, unsigned aid, Pro
 
 int LogicAllianceManager::DropAlliance(unsigned uid, unsigned alliance_id)
 {
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(alliance_id);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(alliance_id);
 
 	int ret = allianceMapping.Del(alliance.name);
 
@@ -1946,7 +1935,7 @@ int LogicAllianceManager::ClearMemberData(unsigned alliance_id, unsigned member_
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::TransferReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::TransferReq *req)
 {
 	unsigned memberuid = req->memberuid();
 
@@ -1954,11 +1943,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::TransferReq* req)
 
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestTransferBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestTransferBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyTransferBC* resp = new ProtoAlliance::ReplyTransferBC;
+	ProtoAlliance::ReplyTransferBC *resp = CreateObj<ProtoAlliance::ReplyTransferBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -1967,14 +1956,14 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestTransferBC* req)
 
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyTransferBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyTransferBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
 
-int LogicAllianceManager::TransformChief(unsigned uid, unsigned member_uid, const string& otherName)
+int LogicAllianceManager::TransformChief(unsigned uid, unsigned member_uid, const string &otherName)
 {
 	DBCUserBaseWrap userwrap(uid);
 
@@ -1987,18 +1976,18 @@ int LogicAllianceManager::TransformChief(unsigned uid, unsigned member_uid, cons
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestTransferBC* m = new ProtoAlliance::RequestTransferBC;
+			ProtoAlliance::RequestTransferBC *m = CreateObj<ProtoAlliance::RequestTransferBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_memberuid(member_uid);
 			m->set_othername(otherName);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::TransferResp* resp = new ProtoAlliance::TransferResp;
+			ProtoAlliance::TransferResp *resp = CreateObj<ProtoAlliance::TransferResp>();
 			TransformChiefLocal(uid, aid, member_uid, otherName, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
@@ -2007,7 +1996,7 @@ int LogicAllianceManager::TransformChief(unsigned uid, unsigned member_uid, cons
 	return 0;
 }
 
-int LogicAllianceManager::TransformChiefLocal(unsigned uid, unsigned aid, unsigned member_uid, const string& otherName, ProtoAlliance::TransferResp * resp)
+int LogicAllianceManager::TransformChiefLocal(unsigned uid, unsigned aid, unsigned member_uid, const string &otherName, ProtoAlliance::TransferResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
@@ -2016,10 +2005,10 @@ int LogicAllianceManager::TransformChiefLocal(unsigned uid, unsigned aid, unsign
 	CheckMember(uid, aid, member_uid);
 
 	//获取自身的数据
-	DataAllianceMember & selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 
 	//获取商会成员的数据
-	DataAllianceMember & othmember = DataAllianceMemberManager::Instance()->GetData(aid, member_uid);
+	DataAllianceMember &othmember = DataAllianceMemberManager::Instance()->GetData(aid, member_uid);
 
 	//判断当前用户的职位是否是会长
 	if (selfmember.position != pos_type_chief)
@@ -2043,11 +2032,11 @@ int LogicAllianceManager::TransformChiefLocal(unsigned uid, unsigned aid, unsign
 	DataAllianceMemberManager::Instance()->UpdateItem(othmember);
 
 	//更新商会的创建者信息
-	DataAlliance & dataalliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &dataalliance = DataAllianceManager::Instance()->GetData(aid);
 	dataalliance.create_uid = member_uid;
 
-//	OffUserSaveControl offcontrol(member_uid);
-//	DBCUserBaseWrap othuserwrap(member_uid);
+	//	OffUserSaveControl offcontrol(member_uid);
+	//	DBCUserBaseWrap othuserwrap(member_uid);
 	snprintf(dataalliance.create_username, sizeof(dataalliance.create_username), otherName.c_str());
 
 	DataAllianceManager::Instance()->UpdateItem(dataalliance);
@@ -2062,17 +2051,17 @@ int LogicAllianceManager::TransformChiefLocal(unsigned uid, unsigned aid, unsign
 	NotifyPositionChange(member_uid, pos_type_director, pos_type_chief, aid);
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::EditAllianceReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::EditAllianceReq *req)
 {
 	EditAlliance(uid, req);
 
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestEditAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestEditAllianceBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyEditAllianceBC* resp = new ProtoAlliance::ReplyEditAllianceBC;
+	ProtoAlliance::ReplyEditAllianceBC *resp = CreateObj<ProtoAlliance::ReplyEditAllianceBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -2081,17 +2070,17 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestEditAllianceBC* req)
 
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyEditAllianceBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyEditAllianceBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
 
-int LogicAllianceManager::EditAlliance(unsigned uid, ProtoAlliance::EditAllianceReq* req)
+int LogicAllianceManager::EditAlliance(unsigned uid, ProtoAlliance::EditAllianceReq *req)
 {
 	//权限校验
-//	CheckPrivilege(uid, privilege_edit_alliance);
+	//	CheckPrivilege(uid, privilege_edit_alliance);
 
 	string decription = req->description();
 
@@ -2108,34 +2097,32 @@ int LogicAllianceManager::EditAlliance(unsigned uid, ProtoAlliance::EditAlliance
 
 	unsigned aid = userwrap.Obj().alliance_id;
 
-
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestEditAllianceBC* m = new ProtoAlliance::RequestEditAllianceBC;
+			ProtoAlliance::RequestEditAllianceBC *m = CreateObj<ProtoAlliance::RequestEditAllianceBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->mutable_info()->CopyFrom(*req);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::EditAllianceResp* resp = new ProtoAlliance::EditAllianceResp;
+			ProtoAlliance::EditAllianceResp *resp = CreateObj<ProtoAlliance::EditAllianceResp>();
 			EditAllianceLocal(uid, aid, req, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 
-
 	return 0;
 }
-int LogicAllianceManager::EditAllianceLocal(unsigned uid, unsigned aid, ProtoAlliance::EditAllianceReq* req, ProtoAlliance::EditAllianceResp* resp)
+int LogicAllianceManager::EditAllianceLocal(unsigned uid, unsigned aid, ProtoAlliance::EditAllianceReq *req, ProtoAlliance::EditAllianceResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
 	uint32_t applyType = req->applytype();
-	if(applyType == 0 || applyType >= join_type_max)
+	if (applyType == 0 || applyType >= join_type_max)
 	{
 		error_log("invalid applyType uid=%u aid=%u applyType=%u", uid, aid, applyType);
 		throw runtime_error("invalid_applyType");
@@ -2143,7 +2130,7 @@ int LogicAllianceManager::EditAllianceLocal(unsigned uid, unsigned aid, ProtoAll
 
 	CheckMemberPrivilege(uid, aid, privilege_edit_alliance);
 	//获取商会信息
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 
 	alliance.flag = req->flag();
 	string decription = req->description();
@@ -2162,7 +2149,7 @@ int LogicAllianceManager::EditAllianceLocal(unsigned uid, unsigned aid, ProtoAll
 	DataAllianceManager::Instance()->UpdateItem(alliance);
 
 	DataAllianceManager::Instance()->SetMessage(aid, resp);
-//	DataAllianceManager::Instance()->DoAllianceSave(aid);
+	//	DataAllianceManager::Instance()->DoAllianceSave(aid);
 	return 0;
 }
 int LogicAllianceManager::NotifyPositionChange(unsigned uid, unsigned oldpos, unsigned newpos, unsigned alliance_id)
@@ -2170,11 +2157,11 @@ int LogicAllianceManager::NotifyPositionChange(unsigned uid, unsigned oldpos, un
 	//debug_log("position change. uid=%u, alliance_id=%u, oldpos=%u,position=%u", uid, alliance_id, oldpos, newpos);
 
 	//在线，推送被踢通知
-	ProtoAlliance::PostionChangePushReq * pushmsg = new ProtoAlliance::PostionChangePushReq;
+	ProtoAlliance::PostionChangePushReq *pushmsg = CreateObj<ProtoAlliance::PostionChangePushReq>();
 	pushmsg->set_oldpos(oldpos);
 	pushmsg->set_newpos(newpos);
 
-	if(!CMI->IsNeedConnectByAID(alliance_id))
+	if (!CMI->IsNeedConnectByAID(alliance_id))
 	{
 		//判断是否刚加入加入公会
 		if (oldpos == pos_type_none && 0 != alliance_id)
@@ -2203,7 +2190,7 @@ bool LogicAllianceManager::CheckMember(unsigned alliance_id, unsigned member_uid
 	return DataAllianceMemberManager::Instance()->IsExistItem(alliance_id, member_uid);
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::SeekDonationReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::SeekDonationReq *req)
 {
 	unsigned propsid = req->propsid();
 	unsigned count = req->count();
@@ -2213,11 +2200,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::SeekDonationReq* 
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestSeekDonationBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestSeekDonationBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplySeekDonationBC* resp = new ProtoAlliance::ReplySeekDonationBC;
+	ProtoAlliance::ReplySeekDonationBC *resp = CreateObj<ProtoAlliance::ReplySeekDonationBC>();
 	resp->set_uid(uid);
 	resp->set_cdtime(req->cdtime());
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
@@ -2227,9 +2214,9 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestSeekDonationBC* req)
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplySeekDonationBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplySeekDonationBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 	{
 		SeekDonationUpdateUser(req->uid(), req->cdtime(), req->mutable_alliance());
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
@@ -2239,7 +2226,7 @@ int LogicAllianceManager::Process(ProtoAlliance::ReplySeekDonationBC* req)
 int LogicAllianceManager::SeekDonation(unsigned uid, unsigned propsid, unsigned count)
 {
 	//权限校验
-//	CheckPrivilege(uid, privilege_donate);
+	//	CheckPrivilege(uid, privilege_donate);
 
 	//判断捐助cd
 	DBCUserBaseWrap userwrap(uid);
@@ -2263,11 +2250,10 @@ int LogicAllianceManager::SeekDonation(unsigned uid, unsigned propsid, unsigned 
 		throw runtime_error("not_a_valid_alliance_id");
 	}
 
-
 	//判断物品是否可捐收，以及数量是否满足要求
 	//获取捐收配置
 	AllianceCfgWrap alliancewrap;
-	const ConfigAlliance::Donation &  donationcfg = alliancewrap.GetDonationCfg();
+	const ConfigAlliance::Donation &donationcfg = alliancewrap.GetDonationCfg();
 
 	int typeindex = alliancewrap.GetDonationPropsTypeIndex(propsid);
 
@@ -2277,9 +2263,9 @@ int LogicAllianceManager::SeekDonation(unsigned uid, unsigned propsid, unsigned 
 		throw runtime_error("donation_nums_beyond_max");
 	}
 
-	if(CMI->IsNeedConnectByAID(aid))
+	if (CMI->IsNeedConnectByAID(aid))
 	{
-		ProtoAlliance::RequestSeekDonationBC* m = new ProtoAlliance::RequestSeekDonationBC;
+		ProtoAlliance::RequestSeekDonationBC *m = CreateObj<ProtoAlliance::RequestSeekDonationBC>();
 		m->set_uid(uid);
 		m->set_count(count);
 		m->set_aid(aid);
@@ -2289,9 +2275,9 @@ int LogicAllianceManager::SeekDonation(unsigned uid, unsigned propsid, unsigned 
 		m->set_level(userwrap.Obj().level);
 		return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 	}
-	else if(CheckMember(aid, uid))
+	else if (CheckMember(aid, uid))
 	{
-		ProtoAlliance::SeekDonationResp* resp = new ProtoAlliance::SeekDonationResp;
+		ProtoAlliance::SeekDonationResp *resp = CreateObj<ProtoAlliance::SeekDonationResp>();
 		SeekDonationUpdateAlliance(uid, aid, userwrap.Obj().level, userwrap.Obj().name, propsid, count, resp);
 		SeekDonationUpdateUser(uid, donationcfg.cdtime(), resp);
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -2300,7 +2286,7 @@ int LogicAllianceManager::SeekDonation(unsigned uid, unsigned propsid, unsigned 
 	return 0;
 }
 
-int LogicAllianceManager::SeekDonationUpdateAlliance(unsigned uid, unsigned aid, unsigned level, const string& name, unsigned propsid, unsigned count, ProtoAlliance::SeekDonationResp * resp)
+int LogicAllianceManager::SeekDonationUpdateAlliance(unsigned uid, unsigned aid, unsigned level, const string &name, unsigned propsid, unsigned count, ProtoAlliance::SeekDonationResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
@@ -2308,7 +2294,7 @@ int LogicAllianceManager::SeekDonationUpdateAlliance(unsigned uid, unsigned aid,
 	//当存在已捐收数据，且物品未取完，则不允许重复发出捐收
 	if (DataAllianceDonationManager::Instance()->IsExistItem(aid, uid))
 	{
-		DataAllianceDonation & donation = DataAllianceDonationManager::Instance()->GetData(aid, uid);
+		DataAllianceDonation &donation = DataAllianceDonationManager::Instance()->GetData(aid, uid);
 
 		if (donation.donate_count > donation.fetch_count)
 		{
@@ -2318,7 +2304,7 @@ int LogicAllianceManager::SeekDonationUpdateAlliance(unsigned uid, unsigned aid,
 	}
 
 	//新增捐收数据
-	DataAllianceDonation & donation = DataAllianceDonationManager::Instance()->GetData(aid, uid);
+	DataAllianceDonation &donation = DataAllianceDonationManager::Instance()->GetData(aid, uid);
 	//重置捐收数据
 	donation.Reset();
 	donation.propsid = propsid;
@@ -2333,7 +2319,7 @@ int LogicAllianceManager::SeekDonationUpdateAlliance(unsigned uid, unsigned aid,
 
 	return 0;
 }
-int LogicAllianceManager::SeekDonationUpdateUser(unsigned uid, unsigned cdtime, ProtoAlliance::SeekDonationResp * resp)
+int LogicAllianceManager::SeekDonationUpdateUser(unsigned uid, unsigned cdtime, ProtoAlliance::SeekDonationResp *resp)
 {
 	DBCUserBaseWrap userwrap(uid);
 	//更新用户的下次可捐收时间
@@ -2343,17 +2329,17 @@ int LogicAllianceManager::SeekDonationUpdateUser(unsigned uid, unsigned cdtime, 
 
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CutUpDonationCDReq* req, ProtoAlliance::CutUpDonationCDResp* resp)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::CutUpDonationCDReq *req, ProtoAlliance::CutUpDonationCDResp *resp)
 {
-	CutCD(uid, req->type(),resp);
+	CutCD(uid, req->type(), resp);
 
 	return 0;
 }
 
-int LogicAllianceManager::CutCD(unsigned uid, unsigned type,ProtoAlliance::CutUpDonationCDResp * resp)
+int LogicAllianceManager::CutCD(unsigned uid, unsigned type, ProtoAlliance::CutUpDonationCDResp *resp)
 {
 	//权限校验
-//	CheckPrivilege(uid, privilege_donate);
+	//	CheckPrivilege(uid, privilege_donate);
 
 	DBCUserBaseWrap userwrap(uid);
 	unsigned nowts = Time::GetGlobalTime();
@@ -2365,27 +2351,27 @@ int LogicAllianceManager::CutCD(unsigned uid, unsigned type,ProtoAlliance::CutUp
 	}
 
 	//花钻或者看广告秒cd
-	if(type != 1 && type != 2)
+	if (type != 1 && type != 2)
 	{
 		throw std::runtime_error("type_param_error");
 	}
 
 	//获取配置
-	const ConfigAlliance::Donation & donationcfg = AllianceCfgWrap().GetDonationCfg();
+	const ConfigAlliance::Donation &donationcfg = AllianceCfgWrap().GetDonationCfg();
 
-	if(type == 1)
+	if (type == 1)
 	{
 		//花钻秒cd
 		int diffts = userwrap.Obj().next_donation_ts > nowts ? userwrap.Obj().next_donation_ts - nowts : 0;
 
 		//获取订单配置中，撕单的总价格
-		int cash = ceil(static_cast<double>(diffts)/donationcfg.cdtime() * donationcfg.cdprice());
+		int cash = ceil(static_cast<double>(diffts) / donationcfg.cdtime() * donationcfg.cdprice());
 
 		//扣钻
 		userwrap.CostCash(cash, "AllianceDonation_CutCD");
 
 		//设置返回给前端的消息
-		DataCommon::BaseItemCPP* basemsg = resp->mutable_commons()->mutable_userbase()->add_baseitem();
+		DataCommon::BaseItemCPP *basemsg = resp->mutable_commons()->mutable_userbase()->add_baseitem();
 
 		basemsg->set_change(-cash);
 		basemsg->set_totalvalue(userwrap.Obj().cash);
@@ -2401,7 +2387,7 @@ int LogicAllianceManager::CutCD(unsigned uid, unsigned type,ProtoAlliance::CutUp
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::OfferDonationReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::OfferDonationReq *req)
 {
 	unsigned applyuid = req->applyuid();
 	unsigned propsid = req->propsid();
@@ -2410,11 +2396,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::OfferDonationReq*
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestOfferDonationBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestOfferDonationBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyOfferDonationBC* resp = new ProtoAlliance::ReplyOfferDonationBC;
+	ProtoAlliance::ReplyOfferDonationBC *resp = CreateObj<ProtoAlliance::ReplyOfferDonationBC>();
 	resp->set_uid(uid);
 	resp->set_aid(aid);
 	resp->set_propsid(req->propsid());
@@ -2425,9 +2411,9 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestOfferDonationBC* req)
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyOfferDonationBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyOfferDonationBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 	{
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	}
@@ -2459,15 +2445,15 @@ int LogicAllianceManager::OfferHelp(unsigned uid, unsigned apply_uid, unsigned p
 	//捐收未完成，则进行捐收
 	//捐收物品消耗
 	CommonGiftConfig::CommonModifyItem cfg;
-	CommonGiftConfig::PropsItem*  itemcfg = cfg.add_props();
-	itemcfg->set_count(-1);   //一次捐收，就只能捐收1个
+	CommonGiftConfig::PropsItem *itemcfg = cfg.add_props();
+	itemcfg->set_count(-1); //一次捐收，就只能捐收1个
 	itemcfg->set_id(propsid);
 
-	ProtoAlliance::OfferDonationResp* resp = new ProtoAlliance::OfferDonationResp;
+	ProtoAlliance::OfferDonationResp *resp = CreateObj<ProtoAlliance::OfferDonationResp>();
 	LogicUserManager::Instance()->CommonProcess(uid, cfg, "AllianceDonation_Offer", resp->mutable_commons());
-	if(CMI->IsNeedConnectByAID(aid))
+	if (CMI->IsNeedConnectByAID(aid))
 	{
-		ProtoAlliance::RequestOfferDonationBC* m = new ProtoAlliance::RequestOfferDonationBC;
+		ProtoAlliance::RequestOfferDonationBC *m = CreateObj<ProtoAlliance::RequestOfferDonationBC>();
 		m->set_uid(uid);
 		m->set_applyuid(apply_uid);
 		m->set_aid(aid);
@@ -2484,10 +2470,9 @@ int LogicAllianceManager::OfferHelp(unsigned uid, unsigned apply_uid, unsigned p
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 	}
 
-
 	return 0;
 }
-int LogicAllianceManager::OfferHelpUpdateAlliance(unsigned uid, const string& name, unsigned aid, unsigned apply_uid, unsigned propsid, ProtoAlliance::OfferDonationResp * resp)
+int LogicAllianceManager::OfferHelpUpdateAlliance(unsigned uid, const string &name, unsigned aid, unsigned apply_uid, unsigned propsid, ProtoAlliance::OfferDonationResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
@@ -2495,7 +2480,6 @@ int LogicAllianceManager::OfferHelpUpdateAlliance(unsigned uid, const string& na
 
 	//判断是否同一公会
 	CheckMember(uid, aid, apply_uid);
-
 
 	//判断是否存在该用户的捐收请求
 	if (!DataAllianceDonationManager::Instance()->IsExistItem(aid, apply_uid))
@@ -2505,7 +2489,7 @@ int LogicAllianceManager::OfferHelpUpdateAlliance(unsigned uid, const string& na
 	}
 
 	//获取捐收数据
-	DataAllianceDonation & donation = DataAllianceDonationManager::Instance()->GetData(aid, apply_uid);
+	DataAllianceDonation &donation = DataAllianceDonationManager::Instance()->GetData(aid, apply_uid);
 
 	if (donation_finish == donation.status)
 	{
@@ -2514,7 +2498,7 @@ int LogicAllianceManager::OfferHelpUpdateAlliance(unsigned uid, const string& na
 	}
 	if (propsid != donation.propsid)
 	{
-		error_log("donation propsid missmatch uid=%u,alliance_id=%u,applyuid=%u,realid=%u propsid=%u", uid, aid, apply_uid,donation.propsid, propsid);
+		error_log("donation propsid missmatch uid=%u,alliance_id=%u,applyuid=%u,realid=%u propsid=%u", uid, aid, apply_uid, donation.propsid, propsid);
 		throw runtime_error("donation_finished");
 	}
 
@@ -2531,28 +2515,28 @@ int LogicAllianceManager::OfferHelpUpdateAlliance(unsigned uid, const string& na
 
 	return 0;
 }
-int LogicAllianceManager::OfferHelpUpdateUser(unsigned uid, unsigned aid, unsigned propsid, ProtoAlliance::OfferDonationResp * resp)
+int LogicAllianceManager::OfferHelpUpdateUser(unsigned uid, unsigned aid, unsigned propsid, ProtoAlliance::OfferDonationResp *resp)
 {
 	//增加帮助次数
 	LogicUserManager::Instance()->UpdateUserHelpTimes(uid, aid);
 	//捐收可获得经验奖励
-	const ConfigItem::PropItem & propscfg = ItemCfgWrap().GetPropsItem(propsid);
+	const ConfigItem::PropItem &propscfg = ItemCfgWrap().GetPropsItem(propsid);
 	LogicUserManager::Instance()->CommonProcess(uid, propscfg.extra_reward(), "AllianceDonation_Offer", resp->mutable_commons());
 
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::FetchDonationReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::FetchDonationReq *req)
 {
 	FetchDonation(uid);
 
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestFetchDonationBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestFetchDonationBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyFetchDonationBC* resp = new ProtoAlliance::ReplyFetchDonationBC;
+	ProtoAlliance::ReplyFetchDonationBC *resp = CreateObj<ProtoAlliance::ReplyFetchDonationBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -2562,9 +2546,9 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestFetchDonationBC* req)
 	}
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyFetchDonationBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyFetchDonationBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 	{
 		AddDonation(req->uid(), req->propsid(), req->mutable_alliance());
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
@@ -2592,16 +2576,16 @@ int LogicAllianceManager::FetchDonation(unsigned uid)
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestFetchDonationBC* m = new ProtoAlliance::RequestFetchDonationBC;
+			ProtoAlliance::RequestFetchDonationBC *m = CreateObj<ProtoAlliance::RequestFetchDonationBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
 		else
 		{
-			ProtoAlliance::FetchDonationResp* resp = new ProtoAlliance::FetchDonationResp;
+			ProtoAlliance::FetchDonationResp *resp = CreateObj<ProtoAlliance::FetchDonationResp>();
 			unsigned propsid = 0;
 			FetchDonationAllianceLocal(uid, aid, propsid, resp);
 			AddDonation(uid, propsid, resp);
@@ -2610,7 +2594,7 @@ int LogicAllianceManager::FetchDonation(unsigned uid)
 	}
 	return 0;
 }
-int LogicAllianceManager::FetchDonationAllianceLocal(unsigned uid, unsigned aid, unsigned& propsid, ProtoAlliance::FetchDonationResp * resp)
+int LogicAllianceManager::FetchDonationAllianceLocal(unsigned uid, unsigned aid, unsigned &propsid, ProtoAlliance::FetchDonationResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
@@ -2623,8 +2607,8 @@ int LogicAllianceManager::FetchDonationAllianceLocal(unsigned uid, unsigned aid,
 		throw runtime_error("user_have_no_help_request");
 	}
 
-	DataAllianceDonation & donation = DataAllianceDonationManager::Instance()->GetData(aid, uid);
-//	info_log("fetch_donation uid=%u aid=%u fc=%u dc=%u", uid, aid, donation.fetch_count, donation.donate_count);
+	DataAllianceDonation &donation = DataAllianceDonationManager::Instance()->GetData(aid, uid);
+	//	info_log("fetch_donation uid=%u aid=%u fc=%u dc=%u", uid, aid, donation.fetch_count, donation.donate_count);
 
 	propsid = donation.propsid;
 	//判断是否有空余的物品可以领取
@@ -2644,7 +2628,7 @@ int LogicAllianceManager::FetchDonationAllianceLocal(unsigned uid, unsigned aid,
 	}
 	else
 	{
-		if(!DataAllianceDonationManager::Instance()->UpdateItem(donation))
+		if (!DataAllianceDonationManager::Instance()->UpdateItem(donation))
 		{
 			error_log("DataAllianceDonationManager UpdateItem fail uid=%u aid=%u", uid, aid);
 		}
@@ -2652,18 +2636,18 @@ int LogicAllianceManager::FetchDonationAllianceLocal(unsigned uid, unsigned aid,
 	DataAllianceDonationManager::Instance()->SetMessage(donation, resp->mutable_donation());
 	return 0;
 }
-int LogicAllianceManager::AddDonation(unsigned uid, unsigned propsid, ProtoAlliance::FetchDonationResp * resp)
+int LogicAllianceManager::AddDonation(unsigned uid, unsigned propsid, ProtoAlliance::FetchDonationResp *resp)
 {
 	//捐收物品领取
 	CommonGiftConfig::CommonModifyItem cfg;
-	CommonGiftConfig::PropsItem*  itemcfg = cfg.add_props();
-	itemcfg->set_count(1);   //一次捐收，就只能捐收1个
+	CommonGiftConfig::PropsItem *itemcfg = cfg.add_props();
+	itemcfg->set_count(1); //一次捐收，就只能捐收1个
 	itemcfg->set_id(propsid);
 	LogicUserManager::Instance()->CommonProcess(uid, cfg, "AllianceDonation_Fetch", resp->mutable_commons());
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::SendNotifyReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::SendNotifyReq *req)
 {
 	string content = req->content();
 
@@ -2672,31 +2656,30 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::SendNotifyReq* re
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestSendNotifyBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestSendNotifyBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplySendNotifyBC* resp = new ProtoAlliance::ReplySendNotifyBC;
+	ProtoAlliance::ReplySendNotifyBC *resp = CreateObj<ProtoAlliance::ReplySendNotifyBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 		SendNotifyLocal(uid, aid, req->name(), req->content(), resp->mutable_alliance());
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplySendNotifyBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplySendNotifyBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
 
-
-int LogicAllianceManager::SendNotify(unsigned uid, string & content)
+int LogicAllianceManager::SendNotify(unsigned uid, string &content)
 {
 	//敏感词过滤
 	SensitiveFilter(content);
 
 	//权限校验
-//	CheckPrivilege(uid, privilege_broadcast_notice);
+	//	CheckPrivilege(uid, privilege_broadcast_notice);
 
 	DBCUserBaseWrap userwrap(uid);
 
@@ -2709,9 +2692,9 @@ int LogicAllianceManager::SendNotify(unsigned uid, string & content)
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestSendNotifyBC* m = new ProtoAlliance::RequestSendNotifyBC;
+			ProtoAlliance::RequestSendNotifyBC *m = CreateObj<ProtoAlliance::RequestSendNotifyBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_content(content);
@@ -2720,7 +2703,7 @@ int LogicAllianceManager::SendNotify(unsigned uid, string & content)
 		}
 		else
 		{
-			ProtoAlliance::SendNotifyResp* resp = new ProtoAlliance::SendNotifyResp;
+			ProtoAlliance::SendNotifyResp *resp = CreateObj<ProtoAlliance::SendNotifyResp>();
 			SendNotifyLocal(uid, aid, userwrap.Obj().name, content, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
@@ -2728,13 +2711,13 @@ int LogicAllianceManager::SendNotify(unsigned uid, string & content)
 
 	return 0;
 }
-int LogicAllianceManager::SendNotifyLocal(unsigned uid, unsigned aid, const string& userName, const string & content, ProtoAlliance::SendNotifyResp * resp)
+int LogicAllianceManager::SendNotifyLocal(unsigned uid, unsigned aid, const string &userName, const string &content, ProtoAlliance::SendNotifyResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
 	CheckMemberPrivilege(uid, aid, privilege_broadcast_notice);
 	//获取用户在商会中的职位
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 
 	//发送公告
 	unsigned notifyid = DataAllianceNotifyManager::Instance()->GetFreeNotifyId(aid, uid, member.position);
@@ -2746,7 +2729,7 @@ int LogicAllianceManager::SendNotifyLocal(unsigned uid, unsigned aid, const stri
 	}
 
 	//公告可用，则更新公告信息
-	DataAllianceNotify & notify = DataAllianceNotifyManager::Instance()->GetData(aid, notifyid);
+	DataAllianceNotify &notify = DataAllianceNotifyManager::Instance()->GetData(aid, notifyid);
 
 	notify.announce_uid = uid;
 	notify.create_ts = Time::GetGlobalTime();
@@ -2760,7 +2743,7 @@ int LogicAllianceManager::SendNotifyLocal(unsigned uid, unsigned aid, const stri
 	DataAllianceNotifyManager::Instance()->SetMessage(notify, resp->mutable_notify());
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::DelNotifyReq* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::DelNotifyReq *req)
 {
 	unsigned id = req->id();
 
@@ -2769,19 +2752,19 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::DelNotifyReq* req
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestDelNotifyBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestDelNotifyBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyDelNotifyBC* resp = new ProtoAlliance::ReplyDelNotifyBC;
+	ProtoAlliance::ReplyDelNotifyBC *resp = CreateObj<ProtoAlliance::ReplyDelNotifyBC>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 		DelNofityLocal(uid, aid, req->id(), resp->mutable_alliance());
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
-int LogicAllianceManager::Process(ProtoAlliance::ReplyDelNotifyBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyDelNotifyBC *req)
 {
-	if(req->has_alliance())
+	if (req->has_alliance())
 		return LMI->sendMsg(req->uid(), req->mutable_alliance(), false) ? 0 : R_ERROR;
 	return 0;
 }
@@ -2798,9 +2781,9 @@ int LogicAllianceManager::DelNofity(unsigned uid, unsigned id)
 
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestDelNotifyBC* m = new ProtoAlliance::RequestDelNotifyBC;
+			ProtoAlliance::RequestDelNotifyBC *m = CreateObj<ProtoAlliance::RequestDelNotifyBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_id(id);
@@ -2808,7 +2791,7 @@ int LogicAllianceManager::DelNofity(unsigned uid, unsigned id)
 		}
 		else
 		{
-			ProtoAlliance::DelNotifyResp* resp = new ProtoAlliance::DelNotifyResp;
+			ProtoAlliance::DelNotifyResp *resp = CreateObj<ProtoAlliance::DelNotifyResp>();
 			DelNofityLocal(uid, aid, id, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
@@ -2816,7 +2799,7 @@ int LogicAllianceManager::DelNofity(unsigned uid, unsigned id)
 
 	return 0;
 }
-int LogicAllianceManager::DelNofityLocal(unsigned uid, unsigned aid, unsigned id, ProtoAlliance::DelNotifyResp* resp)
+int LogicAllianceManager::DelNofityLocal(unsigned uid, unsigned aid, unsigned id, ProtoAlliance::DelNotifyResp *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 
@@ -2828,10 +2811,10 @@ int LogicAllianceManager::DelNofityLocal(unsigned uid, unsigned aid, unsigned id
 	}
 
 	//获取用户在商会中的职位
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 
 	//获取通知数据，判断是否是自身
-	DataAllianceNotify & notify = DataAllianceNotifyManager::Instance()->GetData(aid, id);
+	DataAllianceNotify &notify = DataAllianceNotifyManager::Instance()->GetData(aid, id);
 
 	if (notify.announce_uid != uid && member.position != pos_type_chief)
 	{
@@ -2874,8 +2857,8 @@ int LogicAllianceManager::CheckMemberPrivilege(unsigned uid, unsigned alliance_i
 	}
 
 	//获取用户在商会中的职位
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(alliance_id, uid);
-	member.authority = GetAuthorityByPosition(member.position);  //权限
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(alliance_id, uid);
+	member.authority = GetAuthorityByPosition(member.position); //权限
 	//判断用户的权限是否满足要求
 	if (!IsPrivilege(member.authority, privilege))
 	{
@@ -2886,7 +2869,7 @@ int LogicAllianceManager::CheckMemberPrivilege(unsigned uid, unsigned alliance_i
 	return 0;
 }
 
-int LogicAllianceManager::SensitiveFilter(string & str)
+int LogicAllianceManager::SensitiveFilter(string &str)
 {
 	//敏感词过滤
 	String::Trim(str);
@@ -2897,7 +2880,7 @@ int LogicAllianceManager::SensitiveFilter(string & str)
 		throw runtime_error("words_empty");
 	}
 
-	if(!StringFilter::Check(str))
+	if (!StringFilter::Check(str))
 	{
 		error_log("sensitive words. name=%s", str.c_str());
 		throw runtime_error("sensitive_words");
@@ -2912,7 +2895,7 @@ bool LogicAllianceManager::IsMemberFull(unsigned uid, unsigned alliance_id)
 	unsigned count = DataAllianceMemberManager::Instance()->GetMemberCount(alliance_id);
 
 	//获取商会配置
-	const ConfigAlliance::Alliance & alliancecfg = AllianceCfgWrap().GetAllianceCfg();
+	const ConfigAlliance::Alliance &alliancecfg = AllianceCfgWrap().GetAllianceCfg();
 
 	if (count >= alliancecfg.member_num_limit())
 	{
@@ -2928,7 +2911,7 @@ bool LogicAllianceManager::CheckMemberFull(unsigned uid, unsigned alliance_id)
 	unsigned count = DataAllianceMemberManager::Instance()->GetMemberCount(alliance_id);
 
 	//获取商会配置
-	const ConfigAlliance::Alliance & alliancecfg = AllianceCfgWrap().GetAllianceCfg();
+	const ConfigAlliance::Alliance &alliancecfg = AllianceCfgWrap().GetAllianceCfg();
 
 	if (count >= alliancecfg.member_num_limit())
 	{
@@ -2938,25 +2921,25 @@ bool LogicAllianceManager::CheckMemberFull(unsigned uid, unsigned alliance_id)
 
 	return true;
 }
-int LogicAllianceManager::SetMemberMessage(DataAllianceMember &member, ProtoAlliance::AllianceMemberCPP * msg)
+int LogicAllianceManager::SetMemberMessage(DataAllianceMember &member, ProtoAlliance::AllianceMemberCPP *msg)
 {
 	member.SetMessage(msg);
 	return 0;
 }
-int LogicAllianceManager::SetMemberMessage(DataAllianceMember &member, ProtoAlliance::ReplyAllianceRaceOrder * msg)
+int LogicAllianceManager::SetMemberMessage(DataAllianceMember &member, ProtoAlliance::ReplyAllianceRaceOrder *msg)
 {
 	member.SetMessage(msg);
 	return 0;
 }
 
-bool LogicAllianceManager::IsNameAvailable(unsigned uid, string & name, string & reason)
+bool LogicAllianceManager::IsNameAvailable(unsigned uid, string &name, string &reason)
 {
 	//敏感词汇过滤
 	try
 	{
 		SensitiveFilter(name);
 	}
-	catch(runtime_error &e)
+	catch (runtime_error &e)
 	{
 		reason = "sensitive_name";
 		return false;
@@ -2968,14 +2951,14 @@ bool LogicAllianceManager::IsNameAvailable(unsigned uid, string & name, string &
 
 	int ret = allianceMapping.Get(tempalliance);
 
-	if(ret == 0)
+	if (ret == 0)
 	{
 		error_log("duplicate_alliance_name. uid=%u,allianceId=%u,name=%s]", uid, tempalliance.alliance_id, name.c_str());
 		reason = "duplicate_alliance_name";
 
 		return false;
 	}
-	else if(ret != R_ERR_NO_DATA)
+	else if (ret != R_ERR_NO_DATA)
 	{
 		error_log("GetMapping fail. ret=%d,uid=%u,allianceId=%u,name=%s", ret, uid, tempalliance.alliance_id, name.c_str());
 		reason = "get_namemapping_error";
@@ -2987,13 +2970,13 @@ bool LogicAllianceManager::IsNameAvailable(unsigned uid, string & name, string &
 }
 bool LogicAllianceManager::IsInRace(unsigned joinTs)
 {
-	return joinTs < MemoryAllianceRaceGroupManager::Instance()->GetTs();	// 加入时间得在竞赛开始之前
+	return joinTs < MemoryAllianceRaceGroupManager::Instance()->GetTs(); // 加入时间得在竞赛开始之前
 }
 
 int LogicAllianceManager::SetMemberByPostion(unsigned allianceid, unsigned uid, unsigned position,
-		unsigned helptimes, unsigned level, const string& name,
-		unsigned online, unsigned needHelp, const string& fig,
-		DataAllianceMember & member)
+											 unsigned helptimes, unsigned level, const string &name,
+											 unsigned online, unsigned needHelp, const string &fig,
+											 DataAllianceMember &member)
 {
 	member.alliance_id = allianceid;
 	member.position = position;
@@ -3043,7 +3026,6 @@ int LogicAllianceManager::SetMemberByPostion(unsigned allianceid, unsigned uid, 
 	}
 	*/
 
-
 	return 0;
 }
 
@@ -3052,89 +3034,90 @@ int LogicAllianceManager::GetAuthorityByPosition(unsigned position)
 	unsigned authority = 0;
 
 	//根据职位，初始化成员的权限
-	switch(position)
+	switch (position)
 	{
-		case pos_type_chief: authority |= (privilege_manipulate_director |privilege_transfer_chief| privilege_edit_alliance);
-		case pos_type_director: authority |= (privilege_edit_competition|privilege_manipulate_committee |privilege_broadcast_notice|privilege_kick_out|privilege_del_race_order);
-		case pos_type_committee: authority |= (privilege_invite |privilege_approve);
-		case pos_type_member: authority |= (privilege_join_competition |privilege_donate);
-			break;
-		default:
-			break;
+	case pos_type_chief:
+		authority |= (privilege_manipulate_director | privilege_transfer_chief | privilege_edit_alliance);
+	case pos_type_director:
+		authority |= (privilege_edit_competition | privilege_manipulate_committee | privilege_broadcast_notice | privilege_kick_out | privilege_del_race_order);
+	case pos_type_committee:
+		authority |= (privilege_invite | privilege_approve);
+	case pos_type_member:
+		authority |= (privilege_join_competition | privilege_donate);
+		break;
+	default:
+		break;
 	}
 
 	return authority;
 }
 
-void LogicAllianceManager::SetUserAllianceMsg(unsigned old, unsigned alliance_id, DataCommon::CommonItemsCPP * msg)
+void LogicAllianceManager::SetUserAllianceMsg(unsigned old, unsigned alliance_id, DataCommon::CommonItemsCPP *msg)
 {
-	DataCommon::BaseItemCPP* basemsg = msg->mutable_userbase()->add_baseitem();
+	DataCommon::BaseItemCPP *basemsg = msg->mutable_userbase()->add_baseitem();
 
 	basemsg->set_change(old);
 	basemsg->set_totalvalue(alliance_id);
 
 	basemsg->set_type(type_alliance_id);
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestUpdateMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestUpdateMemberBC *req)
 {
 	UpdateMemberLocal(req->uid(), req->aid(), req->onlinets(), req->helpts(), req->level(), req->name(), req->viplevel());
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAddMemberHelpTimesBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAddMemberHelpTimesBC *req)
 {
 	AddMemberHelpTimesLocal(req->uid(), req->aid());
 	return 0;
 }
 
-
-
-
 //设置商会成员竞赛标志
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceSetFlag* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceSetFlag *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceSetFlagBC* m = new ProtoAlliance::RequestAllianceRaceSetFlagBC;
+			ProtoAlliance::RequestAllianceRaceSetFlagBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceSetFlagBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_id(req->id());
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
 			uint32_t id = req->id();
-			ProtoAlliance::ReplyAllianceRaceInfo* resp = new ProtoAlliance::ReplyAllianceRaceInfo;
+			ProtoAlliance::ReplyAllianceRaceInfo *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceInfo>();
 			SetAllianceRaceFlag(uid, aid, id, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceSetFlagBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceSetFlagBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
 	OtherAllianceSaveControl allianceCtl(aid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
-		ProtoAlliance::ReplyAllianceRaceInfo* resp = new ProtoAlliance::ReplyAllianceRaceInfo;
+		ProtoAlliance::ReplyAllianceRaceInfo *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceInfo>();
 		SetAllianceRaceFlag(uid, aid, req->id(), resp);
 		return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 	}
 	return 0;
 }
-int LogicAllianceManager::SetAllianceRaceFlag(uint32_t uid, uint32_t aid, uint32_t id, ProtoAlliance::ReplyAllianceRaceInfo* resp)
+int LogicAllianceManager::SetAllianceRaceFlag(uint32_t uid, uint32_t aid, uint32_t id, ProtoAlliance::ReplyAllianceRaceInfo *resp)
 {
-	if(id != flag_id_race_order_confirm_grade_reward)
+	if (id != flag_id_race_order_confirm_grade_reward)
 	{
 		error_log("invalid flagId uid=%u,id=%u", uid, id);
 		throw runtime_error("param_error");
 	}
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 	setFlag(member.flag, flag_id_race_order_confirm_grade_reward);
 	FillAllianceRaceInfo(uid, aid, resp);
 
@@ -3143,27 +3126,27 @@ int LogicAllianceManager::SetAllianceRaceFlag(uint32_t uid, uint32_t aid, uint32
 }
 
 //竞赛订单完成进度
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceMemberProgress* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceMemberProgress *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceMemberProgressBC* m = new ProtoAlliance::RequestAllianceRaceMemberProgressBC;
+			ProtoAlliance::RequestAllianceRaceMemberProgressBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceMemberProgressBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
 			return SyncRaceOrderProgress(uid, aid);
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberProgressBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberProgressBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
@@ -3174,44 +3157,44 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberProgre
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceInfo* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceInfo *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceInfoBC* m = new ProtoAlliance::RequestAllianceRaceInfoBC;
+			ProtoAlliance::RequestAllianceRaceInfoBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceInfoBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceInfo* resp = new ProtoAlliance::ReplyAllianceRaceInfo;
+			ProtoAlliance::ReplyAllianceRaceInfo *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceInfo>();
 			FillAllianceRaceInfo(uid, aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceInfoBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceInfoBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceInfo* resp = new ProtoAlliance::ReplyAllianceRaceInfo;
+	ProtoAlliance::ReplyAllianceRaceInfo *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceInfo>();
 	OtherAllianceSaveControl allianceCtl(aid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 		FillAllianceRaceInfo(uid, aid, resp);
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::FillAllianceRaceInfo(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceInfo* resp)
+int LogicAllianceManager::FillAllianceRaceInfo(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceInfo *resp)
 {
 	CheckRace(aid);
 	uint32_t now = Time::GetGlobalTime();
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 
 	resp->set_point(alliance.race_point);
 	resp->set_racelevel(alliance.race_level);
@@ -3223,10 +3206,9 @@ int LogicAllianceManager::FillAllianceRaceInfo(uint32_t uid, uint32_t aid, Proto
 	return 0;
 }
 
-
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceOrder* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceOrder *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -3235,27 +3217,27 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceOrderBC* m = new ProtoAlliance::RequestAllianceRaceOrderBC;
+			ProtoAlliance::RequestAllianceRaceOrderBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceOrderBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceOrder* resp = new ProtoAlliance::ReplyAllianceRaceOrder;
+			ProtoAlliance::ReplyAllianceRaceOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceOrder>();
 			FillAllianceRaceOrder(uid, aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceOrderBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceOrderBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceOrder* resp = new ProtoAlliance::ReplyAllianceRaceOrder;
+	ProtoAlliance::ReplyAllianceRaceOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceOrder>();
 	OtherAllianceSaveControl allianceCtl(aid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -3263,29 +3245,28 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceOrderBC* req
 	}
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::FillAllianceRaceOrder(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceOrder* resp)
+int LogicAllianceManager::FillAllianceRaceOrder(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceOrder *resp)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u aid=%u", uid, aid);
 		return -1;
 	}
 	CheckRace(aid);
 	uint32_t now = Time::GetGlobalTime();
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 
 	bool needSave = false;
-	for(uint32_t i = 0; i < DataAlliance_race_order_id_LENG; ++i)
+	for (uint32_t i = 0; i < DataAlliance_race_order_id_LENG; ++i)
 	{
-		if(alliance.race_order_cd[i] > 0
-		&& alliance.race_order_cd[i] < now	// cd时间已到
-		&& (alliance.race_order_id[i] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) > 0)
+		if (alliance.race_order_cd[i] > 0 && alliance.race_order_cd[i] < now // cd时间已到
+			&& (alliance.race_order_id[i] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) > 0)
 		{
 			alliance.race_order_cd[i] = 0; //now + AllianceRaceCfgWrap().GetCfg().task().cdtime();
 			needSave = true;
 		}
 	}
-	if(needSave)
+	if (needSave)
 	{
 		DataAllianceManager::Instance()->UpdateItem(alliance);
 	}
@@ -3294,14 +3275,14 @@ int LogicAllianceManager::FillAllianceRaceOrder(uint32_t uid, uint32_t aid, Prot
 	vector<unsigned> indexs;
 
 	DataAllianceMemberManager::Instance()->GetIndexs(aid, indexs);
-	for(size_t i = 0; i < indexs.size(); ++i)
+	for (size_t i = 0; i < indexs.size(); ++i)
 	{
-		DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
-		if(member.race_order_id > 0 && member.race_order_ts > now && !isRaceOrderFinish(member))
+		DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
+		if (member.race_order_id > 0 && member.race_order_ts > now && !isRaceOrderFinish(member))
 		{
 			SetMemberMessage(member, resp);
 		}
-		if(member.id == uid)
+		if (member.id == uid)
 		{
 			resp->set_point(member.race_point);
 			resp->set_orderrecv(member.race_order_recv);
@@ -3311,9 +3292,9 @@ int LogicAllianceManager::FillAllianceRaceOrder(uint32_t uid, uint32_t aid, Prot
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceOperateOrder* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceOperateOrder *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -3322,7 +3303,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(req->operate() == race_order_operate_cut_cd)	// 秒cd时间需要先检查玩家资源是否足够
+		if (req->operate() == race_order_operate_cut_cd) // 秒cd时间需要先检查玩家资源是否足够
 		{
 			uint32_t cost = GetRaceOrderCutCdCost(uid, req->cdts());
 			CommonGiftConfig::BaseItem base;
@@ -3330,23 +3311,23 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 			userwrap.CheckBaseBeforeCost(uid, "alliance_race_order_cut_cd", base);
 		}
 
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceOperateOrderBC* m = new ProtoAlliance::RequestAllianceRaceOperateOrderBC;
+			ProtoAlliance::RequestAllianceRaceOperateOrderBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceOperateOrderBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_slot(req->slot());
 			m->set_operate(req->operate());
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceOperateOrder* resp = new ProtoAlliance::ReplyAllianceRaceOperateOrder;
+			ProtoAlliance::ReplyAllianceRaceOperateOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceOperateOrder>();
 			resp->set_uid(uid);
 			resp->set_operate(req->operate());
 			unsigned ret = OperateAllianceRaceOrder(uid, aid, req->slot(), req->operate(), resp);
 			resp->set_ret(ret);
-			if(ret == race_order_operate_success && req->operate() == race_order_operate_cut_cd)
+			if (ret == race_order_operate_success && req->operate() == race_order_operate_cut_cd)
 			{
 				uint32_t cost = GetRaceOrderCutCdCost(uid, resp->cdts());
 				CommonGiftConfig::CommonModifyItem cfg;
@@ -3358,11 +3339,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceOperateOrderBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceOperateOrderBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceOperateOrder* resp = new ProtoAlliance::ReplyAllianceRaceOperateOrder;
+	ProtoAlliance::ReplyAllianceRaceOperateOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceOperateOrder>();
 	resp->set_uid(uid);
 	resp->set_operate(req->operate());
 	unsigned ret = 0;
@@ -3374,12 +3355,12 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceOperateOrder
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceOperateOrder* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceOperateOrder *req)
 {
 	uint32_t uid = req->uid();
 	uint32_t ret = req->ret();
 	uint32_t operate = req->operate();
-	if(operate == race_order_operate_cut_cd && ret == race_order_operate_success)	// 秒cd时间需要先检查玩家资源是否足够
+	if (operate == race_order_operate_cut_cd && ret == race_order_operate_success) // 秒cd时间需要先检查玩家资源是否足够
 	{
 		uint32_t cost = GetRaceOrderCutCdCost(uid, req->cdts());
 		CommonGiftConfig::CommonModifyItem cfg;
@@ -3388,29 +3369,29 @@ int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceOperateOrder* 
 	}
 	return LMI->sendMsg(req->uid(), req, false) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, uint32_t slot, uint32_t operate, ProtoAlliance::ReplyAllianceRaceOperateOrder* resp)
+int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, uint32_t slot, uint32_t operate, ProtoAlliance::ReplyAllianceRaceOperateOrder *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(aid, uid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(!IsInRace(member.join_ts))
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (!IsInRace(member.join_ts))
 	{
 		error_log("member not join alliance race uid=%u,aid=%u", uid, aid);
 		throw runtime_error("member_not_join_alliance_race");
 	}
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	if(slot <= 0 || slot > DataAlliance_race_order_id_LENG)
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	if (slot <= 0 || slot > DataAlliance_race_order_id_LENG)
 	{
 		error_log("slot param error. uid=%u,slot=%u", uid, slot);
 		throw runtime_error("param_error");
 	}
 	uint16_t orderId = alliance.race_order_id[slot - 1];
 	uint32_t orderCd = alliance.race_order_cd[slot - 1];
-	if(orderId == 0 && orderCd < now)	// cd时间已到
+	if (orderId == 0 && orderCd < now) // cd时间已到
 	{
-		if((alliance.race_order_id[slot - 1] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) == 0)
+		if ((alliance.race_order_id[slot - 1] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) == 0)
 		{
 			error_log("GetRandTaskId fail uid=%u operate=%u", uid, operate);
 			throw runtime_error("get_alliance_race_task_fail");
@@ -3420,9 +3401,9 @@ int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, u
 		orderCd = alliance.race_order_cd[slot - 1];
 	}
 	resp->set_cdts(0);
-	if(operate == race_order_operate_del)
+	if (operate == race_order_operate_del)
 	{
-		if(orderCd >= now)
+		if (orderCd >= now)
 		{
 			error_log("race order still in cd time uid=%u operate=%u orderCd=%u", uid, orderCd);
 			return race_order_operate_in_cd;
@@ -3431,9 +3412,9 @@ int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, u
 		alliance.race_order_id[slot - 1] = 0;
 		alliance.race_order_cd[slot - 1] = now + AllianceRaceCfgWrap().GetCfg().task().cdtime();
 	}
-	else if(operate == race_order_operate_accept)
+	else if (operate == race_order_operate_accept)
 	{
-		if(orderCd >= now)
+		if (orderCd >= now)
 		{
 			error_log("race order still in cd time uid=%u operate=%u orderCd=%u", uid, orderCd);
 			return race_order_operate_in_cd;
@@ -3442,23 +3423,23 @@ int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, u
 		uint32_t t = 0;
 		uint32_t level = 0;
 		AllianceRaceCfgWrap().GetTaskInfo(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID, orderId, t, level);
-		if(member.userlevel < level)
+		if (member.userlevel < level)
 		{
 			error_log("member level limit uid=%u mlevel=%u rlevel=%u", uid, member.userlevel, level);
 			throw runtime_error("level_limit");
 		}
-		if(member.race_order_recv >= getRaceOrderMaxChance(uid, alliance.race_level, member.flag, member.vipLevel))
+		if (member.race_order_recv >= getRaceOrderMaxChance(uid, alliance.race_level, member.flag, member.vipLevel))
 		{
 			error_log("race order recv out of limit uid=%u", uid);
 			throw runtime_error("race_order_recv_out_of_limit");
 		}
-		if(member.race_order_id > 0 && member.race_order_ts > now)
+		if (member.race_order_id > 0 && member.race_order_ts > now)
 		{
 			error_log("race order exist uid=%u", uid);
 			throw runtime_error("race_order_exist");
 		}
 
-		if(orderId > 0)
+		if (orderId > 0)
 		{
 			alliance.race_order_id[slot - 1] = 0;
 			alliance.race_order_cd[slot - 1] = now + AllianceRaceCfgWrap().GetCfg().task().cdtime();
@@ -3467,12 +3448,12 @@ int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, u
 		{
 			error_log("race order still in cd time uid=%u operate=%u orderCd=%u", uid, orderCd);
 			return race_order_operate_id_not_exist;
-		//	throw runtime_error("race_order_in_cd");
+			//	throw runtime_error("race_order_in_cd");
 		}
 		member.race_order_id = orderId;
 		member.race_order_recv++;
 		member.race_order_ts = now + t;
-		if(member.race_order_ts > GetRaceOverTs())
+		if (member.race_order_ts > GetRaceOverTs())
 		{
 			member.race_order_ts = GetRaceOverTs();
 		}
@@ -3480,12 +3461,12 @@ int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, u
 		//更新
 		DataAllianceMemberManager::Instance()->UpdateItem(member);
 	}
-	else if(operate == race_order_operate_cut_cd)
+	else if (operate == race_order_operate_cut_cd)
 	{
 		resp->set_cdts(orderCd);
-		if(orderId == 0)
+		if (orderId == 0)
 		{
-			if((alliance.race_order_id[slot - 1] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) == 0)
+			if ((alliance.race_order_id[slot - 1] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) == 0)
 			{
 				error_log("GetRandTaskId fail uid=%u operate=%u", uid, operate);
 				throw runtime_error("get_alliance_race_task_fail");
@@ -3510,21 +3491,21 @@ int LogicAllianceManager::OperateAllianceRaceOrder(uint32_t uid, uint32_t aid, u
 uint32_t LogicAllianceManager::GetRaceOrderCutCdCost(uint32_t uid, uint32_t cdTs)
 {
 	uint32_t now = Time::GetGlobalTime();
-	if(cdTs <= now)
+	if (cdTs <= now)
 	{
 		error_log("cdTs out of limit uid=%u", uid);
 		throw runtime_error("cdTs_out_of_limit");
 	}
 	uint32_t leftTime = cdTs - now;
 	uint32_t buyCdTime = AllianceRaceCfgWrap().GetCfg().task().buy_cd_time();
-	if(buyCdTime == 0)
+	if (buyCdTime == 0)
 	{
 		error_log("config error uid=%u buyCdTime=%u", uid, buyCdTime);
 		throw runtime_error("config_error");
 	}
 	uint32_t buyCdCost = AllianceRaceCfgWrap().GetCfg().task().buy_cd_cost();
 	uint32_t cost = buyCdCost * ((leftTime - 1) / buyCdTime + 1);
-	if(cost == 0)
+	if (cost == 0)
 	{
 		error_log("param error uid=%u cost=%u", uid, cost);
 		throw runtime_error("param_error");
@@ -3533,9 +3514,9 @@ uint32_t LogicAllianceManager::GetRaceOrderCutCdCost(uint32_t uid, uint32_t cdTs
 }
 
 //删除商会竞赛成员订单
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceMemberDelOrder* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceMemberDelOrder *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -3545,47 +3526,48 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	unsigned type = req->type();
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceMemberDelOrderBC* m = new ProtoAlliance::RequestAllianceRaceMemberDelOrderBC;
+			ProtoAlliance::RequestAllianceRaceMemberDelOrderBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceMemberDelOrderBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_type(type);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceOrder* resp = new ProtoAlliance::ReplyAllianceRaceOrder;
-			DelAllianceRaceMemberOrder(uid, aid, type,resp);
+			ProtoAlliance::ReplyAllianceRaceOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceOrder>();
+			DelAllianceRaceMemberOrder(uid, aid, type, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberDelOrderBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberDelOrderBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
 	unsigned type = req->type();
-	ProtoAlliance::ReplyAllianceRaceOrder* resp = new ProtoAlliance::ReplyAllianceRaceOrder;
+	ProtoAlliance::ReplyAllianceRaceOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceOrder>();
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
-		DelAllianceRaceMemberOrder(uid, aid, type,resp);
+		DelAllianceRaceMemberOrder(uid, aid, type, resp);
 	}
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::DelAllianceRaceMemberOrder(uint32_t uid, uint32_t aid, unsigned type,ProtoAlliance::ReplyAllianceRaceOrder* resp)
+int LogicAllianceManager::DelAllianceRaceMemberOrder(uint32_t uid, uint32_t aid, unsigned type, ProtoAlliance::ReplyAllianceRaceOrder *resp)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 	//更新成员数据
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(1 == type){
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (1 == type)
+	{
 		//表明为看广告删除商会订单,则需恢复“接受订单次数”
 		member.race_order_recv -= 1;
 	}
 	member.race_order_id = 0;
 	member.race_order_ts = 0;
-	if(!isRaceOrderFinish(member))	// 删除已完成订单不算撕单
+	if (!isRaceOrderFinish(member)) // 删除已完成订单不算撕单
 	{
 		member.race_order_cancel++;
 		UpdateRaceMemberOrderLog(member, member.race_order_id, race_member_order_status_cancel);
@@ -3597,7 +3579,7 @@ int LogicAllianceManager::DelAllianceRaceMemberOrder(uint32_t uid, uint32_t aid,
 	return 0;
 }
 //更新商会竞赛成员订单
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberUpdateOrderBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberUpdateOrderBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
@@ -3609,7 +3591,7 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberUpdate
 }
 int LogicAllianceManager::AddRaceOrderProgress(uint32_t uid, uint32_t orderType, uint32_t count, uint32_t target)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		return 0;
 	}
@@ -3617,9 +3599,9 @@ int LogicAllianceManager::AddRaceOrderProgress(uint32_t uid, uint32_t orderType,
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceMemberUpdateOrderBC* m = new ProtoAlliance::RequestAllianceRaceMemberUpdateOrderBC;
+			ProtoAlliance::RequestAllianceRaceMemberUpdateOrderBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceMemberUpdateOrderBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->set_ordertype(orderType);
@@ -3627,7 +3609,7 @@ int LogicAllianceManager::AddRaceOrderProgress(uint32_t uid, uint32_t orderType,
 			m->set_target(target);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
 			AddRaceOrderProgressLocal(uid, aid, orderType, count, target);
 		}
@@ -3639,27 +3621,27 @@ int LogicAllianceManager::AddRaceOrderProgressLocal(uint32_t uid, uint32_t aid, 
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//更新成员数据
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(member.race_order_id == 0 || member.race_order_ts < now || isRaceOrderFinish(member))	// 无订单,超时,已完成
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (member.race_order_id == 0 || member.race_order_ts < now || isRaceOrderFinish(member)) // 无订单,超时,已完成
 	{
 		return 0;
 	}
-	const ConfigAllianceRace::RaceTaskStorageItem& item = AllianceRaceCfgWrap().GetTaskItem(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID, member.race_order_id);
+	const ConfigAllianceRace::RaceTaskStorageItem &item = AllianceRaceCfgWrap().GetTaskItem(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID, member.race_order_id);
 	uint32_t finishCount = 0;
 	bool needSync = false;
-	for(uint32_t i = 0; i < item.cond_size() && i < DataAllianceMember_race_order_progress_LENG; ++i)
+	for (uint32_t i = 0; i < item.cond_size() && i < DataAllianceMember_race_order_progress_LENG; ++i)
 	{
-		const ConfigAllianceRace::RaceTaskCond& cond = item.cond(i);
+		const ConfigAllianceRace::RaceTaskCond &cond = item.cond(i);
 		uint32_t progress = member.race_order_progress[i];
-		if(progress >= cond.count())
+		if (progress >= cond.count())
 		{
 			++finishCount;
 		}
-		else if(cond.type() == orderType && (target == 0 || cond.id() == target))
+		else if (cond.type() == orderType && (target == 0 || cond.id() == target))
 		{
 			progress += count;
-			if(progress >= cond.count())
+			if (progress >= cond.count())
 			{
 				progress = cond.count();
 				++finishCount;
@@ -3671,7 +3653,7 @@ int LogicAllianceManager::AddRaceOrderProgressLocal(uint32_t uid, uint32_t aid, 
 
 	bool refreshReward = false;
 
-/*
+	/*
 	if(true)	// 内网测试
 	{
 		finishCount = item.cond_size();
@@ -3681,49 +3663,49 @@ int LogicAllianceManager::AddRaceOrderProgressLocal(uint32_t uid, uint32_t aid, 
 	}
 */
 
-	if(finishCount >= item.cond_size())	// 任务完成
+	if (finishCount >= item.cond_size()) // 任务完成
 	{
 		UpdateRaceMemberOrderLog(member, member.race_order_id, race_member_order_status_finish);
 		uint32_t addPoint = item.point() * LogicVIPManager::Instance()->VIPCompetitionIntegral(member.vipLevel);
-		if(member.race_point == 0 && addPoint > 0)	// 联盟积分破0后刷新所有成员阶段奖励
+		if (member.race_point == 0 && addPoint > 0) // 联盟积分破0后刷新所有成员阶段奖励
 		{
 			refreshReward = true;
 		}
-//		member.race_order_id = 0;
-//		member.race_order_ts = 0;
+		//		member.race_order_id = 0;
+		//		member.race_order_ts = 0;
 		member.race_order_finish++;
 		member.race_point += addPoint;
-		memset(member.race_order_progress, 0xFF, sizeof(member.race_order_progress));	// 表示任务完成
+		memset(member.race_order_progress, 0xFF, sizeof(member.race_order_progress)); // 表示任务完成
 
 		alliance.race_point += addPoint;
 		DataAllianceManager::Instance()->UpdateItem(alliance);
 
 		set<unsigned> zoneId;
 		MemoryAllianceRaceGroupManager::Instance()->UpdateMemberPoint(aid, alliance.race_point, zoneId);
-		for(set<unsigned>::iterator iter = zoneId.begin(); iter != zoneId.end(); ++iter)
+		for (set<unsigned>::iterator iter = zoneId.begin(); iter != zoneId.end(); ++iter)
 		{
-			ProtoAlliance::SetAllianceRaceGroupPointBC* m = new ProtoAlliance::SetAllianceRaceGroupPointBC;
+			ProtoAlliance::SetAllianceRaceGroupPointBC *m = CreateObj<ProtoAlliance::SetAllianceRaceGroupPointBC>();
 			m->set_aid(aid);
 			m->set_point(alliance.race_point);
-			if(ProtoManager::BattleConnectNoReplyByZoneID(*iter, m) != 0)
+			if (ProtoManager::BattleConnectNoReplyByZoneID(*iter, m) != 0)
 			{
 				error_log("BattleConnectNoReplyByZoneID fail zoneId=%u", *iter);
 				continue;
 			}
 		}
 		debug_log("alliance_race_order_progress uid=%u,lev=%u,aid=%u,mp=%u,ap=%u,oid=%u,ots=%u,of=%u",
-				uid, member.userlevel, aid, member.race_point, alliance.race_point, member.race_order_id, member.race_order_ts,member.race_order_finish);
+				  uid, member.userlevel, aid, member.race_point, alliance.race_point, member.race_order_id, member.race_order_ts, member.race_order_finish);
 	}
-	if(needSync)
+	if (needSync)
 	{
 		SyncRaceOrderProgress(uid, aid);
 	}
 
-	if(refreshReward)
+	if (refreshReward)
 	{
 		member.race_user_level = member.userlevel;
 		uint32_t levelId = AllianceRaceCfgWrap().GetRaceRewardLevelId(member.race_user_level);
-		const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > fixId;
+		const ::google::protobuf::RepeatedField<::google::protobuf::uint32> fixId;
 		RefreshMemberRaceStageReward(fixId, levelId, member);
 	}
 	//更新
@@ -3733,10 +3715,10 @@ int LogicAllianceManager::AddRaceOrderProgressLocal(uint32_t uid, uint32_t aid, 
 int LogicAllianceManager::WatchAdPlusRacePointLocal(uint32_t uid, uint32_t aid, uint32_t addPoint)
 {
 	//更新成员数据
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 	bool refreshReward = false;
-	if(member.race_point == 0 && addPoint > 0)	// 联盟积分破0后刷新所有成员阶段奖励
+	if (member.race_point == 0 && addPoint > 0) // 联盟积分破0后刷新所有成员阶段奖励
 	{
 		refreshReward = true;
 	}
@@ -3747,25 +3729,25 @@ int LogicAllianceManager::WatchAdPlusRacePointLocal(uint32_t uid, uint32_t aid, 
 
 	set<unsigned> zoneId;
 	MemoryAllianceRaceGroupManager::Instance()->UpdateMemberPoint(aid, alliance.race_point, zoneId);
-	for(set<unsigned>::iterator iter = zoneId.begin(); iter != zoneId.end(); ++iter)
+	for (set<unsigned>::iterator iter = zoneId.begin(); iter != zoneId.end(); ++iter)
 	{
-		ProtoAlliance::SetAllianceRaceGroupPointBC* m = new ProtoAlliance::SetAllianceRaceGroupPointBC;
+		ProtoAlliance::SetAllianceRaceGroupPointBC *m = CreateObj<ProtoAlliance::SetAllianceRaceGroupPointBC>();
 		m->set_aid(aid);
 		m->set_point(alliance.race_point);
-		if(ProtoManager::BattleConnectNoReplyByZoneID(*iter, m) != 0)
+		if (ProtoManager::BattleConnectNoReplyByZoneID(*iter, m) != 0)
 		{
 			error_log("BattleConnectNoReplyByZoneID fail zoneId=%u", *iter);
 			continue;
 		}
 	}
 	debug_log("watch_ad_add_point add_point=%u,uid=%u,member_level=%u,aid=%u,member_point=%u,alliance_point=%u",
-			addPoint,uid,member.userlevel,aid,member.race_point,alliance.race_point);
+			  addPoint, uid, member.userlevel, aid, member.race_point, alliance.race_point);
 
-	if(refreshReward)
+	if (refreshReward)
 	{
 		member.race_user_level = member.userlevel;
 		uint32_t levelId = AllianceRaceCfgWrap().GetRaceRewardLevelId(member.race_user_level);
-		const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > fixId;
+		const ::google::protobuf::RepeatedField<::google::protobuf::uint32> fixId;
 		RefreshMemberRaceStageReward(fixId, levelId, member);
 	}
 	//更新
@@ -3775,17 +3757,17 @@ int LogicAllianceManager::WatchAdPlusRacePointLocal(uint32_t uid, uint32_t aid, 
 }
 int LogicAllianceManager::SyncRaceOrderProgress(uint32_t uid, uint32_t aid)
 {
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(member.race_order_ts <= Time::GetGlobalTime())
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (member.race_order_ts <= Time::GetGlobalTime())
 	{
 		memset(member.race_order_progress, 0, sizeof(member.race_order_progress));
 		return 0;
 	}
-	ProtoAlliance::ReplyAllianceRaceMemberProgress* resp = new ProtoAlliance::ReplyAllianceRaceMemberProgress;
+	ProtoAlliance::ReplyAllianceRaceMemberProgress *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceMemberProgress>();
 	resp->set_orderid(member.race_order_id);
 	resp->set_ts(member.race_order_ts);
 
-	if(isRaceOrderFinish(member))
+	if (isRaceOrderFinish(member))
 	{
 		resp->set_finish(1);
 	}
@@ -3793,19 +3775,18 @@ int LogicAllianceManager::SyncRaceOrderProgress(uint32_t uid, uint32_t aid)
 	{
 		resp->set_finish(0);
 	}
-	for(int i = 0; i < DataAllianceMember_race_order_progress_LENG; ++i)
+	for (int i = 0; i < DataAllianceMember_race_order_progress_LENG; ++i)
 	{
 		resp->add_progress(member.race_order_progress[i]);
 	}
-	const uint16_t* p = member.race_order_progress;
-//	debug_log("alliance_race_order_progress uid=%u aid=%u progress=%u %u %u %u", uid, aid, p[0], p[1], p[2], p[3]);
+	const uint16_t *p = member.race_order_progress;
+	//	debug_log("alliance_race_order_progress uid=%u aid=%u progress=%u %u %u %u", uid, aid, p[0], p[1], p[2], p[3]);
 	return LMI->sendMsg(member.id, resp) ? 0 : R_ERROR;
 }
 
-
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceBuyOrder* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceBuyOrder *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -3815,7 +3796,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	if (IsAllianceId(aid))
 	{
 		uint32_t cost = AllianceRaceCfgWrap().GetCfg().task().buy_chance_cost();
-		if(cost == 0)
+		if (cost == 0)
 		{
 			error_log("config error uid=%u cost=%u", uid, cost);
 			throw runtime_error("config_error");
@@ -3824,22 +3805,22 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 		base.set_cash(-1 * cost);
 		userwrap.CheckBaseBeforeCost(uid, "alliance_race_buy_order", base);
 
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceBuyOrderBC* m = new ProtoAlliance::RequestAllianceRaceBuyOrderBC;
+			ProtoAlliance::RequestAllianceRaceBuyOrderBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceBuyOrderBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceBuyOrder* resp = new ProtoAlliance::ReplyAllianceRaceBuyOrder;
+			ProtoAlliance::ReplyAllianceRaceBuyOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceBuyOrder>();
 			unsigned ret = BuyAllianceRaceOrder(uid, aid, resp);
 			resp->set_ret(ret);
 			resp->set_uid(uid);
 
 			uint32_t cost = AllianceRaceCfgWrap().GetCfg().task().buy_chance_cost();
-			if(cost == 0)
+			if (cost == 0)
 			{
 				error_log("config error uid=%u cost=%u", uid, cost);
 				throw runtime_error("config_error");
@@ -3853,12 +3834,12 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceBuyOrderBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceBuyOrderBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
 	unsigned ret = 0;
-	ProtoAlliance::ReplyAllianceRaceBuyOrder* resp = new ProtoAlliance::ReplyAllianceRaceBuyOrder;
+	ProtoAlliance::ReplyAllianceRaceBuyOrder *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceBuyOrder>();
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
 		ret = BuyAllianceRaceOrder(uid, aid, resp);
@@ -3868,14 +3849,14 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceBuyOrderBC* 
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceBuyOrder* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceBuyOrder *req)
 {
 	uint32_t ret = req->ret();
 	uint32_t uid = req->uid();
-	if(ret == 0)
+	if (ret == 0)
 	{
 		uint32_t cost = AllianceRaceCfgWrap().GetCfg().task().buy_chance_cost();
-		if(cost == 0)
+		if (cost == 0)
 		{
 			error_log("config error uid=%u cost=%u", uid, cost);
 			throw runtime_error("config_error");
@@ -3887,20 +3868,20 @@ int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceBuyOrder* req)
 	return LMI->sendMsg(req->uid(), req, false) ? 0 : R_ERROR;
 }
 
-int LogicAllianceManager::BuyAllianceRaceOrder(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceBuyOrder* resp)
+int LogicAllianceManager::BuyAllianceRaceOrder(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceBuyOrder *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(aid, uid);
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(member.race_order_recv < AllianceRaceCfgWrap().GetTaskChance(alliance.race_level))
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (member.race_order_recv < AllianceRaceCfgWrap().GetTaskChance(alliance.race_level))
 	{
 		error_log("alliance race order recv left uid=%u", uid);
 		throw runtime_error("alliance_race_order_recv_left");
 	}
-	if(isFlagSet(member.flag, flag_id_race_order_buy_chance))
+	if (isFlagSet(member.flag, flag_id_race_order_buy_chance))
 	{
 		error_log("already buy race order uid=%u", uid);
 		throw runtime_error("already_buy_race_order");
@@ -3913,25 +3894,23 @@ int LogicAllianceManager::BuyAllianceRaceOrder(uint32_t uid, uint32_t aid, Proto
 	return 0;
 }
 
-
-
 //查询竞赛奖励
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceReward* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceReward *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceRewardBC* m = new ProtoAlliance::RequestAllianceRaceRewardBC;
+			ProtoAlliance::RequestAllianceRaceRewardBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceRewardBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceReward* resp = new ProtoAlliance::ReplyAllianceRaceReward;
+			ProtoAlliance::ReplyAllianceRaceReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceReward>();
 			unsigned ret = FillAllianceRaceReward(uid, aid, resp);
 			resp->set_ret(ret);
 			resp->set_uid(uid);
@@ -3940,11 +3919,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceRewardBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceRewardBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceReward* resp = new ProtoAlliance::ReplyAllianceRaceReward;
+	ProtoAlliance::ReplyAllianceRaceReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceReward>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -3956,31 +3935,31 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceRewardBC* re
 }
 
 //获取竞赛奖励
-int LogicAllianceManager::FillAllianceRaceReward(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceReward* resp)
+int LogicAllianceManager::FillAllianceRaceReward(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceReward *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(aid, uid);
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 	resp->set_rankid(alliance.race_rank_id);
 	resp->set_userlevel(member.race_user_level);
 	resp->set_olevel(alliance.race_olevel);
 	resp->set_opoint(alliance.race_opoint);
-	for(uint32_t i = 0; i < DataAllianceMember_race_grade_reward_LENG; ++i)
+	for (uint32_t i = 0; i < DataAllianceMember_race_grade_reward_LENG; ++i)
 	{
 		uint8_t reward = member.race_grade_reward[i].rewardId;
-		if(reward == 0)
+		if (reward == 0)
 		{
 			break;
 		}
 		resp->add_gradeid(reward);
 	}
-	for(uint32_t i = 0; i < DataAllianceMember_race_stage_reward_LENG; ++i)
+	for (uint32_t i = 0; i < DataAllianceMember_race_stage_reward_LENG; ++i)
 	{
 		uint8_t reward = member.race_stage_reward[i].rewardId;
-		if(reward == 0)
+		if (reward == 0)
 		{
 			break;
 		}
@@ -3990,39 +3969,34 @@ int LogicAllianceManager::FillAllianceRaceReward(uint32_t uid, uint32_t aid, Pro
 	return 0;
 }
 
-
-
-
-
-
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceTakeGradeReward* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceTakeGradeReward *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
 		uint32_t cost = AllianceRaceCfgWrap().GetCfg().task().buy_chance_cost();
-		if(cost == 0)
+		if (cost == 0)
 		{
 			error_log("config error uid=%u cost=%u", uid, cost);
 			throw runtime_error("config_error");
 		}
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceTakeGradeRewardBC* m = new ProtoAlliance::RequestAllianceRaceTakeGradeRewardBC;
+			ProtoAlliance::RequestAllianceRaceTakeGradeRewardBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceTakeGradeRewardBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceTakeGradeReward* resp = new ProtoAlliance::ReplyAllianceRaceTakeGradeReward;
+			ProtoAlliance::ReplyAllianceRaceTakeGradeReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceTakeGradeReward>();
 			unsigned ret = TakeAllianceRaceGradeReward(uid, aid, resp);
 			resp->set_uid(uid);
 			resp->set_ret(ret);
 
 			set<uint32_t> id;
-			for(uint32_t i = 0; i < resp->id_size(); ++i)
+			for (uint32_t i = 0; i < resp->id_size(); ++i)
 			{
 				id.insert(resp->id(i));
 			}
@@ -4036,11 +4010,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceTakeGradeRewardBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceTakeGradeRewardBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceTakeGradeReward* resp = new ProtoAlliance::ReplyAllianceRaceTakeGradeReward;
+	ProtoAlliance::ReplyAllianceRaceTakeGradeReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceTakeGradeReward>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -4050,14 +4024,14 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceTakeGradeRew
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceTakeGradeReward* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceTakeGradeReward *req)
 {
 	uint32_t ret = req->ret();
 	uint32_t uid = req->uid();
-	if(ret == 0)
+	if (ret == 0)
 	{
 		set<uint32_t> id;
-		for(uint32_t i = 0; i < req->id_size(); ++i)
+		for (uint32_t i = 0; i < req->id_size(); ++i)
 		{
 			id.insert(req->id(i));
 		}
@@ -4068,60 +4042,60 @@ int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceTakeGradeRewar
 	}
 	return LMI->sendMsg(req->uid(), req, false) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::TakeAllianceRaceGradeReward(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceTakeGradeReward* resp)
+int LogicAllianceManager::TakeAllianceRaceGradeReward(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceTakeGradeReward *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(aid, uid);
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(member.race_grade_reward[0].rewardId == 0)
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (member.race_grade_reward[0].rewardId == 0)
 	{
 		error_log("race grade reward not exist uid=%u", uid);
 		throw runtime_error("race_grade_reward_not_exist");
 	}
 	resp->set_userlevel(member.race_user_level);
 	resp->set_rankid(alliance.race_rank_id);
-	for(uint32_t i = 0; i < DataAllianceMember_race_grade_reward_LENG; ++i)
+	for (uint32_t i = 0; i < DataAllianceMember_race_grade_reward_LENG; ++i)
 	{
 		uint8_t reward = member.race_grade_reward[i].rewardId;
-		if(reward == 0)
+		if (reward == 0)
 		{
 			break;
 		}
 		resp->add_id(reward);
 	}
 	memset(member.race_grade_reward, 0, sizeof(member.race_grade_reward));
-//	alliance.race_rank_id = 0;
+	//	alliance.race_rank_id = 0;
 
 	DataAllianceMemberManager::Instance()->UpdateItem(member);
 	DataAllianceManager::Instance()->UpdateItem(alliance);
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceTakeStageReward* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceTakeStageReward *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceTakeStageRewardBC* m = new ProtoAlliance::RequestAllianceRaceTakeStageRewardBC;
+			ProtoAlliance::RequestAllianceRaceTakeStageRewardBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceTakeStageRewardBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->mutable_id()->CopyFrom(req->id());
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceTakeStageReward* resp = new ProtoAlliance::ReplyAllianceRaceTakeStageReward;
+			ProtoAlliance::ReplyAllianceRaceTakeStageReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceTakeStageReward>();
 			unsigned ret = TakeAllianceRaceStageReward(uid, aid, req->id(), resp);
-			if(ret == 0)
+			if (ret == 0)
 			{
 				vector<uint32_t> id;
-				for(uint32_t i = 0; i < resp->id_size(); ++i)
+				for (uint32_t i = 0; i < resp->id_size(); ++i)
 				{
 					id.push_back(resp->id(i));
 				}
@@ -4137,11 +4111,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceTakeStageRewardBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceTakeStageRewardBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceTakeStageReward* resp = new ProtoAlliance::ReplyAllianceRaceTakeStageReward;
+	ProtoAlliance::ReplyAllianceRaceTakeStageReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceTakeStageReward>();
 	resp->set_uid(uid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -4151,14 +4125,14 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceTakeStageRew
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceTakeStageReward* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceTakeStageReward *req)
 {
 	uint32_t ret = req->ret();
 	uint32_t uid = req->uid();
-	if(ret == 0)
+	if (ret == 0)
 	{
 		vector<uint32_t> id;
-		for(uint32_t i = 0; i < req->id_size(); ++i)
+		for (uint32_t i = 0; i < req->id_size(); ++i)
 		{
 			id.push_back(req->id(i));
 		}
@@ -4170,15 +4144,15 @@ int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceTakeStageRewar
 	return LMI->sendMsg(req->uid(), req, false) ? 0 : R_ERROR;
 }
 int LogicAllianceManager::TakeAllianceRaceStageReward(uint32_t uid, uint32_t aid,
-		const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >& id, ProtoAlliance::ReplyAllianceRaceTakeStageReward* resp)
+													  const ::google::protobuf::RepeatedField<::google::protobuf::uint32> &id, ProtoAlliance::ReplyAllianceRaceTakeStageReward *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(aid, uid);
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(member.race_stage_reward[0].rewardId == 0)
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (member.race_stage_reward[0].rewardId == 0)
 	{
 		error_log("race stage reward not exist uid=%u", uid);
 		throw runtime_error("race_stage_reward_not_exist");
@@ -4188,13 +4162,13 @@ int LogicAllianceManager::TakeAllianceRaceStageReward(uint32_t uid, uint32_t aid
 
 	uint32_t stageId = AllianceRaceCfgWrap().GetRaceRewardStageId(member.race_user_level, alliance.race_olevel, alliance.race_opoint);
 
-	for(uint32_t i = 0; i < id.size() && i < stageId; ++i)
+	for (uint32_t i = 0; i < id.size() && i < stageId; ++i)
 	{
 		uint32_t rewardIdx = i * groupSize + id.Get(i);
-		if(rewardIdx < DataAllianceMember_race_stage_reward_LENG)
+		if (rewardIdx < DataAllianceMember_race_stage_reward_LENG)
 		{
 			uint8_t reward = member.race_stage_reward[rewardIdx].rewardId;
-			if(reward == 0)
+			if (reward == 0)
 			{
 				break;
 			}
@@ -4207,7 +4181,7 @@ int LogicAllianceManager::TakeAllianceRaceStageReward(uint32_t uid, uint32_t aid
 	return 0;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceRefreshStageReward* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceRefreshStageReward *req)
 {
 	DBCUserBaseWrap userwrap(uid);
 	unsigned aid = userwrap.Obj().alliance_id;
@@ -4216,28 +4190,28 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 		CommonGiftConfig::BaseItem base;
 		base.set_cash(-1 * AllianceRaceCfgWrap().GetCfg().stage_reward_refresh_cost());
 		userwrap.CheckBaseBeforeCost(uid, "alliance_race_refresh_stage_reward", base);
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceRefreshStageRewardBC* m = new ProtoAlliance::RequestAllianceRaceRefreshStageRewardBC;
+			ProtoAlliance::RequestAllianceRaceRefreshStageRewardBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceRefreshStageRewardBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			m->mutable_id()->CopyFrom(req->id());
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceRefreshStageReward* resp = new ProtoAlliance::ReplyAllianceRaceRefreshStageReward;
+			ProtoAlliance::ReplyAllianceRaceRefreshStageReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceRefreshStageReward>();
 			unsigned ret = RefreshAllianceRaceStageReward(uid, aid, req->id(), resp);
-			if(ret == 0)
+			if (ret == 0)
 			{
 				vector<uint32_t> id;
-				for(uint32_t i = 0; i < resp->id_size(); ++i)
+				for (uint32_t i = 0; i < resp->id_size(); ++i)
 				{
 					id.push_back(resp->id(i));
 				}
 				CommonGiftConfig::CommonModifyItem cfg;
 				cfg.mutable_based()->set_cash(-1 * AllianceRaceCfgWrap().GetCfg().stage_reward_refresh_cost());
-//				AllianceRaceCfgWrap().GetStageReward(resp->levelid(), id, &cfg);
+				//				AllianceRaceCfgWrap().GetStageReward(resp->levelid(), id, &cfg);
 				LogicUserManager::Instance()->CommonProcess(uid, cfg, "alliance_race_refresh_stage_reward", resp->mutable_commons());
 			}
 			resp->set_uid(uid);
@@ -4247,11 +4221,11 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceRefreshStageRewardBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceRefreshStageRewardBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceRefreshStageReward* resp = new ProtoAlliance::ReplyAllianceRaceRefreshStageReward;
+	ProtoAlliance::ReplyAllianceRaceRefreshStageReward *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceRefreshStageReward>();
 	unsigned ret = 0;
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
@@ -4262,34 +4236,34 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceRefreshStage
 	return ProtoManager::BattleConnectNoReplyByUID(uid, resp);
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceRefreshStageReward* req)
+int LogicAllianceManager::Process(ProtoAlliance::ReplyAllianceRaceRefreshStageReward *req)
 {
 	uint32_t ret = req->ret();
 	uint32_t uid = req->uid();
-	if(ret == 0)
+	if (ret == 0)
 	{
 		vector<uint32_t> id;
-		for(uint32_t i = 0; i < req->id_size(); ++i)
+		for (uint32_t i = 0; i < req->id_size(); ++i)
 		{
 			id.push_back(req->id(i));
 		}
 		CommonGiftConfig::CommonModifyItem cfg;
 		cfg.mutable_based()->set_cash(-1 * AllianceRaceCfgWrap().GetCfg().stage_reward_refresh_cost());
-//		AllianceRaceCfgWrap().GetStageReward(req->levelid(), id, &cfg);
+		//		AllianceRaceCfgWrap().GetStageReward(req->levelid(), id, &cfg);
 		LogicUserManager::Instance()->CommonProcess(uid, cfg, "alliance_race_refresh_stage_reward", req->mutable_commons());
 	}
 	return LMI->sendMsg(req->uid(), req, false) ? 0 : R_ERROR;
 }
 int LogicAllianceManager::RefreshAllianceRaceStageReward(uint32_t uid, uint32_t aid,
-		const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >& id, ProtoAlliance::ReplyAllianceRaceRefreshStageReward* resp)
+														 const ::google::protobuf::RepeatedField<::google::protobuf::uint32> &id, ProtoAlliance::ReplyAllianceRaceRefreshStageReward *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(aid, uid);
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
-	if(member.race_stage_reward[0].rewardId == 0)
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	if (member.race_stage_reward[0].rewardId == 0)
 	{
 		error_log("race stage reward not exist uid=%u", uid);
 		throw runtime_error("race_stage_reward_not_exist");
@@ -4298,10 +4272,9 @@ int LogicAllianceManager::RefreshAllianceRaceStageReward(uint32_t uid, uint32_t 
 	uint32_t levelId = AllianceRaceCfgWrap().GetRaceRewardLevelId(member.race_user_level);
 	RefreshMemberRaceStageReward(id, levelId, member);
 
-
-	for(uint32_t i = 0; i < DataAllianceMember_race_stage_reward_LENG; ++i)
+	for (uint32_t i = 0; i < DataAllianceMember_race_stage_reward_LENG; ++i)
 	{
-		if(member.race_stage_reward[i].rewardId == 0)
+		if (member.race_stage_reward[i].rewardId == 0)
 		{
 			break;
 		}
@@ -4310,8 +4283,8 @@ int LogicAllianceManager::RefreshAllianceRaceStageReward(uint32_t uid, uint32_t 
 
 	return 0;
 }
-int LogicAllianceManager::RefreshMemberRaceStageReward(const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >& id,
-		uint32_t levelId, DataAllianceMember & member)
+int LogicAllianceManager::RefreshMemberRaceStageReward(const ::google::protobuf::RepeatedField<::google::protobuf::uint32> &id,
+													   uint32_t levelId, DataAllianceMember &member)
 {
 
 	uint32_t race_level = 5; // 测试代码,输入参数
@@ -4320,20 +4293,19 @@ int LogicAllianceManager::RefreshMemberRaceStageReward(const ::google::protobuf:
 	memset(race_stage_reward, 0, sizeof(race_stage_reward));
 
 	const uint32_t groupSize = ALLIANCE_RACE_STAGE_REWARD_GROUP_SIZE;
-	for(uint32_t i = 0; i < id.size(); ++i)
+	for (uint32_t i = 0; i < id.size(); ++i)
 	{
 		uint32_t rewardIdx = 0;
-		if(id.Get(i) < groupSize && (rewardIdx = i * groupSize + id.Get(i)) < DataAllianceMember_race_stage_reward_LENG)	//
+		if (id.Get(i) < groupSize && (rewardIdx = i * groupSize + id.Get(i)) < DataAllianceMember_race_stage_reward_LENG) //
 		{
 			race_stage_reward[rewardIdx] = member.race_stage_reward[rewardIdx].rewardId;
 		}
 	}
 	AllianceRaceCfgWrap().RefreshStageReward(levelId, race_stage_reward, DataAllianceMember_race_stage_reward_USED);
 
-
-	for(uint32_t i = 0; i < DataAllianceMember_race_stage_reward_LENG; ++i)
+	for (uint32_t i = 0; i < DataAllianceMember_race_stage_reward_LENG; ++i)
 	{
-		if(race_stage_reward[i] == 0)
+		if (race_stage_reward[i] == 0)
 		{
 			break;
 		}
@@ -4359,9 +4331,9 @@ int LogicAllianceManager::RefreshAllMemberRaceStageReward(uint32_t aid)
 	return 0;
 }
 */
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceMemberOrderLog* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceMemberOrderLog *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -4370,42 +4342,42 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceMemberOrderLogBC* m = new ProtoAlliance::RequestAllianceRaceMemberOrderLogBC;
+			ProtoAlliance::RequestAllianceRaceMemberOrderLogBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceMemberOrderLogBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceMemberOrderLog* resp = new ProtoAlliance::ReplyAllianceRaceMemberOrderLog;
+			ProtoAlliance::ReplyAllianceRaceMemberOrderLog *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceMemberOrderLog>();
 			FillAllianceRaceMemberOrderLog(uid, aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberOrderLogBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceMemberOrderLogBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceMemberOrderLog* resp = new ProtoAlliance::ReplyAllianceRaceMemberOrderLog;
+	ProtoAlliance::ReplyAllianceRaceMemberOrderLog *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceMemberOrderLog>();
 	OtherAllianceSaveControl allianceCtl(aid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 		FillAllianceRaceMemberOrderLog(uid, aid, resp);
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::FillAllianceRaceMemberOrderLog(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceMemberOrderLog* resp)
+int LogicAllianceManager::FillAllianceRaceMemberOrderLog(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRaceMemberOrderLog *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 	vector<unsigned> indexs;
 	DataAllianceMemberManager::Instance()->GetIndexs(aid, indexs);
-	for(size_t i = 0; i < indexs.size(); ++i)
+	for (size_t i = 0; i < indexs.size(); ++i)
 	{
-		DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
-		ProtoAlliance::AllianceRaceMemberOrderLogItem* logItem = resp->add_member();
+		DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
+		ProtoAlliance::AllianceRaceMemberOrderLogItem *logItem = resp->add_member();
 		logItem->set_uid(member.id);
 		logItem->set_finish(member.race_order_finish);
 		logItem->set_max(getRaceOrderMaxChance(uid, alliance.race_level, member.flag, member.vipLevel));
@@ -4417,14 +4389,9 @@ int LogicAllianceManager::FillAllianceRaceMemberOrderLog(uint32_t uid, uint32_t 
 	return 0;
 }
 
-
-
-
-
-
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRacePersonOrderLog* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRacePersonOrderLog *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -4433,44 +4400,44 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRacePersonOrderLogBC* m = new ProtoAlliance::RequestAllianceRacePersonOrderLogBC;
+			ProtoAlliance::RequestAllianceRacePersonOrderLogBC *m = CreateObj<ProtoAlliance::RequestAllianceRacePersonOrderLogBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRacePersonOrderLog* resp = new ProtoAlliance::ReplyAllianceRacePersonOrderLog;
+			ProtoAlliance::ReplyAllianceRacePersonOrderLog *resp = CreateObj<ProtoAlliance::ReplyAllianceRacePersonOrderLog>();
 			FillAllianceRacePersonOrderLog(uid, aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRacePersonOrderLogBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRacePersonOrderLogBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRacePersonOrderLog* resp = new ProtoAlliance::ReplyAllianceRacePersonOrderLog;
+	ProtoAlliance::ReplyAllianceRacePersonOrderLog *resp = CreateObj<ProtoAlliance::ReplyAllianceRacePersonOrderLog>();
 	OtherAllianceSaveControl allianceCtl(aid);
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 		FillAllianceRacePersonOrderLog(uid, aid, resp);
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
-int LogicAllianceManager::FillAllianceRacePersonOrderLog(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRacePersonOrderLog* resp)
+int LogicAllianceManager::FillAllianceRacePersonOrderLog(uint32_t uid, uint32_t aid, ProtoAlliance::ReplyAllianceRacePersonOrderLog *resp)
 {
 	uint32_t now = Time::GetGlobalTime();
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 	CheckMember(aid, uid);
-	DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 	DataAllianceMemberRaceOrderLog race_order_log[DataAllianceMember_race_order_log_LENG]; // 任务日志
-	for(int i = 0; i < DataAllianceMember_race_order_log_LENG; ++i)
+	for (int i = 0; i < DataAllianceMember_race_order_log_LENG; ++i)
 	{
-		if(member.race_order_log[i].id != 0)
+		if (member.race_order_log[i].id != 0)
 		{
-			ProtoAlliance::AllianceRacePersonOrderLogItem* logItem = resp->add_member();
+			ProtoAlliance::AllianceRacePersonOrderLogItem *logItem = resp->add_member();
 			logItem->set_id(member.race_order_log[i].id);
 			logItem->set_status(member.race_order_log[i].status);
 		}
@@ -4486,7 +4453,7 @@ uint32_t LogicAllianceManager::GetRaceOverTs()
 {
 	return MemoryAllianceRaceGroupManager::Instance()->GetTs() + ALLIANCE_RACE_GAME_TIME;
 }
-int LogicAllianceManager::ResetRaceMemberInfo(DataAllianceMember & member)
+int LogicAllianceManager::ResetRaceMemberInfo(DataAllianceMember &member)
 {
 	member.race_point = 0;
 	member.race_order_id = 0;
@@ -4503,23 +4470,23 @@ bool LogicAllianceManager::IsRaceOpen()
 }
 int LogicAllianceManager::CheckRace(uint32_t aid)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		return 0;
 	}
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
-	if(!Time::IsToday(alliance.active_ts))	// 活跃时间一天一置
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
+	if (!Time::IsToday(alliance.active_ts)) // 活跃时间一天一置
 	{
 		alliance.active_ts = Time::GetGlobalTime();
 		DataAllianceManager::Instance()->UpdateItem(alliance);
 	}
-	if(alliance.race_ts != MemoryAllianceRaceGroupManager::Instance()->GetTs())
+	if (alliance.race_ts != MemoryAllianceRaceGroupManager::Instance()->GetTs())
 	{
 		alliance.race_ts = MemoryAllianceRaceGroupManager::Instance()->GetTs();
 		alliance.race_point = 0;
-		for(uint32_t i = 0; i < DataAlliance_race_order_id_LENG; ++i)
+		for (uint32_t i = 0; i < DataAlliance_race_order_id_LENG; ++i)
 		{
-			if((alliance.race_order_id[i] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) > 0)
+			if ((alliance.race_order_id[i] = AllianceRaceCfgWrap().GetRandTaskId(ALLIANCE_RACE_DEFAULT_TASK_STORAGE_ID)) > 0)
 			{
 				alliance.race_order_cd[i] = 0; //now + AllianceRaceCfgWrap().GetCfg().task().cdtime();
 			}
@@ -4528,10 +4495,10 @@ int LogicAllianceManager::CheckRace(uint32_t aid)
 
 		vector<unsigned> indexs;
 		DataAllianceMemberManager::Instance()->GetIndexs(aid, indexs);
-		for(size_t i = 0; i < indexs.size(); ++i)
+		for (size_t i = 0; i < indexs.size(); ++i)
 		{
-			DataAllianceMember & member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
-			if(IsInRace(member.join_ts))
+			DataAllianceMember &member = DataAllianceMemberManager::Instance()->GetDataByIndex(indexs[i]);
+			if (IsInRace(member.join_ts))
 			{
 				ResetRaceMemberInfo(member);
 				DataAllianceMemberManager::Instance()->UpdateItem(member);
@@ -4540,9 +4507,9 @@ int LogicAllianceManager::CheckRace(uint32_t aid)
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::SetAllianceRaceGroupPointBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::SetAllianceRaceGroupPointBC *req)
 {
-	if(IsRaceOpen())
+	if (IsRaceOpen())
 	{
 		unsigned aid = req->aid();
 		unsigned point = req->point();
@@ -4551,10 +4518,9 @@ int LogicAllianceManager::Process(ProtoAlliance::SetAllianceRaceGroupPointBC* re
 	return 0;
 }
 
-
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceGroupMember* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceGroupMember *req)
 {
-	if(!IsRaceOpen())
+	if (!IsRaceOpen())
 	{
 		error_log("alliance_race_closed uid=%u", uid);
 		return -1;
@@ -4563,27 +4529,27 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	unsigned aid = userwrap.Obj().alliance_id;
 	if (IsAllianceId(aid))
 	{
-		if(CMI->IsNeedConnectByAID(aid))
+		if (CMI->IsNeedConnectByAID(aid))
 		{
-			ProtoAlliance::RequestAllianceRaceGroupMemberBC* m = new ProtoAlliance::RequestAllianceRaceGroupMemberBC;
+			ProtoAlliance::RequestAllianceRaceGroupMemberBC *m = CreateObj<ProtoAlliance::RequestAllianceRaceGroupMemberBC>();
 			m->set_aid(aid);
 			m->set_uid(uid);
 			return ProtoManager::BattleConnectNoReplyByAID(aid, m);
 		}
-		else if(CheckMember(aid, uid))
+		else if (CheckMember(aid, uid))
 		{
-			ProtoAlliance::ReplyAllianceRaceGroupMember* resp = new ProtoAlliance::ReplyAllianceRaceGroupMember;
+			ProtoAlliance::ReplyAllianceRaceGroupMember *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceGroupMember>();
 			MemoryAllianceRaceGroupManager::Instance()->FillMember(aid, resp);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 	}
 	return 0;
 }
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceGroupMemberBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceGroupMemberBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
-	ProtoAlliance::ReplyAllianceRaceGroupMember* resp = new ProtoAlliance::ReplyAllianceRaceGroupMember;
+	ProtoAlliance::ReplyAllianceRaceGroupMember *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceGroupMember>();
 	if (IsAllianceId(aid) && CheckMember(aid, uid))
 	{
 		MemoryAllianceRaceGroupManager::Instance()->FillMember(aid, resp);
@@ -4591,25 +4557,25 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceGroupMemberB
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
 
-int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceWatchAd* req)
+int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRaceWatchAd *req)
 {
 	unsigned type = req->type();
-	ProtoAlliance::ReplyAllianceRaceWatchAd* resp = new ProtoAlliance::ReplyAllianceRaceWatchAd;
-	if(watch_ad_type_0 == type)			//观看广告
+	ProtoAlliance::ReplyAllianceRaceWatchAd *resp = CreateObj<ProtoAlliance::ReplyAllianceRaceWatchAd>();
+	if (watch_ad_type_0 == type) //观看广告
 	{
-		if(!IsRaceOpen())
+		if (!IsRaceOpen())
 		{
 			resp->set_ret(watch_ad_result_3);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
-		else if(m_set_watch_ad.count(uid))
+		else if (m_set_watch_ad.count(uid))
 		{
 			resp->set_ret(watch_ad_result_1);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
 		DBCUserBaseWrap userwrap(uid);
 		unsigned aid = userwrap.Obj().alliance_id;
-		if(!IsAllianceId(aid))
+		if (!IsAllianceId(aid))
 		{
 			resp->set_ret(watch_ad_result_4);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -4619,16 +4585,15 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 			resp->set_ret(watch_ad_result_0);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 		}
-
 	}
-	else if(watch_ad_type_1 == type)	//领取奖励
+	else if (watch_ad_type_1 == type) //领取奖励
 	{
 		unsigned diamond = 0;
 		unsigned point = 0;
 		unsigned count = 0;
-		AllianceRaceCfgWrap().GetWatchAdReward(diamond,point,count);
+		AllianceRaceCfgWrap().GetWatchAdReward(diamond, point, count);
 
-		if(!IsRaceOpen())
+		if (!IsRaceOpen())
 		{
 			resp->set_ret(watch_ad_result_3);
 			return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
@@ -4638,15 +4603,15 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 		unsigned aid = userwrap.Obj().alliance_id;
 		if (IsAllianceId(aid))
 		{
-			if(CMI->IsNeedConnectByAID(aid))
+			if (CMI->IsNeedConnectByAID(aid))
 			{
-				ProtoAlliance::RequestAllianceRaceWatchAdBC* msg = new ProtoAlliance::RequestAllianceRaceWatchAdBC;
+				ProtoAlliance::RequestAllianceRaceWatchAdBC *msg = CreateObj<ProtoAlliance::RequestAllianceRaceWatchAdBC>();
 				msg->set_aid(aid);
 				msg->set_uid(uid);
 				msg->set_point(point);
 				ProtoManager::BattleConnectNoReplyByAID(aid, msg);
 			}
-			else if(CheckMember(aid, uid))
+			else if (CheckMember(aid, uid))
 			{
 				WatchAdPlusRacePointLocal(uid, aid, point);
 			}
@@ -4655,7 +4620,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 
 		//加钻石
 		DBCUserBaseWrap user(uid);
-		user.AddCash(diamond,"watch_ad_in_alliance_race");
+		user.AddCash(diamond, "watch_ad_in_alliance_race");
 		DataCommon::CommonItemsCPP *common = resp->mutable_commons();
 		DataCommon::BaseItemCPP *base = common->mutable_userbase()->add_baseitem();
 		base->set_change(diamond);
@@ -4669,7 +4634,7 @@ int LogicAllianceManager::Process(unsigned uid, ProtoAlliance::RequestAllianceRa
 	return 0;
 }
 
-int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceWatchAdBC* req)
+int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceWatchAdBC *req)
 {
 	unsigned aid = req->aid();
 	unsigned uid = req->uid();
@@ -4682,7 +4647,6 @@ int LogicAllianceManager::Process(ProtoAlliance::RequestAllianceRaceWatchAdBC* r
 	return 0;
 }
 
-
 bool LogicAllianceManager::UpdateWatchAd()
 {
 	m_set_watch_ad.clear();
@@ -4694,15 +4658,15 @@ bool LogicAllianceManager::isFlagSet(uint8_t flag, uint8_t id)
 	return ((flag >> id) & 0x1) > 0;
 }
 
-void LogicAllianceManager::setFlag(uint8_t& flag, uint8_t id)
+void LogicAllianceManager::setFlag(uint8_t &flag, uint8_t id)
 {
 	flag |= (0x1 << id);
 }
-bool LogicAllianceManager::isRaceOrderFinish(DataAllianceMember& member)
+bool LogicAllianceManager::isRaceOrderFinish(DataAllianceMember &member)
 {
-	for(int i = 0; i < DataAllianceMember_race_order_progress_LENG; ++i)
+	for (int i = 0; i < DataAllianceMember_race_order_progress_LENG; ++i)
 	{
-		if(member.race_order_progress[i] != 0xFFFF)
+		if (member.race_order_progress[i] != 0xFFFF)
 		{
 			return false;
 		}
@@ -4711,22 +4675,20 @@ bool LogicAllianceManager::isRaceOrderFinish(DataAllianceMember& member)
 }
 uint8_t LogicAllianceManager::getRaceOrderMaxChance(uint32_t uid, uint8_t raceLevel, uint8_t flag, uint32_t vipLevel)
 {
-	return (isFlagSet(flag, flag_id_race_order_buy_chance) ? 1 : 0)
-			+ AllianceRaceCfgWrap().GetTaskChance(raceLevel)
-			+ LogicVIPManager::Instance()->VIPAllianceCompetition(vipLevel);
+	return (isFlagSet(flag, flag_id_race_order_buy_chance) ? 1 : 0) + AllianceRaceCfgWrap().GetTaskChance(raceLevel) + LogicVIPManager::Instance()->VIPAllianceCompetition(vipLevel);
 }
-int LogicAllianceManager::AddRaceMemberOrderLog(DataAllianceMember& member, uint16_t id, uint8_t status)
+int LogicAllianceManager::AddRaceMemberOrderLog(DataAllianceMember &member, uint16_t id, uint8_t status)
 {
-	for(uint32_t i = 0; i < DataAllianceMember_race_order_log_LENG; ++i)
+	for (uint32_t i = 0; i < DataAllianceMember_race_order_log_LENG; ++i)
 	{
-		if(member.race_order_log[i].id == 0)
+		if (member.race_order_log[i].id == 0)
 		{
 			member.race_order_log[i].id = id;
 			member.race_order_log[i].status = status;
-			if(i > 0)	// 将前一个正在进行的任务置为取消状态
+			if (i > 0) // 将前一个正在进行的任务置为取消状态
 			{
 				uint32_t pre = i - 1;
-				if(member.race_order_log[pre].id > 0 && member.race_order_log[pre].status == race_member_order_status_doing)
+				if (member.race_order_log[pre].id > 0 && member.race_order_log[pre].status == race_member_order_status_doing)
 				{
 					member.race_order_log[pre].status = race_member_order_status_cancel;
 				}
@@ -4735,17 +4697,17 @@ int LogicAllianceManager::AddRaceMemberOrderLog(DataAllianceMember& member, uint
 		}
 	}
 }
-int LogicAllianceManager::UpdateRaceMemberOrderLog(DataAllianceMember& member, uint16_t id, uint8_t status)
+int LogicAllianceManager::UpdateRaceMemberOrderLog(DataAllianceMember &member, uint16_t id, uint8_t status)
 {
-	if(DataAllianceMember_race_order_log_LENG <= 0)
+	if (DataAllianceMember_race_order_log_LENG <= 0)
 	{
 		return 0;
 	}
-	for(int32_t i = DataAllianceMember_race_order_log_LENG - 1; i >= 0; --i)
+	for (int32_t i = DataAllianceMember_race_order_log_LENG - 1; i >= 0; --i)
 	{
-		if(member.race_order_log[i].id > 0)	// 当前订单
+		if (member.race_order_log[i].id > 0) // 当前订单
 		{
-			if(member.race_order_log[i].id == id)
+			if (member.race_order_log[i].id == id)
 			{
 				member.race_order_log[i].status = status;
 			}
@@ -4758,7 +4720,7 @@ int LogicAllianceManager::UpdateMemberNow(unsigned uid)
 	//成员下线，检查该成员的商会
 	DBCUserBaseWrap userwrap(uid);
 	unsigned alliance_id = userwrap.Obj().alliance_id;
-	if(!IsAllianceId(alliance_id))
+	if (!IsAllianceId(alliance_id))
 		return 0;
 
 	unsigned helpTs = LogicUserManager::Instance()->IsUserNeedHelp(uid) ? Time::GetGlobalTime() : 0;
@@ -4767,18 +4729,18 @@ int LogicAllianceManager::UpdateMemberNow(unsigned uid)
 	{
 		UpdateMember(uid, alliance_id, onlineTs, helpTs, userwrap.Obj().level, userwrap.Obj().name, userwrap.Obj().viplevel);
 	}
-	catch(runtime_error &e)
+	catch (runtime_error &e)
 	{
 		return R_ERROR;
 	}
 
 	return 0;
 }
-int LogicAllianceManager::UpdateMember(unsigned uid, unsigned aid, unsigned onlineTs, unsigned helpTs, unsigned level, const string& name, unsigned vipLevel)
+int LogicAllianceManager::UpdateMember(unsigned uid, unsigned aid, unsigned onlineTs, unsigned helpTs, unsigned level, const string &name, unsigned vipLevel)
 {
-	if(CMI->IsNeedConnectByAID(aid))
+	if (CMI->IsNeedConnectByAID(aid))
 	{
-		ProtoAlliance::RequestUpdateMemberBC* m = new ProtoAlliance::RequestUpdateMemberBC;
+		ProtoAlliance::RequestUpdateMemberBC *m = CreateObj<ProtoAlliance::RequestUpdateMemberBC>();
 		m->set_aid(aid);
 		m->set_uid(uid);
 		m->set_onlinets(onlineTs);
@@ -4802,14 +4764,14 @@ int LogicAllianceManager::UpdateMemberLevel(unsigned uid)
 {
 	return UpdateMemberNow(uid);
 }
-int LogicAllianceManager::UpdateMemberLocal(unsigned uid, unsigned aid, unsigned onlineTs, unsigned helpTs, unsigned level, const string& name, unsigned vipLevel)
+int LogicAllianceManager::UpdateMemberLocal(unsigned uid, unsigned aid, unsigned onlineTs, unsigned helpTs, unsigned level, const string &name, unsigned vipLevel)
 {
 	OtherAllianceSaveControl allianceCtl(aid);
 	//成员校验
 	CheckMember(uid, aid, uid);
 
 	//获取自身的数据
-	DataAllianceMember & selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 	selfmember.onlineTs = onlineTs;
 	selfmember.helpTs = helpTs;
 	selfmember.userlevel = level;
@@ -4820,7 +4782,7 @@ int LogicAllianceManager::UpdateMemberLocal(unsigned uid, unsigned aid, unsigned
 
 	MemoryAllianceManager::Instance()->UpdateOnlineNum(aid, DataAllianceMemberManager::Instance()->GetMemberOnlineNum(aid));
 
-	DataAlliance & alliance = DataAllianceManager::Instance()->GetData(aid);
+	DataAlliance &alliance = DataAllianceManager::Instance()->GetData(aid);
 	alliance.active_ts = Time::GetGlobalTime();
 	DataAllianceManager::Instance()->UpdateItem(alliance);
 
@@ -4833,29 +4795,29 @@ int LogicAllianceManager::AddMemberHelpTimesLocal(unsigned uid, unsigned aid)
 	CheckMember(uid, aid, uid);
 
 	//获取自身的数据
-	DataAllianceMember & selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
+	DataAllianceMember &selfmember = DataAllianceMemberManager::Instance()->GetData(aid, uid);
 	++selfmember.helptimes;
 	//更新
 	DataAllianceMemberManager::Instance()->UpdateItem(selfmember);
 	return 0;
 }
 
-bool LogicAllianceManager::AddInviteDyInfo(uint32_t uid,uint32_t other_uid,uint32_t aid)
+bool LogicAllianceManager::AddInviteDyInfo(uint32_t uid, uint32_t other_uid, uint32_t aid)
 {
 	//uid:邀请者,other_uid:被邀请者
-	DynamicInfoAttach *pattach = new DynamicInfoAttach;
+	DynamicInfoAttach *pattach = CreateObj<DynamicInfoAttach>();
 	pattach->op_uid = uid;
 	pattach->product_id = aid;
-	if(LogicDynamicInfoManager::Instance()->ProduceOneDyInfo(other_uid,TYPE_DY_INVITE_ALLIANCE,pattach))
+	if (LogicDynamicInfoManager::Instance()->ProduceOneDyInfo(other_uid, TYPE_DY_INVITE_ALLIANCE, pattach))
 	{
 		return true;
 	}
 	return false;
 }
 
-bool LogicAllianceManager::AddInviteDyInfoOverServer(uint32_t uid,uint32_t other_uid,uint32_t aid)
+bool LogicAllianceManager::AddInviteDyInfoOverServer(uint32_t uid, uint32_t other_uid, uint32_t aid)
 {
-	ProtoDynamicInfo::RequestOtherUserMakeDy * msg = new ProtoDynamicInfo::RequestOtherUserMakeDy;
+	ProtoDynamicInfo::RequestOtherUserMakeDy *msg = CreateObj<ProtoDynamicInfo::RequestOtherUserMakeDy>();
 	string ret;
 	msg->set_myuid(uid);
 	msg->set_othuid(other_uid);
@@ -4866,4 +4828,3 @@ bool LogicAllianceManager::AddInviteDyInfoOverServer(uint32_t uid,uint32_t other
 
 	return ProtoManager::BattleConnectNoReplyByUID(other_uid, msg);
 }
-

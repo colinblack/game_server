@@ -27,7 +27,7 @@ bool ParseManager::Init()
 		delete m_parsers;
 	}
 
-	m_parsers = new Parser();
+	m_parsers = CreateObj<Parser>();
 
 	if(!m_parsers->parse(path))
 	{

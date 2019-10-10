@@ -7,32 +7,30 @@
 
 #ifndef BUFFER_H_
 #define BUFFER_H_
+#include "MemoryManager.h"
 
 class CBuffer : public IBuffer
 {
 public:
-
-	CBuffer() :
-		m_pBuffer(NULL),
-		m_uSize(0),
-		m_uCapacity(0),
-		m_bOwn(false)
+	CBuffer() : m_pBuffer(NULL),
+				m_uSize(0),
+				m_uCapacity(0),
+				m_bOwn(false)
 	{
 	}
 
 	~CBuffer()
 	{
-		if(m_bOwn && m_pBuffer != NULL)
+		if (m_bOwn && m_pBuffer != NULL)
 		{
-			delete [] m_pBuffer;
+			delete[] m_pBuffer;
 		}
 	}
 
-	CBuffer(uint32_t uSize) :
-		m_uSize(0)
+	CBuffer(uint32_t uSize) : m_uSize(0)
 	{
-		m_pBuffer = new byte[uSize];
-		if(m_pBuffer == NULL)
+		m_pBuffer = CreateObj<byte>(uSize);
+		if (m_pBuffer == NULL)
 		{
 			m_uCapacity = 0;
 			m_bOwn = false;
@@ -44,20 +42,19 @@ public:
 		}
 	}
 
-	CBuffer(byte *pBuffer, uint32_t uSize) :
-		m_pBuffer(pBuffer),
-		m_uSize(0),
-		m_uCapacity(uSize),
-		m_bOwn(false)
+	CBuffer(byte *pBuffer, uint32_t uSize) : m_pBuffer(pBuffer),
+											 m_uSize(0),
+											 m_uCapacity(uSize),
+											 m_bOwn(false)
 	{
 	}
 
 	//绑定pBuffer
 	virtual bool Attach(byte *pBuffer, uint32_t uSize)
 	{
-		if(m_bOwn)
+		if (m_bOwn)
 		{
-			if(m_pBuffer != NULL)
+			if (m_pBuffer != NULL)
 			{
 				delete m_pBuffer;
 			}
@@ -72,9 +69,9 @@ public:
 	//解绑
 	virtual bool Detach()
 	{
-		if(m_bOwn)
+		if (m_bOwn)
 		{
-			if(m_pBuffer != NULL)
+			if (m_pBuffer != NULL)
 			{
 				delete m_pBuffer;
 			}
@@ -103,7 +100,7 @@ public:
 
 	virtual bool SetSize(uint32_t size)
 	{
-		if(size > m_uCapacity)
+		if (size > m_uCapacity)
 		{
 			return false;
 		}
@@ -129,7 +126,7 @@ public:
 
 	virtual byte GetAt(uint32_t uIndex) const
 	{
-		if(m_pBuffer == NULL || uIndex >= m_uSize)
+		if (m_pBuffer == NULL || uIndex >= m_uSize)
 		{
 			return 0;
 		}
@@ -138,7 +135,7 @@ public:
 
 	virtual bool SetAt(uint32_t uIndex, byte cValue)
 	{
-		if(m_pBuffer == NULL || uIndex >= m_uSize)
+		if (m_pBuffer == NULL || uIndex >= m_uSize)
 		{
 			return false;
 		}
@@ -148,7 +145,7 @@ public:
 
 	virtual bool CopyFrom(const byte *pcBuffer, uint32_t uSize)
 	{
-		if(m_pBuffer == NULL || pcBuffer == NULL || uSize > m_uCapacity)
+		if (m_pBuffer == NULL || pcBuffer == NULL || uSize > m_uCapacity)
 		{
 			return false;
 		}
@@ -159,7 +156,7 @@ public:
 
 	virtual bool Append(const byte *pcBuffer, uint32_t uSize)
 	{
-		if(m_pBuffer == NULL || pcBuffer == NULL || m_uSize + uSize > m_uCapacity)
+		if (m_pBuffer == NULL || pcBuffer == NULL || m_uSize + uSize > m_uCapacity)
 		{
 			return false;
 		}
@@ -170,7 +167,7 @@ public:
 
 	virtual bool Remove(uint32_t uStart, uint32_t uSize)
 	{
-		if(m_pBuffer == NULL || uStart + uSize > m_uSize)
+		if (m_pBuffer == NULL || uStart + uSize > m_uSize)
 		{
 			return false;
 		}
@@ -181,7 +178,7 @@ public:
 
 	virtual bool GetData(byte *pBuffer, uint32_t uSize, uint32_t uIndex) const
 	{
-		if(m_pBuffer == NULL || pBuffer == NULL || uIndex + uSize > m_uSize)
+		if (m_pBuffer == NULL || pBuffer == NULL || uIndex + uSize > m_uSize)
 		{
 			return false;
 		}

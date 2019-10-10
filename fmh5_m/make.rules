@@ -51,6 +51,10 @@ XSG_LIB         =  -L$(PATH_PLATFORM_PRJ)/outerlib/xsg/lib -lxsg
 OPENSSL_INC     = -I$(PATH_PLATFORM_PRJ)/outerlib/openssl/include
 OPENSSL_LIB     = -L$(PATH_PLATFORM_PRJ)/outerlib/openssl/lib -lssl
 
+### MEMPOOL
+MEMPOOL_INC     = -I$(PATH_PLATFORM_PRJ)/outerlib/mempool/inc
+MEMPOOL_LIB     = -L$(PATH_PLATFORM_PRJ)/outerlib/mempool/lib -lmempool
+
 ### PROTO
 PROTO_INC       = -I$(PATH_PLATFORM_PRJ)/proto
 PROTO_LIB		= -L$(PATH_PLATFORM_PRJ)/proto -lsg17proto

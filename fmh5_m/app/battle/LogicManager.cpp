@@ -17,10 +17,13 @@ int LogicManager::m_signum = 0;
 
 #define PER_FRAME_TIME 10
 
-LogicManager::LogicManager():m_fd(0),channelId(-1),m_timer(0),m_last_hour_ts(0),lastLoopTime(0),pReplyProtocol(NULL),needDelReply(true),dispatcher(ProtoManager::DisCardMessage){}
+LogicManager::LogicManager() : m_fd(0), channelId(-1), m_timer(0), m_last_hour_ts(0), lastLoopTime(0), pReplyProtocol(NULL), needDelReply(true), dispatcher(ProtoManager::DisCardMessage)
+{
+}
 
-void* TimerThread(void* arg){
-	CTcpChannel* pChannel = (CTcpChannel*)arg;
+void *TimerThread(void *arg)
+{
+	CTcpChannel *pChannel = (CTcpChannel *)arg;
 	struct timeval timeOut;
 	timeOut.tv_sec = 1;
 	timeOut.tv_usec = 0;
@@ -29,46 +32,51 @@ void* TimerThread(void* arg){
 	CStaticBuffer<PACKET_HEADER_SIZE> buf;
 	packet.Encode(&buf);
 
-	while(!LogicManager::IsClosed){
+	while (!LogicManager::IsClosed)
+	{
 		timeOut.tv_sec = 1;
 		timeOut.tv_usec = 0;
 
-		if(select(0,NULL,NULL,NULL,&timeOut) == 0 && !LogicManager::IsClosed){
+		if (select(0, NULL, NULL, NULL, &timeOut) == 0 && !LogicManager::IsClosed)
+		{
 			pChannel->SendData(&buf);
 		}
 	}
 
 	return NULL;
 }
-bool LogicManager::Initialize(){
+bool LogicManager::Initialize()
+{
 	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	StartMilliTime = tv.tv_sec * 1000 + tv.tv_usec/1000;
+	gettimeofday(&tv, NULL);
+	StartMilliTime = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	ServerId = Config::GetIntValue(CONFIG_SRVID);
 	SecOpenTime = Config::GetIntValue(CONFIG_OPENTIME);
 	m_last_hour_ts = time(NULL);
 	m_timer = m_last_hour_ts % 60;
 	unsigned base_buff = Config::GetIntValue(CONFIG_BASE);
-	if(base_buff)
+	if (base_buff)
 		DataSingletonBase::BASE_BUFF = base_buff;
 
-	BattleServer* pServer = BattleServer::Instance();
+	BattleServer *pServer = BattleServer::Instance();
 
 	//定时器线程
-	CTcpChannel* pTimeChannel = pServer->GetSelfClientChannel();
+	CTcpChannel *pTimeChannel = pServer->GetSelfClientChannel();
 	pthread_t pid;
-	if(pthread_create(&pid,NULL,TimerThread,(void*)pTimeChannel) != 0){
+	if (pthread_create(&pid, NULL, TimerThread, (void *)pTimeChannel) != 0)
+	{
 		error_log("start time thread failed,%m");
 		return false;
 	}
-	info_log("time thread start,pid=%u",pid);
+	info_log("time thread start,pid=%u", pid);
 
-	if(!BattleConnect::InitThread()){
+	if (!BattleConnect::InitThread())
+	{
 		error_log("start BattleConnect thread failed,%m");
 		return false;
 	}
 
-	if(!ConfigManager::Instance()->Inited())
+	if (!ConfigManager::Instance()->Inited())
 	{
 		error_log("ConfigManager Init error!");
 		return false;
@@ -80,107 +88,109 @@ bool LogicManager::Initialize(){
 	RegActivityManager();
 
 	int ret = 0;
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			ret = (*it)->Init();
-			if(ret)
+			if (ret)
 			{
 				error_log("DataSingleton Init error!");
 				return false;
 			}
 		}
-		catch(const std::exception&)
+		catch (const std::exception &)
 		{
 			error_log("DataSingleton Init error!");
 			return false;
 		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
 		try
 		{
 			ret = (*it)->Init();
-			if(ret)
+			if (ret)
 			{
 				error_log("MemorySingleton Init error!");
 				return false;
 			}
 		}
-		catch(const std::exception&)
+		catch (const std::exception &)
 		{
 			error_log("MemorySingleton Init error!");
 			return false;
 		}
 	}
 
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			ret = (*it)->OnInit();
-			if(ret)
+			if (ret)
 			{
 				error_log("DataSingleton OnInit error!");
 				return false;
 			}
 		}
-		catch(const std::exception&)
+		catch (const std::exception &)
 		{
 			error_log("DataSingleton OnInit error!");
 			return false;
 		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
 		try
 		{
 			ret = (*it)->OnInit();
-			if(ret)
+			if (ret)
 			{
 				error_log("MemorySingleton OnInit error!");
 				return false;
 			}
 		}
-		catch(const std::exception&)
+		catch (const std::exception &)
 		{
 			error_log("MemorySingleton OnInit error!");
 			return false;
 		}
 	}
-	for(vector<BattleSingleton*>::iterator it=m_battleManager.begin();it!=m_battleManager.end();++it)
+	for (vector<BattleSingleton *>::iterator it = m_battleManager.begin(); it != m_battleManager.end(); ++it)
 	{
 		try
 		{
 			ret = (*it)->OnInit();
-			if(ret)
+			if (ret)
 			{
 				error_log("BattleSingleton OnInit error!");
 				return false;
 			}
 		}
-		catch(const std::exception&)
+		catch (const std::exception &)
 		{
 			error_log("BattleSingleton OnInit error!");
 			return false;
 		}
 	}
-	for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+	for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->OnInit();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 
 	return true;
 }
 
-bool  LogicManager::sendMsgFD(unsigned fd, Message* msg, bool delmsg)
+bool LogicManager::sendMsgFD(unsigned fd, Message *msg, bool delmsg)
 {
-	CFirePacket* packet = new CFirePacket(PROTOCOL_ACCESS_SEND, delmsg);
+	CFirePacket *packet = CreateObj<CFirePacket>(PROTOCOL_ACCESS_SEND, delmsg);
 	packet->ChannelId = channelId;
 	packet->fd = fd;
 	packet->m_msg = msg;
@@ -192,108 +202,110 @@ bool LogicManager::sendMsgBC(unsigned uid, Message* msg)
 	return sendMsg(uid, msg, false);
 }
 */
-bool LogicManager::sendMsg(unsigned uid, Message* msg, bool delmsg)
+bool LogicManager::sendMsg(unsigned uid, Message *msg, bool delmsg)
 {
-	if(CMI->IsNeedConnectByUID(uid))
+	if (CMI->IsNeedConnectByUID(uid))
 	{
-		CFirePacket* packet = new CFirePacket(PROTOCOL_EVENT_BATTLE_FORWARD, delmsg);
+		CFirePacket *packet = CreateObj<CFirePacket>(PROTOCOL_EVENT_BATTLE_FORWARD, delmsg);
 		packet->m_msg = msg;
 		packet->fd = uid;
 		BattleConnect::AddSend(Config::GetZoneByUID(uid), packet);
 		return true;
 	}
 
-	if(channelId == -1)
+	if (channelId == -1)
 	{
-		if(delmsg)
+		if (delmsg)
 			delete msg;
 		return false;
 	}
 	unsigned fd = Getfd(uid);
-	if(fd == -1)
+	if (fd == -1)
 	{
-		if(delmsg)
+		if (delmsg)
 			delete msg;
 		return false;
 	}
 	string msgname = msg->GetTypeName();
 	bool flag = sendMsgFD(fd, msg, delmsg);
-	if(flag)
+	if (flag)
 		debug_log("[MSGLOG][SEND]uid=%u,fd=%d,name=%s", uid, fd, msgname.c_str());
 	else
 		error_log("[send error]uid=%u,fd=%d,name=%s", uid, fd, msgname.c_str());
 	return flag;
 }
-bool LogicManager::sendMsgGroup(set<unsigned>& uid, Message* msg, bool delmsg)
+bool LogicManager::sendMsgGroup(set<unsigned> &uid, Message *msg, bool delmsg)
 {
-	if(channelId == -1)
+	if (channelId == -1)
 	{
-		if(delmsg)
+		if (delmsg)
 			delete msg;
 		return false;
 	}
 
 	set<unsigned> *fds = new set<unsigned>, del;
-	for(set<unsigned>::iterator it=uid.begin();it!=uid.end();++it)
+	for (set<unsigned>::iterator it = uid.begin(); it != uid.end(); ++it)
 	{
 		unsigned fd = Getfd(*it);
-		if(fd == -1)
+		if (fd == -1)
 		{
 			del.insert(*it);
 			continue;
 		}
 		fds->insert(fd);
 	}
-	for(set<unsigned>::iterator it=del.begin();it!=del.end();++it)
+	for (set<unsigned>::iterator it = del.begin(); it != del.end(); ++it)
 		uid.erase(*it);
-	if(fds->empty())
+	if (fds->empty())
 	{
-		if(delmsg)
+		if (delmsg)
 			delete msg;
 		delete fds;
 		return false;
 	}
 
-	CFirePacket* packet = new CFirePacket(PROTOCOL_ACCESS_GROUP_SEND, delmsg);
+	CFirePacket *packet = CreateObj<CFirePacket>(PROTOCOL_ACCESS_GROUP_SEND, delmsg);
 	packet->ChannelId = channelId;
 	packet->m_msg = msg;
 	packet->group = fds;
 
 	string msgname = msg->GetTypeName();
 	bool flag = BattleServer::Instance()->AddSend(packet);
-	if(flag)
+	if (flag)
 		debug_log("[MSGLOG][GROUP]name=%s", msgname.c_str());
 	else
 		error_log("[send error]name=%s", msgname.c_str());
 	return flag;
 }
-bool LogicManager::broadcastMsg(Message* msg)
+bool LogicManager::broadcastMsg(Message *msg)
 {
-	if(channelId == -1)
+	if (channelId == -1)
 	{
 		delete msg;
 		return false;
 	}
-	CFirePacket* packet = new CFirePacket(PROTOCOL_ACCESS_BROAD_CAST);
+	CFirePacket *packet = CreateObj<CFirePacket>(PROTOCOL_ACCESS_BROAD_CAST);
 	packet->ChannelId = channelId;
 	packet->m_msg = msg;
 
 	string msgname = msg->GetTypeName();
-	bool flag =  BattleServer::Instance()->AddSend(packet);
-	if(flag)
+	bool flag = BattleServer::Instance()->AddSend(packet);
+	if (flag)
 		debug_log("[MSGLOG][BROADCAST]name=%s", msgname.c_str());
 	else
 		error_log("[send error]name=%s", msgname.c_str());
 	return flag;
 }
-void LogicManager::process(CFirePacket* packet)
+void LogicManager::process(CFirePacket *packet)
 {
-	if(packet->cmd < PROTOCOL_ACCESS_LOFFLINE){
+	if (packet->cmd < PROTOCOL_ACCESS_LOFFLINE)
+	{
 		channelId = packet->ChannelId;
 		m_fd = packet->fd;
 	}
 
-	switch(packet->cmd){
+	switch (packet->cmd)
+	{
 	case PROTOCOL_ACCESS_TRANSFER:
 		clientProcess(packet);
 		break;
@@ -322,19 +334,20 @@ void LogicManager::process(CFirePacket* packet)
 		forwardProcess(packet);
 		break;
 	default:
-		error_log("unknown cmd:%u",packet->cmd);
+		error_log("unknown cmd:%u", packet->cmd);
 		break;
 	}
 }
 
-void LogicManager::clientProcess(CFirePacket* packet){
-	if(IsPreClosed)
+void LogicManager::clientProcess(CFirePacket *packet)
+{
+	if (IsPreClosed)
 		return;
 
 	int ret = 0;
 	packet->uid = Getuid(packet->fd);
 	m_errmsg.clear();
-	if(!IsValidUid(packet->uid) && packet->m_msg->GetTypeName() != "Common.Login")
+	if (!IsValidUid(packet->uid) && packet->m_msg->GetTypeName() != "Common.Login")
 	{
 		debug_log("[MSGLOG][RECV]kick not login, fd=%u, cmd=%s", packet->fd, packet->m_msg->GetTypeName().c_str());
 		sendKickMsg(packet->fd, "not_login");
@@ -344,32 +357,34 @@ void LogicManager::clientProcess(CFirePacket* packet){
 
 	ret = dispatcher.onMessage(packet->m_msg);
 
-	if(ret != 0){
+	if (ret != 0)
+	{
 		error_log("client process failed, uid=%u, ret=%d, msg=%s, cmd=%s", packet->uid, ret, m_errmsg.c_str(), packet->m_msg->GetTypeName().c_str());
-		ErrorRet::ErrorRet* reply = new ErrorRet::ErrorRet;
+		ErrorRet::ErrorRet *reply = CreateObj<ErrorRet::ErrorRet>();
 		reply->set_errorret(ret);
 		reply->set_errormsg(m_errmsg);
 		reply->set_requestmsg(packet->m_msg->GetTypeName());
 		pReplyProtocol = reply;
 		needDelReply = true;
 	}
-	else if(IsValidUid(packet->uid))
+	else if (IsValidUid(packet->uid))
 	{
 		unsigned index = BaseManager::Instance()->GetIndex(packet->uid);
 		DataBase &base = BaseManager::Instance()->m_data->data[index];
 		base.last_active_time = Time::GetGlobalTime();
 	}
 
-	if(pReplyProtocol != NULL){
-		CFirePacket* rspPacket = new CFirePacket(PROTOCOL_ACCESS_ANSWER, needDelReply);
+	if (pReplyProtocol != NULL)
+	{
+		CFirePacket *rspPacket = CreateObj<CFirePacket>(PROTOCOL_ACCESS_ANSWER, needDelReply);
 		rspPacket->fd = packet->fd;
 		rspPacket->time = packet->time;
 		rspPacket->microTime = packet->microTime;
 		rspPacket->ChannelId = packet->ChannelId;
 		rspPacket->m_msg = pReplyProtocol;
 
-		string msgname =  pReplyProtocol->GetTypeName();
-		if(!BattleServer::Instance()->AddSend(rspPacket))
+		string msgname = pReplyProtocol->GetTypeName();
+		if (!BattleServer::Instance()->AddSend(rspPacket))
 			error_log("send rsp failed:uid=%u,fd=%d,name=%s", packet->uid, packet->fd, msgname.c_str());
 		else
 			debug_log("[MSGLOG][SEND]uid=%u,fd=%d,name=%s", packet->uid, packet->fd, msgname.c_str());
@@ -379,26 +394,27 @@ void LogicManager::clientProcess(CFirePacket* packet){
 	needDelReply = true;
 }
 
-void LogicManager::deliverProcess(CFirePacket* packet){
-	if(IsPreClosed)
+void LogicManager::deliverProcess(CFirePacket *packet)
+{
+	if (IsPreClosed)
 		return;
 
 	int ret = 0;
-	Common::Pay* msg = (Common::Pay*)packet->m_msg;
+	Common::Pay *msg = (Common::Pay *)packet->m_msg;
 	unsigned uid = msg->uid();
 	debug_log("[MSGLOG][RECV]uid=%u,fd=%d,name=%s", uid, packet->fd, packet->m_msg->GetTypeName().c_str());
 
 	string name;
 	unsigned ts = msg->ts();
-	if(ts - 300 > Time::GetGlobalTime() || ts + 300 < Time::GetGlobalTime())
-		ret =  R_ERR_PARAM;
-	if(ret != 0)
-		error_log("deliver process failed, ret=%d",ret);
+	if (ts - 300 > Time::GetGlobalTime() || ts + 300 < Time::GetGlobalTime())
+		ret = R_ERR_PARAM;
+	if (ret != 0)
+		error_log("deliver process failed, ret=%d", ret);
 
-	Common::ReplyPay* reply = new Common::ReplyPay;
+	Common::ReplyPay *reply = CreateObj<Common::ReplyPay>();
 	reply->set_ret(ret);
 	reply->set_name(name);
-	CFirePacket* rspPacket = new CFirePacket(PROTOCOL_DELIVER);
+	CFirePacket *rspPacket = CreateObj<CFirePacket>(PROTOCOL_DELIVER);
 	rspPacket->fd = packet->fd;
 	rspPacket->time = packet->time;
 	rspPacket->microTime = packet->microTime;
@@ -406,38 +422,38 @@ void LogicManager::deliverProcess(CFirePacket* packet){
 	rspPacket->m_msg = reply;
 
 	string msgname = reply->GetTypeName();
-	if(!BattleServer::Instance()->AddSend(rspPacket))
+	if (!BattleServer::Instance()->AddSend(rspPacket))
 		error_log("send rsp failed:uid=%u,fd=%d,name=%s", uid, packet->fd, msgname.c_str());
 	else
 		debug_log("[MSGLOG][SEND]uid=%u,fd=%d,name=%s", uid, packet->fd, msgname.c_str());
 
-	if(ret == 0)
+	if (ret == 0)
 	{
 		unsigned cash = msg->cash();
 		unsigned totalCash = 0;
-		if(UMI->IsOnline(uid))
+		if (UMI->IsOnline(uid))
 		{
 			unsigned index = BaseManager::Instance()->GetIndex(uid);
 			DataBase &base = BaseManager::Instance()->m_data->data[index];
-			COINS_LOG("[%s][uid=%u,ocash=%u,ncash=%u,chgcash=%d]", "DELIVER", uid, base.cash, base.cash+cash, cash);
+			COINS_LOG("[%s][uid=%u,ocash=%u,ncash=%u,chgcash=%d]", "DELIVER", uid, base.cash, base.cash + cash, cash);
 			base.cash += cash;
 			base.acccharge += cash;
 			totalCash = base.cash;
 
 			//@add oulong 20161009 首充
-	//		if (base.acccharge >= 100 && base.first_recharge == 0)
-	//		{
-	//			//base.first_recharge = 1;
-	//		}
+			//		if (base.acccharge >= 100 && base.first_recharge == 0)
+			//		{
+			//			//base.first_recharge = 1;
+			//		}
 
 			BaseManager::Instance()->m_data->MarkChange(index);
 
 			unsigned itemid = 0;
-			if(msg->has_itemid())
+			if (msg->has_itemid())
 			{
 				itemid = msg->itemid();
 			}
-			LogicUserManager::Instance()->NotifyRecharge(uid, cash,itemid);
+			LogicUserManager::Instance()->NotifyRecharge(uid, cash, itemid);
 
 			DoDataManagerSave(uid);
 		}
@@ -448,27 +464,29 @@ void LogicManager::deliverProcess(CFirePacket* packet){
 		}
 
 		//小米平台充值邮件提醒
-		if(LogicSysMailManager::Instance()->ValidPlatForm(uid))
+		if (LogicSysMailManager::Instance()->ValidPlatForm(uid))
 		{
 			LogicSysMailManager::Instance()->FirstRechargeAddMail(uid);
 		}
 
 		//西山居充值上报
-		if(LogicXsgReportManager::Instance()->IsWXPlatform(uid))
+		if (LogicXsgReportManager::Instance()->IsWXPlatform(uid))
 		{
-			unsigned itemid = msg->itemid();;
+			unsigned itemid = msg->itemid();
+			;
 			unsigned charge = msg->currency() / 100;
 			string orderid = msg->tradeno();
 			string channelOrderId = msg->channeltradeno();
 
-			LogicXsgReportManager::Instance()->XSGRechargeReport(uid,CTrans::ITOS(itemid),charge,orderid,channelOrderId);
-			LogicXsgReportManager::Instance()->XSGRechargeGetDiamondReport(uid,cash,totalCash);
+			LogicXsgReportManager::Instance()->XSGRechargeReport(uid, CTrans::ITOS(itemid), charge, orderid, channelOrderId);
+			LogicXsgReportManager::Instance()->XSGRechargeGetDiamondReport(uid, cash, totalCash);
 		}
 	}
 }
 
-void LogicManager::adminProcess(CFirePacket* packet){
-	if(IsPreClosed)
+void LogicManager::adminProcess(CFirePacket *packet)
+{
+	if (IsPreClosed)
 		return;
 
 	int ret = 0;
@@ -476,9 +494,10 @@ void LogicManager::adminProcess(CFirePacket* packet){
 
 	ret = dispatcher.onMessage(packet->m_msg);
 
-	if(ret != 0){
-		error_log("admin process failed, ret=%d, msg=%s",ret, m_errmsg.c_str());
-		ErrorRet::ErrorRet* reply = new ErrorRet::ErrorRet;
+	if (ret != 0)
+	{
+		error_log("admin process failed, ret=%d, msg=%s", ret, m_errmsg.c_str());
+		ErrorRet::ErrorRet *reply = CreateObj<ErrorRet::ErrorRet>();
 		reply->set_errorret(ret);
 		reply->set_errormsg(m_errmsg);
 		reply->set_requestmsg(packet->m_msg->GetTypeName());
@@ -486,8 +505,9 @@ void LogicManager::adminProcess(CFirePacket* packet){
 		needDelReply = true;
 	}
 
-	if(pReplyProtocol != NULL){
-		CFirePacket* rspPacket = new CFirePacket(PROTOCOL_ADMIN, needDelReply);
+	if (pReplyProtocol != NULL)
+	{
+		CFirePacket *rspPacket = CreateObj<CFirePacket>(PROTOCOL_ADMIN, needDelReply);
 		rspPacket->fd = packet->fd;
 		rspPacket->time = packet->time;
 		rspPacket->microTime = packet->microTime;
@@ -495,7 +515,7 @@ void LogicManager::adminProcess(CFirePacket* packet){
 		rspPacket->m_msg = pReplyProtocol;
 
 		string msgname = pReplyProtocol->GetTypeName();
-		if(!BattleServer::Instance()->AddSend(rspPacket))
+		if (!BattleServer::Instance()->AddSend(rspPacket))
 			error_log("send rsp failed:fd=%d,name=%s", packet->fd, msgname.c_str());
 
 		pReplyProtocol = NULL;
@@ -503,8 +523,9 @@ void LogicManager::adminProcess(CFirePacket* packet){
 	needDelReply = true;
 }
 
-void LogicManager::botProcess(CFirePacket* packet){
-	if(IsPreClosed)
+void LogicManager::botProcess(CFirePacket *packet)
+{
+	if (IsPreClosed)
 		return;
 
 	m_errmsg.clear();
@@ -513,13 +534,14 @@ void LogicManager::botProcess(CFirePacket* packet){
 
 	/*if(packet->m_msg->GetTypeName() == "Bot.RequestLogin")
 	{
-		Bot::ReplyLogin* reply = new Bot::ReplyLogin;
+		Bot::ReplyLogin* reply = CreateObj<>() Bot::ReplyLogin;
 		reply->set_ret(ret);
 		pReplyProtocol = reply;
 	}*/
 
-	if(pReplyProtocol != NULL){
-		CFirePacket* rspPacket = new CFirePacket(PROTOCOL_BOT, needDelReply);
+	if (pReplyProtocol != NULL)
+	{
+		CFirePacket *rspPacket = CreateObj<CFirePacket>(PROTOCOL_BOT, needDelReply);
 		rspPacket->fd = packet->fd;
 		rspPacket->time = packet->time;
 		rspPacket->microTime = packet->microTime;
@@ -527,7 +549,7 @@ void LogicManager::botProcess(CFirePacket* packet){
 		rspPacket->m_msg = pReplyProtocol;
 
 		string msgname = pReplyProtocol->GetTypeName();
-		if(!BattleServer::Instance()->AddSend(rspPacket))
+		if (!BattleServer::Instance()->AddSend(rspPacket))
 			error_log("send rsp failed:fd=%d,name=%s", packet->fd, msgname.c_str());
 
 		pReplyProtocol = NULL;
@@ -535,8 +557,9 @@ void LogicManager::botProcess(CFirePacket* packet){
 	needDelReply = true;
 }
 
-void LogicManager::battleProcess(CFirePacket* packet){
-	if(IsPreClosed)
+void LogicManager::battleProcess(CFirePacket *packet)
+{
+	if (IsPreClosed)
 		return;
 
 	int ret = 0;
@@ -544,7 +567,8 @@ void LogicManager::battleProcess(CFirePacket* packet){
 
 	ret = dispatcher.onMessage(packet->m_msg);
 
-	if(ret != 0){
+	if (ret != 0)
+	{
 		error_log("battle process failed, cmd=%s ret=%d, msg=%s", packet->m_msg->GetTypeName().c_str(), ret, m_errmsg.c_str());
 		/*禁止同步接口
 		ErrorRet::ErrorRet* reply = new ErrorRet::ErrorRet;
@@ -575,22 +599,24 @@ void LogicManager::battleProcess(CFirePacket* packet){
 	needDelReply = true;
 }
 
-void LogicManager::forwardProcess(CFirePacket* packet){
-	if(IsPreClosed)
+void LogicManager::forwardProcess(CFirePacket *packet)
+{
+	if (IsPreClosed)
 		return;
 
 	unsigned uid = packet->fd;
-	if(!CMI->IsNeedConnectByUID(uid))
+	if (!CMI->IsNeedConnectByUID(uid))
 		sendMsg(uid, packet->m_msg, false);
 }
 
-void LogicManager::heartProcess(CFirePacket* packet){
+void LogicManager::heartProcess(CFirePacket *packet)
+{
 	//todo 此处是原来的心跳，应该无用
 }
 
 bool LogicManager::sendKickMsg(unsigned fd, string reason)
 {
-	if(channelId == -1 || fd == -1)
+	if (channelId == -1 || fd == -1)
 		return false;
 
 	/*
@@ -599,12 +625,13 @@ bool LogicManager::sendKickMsg(unsigned fd, string reason)
 	sendMsgFD(fd, m);
 	*/
 
-	CFirePacket* packet = new CFirePacket(PROTOCOL_ACCESS_LOFFLINE);
+	CFirePacket *packet = CreateObj<CFirePacket>(PROTOCOL_ACCESS_LOFFLINE);
 	packet->fd = fd;
 	packet->ChannelId = channelId;
 	return BattleServer::Instance()->AddSend(packet);
 }
-void LogicManager::forceKick(unsigned uid, string reason){
+void LogicManager::forceKick(unsigned uid, string reason)
+{
 	sendKickMsg(Getfd(uid), reason);
 	offline(uid);
 	Eraseuid(uid);
@@ -612,7 +639,8 @@ void LogicManager::forceKick(unsigned uid, string reason){
 
 void LogicManager::offline(unsigned uid)
 {
-	if(IsValidUid(uid)){
+	if (IsValidUid(uid))
+	{
 		//todo 此处是下线的逻辑处理
 		UserManager::Instance()->UserOffLine(uid);
 		//队列离线处理
@@ -621,77 +649,92 @@ void LogicManager::offline(unsigned uid)
 		//LogicRoutineManager::Instance()->Offline(uid);
 	}
 
-	if(LogicXsgReportManager::Instance()->IsWXPlatform(uid))
+	if (LogicXsgReportManager::Instance()->IsWXPlatform(uid))
 		LogicXsgReportManager::Instance()->XSGLogOutReport(uid);
 }
 
-void LogicManager::timerProcess(CFirePacket* packet)
+void LogicManager::timerProcess(CFirePacket *packet)
 {
 	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	GlobalMilliTime = tv.tv_sec * 1000 + tv.tv_usec/1000 - StartMilliTime;
+	gettimeofday(&tv, NULL);
+	GlobalMilliTime = tv.tv_sec * 1000 + tv.tv_usec / 1000 - StartMilliTime;
 
 	//抛弃挤压消息，避免消息阻塞引起的雪崩
-	if(GlobalMilliTime - lastLoopTime < PER_FRAME_TIME){
-//		info_log("timer process time out time=%u",GlobalMilliTime - lastLoopTime);
+	if (GlobalMilliTime - lastLoopTime < PER_FRAME_TIME)
+	{
+		//		info_log("timer process time out time=%u",GlobalMilliTime - lastLoopTime);
 		return;
 	}
 
-	if(IsPreClosed){
+	if (IsPreClosed)
+	{
 		static int c = 0;
 		++c;
-		if(c == 1)
+		if (c == 1)
 			ClearUser(true);
-		else if(c == 4){
-			for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+		else if (c == 4)
+		{
+			for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 			{
 				try
 				{
-					if((*it)->IsOn())
+					if ((*it)->IsOn())
 						(*it)->OnExit();
 				}
-				catch(const std::exception&) {}
+				catch (const std::exception &)
+				{
+				}
 			}
-			for(vector<BattleSingleton*>::iterator it=m_battleManager.begin();it!=m_battleManager.end();++it)
+			for (vector<BattleSingleton *>::iterator it = m_battleManager.begin(); it != m_battleManager.end(); ++it)
 			{
 				try
 				{
 					(*it)->OnExit();
 				}
-				catch(const std::exception&) {}
+				catch (const std::exception &)
+				{
+				}
 			}
-			for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+			for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 			{
 				try
 				{
 					(*it)->OnExit();
 				}
-				catch(const std::exception&) {}
+				catch (const std::exception &)
+				{
+				}
 			}
-			for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+			for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 			{
 				try
 				{
 					(*it)->OnExit();
 				}
-				catch(const std::exception&) {}
+				catch (const std::exception &)
+				{
+				}
 			}
 
-			for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+			for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 			{
 				try
 				{
 					(*it)->Exit();
 				}
-				catch(const std::exception&) {}
+				catch (const std::exception &)
+				{
+				}
 			}
-			for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+			for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 			{
 				try
 				{
 					(*it)->Exit();
 				}
-				catch(const std::exception&) {}
+				catch (const std::exception &)
+				{
+				}
 			}
 
 			IsClosed = true;
@@ -700,13 +743,13 @@ void LogicManager::timerProcess(CFirePacket* packet)
 	}
 	else
 	{
-		if(BattleServer::Instance()->IsChannelClosed(channelId))
+		if (BattleServer::Instance()->IsChannelClosed(channelId))
 			LogicManager::Instance()->ClearUser(false);
 
-		if(NeedReloadConfig)
+		if (NeedReloadConfig)
 		{
 			NeedReloadConfig = false;
-			if(ConfigManager::Reload())
+			if (ConfigManager::Reload())
 			{
 				info_log("ConfigManager Reload sucess!");
 				OnReload();
@@ -715,36 +758,38 @@ void LogicManager::timerProcess(CFirePacket* packet)
 				info_log("ConfigManager Reload fail!");
 		}
 
-		if(m_signum)
+		if (m_signum)
 			CheckSig();
 
 		++m_timer;
 		unsigned now = Time::GetGlobalTime();
-		if(CTime::IsDiffHour(m_last_hour_ts,now))
+		if (CTime::IsDiffHour(m_last_hour_ts, now))
 		{
 			m_last_hour_ts = now;
 			try
 			{
 				CheckHour();
 			}
-			catch(const std::exception& e)
+			catch (const std::exception &e)
 			{
 				error_log("err_msg: %s", e.what());
 			}
 		}
-		if(m_timer % 60 == 0)
+		if (m_timer % 60 == 0)
 		{
 			try
 			{
 				CheckMin();
 			}
-			catch(const std::exception& e)
+			catch (const std::exception &e)
 			{
 				error_log("err_msg: %s", e.what());
 			}
 		}
-		for(list<pair<unsigned, unsigned> >::iterator it=m_leaveList.begin(); it!=m_leaveList.end();){
-			if(OFFLINE_DELAY + it->first <= now){
+		for (list<pair<unsigned, unsigned>>::iterator it = m_leaveList.begin(); it != m_leaveList.end();)
+		{
+			if (OFFLINE_DELAY + it->first <= now)
+			{
 				info_log("kick offline, uid=%u", it->second);
 				offline(it->second);
 				it = m_leaveList.erase(it);
@@ -753,68 +798,78 @@ void LogicManager::timerProcess(CFirePacket* packet)
 				break;
 		}
 
-		for(vector<BattleSingleton*>::iterator it=m_battleManager.begin();it!=m_battleManager.end();++it)
+		for (vector<BattleSingleton *>::iterator it = m_battleManager.begin(); it != m_battleManager.end(); ++it)
 		{
 			try
 			{
 				(*it)->OnTimer1();
 			}
-			catch(const std::exception&) {}
+			catch (const std::exception &)
+			{
+			}
 		}
-		for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+		for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 		{
 			try
 			{
 				(*it)->OnTimer1();
 			}
-			catch(const std::exception&) {}
+			catch (const std::exception &)
+			{
+			}
 		}
-		for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+		for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 		{
 			try
 			{
 				(*it)->OnTimer1();
 			}
-			catch(const std::exception&) {}
+			catch (const std::exception &)
+			{
+			}
 		}
 
-		for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+		for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 		{
 			try
 			{
 				(*it)->Timer1();
 			}
-			catch(const std::exception&) {}
+			catch (const std::exception &)
+			{
+			}
 		}
-		for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+		for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 		{
 			try
 			{
 				(*it)->Timer1();
 			}
-			catch(const std::exception&) {}
+			catch (const std::exception &)
+			{
+			}
 		}
 
-		if(m_timer % 3 == 0)
+		if (m_timer % 3 == 0)
 		{
 			this->onTimer2();
 		}
 	}
 
-	gettimeofday(&tv,NULL);
-	lastLoopTime = tv.tv_sec * 1000 + tv.tv_usec/1000 - StartMilliTime;
-	if(lastLoopTime - GlobalMilliTime > 40)
+	gettimeofday(&tv, NULL);
+	lastLoopTime = tv.tv_sec * 1000 + tv.tv_usec / 1000 - StartMilliTime;
+	if (lastLoopTime - GlobalMilliTime > 40)
 	{
-		info_log("timer run time = %u",lastLoopTime - GlobalMilliTime);
+		info_log("timer run time = %u", lastLoopTime - GlobalMilliTime);
 	}
 }
 
-void LogicManager::preOffline(CFirePacket* packet)
+void LogicManager::preOffline(CFirePacket *packet)
 {
-	if(IsPreClosed)
+	if (IsPreClosed)
 		return;
 
-	if(Getuid(packet->fd) == -1)
+	if (Getuid(packet->fd) == -1)
 		return;
 
 	info_log("kick pre offline, uid=%u, fd=%u", Getuid(packet->fd), packet->fd);
@@ -824,46 +879,56 @@ void LogicManager::preOffline(CFirePacket* packet)
 
 int LogicManager::onTimer2()
 {
-	for(vector<BattleSingleton*>::iterator it=m_battleManager.begin();it!=m_battleManager.end();++it)
+	for (vector<BattleSingleton *>::iterator it = m_battleManager.begin(); it != m_battleManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->OnTimer2();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->OnTimer2();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->OnTimer2();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->Timer2();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->Timer2();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 
 	return 0;
@@ -871,37 +936,45 @@ int LogicManager::onTimer2()
 
 LogicManager::~LogicManager()
 {
-	for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+	for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->CallDestroy();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-	for(vector<BattleSingleton*>::iterator it=m_battleManager.begin();it!=m_battleManager.end();++it)
+	for (vector<BattleSingleton *>::iterator it = m_battleManager.begin(); it != m_battleManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->CallDestroy();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->CallDestroy();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->CallDestroy();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 	ConfigManager::Instance()->Destroy();
 	BattleConnect::DestoryThread();
@@ -1382,8 +1455,6 @@ void LogicManager::RegProto()
 	//跨服更新成员信息
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAddMemberHelpTimesBC>(ProtoManager::ProcessNoReplyNoUID<ProtoAlliance::RequestAddMemberHelpTimesBC, LogicAllianceManager>);
 
-
-
 	//设置商会成员竞赛标志
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceSetFlag>(ProtoManager::ProcessNoReply<ProtoAlliance::RequestAllianceRaceSetFlag, LogicAllianceManager>);
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceSetFlagBC>(ProtoManager::ProcessNoReplyNoUID<ProtoAlliance::RequestAllianceRaceSetFlagBC, LogicAllianceManager>);
@@ -1391,7 +1462,6 @@ void LogicManager::RegProto()
 	//竞赛订单完成进度
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceMemberProgress>(ProtoManager::ProcessNoReply<ProtoAlliance::RequestAllianceRaceMemberProgress, LogicAllianceManager>);
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceMemberProgressBC>(ProtoManager::ProcessNoReplyNoUID<ProtoAlliance::RequestAllianceRaceMemberProgressBC, LogicAllianceManager>);
-
 
 	//查询竞赛信息
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceInfo>(ProtoManager::ProcessNoReply<ProtoAlliance::RequestAllianceRaceInfo, LogicAllianceManager>);
@@ -1455,7 +1525,6 @@ void LogicManager::RegProto()
 	//看广告增加商会积分
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceWatchAd>(ProtoManager::ProcessNoReply<ProtoAlliance::RequestAllianceRaceWatchAd, LogicAllianceManager>);
 	dispatcher.registerMessageCallback<ProtoAlliance::RequestAllianceRaceWatchAdBC>(ProtoManager::ProcessNoReplyNoUID<ProtoAlliance::RequestAllianceRaceWatchAdBC, LogicAllianceManager>);
-
 
 	//物品助手
 	dispatcher.registerMessageCallback<ProtoAssistor::OpenAssistorReq>(ProtoManager::Process<ProtoAssistor::OpenAssistorReq, ProtoAssistor::OpenAssistorResp, UserManager>);
@@ -1617,8 +1686,6 @@ void LogicManager::RegProto()
 	dispatcher.registerMessageCallback<ProtoActivity::NewShareReq>(ProtoManager::Process<ProtoActivity::NewShareReq, ProtoActivity::NewShareResp, LogicNewShareActivity>);
 	//领取
 	dispatcher.registerMessageCallback<ProtoActivity::RewardNewShareReq>(ProtoManager::Process<ProtoActivity::RewardNewShareReq, ProtoActivity::RewardNewShareResp, LogicNewShareActivity>);
-
-
 }
 
 void LogicManager::RegMemoryManager()
@@ -1640,7 +1707,6 @@ void LogicManager::RegMemoryManager()
 	m_memoryManager.push_back(MessageBoardManager::Instance());
 	m_memoryManager.push_back(CDKeyManager::Instance());
 	m_memoryManager.push_back(MemorySysMailManager::Instance());
-
 }
 
 void LogicManager::RegDataManager()
@@ -1752,9 +1818,9 @@ void LogicManager::RegActivityManager()
 
 bool LogicManager::IsDataManagerWorking()
 {
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
-		if((*it)->IsWorking())
+		if ((*it)->IsWorking())
 			return true;
 	}
 	return false;
@@ -1762,9 +1828,9 @@ bool LogicManager::IsDataManagerWorking()
 
 bool LogicManager::IsDataManagerFull()
 {
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
-		if((*it)->IsFull())
+		if ((*it)->IsFull())
 			return true;
 	}
 	return false;
@@ -1772,9 +1838,9 @@ bool LogicManager::IsDataManagerFull()
 
 bool LogicManager::IsDataManagerNeedClear()
 {
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
-		if((*it)->IsNeedClear())
+		if ((*it)->IsNeedClear())
 			return true;
 	}
 	return false;
@@ -1782,9 +1848,9 @@ bool LogicManager::IsDataManagerNeedClear()
 
 bool LogicManager::IsMemoryManagerNeedClear()
 {
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
-		if((*it)->IsNeedClear())
+		if ((*it)->IsNeedClear())
 			return true;
 	}
 	return false;
@@ -1792,64 +1858,72 @@ bool LogicManager::IsMemoryManagerNeedClear()
 
 void LogicManager::DoDataManagerSave(unsigned uid)
 {
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->DoSave(uid);
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-
 }
 
 void LogicManager::DoDataManagerAllianceSave(unsigned aid)
 {
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->DoAllianceSave(aid);
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
-
 }
 
 void LogicManager::DoDataManagerClear(unsigned uid)
 {
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->DoClear(uid);
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 }
 
 void LogicManager::DoAllianceManagerClear(unsigned alliance_id)
 {
-	for(vector<DataSingletonBase*>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->DoAllianceClear(alliance_id);
 		}
 
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 }
 
 void LogicManager::DoMemoryManagerClear(unsigned uid)
 {
-	for(vector<DataSingletonBase*>::iterator it=m_memoryManager.begin();it!=m_memoryManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_memoryManager.begin(); it != m_memoryManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->DoClear(uid);
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 }
 
@@ -1861,7 +1935,7 @@ void LogicManager::Addfd(unsigned uid, unsigned fd)
 
 void LogicManager::Erasefd(unsigned fd)
 {
-	if(m_fdmap.count(fd))
+	if (m_fdmap.count(fd))
 	{
 		m_uidmap.erase(m_fdmap[fd]);
 		m_fdmap.erase(fd);
@@ -1870,7 +1944,7 @@ void LogicManager::Erasefd(unsigned fd)
 
 void LogicManager::Eraseuid(unsigned uid)
 {
-	if(m_uidmap.count(uid))
+	if (m_uidmap.count(uid))
 	{
 		m_fdmap.erase(m_uidmap[uid]);
 		m_uidmap.erase(uid);
@@ -1879,23 +1953,23 @@ void LogicManager::Eraseuid(unsigned uid)
 
 unsigned LogicManager::Getfd(unsigned uid)
 {
-	if(m_uidmap.count(uid))
+	if (m_uidmap.count(uid))
 		return m_uidmap[uid];
 	return -1;
 }
 
 unsigned LogicManager::Getuid(unsigned fd)
 {
-	if(m_fdmap.count(fd))
+	if (m_fdmap.count(fd))
 		return m_fdmap[fd];
 	return -1;
 }
 
 void LogicManager::EraseLeaveList(unsigned uid)
 {
-	for(list<pair<unsigned, unsigned> >::iterator it = m_leaveList.begin();it != m_leaveList.end();++it)
+	for (list<pair<unsigned, unsigned>>::iterator it = m_leaveList.begin(); it != m_leaveList.end(); ++it)
 	{
-		if(it->second == uid)
+		if (it->second == uid)
 		{
 			m_leaveList.erase(it);
 			return;
@@ -1909,9 +1983,9 @@ void LogicManager::ClearUser(bool send)
 	UMI->GetOnlineUsers(uids);
 
 	info_log("kick close %u", uids.size());
-	for(vector<unsigned>::iterator it=uids.begin();it!=uids.end();++it)
+	for (vector<unsigned>::iterator it = uids.begin(); it != uids.end(); ++it)
 	{
-		if(send)
+		if (send)
 			sendKickMsg(Getfd(*it), "server_close");
 		offline(*it);
 	}
@@ -1928,17 +2002,19 @@ unsigned LogicManager::GetOpenDays()
 	return CTime::GetDayInterval(SecOpenTime, Time::GetGlobalTime());
 }
 
-void LogicManager::CheckSave(){
+void LogicManager::CheckSave()
+{
 	debug_log("---------------------------");
 	debug_log("CheckSave!");
 	debug_log("---------------------------");
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 		(*it)->OnCheck();
 }
 
-void LogicManager::DataLog(){
+void LogicManager::DataLog()
+{
 	debug_log("---------------------------");
-	for(vector<DataSingletonBase*>::iterator it=m_dataManager.begin();it!=m_dataManager.end();++it)
+	for (vector<DataSingletonBase *>::iterator it = m_dataManager.begin(); it != m_dataManager.end(); ++it)
 		(*it)->DebugLog();
 	debug_log("---------------------------");
 }
@@ -1946,35 +2022,37 @@ void LogicManager::DataLog(){
 void LogicManager::TryClear()
 {
 	debug_log("---------------------------");
-	debug_log("%s",IsDataManagerWorking()?"DataManager Working":"DataManager not Working");
-	debug_log("%s",IsDataManagerNeedClear()?"DataManager Need Clear":"DataManager not Need Clear");
+	debug_log("%s", IsDataManagerWorking() ? "DataManager Working" : "DataManager not Working");
+	debug_log("%s", IsDataManagerNeedClear() ? "DataManager Need Clear" : "DataManager not Need Clear");
 	vector<unsigned> uids;
 	BaseManager::Instance()->TryClear(uids);
-	debug_log("clear num: %u",uids.size());
+	debug_log("clear num: %u", uids.size());
 	debug_log("---------------------------");
-	debug_log("%s",IsMemoryManagerNeedClear()?"MemoryManager Need Clear":"MemoryManager not Need Clear");
+	debug_log("%s", IsMemoryManagerNeedClear() ? "MemoryManager Need Clear" : "MemoryManager not Need Clear");
 	vector<unsigned> uids1;
 	ResourceManager::Instance()->TryClear(uids1);
-	debug_log("clear num: %u",uids1.size());
+	debug_log("clear num: %u", uids1.size());
 	debug_log("---------------------------");
 }
 
 void LogicManager::CheckMin()
 {
-	info_log("Online:%u",m_fdmap.size());
+	info_log("Online:%u", m_fdmap.size());
 
-	User::ServerTime * msg = new User::ServerTime;
+	User::ServerTime *msg = CreateObj<User::ServerTime>();
 	msg->set_ts(now);
 	broadcastMsg(msg);
 
-	for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+	for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 	{
 		try
 		{
-			if((*it)->IsOn())
+			if ((*it)->IsOn())
 				(*it)->OnMin();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 
 	LogicFriendOrderManager::Instance()->CheckClearFoInfo();
@@ -1984,17 +2062,19 @@ void LogicManager::CheckHour()
 {
 	m_timer = 0;
 
-	if(LogicCommonUtil::GetHourByTime(Time::GetGlobalTime()) == 0)
+	if (LogicCommonUtil::GetHourByTime(Time::GetGlobalTime()) == 0)
 		CheckDay();
 
-	for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+	for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 	{
 		try
 		{
-			if((*it)->IsOn())
+			if ((*it)->IsOn())
 				(*it)->OnHour();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 
 	//定时删除广告
@@ -2007,13 +2087,15 @@ void LogicManager::CheckHour()
 
 void LogicManager::CheckDay()
 {
-	for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+	for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->CheckDay();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 
 	LogicUserManager::Instance()->EveryDayAction();
@@ -2032,18 +2114,21 @@ void LogicManager::CheckDay()
 
 void LogicManager::OnReload()
 {
-	for(vector<ActivitySingletonBase*>::iterator it=m_activityManager.begin();it!=m_activityManager.end();++it)
+	for (vector<ActivitySingletonBase *>::iterator it = m_activityManager.begin(); it != m_activityManager.end(); ++it)
 	{
 		try
 		{
 			(*it)->OnReload();
 		}
-		catch(const std::exception&) {}
+		catch (const std::exception &)
+		{
+		}
 	}
 }
 
-void LogicManager::CheckSig(){
-	switch(m_signum)
+void LogicManager::CheckSig()
+{
+	switch (m_signum)
 	{
 	case e_Sig_Save:
 		CheckSave();

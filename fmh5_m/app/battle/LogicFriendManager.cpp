@@ -1,128 +1,122 @@
 #include "LogicFriendManager.h"
 
-
-int LogicFriendManager::Process(unsigned uid, ProtoFriend::GetAllFriendsReq* req)
+int LogicFriendManager::Process(unsigned uid, ProtoFriend::GetAllFriendsReq *req)
 {
-	ProtoFriend::GetAllFriendsResp* resp = new ProtoFriend::GetAllFriendsResp;
+	ProtoFriend::GetAllFriendsResp *resp = CreateObj<ProtoFriend::GetAllFriendsResp>();
 
-	GetConcernFriendInfo(uid,resp);
-	GetFansFriendInfo(uid,resp);
-	GetAidFriendInfo(uid,resp);
+	GetConcernFriendInfo(uid, resp);
+	GetFansFriendInfo(uid, resp);
+	GetAidFriendInfo(uid, resp);
 
-	return LMI->sendMsg(uid,resp)?0:R_ERROR;
+	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
 
-void LogicFriendManager::GetConcernFriendInfo(unsigned uid,ProtoFriend::GetAllFriendsResp *resp)
+void LogicFriendManager::GetConcernFriendInfo(unsigned uid, ProtoFriend::GetAllFriendsResp *resp)
 {
 	//获取关注人信息
 	vector<unsigned> indexs;
 	DataConcernManager::Instance()->GetIndexs(uid, indexs);
-	for(int i = 0; i < indexs.size(); ++i)
+	for (int i = 0; i < indexs.size(); ++i)
 	{
-		DataConcern & data = DataConcernManager::Instance()->GetDataByIndex(indexs[i]);
+		DataConcern &data = DataConcernManager::Instance()->GetDataByIndex(indexs[i]);
 		resp->add_concerns()->mutable_concernfolk()->set_folkuid(data.id);
 	}
 }
 
-void LogicFriendManager::GetFansFriendInfo(unsigned uid,ProtoFriend::GetAllFriendsResp *resp)
+void LogicFriendManager::GetFansFriendInfo(unsigned uid, ProtoFriend::GetAllFriendsResp *resp)
 {
 	//获取关注人信息
 	vector<unsigned> indexs;
 	DataFansManager::Instance()->GetIndexs(uid, indexs);
-	for(int i = 0; i < indexs.size(); ++i)
+	for (int i = 0; i < indexs.size(); ++i)
 	{
-		DataFans & data = DataFansManager::Instance()->GetDataByIndex(indexs[i]);
+		DataFans &data = DataFansManager::Instance()->GetDataByIndex(indexs[i]);
 
 		resp->add_fans()->mutable_fan()->set_folkuid(data.id);
 	}
 }
 
-
-void LogicFriendManager::GetAidFriendInfo(unsigned uid,ProtoFriend::GetAllFriendsResp *resp)
+void LogicFriendManager::GetAidFriendInfo(unsigned uid, ProtoFriend::GetAllFriendsResp *resp)
 {
 	//获取关注人信息
 	vector<unsigned> indexs;
 	DataAidRecordManager::Instance()->GetRecentAidRecord(uid, indexs);
-	for(int i = 0; i < indexs.size(); ++i)
+	for (int i = 0; i < indexs.size(); ++i)
 	{
-		DataAidRecord & data = DataAidRecordManager::Instance()->GetDataByIndex(indexs[i]);
+		DataAidRecord &data = DataAidRecordManager::Instance()->GetDataByIndex(indexs[i]);
 		resp->add_helpers()->set_folkuid(data.aid_id);
 	}
 }
 
 //请求需要帮助的好友数据
-int LogicFriendManager::Process(unsigned uid, ProtoFriend::GetFriendHelpInfoReq* req)
+int LogicFriendManager::Process(unsigned uid, ProtoFriend::GetFriendHelpInfoReq *req)
 {
-	map<unsigned,vector<unsigned> > zoneUids;
+	map<unsigned, vector<unsigned>> zoneUids;
 	zoneUids.clear();
-	ProtoFriend::CSGetFriendHelpInfoResp *resp = new ProtoFriend::CSGetFriendHelpInfoResp;
+	ProtoFriend::CSGetFriendHelpInfoResp *resp = CreateObj<ProtoFriend::CSGetFriendHelpInfoResp>();
 
 	//获取关注人信息
 	vector<unsigned> indexs;
 	DataConcernManager::Instance()->GetIndexs(uid, indexs);
-	for(int i = 0; i < indexs.size(); ++i)
+	for (int i = 0; i < indexs.size(); ++i)
 	{
-		DataConcern & data = DataConcernManager::Instance()->GetDataByIndex(indexs[i]);
+		DataConcern &data = DataConcernManager::Instance()->GetDataByIndex(indexs[i]);
 		//记录需要跨服处理的uid
-		if(CMI->IsNeedConnectByUID(data.id))
+		if (CMI->IsNeedConnectByUID(data.id))
 		{
 			unsigned zone = Config::GetZoneByUID(data.id);
 			zoneUids[zone].push_back(data.id);
 		}
 		else
 		{
-			if(LogicUserManager::Instance()->IsUserNeedHelp(data.id))
+			if (LogicUserManager::Instance()->IsUserNeedHelp(data.id))
 			{
 				resp->add_othuid(data.id);
 			}
 		}
-
 	}
 
 	//获取粉丝信息
 	indexs.clear();
 	DataFansManager::Instance()->GetIndexs(uid, indexs);
-	for(int i = 0; i < indexs.size(); ++i)
+	for (int i = 0; i < indexs.size(); ++i)
 	{
-		DataFans & data = DataFansManager::Instance()->GetDataByIndex(indexs[i]);
+		DataFans &data = DataFansManager::Instance()->GetDataByIndex(indexs[i]);
 		//记录需要跨服处理的uid
-		if(CMI->IsNeedConnectByUID(data.id))
+		if (CMI->IsNeedConnectByUID(data.id))
 		{
 			unsigned zone = Config::GetZoneByUID(data.id);
 			zoneUids[zone].push_back(data.id);
 		}
 		else
 		{
-			if(LogicUserManager::Instance()->IsUserNeedHelp(data.id))
+			if (LogicUserManager::Instance()->IsUserNeedHelp(data.id))
 			{
 				resp->add_othuid(data.id);
 			}
 		}
 	}
 
-
-
-	for(map<unsigned,vector<unsigned> >::iterator it = zoneUids.begin(); it != zoneUids.end(); it++)
+	for (map<unsigned, vector<unsigned>>::iterator it = zoneUids.begin(); it != zoneUids.end(); it++)
 	{
-		ProtoFriend::CSGetFriendHelpInfoReq *getFriendReq = new ProtoFriend::CSGetFriendHelpInfoReq;
+		ProtoFriend::CSGetFriendHelpInfoReq *getFriendReq = CreateObj<ProtoFriend::CSGetFriendHelpInfoReq>();
 		getFriendReq->set_myuid(uid);
-		for(vector<unsigned>::iterator itor = it->second.begin(); itor != it->second.end(); itor++)
+		for (vector<unsigned>::iterator itor = it->second.begin(); itor != it->second.end(); itor++)
 		{
 			getFriendReq->add_othuid(*itor);
 		}
 		ProtoManager::BattleConnectNoReplyByZoneID(it->first, getFriendReq);
 	}
 
-
 	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
 
-int LogicFriendManager::Process(ProtoFriend::CSGetFriendHelpInfoReq* req)
+int LogicFriendManager::Process(ProtoFriend::CSGetFriendHelpInfoReq *req)
 {
-	ProtoFriend::CSGetFriendHelpInfoResp *resp = new ProtoFriend::CSGetFriendHelpInfoResp;
-	for(int i = 0; i < req->othuid_size(); i++)
+	ProtoFriend::CSGetFriendHelpInfoResp *resp = CreateObj<ProtoFriend::CSGetFriendHelpInfoResp>();
+	for (int i = 0; i < req->othuid_size(); i++)
 	{
-		if(LogicUserManager::Instance()->IsUserNeedHelp(req->othuid(i)))
+		if (LogicUserManager::Instance()->IsUserNeedHelp(req->othuid(i)))
 		{
 			resp->add_othuid(req->othuid(i));
 		}
@@ -130,13 +124,11 @@ int LogicFriendManager::Process(ProtoFriend::CSGetFriendHelpInfoReq* req)
 	return LMI->sendMsg(req->myuid(), resp) ? 0 : R_ERROR;
 }
 
-
-
-int LogicFriendManager::Process(unsigned uid, ProtoFriend::ConcernReq* req)
+int LogicFriendManager::Process(unsigned uid, ProtoFriend::ConcernReq *req)
 {
 	unsigned othuid = req->othuid();
 
-	if(CMI->IsNeedConnectByUID(othuid))
+	if (CMI->IsNeedConnectByUID(othuid))
 	{
 		//--------------关注对方
 		//判断对方是否已在你的关注列表中
@@ -147,7 +139,7 @@ int LogicFriendManager::Process(unsigned uid, ProtoFriend::ConcernReq* req)
 		}
 
 		//对方uid参数验证
-		if(!IsValidUid(othuid))
+		if (!IsValidUid(othuid))
 		{
 			error_log("othuid is invalid. uid=%u,othuid=%u", uid, othuid);
 			throw runtime_error("param_uid_invalid");
@@ -155,7 +147,7 @@ int LogicFriendManager::Process(unsigned uid, ProtoFriend::ConcernReq* req)
 
 		//获取好友配置
 		DBCUserBaseWrap userwrap(uid);
-		const ConfigFriend::LevelNums & friendcfg = FriendCfgWrap().GetLevelCfgByLevel(userwrap.Obj().viplevel);
+		const ConfigFriend::LevelNums &friendcfg = FriendCfgWrap().GetLevelCfgByLevel(userwrap.Obj().viplevel);
 
 		//判断好友数量是否达到上限
 		vector<unsigned> indexs;
@@ -170,36 +162,38 @@ int LogicFriendManager::Process(unsigned uid, ProtoFriend::ConcernReq* req)
 		DataConcernManager::Instance()->GetData(uid, othuid);
 
 		//-------------写入对方的粉丝
-		ProtoFriend::CSConcernReq* m = new ProtoFriend::CSConcernReq;
+		ProtoFriend::CSConcernReq *m = CreateObj<ProtoFriend::CSConcernReq>();
 		m->set_othuid(othuid);
 		m->set_myuid(uid);
 		int ret = ProtoManager::BattleConnectNoReplyByUID(othuid, m);
-		AddConcernDyInfoOverServer(uid,othuid);	//跨服访问添加动态消息
+		AddConcernDyInfoOverServer(uid, othuid); //跨服访问添加动态消息
 		return ret;
 	}
 
-	ProtoFriend::ConcernResp* resp = new ProtoFriend::ConcernResp;
-	try{
+	ProtoFriend::ConcernResp *resp = CreateObj<ProtoFriend::ConcernResp>();
+	try
+	{
 		Concern(uid, othuid, resp);
-		AddConcernDyInfo(uid,othuid);			//同服访问添加动态消息
-	}catch(std::exception &e)
+		AddConcernDyInfo(uid, othuid); //同服访问添加动态消息
+	}
+	catch (std::exception &e)
 	{
 		delete resp;
-		error_log("failed:%s",e.what());
+		error_log("failed:%s", e.what());
 		throw std::runtime_error(e.what());
 		return R_ERROR;
 	}
 
-	return LMI->sendMsg(uid,resp)?0:R_ERROR;
+	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
 
-int LogicFriendManager::Process(ProtoFriend::CSConcernReq* req)
+int LogicFriendManager::Process(ProtoFriend::CSConcernReq *req)
 {
 	unsigned myuid = req->othuid();
 	unsigned othuid = req->myuid();
 
-	ProtoFriend::CSConcernResp* folkmsg = new ProtoFriend::CSConcernResp;
-	ProtoFriend::FolkCPP *folkcpp =  folkmsg->mutable_folkresp()->mutable_concern()->mutable_concernfolk();
+	ProtoFriend::CSConcernResp *folkmsg = CreateObj<ProtoFriend::CSConcernResp>();
+	ProtoFriend::FolkCPP *folkcpp = folkmsg->mutable_folkresp()->mutable_concern()->mutable_concernfolk();
 	folkcpp->set_folkuid(myuid);
 
 	//写入对方的粉丝
@@ -212,7 +206,7 @@ int LogicFriendManager::Process(ProtoFriend::CSConcernReq* req)
 		indexs.clear();
 		DataFansManager::Instance()->GetIndexs(myuid, indexs);
 		DBCUserBaseWrap othuserwrap(myuid);
-		const ConfigFriend::LevelNums & othfriendcfg = FriendCfgWrap().GetLevelCfgByLevel(othuserwrap.Obj().viplevel);
+		const ConfigFriend::LevelNums &othfriendcfg = FriendCfgWrap().GetLevelCfgByLevel(othuserwrap.Obj().viplevel);
 
 		if (indexs.size() >= othfriendcfg.fans_num())
 		{
@@ -227,7 +221,7 @@ int LogicFriendManager::Process(ProtoFriend::CSConcernReq* req)
 			if (UserManager::Instance()->IsOnline(myuid))
 			{
 				//在线，则推送
-				ProtoFriend::FansPushReq * pushmsg = new ProtoFriend::FansPushReq;
+				ProtoFriend::FansPushReq *pushmsg = CreateObj<ProtoFriend::FansPushReq>();
 				ProtoFriend::FolkCPP *folkcpp1 = pushmsg->mutable_fan()->mutable_fan();
 				folkcpp1->set_folkuid(myuid);
 
@@ -240,14 +234,12 @@ int LogicFriendManager::Process(ProtoFriend::CSConcernReq* req)
 	return ProtoManager::BattleConnectNoReplyByUID(othuid, folkmsg);
 }
 
-int LogicFriendManager::Process(ProtoFriend::CSConcernResp* req)
+int LogicFriendManager::Process(ProtoFriend::CSConcernResp *req)
 {
-	return LMI->sendMsg(req->myuid(),req->mutable_folkresp(),false)?0:R_ERROR;
+	return LMI->sendMsg(req->myuid(), req->mutable_folkresp(), false) ? 0 : R_ERROR;
 }
 
-
-
-int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::ConcernResp * resp)
+int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::ConcernResp *resp)
 {
 	//关注对方
 	//判断对方是否已在你的关注列表中
@@ -258,7 +250,7 @@ int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::Conc
 	}
 
 	//对方uid参数验证
-	if(!IsValidUid(othuid))
+	if (!IsValidUid(othuid))
 	{
 		error_log("othuid is invalid. uid=%u,othuid=%u", uid, othuid);
 		throw runtime_error("param_uid_invalid");
@@ -266,7 +258,7 @@ int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::Conc
 
 	//获取好友配置
 	DBCUserBaseWrap userwrap(uid);
-	const ConfigFriend::LevelNums & friendcfg = FriendCfgWrap().GetLevelCfgByLevel(userwrap.Obj().viplevel);
+	const ConfigFriend::LevelNums &friendcfg = FriendCfgWrap().GetLevelCfgByLevel(userwrap.Obj().viplevel);
 
 	//判断好友数量是否达到上限
 	vector<unsigned> indexs;
@@ -292,7 +284,7 @@ int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::Conc
 		indexs.clear();
 		DataFansManager::Instance()->GetIndexs(othuid, indexs);
 		DBCUserBaseWrap othuserwrap(othuid);
-		const ConfigFriend::LevelNums & othfriendcfg = FriendCfgWrap().GetLevelCfgByLevel(othuserwrap.Obj().viplevel);
+		const ConfigFriend::LevelNums &othfriendcfg = FriendCfgWrap().GetLevelCfgByLevel(othuserwrap.Obj().viplevel);
 
 		if (indexs.size() >= othfriendcfg.fans_num())
 		{
@@ -307,9 +299,9 @@ int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::Conc
 			if (UserManager::Instance()->IsOnline(uid))
 			{
 				//在线，则推送
-				ProtoFriend::FansPushReq * pushmsg = new ProtoFriend::FansPushReq;
+				ProtoFriend::FansPushReq *pushmsg = CreateObj<ProtoFriend::FansPushReq>();
 
-				ProtoFriend::FolkCPP *folkcpp1 =  pushmsg->mutable_fan()->mutable_fan();
+				ProtoFriend::FolkCPP *folkcpp1 = pushmsg->mutable_fan()->mutable_fan();
 				folkcpp1->set_folkuid(uid);
 
 				//推送
@@ -319,17 +311,17 @@ int LogicFriendManager::Concern(unsigned uid, unsigned othuid, ProtoFriend::Conc
 	}
 
 	//将关注好友添加到任务列表中
-	LogicTaskManager::Instance()->AddTaskData(uid,task_of_Focus_friend,1);
+	LogicTaskManager::Instance()->AddTaskData(uid, task_of_Focus_friend, 1);
 
 	//debug_log("user:[uid] fork other uid:[%u]", uid, othuid);
 
 	return 0;
 }
 
-int LogicFriendManager::Process(unsigned uid, ProtoFriend::CancelConcernReq* req)
+int LogicFriendManager::Process(unsigned uid, ProtoFriend::CancelConcernReq *req)
 {
 	unsigned othuid = req->othuid();
-	if(CMI->IsNeedConnectByUID(othuid))
+	if (CMI->IsNeedConnectByUID(othuid))
 	{
 		//判断对方是否已在你的关注列表中
 		if (!DataConcernManager::Instance()->IsExistItem(uid, othuid))
@@ -341,25 +333,27 @@ int LogicFriendManager::Process(unsigned uid, ProtoFriend::CancelConcernReq* req
 		DataConcernManager::Instance()->DelItem(uid, othuid);
 
 		//发送请求、将自己从对方的粉丝列表删除
-		ProtoFriend::CSCancelConcernReq* m = new ProtoFriend::CSCancelConcernReq;
+		ProtoFriend::CSCancelConcernReq *m = CreateObj<ProtoFriend::CSCancelConcernReq>();
 		m->set_othuid(othuid);
 		m->set_myuid(uid);
 		return ProtoManager::BattleConnectNoReplyByUID(othuid, m);
 	}
 
-	ProtoFriend::CancelConcernResp* resp = new ProtoFriend::CancelConcernResp;
-	try{
+	ProtoFriend::CancelConcernResp *resp = CreateObj<ProtoFriend::CancelConcernResp>();
+	try
+	{
 		CancelConcern(uid, othuid, resp);
-	}catch(const std::exception &e)
+	}
+	catch (const std::exception &e)
 	{
 		delete resp;
-		error_log("failed:%s",e.what());
+		error_log("failed:%s", e.what());
 		return R_ERROR;
 	}
-	return LMI->sendMsg(uid,resp)?0:R_ERROR;
+	return LMI->sendMsg(uid, resp) ? 0 : R_ERROR;
 }
 
-int LogicFriendManager::Process(ProtoFriend::CSCancelConcernReq* req)
+int LogicFriendManager::Process(ProtoFriend::CSCancelConcernReq *req)
 {
 	unsigned myuid = req->othuid();
 	unsigned othuid = req->myuid();
@@ -378,7 +372,7 @@ int LogicFriendManager::Process(ProtoFriend::CSCancelConcernReq* req)
 		if (UserManager::Instance()->IsOnline(myuid))
 		{
 			//脱粉的推送
-			ProtoFriend::StripFansPushReq * pushmsg = new ProtoFriend::StripFansPushReq;
+			ProtoFriend::StripFansPushReq *pushmsg = CreateObj<ProtoFriend::StripFansPushReq>();
 			pushmsg->set_deluid(othuid);
 
 			//推送
@@ -387,19 +381,18 @@ int LogicFriendManager::Process(ProtoFriend::CSCancelConcernReq* req)
 	}
 
 	//返回处理消息
-	ProtoFriend::CSCancelConcernResp* resp = new ProtoFriend::CSCancelConcernResp;
+	ProtoFriend::CSCancelConcernResp *resp = CreateObj<ProtoFriend::CSCancelConcernResp>();
 	resp->set_myuid(req->myuid());
 	resp->mutable_resp()->set_deluid(req->othuid());
 	return ProtoManager::BattleConnectNoReplyByUID(othuid, resp);
 }
 
-int LogicFriendManager::Process(ProtoFriend::CSCancelConcernResp* req)
+int LogicFriendManager::Process(ProtoFriend::CSCancelConcernResp *req)
 {
-	return LMI->sendMsg(req->myuid(),req->mutable_resp(),false)?0:R_ERROR;
+	return LMI->sendMsg(req->myuid(), req->mutable_resp(), false) ? 0 : R_ERROR;
 }
 
-
-int LogicFriendManager::CancelConcern(unsigned uid, unsigned othuid, ProtoFriend::CancelConcernResp * resp)
+int LogicFriendManager::CancelConcern(unsigned uid, unsigned othuid, ProtoFriend::CancelConcernResp *resp)
 {
 	//判断对方是否已在你的关注列表中
 	if (!DataConcernManager::Instance()->IsExistItem(uid, othuid))
@@ -425,7 +418,7 @@ int LogicFriendManager::CancelConcern(unsigned uid, unsigned othuid, ProtoFriend
 		if (UserManager::Instance()->IsOnline(uid))
 		{
 			//脱粉的推送
-			ProtoFriend::StripFansPushReq * pushmsg = new ProtoFriend::StripFansPushReq;
+			ProtoFriend::StripFansPushReq *pushmsg = CreateObj<ProtoFriend::StripFansPushReq>();
 			pushmsg->set_deluid(uid);
 
 			//推送
@@ -439,7 +432,7 @@ int LogicFriendManager::CancelConcern(unsigned uid, unsigned othuid, ProtoFriend
 	return 0;
 }
 
-int LogicFriendManager::Process(unsigned uid, ProtoFriend::RemoveFansReq *req, ProtoFriend::RemoveFansResp* resp)
+int LogicFriendManager::Process(unsigned uid, ProtoFriend::RemoveFansReq *req, ProtoFriend::RemoveFansResp *resp)
 {
 	unsigned othuid = req->deluid();
 
@@ -448,7 +441,7 @@ int LogicFriendManager::Process(unsigned uid, ProtoFriend::RemoveFansReq *req, P
 	return 0;
 }
 
-int LogicFriendManager::RemoveFans(unsigned uid, unsigned othuid, ProtoFriend::RemoveFansResp * resp)
+int LogicFriendManager::RemoveFans(unsigned uid, unsigned othuid, ProtoFriend::RemoveFansResp *resp)
 {
 	//判断是否是粉丝
 	if (!DataFansManager::Instance()->IsExistItem(uid, othuid))
@@ -465,23 +458,21 @@ int LogicFriendManager::RemoveFans(unsigned uid, unsigned othuid, ProtoFriend::R
 	return 0;
 }
 
-
-
-bool LogicFriendManager::AddConcernDyInfo(unsigned uid,unsigned other_uid)
+bool LogicFriendManager::AddConcernDyInfo(unsigned uid, unsigned other_uid)
 {
 	//uid:关注者,other_uid:被关注者,关注好友会让被关注者增加一条被关注动态
-	DynamicInfoAttach *pattach = new DynamicInfoAttach;
+	DynamicInfoAttach *pattach = CreateObj<DynamicInfoAttach>();
 	pattach->op_uid = uid;
-	if(LogicDynamicInfoManager::Instance()->ProduceOneDyInfo(other_uid,TYPE_DY_CONCERN,pattach))
+	if (LogicDynamicInfoManager::Instance()->ProduceOneDyInfo(other_uid, TYPE_DY_CONCERN, pattach))
 	{
 		return true;
 	}
 	return false;
 }
 
-bool LogicFriendManager::AddConcernDyInfoOverServer(unsigned uid,unsigned other_uid)
+bool LogicFriendManager::AddConcernDyInfoOverServer(unsigned uid, unsigned other_uid)
 {
-	ProtoDynamicInfo::RequestOtherUserMakeDy * msg = new ProtoDynamicInfo::RequestOtherUserMakeDy;
+	ProtoDynamicInfo::RequestOtherUserMakeDy *msg = CreateObj<ProtoDynamicInfo::RequestOtherUserMakeDy>();
 	string ret;
 	msg->set_myuid(uid);
 	msg->set_othuid(other_uid);

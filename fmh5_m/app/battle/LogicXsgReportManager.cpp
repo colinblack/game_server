@@ -1,20 +1,20 @@
 #include "ServerInc.h"
 #include <sys/timeb.h>
 
-DcLogger* LogicXsgReportManager::m_dclogger = 0;
+DcLogger *LogicXsgReportManager::m_dclogger = 0;
 
-LogicXsgReportManager::LogicXsgReportManager ()
+LogicXsgReportManager::LogicXsgReportManager()
 {
-	if(m_dclogger == NULL)
+	if (m_dclogger == NULL)
 	{
-		m_dclogger = new DcLogger("99917");
+		m_dclogger = CreateObj<DcLogger>(1, "99917");
 		m_dclogger->Start();
 	}
 }
 
 void LogicXsgReportManager::CallDestroy()
 {
-	if(m_dclogger != NULL)
+	if (m_dclogger != NULL)
 	{
 		m_dclogger->Quit();
 		delete m_dclogger;
@@ -27,19 +27,18 @@ bool LogicXsgReportManager::IsWXPlatform(unsigned uid)
 	DBCUserBaseWrap userwrap(uid);
 	bool IsValid = false;
 	//if(uid == 10000012)
-	if(userwrap.Obj().register_platform == PT_WX || userwrap.Obj().register_platform == PT_XMFOUR || userwrap.Obj().register_platform == PT_XMZZ || userwrap.Obj().register_platform == PT_Mi2 || userwrap.Obj().register_platform == PT_VIVO || userwrap.Obj().register_platform == PT_OPPO)
+	if (userwrap.Obj().register_platform == PT_WX || userwrap.Obj().register_platform == PT_XMFOUR || userwrap.Obj().register_platform == PT_XMZZ || userwrap.Obj().register_platform == PT_Mi2 || userwrap.Obj().register_platform == PT_VIVO || userwrap.Obj().register_platform == PT_OPPO)
 		IsValid = true;
 	return IsValid;
 }
 
-
-template<class T>
-void LogicXsgReportManager::SetBaseParam(unsigned uid,string openid,T &base)
+template <class T>
+void LogicXsgReportManager::SetBaseParam(unsigned uid, string openid, T &base)
 {
-	if(openid == "")
+	if (openid == "")
 	{
-		map<unsigned,string>::iterator it = user_openid_map.find(uid);
-		if(it == user_openid_map.end())
+		map<unsigned, string>::iterator it = user_openid_map.find(uid);
+		if (it == user_openid_map.end())
 			return;
 		else
 			openid = it->second;
@@ -48,37 +47,37 @@ void LogicXsgReportManager::SetBaseParam(unsigned uid,string openid,T &base)
 	DBCUserBaseWrap userwrap(uid);
 	//BaseMsg
 	base.deviceId = "";
-	struct  timeb   pt;
+	struct timeb pt;
 	ftime(&pt);
 	struct tm ptm;
 	localtime_r(&pt.time, &ptm);
 	char str[100];
-	snprintf(str, sizeof(str), "%u-%u-%u %u:%u:%u.%u", ptm.tm_year + 1900, ptm.tm_mon + 1, ptm.tm_mday, ptm.tm_hour, ptm.tm_min, ptm.tm_sec,pt.millitm);
+	snprintf(str, sizeof(str), "%u-%u-%u %u:%u:%u.%u", ptm.tm_year + 1900, ptm.tm_mon + 1, ptm.tm_mday, ptm.tm_hour, ptm.tm_min, ptm.tm_sec, pt.millitm);
 	base.timestamp = str;
 	//error_log("ts:%s,ts2:%s",str,base->timestamp.c_str());
 	//RoleInfo
-	string channel = "seasun",channelDesc = "微信";
-	if(userwrap.Obj().register_platform == PT_XMZZ)
+	string channel = "seasun", channelDesc = "微信";
+	if (userwrap.Obj().register_platform == PT_XMZZ)
 	{
 		channel = "xiaomi4";
 		channelDesc = "小米4部(赚赚小游戏)";
 	}
-	else if(userwrap.Obj().register_platform == PT_XMFOUR)
+	else if (userwrap.Obj().register_platform == PT_XMFOUR)
 	{
 		channel = "xiaomi4";
 		channelDesc = "小米4部(疯狂小游戏)";
 	}
-	else if(userwrap.Obj().register_platform == PT_Mi2)
+	else if (userwrap.Obj().register_platform == PT_Mi2)
 	{
 		channel = "xiaomi2";
 		channelDesc = "小米2部";
 	}
-	else if(userwrap.Obj().register_platform == PT_VIVO)
+	else if (userwrap.Obj().register_platform == PT_VIVO)
 	{
 		channel = "vivo";
 		channelDesc = "vivo快游戏";
 	}
-	else if(userwrap.Obj().register_platform == PT_OPPO)
+	else if (userwrap.Obj().register_platform == PT_OPPO)
 	{
 		channel = "oppo";
 		channelDesc = "oppo快游戏";
@@ -98,15 +97,14 @@ void LogicXsgReportManager::SetBaseParam(unsigned uid,string openid,T &base)
 	base.gender = "";
 	base.deviceId = openid;
 	base.channelDesc = channelDesc;
-
 }
 
-void LogicXsgReportManager::XSGLoginReport(unsigned uid,const string openid)
+void LogicXsgReportManager::XSGLoginReport(unsigned uid, const string openid)
 {
 	DBCUserBaseWrap userwrap(uid);
 
-	LoginInfo loginInfo ;
-	SetBaseParam<LoginInfo>(uid,openid,loginInfo);
+	LoginInfo loginInfo;
+	SetBaseParam<LoginInfo>(uid, openid, loginInfo);
 
 	m_dclogger->OnRoleLogin(&loginInfo);
 
@@ -117,21 +115,20 @@ void LogicXsgReportManager::XSGLogOutReport(unsigned uid)
 {
 	string openid = "";
 	LogoutInfo logoutInfo;
-	SetBaseParam<LogoutInfo>(uid,openid,logoutInfo);
+	SetBaseParam<LogoutInfo>(uid, openid, logoutInfo);
 
 	m_dclogger->OnRoleLogout(&logoutInfo);
 
-	map<unsigned,string>::iterator it = user_openid_map.find(uid);
-	if(it != user_openid_map.end())
+	map<unsigned, string>::iterator it = user_openid_map.find(uid);
+	if (it != user_openid_map.end())
 		user_openid_map.erase(it);
-
 }
 
-void LogicXsgReportManager::XSGRechargeReport(unsigned uid,string itemid,unsigned charge,string orderid,string channelOrderId)
+void LogicXsgReportManager::XSGRechargeReport(unsigned uid, string itemid, unsigned charge, string orderid, string channelOrderId)
 {
 	string openid = "";
 	RechargeInfo rechargeInfo;
-	SetBaseParam<RechargeInfo>(uid,openid,rechargeInfo);
+	SetBaseParam<RechargeInfo>(uid, openid, rechargeInfo);
 
 	rechargeInfo.currency = "CNY";
 	rechargeInfo.money = charge;
@@ -142,23 +139,22 @@ void LogicXsgReportManager::XSGRechargeReport(unsigned uid,string itemid,unsigne
 	m_dclogger->OnRoleRecharge(&rechargeInfo);
 }
 
-void LogicXsgReportManager::XSGRechargeGetDiamondReport(unsigned uid,unsigned cash,unsigned total)
+void LogicXsgReportManager::XSGRechargeGetDiamondReport(unsigned uid, unsigned cash, unsigned total)
 {
 	string openid = "";
 	TokenPurchaseInfo tokenPurchaseInfo;
-	SetBaseParam<TokenPurchaseInfo>(uid,openid,tokenPurchaseInfo);
+	SetBaseParam<TokenPurchaseInfo>(uid, openid, tokenPurchaseInfo);
 
 	tokenPurchaseInfo.gold = cash;
 	tokenPurchaseInfo.virtualCurrencyTotal = total;
 	m_dclogger->OnTokenPurchase(&tokenPurchaseInfo);
-
 }
 
-void LogicXsgReportManager::XSGGetDiamondReport(unsigned uid,string reason,unsigned add,unsigned total,bool isbind)
+void LogicXsgReportManager::XSGGetDiamondReport(unsigned uid, string reason, unsigned add, unsigned total, bool isbind)
 {
 	string openid = "";
 	TokenRewardInfo tokenRewardInfo;
-	SetBaseParam<TokenRewardInfo>(uid,openid,tokenRewardInfo);
+	SetBaseParam<TokenRewardInfo>(uid, openid, tokenRewardInfo);
 
 	tokenRewardInfo.gainChannel = reason;
 	tokenRewardInfo.gold = add;
@@ -168,11 +164,11 @@ void LogicXsgReportManager::XSGGetDiamondReport(unsigned uid,string reason,unsig
 	m_dclogger->OnTokenReward(&tokenRewardInfo);
 }
 
-void LogicXsgReportManager::XSGCostDiamondReport(unsigned uid,unsigned sub,unsigned total,string reason)
+void LogicXsgReportManager::XSGCostDiamondReport(unsigned uid, unsigned sub, unsigned total, string reason)
 {
 	string openid = "";
-	TokenConsumeInfo tokenConsumeInfo ;
-	SetBaseParam<TokenConsumeInfo>(uid,openid,tokenConsumeInfo);
+	TokenConsumeInfo tokenConsumeInfo;
+	SetBaseParam<TokenConsumeInfo>(uid, openid, tokenConsumeInfo);
 
 	tokenConsumeInfo.gold = sub;
 	tokenConsumeInfo.itemType = reason;
@@ -185,11 +181,11 @@ void LogicXsgReportManager::XSGCostDiamondReport(unsigned uid,unsigned sub,unsig
 	m_dclogger->OnTokenConsume(&tokenConsumeInfo);
 }
 
-void LogicXsgReportManager::XSGPurchaseCoinReport(unsigned uid,unsigned purchase_count,unsigned total)
+void LogicXsgReportManager::XSGPurchaseCoinReport(unsigned uid, unsigned purchase_count, unsigned total)
 {
 	string openid = "";
 	VirtualCurrencyPurchaseInfo virtualCurrencyPurchaseInfo;
-	SetBaseParam<VirtualCurrencyPurchaseInfo>(uid,openid,virtualCurrencyPurchaseInfo);
+	SetBaseParam<VirtualCurrencyPurchaseInfo>(uid, openid, virtualCurrencyPurchaseInfo);
 
 	virtualCurrencyPurchaseInfo.gold = purchase_count;
 	virtualCurrencyPurchaseInfo.virtualCurrencyType = "jinbi";
@@ -198,11 +194,11 @@ void LogicXsgReportManager::XSGPurchaseCoinReport(unsigned uid,unsigned purchase
 	m_dclogger->OnVirtualCurrencyPurchase(&virtualCurrencyPurchaseInfo);
 }
 
-void LogicXsgReportManager::XSGGetCoinReport(unsigned uid,unsigned count,unsigned total,string reason)
+void LogicXsgReportManager::XSGGetCoinReport(unsigned uid, unsigned count, unsigned total, string reason)
 {
 	string openid = "";
 	VirtualCurrencyRewardInfo virtualCurrencyRewardInfo;
-	SetBaseParam<VirtualCurrencyRewardInfo>(uid,openid,virtualCurrencyRewardInfo);
+	SetBaseParam<VirtualCurrencyRewardInfo>(uid, openid, virtualCurrencyRewardInfo);
 
 	virtualCurrencyRewardInfo.gainChannel = reason;
 	virtualCurrencyRewardInfo.gainChannelType = reason;
@@ -214,11 +210,11 @@ void LogicXsgReportManager::XSGGetCoinReport(unsigned uid,unsigned count,unsigne
 	m_dclogger->OnVirtualCurrencyReward(&virtualCurrencyRewardInfo);
 }
 
-void LogicXsgReportManager::XSGCostCoinReport(unsigned uid,unsigned sub,unsigned total,string reason)
+void LogicXsgReportManager::XSGCostCoinReport(unsigned uid, unsigned sub, unsigned total, string reason)
 {
 	string openid = "";
 	VirtualCurrencyConsumeInfo virtualCurrencyConsumeInfo;
-	SetBaseParam<VirtualCurrencyConsumeInfo>(uid,openid,virtualCurrencyConsumeInfo);
+	SetBaseParam<VirtualCurrencyConsumeInfo>(uid, openid, virtualCurrencyConsumeInfo);
 
 	virtualCurrencyConsumeInfo.gold = sub;
 	virtualCurrencyConsumeInfo.itemType = reason;
@@ -234,17 +230,17 @@ void LogicXsgReportManager::XSGCostCoinReport(unsigned uid,unsigned sub,unsigned
 void LogicXsgReportManager::XSGLevelUpReport(unsigned uid)
 {
 	string openid = "";
-	RoleLevelUpInfo roleLevelUpInfo ;
-	SetBaseParam<RoleLevelUpInfo>(uid,openid,roleLevelUpInfo);
+	RoleLevelUpInfo roleLevelUpInfo;
+	SetBaseParam<RoleLevelUpInfo>(uid, openid, roleLevelUpInfo);
 
 	m_dclogger->OnRoleLeveUp(&roleLevelUpInfo);
 }
 
-void LogicXsgReportManager::XSGMissionStartReport(unsigned uid,unsigned missionid,unsigned missiontype)
+void LogicXsgReportManager::XSGMissionStartReport(unsigned uid, unsigned missionid, unsigned missiontype)
 {
 	string openid = "";
 	MissionInfo missionInfo;
-	SetBaseParam<MissionInfo>(uid,openid,missionInfo);
+	SetBaseParam<MissionInfo>(uid, openid, missionInfo);
 
 	missionInfo.missionId = CTrans::UTOS(missionid);
 	missionInfo.missionType = CTrans::UTOS(missiontype);
@@ -252,11 +248,11 @@ void LogicXsgReportManager::XSGMissionStartReport(unsigned uid,unsigned missioni
 	m_dclogger->OnMissionBegin(&missionInfo);
 }
 
-void LogicXsgReportManager::XSGMissionEndReport(unsigned uid,unsigned missionid,unsigned missiontype)
+void LogicXsgReportManager::XSGMissionEndReport(unsigned uid, unsigned missionid, unsigned missiontype)
 {
 	string openid = "";
 	MissionInfo missionInfo;
-	SetBaseParam<MissionInfo>(uid,openid,missionInfo);
+	SetBaseParam<MissionInfo>(uid, openid, missionInfo);
 
 	missionInfo.missionId = CTrans::UTOS(missionid);
 	missionInfo.missionType = CTrans::UTOS(missiontype);
@@ -264,11 +260,11 @@ void LogicXsgReportManager::XSGMissionEndReport(unsigned uid,unsigned missionid,
 	m_dclogger->OnMissionSuccess(&missionInfo);
 }
 
-void LogicXsgReportManager::XSGShopTradeReport(unsigned uid,string tradeid,string tradetype,unsigned coin,string coinType,unsigned itemid,unsigned itemnum)
+void LogicXsgReportManager::XSGShopTradeReport(unsigned uid, string tradeid, string tradetype, unsigned coin, string coinType, unsigned itemid, unsigned itemnum)
 {
 	string openid = "";
 	TradeInfo tradeInfo;
-	SetBaseParam<TradeInfo>(uid,openid,tradeInfo);
+	SetBaseParam<TradeInfo>(uid, openid, tradeInfo);
 
 	tradeInfo.tradeId = tradeid;
 	tradeInfo.tradeType = tradetype;
@@ -282,11 +278,11 @@ void LogicXsgReportManager::XSGShopTradeReport(unsigned uid,string tradeid,strin
 	m_dclogger->OnRoleTrade(&tradeInfo);
 }
 
-void LogicXsgReportManager::XSGBuildReport(unsigned uid,unsigned buildtype,unsigned buildid,unsigned buildnum)
+void LogicXsgReportManager::XSGBuildReport(unsigned uid, unsigned buildtype, unsigned buildid, unsigned buildnum)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -298,11 +294,11 @@ void LogicXsgReportManager::XSGBuildReport(unsigned uid,unsigned buildtype,unsig
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGEquipmentReport(unsigned uid,unsigned equipmentId,unsigned itemid,unsigned itemnum)
+void LogicXsgReportManager::XSGEquipmentReport(unsigned uid, unsigned equipmentId, unsigned itemid, unsigned itemnum)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -314,11 +310,11 @@ void LogicXsgReportManager::XSGEquipmentReport(unsigned uid,unsigned equipmentId
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGGetHaverstReport(unsigned uid,unsigned itemtype,unsigned itemid,unsigned itemnum)
+void LogicXsgReportManager::XSGGetHaverstReport(unsigned uid, unsigned itemtype, unsigned itemid, unsigned itemnum)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -330,11 +326,11 @@ void LogicXsgReportManager::XSGGetHaverstReport(unsigned uid,unsigned itemtype,u
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGDestroyBarrierReport(unsigned uid,unsigned item_num,unsigned use_num)
+void LogicXsgReportManager::XSGDestroyBarrierReport(unsigned uid, unsigned item_num, unsigned use_num)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -346,11 +342,11 @@ void LogicXsgReportManager::XSGDestroyBarrierReport(unsigned uid,unsigned item_n
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGFeedAnimalReport(unsigned uid,unsigned animalid,unsigned itemid,unsigned itemnum)
+void LogicXsgReportManager::XSGFeedAnimalReport(unsigned uid, unsigned animalid, unsigned itemid, unsigned itemnum)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -361,17 +357,17 @@ void LogicXsgReportManager::XSGFeedAnimalReport(unsigned uid,unsigned animalid,u
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGStorageUpReport(unsigned uid,unsigned stroageid,unsigned space,string itemid,string itemnum)
+void LogicXsgReportManager::XSGStorageUpReport(unsigned uid, unsigned stroageid, unsigned space, string itemid, string itemnum)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
-	if(stroageid == 100)
+	if (stroageid == 100)
 		customEventInfo.ext["type"] = "action_grainup";
-	else if(stroageid == 200)
+	else if (stroageid == 200)
 		customEventInfo.ext["type"] = "action_stockup";
 	customEventInfo.ext["contain"] = CTrans::UTOS(space);
 	customEventInfo.ext["item"] = itemid;
@@ -379,15 +375,15 @@ void LogicXsgReportManager::XSGStorageUpReport(unsigned uid,unsigned stroageid,u
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGItemChangeReport(unsigned uid,int flag,unsigned itemid,unsigned itemnum,string reason)
+void LogicXsgReportManager::XSGItemChangeReport(unsigned uid, int flag, unsigned itemid, unsigned itemnum, string reason)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
-	if(flag > 0)
+	if (flag > 0)
 		customEventInfo.ext["type"] = "action_itemget";
 	else
 		customEventInfo.ext["type"] = "action_itemuse";
@@ -398,11 +394,11 @@ void LogicXsgReportManager::XSGItemChangeReport(unsigned uid,int flag,unsigned i
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGShopShelfItemReport(unsigned uid,unsigned itemid,unsigned itemnum,unsigned price)
+void LogicXsgReportManager::XSGShopShelfItemReport(unsigned uid, unsigned itemid, unsigned itemnum, unsigned price)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -414,11 +410,11 @@ void LogicXsgReportManager::XSGShopShelfItemReport(unsigned uid,unsigned itemid,
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
 
-void LogicXsgReportManager::XSGRotaryDrawReport(unsigned uid,unsigned itemid,unsigned itemnum)
+void LogicXsgReportManager::XSGRotaryDrawReport(unsigned uid, unsigned itemid, unsigned itemnum)
 {
 	string openid = "";
 	CustomEventInfo customEventInfo;
-	SetBaseParam<CustomEventInfo>(uid,openid,customEventInfo);
+	SetBaseParam<CustomEventInfo>(uid, openid, customEventInfo);
 
 	customEventInfo.eventId = "action_log";
 	customEventInfo.eventDesc = "个性化行为表";
@@ -428,5 +424,3 @@ void LogicXsgReportManager::XSGRotaryDrawReport(unsigned uid,unsigned itemid,uns
 	customEventInfo.ext["item_num"] = CTrans::UTOS(itemnum);
 	m_dclogger->OnCustomEvent(&customEventInfo);
 }
-
-

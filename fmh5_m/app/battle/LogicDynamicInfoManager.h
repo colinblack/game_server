@@ -10,10 +10,10 @@
 
 struct DynamicInfoAttach
 {
-	uint32_t op_uid;		//对方玩家uid
-	uint32_t product_id;	//卖出的商品id
-	uint32_t coin;			//卖出商品收获的金币
-	string   words;			//对方回复留言的内容
+	uint32_t op_uid;	 //对方玩家uid
+	uint32_t product_id; //卖出的商品id
+	uint32_t coin;		 //卖出商品收获的金币
+	string words;		 //对方回复留言的内容
 
 	DynamicInfoAttach()
 	{
@@ -23,23 +23,23 @@ struct DynamicInfoAttach
 	}
 };
 
-class  LogicDynamicInfoManager : public BattleSingleton, public CSingleton<LogicDynamicInfoManager>
+class LogicDynamicInfoManager : public BattleSingleton, public CSingleton<LogicDynamicInfoManager>
 {
 private:
 	friend class CSingleton<LogicDynamicInfoManager>;
 	LogicDynamicInfoManager() {}
 
 public:
-	virtual void CallDestroy() { Destroy();}
+	virtual void CallDestroy() { Destroy(); }
 
 	//前端主动获取动态消息 同服
-	int Process(unsigned uid, ProtoDynamicInfo::GetDynamicInfoReq *reqmsg, ProtoDynamicInfo::GetDynamicInfoResp * respmsg);
+	int Process(unsigned uid, ProtoDynamicInfo::GetDynamicInfoReq *reqmsg, ProtoDynamicInfo::GetDynamicInfoResp *respmsg);
 
 	//前端请求删除动态消息 同服
 	int Process(unsigned uid, ProtoDynamicInfo::DeleteDynamicInfoReq *reqmsg);
 
 	//前端请求更新有动态状态 同服
-	int Process(unsigned uid, ProtoDynamicInfo::HasNewDynamicInfoReq *reqmsg, ProtoDynamicInfo::HasNewDynamicInfoResp * respmsg);
+	int Process(unsigned uid, ProtoDynamicInfo::HasNewDynamicInfoReq *reqmsg, ProtoDynamicInfo::HasNewDynamicInfoResp *respmsg);
 
 	//跨服访问好友产生动态 跨服
 	int Process(ProtoDynamicInfo::RequestOtherUserMakeDy *msg);
@@ -48,16 +48,16 @@ public:
 	bool NotifyNewDy2Client(unsigned uid);
 
 	//产生动态消息统一接口
-	bool ProduceOneDyInfo(unsigned uid, unsigned type_id, DynamicInfoAttach *pattach = new DynamicInfoAttach);
+	bool ProduceOneDyInfo(unsigned uid, unsigned type_id, DynamicInfoAttach *pattach = CreateObj<DynamicInfoAttach>());
 
 	//获取动态条数
-	int GetDyInfo(unsigned uid,DyInfoItem dyItem[],unsigned max_count);
+	int GetDyInfo(unsigned uid, DyInfoItem dyItem[], unsigned max_count);
 
 	//设置动态返回信息
-	bool SetDyRespMsg(unsigned uid,const DyInfoItem& adItem,ProtoDynamicInfo::DynamicInfo *msg);
+	bool SetDyRespMsg(unsigned uid, const DyInfoItem &adItem, ProtoDynamicInfo::DynamicInfo *msg);
 
 	//更新玩家下线时间
-	bool UpdateOffLine(unsigned uid,unsigned offtime);
+	bool UpdateOffLine(unsigned uid, unsigned offtime);
 
 	//内网调试时测试淘汰策略
 	bool CheckClearDemo();
@@ -66,15 +66,13 @@ public:
 	bool CheckClearDyInfo();
 
 	//将置顶动态消息降级为普通消息
-	bool Degrade2Normal(unsigned uid,unsigned dyidx);
+	bool Degrade2Normal(unsigned uid, unsigned dyidx);
 
-	int Process(unsigned uid,ProtoDynamicInfo::ClickOrderHelpReq *reqmsg,ProtoDynamicInfo::ClickOrderHelpResp *respmsg);
+	int Process(unsigned uid, ProtoDynamicInfo::ClickOrderHelpReq *reqmsg, ProtoDynamicInfo::ClickOrderHelpResp *respmsg);
 
 private:
-
 	//给玩家增加一条动态
-	bool AddOneDyInShm(unsigned uid,DyInfoItem & dyitem);
+	bool AddOneDyInShm(unsigned uid, DyInfoItem &dyitem);
 };
-
 
 #endif

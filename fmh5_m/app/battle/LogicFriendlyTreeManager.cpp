@@ -50,7 +50,7 @@ int LogicFriendlyTreeManager::Process(unsigned uid, ProtoFriendlyTree::WaterFrie
 	unsigned user_level = userwrap.Obj().level;
 	if(user_level < unlock_level)
 	{
-		ProtoFriendlyTree::WaterFriendlyTreeResp* resp = new ProtoFriendlyTree::WaterFriendlyTreeResp;
+		ProtoFriendlyTree::WaterFriendlyTreeResp* resp = CreateObj<ProtoFriendlyTree::WaterFriendlyTreeResp>() ;
 		resp->set_code(water_code_level_error);
 		return LMI->sendMsg(uid,resp)?0:R_ERROR;
 	}
@@ -60,7 +60,7 @@ int LogicFriendlyTreeManager::Process(unsigned uid, ProtoFriendlyTree::WaterFrie
 	unsigned friendly_value = userwrap.Obj().friendly_value;
 	if(friendly_value >= friendly_value_max)
 	{
-		ProtoFriendlyTree::WaterFriendlyTreeResp* resp = new ProtoFriendlyTree::WaterFriendlyTreeResp;
+		ProtoFriendlyTree::WaterFriendlyTreeResp* resp = CreateObj<ProtoFriendlyTree::WaterFriendlyTreeResp>() ;
 		resp->set_code(water_code_friendly_max_error);
 		return LMI->sendMsg(uid,resp)?0:R_ERROR;
 	}
@@ -70,7 +70,7 @@ int LogicFriendlyTreeManager::Process(unsigned uid, ProtoFriendlyTree::WaterFrie
 	if(CMI->IsNeedConnectByUID(othuid))
 	{
 
-		ProtoFriendlyTree::CSWaterFriendlyTreeReq* m = new ProtoFriendlyTree::CSWaterFriendlyTreeReq;
+		ProtoFriendlyTree::CSWaterFriendlyTreeReq* m = CreateObj<ProtoFriendlyTree::CSWaterFriendlyTreeReq>() ;
 		m->set_othuid(othuid);
 		m->set_myuid(uid);
 		m->set_myname(userwrap.Obj().name);
@@ -80,7 +80,7 @@ int LogicFriendlyTreeManager::Process(unsigned uid, ProtoFriendlyTree::WaterFrie
 		return ret;
 	}
 
-	ProtoFriendlyTree::WaterFriendlyTreeResp* resp = new ProtoFriendlyTree::WaterFriendlyTreeResp;
+	ProtoFriendlyTree::WaterFriendlyTreeResp* resp = CreateObj<ProtoFriendlyTree::WaterFriendlyTreeResp>() ;
 	try{
 		WaterTree(uid, othuid, resp);
 		AddWaterDyInfo(uid,othuid);				//同服浇水增加一条动态
@@ -107,7 +107,7 @@ int LogicFriendlyTreeManager::Process(ProtoFriendlyTree::CSWaterFriendlyTreeReq*
 	const ConfigFriendlyTree::FriendlyTreeCPP & treecfg = ConfigManager::Instance()->friendlytree.m_config.friendlytree();
 
 	//消息构造返回
-	ProtoFriendlyTree::CSWaterFriendlyTreeResp* resp = new ProtoFriendlyTree::CSWaterFriendlyTreeResp;
+	ProtoFriendlyTree::CSWaterFriendlyTreeResp* resp = CreateObj<ProtoFriendlyTree::CSWaterFriendlyTreeResp>() ;
 
 	//获取友情树状态数据
 	DataGameActivity& activity = DataGameActivityManager::Instance()->GetUserActivity(othuid, actid);
@@ -183,7 +183,7 @@ int LogicFriendlyTreeManager::Process(ProtoFriendlyTree::CSWaterFriendlyTreeReq*
 
 int LogicFriendlyTreeManager::Process(ProtoFriendlyTree::CSWaterFriendlyTreeResp* req)
 {
-	ProtoFriendlyTree::WaterFriendlyTreeResp *resp = new ProtoFriendlyTree::WaterFriendlyTreeResp;
+	ProtoFriendlyTree::WaterFriendlyTreeResp *resp = CreateObj<ProtoFriendlyTree::WaterFriendlyTreeResp>() ;
 	unsigned uid = req->myuid();
 
 	//判定是否执行成功
@@ -305,7 +305,7 @@ int LogicFriendlyTreeManager::PushMessage(unsigned uid)
 	if(!UserManager::Instance()->IsOnline(uid))
 		return 0;
 
-	ProtoFriendlyTree::PushFriendlyTreeMsg *msg = new ProtoFriendlyTree::PushFriendlyTreeMsg;
+	ProtoFriendlyTree::PushFriendlyTreeMsg *msg = CreateObj<ProtoFriendlyTree::PushFriendlyTreeMsg>() ;
 
 	vector<unsigned>results;
 	DataFriendlyTreeManager::Instance()->GetIndexs(uid,results);
@@ -434,7 +434,7 @@ unsigned LogicFriendlyTreeManager::GetWaterTS(unsigned uid,unsigned othuid)
 bool LogicFriendlyTreeManager::AddWaterDyInfo(unsigned uid,unsigned other_uid)
 {
 	//uid:访问者,other_uid:被访问者,访问好友庄园给好友浇水会让被访问者增加一条帮助浇水的动态
-	DynamicInfoAttach *pattach = new DynamicInfoAttach;
+	DynamicInfoAttach *pattach = CreateObj<DynamicInfoAttach>() ;
 	pattach->op_uid = uid;
 	if(LogicDynamicInfoManager::Instance()->ProduceOneDyInfo(other_uid,TYPE_DY_WATER,pattach))
 	{
@@ -445,7 +445,7 @@ bool LogicFriendlyTreeManager::AddWaterDyInfo(unsigned uid,unsigned other_uid)
 
 bool LogicFriendlyTreeManager::AddWaterDyInfoOverServer(unsigned uid,unsigned other_uid)
 {
-	ProtoDynamicInfo::RequestOtherUserMakeDy * msg = new ProtoDynamicInfo::RequestOtherUserMakeDy;
+	ProtoDynamicInfo::RequestOtherUserMakeDy * msg = CreateObj<ProtoDynamicInfo::RequestOtherUserMakeDy>() ;
 	string ret;
 	msg->set_myuid(uid);
 	msg->set_othuid(other_uid);

@@ -16,30 +16,28 @@ template <class T>
 class CSingleton
 {
 public:
-    static T* Instance (void);
-    static void Destroy (void);
+    static T *Instance(void);
+    static void Destroy(void);
 
 protected:
-    CSingleton (void){}
-    CSingleton (const CSingleton&){}
-    CSingleton& operator= (const CSingleton&){}
+    CSingleton(void) {}
+    CSingleton(const CSingleton &) {}
+    CSingleton &operator=(const CSingleton &) {}
 
-private: 
-    static T*       _instance;
-    static CBaseMutex   _mutex;
+private:
+    static T *_instance;
+    static CBaseMutex _mutex;
 };
-
 
 //implement
 template <class T>
 CBaseMutex CSingleton<T>::_mutex;
 
 template <class T>
-T* CSingleton<T>::_instance = 0;
-
+T *CSingleton<T>::_instance = 0;
 
 template <class T>
-T* CSingleton<T>::Instance (void)
+T *CSingleton<T>::Instance(void)
 {
     if (0 == _instance)
     {
@@ -55,19 +53,62 @@ T* CSingleton<T>::Instance (void)
 }
 
 template <class T>
-void CSingleton<T>::Destroy (void)
+void CSingleton<T>::Destroy(void)
 {
-	if(0 != _instance)
-	{
-		CScopedLock guard(_mutex);
-		if(0 != _instance)
-		{
-			delete _instance;
-			_instance = 0;
-		}
-	}
+    if (0 != _instance)
+    {
+        CScopedLock guard(_mutex);
+        if (0 != _instance)
+        {
+            delete _instance;
+            _instance = 0;
+        }
+    }
 
-	return;
+    return;
 }
+
+//饿汉模式
+template <class T>
+class CHSingleton
+{
+protected:
+    CHSingleton()
+    {
+        _destory.init();
+    }
+
+    ~CHSingleton()
+    {
+    }
+
+public:
+    static T *Instance() { return _instance; }
+    class CDestory
+    {
+    public:
+        CDestory()
+        {
+            std::cout << "CDestory" << std::endl;
+        }
+        ~CDestory()
+        {
+            std::cout << "~CDestory" << std::endl;
+            delete CHSingleton::_instance;
+            CHSingleton::_instance = nullptr;
+        }
+        static void init() {}
+    };
+
+private:
+    thread_local static T *_instance;
+    static CDestory _destory;
+};
+
+template <class T>
+thread_local T *CHSingleton<T>::_instance = new T;
+
+template <class T>
+typename CHSingleton<T>::CDestory CHSingleton<T>::_destory;
 
 #endif //__SINGLETON_H__

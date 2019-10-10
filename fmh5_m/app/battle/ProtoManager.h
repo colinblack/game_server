@@ -20,17 +20,17 @@
 class ProtoManager
 {
 public:
-	static int DisCardMessage(Message* message);
+	static int DisCardMessage(Message *message);
 	static CurCMD m_CurCMD;
-	static int ProcessLogin(Common::Login* msg);
+	static int ProcessLogin(Common::Login *msg);
 
 	/**************通用模版**********/
 	//new出回包，自动删除
-	template<class T, class G, class H>
-	static int Process(T* msg)
+	template <class T, class G, class H>
+	static int Process(T *msg)
 	{
 		int ret = 0;
-		G* resp = new G;
+		G *resp = CreateObj<G>();
 		try
 		{
 			ret = H::Instance()->Process(LogicManager::Instance()->Getuid(), msg, resp);
@@ -38,9 +38,8 @@ public:
 				delete resp;
 			else
 				LogicManager::Instance()->SetReplyProtocol(resp);
-
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			delete resp;
 			LogicManager::Instance()->SetErrMsg(e.what());
@@ -51,22 +50,21 @@ public:
 	}
 
 	//不new回包，不删除
-	template<class T, class G, class H>
-	static int ProcessNoNew(T* msg)
+	template <class T, class G, class H>
+	static int ProcessNoNew(T *msg)
 	{
 		int ret = 0;
-		G* resp = NULL;
+		G *resp = NULL;
 		try
 		{
 			ret = H::Instance()->Process(LogicManager::Instance()->Getuid(), msg, resp);
-			if(ret == 0)
+			if (ret == 0)
 			{
 				LogicManager::Instance()->SetReplyProtocol(resp);
 				LogicManager::Instance()->SetNeedDelReply();
 			}
-
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			LogicManager::Instance()->SetErrMsg(e.what());
 			return R_ERROR;
@@ -76,15 +74,15 @@ public:
 	}
 
 	//无回包
-	template<class T, class H>
-	static int ProcessNoReply(T* msg)
+	template <class T, class H>
+	static int ProcessNoReply(T *msg)
 	{
 		int ret = 0;
 		try
 		{
 			ret = H::Instance()->Process(LogicManager::Instance()->Getuid(), msg);
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			LogicManager::Instance()->SetErrMsg(e.what());
 			return R_ERROR;
@@ -94,11 +92,11 @@ public:
 	}
 
 	//new出回包，自动删除，支付或者gm发来的无uid的包
-	template<class T, class G, class H>
-	static int ProcessNoUID(T* msg)
+	template <class T, class G, class H>
+	static int ProcessNoUID(T *msg)
 	{
 		int ret = 0;
-		G* resp = new G;
+		G *resp = CreateObj<G>();
 		try
 		{
 			ret = H::Instance()->Process(msg, resp);
@@ -106,9 +104,8 @@ public:
 				delete resp;
 			else
 				LogicManager::Instance()->SetReplyProtocol(resp);
-
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			delete resp;
 			LogicManager::Instance()->SetErrMsg(e.what());
@@ -119,15 +116,15 @@ public:
 	}
 
 	//无回包，支付或者gm发来的无uid的包
-	template<class T, class H>
-	static int ProcessNoReplyNoUID(T* msg)
+	template <class T, class H>
+	static int ProcessNoReplyNoUID(T *msg)
 	{
 		int ret = 0;
 		try
 		{
 			ret = H::Instance()->Process(msg);
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			LogicManager::Instance()->SetErrMsg(e.what());
 			return R_ERROR;
@@ -181,15 +178,15 @@ public:
 	*/
 
 	//指定serverid的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
-	static int BattleConnectNoReply(unsigned serverid, Message* msg, bool d = true)
+	static int BattleConnectNoReply(unsigned serverid, Message *msg, bool d = true)
 	{
 		try
 		{
-			CFirePacket* packet = new CFirePacket(PROTOCOL_EVENT_BATTLE_CONNECT, d);
+			CFirePacket *packet = CreateObj<CFirePacket>(PROTOCOL_EVENT_BATTLE_CONNECT, d);
 			packet->m_msg = msg;
 			BattleConnect::AddSend(serverid, packet);
 		}
-		catch(const std::exception& e)
+		catch (const std::exception &e)
 		{
 			error_log("BattleConnect error %s", e.what());
 			return R_ERROR;
@@ -211,21 +208,20 @@ public:
 	}
 	*/
 	//指定uid的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
-	static int BattleConnectNoReplyByUID(unsigned uid, Message* msg, bool d = true)
+	static int BattleConnectNoReplyByUID(unsigned uid, Message *msg, bool d = true)
 	{
 		return BattleConnectNoReply(Config::GetZoneByUID(uid), msg, d);
 	}
 	//指定aid的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
-	static int BattleConnectNoReplyByAID(unsigned aid, Message* msg, bool d = true)
+	static int BattleConnectNoReplyByAID(unsigned aid, Message *msg, bool d = true)
 	{
 		return BattleConnectNoReply(Config::GetZoneByAID(aid), msg, d);
 	}
 	//指定zoneId的battle之间的无回复跨服请求，对方的消息注册应该使用 ProcessNoReplyNoUID
-	static int BattleConnectNoReplyByZoneID(unsigned zoneId, Message* msg, bool d = true)
+	static int BattleConnectNoReplyByZoneID(unsigned zoneId, Message *msg, bool d = true)
 	{
 		return BattleConnectNoReply(zoneId, msg, d);
 	}
 };
-
 
 #endif /* PROTOMANAGER_H_ */

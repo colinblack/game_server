@@ -49,6 +49,8 @@
 #define LIFE_CARD_ID 10 //终生卡
 
 
+#define MEM_POOL_SIZE (1024 * 16) //内存池每块大小
+
 //延迟下线时间(秒)
 #define OFFLINE_DELAY 60
 #define TUTOR_MAX 55555
