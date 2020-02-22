@@ -1,2 +1,0 @@
-#!/bin/sh
-exec x86_64-redhat-linux-gcc-8 -m32 "$@"

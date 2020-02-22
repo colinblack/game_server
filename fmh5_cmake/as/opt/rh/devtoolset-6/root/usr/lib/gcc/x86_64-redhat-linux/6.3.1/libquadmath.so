@@ -1,3 +1,0 @@
-/* GNU ld script */
-OUTPUT_FORMAT(elf64-x86-64)
-INPUT ( /usr/lib64/libquadmath.so.0 )

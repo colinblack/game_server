@@ -1,3 +1,0 @@
-/* GNU ld script */
-OUTPUT_FORMAT(elf32-i386)
-INPUT ( /opt/rh/devtoolset-8/root/usr/lib/libgccjit.so.0 )
