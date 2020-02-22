@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_SOURCE_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_BINARY_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles /data/colin/game_server/fmh5_cmake/app/CMakeFiles/progress.marks
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles/progress.marks
+	$(MAKE) -f CMakeFiles/Makefile2 all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/clean
+	$(MAKE) -f CMakeFiles/Makefile2 clean
 .PHONY : clean
 
 # The main clean target
@@ -97,18 +97,109 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/preinstall
+	$(MAKE) -f CMakeFiles/Makefile2 preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/preinstall
+	$(MAKE) -f CMakeFiles/Makefile2 preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named sg17battle
+
+# Build rule for target.
+sg17battle: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sg17battle
+.PHONY : sg17battle
+
+# fast build rule for target.
+sg17battle/fast:
+	$(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/build
+.PHONY : sg17battle/fast
+
+#=============================================================================
+# Target rules for targets named sg17common
+
+# Build rule for target.
+sg17common: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sg17common
+.PHONY : sg17common
+
+# fast build rule for target.
+sg17common/fast:
+	$(MAKE) -f common/CMakeFiles/sg17common.dir/build.make common/CMakeFiles/sg17common.dir/build
+.PHONY : sg17common/fast
+
+#=============================================================================
+# Target rules for targets named sg17config
+
+# Build rule for target.
+sg17config: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sg17config
+.PHONY : sg17config
+
+# fast build rule for target.
+sg17config/fast:
+	$(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/build
+.PHONY : sg17config/fast
+
+#=============================================================================
+# Target rules for targets named sg17data
+
+# Build rule for target.
+sg17data: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sg17data
+.PHONY : sg17data
+
+# fast build rule for target.
+sg17data/fast:
+	$(MAKE) -f data/CMakeFiles/sg17data.dir/build.make data/CMakeFiles/sg17data.dir/build
+.PHONY : sg17data/fast
+
+#=============================================================================
+# Target rules for targets named sg17kernel
+
+# Build rule for target.
+sg17kernel: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sg17kernel
+.PHONY : sg17kernel
+
+# fast build rule for target.
+sg17kernel/fast:
+	$(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/build
+.PHONY : sg17kernel/fast
+
+#=============================================================================
+# Target rules for targets named battled
+
+# Build rule for target.
+battled: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 battled
+.PHONY : battled
+
+# fast build rule for target.
+battled/fast:
+	$(MAKE) -f main/CMakeFiles/battled.dir/build.make main/CMakeFiles/battled.dir/build
+.PHONY : battled/fast
+
+#=============================================================================
+# Target rules for targets named sg17pb
+
+# Build rule for target.
+sg17pb: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sg17pb
+.PHONY : sg17pb
+
+# fast build rule for target.
+sg17pb/fast:
+	$(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/build
+.PHONY : sg17pb/fast
 
 # Help Target
 help:
@@ -118,6 +209,13 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... sg17battle"
+	@echo "... sg17common"
+	@echo "... sg17config"
+	@echo "... sg17data"
+	@echo "... sg17kernel"
+	@echo "... battled"
+	@echo "... sg17pb"
 .PHONY : help
 
 
@@ -129,6 +227,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

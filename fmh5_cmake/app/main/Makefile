@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_SOURCE_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_BINARY_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles /data/colin/game_server/fmh5_cmake/app/main/CMakeFiles/progress.marks
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/main/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles /home/cp/data/game_server/fmh5_cmake/app/main/CMakeFiles/progress.marks
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 main/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/main/clean
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 main/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,32 +97,32 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/main/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 main/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/main/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 main/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-app/main/CMakeFiles/battled.dir/rule:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/main/CMakeFiles/battled.dir/rule
-.PHONY : app/main/CMakeFiles/battled.dir/rule
+main/CMakeFiles/battled.dir/rule:
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 main/CMakeFiles/battled.dir/rule
+.PHONY : main/CMakeFiles/battled.dir/rule
 
 # Convenience name for target.
-battled: app/main/CMakeFiles/battled.dir/rule
+battled: main/CMakeFiles/battled.dir/rule
 
 .PHONY : battled
 
 # fast build rule for target.
 battled/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/main/CMakeFiles/battled.dir/build.make app/main/CMakeFiles/battled.dir/build
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f main/CMakeFiles/battled.dir/build.make main/CMakeFiles/battled.dir/build
 .PHONY : battled/fast
 
 battled.o: battled.cpp.o
@@ -131,7 +131,7 @@ battled.o: battled.cpp.o
 
 # target to build an object file
 battled.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/main/CMakeFiles/battled.dir/build.make app/main/CMakeFiles/battled.dir/battled.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f main/CMakeFiles/battled.dir/build.make main/CMakeFiles/battled.dir/battled.cpp.o
 .PHONY : battled.cpp.o
 
 battled.i: battled.cpp.i
@@ -140,7 +140,7 @@ battled.i: battled.cpp.i
 
 # target to preprocess a source file
 battled.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/main/CMakeFiles/battled.dir/build.make app/main/CMakeFiles/battled.dir/battled.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f main/CMakeFiles/battled.dir/build.make main/CMakeFiles/battled.dir/battled.cpp.i
 .PHONY : battled.cpp.i
 
 battled.s: battled.cpp.s
@@ -149,7 +149,7 @@ battled.s: battled.cpp.s
 
 # target to generate assembly for a file
 battled.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/main/CMakeFiles/battled.dir/build.make app/main/CMakeFiles/battled.dir/battled.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f main/CMakeFiles/battled.dir/build.make main/CMakeFiles/battled.dir/battled.cpp.s
 .PHONY : battled.cpp.s
 
 # Help Target
@@ -175,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

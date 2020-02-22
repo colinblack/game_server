@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_SOURCE_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_BINARY_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles /data/colin/game_server/fmh5_cmake/app/kernel/CMakeFiles/progress.marks
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/kernel/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles /home/cp/data/game_server/fmh5_cmake/app/kernel/CMakeFiles/progress.marks
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 kernel/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/kernel/clean
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 kernel/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,32 +97,32 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/kernel/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 kernel/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/kernel/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 kernel/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-app/kernel/CMakeFiles/sg17kernel.dir/rule:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/kernel/CMakeFiles/sg17kernel.dir/rule
-.PHONY : app/kernel/CMakeFiles/sg17kernel.dir/rule
+kernel/CMakeFiles/sg17kernel.dir/rule:
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 kernel/CMakeFiles/sg17kernel.dir/rule
+.PHONY : kernel/CMakeFiles/sg17kernel.dir/rule
 
 # Convenience name for target.
-sg17kernel: app/kernel/CMakeFiles/sg17kernel.dir/rule
+sg17kernel: kernel/CMakeFiles/sg17kernel.dir/rule
 
 .PHONY : sg17kernel
 
 # fast build rule for target.
 sg17kernel/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/build
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/build
 .PHONY : sg17kernel/fast
 
 BattleConnect.o: BattleConnect.cpp.o
@@ -131,7 +131,7 @@ BattleConnect.o: BattleConnect.cpp.o
 
 # target to build an object file
 BattleConnect.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/BattleConnect.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/BattleConnect.cpp.o
 .PHONY : BattleConnect.cpp.o
 
 BattleConnect.i: BattleConnect.cpp.i
@@ -140,7 +140,7 @@ BattleConnect.i: BattleConnect.cpp.i
 
 # target to preprocess a source file
 BattleConnect.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/BattleConnect.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/BattleConnect.cpp.i
 .PHONY : BattleConnect.cpp.i
 
 BattleConnect.s: BattleConnect.cpp.s
@@ -149,7 +149,7 @@ BattleConnect.s: BattleConnect.cpp.s
 
 # target to generate assembly for a file
 BattleConnect.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/BattleConnect.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/BattleConnect.cpp.s
 .PHONY : BattleConnect.cpp.s
 
 BusinessLog.o: BusinessLog.cpp.o
@@ -158,7 +158,7 @@ BusinessLog.o: BusinessLog.cpp.o
 
 # target to build an object file
 BusinessLog.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/BusinessLog.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/BusinessLog.cpp.o
 .PHONY : BusinessLog.cpp.o
 
 BusinessLog.i: BusinessLog.cpp.i
@@ -167,7 +167,7 @@ BusinessLog.i: BusinessLog.cpp.i
 
 # target to preprocess a source file
 BusinessLog.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/BusinessLog.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/BusinessLog.cpp.i
 .PHONY : BusinessLog.cpp.i
 
 BusinessLog.s: BusinessLog.cpp.s
@@ -176,7 +176,7 @@ BusinessLog.s: BusinessLog.cpp.s
 
 # target to generate assembly for a file
 BusinessLog.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/BusinessLog.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/BusinessLog.cpp.s
 .PHONY : BusinessLog.cpp.s
 
 ConfigManager.o: ConfigManager.cpp.o
@@ -185,7 +185,7 @@ ConfigManager.o: ConfigManager.cpp.o
 
 # target to build an object file
 ConfigManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ConfigManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ConfigManager.cpp.o
 .PHONY : ConfigManager.cpp.o
 
 ConfigManager.i: ConfigManager.cpp.i
@@ -194,7 +194,7 @@ ConfigManager.i: ConfigManager.cpp.i
 
 # target to preprocess a source file
 ConfigManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ConfigManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ConfigManager.cpp.i
 .PHONY : ConfigManager.cpp.i
 
 ConfigManager.s: ConfigManager.cpp.s
@@ -203,7 +203,7 @@ ConfigManager.s: ConfigManager.cpp.s
 
 # target to generate assembly for a file
 ConfigManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ConfigManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ConfigManager.cpp.s
 .PHONY : ConfigManager.cpp.s
 
 ConfigPB.o: ConfigPB.cpp.o
@@ -212,7 +212,7 @@ ConfigPB.o: ConfigPB.cpp.o
 
 # target to build an object file
 ConfigPB.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ConfigPB.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ConfigPB.cpp.o
 .PHONY : ConfigPB.cpp.o
 
 ConfigPB.i: ConfigPB.cpp.i
@@ -221,7 +221,7 @@ ConfigPB.i: ConfigPB.cpp.i
 
 # target to preprocess a source file
 ConfigPB.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ConfigPB.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ConfigPB.cpp.i
 .PHONY : ConfigPB.cpp.i
 
 ConfigPB.s: ConfigPB.cpp.s
@@ -230,7 +230,7 @@ ConfigPB.s: ConfigPB.cpp.s
 
 # target to generate assembly for a file
 ConfigPB.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ConfigPB.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ConfigPB.cpp.s
 .PHONY : ConfigPB.cpp.s
 
 DataBaseDBC.o: DataBaseDBC.cpp.o
@@ -239,7 +239,7 @@ DataBaseDBC.o: DataBaseDBC.cpp.o
 
 # target to build an object file
 DataBaseDBC.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataBaseDBC.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataBaseDBC.cpp.o
 .PHONY : DataBaseDBC.cpp.o
 
 DataBaseDBC.i: DataBaseDBC.cpp.i
@@ -248,7 +248,7 @@ DataBaseDBC.i: DataBaseDBC.cpp.i
 
 # target to preprocess a source file
 DataBaseDBC.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataBaseDBC.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataBaseDBC.cpp.i
 .PHONY : DataBaseDBC.cpp.i
 
 DataBaseDBC.s: DataBaseDBC.cpp.s
@@ -257,7 +257,7 @@ DataBaseDBC.s: DataBaseDBC.cpp.s
 
 # target to generate assembly for a file
 DataBaseDBC.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataBaseDBC.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataBaseDBC.cpp.s
 .PHONY : DataBaseDBC.cpp.s
 
 DataLog.o: DataLog.cpp.o
@@ -266,7 +266,7 @@ DataLog.o: DataLog.cpp.o
 
 # target to build an object file
 DataLog.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataLog.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataLog.cpp.o
 .PHONY : DataLog.cpp.o
 
 DataLog.i: DataLog.cpp.i
@@ -275,7 +275,7 @@ DataLog.i: DataLog.cpp.i
 
 # target to preprocess a source file
 DataLog.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataLog.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataLog.cpp.i
 .PHONY : DataLog.cpp.i
 
 DataLog.s: DataLog.cpp.s
@@ -284,7 +284,7 @@ DataLog.s: DataLog.cpp.s
 
 # target to generate assembly for a file
 DataLog.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataLog.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataLog.cpp.s
 .PHONY : DataLog.cpp.s
 
 DataSingleton.o: DataSingleton.cpp.o
@@ -293,7 +293,7 @@ DataSingleton.o: DataSingleton.cpp.o
 
 # target to build an object file
 DataSingleton.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataSingleton.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataSingleton.cpp.o
 .PHONY : DataSingleton.cpp.o
 
 DataSingleton.i: DataSingleton.cpp.i
@@ -302,7 +302,7 @@ DataSingleton.i: DataSingleton.cpp.i
 
 # target to preprocess a source file
 DataSingleton.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataSingleton.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataSingleton.cpp.i
 .PHONY : DataSingleton.cpp.i
 
 DataSingleton.s: DataSingleton.cpp.s
@@ -311,7 +311,7 @@ DataSingleton.s: DataSingleton.cpp.s
 
 # target to generate assembly for a file
 DataSingleton.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/DataSingleton.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/DataSingleton.cpp.s
 .PHONY : DataSingleton.cpp.s
 
 ErrorUtil.o: ErrorUtil.cpp.o
@@ -320,7 +320,7 @@ ErrorUtil.o: ErrorUtil.cpp.o
 
 # target to build an object file
 ErrorUtil.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ErrorUtil.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ErrorUtil.cpp.o
 .PHONY : ErrorUtil.cpp.o
 
 ErrorUtil.i: ErrorUtil.cpp.i
@@ -329,7 +329,7 @@ ErrorUtil.i: ErrorUtil.cpp.i
 
 # target to preprocess a source file
 ErrorUtil.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ErrorUtil.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ErrorUtil.cpp.i
 .PHONY : ErrorUtil.cpp.i
 
 ErrorUtil.s: ErrorUtil.cpp.s
@@ -338,7 +338,7 @@ ErrorUtil.s: ErrorUtil.cpp.s
 
 # target to generate assembly for a file
 ErrorUtil.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/ErrorUtil.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/ErrorUtil.cpp.s
 .PHONY : ErrorUtil.cpp.s
 
 FirePacket.o: FirePacket.cpp.o
@@ -347,7 +347,7 @@ FirePacket.o: FirePacket.cpp.o
 
 # target to build an object file
 FirePacket.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/FirePacket.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/FirePacket.cpp.o
 .PHONY : FirePacket.cpp.o
 
 FirePacket.i: FirePacket.cpp.i
@@ -356,7 +356,7 @@ FirePacket.i: FirePacket.cpp.i
 
 # target to preprocess a source file
 FirePacket.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/FirePacket.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/FirePacket.cpp.i
 .PHONY : FirePacket.cpp.i
 
 FirePacket.s: FirePacket.cpp.s
@@ -365,7 +365,7 @@ FirePacket.s: FirePacket.cpp.s
 
 # target to generate assembly for a file
 FirePacket.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/FirePacket.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/FirePacket.cpp.s
 .PHONY : FirePacket.cpp.s
 
 KernelUtil.o: KernelUtil.cpp.o
@@ -374,7 +374,7 @@ KernelUtil.o: KernelUtil.cpp.o
 
 # target to build an object file
 KernelUtil.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/KernelUtil.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/KernelUtil.cpp.o
 .PHONY : KernelUtil.cpp.o
 
 KernelUtil.i: KernelUtil.cpp.i
@@ -383,7 +383,7 @@ KernelUtil.i: KernelUtil.cpp.i
 
 # target to preprocess a source file
 KernelUtil.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/KernelUtil.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/KernelUtil.cpp.i
 .PHONY : KernelUtil.cpp.i
 
 KernelUtil.s: KernelUtil.cpp.s
@@ -392,7 +392,7 @@ KernelUtil.s: KernelUtil.cpp.s
 
 # target to generate assembly for a file
 KernelUtil.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/KernelUtil.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/KernelUtil.cpp.s
 .PHONY : KernelUtil.cpp.s
 
 Session.o: Session.cpp.o
@@ -401,7 +401,7 @@ Session.o: Session.cpp.o
 
 # target to build an object file
 Session.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/Session.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/Session.cpp.o
 .PHONY : Session.cpp.o
 
 Session.i: Session.cpp.i
@@ -410,7 +410,7 @@ Session.i: Session.cpp.i
 
 # target to preprocess a source file
 Session.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/Session.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/Session.cpp.i
 .PHONY : Session.cpp.i
 
 Session.s: Session.cpp.s
@@ -419,7 +419,7 @@ Session.s: Session.cpp.s
 
 # target to generate assembly for a file
 Session.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/Session.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/Session.cpp.s
 .PHONY : Session.cpp.s
 
 TcpChannel.o: TcpChannel.cpp.o
@@ -428,7 +428,7 @@ TcpChannel.o: TcpChannel.cpp.o
 
 # target to build an object file
 TcpChannel.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/TcpChannel.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/TcpChannel.cpp.o
 .PHONY : TcpChannel.cpp.o
 
 TcpChannel.i: TcpChannel.cpp.i
@@ -437,7 +437,7 @@ TcpChannel.i: TcpChannel.cpp.i
 
 # target to preprocess a source file
 TcpChannel.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/TcpChannel.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/TcpChannel.cpp.i
 .PHONY : TcpChannel.cpp.i
 
 TcpChannel.s: TcpChannel.cpp.s
@@ -446,7 +446,7 @@ TcpChannel.s: TcpChannel.cpp.s
 
 # target to generate assembly for a file
 TcpChannel.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/TcpChannel.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/TcpChannel.cpp.s
 .PHONY : TcpChannel.cpp.s
 
 TcpServer.o: TcpServer.cpp.o
@@ -455,7 +455,7 @@ TcpServer.o: TcpServer.cpp.o
 
 # target to build an object file
 TcpServer.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/TcpServer.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/TcpServer.cpp.o
 .PHONY : TcpServer.cpp.o
 
 TcpServer.i: TcpServer.cpp.i
@@ -464,7 +464,7 @@ TcpServer.i: TcpServer.cpp.i
 
 # target to preprocess a source file
 TcpServer.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/TcpServer.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/TcpServer.cpp.i
 .PHONY : TcpServer.cpp.i
 
 TcpServer.s: TcpServer.cpp.s
@@ -473,7 +473,7 @@ TcpServer.s: TcpServer.cpp.s
 
 # target to generate assembly for a file
 TcpServer.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/TcpServer.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/TcpServer.cpp.s
 .PHONY : TcpServer.cpp.s
 
 WhiteList.o: WhiteList.cpp.o
@@ -482,7 +482,7 @@ WhiteList.o: WhiteList.cpp.o
 
 # target to build an object file
 WhiteList.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/WhiteList.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/WhiteList.cpp.o
 .PHONY : WhiteList.cpp.o
 
 WhiteList.i: WhiteList.cpp.i
@@ -491,7 +491,7 @@ WhiteList.i: WhiteList.cpp.i
 
 # target to preprocess a source file
 WhiteList.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/WhiteList.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/WhiteList.cpp.i
 .PHONY : WhiteList.cpp.i
 
 WhiteList.s: WhiteList.cpp.s
@@ -500,7 +500,7 @@ WhiteList.s: WhiteList.cpp.s
 
 # target to generate assembly for a file
 WhiteList.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/kernel/CMakeFiles/sg17kernel.dir/build.make app/kernel/CMakeFiles/sg17kernel.dir/WhiteList.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f kernel/CMakeFiles/sg17kernel.dir/build.make kernel/CMakeFiles/sg17kernel.dir/WhiteList.cpp.s
 .PHONY : WhiteList.cpp.s
 
 # Help Target
@@ -565,6 +565,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

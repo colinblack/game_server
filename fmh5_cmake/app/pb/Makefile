@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_SOURCE_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_BINARY_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles /data/colin/game_server/fmh5_cmake/app/pb/CMakeFiles/progress.marks
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/pb/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles /home/cp/data/game_server/fmh5_cmake/app/pb/CMakeFiles/progress.marks
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 pb/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/pb/clean
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 pb/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,32 +97,32 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/pb/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 pb/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/pb/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 pb/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-app/pb/CMakeFiles/sg17pb.dir/rule:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/pb/CMakeFiles/sg17pb.dir/rule
-.PHONY : app/pb/CMakeFiles/sg17pb.dir/rule
+pb/CMakeFiles/sg17pb.dir/rule:
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 pb/CMakeFiles/sg17pb.dir/rule
+.PHONY : pb/CMakeFiles/sg17pb.dir/rule
 
 # Convenience name for target.
-sg17pb: app/pb/CMakeFiles/sg17pb.dir/rule
+sg17pb: pb/CMakeFiles/sg17pb.dir/rule
 
 .PHONY : sg17pb
 
 # fast build rule for target.
 sg17pb/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/build
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/build
 .PHONY : sg17pb/fast
 
 DataCommon.pb.o: DataCommon.pb.cpp.o
@@ -131,7 +131,7 @@ DataCommon.pb.o: DataCommon.pb.cpp.o
 
 # target to build an object file
 DataCommon.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/DataCommon.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/DataCommon.pb.cpp.o
 .PHONY : DataCommon.pb.cpp.o
 
 DataCommon.pb.i: DataCommon.pb.cpp.i
@@ -140,7 +140,7 @@ DataCommon.pb.i: DataCommon.pb.cpp.i
 
 # target to preprocess a source file
 DataCommon.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/DataCommon.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/DataCommon.pb.cpp.i
 .PHONY : DataCommon.pb.cpp.i
 
 DataCommon.pb.s: DataCommon.pb.cpp.s
@@ -149,7 +149,7 @@ DataCommon.pb.s: DataCommon.pb.cpp.s
 
 # target to generate assembly for a file
 DataCommon.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/DataCommon.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/DataCommon.pb.cpp.s
 .PHONY : DataCommon.pb.cpp.s
 
 ErrorRet.pb.o: ErrorRet.pb.cpp.o
@@ -158,7 +158,7 @@ ErrorRet.pb.o: ErrorRet.pb.cpp.o
 
 # target to build an object file
 ErrorRet.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ErrorRet.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ErrorRet.pb.cpp.o
 .PHONY : ErrorRet.pb.cpp.o
 
 ErrorRet.pb.i: ErrorRet.pb.cpp.i
@@ -167,7 +167,7 @@ ErrorRet.pb.i: ErrorRet.pb.cpp.i
 
 # target to preprocess a source file
 ErrorRet.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ErrorRet.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ErrorRet.pb.cpp.i
 .PHONY : ErrorRet.pb.cpp.i
 
 ErrorRet.pb.s: ErrorRet.pb.cpp.s
@@ -176,7 +176,7 @@ ErrorRet.pb.s: ErrorRet.pb.cpp.s
 
 # target to generate assembly for a file
 ErrorRet.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ErrorRet.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ErrorRet.pb.cpp.s
 .PHONY : ErrorRet.pb.cpp.s
 
 ProtoAccessAd.pb.o: ProtoAccessAd.pb.cpp.o
@@ -185,7 +185,7 @@ ProtoAccessAd.pb.o: ProtoAccessAd.pb.cpp.o
 
 # target to build an object file
 ProtoAccessAd.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAccessAd.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAccessAd.pb.cpp.o
 .PHONY : ProtoAccessAd.pb.cpp.o
 
 ProtoAccessAd.pb.i: ProtoAccessAd.pb.cpp.i
@@ -194,7 +194,7 @@ ProtoAccessAd.pb.i: ProtoAccessAd.pb.cpp.i
 
 # target to preprocess a source file
 ProtoAccessAd.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAccessAd.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAccessAd.pb.cpp.i
 .PHONY : ProtoAccessAd.pb.cpp.i
 
 ProtoAccessAd.pb.s: ProtoAccessAd.pb.cpp.s
@@ -203,7 +203,7 @@ ProtoAccessAd.pb.s: ProtoAccessAd.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoAccessAd.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAccessAd.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAccessAd.pb.cpp.s
 .PHONY : ProtoAccessAd.pb.cpp.s
 
 ProtoActivity.pb.o: ProtoActivity.pb.cpp.o
@@ -212,7 +212,7 @@ ProtoActivity.pb.o: ProtoActivity.pb.cpp.o
 
 # target to build an object file
 ProtoActivity.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoActivity.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoActivity.pb.cpp.o
 .PHONY : ProtoActivity.pb.cpp.o
 
 ProtoActivity.pb.i: ProtoActivity.pb.cpp.i
@@ -221,7 +221,7 @@ ProtoActivity.pb.i: ProtoActivity.pb.cpp.i
 
 # target to preprocess a source file
 ProtoActivity.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoActivity.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoActivity.pb.cpp.i
 .PHONY : ProtoActivity.pb.cpp.i
 
 ProtoActivity.pb.s: ProtoActivity.pb.cpp.s
@@ -230,7 +230,7 @@ ProtoActivity.pb.s: ProtoActivity.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoActivity.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoActivity.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoActivity.pb.cpp.s
 .PHONY : ProtoActivity.pb.cpp.s
 
 ProtoActivityTencent.pb.o: ProtoActivityTencent.pb.cpp.o
@@ -239,7 +239,7 @@ ProtoActivityTencent.pb.o: ProtoActivityTencent.pb.cpp.o
 
 # target to build an object file
 ProtoActivityTencent.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoActivityTencent.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoActivityTencent.pb.cpp.o
 .PHONY : ProtoActivityTencent.pb.cpp.o
 
 ProtoActivityTencent.pb.i: ProtoActivityTencent.pb.cpp.i
@@ -248,7 +248,7 @@ ProtoActivityTencent.pb.i: ProtoActivityTencent.pb.cpp.i
 
 # target to preprocess a source file
 ProtoActivityTencent.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoActivityTencent.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoActivityTencent.pb.cpp.i
 .PHONY : ProtoActivityTencent.pb.cpp.i
 
 ProtoActivityTencent.pb.s: ProtoActivityTencent.pb.cpp.s
@@ -257,7 +257,7 @@ ProtoActivityTencent.pb.s: ProtoActivityTencent.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoActivityTencent.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoActivityTencent.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoActivityTencent.pb.cpp.s
 .PHONY : ProtoActivityTencent.pb.cpp.s
 
 ProtoAdvertise.pb.o: ProtoAdvertise.pb.cpp.o
@@ -266,7 +266,7 @@ ProtoAdvertise.pb.o: ProtoAdvertise.pb.cpp.o
 
 # target to build an object file
 ProtoAdvertise.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAdvertise.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAdvertise.pb.cpp.o
 .PHONY : ProtoAdvertise.pb.cpp.o
 
 ProtoAdvertise.pb.i: ProtoAdvertise.pb.cpp.i
@@ -275,7 +275,7 @@ ProtoAdvertise.pb.i: ProtoAdvertise.pb.cpp.i
 
 # target to preprocess a source file
 ProtoAdvertise.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAdvertise.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAdvertise.pb.cpp.i
 .PHONY : ProtoAdvertise.pb.cpp.i
 
 ProtoAdvertise.pb.s: ProtoAdvertise.pb.cpp.s
@@ -284,7 +284,7 @@ ProtoAdvertise.pb.s: ProtoAdvertise.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoAdvertise.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAdvertise.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAdvertise.pb.cpp.s
 .PHONY : ProtoAdvertise.pb.cpp.s
 
 ProtoAlliance.pb.o: ProtoAlliance.pb.cpp.o
@@ -293,7 +293,7 @@ ProtoAlliance.pb.o: ProtoAlliance.pb.cpp.o
 
 # target to build an object file
 ProtoAlliance.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAlliance.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAlliance.pb.cpp.o
 .PHONY : ProtoAlliance.pb.cpp.o
 
 ProtoAlliance.pb.i: ProtoAlliance.pb.cpp.i
@@ -302,7 +302,7 @@ ProtoAlliance.pb.i: ProtoAlliance.pb.cpp.i
 
 # target to preprocess a source file
 ProtoAlliance.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAlliance.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAlliance.pb.cpp.i
 .PHONY : ProtoAlliance.pb.cpp.i
 
 ProtoAlliance.pb.s: ProtoAlliance.pb.cpp.s
@@ -311,7 +311,7 @@ ProtoAlliance.pb.s: ProtoAlliance.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoAlliance.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAlliance.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAlliance.pb.cpp.s
 .PHONY : ProtoAlliance.pb.cpp.s
 
 ProtoAssistor.pb.o: ProtoAssistor.pb.cpp.o
@@ -320,7 +320,7 @@ ProtoAssistor.pb.o: ProtoAssistor.pb.cpp.o
 
 # target to build an object file
 ProtoAssistor.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAssistor.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAssistor.pb.cpp.o
 .PHONY : ProtoAssistor.pb.cpp.o
 
 ProtoAssistor.pb.i: ProtoAssistor.pb.cpp.i
@@ -329,7 +329,7 @@ ProtoAssistor.pb.i: ProtoAssistor.pb.cpp.i
 
 # target to preprocess a source file
 ProtoAssistor.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAssistor.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAssistor.pb.cpp.i
 .PHONY : ProtoAssistor.pb.cpp.i
 
 ProtoAssistor.pb.s: ProtoAssistor.pb.cpp.s
@@ -338,7 +338,7 @@ ProtoAssistor.pb.s: ProtoAssistor.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoAssistor.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoAssistor.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoAssistor.pb.cpp.s
 .PHONY : ProtoAssistor.pb.cpp.s
 
 ProtoBuilding.pb.o: ProtoBuilding.pb.cpp.o
@@ -347,7 +347,7 @@ ProtoBuilding.pb.o: ProtoBuilding.pb.cpp.o
 
 # target to build an object file
 ProtoBuilding.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoBuilding.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoBuilding.pb.cpp.o
 .PHONY : ProtoBuilding.pb.cpp.o
 
 ProtoBuilding.pb.i: ProtoBuilding.pb.cpp.i
@@ -356,7 +356,7 @@ ProtoBuilding.pb.i: ProtoBuilding.pb.cpp.i
 
 # target to preprocess a source file
 ProtoBuilding.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoBuilding.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoBuilding.pb.cpp.i
 .PHONY : ProtoBuilding.pb.cpp.i
 
 ProtoBuilding.pb.s: ProtoBuilding.pb.cpp.s
@@ -365,7 +365,7 @@ ProtoBuilding.pb.s: ProtoBuilding.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoBuilding.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoBuilding.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoBuilding.pb.cpp.s
 .PHONY : ProtoBuilding.pb.cpp.s
 
 ProtoCard.pb.o: ProtoCard.pb.cpp.o
@@ -374,7 +374,7 @@ ProtoCard.pb.o: ProtoCard.pb.cpp.o
 
 # target to build an object file
 ProtoCard.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoCard.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoCard.pb.cpp.o
 .PHONY : ProtoCard.pb.cpp.o
 
 ProtoCard.pb.i: ProtoCard.pb.cpp.i
@@ -383,7 +383,7 @@ ProtoCard.pb.i: ProtoCard.pb.cpp.i
 
 # target to preprocess a source file
 ProtoCard.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoCard.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoCard.pb.cpp.i
 .PHONY : ProtoCard.pb.cpp.i
 
 ProtoCard.pb.s: ProtoCard.pb.cpp.s
@@ -392,7 +392,7 @@ ProtoCard.pb.s: ProtoCard.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoCard.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoCard.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoCard.pb.cpp.s
 .PHONY : ProtoCard.pb.cpp.s
 
 ProtoDynamicInfo.pb.o: ProtoDynamicInfo.pb.cpp.o
@@ -401,7 +401,7 @@ ProtoDynamicInfo.pb.o: ProtoDynamicInfo.pb.cpp.o
 
 # target to build an object file
 ProtoDynamicInfo.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoDynamicInfo.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoDynamicInfo.pb.cpp.o
 .PHONY : ProtoDynamicInfo.pb.cpp.o
 
 ProtoDynamicInfo.pb.i: ProtoDynamicInfo.pb.cpp.i
@@ -410,7 +410,7 @@ ProtoDynamicInfo.pb.i: ProtoDynamicInfo.pb.cpp.i
 
 # target to preprocess a source file
 ProtoDynamicInfo.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoDynamicInfo.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoDynamicInfo.pb.cpp.i
 .PHONY : ProtoDynamicInfo.pb.cpp.i
 
 ProtoDynamicInfo.pb.s: ProtoDynamicInfo.pb.cpp.s
@@ -419,7 +419,7 @@ ProtoDynamicInfo.pb.s: ProtoDynamicInfo.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoDynamicInfo.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoDynamicInfo.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoDynamicInfo.pb.cpp.s
 .PHONY : ProtoDynamicInfo.pb.cpp.s
 
 ProtoFriend.pb.o: ProtoFriend.pb.cpp.o
@@ -428,7 +428,7 @@ ProtoFriend.pb.o: ProtoFriend.pb.cpp.o
 
 # target to build an object file
 ProtoFriend.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriend.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriend.pb.cpp.o
 .PHONY : ProtoFriend.pb.cpp.o
 
 ProtoFriend.pb.i: ProtoFriend.pb.cpp.i
@@ -437,7 +437,7 @@ ProtoFriend.pb.i: ProtoFriend.pb.cpp.i
 
 # target to preprocess a source file
 ProtoFriend.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriend.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriend.pb.cpp.i
 .PHONY : ProtoFriend.pb.cpp.i
 
 ProtoFriend.pb.s: ProtoFriend.pb.cpp.s
@@ -446,7 +446,7 @@ ProtoFriend.pb.s: ProtoFriend.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoFriend.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriend.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriend.pb.cpp.s
 .PHONY : ProtoFriend.pb.cpp.s
 
 ProtoFriendOrder.pb.o: ProtoFriendOrder.pb.cpp.o
@@ -455,7 +455,7 @@ ProtoFriendOrder.pb.o: ProtoFriendOrder.pb.cpp.o
 
 # target to build an object file
 ProtoFriendOrder.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendOrder.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendOrder.pb.cpp.o
 .PHONY : ProtoFriendOrder.pb.cpp.o
 
 ProtoFriendOrder.pb.i: ProtoFriendOrder.pb.cpp.i
@@ -464,7 +464,7 @@ ProtoFriendOrder.pb.i: ProtoFriendOrder.pb.cpp.i
 
 # target to preprocess a source file
 ProtoFriendOrder.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendOrder.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendOrder.pb.cpp.i
 .PHONY : ProtoFriendOrder.pb.cpp.i
 
 ProtoFriendOrder.pb.s: ProtoFriendOrder.pb.cpp.s
@@ -473,7 +473,7 @@ ProtoFriendOrder.pb.s: ProtoFriendOrder.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoFriendOrder.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendOrder.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendOrder.pb.cpp.s
 .PHONY : ProtoFriendOrder.pb.cpp.s
 
 ProtoFriendWorker.pb.o: ProtoFriendWorker.pb.cpp.o
@@ -482,7 +482,7 @@ ProtoFriendWorker.pb.o: ProtoFriendWorker.pb.cpp.o
 
 # target to build an object file
 ProtoFriendWorker.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendWorker.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendWorker.pb.cpp.o
 .PHONY : ProtoFriendWorker.pb.cpp.o
 
 ProtoFriendWorker.pb.i: ProtoFriendWorker.pb.cpp.i
@@ -491,7 +491,7 @@ ProtoFriendWorker.pb.i: ProtoFriendWorker.pb.cpp.i
 
 # target to preprocess a source file
 ProtoFriendWorker.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendWorker.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendWorker.pb.cpp.i
 .PHONY : ProtoFriendWorker.pb.cpp.i
 
 ProtoFriendWorker.pb.s: ProtoFriendWorker.pb.cpp.s
@@ -500,7 +500,7 @@ ProtoFriendWorker.pb.s: ProtoFriendWorker.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoFriendWorker.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendWorker.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendWorker.pb.cpp.s
 .PHONY : ProtoFriendWorker.pb.cpp.s
 
 ProtoFriendlyTree.pb.o: ProtoFriendlyTree.pb.cpp.o
@@ -509,7 +509,7 @@ ProtoFriendlyTree.pb.o: ProtoFriendlyTree.pb.cpp.o
 
 # target to build an object file
 ProtoFriendlyTree.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendlyTree.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendlyTree.pb.cpp.o
 .PHONY : ProtoFriendlyTree.pb.cpp.o
 
 ProtoFriendlyTree.pb.i: ProtoFriendlyTree.pb.cpp.i
@@ -518,7 +518,7 @@ ProtoFriendlyTree.pb.i: ProtoFriendlyTree.pb.cpp.i
 
 # target to preprocess a source file
 ProtoFriendlyTree.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendlyTree.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendlyTree.pb.cpp.i
 .PHONY : ProtoFriendlyTree.pb.cpp.i
 
 ProtoFriendlyTree.pb.s: ProtoFriendlyTree.pb.cpp.s
@@ -527,7 +527,7 @@ ProtoFriendlyTree.pb.s: ProtoFriendlyTree.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoFriendlyTree.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoFriendlyTree.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoFriendlyTree.pb.cpp.s
 .PHONY : ProtoFriendlyTree.pb.cpp.s
 
 ProtoGM.pb.o: ProtoGM.pb.cpp.o
@@ -536,7 +536,7 @@ ProtoGM.pb.o: ProtoGM.pb.cpp.o
 
 # target to build an object file
 ProtoGM.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoGM.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoGM.pb.cpp.o
 .PHONY : ProtoGM.pb.cpp.o
 
 ProtoGM.pb.i: ProtoGM.pb.cpp.i
@@ -545,7 +545,7 @@ ProtoGM.pb.i: ProtoGM.pb.cpp.i
 
 # target to preprocess a source file
 ProtoGM.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoGM.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoGM.pb.cpp.i
 .PHONY : ProtoGM.pb.cpp.i
 
 ProtoGM.pb.s: ProtoGM.pb.cpp.s
@@ -554,7 +554,7 @@ ProtoGM.pb.s: ProtoGM.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoGM.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoGM.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoGM.pb.cpp.s
 .PHONY : ProtoGM.pb.cpp.s
 
 ProtoKeeper.pb.o: ProtoKeeper.pb.cpp.o
@@ -563,7 +563,7 @@ ProtoKeeper.pb.o: ProtoKeeper.pb.cpp.o
 
 # target to build an object file
 ProtoKeeper.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoKeeper.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoKeeper.pb.cpp.o
 .PHONY : ProtoKeeper.pb.cpp.o
 
 ProtoKeeper.pb.i: ProtoKeeper.pb.cpp.i
@@ -572,7 +572,7 @@ ProtoKeeper.pb.i: ProtoKeeper.pb.cpp.i
 
 # target to preprocess a source file
 ProtoKeeper.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoKeeper.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoKeeper.pb.cpp.i
 .PHONY : ProtoKeeper.pb.cpp.i
 
 ProtoKeeper.pb.s: ProtoKeeper.pb.cpp.s
@@ -581,7 +581,7 @@ ProtoKeeper.pb.s: ProtoKeeper.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoKeeper.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoKeeper.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoKeeper.pb.cpp.s
 .PHONY : ProtoKeeper.pb.cpp.s
 
 ProtoMailDog.pb.o: ProtoMailDog.pb.cpp.o
@@ -590,7 +590,7 @@ ProtoMailDog.pb.o: ProtoMailDog.pb.cpp.o
 
 # target to build an object file
 ProtoMailDog.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMailDog.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMailDog.pb.cpp.o
 .PHONY : ProtoMailDog.pb.cpp.o
 
 ProtoMailDog.pb.i: ProtoMailDog.pb.cpp.i
@@ -599,7 +599,7 @@ ProtoMailDog.pb.i: ProtoMailDog.pb.cpp.i
 
 # target to preprocess a source file
 ProtoMailDog.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMailDog.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMailDog.pb.cpp.i
 .PHONY : ProtoMailDog.pb.cpp.i
 
 ProtoMailDog.pb.s: ProtoMailDog.pb.cpp.s
@@ -608,7 +608,7 @@ ProtoMailDog.pb.s: ProtoMailDog.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoMailDog.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMailDog.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMailDog.pb.cpp.s
 .PHONY : ProtoMailDog.pb.cpp.s
 
 ProtoMessageBoard.pb.o: ProtoMessageBoard.pb.cpp.o
@@ -617,7 +617,7 @@ ProtoMessageBoard.pb.o: ProtoMessageBoard.pb.cpp.o
 
 # target to build an object file
 ProtoMessageBoard.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMessageBoard.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMessageBoard.pb.cpp.o
 .PHONY : ProtoMessageBoard.pb.cpp.o
 
 ProtoMessageBoard.pb.i: ProtoMessageBoard.pb.cpp.i
@@ -626,7 +626,7 @@ ProtoMessageBoard.pb.i: ProtoMessageBoard.pb.cpp.i
 
 # target to preprocess a source file
 ProtoMessageBoard.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMessageBoard.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMessageBoard.pb.cpp.i
 .PHONY : ProtoMessageBoard.pb.cpp.i
 
 ProtoMessageBoard.pb.s: ProtoMessageBoard.pb.cpp.s
@@ -635,7 +635,7 @@ ProtoMessageBoard.pb.s: ProtoMessageBoard.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoMessageBoard.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMessageBoard.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMessageBoard.pb.cpp.s
 .PHONY : ProtoMessageBoard.pb.cpp.s
 
 ProtoMission.pb.o: ProtoMission.pb.cpp.o
@@ -644,7 +644,7 @@ ProtoMission.pb.o: ProtoMission.pb.cpp.o
 
 # target to build an object file
 ProtoMission.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMission.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMission.pb.cpp.o
 .PHONY : ProtoMission.pb.cpp.o
 
 ProtoMission.pb.i: ProtoMission.pb.cpp.i
@@ -653,7 +653,7 @@ ProtoMission.pb.i: ProtoMission.pb.cpp.i
 
 # target to preprocess a source file
 ProtoMission.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMission.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMission.pb.cpp.i
 .PHONY : ProtoMission.pb.cpp.i
 
 ProtoMission.pb.s: ProtoMission.pb.cpp.s
@@ -662,7 +662,7 @@ ProtoMission.pb.s: ProtoMission.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoMission.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoMission.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoMission.pb.cpp.s
 .PHONY : ProtoMission.pb.cpp.s
 
 ProtoNPCCustomer.pb.o: ProtoNPCCustomer.pb.cpp.o
@@ -671,7 +671,7 @@ ProtoNPCCustomer.pb.o: ProtoNPCCustomer.pb.cpp.o
 
 # target to build an object file
 ProtoNPCCustomer.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCCustomer.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCCustomer.pb.cpp.o
 .PHONY : ProtoNPCCustomer.pb.cpp.o
 
 ProtoNPCCustomer.pb.i: ProtoNPCCustomer.pb.cpp.i
@@ -680,7 +680,7 @@ ProtoNPCCustomer.pb.i: ProtoNPCCustomer.pb.cpp.i
 
 # target to preprocess a source file
 ProtoNPCCustomer.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCCustomer.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCCustomer.pb.cpp.i
 .PHONY : ProtoNPCCustomer.pb.cpp.i
 
 ProtoNPCCustomer.pb.s: ProtoNPCCustomer.pb.cpp.s
@@ -689,7 +689,7 @@ ProtoNPCCustomer.pb.s: ProtoNPCCustomer.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoNPCCustomer.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCCustomer.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCCustomer.pb.cpp.s
 .PHONY : ProtoNPCCustomer.pb.cpp.s
 
 ProtoNPCSeller.pb.o: ProtoNPCSeller.pb.cpp.o
@@ -698,7 +698,7 @@ ProtoNPCSeller.pb.o: ProtoNPCSeller.pb.cpp.o
 
 # target to build an object file
 ProtoNPCSeller.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCSeller.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCSeller.pb.cpp.o
 .PHONY : ProtoNPCSeller.pb.cpp.o
 
 ProtoNPCSeller.pb.i: ProtoNPCSeller.pb.cpp.i
@@ -707,7 +707,7 @@ ProtoNPCSeller.pb.i: ProtoNPCSeller.pb.cpp.i
 
 # target to preprocess a source file
 ProtoNPCSeller.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCSeller.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCSeller.pb.cpp.i
 .PHONY : ProtoNPCSeller.pb.cpp.i
 
 ProtoNPCSeller.pb.s: ProtoNPCSeller.pb.cpp.s
@@ -716,7 +716,7 @@ ProtoNPCSeller.pb.s: ProtoNPCSeller.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoNPCSeller.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCSeller.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCSeller.pb.cpp.s
 .PHONY : ProtoNPCSeller.pb.cpp.s
 
 ProtoNPCUser.pb.o: ProtoNPCUser.pb.cpp.o
@@ -725,7 +725,7 @@ ProtoNPCUser.pb.o: ProtoNPCUser.pb.cpp.o
 
 # target to build an object file
 ProtoNPCUser.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCUser.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCUser.pb.cpp.o
 .PHONY : ProtoNPCUser.pb.cpp.o
 
 ProtoNPCUser.pb.i: ProtoNPCUser.pb.cpp.i
@@ -734,7 +734,7 @@ ProtoNPCUser.pb.i: ProtoNPCUser.pb.cpp.i
 
 # target to preprocess a source file
 ProtoNPCUser.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCUser.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCUser.pb.cpp.i
 .PHONY : ProtoNPCUser.pb.cpp.i
 
 ProtoNPCUser.pb.s: ProtoNPCUser.pb.cpp.s
@@ -743,7 +743,7 @@ ProtoNPCUser.pb.s: ProtoNPCUser.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoNPCUser.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNPCUser.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNPCUser.pb.cpp.s
 .PHONY : ProtoNPCUser.pb.cpp.s
 
 ProtoNotify.pb.o: ProtoNotify.pb.cpp.o
@@ -752,7 +752,7 @@ ProtoNotify.pb.o: ProtoNotify.pb.cpp.o
 
 # target to build an object file
 ProtoNotify.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNotify.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNotify.pb.cpp.o
 .PHONY : ProtoNotify.pb.cpp.o
 
 ProtoNotify.pb.i: ProtoNotify.pb.cpp.i
@@ -761,7 +761,7 @@ ProtoNotify.pb.i: ProtoNotify.pb.cpp.i
 
 # target to preprocess a source file
 ProtoNotify.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNotify.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNotify.pb.cpp.i
 .PHONY : ProtoNotify.pb.cpp.i
 
 ProtoNotify.pb.s: ProtoNotify.pb.cpp.s
@@ -770,7 +770,7 @@ ProtoNotify.pb.s: ProtoNotify.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoNotify.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoNotify.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoNotify.pb.cpp.s
 .PHONY : ProtoNotify.pb.cpp.s
 
 ProtoOrder.pb.o: ProtoOrder.pb.cpp.o
@@ -779,7 +779,7 @@ ProtoOrder.pb.o: ProtoOrder.pb.cpp.o
 
 # target to build an object file
 ProtoOrder.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoOrder.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoOrder.pb.cpp.o
 .PHONY : ProtoOrder.pb.cpp.o
 
 ProtoOrder.pb.i: ProtoOrder.pb.cpp.i
@@ -788,7 +788,7 @@ ProtoOrder.pb.i: ProtoOrder.pb.cpp.i
 
 # target to preprocess a source file
 ProtoOrder.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoOrder.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoOrder.pb.cpp.i
 .PHONY : ProtoOrder.pb.cpp.i
 
 ProtoOrder.pb.s: ProtoOrder.pb.cpp.s
@@ -797,7 +797,7 @@ ProtoOrder.pb.s: ProtoOrder.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoOrder.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoOrder.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoOrder.pb.cpp.s
 .PHONY : ProtoOrder.pb.cpp.s
 
 ProtoPet.pb.o: ProtoPet.pb.cpp.o
@@ -806,7 +806,7 @@ ProtoPet.pb.o: ProtoPet.pb.cpp.o
 
 # target to build an object file
 ProtoPet.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoPet.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoPet.pb.cpp.o
 .PHONY : ProtoPet.pb.cpp.o
 
 ProtoPet.pb.i: ProtoPet.pb.cpp.i
@@ -815,7 +815,7 @@ ProtoPet.pb.i: ProtoPet.pb.cpp.i
 
 # target to preprocess a source file
 ProtoPet.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoPet.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoPet.pb.cpp.i
 .PHONY : ProtoPet.pb.cpp.i
 
 ProtoPet.pb.s: ProtoPet.pb.cpp.s
@@ -824,7 +824,7 @@ ProtoPet.pb.s: ProtoPet.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoPet.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoPet.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoPet.pb.cpp.s
 .PHONY : ProtoPet.pb.cpp.s
 
 ProtoProduce.pb.o: ProtoProduce.pb.cpp.o
@@ -833,7 +833,7 @@ ProtoProduce.pb.o: ProtoProduce.pb.cpp.o
 
 # target to build an object file
 ProtoProduce.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoProduce.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoProduce.pb.cpp.o
 .PHONY : ProtoProduce.pb.cpp.o
 
 ProtoProduce.pb.i: ProtoProduce.pb.cpp.i
@@ -842,7 +842,7 @@ ProtoProduce.pb.i: ProtoProduce.pb.cpp.i
 
 # target to preprocess a source file
 ProtoProduce.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoProduce.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoProduce.pb.cpp.i
 .PHONY : ProtoProduce.pb.cpp.i
 
 ProtoProduce.pb.s: ProtoProduce.pb.cpp.s
@@ -851,7 +851,7 @@ ProtoProduce.pb.s: ProtoProduce.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoProduce.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoProduce.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoProduce.pb.cpp.s
 .PHONY : ProtoProduce.pb.cpp.s
 
 ProtoPush.pb.o: ProtoPush.pb.cpp.o
@@ -860,7 +860,7 @@ ProtoPush.pb.o: ProtoPush.pb.cpp.o
 
 # target to build an object file
 ProtoPush.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoPush.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoPush.pb.cpp.o
 .PHONY : ProtoPush.pb.cpp.o
 
 ProtoPush.pb.i: ProtoPush.pb.cpp.i
@@ -869,7 +869,7 @@ ProtoPush.pb.i: ProtoPush.pb.cpp.i
 
 # target to preprocess a source file
 ProtoPush.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoPush.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoPush.pb.cpp.i
 .PHONY : ProtoPush.pb.cpp.i
 
 ProtoPush.pb.s: ProtoPush.pb.cpp.s
@@ -878,7 +878,7 @@ ProtoPush.pb.s: ProtoPush.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoPush.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoPush.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoPush.pb.cpp.s
 .PHONY : ProtoPush.pb.cpp.s
 
 ProtoRandomBox.pb.o: ProtoRandomBox.pb.cpp.o
@@ -887,7 +887,7 @@ ProtoRandomBox.pb.o: ProtoRandomBox.pb.cpp.o
 
 # target to build an object file
 ProtoRandomBox.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoRandomBox.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoRandomBox.pb.cpp.o
 .PHONY : ProtoRandomBox.pb.cpp.o
 
 ProtoRandomBox.pb.i: ProtoRandomBox.pb.cpp.i
@@ -896,7 +896,7 @@ ProtoRandomBox.pb.i: ProtoRandomBox.pb.cpp.i
 
 # target to preprocess a source file
 ProtoRandomBox.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoRandomBox.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoRandomBox.pb.cpp.i
 .PHONY : ProtoRandomBox.pb.cpp.i
 
 ProtoRandomBox.pb.s: ProtoRandomBox.pb.cpp.s
@@ -905,7 +905,7 @@ ProtoRandomBox.pb.s: ProtoRandomBox.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoRandomBox.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoRandomBox.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoRandomBox.pb.cpp.s
 .PHONY : ProtoRandomBox.pb.cpp.s
 
 ProtoReward.pb.o: ProtoReward.pb.cpp.o
@@ -914,7 +914,7 @@ ProtoReward.pb.o: ProtoReward.pb.cpp.o
 
 # target to build an object file
 ProtoReward.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoReward.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoReward.pb.cpp.o
 .PHONY : ProtoReward.pb.cpp.o
 
 ProtoReward.pb.i: ProtoReward.pb.cpp.i
@@ -923,7 +923,7 @@ ProtoReward.pb.i: ProtoReward.pb.cpp.i
 
 # target to preprocess a source file
 ProtoReward.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoReward.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoReward.pb.cpp.i
 .PHONY : ProtoReward.pb.cpp.i
 
 ProtoReward.pb.s: ProtoReward.pb.cpp.s
@@ -932,7 +932,7 @@ ProtoReward.pb.s: ProtoReward.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoReward.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoReward.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoReward.pb.cpp.s
 .PHONY : ProtoReward.pb.cpp.s
 
 ProtoRotaryTable.pb.o: ProtoRotaryTable.pb.cpp.o
@@ -941,7 +941,7 @@ ProtoRotaryTable.pb.o: ProtoRotaryTable.pb.cpp.o
 
 # target to build an object file
 ProtoRotaryTable.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoRotaryTable.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoRotaryTable.pb.cpp.o
 .PHONY : ProtoRotaryTable.pb.cpp.o
 
 ProtoRotaryTable.pb.i: ProtoRotaryTable.pb.cpp.i
@@ -950,7 +950,7 @@ ProtoRotaryTable.pb.i: ProtoRotaryTable.pb.cpp.i
 
 # target to preprocess a source file
 ProtoRotaryTable.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoRotaryTable.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoRotaryTable.pb.cpp.i
 .PHONY : ProtoRotaryTable.pb.cpp.i
 
 ProtoRotaryTable.pb.s: ProtoRotaryTable.pb.cpp.s
@@ -959,7 +959,7 @@ ProtoRotaryTable.pb.s: ProtoRotaryTable.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoRotaryTable.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoRotaryTable.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoRotaryTable.pb.cpp.s
 .PHONY : ProtoRotaryTable.pb.cpp.s
 
 ProtoShipping.pb.o: ProtoShipping.pb.cpp.o
@@ -968,7 +968,7 @@ ProtoShipping.pb.o: ProtoShipping.pb.cpp.o
 
 # target to build an object file
 ProtoShipping.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoShipping.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoShipping.pb.cpp.o
 .PHONY : ProtoShipping.pb.cpp.o
 
 ProtoShipping.pb.i: ProtoShipping.pb.cpp.i
@@ -977,7 +977,7 @@ ProtoShipping.pb.i: ProtoShipping.pb.cpp.i
 
 # target to preprocess a source file
 ProtoShipping.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoShipping.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoShipping.pb.cpp.i
 .PHONY : ProtoShipping.pb.cpp.i
 
 ProtoShipping.pb.s: ProtoShipping.pb.cpp.s
@@ -986,7 +986,7 @@ ProtoShipping.pb.s: ProtoShipping.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoShipping.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoShipping.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoShipping.pb.cpp.s
 .PHONY : ProtoShipping.pb.cpp.s
 
 ProtoShop.pb.o: ProtoShop.pb.cpp.o
@@ -995,7 +995,7 @@ ProtoShop.pb.o: ProtoShop.pb.cpp.o
 
 # target to build an object file
 ProtoShop.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoShop.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoShop.pb.cpp.o
 .PHONY : ProtoShop.pb.cpp.o
 
 ProtoShop.pb.i: ProtoShop.pb.cpp.i
@@ -1004,7 +1004,7 @@ ProtoShop.pb.i: ProtoShop.pb.cpp.i
 
 # target to preprocess a source file
 ProtoShop.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoShop.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoShop.pb.cpp.i
 .PHONY : ProtoShop.pb.cpp.i
 
 ProtoShop.pb.s: ProtoShop.pb.cpp.s
@@ -1013,7 +1013,7 @@ ProtoShop.pb.s: ProtoShop.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoShop.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoShop.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoShop.pb.cpp.s
 .PHONY : ProtoShop.pb.cpp.s
 
 ProtoTask.pb.o: ProtoTask.pb.cpp.o
@@ -1022,7 +1022,7 @@ ProtoTask.pb.o: ProtoTask.pb.cpp.o
 
 # target to build an object file
 ProtoTask.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoTask.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoTask.pb.cpp.o
 .PHONY : ProtoTask.pb.cpp.o
 
 ProtoTask.pb.i: ProtoTask.pb.cpp.i
@@ -1031,7 +1031,7 @@ ProtoTask.pb.i: ProtoTask.pb.cpp.i
 
 # target to preprocess a source file
 ProtoTask.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoTask.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoTask.pb.cpp.i
 .PHONY : ProtoTask.pb.cpp.i
 
 ProtoTask.pb.s: ProtoTask.pb.cpp.s
@@ -1040,7 +1040,7 @@ ProtoTask.pb.s: ProtoTask.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoTask.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoTask.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoTask.pb.cpp.s
 .PHONY : ProtoTask.pb.cpp.s
 
 ProtoTheme.pb.o: ProtoTheme.pb.cpp.o
@@ -1049,7 +1049,7 @@ ProtoTheme.pb.o: ProtoTheme.pb.cpp.o
 
 # target to build an object file
 ProtoTheme.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoTheme.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoTheme.pb.cpp.o
 .PHONY : ProtoTheme.pb.cpp.o
 
 ProtoTheme.pb.i: ProtoTheme.pb.cpp.i
@@ -1058,7 +1058,7 @@ ProtoTheme.pb.i: ProtoTheme.pb.cpp.i
 
 # target to preprocess a source file
 ProtoTheme.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoTheme.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoTheme.pb.cpp.i
 .PHONY : ProtoTheme.pb.cpp.i
 
 ProtoTheme.pb.s: ProtoTheme.pb.cpp.s
@@ -1067,7 +1067,7 @@ ProtoTheme.pb.s: ProtoTheme.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoTheme.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoTheme.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoTheme.pb.cpp.s
 .PHONY : ProtoTheme.pb.cpp.s
 
 ProtoVIP.pb.o: ProtoVIP.pb.cpp.o
@@ -1076,7 +1076,7 @@ ProtoVIP.pb.o: ProtoVIP.pb.cpp.o
 
 # target to build an object file
 ProtoVIP.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoVIP.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoVIP.pb.cpp.o
 .PHONY : ProtoVIP.pb.cpp.o
 
 ProtoVIP.pb.i: ProtoVIP.pb.cpp.i
@@ -1085,7 +1085,7 @@ ProtoVIP.pb.i: ProtoVIP.pb.cpp.i
 
 # target to preprocess a source file
 ProtoVIP.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoVIP.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoVIP.pb.cpp.i
 .PHONY : ProtoVIP.pb.cpp.i
 
 ProtoVIP.pb.s: ProtoVIP.pb.cpp.s
@@ -1094,7 +1094,7 @@ ProtoVIP.pb.s: ProtoVIP.pb.cpp.s
 
 # target to generate assembly for a file
 ProtoVIP.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/ProtoVIP.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/ProtoVIP.pb.cpp.s
 .PHONY : ProtoVIP.pb.cpp.s
 
 User.pb.o: User.pb.cpp.o
@@ -1103,7 +1103,7 @@ User.pb.o: User.pb.cpp.o
 
 # target to build an object file
 User.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/User.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/User.pb.cpp.o
 .PHONY : User.pb.cpp.o
 
 User.pb.i: User.pb.cpp.i
@@ -1112,7 +1112,7 @@ User.pb.i: User.pb.cpp.i
 
 # target to preprocess a source file
 User.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/User.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/User.pb.cpp.i
 .PHONY : User.pb.cpp.i
 
 User.pb.s: User.pb.cpp.s
@@ -1121,7 +1121,7 @@ User.pb.s: User.pb.cpp.s
 
 # target to generate assembly for a file
 User.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/pb/CMakeFiles/sg17pb.dir/build.make app/pb/CMakeFiles/sg17pb.dir/User.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f pb/CMakeFiles/sg17pb.dir/build.make pb/CMakeFiles/sg17pb.dir/User.pb.cpp.s
 .PHONY : User.pb.cpp.s
 
 # Help Target
@@ -1255,6 +1255,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

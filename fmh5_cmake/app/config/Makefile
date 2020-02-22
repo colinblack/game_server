@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_SOURCE_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_BINARY_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles /data/colin/game_server/fmh5_cmake/app/config/CMakeFiles/progress.marks
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/config/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles /home/cp/data/game_server/fmh5_cmake/app/config/CMakeFiles/progress.marks
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 config/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/config/clean
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 config/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,32 +97,32 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/config/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 config/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/config/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 config/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-app/config/CMakeFiles/sg17config.dir/rule:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/config/CMakeFiles/sg17config.dir/rule
-.PHONY : app/config/CMakeFiles/sg17config.dir/rule
+config/CMakeFiles/sg17config.dir/rule:
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 config/CMakeFiles/sg17config.dir/rule
+.PHONY : config/CMakeFiles/sg17config.dir/rule
 
 # Convenience name for target.
-sg17config: app/config/CMakeFiles/sg17config.dir/rule
+sg17config: config/CMakeFiles/sg17config.dir/rule
 
 .PHONY : sg17config
 
 # fast build rule for target.
 sg17config/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/build
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/build
 .PHONY : sg17config/fast
 
 CdKey.pb.o: CdKey.pb.cpp.o
@@ -131,7 +131,7 @@ CdKey.pb.o: CdKey.pb.cpp.o
 
 # target to build an object file
 CdKey.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/CdKey.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/CdKey.pb.cpp.o
 .PHONY : CdKey.pb.cpp.o
 
 CdKey.pb.i: CdKey.pb.cpp.i
@@ -140,7 +140,7 @@ CdKey.pb.i: CdKey.pb.cpp.i
 
 # target to preprocess a source file
 CdKey.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/CdKey.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/CdKey.pb.cpp.i
 .PHONY : CdKey.pb.cpp.i
 
 CdKey.pb.s: CdKey.pb.cpp.s
@@ -149,7 +149,7 @@ CdKey.pb.s: CdKey.pb.cpp.s
 
 # target to generate assembly for a file
 CdKey.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/CdKey.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/CdKey.pb.cpp.s
 .PHONY : CdKey.pb.cpp.s
 
 CommonGiftConfig.pb.o: CommonGiftConfig.pb.cpp.o
@@ -158,7 +158,7 @@ CommonGiftConfig.pb.o: CommonGiftConfig.pb.cpp.o
 
 # target to build an object file
 CommonGiftConfig.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/CommonGiftConfig.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/CommonGiftConfig.pb.cpp.o
 .PHONY : CommonGiftConfig.pb.cpp.o
 
 CommonGiftConfig.pb.i: CommonGiftConfig.pb.cpp.i
@@ -167,7 +167,7 @@ CommonGiftConfig.pb.i: CommonGiftConfig.pb.cpp.i
 
 # target to preprocess a source file
 CommonGiftConfig.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/CommonGiftConfig.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/CommonGiftConfig.pb.cpp.i
 .PHONY : CommonGiftConfig.pb.cpp.i
 
 CommonGiftConfig.pb.s: CommonGiftConfig.pb.cpp.s
@@ -176,7 +176,7 @@ CommonGiftConfig.pb.s: CommonGiftConfig.pb.cpp.s
 
 # target to generate assembly for a file
 CommonGiftConfig.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/CommonGiftConfig.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/CommonGiftConfig.pb.cpp.s
 .PHONY : CommonGiftConfig.pb.cpp.s
 
 ConfigAccessAd.pb.o: ConfigAccessAd.pb.cpp.o
@@ -185,7 +185,7 @@ ConfigAccessAd.pb.o: ConfigAccessAd.pb.cpp.o
 
 # target to build an object file
 ConfigAccessAd.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAccessAd.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAccessAd.pb.cpp.o
 .PHONY : ConfigAccessAd.pb.cpp.o
 
 ConfigAccessAd.pb.i: ConfigAccessAd.pb.cpp.i
@@ -194,7 +194,7 @@ ConfigAccessAd.pb.i: ConfigAccessAd.pb.cpp.i
 
 # target to preprocess a source file
 ConfigAccessAd.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAccessAd.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAccessAd.pb.cpp.i
 .PHONY : ConfigAccessAd.pb.cpp.i
 
 ConfigAccessAd.pb.s: ConfigAccessAd.pb.cpp.s
@@ -203,7 +203,7 @@ ConfigAccessAd.pb.s: ConfigAccessAd.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigAccessAd.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAccessAd.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAccessAd.pb.cpp.s
 .PHONY : ConfigAccessAd.pb.cpp.s
 
 ConfigActivity.pb.o: ConfigActivity.pb.cpp.o
@@ -212,7 +212,7 @@ ConfigActivity.pb.o: ConfigActivity.pb.cpp.o
 
 # target to build an object file
 ConfigActivity.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigActivity.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigActivity.pb.cpp.o
 .PHONY : ConfigActivity.pb.cpp.o
 
 ConfigActivity.pb.i: ConfigActivity.pb.cpp.i
@@ -221,7 +221,7 @@ ConfigActivity.pb.i: ConfigActivity.pb.cpp.i
 
 # target to preprocess a source file
 ConfigActivity.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigActivity.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigActivity.pb.cpp.i
 .PHONY : ConfigActivity.pb.cpp.i
 
 ConfigActivity.pb.s: ConfigActivity.pb.cpp.s
@@ -230,7 +230,7 @@ ConfigActivity.pb.s: ConfigActivity.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigActivity.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigActivity.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigActivity.pb.cpp.s
 .PHONY : ConfigActivity.pb.cpp.s
 
 ConfigActivityTencent.pb.o: ConfigActivityTencent.pb.cpp.o
@@ -239,7 +239,7 @@ ConfigActivityTencent.pb.o: ConfigActivityTencent.pb.cpp.o
 
 # target to build an object file
 ConfigActivityTencent.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigActivityTencent.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigActivityTencent.pb.cpp.o
 .PHONY : ConfigActivityTencent.pb.cpp.o
 
 ConfigActivityTencent.pb.i: ConfigActivityTencent.pb.cpp.i
@@ -248,7 +248,7 @@ ConfigActivityTencent.pb.i: ConfigActivityTencent.pb.cpp.i
 
 # target to preprocess a source file
 ConfigActivityTencent.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigActivityTencent.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigActivityTencent.pb.cpp.i
 .PHONY : ConfigActivityTencent.pb.cpp.i
 
 ConfigActivityTencent.pb.s: ConfigActivityTencent.pb.cpp.s
@@ -257,7 +257,7 @@ ConfigActivityTencent.pb.s: ConfigActivityTencent.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigActivityTencent.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigActivityTencent.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigActivityTencent.pb.cpp.s
 .PHONY : ConfigActivityTencent.pb.cpp.s
 
 ConfigAd.pb.o: ConfigAd.pb.cpp.o
@@ -266,7 +266,7 @@ ConfigAd.pb.o: ConfigAd.pb.cpp.o
 
 # target to build an object file
 ConfigAd.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAd.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAd.pb.cpp.o
 .PHONY : ConfigAd.pb.cpp.o
 
 ConfigAd.pb.i: ConfigAd.pb.cpp.i
@@ -275,7 +275,7 @@ ConfigAd.pb.i: ConfigAd.pb.cpp.i
 
 # target to preprocess a source file
 ConfigAd.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAd.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAd.pb.cpp.i
 .PHONY : ConfigAd.pb.cpp.i
 
 ConfigAd.pb.s: ConfigAd.pb.cpp.s
@@ -284,7 +284,7 @@ ConfigAd.pb.s: ConfigAd.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigAd.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAd.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAd.pb.cpp.s
 .PHONY : ConfigAd.pb.cpp.s
 
 ConfigAlliance.pb.o: ConfigAlliance.pb.cpp.o
@@ -293,7 +293,7 @@ ConfigAlliance.pb.o: ConfigAlliance.pb.cpp.o
 
 # target to build an object file
 ConfigAlliance.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAlliance.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAlliance.pb.cpp.o
 .PHONY : ConfigAlliance.pb.cpp.o
 
 ConfigAlliance.pb.i: ConfigAlliance.pb.cpp.i
@@ -302,7 +302,7 @@ ConfigAlliance.pb.i: ConfigAlliance.pb.cpp.i
 
 # target to preprocess a source file
 ConfigAlliance.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAlliance.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAlliance.pb.cpp.i
 .PHONY : ConfigAlliance.pb.cpp.i
 
 ConfigAlliance.pb.s: ConfigAlliance.pb.cpp.s
@@ -311,7 +311,7 @@ ConfigAlliance.pb.s: ConfigAlliance.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigAlliance.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAlliance.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAlliance.pb.cpp.s
 .PHONY : ConfigAlliance.pb.cpp.s
 
 ConfigAllianceRace.pb.o: ConfigAllianceRace.pb.cpp.o
@@ -320,7 +320,7 @@ ConfigAllianceRace.pb.o: ConfigAllianceRace.pb.cpp.o
 
 # target to build an object file
 ConfigAllianceRace.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAllianceRace.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAllianceRace.pb.cpp.o
 .PHONY : ConfigAllianceRace.pb.cpp.o
 
 ConfigAllianceRace.pb.i: ConfigAllianceRace.pb.cpp.i
@@ -329,7 +329,7 @@ ConfigAllianceRace.pb.i: ConfigAllianceRace.pb.cpp.i
 
 # target to preprocess a source file
 ConfigAllianceRace.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAllianceRace.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAllianceRace.pb.cpp.i
 .PHONY : ConfigAllianceRace.pb.cpp.i
 
 ConfigAllianceRace.pb.s: ConfigAllianceRace.pb.cpp.s
@@ -338,7 +338,7 @@ ConfigAllianceRace.pb.s: ConfigAllianceRace.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigAllianceRace.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAllianceRace.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAllianceRace.pb.cpp.s
 .PHONY : ConfigAllianceRace.pb.cpp.s
 
 ConfigAssistor.pb.o: ConfigAssistor.pb.cpp.o
@@ -347,7 +347,7 @@ ConfigAssistor.pb.o: ConfigAssistor.pb.cpp.o
 
 # target to build an object file
 ConfigAssistor.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAssistor.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAssistor.pb.cpp.o
 .PHONY : ConfigAssistor.pb.cpp.o
 
 ConfigAssistor.pb.i: ConfigAssistor.pb.cpp.i
@@ -356,7 +356,7 @@ ConfigAssistor.pb.i: ConfigAssistor.pb.cpp.i
 
 # target to preprocess a source file
 ConfigAssistor.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAssistor.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAssistor.pb.cpp.i
 .PHONY : ConfigAssistor.pb.cpp.i
 
 ConfigAssistor.pb.s: ConfigAssistor.pb.cpp.s
@@ -365,7 +365,7 @@ ConfigAssistor.pb.s: ConfigAssistor.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigAssistor.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigAssistor.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigAssistor.pb.cpp.s
 .PHONY : ConfigAssistor.pb.cpp.s
 
 ConfigBuilding.pb.o: ConfigBuilding.pb.cpp.o
@@ -374,7 +374,7 @@ ConfigBuilding.pb.o: ConfigBuilding.pb.cpp.o
 
 # target to build an object file
 ConfigBuilding.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigBuilding.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigBuilding.pb.cpp.o
 .PHONY : ConfigBuilding.pb.cpp.o
 
 ConfigBuilding.pb.i: ConfigBuilding.pb.cpp.i
@@ -383,7 +383,7 @@ ConfigBuilding.pb.i: ConfigBuilding.pb.cpp.i
 
 # target to preprocess a source file
 ConfigBuilding.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigBuilding.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigBuilding.pb.cpp.i
 .PHONY : ConfigBuilding.pb.cpp.i
 
 ConfigBuilding.pb.s: ConfigBuilding.pb.cpp.s
@@ -392,7 +392,7 @@ ConfigBuilding.pb.s: ConfigBuilding.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigBuilding.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigBuilding.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigBuilding.pb.cpp.s
 .PHONY : ConfigBuilding.pb.cpp.s
 
 ConfigCard.pb.o: ConfigCard.pb.cpp.o
@@ -401,7 +401,7 @@ ConfigCard.pb.o: ConfigCard.pb.cpp.o
 
 # target to build an object file
 ConfigCard.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigCard.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigCard.pb.cpp.o
 .PHONY : ConfigCard.pb.cpp.o
 
 ConfigCard.pb.i: ConfigCard.pb.cpp.i
@@ -410,7 +410,7 @@ ConfigCard.pb.i: ConfigCard.pb.cpp.i
 
 # target to preprocess a source file
 ConfigCard.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigCard.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigCard.pb.cpp.i
 .PHONY : ConfigCard.pb.cpp.i
 
 ConfigCard.pb.s: ConfigCard.pb.cpp.s
@@ -419,7 +419,7 @@ ConfigCard.pb.s: ConfigCard.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigCard.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigCard.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigCard.pb.cpp.s
 .PHONY : ConfigCard.pb.cpp.s
 
 ConfigFriend.pb.o: ConfigFriend.pb.cpp.o
@@ -428,7 +428,7 @@ ConfigFriend.pb.o: ConfigFriend.pb.cpp.o
 
 # target to build an object file
 ConfigFriend.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriend.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriend.pb.cpp.o
 .PHONY : ConfigFriend.pb.cpp.o
 
 ConfigFriend.pb.i: ConfigFriend.pb.cpp.i
@@ -437,7 +437,7 @@ ConfigFriend.pb.i: ConfigFriend.pb.cpp.i
 
 # target to preprocess a source file
 ConfigFriend.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriend.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriend.pb.cpp.i
 .PHONY : ConfigFriend.pb.cpp.i
 
 ConfigFriend.pb.s: ConfigFriend.pb.cpp.s
@@ -446,7 +446,7 @@ ConfigFriend.pb.s: ConfigFriend.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigFriend.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriend.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriend.pb.cpp.s
 .PHONY : ConfigFriend.pb.cpp.s
 
 ConfigFriendWorker.pb.o: ConfigFriendWorker.pb.cpp.o
@@ -455,7 +455,7 @@ ConfigFriendWorker.pb.o: ConfigFriendWorker.pb.cpp.o
 
 # target to build an object file
 ConfigFriendWorker.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriendWorker.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriendWorker.pb.cpp.o
 .PHONY : ConfigFriendWorker.pb.cpp.o
 
 ConfigFriendWorker.pb.i: ConfigFriendWorker.pb.cpp.i
@@ -464,7 +464,7 @@ ConfigFriendWorker.pb.i: ConfigFriendWorker.pb.cpp.i
 
 # target to preprocess a source file
 ConfigFriendWorker.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriendWorker.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriendWorker.pb.cpp.i
 .PHONY : ConfigFriendWorker.pb.cpp.i
 
 ConfigFriendWorker.pb.s: ConfigFriendWorker.pb.cpp.s
@@ -473,7 +473,7 @@ ConfigFriendWorker.pb.s: ConfigFriendWorker.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigFriendWorker.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriendWorker.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriendWorker.pb.cpp.s
 .PHONY : ConfigFriendWorker.pb.cpp.s
 
 ConfigFriendlyTree.pb.o: ConfigFriendlyTree.pb.cpp.o
@@ -482,7 +482,7 @@ ConfigFriendlyTree.pb.o: ConfigFriendlyTree.pb.cpp.o
 
 # target to build an object file
 ConfigFriendlyTree.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriendlyTree.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriendlyTree.pb.cpp.o
 .PHONY : ConfigFriendlyTree.pb.cpp.o
 
 ConfigFriendlyTree.pb.i: ConfigFriendlyTree.pb.cpp.i
@@ -491,7 +491,7 @@ ConfigFriendlyTree.pb.i: ConfigFriendlyTree.pb.cpp.i
 
 # target to preprocess a source file
 ConfigFriendlyTree.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriendlyTree.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriendlyTree.pb.cpp.i
 .PHONY : ConfigFriendlyTree.pb.cpp.i
 
 ConfigFriendlyTree.pb.s: ConfigFriendlyTree.pb.cpp.s
@@ -500,7 +500,7 @@ ConfigFriendlyTree.pb.s: ConfigFriendlyTree.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigFriendlyTree.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigFriendlyTree.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigFriendlyTree.pb.cpp.s
 .PHONY : ConfigFriendlyTree.pb.cpp.s
 
 ConfigItem.pb.o: ConfigItem.pb.cpp.o
@@ -509,7 +509,7 @@ ConfigItem.pb.o: ConfigItem.pb.cpp.o
 
 # target to build an object file
 ConfigItem.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigItem.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigItem.pb.cpp.o
 .PHONY : ConfigItem.pb.cpp.o
 
 ConfigItem.pb.i: ConfigItem.pb.cpp.i
@@ -518,7 +518,7 @@ ConfigItem.pb.i: ConfigItem.pb.cpp.i
 
 # target to preprocess a source file
 ConfigItem.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigItem.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigItem.pb.cpp.i
 .PHONY : ConfigItem.pb.cpp.i
 
 ConfigItem.pb.s: ConfigItem.pb.cpp.s
@@ -527,7 +527,7 @@ ConfigItem.pb.s: ConfigItem.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigItem.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigItem.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigItem.pb.cpp.s
 .PHONY : ConfigItem.pb.cpp.s
 
 ConfigKeeper.pb.o: ConfigKeeper.pb.cpp.o
@@ -536,7 +536,7 @@ ConfigKeeper.pb.o: ConfigKeeper.pb.cpp.o
 
 # target to build an object file
 ConfigKeeper.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigKeeper.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigKeeper.pb.cpp.o
 .PHONY : ConfigKeeper.pb.cpp.o
 
 ConfigKeeper.pb.i: ConfigKeeper.pb.cpp.i
@@ -545,7 +545,7 @@ ConfigKeeper.pb.i: ConfigKeeper.pb.cpp.i
 
 # target to preprocess a source file
 ConfigKeeper.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigKeeper.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigKeeper.pb.cpp.i
 .PHONY : ConfigKeeper.pb.cpp.i
 
 ConfigKeeper.pb.s: ConfigKeeper.pb.cpp.s
@@ -554,7 +554,7 @@ ConfigKeeper.pb.s: ConfigKeeper.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigKeeper.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigKeeper.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigKeeper.pb.cpp.s
 .PHONY : ConfigKeeper.pb.cpp.s
 
 ConfigLanguage.pb.o: ConfigLanguage.pb.cpp.o
@@ -563,7 +563,7 @@ ConfigLanguage.pb.o: ConfigLanguage.pb.cpp.o
 
 # target to build an object file
 ConfigLanguage.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigLanguage.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigLanguage.pb.cpp.o
 .PHONY : ConfigLanguage.pb.cpp.o
 
 ConfigLanguage.pb.i: ConfigLanguage.pb.cpp.i
@@ -572,7 +572,7 @@ ConfigLanguage.pb.i: ConfigLanguage.pb.cpp.i
 
 # target to preprocess a source file
 ConfigLanguage.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigLanguage.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigLanguage.pb.cpp.i
 .PHONY : ConfigLanguage.pb.cpp.i
 
 ConfigLanguage.pb.s: ConfigLanguage.pb.cpp.s
@@ -581,7 +581,7 @@ ConfigLanguage.pb.s: ConfigLanguage.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigLanguage.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigLanguage.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigLanguage.pb.cpp.s
 .PHONY : ConfigLanguage.pb.cpp.s
 
 ConfigMailDog.pb.o: ConfigMailDog.pb.cpp.o
@@ -590,7 +590,7 @@ ConfigMailDog.pb.o: ConfigMailDog.pb.cpp.o
 
 # target to build an object file
 ConfigMailDog.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigMailDog.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigMailDog.pb.cpp.o
 .PHONY : ConfigMailDog.pb.cpp.o
 
 ConfigMailDog.pb.i: ConfigMailDog.pb.cpp.i
@@ -599,7 +599,7 @@ ConfigMailDog.pb.i: ConfigMailDog.pb.cpp.i
 
 # target to preprocess a source file
 ConfigMailDog.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigMailDog.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigMailDog.pb.cpp.i
 .PHONY : ConfigMailDog.pb.cpp.i
 
 ConfigMailDog.pb.s: ConfigMailDog.pb.cpp.s
@@ -608,7 +608,7 @@ ConfigMailDog.pb.s: ConfigMailDog.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigMailDog.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigMailDog.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigMailDog.pb.cpp.s
 .PHONY : ConfigMailDog.pb.cpp.s
 
 ConfigMapExpand.pb.o: ConfigMapExpand.pb.cpp.o
@@ -617,7 +617,7 @@ ConfigMapExpand.pb.o: ConfigMapExpand.pb.cpp.o
 
 # target to build an object file
 ConfigMapExpand.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigMapExpand.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigMapExpand.pb.cpp.o
 .PHONY : ConfigMapExpand.pb.cpp.o
 
 ConfigMapExpand.pb.i: ConfigMapExpand.pb.cpp.i
@@ -626,7 +626,7 @@ ConfigMapExpand.pb.i: ConfigMapExpand.pb.cpp.i
 
 # target to preprocess a source file
 ConfigMapExpand.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigMapExpand.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigMapExpand.pb.cpp.i
 .PHONY : ConfigMapExpand.pb.cpp.i
 
 ConfigMapExpand.pb.s: ConfigMapExpand.pb.cpp.s
@@ -635,7 +635,7 @@ ConfigMapExpand.pb.s: ConfigMapExpand.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigMapExpand.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigMapExpand.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigMapExpand.pb.cpp.s
 .PHONY : ConfigMapExpand.pb.cpp.s
 
 ConfigNPCCustomer.pb.o: ConfigNPCCustomer.pb.cpp.o
@@ -644,7 +644,7 @@ ConfigNPCCustomer.pb.o: ConfigNPCCustomer.pb.cpp.o
 
 # target to build an object file
 ConfigNPCCustomer.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigNPCCustomer.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigNPCCustomer.pb.cpp.o
 .PHONY : ConfigNPCCustomer.pb.cpp.o
 
 ConfigNPCCustomer.pb.i: ConfigNPCCustomer.pb.cpp.i
@@ -653,7 +653,7 @@ ConfigNPCCustomer.pb.i: ConfigNPCCustomer.pb.cpp.i
 
 # target to preprocess a source file
 ConfigNPCCustomer.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigNPCCustomer.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigNPCCustomer.pb.cpp.i
 .PHONY : ConfigNPCCustomer.pb.cpp.i
 
 ConfigNPCCustomer.pb.s: ConfigNPCCustomer.pb.cpp.s
@@ -662,7 +662,7 @@ ConfigNPCCustomer.pb.s: ConfigNPCCustomer.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigNPCCustomer.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigNPCCustomer.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigNPCCustomer.pb.cpp.s
 .PHONY : ConfigNPCCustomer.pb.cpp.s
 
 ConfigNPCSeller.pb.o: ConfigNPCSeller.pb.cpp.o
@@ -671,7 +671,7 @@ ConfigNPCSeller.pb.o: ConfigNPCSeller.pb.cpp.o
 
 # target to build an object file
 ConfigNPCSeller.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigNPCSeller.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigNPCSeller.pb.cpp.o
 .PHONY : ConfigNPCSeller.pb.cpp.o
 
 ConfigNPCSeller.pb.i: ConfigNPCSeller.pb.cpp.i
@@ -680,7 +680,7 @@ ConfigNPCSeller.pb.i: ConfigNPCSeller.pb.cpp.i
 
 # target to preprocess a source file
 ConfigNPCSeller.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigNPCSeller.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigNPCSeller.pb.cpp.i
 .PHONY : ConfigNPCSeller.pb.cpp.i
 
 ConfigNPCSeller.pb.s: ConfigNPCSeller.pb.cpp.s
@@ -689,7 +689,7 @@ ConfigNPCSeller.pb.s: ConfigNPCSeller.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigNPCSeller.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigNPCSeller.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigNPCSeller.pb.cpp.s
 .PHONY : ConfigNPCSeller.pb.cpp.s
 
 ConfigOrder.pb.o: ConfigOrder.pb.cpp.o
@@ -698,7 +698,7 @@ ConfigOrder.pb.o: ConfigOrder.pb.cpp.o
 
 # target to build an object file
 ConfigOrder.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigOrder.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigOrder.pb.cpp.o
 .PHONY : ConfigOrder.pb.cpp.o
 
 ConfigOrder.pb.i: ConfigOrder.pb.cpp.i
@@ -707,7 +707,7 @@ ConfigOrder.pb.i: ConfigOrder.pb.cpp.i
 
 # target to preprocess a source file
 ConfigOrder.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigOrder.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigOrder.pb.cpp.i
 .PHONY : ConfigOrder.pb.cpp.i
 
 ConfigOrder.pb.s: ConfigOrder.pb.cpp.s
@@ -716,7 +716,7 @@ ConfigOrder.pb.s: ConfigOrder.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigOrder.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigOrder.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigOrder.pb.cpp.s
 .PHONY : ConfigOrder.pb.cpp.s
 
 ConfigPet.pb.o: ConfigPet.pb.cpp.o
@@ -725,7 +725,7 @@ ConfigPet.pb.o: ConfigPet.pb.cpp.o
 
 # target to build an object file
 ConfigPet.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigPet.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigPet.pb.cpp.o
 .PHONY : ConfigPet.pb.cpp.o
 
 ConfigPet.pb.i: ConfigPet.pb.cpp.i
@@ -734,7 +734,7 @@ ConfigPet.pb.i: ConfigPet.pb.cpp.i
 
 # target to preprocess a source file
 ConfigPet.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigPet.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigPet.pb.cpp.i
 .PHONY : ConfigPet.pb.cpp.i
 
 ConfigPet.pb.s: ConfigPet.pb.cpp.s
@@ -743,7 +743,7 @@ ConfigPet.pb.s: ConfigPet.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigPet.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigPet.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigPet.pb.cpp.s
 .PHONY : ConfigPet.pb.cpp.s
 
 ConfigProductLine.pb.o: ConfigProductLine.pb.cpp.o
@@ -752,7 +752,7 @@ ConfigProductLine.pb.o: ConfigProductLine.pb.cpp.o
 
 # target to build an object file
 ConfigProductLine.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigProductLine.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigProductLine.pb.cpp.o
 .PHONY : ConfigProductLine.pb.cpp.o
 
 ConfigProductLine.pb.i: ConfigProductLine.pb.cpp.i
@@ -761,7 +761,7 @@ ConfigProductLine.pb.i: ConfigProductLine.pb.cpp.i
 
 # target to preprocess a source file
 ConfigProductLine.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigProductLine.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigProductLine.pb.cpp.i
 .PHONY : ConfigProductLine.pb.cpp.i
 
 ConfigProductLine.pb.s: ConfigProductLine.pb.cpp.s
@@ -770,7 +770,7 @@ ConfigProductLine.pb.s: ConfigProductLine.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigProductLine.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigProductLine.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigProductLine.pb.cpp.s
 .PHONY : ConfigProductLine.pb.cpp.s
 
 ConfigRandomBox.pb.o: ConfigRandomBox.pb.cpp.o
@@ -779,7 +779,7 @@ ConfigRandomBox.pb.o: ConfigRandomBox.pb.cpp.o
 
 # target to build an object file
 ConfigRandomBox.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigRandomBox.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigRandomBox.pb.cpp.o
 .PHONY : ConfigRandomBox.pb.cpp.o
 
 ConfigRandomBox.pb.i: ConfigRandomBox.pb.cpp.i
@@ -788,7 +788,7 @@ ConfigRandomBox.pb.i: ConfigRandomBox.pb.cpp.i
 
 # target to preprocess a source file
 ConfigRandomBox.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigRandomBox.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigRandomBox.pb.cpp.i
 .PHONY : ConfigRandomBox.pb.cpp.i
 
 ConfigRandomBox.pb.s: ConfigRandomBox.pb.cpp.s
@@ -797,7 +797,7 @@ ConfigRandomBox.pb.s: ConfigRandomBox.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigRandomBox.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigRandomBox.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigRandomBox.pb.cpp.s
 .PHONY : ConfigRandomBox.pb.cpp.s
 
 ConfigReward.pb.o: ConfigReward.pb.cpp.o
@@ -806,7 +806,7 @@ ConfigReward.pb.o: ConfigReward.pb.cpp.o
 
 # target to build an object file
 ConfigReward.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigReward.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigReward.pb.cpp.o
 .PHONY : ConfigReward.pb.cpp.o
 
 ConfigReward.pb.i: ConfigReward.pb.cpp.i
@@ -815,7 +815,7 @@ ConfigReward.pb.i: ConfigReward.pb.cpp.i
 
 # target to preprocess a source file
 ConfigReward.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigReward.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigReward.pb.cpp.i
 .PHONY : ConfigReward.pb.cpp.i
 
 ConfigReward.pb.s: ConfigReward.pb.cpp.s
@@ -824,7 +824,7 @@ ConfigReward.pb.s: ConfigReward.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigReward.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigReward.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigReward.pb.cpp.s
 .PHONY : ConfigReward.pb.cpp.s
 
 ConfigRotaryTable.pb.o: ConfigRotaryTable.pb.cpp.o
@@ -833,7 +833,7 @@ ConfigRotaryTable.pb.o: ConfigRotaryTable.pb.cpp.o
 
 # target to build an object file
 ConfigRotaryTable.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigRotaryTable.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigRotaryTable.pb.cpp.o
 .PHONY : ConfigRotaryTable.pb.cpp.o
 
 ConfigRotaryTable.pb.i: ConfigRotaryTable.pb.cpp.i
@@ -842,7 +842,7 @@ ConfigRotaryTable.pb.i: ConfigRotaryTable.pb.cpp.i
 
 # target to preprocess a source file
 ConfigRotaryTable.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigRotaryTable.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigRotaryTable.pb.cpp.i
 .PHONY : ConfigRotaryTable.pb.cpp.i
 
 ConfigRotaryTable.pb.s: ConfigRotaryTable.pb.cpp.s
@@ -851,7 +851,7 @@ ConfigRotaryTable.pb.s: ConfigRotaryTable.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigRotaryTable.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigRotaryTable.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigRotaryTable.pb.cpp.s
 .PHONY : ConfigRotaryTable.pb.cpp.s
 
 ConfigShipping.pb.o: ConfigShipping.pb.cpp.o
@@ -860,7 +860,7 @@ ConfigShipping.pb.o: ConfigShipping.pb.cpp.o
 
 # target to build an object file
 ConfigShipping.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigShipping.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigShipping.pb.cpp.o
 .PHONY : ConfigShipping.pb.cpp.o
 
 ConfigShipping.pb.i: ConfigShipping.pb.cpp.i
@@ -869,7 +869,7 @@ ConfigShipping.pb.i: ConfigShipping.pb.cpp.i
 
 # target to preprocess a source file
 ConfigShipping.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigShipping.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigShipping.pb.cpp.i
 .PHONY : ConfigShipping.pb.cpp.i
 
 ConfigShipping.pb.s: ConfigShipping.pb.cpp.s
@@ -878,7 +878,7 @@ ConfigShipping.pb.s: ConfigShipping.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigShipping.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigShipping.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigShipping.pb.cpp.s
 .PHONY : ConfigShipping.pb.cpp.s
 
 ConfigShop.pb.o: ConfigShop.pb.cpp.o
@@ -887,7 +887,7 @@ ConfigShop.pb.o: ConfigShop.pb.cpp.o
 
 # target to build an object file
 ConfigShop.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigShop.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigShop.pb.cpp.o
 .PHONY : ConfigShop.pb.cpp.o
 
 ConfigShop.pb.i: ConfigShop.pb.cpp.i
@@ -896,7 +896,7 @@ ConfigShop.pb.i: ConfigShop.pb.cpp.i
 
 # target to preprocess a source file
 ConfigShop.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigShop.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigShop.pb.cpp.i
 .PHONY : ConfigShop.pb.cpp.i
 
 ConfigShop.pb.s: ConfigShop.pb.cpp.s
@@ -905,7 +905,7 @@ ConfigShop.pb.s: ConfigShop.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigShop.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigShop.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigShop.pb.cpp.s
 .PHONY : ConfigShop.pb.cpp.s
 
 ConfigTask.pb.o: ConfigTask.pb.cpp.o
@@ -914,7 +914,7 @@ ConfigTask.pb.o: ConfigTask.pb.cpp.o
 
 # target to build an object file
 ConfigTask.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigTask.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigTask.pb.cpp.o
 .PHONY : ConfigTask.pb.cpp.o
 
 ConfigTask.pb.i: ConfigTask.pb.cpp.i
@@ -923,7 +923,7 @@ ConfigTask.pb.i: ConfigTask.pb.cpp.i
 
 # target to preprocess a source file
 ConfigTask.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigTask.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigTask.pb.cpp.i
 .PHONY : ConfigTask.pb.cpp.i
 
 ConfigTask.pb.s: ConfigTask.pb.cpp.s
@@ -932,7 +932,7 @@ ConfigTask.pb.s: ConfigTask.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigTask.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigTask.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigTask.pb.cpp.s
 .PHONY : ConfigTask.pb.cpp.s
 
 ConfigTheme.pb.o: ConfigTheme.pb.cpp.o
@@ -941,7 +941,7 @@ ConfigTheme.pb.o: ConfigTheme.pb.cpp.o
 
 # target to build an object file
 ConfigTheme.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigTheme.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigTheme.pb.cpp.o
 .PHONY : ConfigTheme.pb.cpp.o
 
 ConfigTheme.pb.i: ConfigTheme.pb.cpp.i
@@ -950,7 +950,7 @@ ConfigTheme.pb.i: ConfigTheme.pb.cpp.i
 
 # target to preprocess a source file
 ConfigTheme.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigTheme.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigTheme.pb.cpp.i
 .PHONY : ConfigTheme.pb.cpp.i
 
 ConfigTheme.pb.s: ConfigTheme.pb.cpp.s
@@ -959,7 +959,7 @@ ConfigTheme.pb.s: ConfigTheme.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigTheme.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigTheme.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigTheme.pb.cpp.s
 .PHONY : ConfigTheme.pb.cpp.s
 
 ConfigVIP.pb.o: ConfigVIP.pb.cpp.o
@@ -968,7 +968,7 @@ ConfigVIP.pb.o: ConfigVIP.pb.cpp.o
 
 # target to build an object file
 ConfigVIP.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigVIP.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigVIP.pb.cpp.o
 .PHONY : ConfigVIP.pb.cpp.o
 
 ConfigVIP.pb.i: ConfigVIP.pb.cpp.i
@@ -977,7 +977,7 @@ ConfigVIP.pb.i: ConfigVIP.pb.cpp.i
 
 # target to preprocess a source file
 ConfigVIP.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigVIP.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigVIP.pb.cpp.i
 .PHONY : ConfigVIP.pb.cpp.i
 
 ConfigVIP.pb.s: ConfigVIP.pb.cpp.s
@@ -986,7 +986,7 @@ ConfigVIP.pb.s: ConfigVIP.pb.cpp.s
 
 # target to generate assembly for a file
 ConfigVIP.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/ConfigVIP.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/ConfigVIP.pb.cpp.s
 .PHONY : ConfigVIP.pb.cpp.s
 
 Demo.pb.o: Demo.pb.cpp.o
@@ -995,7 +995,7 @@ Demo.pb.o: Demo.pb.cpp.o
 
 # target to build an object file
 Demo.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/Demo.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/Demo.pb.cpp.o
 .PHONY : Demo.pb.cpp.o
 
 Demo.pb.i: Demo.pb.cpp.i
@@ -1004,7 +1004,7 @@ Demo.pb.i: Demo.pb.cpp.i
 
 # target to preprocess a source file
 Demo.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/Demo.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/Demo.pb.cpp.i
 .PHONY : Demo.pb.cpp.i
 
 Demo.pb.s: Demo.pb.cpp.s
@@ -1013,7 +1013,7 @@ Demo.pb.s: Demo.pb.cpp.s
 
 # target to generate assembly for a file
 Demo.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/Demo.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/Demo.pb.cpp.s
 .PHONY : Demo.pb.cpp.s
 
 LevelupUnlock.pb.o: LevelupUnlock.pb.cpp.o
@@ -1022,7 +1022,7 @@ LevelupUnlock.pb.o: LevelupUnlock.pb.cpp.o
 
 # target to build an object file
 LevelupUnlock.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/LevelupUnlock.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/LevelupUnlock.pb.cpp.o
 .PHONY : LevelupUnlock.pb.cpp.o
 
 LevelupUnlock.pb.i: LevelupUnlock.pb.cpp.i
@@ -1031,7 +1031,7 @@ LevelupUnlock.pb.i: LevelupUnlock.pb.cpp.i
 
 # target to preprocess a source file
 LevelupUnlock.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/LevelupUnlock.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/LevelupUnlock.pb.cpp.i
 .PHONY : LevelupUnlock.pb.cpp.i
 
 LevelupUnlock.pb.s: LevelupUnlock.pb.cpp.s
@@ -1040,7 +1040,7 @@ LevelupUnlock.pb.s: LevelupUnlock.pb.cpp.s
 
 # target to generate assembly for a file
 LevelupUnlock.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/LevelupUnlock.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/LevelupUnlock.pb.cpp.s
 .PHONY : LevelupUnlock.pb.cpp.s
 
 UserConfig.pb.o: UserConfig.pb.cpp.o
@@ -1049,7 +1049,7 @@ UserConfig.pb.o: UserConfig.pb.cpp.o
 
 # target to build an object file
 UserConfig.pb.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/UserConfig.pb.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/UserConfig.pb.cpp.o
 .PHONY : UserConfig.pb.cpp.o
 
 UserConfig.pb.i: UserConfig.pb.cpp.i
@@ -1058,7 +1058,7 @@ UserConfig.pb.i: UserConfig.pb.cpp.i
 
 # target to preprocess a source file
 UserConfig.pb.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/UserConfig.pb.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/UserConfig.pb.cpp.i
 .PHONY : UserConfig.pb.cpp.i
 
 UserConfig.pb.s: UserConfig.pb.cpp.s
@@ -1067,7 +1067,7 @@ UserConfig.pb.s: UserConfig.pb.cpp.s
 
 # target to generate assembly for a file
 UserConfig.pb.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/config/CMakeFiles/sg17config.dir/build.make app/config/CMakeFiles/sg17config.dir/UserConfig.pb.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f config/CMakeFiles/sg17config.dir/build.make config/CMakeFiles/sg17config.dir/UserConfig.pb.cpp.s
 .PHONY : UserConfig.pb.cpp.s
 
 # Help Target
@@ -1195,6 +1195,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_SOURCE_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/colin/game_server/fmh5_cmake
+CMAKE_BINARY_DIR = /home/cp/data/game_server/fmh5_cmake/app
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles /data/colin/game_server/fmh5_cmake/app/battle/CMakeFiles/progress.marks
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/battle/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/colin/game_server/fmh5_cmake/CMakeFiles 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles /home/cp/data/game_server/fmh5_cmake/app/battle/CMakeFiles/progress.marks
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 battle/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cp/data/game_server/fmh5_cmake/app/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/battle/clean
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 battle/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,32 +97,32 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/battle/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 battle/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/battle/preinstall
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 battle/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-app/battle/CMakeFiles/sg17battle.dir/rule:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f CMakeFiles/Makefile2 app/battle/CMakeFiles/sg17battle.dir/rule
-.PHONY : app/battle/CMakeFiles/sg17battle.dir/rule
+battle/CMakeFiles/sg17battle.dir/rule:
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f CMakeFiles/Makefile2 battle/CMakeFiles/sg17battle.dir/rule
+.PHONY : battle/CMakeFiles/sg17battle.dir/rule
 
 # Convenience name for target.
-sg17battle: app/battle/CMakeFiles/sg17battle.dir/rule
+sg17battle: battle/CMakeFiles/sg17battle.dir/rule
 
 .PHONY : sg17battle
 
 # fast build rule for target.
 sg17battle/fast:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/build
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/build
 .PHONY : sg17battle/fast
 
 BattleServer.o: BattleServer.cpp.o
@@ -131,7 +131,7 @@ BattleServer.o: BattleServer.cpp.o
 
 # target to build an object file
 BattleServer.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/BattleServer.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/BattleServer.cpp.o
 .PHONY : BattleServer.cpp.o
 
 BattleServer.i: BattleServer.cpp.i
@@ -140,7 +140,7 @@ BattleServer.i: BattleServer.cpp.i
 
 # target to preprocess a source file
 BattleServer.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/BattleServer.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/BattleServer.cpp.i
 .PHONY : BattleServer.cpp.i
 
 BattleServer.s: BattleServer.cpp.s
@@ -149,7 +149,7 @@ BattleServer.s: BattleServer.cpp.s
 
 # target to generate assembly for a file
 BattleServer.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/BattleServer.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/BattleServer.cpp.s
 .PHONY : BattleServer.cpp.s
 
 LogicAccessAdManager.o: LogicAccessAdManager.cpp.o
@@ -158,7 +158,7 @@ LogicAccessAdManager.o: LogicAccessAdManager.cpp.o
 
 # target to build an object file
 LogicAccessAdManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAccessAdManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAccessAdManager.cpp.o
 .PHONY : LogicAccessAdManager.cpp.o
 
 LogicAccessAdManager.i: LogicAccessAdManager.cpp.i
@@ -167,7 +167,7 @@ LogicAccessAdManager.i: LogicAccessAdManager.cpp.i
 
 # target to preprocess a source file
 LogicAccessAdManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAccessAdManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAccessAdManager.cpp.i
 .PHONY : LogicAccessAdManager.cpp.i
 
 LogicAccessAdManager.s: LogicAccessAdManager.cpp.s
@@ -176,7 +176,7 @@ LogicAccessAdManager.s: LogicAccessAdManager.cpp.s
 
 # target to generate assembly for a file
 LogicAccessAdManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAccessAdManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAccessAdManager.cpp.s
 .PHONY : LogicAccessAdManager.cpp.s
 
 LogicActivityTencent.o: LogicActivityTencent.cpp.o
@@ -185,7 +185,7 @@ LogicActivityTencent.o: LogicActivityTencent.cpp.o
 
 # target to build an object file
 LogicActivityTencent.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicActivityTencent.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicActivityTencent.cpp.o
 .PHONY : LogicActivityTencent.cpp.o
 
 LogicActivityTencent.i: LogicActivityTencent.cpp.i
@@ -194,7 +194,7 @@ LogicActivityTencent.i: LogicActivityTencent.cpp.i
 
 # target to preprocess a source file
 LogicActivityTencent.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicActivityTencent.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicActivityTencent.cpp.i
 .PHONY : LogicActivityTencent.cpp.i
 
 LogicActivityTencent.s: LogicActivityTencent.cpp.s
@@ -203,7 +203,7 @@ LogicActivityTencent.s: LogicActivityTencent.cpp.s
 
 # target to generate assembly for a file
 LogicActivityTencent.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicActivityTencent.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicActivityTencent.cpp.s
 .PHONY : LogicActivityTencent.cpp.s
 
 LogicAdvertiseManager.o: LogicAdvertiseManager.cpp.o
@@ -212,7 +212,7 @@ LogicAdvertiseManager.o: LogicAdvertiseManager.cpp.o
 
 # target to build an object file
 LogicAdvertiseManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAdvertiseManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAdvertiseManager.cpp.o
 .PHONY : LogicAdvertiseManager.cpp.o
 
 LogicAdvertiseManager.i: LogicAdvertiseManager.cpp.i
@@ -221,7 +221,7 @@ LogicAdvertiseManager.i: LogicAdvertiseManager.cpp.i
 
 # target to preprocess a source file
 LogicAdvertiseManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAdvertiseManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAdvertiseManager.cpp.i
 .PHONY : LogicAdvertiseManager.cpp.i
 
 LogicAdvertiseManager.s: LogicAdvertiseManager.cpp.s
@@ -230,7 +230,7 @@ LogicAdvertiseManager.s: LogicAdvertiseManager.cpp.s
 
 # target to generate assembly for a file
 LogicAdvertiseManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAdvertiseManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAdvertiseManager.cpp.s
 .PHONY : LogicAdvertiseManager.cpp.s
 
 LogicAllianceManager.o: LogicAllianceManager.cpp.o
@@ -239,7 +239,7 @@ LogicAllianceManager.o: LogicAllianceManager.cpp.o
 
 # target to build an object file
 LogicAllianceManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAllianceManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAllianceManager.cpp.o
 .PHONY : LogicAllianceManager.cpp.o
 
 LogicAllianceManager.i: LogicAllianceManager.cpp.i
@@ -248,7 +248,7 @@ LogicAllianceManager.i: LogicAllianceManager.cpp.i
 
 # target to preprocess a source file
 LogicAllianceManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAllianceManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAllianceManager.cpp.i
 .PHONY : LogicAllianceManager.cpp.i
 
 LogicAllianceManager.s: LogicAllianceManager.cpp.s
@@ -257,7 +257,7 @@ LogicAllianceManager.s: LogicAllianceManager.cpp.s
 
 # target to generate assembly for a file
 LogicAllianceManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicAllianceManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicAllianceManager.cpp.s
 .PHONY : LogicAllianceManager.cpp.s
 
 LogicBuildingManager.o: LogicBuildingManager.cpp.o
@@ -266,7 +266,7 @@ LogicBuildingManager.o: LogicBuildingManager.cpp.o
 
 # target to build an object file
 LogicBuildingManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicBuildingManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicBuildingManager.cpp.o
 .PHONY : LogicBuildingManager.cpp.o
 
 LogicBuildingManager.i: LogicBuildingManager.cpp.i
@@ -275,7 +275,7 @@ LogicBuildingManager.i: LogicBuildingManager.cpp.i
 
 # target to preprocess a source file
 LogicBuildingManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicBuildingManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicBuildingManager.cpp.i
 .PHONY : LogicBuildingManager.cpp.i
 
 LogicBuildingManager.s: LogicBuildingManager.cpp.s
@@ -284,7 +284,7 @@ LogicBuildingManager.s: LogicBuildingManager.cpp.s
 
 # target to generate assembly for a file
 LogicBuildingManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicBuildingManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicBuildingManager.cpp.s
 .PHONY : LogicBuildingManager.cpp.s
 
 LogicCardManager.o: LogicCardManager.cpp.o
@@ -293,7 +293,7 @@ LogicCardManager.o: LogicCardManager.cpp.o
 
 # target to build an object file
 LogicCardManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCardManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCardManager.cpp.o
 .PHONY : LogicCardManager.cpp.o
 
 LogicCardManager.i: LogicCardManager.cpp.i
@@ -302,7 +302,7 @@ LogicCardManager.i: LogicCardManager.cpp.i
 
 # target to preprocess a source file
 LogicCardManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCardManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCardManager.cpp.i
 .PHONY : LogicCardManager.cpp.i
 
 LogicCardManager.s: LogicCardManager.cpp.s
@@ -311,7 +311,7 @@ LogicCardManager.s: LogicCardManager.cpp.s
 
 # target to generate assembly for a file
 LogicCardManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCardManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCardManager.cpp.s
 .PHONY : LogicCardManager.cpp.s
 
 LogicCropsRewards.o: LogicCropsRewards.cpp.o
@@ -320,7 +320,7 @@ LogicCropsRewards.o: LogicCropsRewards.cpp.o
 
 # target to build an object file
 LogicCropsRewards.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCropsRewards.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCropsRewards.cpp.o
 .PHONY : LogicCropsRewards.cpp.o
 
 LogicCropsRewards.i: LogicCropsRewards.cpp.i
@@ -329,7 +329,7 @@ LogicCropsRewards.i: LogicCropsRewards.cpp.i
 
 # target to preprocess a source file
 LogicCropsRewards.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCropsRewards.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCropsRewards.cpp.i
 .PHONY : LogicCropsRewards.cpp.i
 
 LogicCropsRewards.s: LogicCropsRewards.cpp.s
@@ -338,7 +338,7 @@ LogicCropsRewards.s: LogicCropsRewards.cpp.s
 
 # target to generate assembly for a file
 LogicCropsRewards.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCropsRewards.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCropsRewards.cpp.s
 .PHONY : LogicCropsRewards.cpp.s
 
 LogicCustomerManager.o: LogicCustomerManager.cpp.o
@@ -347,7 +347,7 @@ LogicCustomerManager.o: LogicCustomerManager.cpp.o
 
 # target to build an object file
 LogicCustomerManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCustomerManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCustomerManager.cpp.o
 .PHONY : LogicCustomerManager.cpp.o
 
 LogicCustomerManager.i: LogicCustomerManager.cpp.i
@@ -356,7 +356,7 @@ LogicCustomerManager.i: LogicCustomerManager.cpp.i
 
 # target to preprocess a source file
 LogicCustomerManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCustomerManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCustomerManager.cpp.i
 .PHONY : LogicCustomerManager.cpp.i
 
 LogicCustomerManager.s: LogicCustomerManager.cpp.s
@@ -365,7 +365,7 @@ LogicCustomerManager.s: LogicCustomerManager.cpp.s
 
 # target to generate assembly for a file
 LogicCustomerManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicCustomerManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicCustomerManager.cpp.s
 .PHONY : LogicCustomerManager.cpp.s
 
 LogicDaily4399Activity.o: LogicDaily4399Activity.cpp.o
@@ -374,7 +374,7 @@ LogicDaily4399Activity.o: LogicDaily4399Activity.cpp.o
 
 # target to build an object file
 LogicDaily4399Activity.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicDaily4399Activity.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicDaily4399Activity.cpp.o
 .PHONY : LogicDaily4399Activity.cpp.o
 
 LogicDaily4399Activity.i: LogicDaily4399Activity.cpp.i
@@ -383,7 +383,7 @@ LogicDaily4399Activity.i: LogicDaily4399Activity.cpp.i
 
 # target to preprocess a source file
 LogicDaily4399Activity.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicDaily4399Activity.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicDaily4399Activity.cpp.i
 .PHONY : LogicDaily4399Activity.cpp.i
 
 LogicDaily4399Activity.s: LogicDaily4399Activity.cpp.s
@@ -392,7 +392,7 @@ LogicDaily4399Activity.s: LogicDaily4399Activity.cpp.s
 
 # target to generate assembly for a file
 LogicDaily4399Activity.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicDaily4399Activity.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicDaily4399Activity.cpp.s
 .PHONY : LogicDaily4399Activity.cpp.s
 
 LogicDynamicInfoManager.o: LogicDynamicInfoManager.cpp.o
@@ -401,7 +401,7 @@ LogicDynamicInfoManager.o: LogicDynamicInfoManager.cpp.o
 
 # target to build an object file
 LogicDynamicInfoManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicDynamicInfoManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicDynamicInfoManager.cpp.o
 .PHONY : LogicDynamicInfoManager.cpp.o
 
 LogicDynamicInfoManager.i: LogicDynamicInfoManager.cpp.i
@@ -410,7 +410,7 @@ LogicDynamicInfoManager.i: LogicDynamicInfoManager.cpp.i
 
 # target to preprocess a source file
 LogicDynamicInfoManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicDynamicInfoManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicDynamicInfoManager.cpp.i
 .PHONY : LogicDynamicInfoManager.cpp.i
 
 LogicDynamicInfoManager.s: LogicDynamicInfoManager.cpp.s
@@ -419,7 +419,7 @@ LogicDynamicInfoManager.s: LogicDynamicInfoManager.cpp.s
 
 # target to generate assembly for a file
 LogicDynamicInfoManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicDynamicInfoManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicDynamicInfoManager.cpp.s
 .PHONY : LogicDynamicInfoManager.cpp.s
 
 LogicFriendManager.o: LogicFriendManager.cpp.o
@@ -428,7 +428,7 @@ LogicFriendManager.o: LogicFriendManager.cpp.o
 
 # target to build an object file
 LogicFriendManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendManager.cpp.o
 .PHONY : LogicFriendManager.cpp.o
 
 LogicFriendManager.i: LogicFriendManager.cpp.i
@@ -437,7 +437,7 @@ LogicFriendManager.i: LogicFriendManager.cpp.i
 
 # target to preprocess a source file
 LogicFriendManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendManager.cpp.i
 .PHONY : LogicFriendManager.cpp.i
 
 LogicFriendManager.s: LogicFriendManager.cpp.s
@@ -446,7 +446,7 @@ LogicFriendManager.s: LogicFriendManager.cpp.s
 
 # target to generate assembly for a file
 LogicFriendManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendManager.cpp.s
 .PHONY : LogicFriendManager.cpp.s
 
 LogicFriendOrderManager.o: LogicFriendOrderManager.cpp.o
@@ -455,7 +455,7 @@ LogicFriendOrderManager.o: LogicFriendOrderManager.cpp.o
 
 # target to build an object file
 LogicFriendOrderManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendOrderManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendOrderManager.cpp.o
 .PHONY : LogicFriendOrderManager.cpp.o
 
 LogicFriendOrderManager.i: LogicFriendOrderManager.cpp.i
@@ -464,7 +464,7 @@ LogicFriendOrderManager.i: LogicFriendOrderManager.cpp.i
 
 # target to preprocess a source file
 LogicFriendOrderManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendOrderManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendOrderManager.cpp.i
 .PHONY : LogicFriendOrderManager.cpp.i
 
 LogicFriendOrderManager.s: LogicFriendOrderManager.cpp.s
@@ -473,7 +473,7 @@ LogicFriendOrderManager.s: LogicFriendOrderManager.cpp.s
 
 # target to generate assembly for a file
 LogicFriendOrderManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendOrderManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendOrderManager.cpp.s
 .PHONY : LogicFriendOrderManager.cpp.s
 
 LogicFriendWorkerManager.o: LogicFriendWorkerManager.cpp.o
@@ -482,7 +482,7 @@ LogicFriendWorkerManager.o: LogicFriendWorkerManager.cpp.o
 
 # target to build an object file
 LogicFriendWorkerManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendWorkerManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendWorkerManager.cpp.o
 .PHONY : LogicFriendWorkerManager.cpp.o
 
 LogicFriendWorkerManager.i: LogicFriendWorkerManager.cpp.i
@@ -491,7 +491,7 @@ LogicFriendWorkerManager.i: LogicFriendWorkerManager.cpp.i
 
 # target to preprocess a source file
 LogicFriendWorkerManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendWorkerManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendWorkerManager.cpp.i
 .PHONY : LogicFriendWorkerManager.cpp.i
 
 LogicFriendWorkerManager.s: LogicFriendWorkerManager.cpp.s
@@ -500,7 +500,7 @@ LogicFriendWorkerManager.s: LogicFriendWorkerManager.cpp.s
 
 # target to generate assembly for a file
 LogicFriendWorkerManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendWorkerManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendWorkerManager.cpp.s
 .PHONY : LogicFriendWorkerManager.cpp.s
 
 LogicFriendlyTreeManager.o: LogicFriendlyTreeManager.cpp.o
@@ -509,7 +509,7 @@ LogicFriendlyTreeManager.o: LogicFriendlyTreeManager.cpp.o
 
 # target to build an object file
 LogicFriendlyTreeManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendlyTreeManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendlyTreeManager.cpp.o
 .PHONY : LogicFriendlyTreeManager.cpp.o
 
 LogicFriendlyTreeManager.i: LogicFriendlyTreeManager.cpp.i
@@ -518,7 +518,7 @@ LogicFriendlyTreeManager.i: LogicFriendlyTreeManager.cpp.i
 
 # target to preprocess a source file
 LogicFriendlyTreeManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendlyTreeManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendlyTreeManager.cpp.i
 .PHONY : LogicFriendlyTreeManager.cpp.i
 
 LogicFriendlyTreeManager.s: LogicFriendlyTreeManager.cpp.s
@@ -527,7 +527,7 @@ LogicFriendlyTreeManager.s: LogicFriendlyTreeManager.cpp.s
 
 # target to generate assembly for a file
 LogicFriendlyTreeManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFriendlyTreeManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFriendlyTreeManager.cpp.s
 .PHONY : LogicFriendlyTreeManager.cpp.s
 
 LogicFundActivityManager.o: LogicFundActivityManager.cpp.o
@@ -536,7 +536,7 @@ LogicFundActivityManager.o: LogicFundActivityManager.cpp.o
 
 # target to build an object file
 LogicFundActivityManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFundActivityManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFundActivityManager.cpp.o
 .PHONY : LogicFundActivityManager.cpp.o
 
 LogicFundActivityManager.i: LogicFundActivityManager.cpp.i
@@ -545,7 +545,7 @@ LogicFundActivityManager.i: LogicFundActivityManager.cpp.i
 
 # target to preprocess a source file
 LogicFundActivityManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFundActivityManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFundActivityManager.cpp.i
 .PHONY : LogicFundActivityManager.cpp.i
 
 LogicFundActivityManager.s: LogicFundActivityManager.cpp.s
@@ -554,7 +554,7 @@ LogicFundActivityManager.s: LogicFundActivityManager.cpp.s
 
 # target to generate assembly for a file
 LogicFundActivityManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicFundActivityManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicFundActivityManager.cpp.s
 .PHONY : LogicFundActivityManager.cpp.s
 
 LogicGM.o: LogicGM.cpp.o
@@ -563,7 +563,7 @@ LogicGM.o: LogicGM.cpp.o
 
 # target to build an object file
 LogicGM.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicGM.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicGM.cpp.o
 .PHONY : LogicGM.cpp.o
 
 LogicGM.i: LogicGM.cpp.i
@@ -572,7 +572,7 @@ LogicGM.i: LogicGM.cpp.i
 
 # target to preprocess a source file
 LogicGM.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicGM.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicGM.cpp.i
 .PHONY : LogicGM.cpp.i
 
 LogicGM.s: LogicGM.cpp.s
@@ -581,7 +581,7 @@ LogicGM.s: LogicGM.cpp.s
 
 # target to generate assembly for a file
 LogicGM.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicGM.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicGM.cpp.s
 .PHONY : LogicGM.cpp.s
 
 LogicGameActivityManager.o: LogicGameActivityManager.cpp.o
@@ -590,7 +590,7 @@ LogicGameActivityManager.o: LogicGameActivityManager.cpp.o
 
 # target to build an object file
 LogicGameActivityManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicGameActivityManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicGameActivityManager.cpp.o
 .PHONY : LogicGameActivityManager.cpp.o
 
 LogicGameActivityManager.i: LogicGameActivityManager.cpp.i
@@ -599,7 +599,7 @@ LogicGameActivityManager.i: LogicGameActivityManager.cpp.i
 
 # target to preprocess a source file
 LogicGameActivityManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicGameActivityManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicGameActivityManager.cpp.i
 .PHONY : LogicGameActivityManager.cpp.i
 
 LogicGameActivityManager.s: LogicGameActivityManager.cpp.s
@@ -608,7 +608,7 @@ LogicGameActivityManager.s: LogicGameActivityManager.cpp.s
 
 # target to generate assembly for a file
 LogicGameActivityManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicGameActivityManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicGameActivityManager.cpp.s
 .PHONY : LogicGameActivityManager.cpp.s
 
 LogicIdCtrl.o: LogicIdCtrl.cpp.o
@@ -617,7 +617,7 @@ LogicIdCtrl.o: LogicIdCtrl.cpp.o
 
 # target to build an object file
 LogicIdCtrl.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicIdCtrl.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicIdCtrl.cpp.o
 .PHONY : LogicIdCtrl.cpp.o
 
 LogicIdCtrl.i: LogicIdCtrl.cpp.i
@@ -626,7 +626,7 @@ LogicIdCtrl.i: LogicIdCtrl.cpp.i
 
 # target to preprocess a source file
 LogicIdCtrl.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicIdCtrl.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicIdCtrl.cpp.i
 .PHONY : LogicIdCtrl.cpp.i
 
 LogicIdCtrl.s: LogicIdCtrl.cpp.s
@@ -635,7 +635,7 @@ LogicIdCtrl.s: LogicIdCtrl.cpp.s
 
 # target to generate assembly for a file
 LogicIdCtrl.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicIdCtrl.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicIdCtrl.cpp.s
 .PHONY : LogicIdCtrl.cpp.s
 
 LogicKeeperManager.o: LogicKeeperManager.cpp.o
@@ -644,7 +644,7 @@ LogicKeeperManager.o: LogicKeeperManager.cpp.o
 
 # target to build an object file
 LogicKeeperManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicKeeperManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicKeeperManager.cpp.o
 .PHONY : LogicKeeperManager.cpp.o
 
 LogicKeeperManager.i: LogicKeeperManager.cpp.i
@@ -653,7 +653,7 @@ LogicKeeperManager.i: LogicKeeperManager.cpp.i
 
 # target to preprocess a source file
 LogicKeeperManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicKeeperManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicKeeperManager.cpp.i
 .PHONY : LogicKeeperManager.cpp.i
 
 LogicKeeperManager.s: LogicKeeperManager.cpp.s
@@ -662,7 +662,7 @@ LogicKeeperManager.s: LogicKeeperManager.cpp.s
 
 # target to generate assembly for a file
 LogicKeeperManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicKeeperManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicKeeperManager.cpp.s
 .PHONY : LogicKeeperManager.cpp.s
 
 LogicLocationHelpManager.o: LogicLocationHelpManager.cpp.o
@@ -671,7 +671,7 @@ LogicLocationHelpManager.o: LogicLocationHelpManager.cpp.o
 
 # target to build an object file
 LogicLocationHelpManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicLocationHelpManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicLocationHelpManager.cpp.o
 .PHONY : LogicLocationHelpManager.cpp.o
 
 LogicLocationHelpManager.i: LogicLocationHelpManager.cpp.i
@@ -680,7 +680,7 @@ LogicLocationHelpManager.i: LogicLocationHelpManager.cpp.i
 
 # target to preprocess a source file
 LogicLocationHelpManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicLocationHelpManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicLocationHelpManager.cpp.i
 .PHONY : LogicLocationHelpManager.cpp.i
 
 LogicLocationHelpManager.s: LogicLocationHelpManager.cpp.s
@@ -689,7 +689,7 @@ LogicLocationHelpManager.s: LogicLocationHelpManager.cpp.s
 
 # target to generate assembly for a file
 LogicLocationHelpManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicLocationHelpManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicLocationHelpManager.cpp.s
 .PHONY : LogicLocationHelpManager.cpp.s
 
 LogicMailDogManager.o: LogicMailDogManager.cpp.o
@@ -698,7 +698,7 @@ LogicMailDogManager.o: LogicMailDogManager.cpp.o
 
 # target to build an object file
 LogicMailDogManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMailDogManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMailDogManager.cpp.o
 .PHONY : LogicMailDogManager.cpp.o
 
 LogicMailDogManager.i: LogicMailDogManager.cpp.i
@@ -707,7 +707,7 @@ LogicMailDogManager.i: LogicMailDogManager.cpp.i
 
 # target to preprocess a source file
 LogicMailDogManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMailDogManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMailDogManager.cpp.i
 .PHONY : LogicMailDogManager.cpp.i
 
 LogicMailDogManager.s: LogicMailDogManager.cpp.s
@@ -716,7 +716,7 @@ LogicMailDogManager.s: LogicMailDogManager.cpp.s
 
 # target to generate assembly for a file
 LogicMailDogManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMailDogManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMailDogManager.cpp.s
 .PHONY : LogicMailDogManager.cpp.s
 
 LogicManager.o: LogicManager.cpp.o
@@ -725,7 +725,7 @@ LogicManager.o: LogicManager.cpp.o
 
 # target to build an object file
 LogicManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicManager.cpp.o
 .PHONY : LogicManager.cpp.o
 
 LogicManager.i: LogicManager.cpp.i
@@ -734,7 +734,7 @@ LogicManager.i: LogicManager.cpp.i
 
 # target to preprocess a source file
 LogicManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicManager.cpp.i
 .PHONY : LogicManager.cpp.i
 
 LogicManager.s: LogicManager.cpp.s
@@ -743,7 +743,7 @@ LogicManager.s: LogicManager.cpp.s
 
 # target to generate assembly for a file
 LogicManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicManager.cpp.s
 .PHONY : LogicManager.cpp.s
 
 LogicMessageBoardManager.o: LogicMessageBoardManager.cpp.o
@@ -752,7 +752,7 @@ LogicMessageBoardManager.o: LogicMessageBoardManager.cpp.o
 
 # target to build an object file
 LogicMessageBoardManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMessageBoardManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMessageBoardManager.cpp.o
 .PHONY : LogicMessageBoardManager.cpp.o
 
 LogicMessageBoardManager.i: LogicMessageBoardManager.cpp.i
@@ -761,7 +761,7 @@ LogicMessageBoardManager.i: LogicMessageBoardManager.cpp.i
 
 # target to preprocess a source file
 LogicMessageBoardManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMessageBoardManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMessageBoardManager.cpp.i
 .PHONY : LogicMessageBoardManager.cpp.i
 
 LogicMessageBoardManager.s: LogicMessageBoardManager.cpp.s
@@ -770,7 +770,7 @@ LogicMessageBoardManager.s: LogicMessageBoardManager.cpp.s
 
 # target to generate assembly for a file
 LogicMessageBoardManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMessageBoardManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMessageBoardManager.cpp.s
 .PHONY : LogicMessageBoardManager.cpp.s
 
 LogicMissionManager.o: LogicMissionManager.cpp.o
@@ -779,7 +779,7 @@ LogicMissionManager.o: LogicMissionManager.cpp.o
 
 # target to build an object file
 LogicMissionManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMissionManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMissionManager.cpp.o
 .PHONY : LogicMissionManager.cpp.o
 
 LogicMissionManager.i: LogicMissionManager.cpp.i
@@ -788,7 +788,7 @@ LogicMissionManager.i: LogicMissionManager.cpp.i
 
 # target to preprocess a source file
 LogicMissionManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMissionManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMissionManager.cpp.i
 .PHONY : LogicMissionManager.cpp.i
 
 LogicMissionManager.s: LogicMissionManager.cpp.s
@@ -797,7 +797,7 @@ LogicMissionManager.s: LogicMissionManager.cpp.s
 
 # target to generate assembly for a file
 LogicMissionManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicMissionManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicMissionManager.cpp.s
 .PHONY : LogicMissionManager.cpp.s
 
 LogicNPCSellerMgr.o: LogicNPCSellerMgr.cpp.o
@@ -806,7 +806,7 @@ LogicNPCSellerMgr.o: LogicNPCSellerMgr.cpp.o
 
 # target to build an object file
 LogicNPCSellerMgr.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNPCSellerMgr.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNPCSellerMgr.cpp.o
 .PHONY : LogicNPCSellerMgr.cpp.o
 
 LogicNPCSellerMgr.i: LogicNPCSellerMgr.cpp.i
@@ -815,7 +815,7 @@ LogicNPCSellerMgr.i: LogicNPCSellerMgr.cpp.i
 
 # target to preprocess a source file
 LogicNPCSellerMgr.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNPCSellerMgr.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNPCSellerMgr.cpp.i
 .PHONY : LogicNPCSellerMgr.cpp.i
 
 LogicNPCSellerMgr.s: LogicNPCSellerMgr.cpp.s
@@ -824,7 +824,7 @@ LogicNPCSellerMgr.s: LogicNPCSellerMgr.cpp.s
 
 # target to generate assembly for a file
 LogicNPCSellerMgr.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNPCSellerMgr.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNPCSellerMgr.cpp.s
 .PHONY : LogicNPCSellerMgr.cpp.s
 
 LogicNPCShopManager.o: LogicNPCShopManager.cpp.o
@@ -833,7 +833,7 @@ LogicNPCShopManager.o: LogicNPCShopManager.cpp.o
 
 # target to build an object file
 LogicNPCShopManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNPCShopManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNPCShopManager.cpp.o
 .PHONY : LogicNPCShopManager.cpp.o
 
 LogicNPCShopManager.i: LogicNPCShopManager.cpp.i
@@ -842,7 +842,7 @@ LogicNPCShopManager.i: LogicNPCShopManager.cpp.i
 
 # target to preprocess a source file
 LogicNPCShopManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNPCShopManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNPCShopManager.cpp.i
 .PHONY : LogicNPCShopManager.cpp.i
 
 LogicNPCShopManager.s: LogicNPCShopManager.cpp.s
@@ -851,7 +851,7 @@ LogicNPCShopManager.s: LogicNPCShopManager.cpp.s
 
 # target to generate assembly for a file
 LogicNPCShopManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNPCShopManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNPCShopManager.cpp.s
 .PHONY : LogicNPCShopManager.cpp.s
 
 LogicNewShareActivity.o: LogicNewShareActivity.cpp.o
@@ -860,7 +860,7 @@ LogicNewShareActivity.o: LogicNewShareActivity.cpp.o
 
 # target to build an object file
 LogicNewShareActivity.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNewShareActivity.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNewShareActivity.cpp.o
 .PHONY : LogicNewShareActivity.cpp.o
 
 LogicNewShareActivity.i: LogicNewShareActivity.cpp.i
@@ -869,7 +869,7 @@ LogicNewShareActivity.i: LogicNewShareActivity.cpp.i
 
 # target to preprocess a source file
 LogicNewShareActivity.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNewShareActivity.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNewShareActivity.cpp.i
 .PHONY : LogicNewShareActivity.cpp.i
 
 LogicNewShareActivity.s: LogicNewShareActivity.cpp.s
@@ -878,7 +878,7 @@ LogicNewShareActivity.s: LogicNewShareActivity.cpp.s
 
 # target to generate assembly for a file
 LogicNewShareActivity.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNewShareActivity.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNewShareActivity.cpp.s
 .PHONY : LogicNewShareActivity.cpp.s
 
 LogicNotifyManager.o: LogicNotifyManager.cpp.o
@@ -887,7 +887,7 @@ LogicNotifyManager.o: LogicNotifyManager.cpp.o
 
 # target to build an object file
 LogicNotifyManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNotifyManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNotifyManager.cpp.o
 .PHONY : LogicNotifyManager.cpp.o
 
 LogicNotifyManager.i: LogicNotifyManager.cpp.i
@@ -896,7 +896,7 @@ LogicNotifyManager.i: LogicNotifyManager.cpp.i
 
 # target to preprocess a source file
 LogicNotifyManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNotifyManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNotifyManager.cpp.i
 .PHONY : LogicNotifyManager.cpp.i
 
 LogicNotifyManager.s: LogicNotifyManager.cpp.s
@@ -905,7 +905,7 @@ LogicNotifyManager.s: LogicNotifyManager.cpp.s
 
 # target to generate assembly for a file
 LogicNotifyManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicNotifyManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicNotifyManager.cpp.s
 .PHONY : LogicNotifyManager.cpp.s
 
 LogicOrderManager.o: LogicOrderManager.cpp.o
@@ -914,7 +914,7 @@ LogicOrderManager.o: LogicOrderManager.cpp.o
 
 # target to build an object file
 LogicOrderManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicOrderManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicOrderManager.cpp.o
 .PHONY : LogicOrderManager.cpp.o
 
 LogicOrderManager.i: LogicOrderManager.cpp.i
@@ -923,7 +923,7 @@ LogicOrderManager.i: LogicOrderManager.cpp.i
 
 # target to preprocess a source file
 LogicOrderManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicOrderManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicOrderManager.cpp.i
 .PHONY : LogicOrderManager.cpp.i
 
 LogicOrderManager.s: LogicOrderManager.cpp.s
@@ -932,7 +932,7 @@ LogicOrderManager.s: LogicOrderManager.cpp.s
 
 # target to generate assembly for a file
 LogicOrderManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicOrderManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicOrderManager.cpp.s
 .PHONY : LogicOrderManager.cpp.s
 
 LogicOrderRewards.o: LogicOrderRewards.cpp.o
@@ -941,7 +941,7 @@ LogicOrderRewards.o: LogicOrderRewards.cpp.o
 
 # target to build an object file
 LogicOrderRewards.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicOrderRewards.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicOrderRewards.cpp.o
 .PHONY : LogicOrderRewards.cpp.o
 
 LogicOrderRewards.i: LogicOrderRewards.cpp.i
@@ -950,7 +950,7 @@ LogicOrderRewards.i: LogicOrderRewards.cpp.i
 
 # target to preprocess a source file
 LogicOrderRewards.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicOrderRewards.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicOrderRewards.cpp.i
 .PHONY : LogicOrderRewards.cpp.i
 
 LogicOrderRewards.s: LogicOrderRewards.cpp.s
@@ -959,7 +959,7 @@ LogicOrderRewards.s: LogicOrderRewards.cpp.s
 
 # target to generate assembly for a file
 LogicOrderRewards.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicOrderRewards.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicOrderRewards.cpp.s
 .PHONY : LogicOrderRewards.cpp.s
 
 LogicPetManager.o: LogicPetManager.cpp.o
@@ -968,7 +968,7 @@ LogicPetManager.o: LogicPetManager.cpp.o
 
 # target to build an object file
 LogicPetManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicPetManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicPetManager.cpp.o
 .PHONY : LogicPetManager.cpp.o
 
 LogicPetManager.i: LogicPetManager.cpp.i
@@ -977,7 +977,7 @@ LogicPetManager.i: LogicPetManager.cpp.i
 
 # target to preprocess a source file
 LogicPetManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicPetManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicPetManager.cpp.i
 .PHONY : LogicPetManager.cpp.i
 
 LogicPetManager.s: LogicPetManager.cpp.s
@@ -986,7 +986,7 @@ LogicPetManager.s: LogicPetManager.cpp.s
 
 # target to generate assembly for a file
 LogicPetManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicPetManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicPetManager.cpp.s
 .PHONY : LogicPetManager.cpp.s
 
 LogicProductLineManager.o: LogicProductLineManager.cpp.o
@@ -995,7 +995,7 @@ LogicProductLineManager.o: LogicProductLineManager.cpp.o
 
 # target to build an object file
 LogicProductLineManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicProductLineManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicProductLineManager.cpp.o
 .PHONY : LogicProductLineManager.cpp.o
 
 LogicProductLineManager.i: LogicProductLineManager.cpp.i
@@ -1004,7 +1004,7 @@ LogicProductLineManager.i: LogicProductLineManager.cpp.i
 
 # target to preprocess a source file
 LogicProductLineManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicProductLineManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicProductLineManager.cpp.i
 .PHONY : LogicProductLineManager.cpp.i
 
 LogicProductLineManager.s: LogicProductLineManager.cpp.s
@@ -1013,7 +1013,7 @@ LogicProductLineManager.s: LogicProductLineManager.cpp.s
 
 # target to generate assembly for a file
 LogicProductLineManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicProductLineManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicProductLineManager.cpp.s
 .PHONY : LogicProductLineManager.cpp.s
 
 LogicPropsManager.o: LogicPropsManager.cpp.o
@@ -1022,7 +1022,7 @@ LogicPropsManager.o: LogicPropsManager.cpp.o
 
 # target to build an object file
 LogicPropsManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicPropsManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicPropsManager.cpp.o
 .PHONY : LogicPropsManager.cpp.o
 
 LogicPropsManager.i: LogicPropsManager.cpp.i
@@ -1031,7 +1031,7 @@ LogicPropsManager.i: LogicPropsManager.cpp.i
 
 # target to preprocess a source file
 LogicPropsManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicPropsManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicPropsManager.cpp.i
 .PHONY : LogicPropsManager.cpp.i
 
 LogicPropsManager.s: LogicPropsManager.cpp.s
@@ -1040,7 +1040,7 @@ LogicPropsManager.s: LogicPropsManager.cpp.s
 
 # target to generate assembly for a file
 LogicPropsManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicPropsManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicPropsManager.cpp.s
 .PHONY : LogicPropsManager.cpp.s
 
 LogicQueueManager.o: LogicQueueManager.cpp.o
@@ -1049,7 +1049,7 @@ LogicQueueManager.o: LogicQueueManager.cpp.o
 
 # target to build an object file
 LogicQueueManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicQueueManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicQueueManager.cpp.o
 .PHONY : LogicQueueManager.cpp.o
 
 LogicQueueManager.i: LogicQueueManager.cpp.i
@@ -1058,7 +1058,7 @@ LogicQueueManager.i: LogicQueueManager.cpp.i
 
 # target to preprocess a source file
 LogicQueueManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicQueueManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicQueueManager.cpp.i
 .PHONY : LogicQueueManager.cpp.i
 
 LogicQueueManager.s: LogicQueueManager.cpp.s
@@ -1067,7 +1067,7 @@ LogicQueueManager.s: LogicQueueManager.cpp.s
 
 # target to generate assembly for a file
 LogicQueueManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicQueueManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicQueueManager.cpp.s
 .PHONY : LogicQueueManager.cpp.s
 
 LogicRandomBoxManager.o: LogicRandomBoxManager.cpp.o
@@ -1076,7 +1076,7 @@ LogicRandomBoxManager.o: LogicRandomBoxManager.cpp.o
 
 # target to build an object file
 LogicRandomBoxManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRandomBoxManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRandomBoxManager.cpp.o
 .PHONY : LogicRandomBoxManager.cpp.o
 
 LogicRandomBoxManager.i: LogicRandomBoxManager.cpp.i
@@ -1085,7 +1085,7 @@ LogicRandomBoxManager.i: LogicRandomBoxManager.cpp.i
 
 # target to preprocess a source file
 LogicRandomBoxManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRandomBoxManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRandomBoxManager.cpp.i
 .PHONY : LogicRandomBoxManager.cpp.i
 
 LogicRandomBoxManager.s: LogicRandomBoxManager.cpp.s
@@ -1094,7 +1094,7 @@ LogicRandomBoxManager.s: LogicRandomBoxManager.cpp.s
 
 # target to generate assembly for a file
 LogicRandomBoxManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRandomBoxManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRandomBoxManager.cpp.s
 .PHONY : LogicRandomBoxManager.cpp.s
 
 LogicRecharge4399Activity.o: LogicRecharge4399Activity.cpp.o
@@ -1103,7 +1103,7 @@ LogicRecharge4399Activity.o: LogicRecharge4399Activity.cpp.o
 
 # target to build an object file
 LogicRecharge4399Activity.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRecharge4399Activity.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRecharge4399Activity.cpp.o
 .PHONY : LogicRecharge4399Activity.cpp.o
 
 LogicRecharge4399Activity.i: LogicRecharge4399Activity.cpp.i
@@ -1112,7 +1112,7 @@ LogicRecharge4399Activity.i: LogicRecharge4399Activity.cpp.i
 
 # target to preprocess a source file
 LogicRecharge4399Activity.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRecharge4399Activity.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRecharge4399Activity.cpp.i
 .PHONY : LogicRecharge4399Activity.cpp.i
 
 LogicRecharge4399Activity.s: LogicRecharge4399Activity.cpp.s
@@ -1121,7 +1121,7 @@ LogicRecharge4399Activity.s: LogicRecharge4399Activity.cpp.s
 
 # target to generate assembly for a file
 LogicRecharge4399Activity.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRecharge4399Activity.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRecharge4399Activity.cpp.s
 .PHONY : LogicRecharge4399Activity.cpp.s
 
 LogicRechargeActivity.o: LogicRechargeActivity.cpp.o
@@ -1130,7 +1130,7 @@ LogicRechargeActivity.o: LogicRechargeActivity.cpp.o
 
 # target to build an object file
 LogicRechargeActivity.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRechargeActivity.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRechargeActivity.cpp.o
 .PHONY : LogicRechargeActivity.cpp.o
 
 LogicRechargeActivity.i: LogicRechargeActivity.cpp.i
@@ -1139,7 +1139,7 @@ LogicRechargeActivity.i: LogicRechargeActivity.cpp.i
 
 # target to preprocess a source file
 LogicRechargeActivity.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRechargeActivity.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRechargeActivity.cpp.i
 .PHONY : LogicRechargeActivity.cpp.i
 
 LogicRechargeActivity.s: LogicRechargeActivity.cpp.s
@@ -1148,7 +1148,7 @@ LogicRechargeActivity.s: LogicRechargeActivity.cpp.s
 
 # target to generate assembly for a file
 LogicRechargeActivity.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRechargeActivity.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRechargeActivity.cpp.s
 .PHONY : LogicRechargeActivity.cpp.s
 
 LogicResourceManager.o: LogicResourceManager.cpp.o
@@ -1157,7 +1157,7 @@ LogicResourceManager.o: LogicResourceManager.cpp.o
 
 # target to build an object file
 LogicResourceManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicResourceManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicResourceManager.cpp.o
 .PHONY : LogicResourceManager.cpp.o
 
 LogicResourceManager.i: LogicResourceManager.cpp.i
@@ -1166,7 +1166,7 @@ LogicResourceManager.i: LogicResourceManager.cpp.i
 
 # target to preprocess a source file
 LogicResourceManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicResourceManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicResourceManager.cpp.i
 .PHONY : LogicResourceManager.cpp.i
 
 LogicResourceManager.s: LogicResourceManager.cpp.s
@@ -1175,7 +1175,7 @@ LogicResourceManager.s: LogicResourceManager.cpp.s
 
 # target to generate assembly for a file
 LogicResourceManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicResourceManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicResourceManager.cpp.s
 .PHONY : LogicResourceManager.cpp.s
 
 LogicRotaryTable.o: LogicRotaryTable.cpp.o
@@ -1184,7 +1184,7 @@ LogicRotaryTable.o: LogicRotaryTable.cpp.o
 
 # target to build an object file
 LogicRotaryTable.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRotaryTable.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRotaryTable.cpp.o
 .PHONY : LogicRotaryTable.cpp.o
 
 LogicRotaryTable.i: LogicRotaryTable.cpp.i
@@ -1193,7 +1193,7 @@ LogicRotaryTable.i: LogicRotaryTable.cpp.i
 
 # target to preprocess a source file
 LogicRotaryTable.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRotaryTable.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRotaryTable.cpp.i
 .PHONY : LogicRotaryTable.cpp.i
 
 LogicRotaryTable.s: LogicRotaryTable.cpp.s
@@ -1202,7 +1202,7 @@ LogicRotaryTable.s: LogicRotaryTable.cpp.s
 
 # target to generate assembly for a file
 LogicRotaryTable.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRotaryTable.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRotaryTable.cpp.s
 .PHONY : LogicRotaryTable.cpp.s
 
 LogicRoutineManager.o: LogicRoutineManager.cpp.o
@@ -1211,7 +1211,7 @@ LogicRoutineManager.o: LogicRoutineManager.cpp.o
 
 # target to build an object file
 LogicRoutineManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRoutineManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRoutineManager.cpp.o
 .PHONY : LogicRoutineManager.cpp.o
 
 LogicRoutineManager.i: LogicRoutineManager.cpp.i
@@ -1220,7 +1220,7 @@ LogicRoutineManager.i: LogicRoutineManager.cpp.i
 
 # target to preprocess a source file
 LogicRoutineManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRoutineManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRoutineManager.cpp.i
 .PHONY : LogicRoutineManager.cpp.i
 
 LogicRoutineManager.s: LogicRoutineManager.cpp.s
@@ -1229,7 +1229,7 @@ LogicRoutineManager.s: LogicRoutineManager.cpp.s
 
 # target to generate assembly for a file
 LogicRoutineManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicRoutineManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicRoutineManager.cpp.s
 .PHONY : LogicRoutineManager.cpp.s
 
 LogicShippingManager.o: LogicShippingManager.cpp.o
@@ -1238,7 +1238,7 @@ LogicShippingManager.o: LogicShippingManager.cpp.o
 
 # target to build an object file
 LogicShippingManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShippingManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShippingManager.cpp.o
 .PHONY : LogicShippingManager.cpp.o
 
 LogicShippingManager.i: LogicShippingManager.cpp.i
@@ -1247,7 +1247,7 @@ LogicShippingManager.i: LogicShippingManager.cpp.i
 
 # target to preprocess a source file
 LogicShippingManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShippingManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShippingManager.cpp.i
 .PHONY : LogicShippingManager.cpp.i
 
 LogicShippingManager.s: LogicShippingManager.cpp.s
@@ -1256,7 +1256,7 @@ LogicShippingManager.s: LogicShippingManager.cpp.s
 
 # target to generate assembly for a file
 LogicShippingManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShippingManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShippingManager.cpp.s
 .PHONY : LogicShippingManager.cpp.s
 
 LogicShopManager.o: LogicShopManager.cpp.o
@@ -1265,7 +1265,7 @@ LogicShopManager.o: LogicShopManager.cpp.o
 
 # target to build an object file
 LogicShopManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShopManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShopManager.cpp.o
 .PHONY : LogicShopManager.cpp.o
 
 LogicShopManager.i: LogicShopManager.cpp.i
@@ -1274,7 +1274,7 @@ LogicShopManager.i: LogicShopManager.cpp.i
 
 # target to preprocess a source file
 LogicShopManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShopManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShopManager.cpp.i
 .PHONY : LogicShopManager.cpp.i
 
 LogicShopManager.s: LogicShopManager.cpp.s
@@ -1283,7 +1283,7 @@ LogicShopManager.s: LogicShopManager.cpp.s
 
 # target to generate assembly for a file
 LogicShopManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShopManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShopManager.cpp.s
 .PHONY : LogicShopManager.cpp.s
 
 LogicShopSellCoinManager.o: LogicShopSellCoinManager.cpp.o
@@ -1292,7 +1292,7 @@ LogicShopSellCoinManager.o: LogicShopSellCoinManager.cpp.o
 
 # target to build an object file
 LogicShopSellCoinManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShopSellCoinManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShopSellCoinManager.cpp.o
 .PHONY : LogicShopSellCoinManager.cpp.o
 
 LogicShopSellCoinManager.i: LogicShopSellCoinManager.cpp.i
@@ -1301,7 +1301,7 @@ LogicShopSellCoinManager.i: LogicShopSellCoinManager.cpp.i
 
 # target to preprocess a source file
 LogicShopSellCoinManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShopSellCoinManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShopSellCoinManager.cpp.i
 .PHONY : LogicShopSellCoinManager.cpp.i
 
 LogicShopSellCoinManager.s: LogicShopSellCoinManager.cpp.s
@@ -1310,7 +1310,7 @@ LogicShopSellCoinManager.s: LogicShopSellCoinManager.cpp.s
 
 # target to generate assembly for a file
 LogicShopSellCoinManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicShopSellCoinManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicShopSellCoinManager.cpp.s
 .PHONY : LogicShopSellCoinManager.cpp.s
 
 LogicSignInRewards.o: LogicSignInRewards.cpp.o
@@ -1319,7 +1319,7 @@ LogicSignInRewards.o: LogicSignInRewards.cpp.o
 
 # target to build an object file
 LogicSignInRewards.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicSignInRewards.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicSignInRewards.cpp.o
 .PHONY : LogicSignInRewards.cpp.o
 
 LogicSignInRewards.i: LogicSignInRewards.cpp.i
@@ -1328,7 +1328,7 @@ LogicSignInRewards.i: LogicSignInRewards.cpp.i
 
 # target to preprocess a source file
 LogicSignInRewards.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicSignInRewards.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicSignInRewards.cpp.i
 .PHONY : LogicSignInRewards.cpp.i
 
 LogicSignInRewards.s: LogicSignInRewards.cpp.s
@@ -1337,7 +1337,7 @@ LogicSignInRewards.s: LogicSignInRewards.cpp.s
 
 # target to generate assembly for a file
 LogicSignInRewards.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicSignInRewards.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicSignInRewards.cpp.s
 .PHONY : LogicSignInRewards.cpp.s
 
 LogicSysMail.o: LogicSysMail.cpp.o
@@ -1346,7 +1346,7 @@ LogicSysMail.o: LogicSysMail.cpp.o
 
 # target to build an object file
 LogicSysMail.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicSysMail.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicSysMail.cpp.o
 .PHONY : LogicSysMail.cpp.o
 
 LogicSysMail.i: LogicSysMail.cpp.i
@@ -1355,7 +1355,7 @@ LogicSysMail.i: LogicSysMail.cpp.i
 
 # target to preprocess a source file
 LogicSysMail.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicSysMail.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicSysMail.cpp.i
 .PHONY : LogicSysMail.cpp.i
 
 LogicSysMail.s: LogicSysMail.cpp.s
@@ -1364,7 +1364,7 @@ LogicSysMail.s: LogicSysMail.cpp.s
 
 # target to generate assembly for a file
 LogicSysMail.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicSysMail.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicSysMail.cpp.s
 .PHONY : LogicSysMail.cpp.s
 
 LogicTaskManager.o: LogicTaskManager.cpp.o
@@ -1373,7 +1373,7 @@ LogicTaskManager.o: LogicTaskManager.cpp.o
 
 # target to build an object file
 LogicTaskManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicTaskManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicTaskManager.cpp.o
 .PHONY : LogicTaskManager.cpp.o
 
 LogicTaskManager.i: LogicTaskManager.cpp.i
@@ -1382,7 +1382,7 @@ LogicTaskManager.i: LogicTaskManager.cpp.i
 
 # target to preprocess a source file
 LogicTaskManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicTaskManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicTaskManager.cpp.i
 .PHONY : LogicTaskManager.cpp.i
 
 LogicTaskManager.s: LogicTaskManager.cpp.s
@@ -1391,7 +1391,7 @@ LogicTaskManager.s: LogicTaskManager.cpp.s
 
 # target to generate assembly for a file
 LogicTaskManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicTaskManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicTaskManager.cpp.s
 .PHONY : LogicTaskManager.cpp.s
 
 LogicThemeManager.o: LogicThemeManager.cpp.o
@@ -1400,7 +1400,7 @@ LogicThemeManager.o: LogicThemeManager.cpp.o
 
 # target to build an object file
 LogicThemeManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicThemeManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicThemeManager.cpp.o
 .PHONY : LogicThemeManager.cpp.o
 
 LogicThemeManager.i: LogicThemeManager.cpp.i
@@ -1409,7 +1409,7 @@ LogicThemeManager.i: LogicThemeManager.cpp.i
 
 # target to preprocess a source file
 LogicThemeManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicThemeManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicThemeManager.cpp.i
 .PHONY : LogicThemeManager.cpp.i
 
 LogicThemeManager.s: LogicThemeManager.cpp.s
@@ -1418,7 +1418,7 @@ LogicThemeManager.s: LogicThemeManager.cpp.s
 
 # target to generate assembly for a file
 LogicThemeManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicThemeManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicThemeManager.cpp.s
 .PHONY : LogicThemeManager.cpp.s
 
 LogicUserManager.o: LogicUserManager.cpp.o
@@ -1427,7 +1427,7 @@ LogicUserManager.o: LogicUserManager.cpp.o
 
 # target to build an object file
 LogicUserManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicUserManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicUserManager.cpp.o
 .PHONY : LogicUserManager.cpp.o
 
 LogicUserManager.i: LogicUserManager.cpp.i
@@ -1436,7 +1436,7 @@ LogicUserManager.i: LogicUserManager.cpp.i
 
 # target to preprocess a source file
 LogicUserManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicUserManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicUserManager.cpp.i
 .PHONY : LogicUserManager.cpp.i
 
 LogicUserManager.s: LogicUserManager.cpp.s
@@ -1445,7 +1445,7 @@ LogicUserManager.s: LogicUserManager.cpp.s
 
 # target to generate assembly for a file
 LogicUserManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicUserManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicUserManager.cpp.s
 .PHONY : LogicUserManager.cpp.s
 
 LogicVIPManager.o: LogicVIPManager.cpp.o
@@ -1454,7 +1454,7 @@ LogicVIPManager.o: LogicVIPManager.cpp.o
 
 # target to build an object file
 LogicVIPManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicVIPManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicVIPManager.cpp.o
 .PHONY : LogicVIPManager.cpp.o
 
 LogicVIPManager.i: LogicVIPManager.cpp.i
@@ -1463,7 +1463,7 @@ LogicVIPManager.i: LogicVIPManager.cpp.i
 
 # target to preprocess a source file
 LogicVIPManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicVIPManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicVIPManager.cpp.i
 .PHONY : LogicVIPManager.cpp.i
 
 LogicVIPManager.s: LogicVIPManager.cpp.s
@@ -1472,7 +1472,7 @@ LogicVIPManager.s: LogicVIPManager.cpp.s
 
 # target to generate assembly for a file
 LogicVIPManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicVIPManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicVIPManager.cpp.s
 .PHONY : LogicVIPManager.cpp.s
 
 LogicXsgReportManager.o: LogicXsgReportManager.cpp.o
@@ -1481,7 +1481,7 @@ LogicXsgReportManager.o: LogicXsgReportManager.cpp.o
 
 # target to build an object file
 LogicXsgReportManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicXsgReportManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicXsgReportManager.cpp.o
 .PHONY : LogicXsgReportManager.cpp.o
 
 LogicXsgReportManager.i: LogicXsgReportManager.cpp.i
@@ -1490,7 +1490,7 @@ LogicXsgReportManager.i: LogicXsgReportManager.cpp.i
 
 # target to preprocess a source file
 LogicXsgReportManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicXsgReportManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicXsgReportManager.cpp.i
 .PHONY : LogicXsgReportManager.cpp.i
 
 LogicXsgReportManager.s: LogicXsgReportManager.cpp.s
@@ -1499,7 +1499,7 @@ LogicXsgReportManager.s: LogicXsgReportManager.cpp.s
 
 # target to generate assembly for a file
 LogicXsgReportManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LogicXsgReportManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LogicXsgReportManager.cpp.s
 .PHONY : LogicXsgReportManager.cpp.s
 
 LoigcDailyShareRewards.o: LoigcDailyShareRewards.cpp.o
@@ -1508,7 +1508,7 @@ LoigcDailyShareRewards.o: LoigcDailyShareRewards.cpp.o
 
 # target to build an object file
 LoigcDailyShareRewards.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LoigcDailyShareRewards.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LoigcDailyShareRewards.cpp.o
 .PHONY : LoigcDailyShareRewards.cpp.o
 
 LoigcDailyShareRewards.i: LoigcDailyShareRewards.cpp.i
@@ -1517,7 +1517,7 @@ LoigcDailyShareRewards.i: LoigcDailyShareRewards.cpp.i
 
 # target to preprocess a source file
 LoigcDailyShareRewards.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LoigcDailyShareRewards.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LoigcDailyShareRewards.cpp.i
 .PHONY : LoigcDailyShareRewards.cpp.i
 
 LoigcDailyShareRewards.s: LoigcDailyShareRewards.cpp.s
@@ -1526,7 +1526,7 @@ LoigcDailyShareRewards.s: LoigcDailyShareRewards.cpp.s
 
 # target to generate assembly for a file
 LoigcDailyShareRewards.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/LoigcDailyShareRewards.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/LoigcDailyShareRewards.cpp.s
 .PHONY : LoigcDailyShareRewards.cpp.s
 
 ParseManager.o: ParseManager.cpp.o
@@ -1535,7 +1535,7 @@ ParseManager.o: ParseManager.cpp.o
 
 # target to build an object file
 ParseManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/ParseManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/ParseManager.cpp.o
 .PHONY : ParseManager.cpp.o
 
 ParseManager.i: ParseManager.cpp.i
@@ -1544,7 +1544,7 @@ ParseManager.i: ParseManager.cpp.i
 
 # target to preprocess a source file
 ParseManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/ParseManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/ParseManager.cpp.i
 .PHONY : ParseManager.cpp.i
 
 ParseManager.s: ParseManager.cpp.s
@@ -1553,7 +1553,7 @@ ParseManager.s: ParseManager.cpp.s
 
 # target to generate assembly for a file
 ParseManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/ParseManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/ParseManager.cpp.s
 .PHONY : ParseManager.cpp.s
 
 Parser.o: Parser.cpp.o
@@ -1562,7 +1562,7 @@ Parser.o: Parser.cpp.o
 
 # target to build an object file
 Parser.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/Parser.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/Parser.cpp.o
 .PHONY : Parser.cpp.o
 
 Parser.i: Parser.cpp.i
@@ -1571,7 +1571,7 @@ Parser.i: Parser.cpp.i
 
 # target to preprocess a source file
 Parser.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/Parser.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/Parser.cpp.i
 .PHONY : Parser.cpp.i
 
 Parser.s: Parser.cpp.s
@@ -1580,7 +1580,7 @@ Parser.s: Parser.cpp.s
 
 # target to generate assembly for a file
 Parser.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/Parser.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/Parser.cpp.s
 .PHONY : Parser.cpp.s
 
 ProtoManager.o: ProtoManager.cpp.o
@@ -1589,7 +1589,7 @@ ProtoManager.o: ProtoManager.cpp.o
 
 # target to build an object file
 ProtoManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/ProtoManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/ProtoManager.cpp.o
 .PHONY : ProtoManager.cpp.o
 
 ProtoManager.i: ProtoManager.cpp.i
@@ -1598,7 +1598,7 @@ ProtoManager.i: ProtoManager.cpp.i
 
 # target to preprocess a source file
 ProtoManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/ProtoManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/ProtoManager.cpp.i
 .PHONY : ProtoManager.cpp.i
 
 ProtoManager.s: ProtoManager.cpp.s
@@ -1607,7 +1607,7 @@ ProtoManager.s: ProtoManager.cpp.s
 
 # target to generate assembly for a file
 ProtoManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/ProtoManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/ProtoManager.cpp.s
 .PHONY : ProtoManager.cpp.s
 
 UserManager.o: UserManager.cpp.o
@@ -1616,7 +1616,7 @@ UserManager.o: UserManager.cpp.o
 
 # target to build an object file
 UserManager.cpp.o:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/UserManager.cpp.o
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/UserManager.cpp.o
 .PHONY : UserManager.cpp.o
 
 UserManager.i: UserManager.cpp.i
@@ -1625,7 +1625,7 @@ UserManager.i: UserManager.cpp.i
 
 # target to preprocess a source file
 UserManager.cpp.i:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/UserManager.cpp.i
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/UserManager.cpp.i
 .PHONY : UserManager.cpp.i
 
 UserManager.s: UserManager.cpp.s
@@ -1634,7 +1634,7 @@ UserManager.s: UserManager.cpp.s
 
 # target to generate assembly for a file
 UserManager.cpp.s:
-	cd /data/colin/game_server/fmh5_cmake && $(MAKE) -f app/battle/CMakeFiles/sg17battle.dir/build.make app/battle/CMakeFiles/sg17battle.dir/UserManager.cpp.s
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(MAKE) -f battle/CMakeFiles/sg17battle.dir/build.make battle/CMakeFiles/sg17battle.dir/UserManager.cpp.s
 .PHONY : UserManager.cpp.s
 
 # Help Target
@@ -1825,6 +1825,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /data/colin/game_server/fmh5_cmake && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/cp/data/game_server/fmh5_cmake/app && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
