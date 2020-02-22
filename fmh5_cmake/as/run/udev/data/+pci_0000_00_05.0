@@ -1,5 +1,0 @@
-I:3964
-E:ID_MODEL_FROM_DATABASE=Virtio block device
-E:ID_PCI_CLASS_FROM_DATABASE=Mass storage controller
-E:ID_PCI_SUBCLASS_FROM_DATABASE=SCSI storage controller
-E:ID_VENDOR_FROM_DATABASE=Red Hat, Inc.

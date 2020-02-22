@@ -1,8 +1,0 @@
-/usr/lib/systemd/system-generators/cloud-init-generator normal=/run/systemd/generator early=/run/systemd/generator.early late=/run/systemd/generator.late
-kernel command line (/proc/cmdline): BOOT_IMAGE=/boot/vmlinuz-3.10.0-957.27.2.el7.x86_64 root=/dev/vda1 ro crashkernel=auto console=ttyS0 console=tty0 panic=5 net.ifnames=0 biosdevname=0 LANG=en_US.utf8
-kernel_cmdline found unset
-etc_file found unset
-default found enabled
-checking for datasource
-no ds-identify in /usr/lib/cloud-init/ds-identify. _RET=found
-enabled via /run/systemd/generator.early/multi-user.target.wants/cloud-init.target -> /lib/systemd/system/cloud-init.target

@@ -1,3 +1,0 @@
-<device DEVNO="0x0b00" TIME="1567346706.588663" UUID="2019-09-01-22-04-49-00" LABEL="config-2" TYPE="iso9660">/dev/sr0</device>
-<device DEVNO="0xfd01" TIME="1567346714.219808" UUID="58ebcc18-06a4-454a-a772-4f583085b996" TYPE="ext3">/dev/vda1</device>
-<device DEVNO="0xfd10" TIME="1567346706.620984" UUID="350ed4c9-8540-4c2f-a399-bd83cb3f1b1e" SEC_TYPE="ext2" TYPE="ext3">/dev/vdb</device>
