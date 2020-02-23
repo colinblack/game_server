@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -g -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_DEBUG_BUILD -fPIC -std=c++11  -shared -Wl,-soname,libsg17proto.so -o libsg17proto.so CMakeFiles/sg17proto.dir/Admin.pb.cc.o CMakeFiles/sg17proto.dir/Common.pb.cc.o CMakeFiles/sg17proto.dir/ProtoArchive.pb.cc.o CMakeFiles/sg17proto.dir/ProtoUser.pb.cc.o 

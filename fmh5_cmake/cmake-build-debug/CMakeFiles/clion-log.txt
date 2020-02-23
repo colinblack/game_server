@@ -1,0 +1,20 @@
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /data/colin/fmh5_cmake
+-- Configuring done
+CMake Warning (dev) at cgiapp/kernel/CMakeLists.txt:51 (add_library):
+  Policy CMP0038 is not set: Targets may not link directly to themselves.
+  Run "cmake --help-policy CMP0038" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+
+  Target "sg17cgikernel" links to itself.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at cgiapp/kernel/CMakeLists.txt:51 (add_library):
+  Policy CMP0038 is not set: Targets may not link directly to themselves.
+  Run "cmake --help-policy CMP0038" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+
+  Target "sg17cgikernel" links to itself.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Generating done
+-- Build files have been written to: /data/colin/fmh5_cmake/cmake-build-debug
