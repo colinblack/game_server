@@ -130,6 +130,7 @@
 				<Compiler>
 					<Add directory="/usr/include/openssl"/>
 					<Add directory="/data/colin/fmh5_cmake/baselib/include"/>
+					<Add directory="/data/colin/fmh5_cmake/net/inc"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/dbc/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/pengyou/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/xsg/include"/>
@@ -163,6 +164,7 @@
 				<Compiler>
 					<Add directory="/usr/include/openssl"/>
 					<Add directory="/data/colin/fmh5_cmake/baselib/include"/>
+					<Add directory="/data/colin/fmh5_cmake/net/inc"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/dbc/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/pengyou/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/xsg/include"/>
@@ -442,6 +444,7 @@
 				<Compiler>
 					<Add directory="/usr/include/openssl"/>
 					<Add directory="/data/colin/fmh5_cmake/baselib/include"/>
+					<Add directory="/data/colin/fmh5_cmake/net/inc"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/dbc/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/pengyou/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/xsg/include"/>
@@ -476,6 +479,7 @@
 				<Compiler>
 					<Add directory="/usr/include/openssl"/>
 					<Add directory="/data/colin/fmh5_cmake/baselib/include"/>
+					<Add directory="/data/colin/fmh5_cmake/net/inc"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/dbc/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/pengyou/include"/>
 					<Add directory="/data/colin/fmh5_cmake/outerlib/xsg/include"/>

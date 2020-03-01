@@ -224,7 +224,7 @@ Project_BINARY_DIR:STATIC=/data/colin/fmh5_cmake/cmake-build-debug
 Project_SOURCE_DIR:STATIC=/data/colin/fmh5_cmake
 
 //Dependencies for the target
-sg17battle_LIB_DEPENDS:STATIC=general;sg17base;general;sg17proto;general;sg17save;general;dbs-gcc-4.4;general;fcgi++;general;fcgi;general;nsl;general;ssl;general;sg17openapi;general;curl;general;z;general;dl;general;xsg;general;sg17common;general;sg17pb;general;sg17config;general;sg17kernel;general;sg17data;
+sg17battle_LIB_DEPENDS:STATIC=general;sg17base;general;sg17proto;general;sg17save;general;dbs-gcc-4.4;general;fcgi++;general;fcgi;general;nsl;general;ssl;general;sg17openapi;general;curl;general;z;general;dl;general;xsg;general;sg17common;general;sg17pb;general;sg17config;general;sg17kernel;general;sg17data;general;cob;
 
 //Dependencies for the target
 sg17cgicommon_LIB_DEPENDS:STATIC=general;sg17base;general;sg17proto;general;sg17save;general;dbs-gcc-4.4;general;fcgi++;general;fcgi;general;nsl;general;ssl;general;sg17openapi;general;curl;general;z;general;dl;

@@ -6,5 +6,5 @@ CXX_FLAGS =  -g -Wall -pipe -fno-ident -MMD -D_GNU_SOURCE -D_REENTRNT -D_DEBUG_B
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/include/openssl -I/data/colin/fmh5_cmake/baselib/include -I/data/colin/fmh5_cmake/outerlib/dbc/include -I/data/colin/fmh5_cmake/outerlib/pengyou/include -I/data/colin/fmh5_cmake/outerlib/xsg/include -I/data/colin/fmh5_cmake/save -I/data/colin/fmh5_cmake/proto -I/data/colin/fmh5_cmake/app/common -I/data/colin/fmh5_cmake/app/pb -I/data/colin/fmh5_cmake/app/config -I/data/colin/fmh5_cmake/app/kernel -I/data/colin/fmh5_cmake/app/data -I/data/colin/fmh5_cmake/app/battle 
+CXX_INCLUDES = -I/usr/include/openssl -I/data/colin/fmh5_cmake/baselib/include -I/data/colin/fmh5_cmake/net/inc -I/data/colin/fmh5_cmake/outerlib/dbc/include -I/data/colin/fmh5_cmake/outerlib/pengyou/include -I/data/colin/fmh5_cmake/outerlib/xsg/include -I/data/colin/fmh5_cmake/save -I/data/colin/fmh5_cmake/proto -I/data/colin/fmh5_cmake/app/common -I/data/colin/fmh5_cmake/app/pb -I/data/colin/fmh5_cmake/app/config -I/data/colin/fmh5_cmake/app/kernel -I/data/colin/fmh5_cmake/app/data -I/data/colin/fmh5_cmake/app/battle 
 

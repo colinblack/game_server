@@ -72,6 +72,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/include/openssl"
   "../baselib/include"
+  "../net/inc"
   "../outerlib/dbc/include"
   "../outerlib/pengyou/include"
   "../outerlib/xsg/include"

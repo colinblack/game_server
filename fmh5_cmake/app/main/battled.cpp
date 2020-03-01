@@ -1,5 +1,6 @@
 #include "BattleServer.h"
 
+
 int main(int argc,char** argv){
 
 	if(!BattleServer::Instance()->Initialize())
@@ -26,6 +27,7 @@ int main(int argc,char** argv){
 
 	LogicManager::Instance()->Destroy();
 	BattleServer::Instance()->Destroy();
+
 
 	return 0;
 }

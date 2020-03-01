@@ -12,6 +12,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/include/openssl"
   "../baselib/include"
+  "../net/inc"
   "../outerlib/dbc/include"
   "../outerlib/pengyou/include"
   "../outerlib/xsg/include"

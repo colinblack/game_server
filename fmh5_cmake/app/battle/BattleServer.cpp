@@ -1,5 +1,6 @@
 #include "BattleServer.h"
 
+
 CBaseMutex   BattleServer::m_mutex;
 pthread_t BattleServer::m_thread;
 pthread_cond_t BattleServer::m_cond;
@@ -20,7 +21,30 @@ static void OnSigNum(int signum,siginfo_t *info,void *myact)
 	LogicManager::m_signum = signum;
 }
 
-static bool ParseAddress(vector<CInternetAddress> &vecAddress, const string &sAddress)
+bool FromString(const string &sAddress, InetAddr& addr)
+{
+    vector<string> vecAddress;
+    CBasic::StringSplitTrim(sAddress, ":", vecAddress);
+    if(vecAddress.size() != 2)
+    {
+        return false;
+    }
+    unsigned port;
+    if(!Convert::StringToUInt(port, vecAddress[1]))
+    {
+        return false;
+    }
+    if(port > UINT16_MAX)
+    {
+        return false;
+    }
+
+    addr.port_ = port;
+    addr.ip_ = vecAddress[0];
+    return true;
+}
+
+static bool ParseAddress(vector<InetAddr> &vecAddress, const string &sAddress)
 {
 	if(sAddress.empty())
 	{
@@ -30,8 +54,8 @@ static bool ParseAddress(vector<CInternetAddress> &vecAddress, const string &sAd
 	CBasic::StringSplitTrim(sAddress, ",", vecStrAddress);
 	for(vector<string>::iterator itr = vecStrAddress.begin(); itr != vecStrAddress.end(); itr++)
 	{
-		CInternetAddress address;
-		if(address.FromString(*itr))
+		InetAddr address;
+		if(FromString(*itr, address))
 		{
 			vecAddress.push_back(address);
 		}
@@ -39,8 +63,11 @@ static bool ParseAddress(vector<CInternetAddress> &vecAddress, const string &sAd
 	return vecAddress.size() != 0;
 }
 
+
+
 bool BattleServer::Initialize()
 {
+#if 0
 	if(!Kernel::Init())
 	{
 		fatal_log("[Kernel::Init fail][server=Toywar]");
@@ -70,6 +97,7 @@ bool BattleServer::Initialize()
 
 	//CLog::startLogThread();
 
+#endif
 	return true;
 }
 
@@ -172,4 +200,42 @@ bool BattleServer::IsChannelClosed(int channel)
 		c = true;
 	m_closed.clear();
 	return c;
+}
+
+bool BattleServer1::Initialize() {
+    if(!Kernel::Init())
+    {
+        fatal_log("[Kernel::Init fail][server=Toywar]");
+        return false;
+    }
+
+    vector<CInternetAddress> listenAddress;
+    if(!ParseAddress(listenAddress,Config::GetValue("server_listen")))
+    {
+        fatal_log("[ParseAddress fail]");
+        return false;
+    }
+    //TODO:最大连接数
+
+
+
+}
+
+bool BattleServer1::Run() {
+
+    pTcpSvr_->Start(3368, "192.168.1.102");
+    loop_->loop();
+
+    return true;
+}
+
+
+BattleServer1::BattleServer1()
+    : loop_(new EventLoop())
+    , pTcpSvr_(new TcpServer1(loop_)){
+}
+
+
+BattleServer1::~BattleServer1(){
+    delete loop_;
 }

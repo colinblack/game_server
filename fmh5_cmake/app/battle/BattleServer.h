@@ -2,7 +2,8 @@
 #define _BATTLE_SERVER_H_
 
 #include "ServerInc.h"
-
+#include "TcpServer1.h"
+#include <memory>
 
 class BattleServer : public CTcpServer, public CSingleton<BattleServer>
 {
@@ -34,6 +35,20 @@ private:
 	static pthread_cond_t m_cond;
 	static list<CFirePacket*> m_recv, m_send;
 	static set<int> m_closed;
+};
+
+class BattleServer1 : public CSingleton<BattleServer1> {
+public:
+    bool Run();
+    bool Initialize();
+
+    BattleServer1();
+    virtual  ~BattleServer1();
+
+private:
+    std::unique_ptr<TcpServer1> pTcpSvr_;
+    std::unique_ptr<int> pInt_;
+    EventLoop* loop_;
 };
 
 
